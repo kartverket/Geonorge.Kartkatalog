@@ -6,16 +6,16 @@ namespace Kartverket.Metadatakatalog.Service
 {
     public class MetadataService : IMetadataService
     {
-        private readonly GeoNorge _geoNorge;
+        private readonly IGeoNorge _geoNorge;
 
-        public MetadataService(GeoNorge geoNorge)
+        public MetadataService(IGeoNorge geoNorge)
         {
             _geoNorge = geoNorge;
         }
 
         public MetadataViewModel FindMetadata(string uuid)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

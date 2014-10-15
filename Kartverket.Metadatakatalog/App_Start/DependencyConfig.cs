@@ -23,7 +23,7 @@ namespace Kartverket.Metadatakatalog
         private static void ConfigureAppDependencies(ContainerBuilder builder)
         {
             builder.RegisterType<GeoNorge>()
-                .AsSelf()
+                .As<IGeoNorge>()
                 .WithParameters(new List<Parameter>
                 {
                     new NamedParameter("geonetworkUsername", ""),
