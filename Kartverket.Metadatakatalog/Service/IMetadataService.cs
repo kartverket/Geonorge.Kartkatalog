@@ -4,6 +4,6 @@ namespace Kartverket.Metadatakatalog.Service
 {
     public interface IMetadataService
     {
-        MetadataViewModel FindMetadata(string uuid);
+        MetadataViewModel GetMetadataByUuid(string uuid);
     }
 }

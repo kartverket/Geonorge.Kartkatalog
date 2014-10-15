@@ -15,7 +15,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         public ActionResult Index(string uuid)
         {
-            MetadataViewModel model = _metadataService.FindMetadata(uuid);
+            MetadataViewModel model = _metadataService.GetMetadataByUuid(uuid);
 
             if (model == null)
                 return new HttpNotFoundResult();

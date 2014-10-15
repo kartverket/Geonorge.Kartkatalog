@@ -25,7 +25,7 @@ namespace Kartverket.Metadatakatalog.Tests
         public void ShouldReturnMetadataForUuid()
         {
             var serviceMock = new Mock<IMetadataService>();
-            serviceMock.Setup(m => m.FindMetadata(uuid)).Returns(new MetadataViewModel());
+            serviceMock.Setup(m => m.GetMetadataByUuid(uuid)).Returns(new MetadataViewModel());
             var controller = new MetadataController(serviceMock.Object);
             var result = controller.Index(uuid) as ViewResult;
             result.Should().NotBeNull();

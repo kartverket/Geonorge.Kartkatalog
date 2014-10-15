@@ -1,7 +1,16 @@
-﻿
+﻿@model MetadataViewModel
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h1>@Model.Title</h1>
 
+<h2>@Model.ContactMetadata.Organization</h2>
+
+<img src="@Model.Thumbnails[0].URL" width="200" class="pull-right thumbnail img-thumbnail"/>
+
+<p>@Model.Abstract</p>
+
+<p>@Model.Purpose</p>
+
+<p>@Model.DatePublished</p>
