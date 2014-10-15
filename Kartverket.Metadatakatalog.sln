@@ -7,6 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kartverket.Metadatakatalog"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kartverket.Metadatakatalog.Tests", "..\..\..\..\Users\henning\Documents\Visual Studio 2013\Projects\Kartverket.Metadatakatalog\Kartverket.Metadatakatalog.Tests\Kartverket.Metadatakatalog.Tests.csproj", "{A6E6DEB0-4B22-44EC-B065-13A81100181B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{AF97F241-127A-4D0D-B949-743323274E25}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
