@@ -56,6 +56,11 @@ namespace Kartverket.Metadatakatalog.Models
         public string Title { get; set; }
         public string TopicCategory { get; set; }
         public string Uuid { get; set; }
+
+        public SeoUrl CreateSeoUrl()
+        {
+            return new SeoUrl(ContactMetadata.Organization, Title);
+        }
     }
 
     public class BoundingBox

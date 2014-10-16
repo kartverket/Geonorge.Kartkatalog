@@ -13,6 +13,17 @@ namespace Kartverket.Metadatakatalog
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute("DisplayMetadataUuidAndSlug", "{controller}/{organization}/{title}/{uuid}",
+                new { controller = "Metadata", action = "Index" },
+                new { uuid = @"[a-zA-Z0-9-]+$" }
+            );
+
+            routes.MapRoute("DisplayMetadataUuid", "{controller}/{uuid}",
+                new { controller = "Metadata", action = "Index" },
+                new { uuid = @"[a-zA-Z0-9-]+$" }
+            );
+
+            
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

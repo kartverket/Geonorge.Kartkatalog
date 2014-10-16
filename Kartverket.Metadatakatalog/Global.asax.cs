@@ -15,6 +15,8 @@ namespace Kartverket.Metadatakatalog
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            MvcHandler.DisableMvcResponseHeader = true;
         }
     }
 }

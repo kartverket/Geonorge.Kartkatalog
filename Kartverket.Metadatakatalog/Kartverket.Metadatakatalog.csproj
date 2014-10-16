@@ -138,6 +138,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\MetadataViewModel.cs" />
+    <Compile Include="Models\SeoUrl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\UI.Designer.cs">
       <AutoGen>True</AutoGen>

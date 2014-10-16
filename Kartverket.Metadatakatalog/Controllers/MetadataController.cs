@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
 
@@ -13,14 +14,26 @@ namespace Kartverket.Metadatakatalog.Controllers
             _metadataService = metadataService;
         }
 
-        public ActionResult Index(string uuid)
+        public ActionResult Index(string uuid, string organization = null, string title = null)
         {
-            MetadataViewModel model = _metadataService.GetMetadataByUuid(uuid);
-
+            MetadataViewModel model = null;
+            try
+            {
+                model = _metadataService.GetMetadataByUuid(uuid);
+            }
+            catch (InvalidOperationException exception)
+            {
+                // todo log exception    
+            }
             if (model == null)
                 return new HttpNotFoundResult();
+            
+            SeoUrl url = model.CreateSeoUrl();
+            if (!url.Matches(organization, title))
+                return RedirectToActionPermanent("Index", new { organization = url.Organization, title = url.Title, uuid = uuid });
 
             return View(model);
         }
+
     }
 }

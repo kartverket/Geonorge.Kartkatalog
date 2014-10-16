@@ -1,6 +1,6 @@
 ﻿@model MetadataViewModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = Model.Title + " - " + Model.ContactMetadata.Organization;
 }
 
 <h1>@Model.Title</h1>
@@ -9,8 +9,21 @@
 
 <img src="@Model.Thumbnails[0].URL" width="200" class="pull-right thumbnail img-thumbnail"/>
 
+<h3>Sammendrag</h3>
 <p>@Model.Abstract</p>
 
+<h3>Formål</h3>
 <p>@Model.Purpose</p>
 
-<p>@Model.DatePublished</p>
+<h3>Kontaktinformasjon</h3>
+<p><strong>Metadatakontakt:</strong> <a href="mailto:@Model.ContactMetadata.Email">@Model.ContactMetadata.Name, @Model.ContactMetadata.Organization</a></p>
+@if (Model.ContactPublisher != null)
+{
+    <p><strong>Faglig kontakt:</strong> <a href="mailto:@Model.ContactOwner.Email">@Model.ContactOwner.Name, @Model.ContactOwner.Organization</a></p>
+}
+@if (Model.ContactPublisher != null)
+{
+    <p><strong>Teknisk kontakt:</strong> <a href="mailto:@Model.ContactPublisher.Email">@Model.ContactPublisher.Name, @Model.ContactPublisher.Organization</a></p>
+}
+
+

@@ -32,12 +32,13 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         public void ShouldReturnMetadataFromGeoNorge()
         {
             var geoNorgeMock = new Mock<IGeoNorge>();
-            geoNorgeMock.Setup(m => m.GetRecordByUuid(uuid)).Returns(new MD_Metadata_Type());
+            geoNorgeMock.Setup(m => m.GetRecordByUuid(uuid)).Returns(SimpleMetadata.CreateDataset().GetMetadata());
             var metadataService = new MetadataService(geoNorgeMock.Object);
             
             MetadataViewModel metadata = metadataService.GetMetadataByUuid(uuid);
 
             metadata.Should().NotBeNull();
         }
+
     }
 }
