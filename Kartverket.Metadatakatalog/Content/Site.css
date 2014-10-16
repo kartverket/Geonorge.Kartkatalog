@@ -1,1 +1,10 @@
-﻿
+﻿h3 {
+    border-bottom: 1px solid limegreen;
+    display: inline-block;
+}
+
+.shortcuts {
+    border-radius: 4px; 
+    padding: 10px; 
+    margin-top:20px; 
+}

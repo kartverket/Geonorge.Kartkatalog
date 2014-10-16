@@ -61,6 +61,28 @@ namespace Kartverket.Metadatakatalog.Models
         {
             return new SeoUrl(ContactMetadata.Organization, Title);
         }
+
+        public bool IsService()
+        {
+            return HierarchyLevel == "service";
+        }
+
+        public bool IsDataset()
+        {
+            return HierarchyLevel == "dataset";
+        }
+
+        public bool IsDatasetSeries()
+        {
+            return HierarchyLevel == "series";
+        }
+
+        public bool IsApplication()
+        {
+            return HierarchyLevel == "software";
+        }
+
+
     }
 
     public class BoundingBox
@@ -95,6 +117,16 @@ namespace Kartverket.Metadatakatalog.Models
         public string Name { get; set; }
         public string Protocol { get; set; }
         public string URL { get; set; }
+
+        public bool IsWmsUrl()
+        {
+            return !string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains("OGC:WMS");
+        }
+
+        public bool IsWfsUrl()
+        {
+            return !string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains("OGC:WFS");
+        }
     }
 
     public class DistributionFormat
