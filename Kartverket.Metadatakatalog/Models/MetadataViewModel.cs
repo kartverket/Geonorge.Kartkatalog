@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -16,6 +17,8 @@ namespace Kartverket.Metadatakatalog.Models
         public Contact ContactPublisher { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateMetadataUpdated { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? DatePublished { get; set; }
         public DateTime? DateUpdated { get; set; }
         public DistributionDetails DistributionDetails { get; set; }
@@ -82,7 +85,33 @@ namespace Kartverket.Metadatakatalog.Models
             return HierarchyLevel == "software";
         }
 
+        public string MaintenanceFrequencyTranslated()
+        {
+            if (MaintenanceFrequency == null)
+                return null;
 
+            string translated = GetListOfMaintenanceFrequencyValues()[MaintenanceFrequency];
+            return translated ?? MaintenanceFrequency;
+        }
+
+        private Dictionary<string, string> GetListOfMaintenanceFrequencyValues()
+        {
+            return new Dictionary<string, string>
+            {
+                {"continual", "Kontinuerlig"},
+                {"daily", "Daglig"},
+                {"weekly", "Ukentlig"},
+                {"fortnightly", "Annenhver uke"},
+                {"monthly", "Månedlig"},
+                {"quarterly", "Hvert kvartal"},
+                {"biannually", "Hvert halvår"},
+                {"annually", "Årlig"},
+                {"asNeeded", "Etter behov"},
+                {"irregular", "Ujevnt"},
+                {"notPlanned", "Ikke planlagt"},
+                {"unknown", "Ukjent"},
+            };
+        }
     }
 
     public class BoundingBox

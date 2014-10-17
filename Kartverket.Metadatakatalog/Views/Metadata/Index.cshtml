@@ -35,16 +35,20 @@
 <h1>@Model.Title</h1>
 
 <h2>@Model.ContactMetadata.Organization</h2>
-@if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
-{
-    <img src="@Model.Thumbnails[0].URL" width="300" class="pull-right thumbnail img-thumbnail" />
-}
+
+    @if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
+    {
+        <img src="@Model.Thumbnails[0].URL" width="300" class="thumbnail pull-right" />
+    }
 
 <h3>Sammendrag</h3>
 <p>@Model.Abstract</p>
 
-<h3>Formål</h3>
-<p>@Model.Purpose</p>
+@if (!string.IsNullOrWhiteSpace(Model.Purpose))
+{
+    <h3>Formål</h3>
+    <p>@Model.Purpose</p>
+}
 
 <h3>Kontaktinformasjon</h3>
 <p><strong>Metadatakontakt:</strong> <a href="mailto:@Model.ContactMetadata.Email">@Model.ContactMetadata.Name, @Model.ContactMetadata.Organization</a></p>
@@ -97,4 +101,13 @@
         <a href="@Model.LegendDescriptionUrl" class="btn btn-default">Tegnforklaring</a>
     }
 </p>
+
+<h3>Detaljer</h3>
+<p><strong>Publisert:</strong> @Html.DisplayFor(m => m.DatePublished)</p>
+@if (Model.MaintenanceFrequencyTranslated() != null)
+{
+    <p><strong>Oppdateringshyppighet:</strong> @Model.MaintenanceFrequencyTranslated()</p>
+}
+<p><strong>Bruksbegrensninger:</strong> @Model.Constraints.UseLimitations</p>
+<p><strong>Andre restriksjoner:</strong> @Model.Constraints.OtherConstraints</p>
 
