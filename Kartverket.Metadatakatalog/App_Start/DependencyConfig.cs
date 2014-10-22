@@ -32,6 +32,7 @@ namespace Kartverket.Metadatakatalog
                 });
 
             builder.RegisterType<MetadataService>().As<IMetadataService>();
+            builder.RegisterType<SolrMetadataIndexer>().As<MetadataIndexer>();
         }
     }
 }
