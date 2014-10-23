@@ -57,9 +57,9 @@
     <Reference Include="Autofac.Integration.Mvc">
       <HintPath>..\packages\Autofac.Mvc5.3.3.3\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="GeoNorgeAPI, Version=2.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="GeoNorgeAPI, Version=2.6.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\GeoNorgeAPI.2.6.2.0\lib\net40\GeoNorgeAPI.dll</HintPath>
+      <HintPath>..\packages\GeoNorgeAPI.2.6.4.0\lib\net40\GeoNorgeAPI.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -170,8 +170,10 @@
       <DependentUpon>UI.resx</DependentUpon>
     </Compile>
     <Compile Include="Service\IMetadataService.cs" />
+    <Compile Include="Service\Indexer.cs" />
     <Compile Include="Service\MetadataIndexer.cs" />
     <Compile Include="Service\MetadataService.cs" />
+    <Compile Include="Service\SolrIndexer.cs" />
     <Compile Include="Service\SolrMetadataIndexer.cs" />
   </ItemGroup>
   <ItemGroup>
