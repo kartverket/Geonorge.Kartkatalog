@@ -30,8 +30,9 @@ namespace Kartverket.Metadatakatalog
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
 
-            Startup.Init<MetadataIndexDoc>("http://localhost:8983/solr/metadata");
+            log4net.Config.XmlConfigurator.Configure();
 
+            Startup.Init<MetadataIndexDoc>("http://localhost:8983/solr/metadata");
 
         }
     }
