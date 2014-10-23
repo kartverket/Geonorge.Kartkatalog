@@ -1,34 +1,45 @@
-﻿using System;
+﻿using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Models;
 using Microsoft.Practices.ServiceLocation;
 using SolrNet;
-using SolrNet.Exceptions;
+using www.opengis.net;
 
 namespace Kartverket.Metadatakatalog.Service
 {
     public class SolrMetadataIndexer : MetadataIndexer
     {
+        private readonly IGeoNorge _geoNorge;
+
+        public SolrMetadataIndexer(IGeoNorge geoNorge)
+        {
+            _geoNorge = geoNorge;
+        }
 
         public void RunIndexing()
         {
-            var doc = new MetadataIndexDoc()
+            SearchResultsType searchResult = _geoNorge.SearchIso("");
+            foreach (var item in searchResult.Items)
             {
-                Uuid = "e461747b-8482-4b2b-88af-cf920570de2d",
-                Title = "ABAS wms"
-            };
-
-            var solr = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
-            solr.Add(doc);
-            try
-            {
-                solr.Commit();
+                var metadataItem = item as MD_Metadata_Type;
+                if (metadataItem != null)
+                {
+                    var simpleMetadata = new SimpleMetadata(metadataItem);
+                    var indexDoc = new MetadataIndexDoc
+                    {
+                        Uuid = simpleMetadata.Uuid,
+                        Title = simpleMetadata.Title,
+                        Abstract = simpleMetadata.Abstract,
+                        Purpose = simpleMetadata.Purpose,
+                        Type = simpleMetadata.HierarchyLevel,
+                        ContactMetadataName = simpleMetadata.ContactMetadata.Name,
+                        ContactMetadataOrganization = simpleMetadata.ContactMetadata.Organization,
+                        ContactMetadataEmail = simpleMetadata.ContactMetadata.Email,
+                    };
+                    var solr = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
+                    solr.Add(indexDoc);
+                    solr.Commit();
+                }
             }
-            catch (SolrConnectionException exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
-            
-
         }
     }
 }

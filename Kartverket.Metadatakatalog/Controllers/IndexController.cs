@@ -15,7 +15,6 @@ namespace Kartverket.Metadatakatalog.Controllers
         public ActionResult Index()
         {
             _indexer.RunIndexing();
-
             
             return View();
         }
