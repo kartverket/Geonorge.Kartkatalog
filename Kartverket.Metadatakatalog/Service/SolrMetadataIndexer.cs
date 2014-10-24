@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
@@ -108,6 +109,9 @@ namespace Kartverket.Metadatakatalog.Service
                     }
 
                     indexDoc.MaintenanceFrequency = simpleMetadata.MaintenanceFrequency;
+
+                    indexDoc.TopicCategory = simpleMetadata.TopicCategory;
+                    indexDoc.Keywords = simpleMetadata.Keywords.Select(k => k.Keyword).ToList();
 
                     Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid, indexDoc.Title));
                     
