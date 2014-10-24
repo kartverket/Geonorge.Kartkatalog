@@ -57,6 +57,7 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("text")]
         public List<string> Text { get; set; }
 
+
         // not indexed, only stored fields
 
         [SolrField("date_published")]
@@ -91,5 +92,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string MaintenanceFrequency { get; set; }
 
 
+
     }
+
 }
