@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
@@ -75,7 +76,39 @@ namespace Kartverket.Metadatakatalog.Service
                         indexDoc.ContactPublisherOrganization = simpleMetadata.ContactPublisher.Organization;
                         indexDoc.ContactPublisherEmail = simpleMetadata.ContactPublisher.Email;
                     }
-                    
+
+
+                    // BAD!! Move this into GeoNorgeAPI
+                    try
+                    {
+                        indexDoc.DatePublished = simpleMetadata.DatePublished;
+                        indexDoc.DateUpdated = simpleMetadata.DateUpdated;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error("Error parsing datetime", e);
+                    }
+
+                    indexDoc.LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl;
+                    indexDoc.ProductPageUrl = simpleMetadata.ProductPageUrl;
+                    indexDoc.ProductSheetUrl = simpleMetadata.ProductSheetUrl;
+                    indexDoc.ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl;
+
+                    var distributionDetails = simpleMetadata.DistributionDetails;
+                    if (distributionDetails != null)
+                    {
+                        indexDoc.DistributionProtocol = distributionDetails.Protocol;
+                        indexDoc.DistributionUrl = distributionDetails.URL;    
+                    }
+
+                    List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;
+                    if (thumbnails != null && thumbnails.Count > 0)
+                    {
+                        indexDoc.ThumbnailUrl = thumbnails[0].URL;
+                    }
+
+                    indexDoc.MaintenanceFrequency = simpleMetadata.MaintenanceFrequency;
+
                     Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid, indexDoc.Title));
                     
                     documentsToIndex.Add(indexDoc);
