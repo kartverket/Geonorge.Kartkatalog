@@ -82,8 +82,8 @@ namespace Kartverket.Metadatakatalog.Service
                     // BAD!! Move this into GeoNorgeAPI
                     try
                     {
-                        indexDoc.DatePublished = simpleMetadata.DatePublished;
-                        indexDoc.DateUpdated = simpleMetadata.DateUpdated;
+                        indexDoc.DatePublished = simpleMetadata.DatePublished.ToString();
+                        indexDoc.DateUpdated = simpleMetadata.DateUpdated.ToString();
                     }
                     catch (Exception e)
                     {

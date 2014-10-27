@@ -18,5 +18,17 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public Contact ContactMetadata { get; set; }
         public Contact ContactOwner { get; set; }
         public Contact ContactPublisher { get; set; }
+
+        public string DatePublished { get; set; }
+        public string DateUpdated { get; set; }
+        public string LegendDescriptionUrl { get; set; }
+        public string ProductPageUrl { get; set; }
+        public string ProductSheetUrl { get; set; }
+        public string ProductSpecificationUrl { get; set; }
+        public string ThumbnailUrl { get; set; }
+        public string DistributionUrl { get; set; }
+        public string DistributionProtocol { get; set; }
+        public string MaintenanceFrequency { get; set; }
+
     }
 }

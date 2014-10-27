@@ -163,6 +163,7 @@
     <Compile Include="Models\Api\Contact.cs" />
     <Compile Include="Models\Api\Keyword.cs" />
     <Compile Include="Models\Api\Metadata.cs" />
+    <Compile Include="Models\Api\SearchParameters.cs" />
     <Compile Include="Models\Facet.cs" />
     <Compile Include="Models\MetadataIndexDoc.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />

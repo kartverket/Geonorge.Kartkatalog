@@ -61,10 +61,10 @@ namespace Kartverket.Metadatakatalog.Models
         // not indexed, only stored fields
 
         [SolrField("date_published")]
-        public DateTime? DatePublished { get; set; }
+        public string DatePublished { get; set; }
 
         [SolrField("date_updated")]
-        public DateTime? DateUpdated { get; set; }
+        public string DateUpdated { get; set; }
 
         [SolrField("legend_description_url")]
         public string LegendDescriptionUrl { get; set; }

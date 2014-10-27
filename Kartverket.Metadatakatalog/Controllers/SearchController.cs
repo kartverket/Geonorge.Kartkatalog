@@ -30,9 +30,10 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
 
 
             var query = Query.Field("title").Is(qstr).Boost(4)
-                //|| Query.Field("abstract").Is(qstr)
-                //|| Query.Field("purpose").Is(qstr)
+                || Query.Field("abstract").Is(qstr).Boost(3)
+                || Query.Field("purpose").Is(qstr)
                 || Query.Field("type").Is(qstr)
+                || Query.Field("topic_category").Is(qstr)
                 || Query.Field("contact_metadata_name").Is(qstr)
                 || Query.Field("contact_metadata_organization").Is(qstr)
                 || Query.Field("contact_metadata_email").Is(qstr)
@@ -42,9 +43,11 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
                 || Query.Field("contact_publisher_name").Is(qstr)
                 || Query.Field("contact_publisher_organization").Is(qstr)
                 || Query.Field("contact_publisher_email").Is(qstr)
+                || Query.Field("keyword").Is(qstr)
                 ;
 
 
+            
             var metadataIndexDocs = solr.Query(query, new QueryOptions
             {
                 Rows = 20 ,
@@ -56,9 +59,17 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
             });
 
 
+            return SearchResultOutput(metadataIndexDocs);
+
+        }
+
+
+        private static SearchResult SearchResultOutput(SolrQueryResults<MetadataIndexDoc> metadataIndexDocs)
+        {
             List<Metadata> metadataList = new List<Metadata>(); // map'e fra metadataIndexDocs...
 
-            foreach(MetadataIndexDoc metadataIndexDoc in metadataIndexDocs) {
+            foreach (MetadataIndexDoc metadataIndexDoc in metadataIndexDocs)
+            {
 
                 Metadata metadata = new Metadata
                 {
@@ -85,28 +96,41 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
                         Name = metadataIndexDoc.ContactMetadataName,
                         Email = metadataIndexDoc.ContactMetadataEmail,
                         Organization = metadataIndexDoc.ContactMetadataOrganization
-                    }
-             
+                    },
+
+                    DatePublished = metadataIndexDoc.DatePublished,
+                    DateUpdated = metadataIndexDoc.DateUpdated,
+                    LegendDescriptionUrl = metadataIndexDoc.LegendDescriptionUrl,
+                    ProductPageUrl = metadataIndexDoc.ProductPageUrl,
+                    ProductSheetUrl = metadataIndexDoc.ProductSheetUrl,
+                    ProductSpecificationUrl = metadataIndexDoc.ProductSpecificationUrl,
+                    ThumbnailUrl = metadataIndexDoc.ThumbnailUrl,
+                    DistributionUrl = metadataIndexDoc.DistributionUrl,
+                    DistributionProtocol = metadataIndexDoc.DistributionProtocol,
+                    MaintenanceFrequency = metadataIndexDoc.MaintenanceFrequency
+
                 };
 
                 metadataList.Add(metadata);
             }
 
-            List<Facet> facets = new List<Facet>(); 
+            List<Facet> facets = new List<Facet>();
 
             foreach (var facetField in metadataIndexDocs.FacetFields)
             {
                 System.Diagnostics.Debug.WriteLine("{0}", facetField.Key);
-               
+
                 Facet facet = new Facet();
                 facet.Name = facetField.Key;
                 facet.Values = new List<Facet.FacetValue>();
 
-                foreach (var facetvalueFromIndex in metadataIndexDocs.FacetFields[facetField.Key]){
+                foreach (var facetvalueFromIndex in metadataIndexDocs.FacetFields[facetField.Key])
+                {
 
                     System.Diagnostics.Debug.WriteLine("{0}: {1}", facetvalueFromIndex.Key, facetvalueFromIndex.Value);
 
-                    Facet.FacetValue facetvalue = new Facet.FacetValue {
+                    Facet.FacetValue facetvalue = new Facet.FacetValue
+                    {
                         Name = facetvalueFromIndex.Key,
                         Count = facetvalueFromIndex.Value,
                     };
@@ -123,10 +147,7 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
                 MetadataList = metadataList,
                 Facets = facets
             };
-
-
             return SResult;
-
         } 
     }
 }
