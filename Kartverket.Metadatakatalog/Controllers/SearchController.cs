@@ -16,55 +16,95 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
 {
     public class SearchController : ApiController
     {
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public string Get() {
 
-            return "Search string missing";
-        }
+         public ISolrQuery BuildQuery(SearchParameters parameters) {
 
-        public SearchResult Get(string search)
+             if (!string.IsNullOrEmpty(parameters.FreeSearch)) {
+                 var qstr = parameters.FreeSearch;
+                 var query = Query.Field("title").Is(qstr).Boost(4)
+                     || Query.Field("abstract").Is(qstr).Boost(3)
+                     || Query.Field("purpose").Is(qstr)
+                     || Query.Field("type").Is(qstr)
+                     || Query.Field("topic_category").Is(qstr)
+                     || Query.Field("contact_metadata_name").Is(qstr)
+                     || Query.Field("contact_metadata_organization").Is(qstr)
+                     || Query.Field("contact_metadata_email").Is(qstr)
+                     || Query.Field("contact_owner_name").Is(qstr)
+                     || Query.Field("contact_owner_organization").Is(qstr)
+                     || Query.Field("contact_owner_email").Is(qstr)
+                     || Query.Field("contact_publisher_name").Is(qstr)
+                     || Query.Field("contact_publisher_organization").Is(qstr)
+                     || Query.Field("contact_publisher_email").Is(qstr)
+                     || Query.Field("keyword").Is(qstr)
+                     ;
+                 return query;
+             }
+                 
+             return SolrQuery.All; 
+         } 
+ 
+ 
+         public ICollection<ISolrQuery> BuildFilterQueries(SearchParameters parameters) { 
+             var queriesFromFacets = from p in parameters.Facets 
+                                     select (ISolrQuery)Query.Field(p.Key).Is(p.Value); 
+             return queriesFromFacets.ToList(); 
+         }
+
+        private static readonly string[] AllFacetFields = new[] { "type" /*, "topic_category"*/ };
+
+
+        public IEnumerable<string> SelectedFacetFields(SearchParameters parameters) { 
+             return parameters.Facets.Select(f => f.Key); 
+         }
+
+
+
+        public SearchResult Get([FromUri] SearchParameters parameters)
         {
-            var solr = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
-
-            string qstr = search;
-
-
-            var query = Query.Field("title").Is(qstr).Boost(4)
-                || Query.Field("abstract").Is(qstr).Boost(3)
-                || Query.Field("purpose").Is(qstr)
-                || Query.Field("type").Is(qstr)
-                || Query.Field("topic_category").Is(qstr)
-                || Query.Field("contact_metadata_name").Is(qstr)
-                || Query.Field("contact_metadata_organization").Is(qstr)
-                || Query.Field("contact_metadata_email").Is(qstr)
-                || Query.Field("contact_owner_name").Is(qstr)
-                || Query.Field("contact_owner_organization").Is(qstr)
-                || Query.Field("contact_owner_email").Is(qstr)
-                || Query.Field("contact_publisher_name").Is(qstr)
-                || Query.Field("contact_publisher_organization").Is(qstr)
-                || Query.Field("contact_publisher_email").Is(qstr)
-                || Query.Field("keyword").Is(qstr)
-                ;
-
-
             
-            var metadataIndexDocs = solr.Query(query, new QueryOptions
-            {
-                Rows = 20 ,
-                Start = 0,
-                Facet = new FacetParameters
-                {
-                    Queries = new[] { new SolrFacetFieldQuery("type") , new SolrFacetFieldQuery("title")}
+            try{
+
+                if (string.IsNullOrWhiteSpace(parameters.FreeSearch)){
+                    throw new Exception("FreeSearch parameter missing");
                 }
-            });
+                
+                //Todo check out how to get this as input 
+                //IDictionary<string, string> FacetParam = new Dictionary<string, string>();
+                //FacetParam.Add("type", "dataset");
+                //FacetParam.Add("contact_publisher_organization", "Norsk Polarinstitutt");
 
+                //parameters.Facets = FacetParam;
 
-            return SearchResultOutput(metadataIndexDocs);
+                var solr = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
+
+                var start = (parameters.PageIndex - 1) * parameters.PageSize;
+                var metadataIndexDocs = solr.Query(BuildQuery(parameters), new QueryOptions
+                { 
+                         FilterQueries = BuildFilterQueries(parameters), 
+                         Rows = parameters.PageSize,
+                         StartOrCursor = new StartOrCursor.Start(start), 
+                         Facet = new FacetParameters { 
+                             Queries = AllFacetFields/*.Except(SelectedFacetFields(parameters)) */
+                                                                                   .Select(f => new SolrFacetFieldQuery(f) {MinCount = 1}) 
+                                                                                   .Cast<ISolrFacetQuery>()
+                                                                                   .ToList(),
+                         }, 
+                     });
+                return SearchResultOutput(metadataIndexDocs,parameters.PageSize,parameters.PageIndex);
+            }
+            catch(Exception ex){
+            
+                Log.Error(ex.Message);
+            }
+
+            return null;
 
         }
 
 
-        private static SearchResult SearchResultOutput(SolrQueryResults<MetadataIndexDoc> metadataIndexDocs)
+        private static SearchResult SearchResultOutput(SolrQueryResults<MetadataIndexDoc> metadataIndexDocs, int PageSize, int PageIndex)
         {
             List<Metadata> metadataList = new List<Metadata>(); // map'e fra metadataIndexDocs...
 
@@ -118,7 +158,6 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
 
             foreach (var facetField in metadataIndexDocs.FacetFields)
             {
-                System.Diagnostics.Debug.WriteLine("{0}", facetField.Key);
 
                 Facet facet = new Facet();
                 facet.Name = facetField.Key;
@@ -126,8 +165,6 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
 
                 foreach (var facetvalueFromIndex in metadataIndexDocs.FacetFields[facetField.Key])
                 {
-
-                    System.Diagnostics.Debug.WriteLine("{0}: {1}", facetvalueFromIndex.Key, facetvalueFromIndex.Value);
 
                     Facet.FacetValue facetvalue = new Facet.FacetValue
                     {
@@ -141,9 +178,9 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
 
             SearchResult SResult = new SearchResult
             {
-                NumFound = metadataIndexDocs.Count,
-                //Limit = 
-                //Offset = 
+                NumFound = metadataIndexDocs.NumFound,
+                Limit = PageSize,
+                Offset = PageIndex,
                 MetadataList = metadataList,
                 Facets = facets
             };
