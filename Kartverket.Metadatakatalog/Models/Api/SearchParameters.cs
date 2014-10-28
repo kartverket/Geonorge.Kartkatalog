@@ -15,7 +15,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
              Offset = 1; 
          } 
 
-        public string FreeSearch { get; set; }
+        public string text { get; set; }
         public int Offset { get; set; } 
         public int Limit { get; set; } 
         public IDictionary<string, string> Facets { get; set; }

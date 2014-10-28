@@ -21,8 +21,8 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
 
          public ISolrQuery BuildQuery(SearchParameters parameters) {
 
-             if (!string.IsNullOrEmpty(parameters.FreeSearch)) {
-                 var qstr = parameters.FreeSearch;
+             if (!string.IsNullOrEmpty(parameters.text)) {
+                 var qstr = parameters.text;
                  var query = Query.Field("title").Is(qstr).Boost(4)
                      || Query.Field("abstract").Is(qstr).Boost(3)
                      || Query.Field("purpose").Is(qstr)
@@ -66,8 +66,8 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
             
             try{
 
-                if (string.IsNullOrWhiteSpace(parameters.FreeSearch)){
-                    throw new ArgumentException("FreeSearch parameter missing");
+                if (string.IsNullOrWhiteSpace(parameters.text)){
+                    throw new ArgumentException("text parameter missing");
                 }
                 
                 
@@ -117,73 +117,75 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
                     Uuid = metadataIndexDoc.Uuid,
                     Title = metadataIndexDoc.Title,
                     @Abstract = metadataIndexDoc.Abstract,
-                    Purpose = metadataIndexDoc.Purpose,
+                    //Purpose = metadataIndexDoc.Purpose,
                     Type = metadataIndexDoc.Type,
-                    TopicCategory = metadataIndexDoc.TopicCategory,
-                    ContactMetadata = new Kartverket.Metadatakatalog.Models.Api.Contact
-                    {
-                        Name = metadataIndexDoc.ContactMetadataName,
-                        Email = metadataIndexDoc.ContactMetadataEmail,
-                        Organization = metadataIndexDoc.ContactMetadataOrganization
-                    },
-                    ContactOwner = new Kartverket.Metadatakatalog.Models.Api.Contact
-                    {
-                        Name = metadataIndexDoc.ContactMetadataName,
-                        Email = metadataIndexDoc.ContactMetadataEmail,
-                        Organization = metadataIndexDoc.ContactMetadataOrganization
-                    },
-                    ContactPublisher = new Kartverket.Metadatakatalog.Models.Api.Contact
-                    {
-                        Name = metadataIndexDoc.ContactMetadataName,
-                        Email = metadataIndexDoc.ContactMetadataEmail,
-                        Organization = metadataIndexDoc.ContactMetadataOrganization
-                    },
+                    Theme = "TODO",
+                    Organization = metadataIndexDoc.ContactMetadataOrganization,
+                    OrganizationLogo = "TODO",
+                    //ContactMetadata = new Kartverket.Metadatakatalog.Models.Api.Contact
+                    //{
+                    //    Name = metadataIndexDoc.ContactMetadataName,
+                    //    Email = metadataIndexDoc.ContactMetadataEmail,
+                    //    Organization = metadataIndexDoc.ContactMetadataOrganization
+                    //},
+                    //ContactOwner = new Kartverket.Metadatakatalog.Models.Api.Contact
+                    //{
+                    //    Name = metadataIndexDoc.ContactMetadataName,
+                    //    Email = metadataIndexDoc.ContactMetadataEmail,
+                    //    Organization = metadataIndexDoc.ContactMetadataOrganization
+                    //},
+                    //ContactPublisher = new Kartverket.Metadatakatalog.Models.Api.Contact
+                    //{
+                    //    Name = metadataIndexDoc.ContactMetadataName,
+                    //    Email = metadataIndexDoc.ContactMetadataEmail,
+                    //    Organization = metadataIndexDoc.ContactMetadataOrganization
+                    //},
 
-                    DatePublished = metadataIndexDoc.DatePublished,
-                    DateUpdated = metadataIndexDoc.DateUpdated,
-                    LegendDescriptionUrl = metadataIndexDoc.LegendDescriptionUrl,
-                    ProductPageUrl = metadataIndexDoc.ProductPageUrl,
-                    ProductSheetUrl = metadataIndexDoc.ProductSheetUrl,
-                    ProductSpecificationUrl = metadataIndexDoc.ProductSpecificationUrl,
+                    //DatePublished = metadataIndexDoc.DatePublished,
+                    //DateUpdated = metadataIndexDoc.DateUpdated,
+                    //LegendDescriptionUrl = metadataIndexDoc.LegendDescriptionUrl,
+                    //ProductPageUrl = metadataIndexDoc.ProductPageUrl,
+                    //ProductSheetUrl = metadataIndexDoc.ProductSheetUrl,
                     ThumbnailUrl = metadataIndexDoc.ThumbnailUrl,
                     DistributionUrl = metadataIndexDoc.DistributionUrl,
                     DistributionProtocol = metadataIndexDoc.DistributionProtocol,
-                    MaintenanceFrequency = metadataIndexDoc.MaintenanceFrequency
+                    //MaintenanceFrequency = metadataIndexDoc.MaintenanceFrequency,
+                    ShowDetailsUrl = "http://metadata.dev.geonorge.no/metadata/?uuid=" + metadataIndexDoc.Uuid
 
                 };
 
                 metadataList.Add(metadata);
             }
 
-            List<Facet> facets = new List<Facet>();
+            //List<Facet> facets = new List<Facet>();
 
-            foreach (var facetField in metadataIndexDocs.FacetFields)
-            {
+            //foreach (var facetField in metadataIndexDocs.FacetFields)
+            //{
 
-                Facet facet = new Facet();
-                facet.FacetField = facetField.Key;
-                facet.FacetResults = new List<Facet.FacetValue>();
+            //    Facet facet = new Facet();
+            //    facet.FacetField = facetField.Key;
+            //    facet.FacetResults = new List<Facet.FacetValue>();
 
-                foreach (var facetvalueFromIndex in metadataIndexDocs.FacetFields[facetField.Key])
-                {
+            //    foreach (var facetvalueFromIndex in metadataIndexDocs.FacetFields[facetField.Key])
+            //    {
 
-                    Facet.FacetValue facetvalue = new Facet.FacetValue
-                    {
-                        Name = facetvalueFromIndex.Key,
-                        Count = facetvalueFromIndex.Value,
-                    };
-                    facet.FacetResults.Add(facetvalue);
-                }
-                facets.Add(facet);
-            }
+            //        Facet.FacetValue facetvalue = new Facet.FacetValue
+            //        {
+            //            Name = facetvalueFromIndex.Key,
+            //            Count = facetvalueFromIndex.Value,
+            //        };
+            //        facet.FacetResults.Add(facetvalue);
+            //    }
+            //    facets.Add(facet);
+            //}
 
             SearchResult SResult = new SearchResult
             {
                 NumFound = metadataIndexDocs.NumFound,
                 Limit = Limit,
                 Offset = Offset,
-                Results = metadataList,
-                Facets = facets
+                Results = metadataList/*,
+                Facets = facets*/
             };
             return SResult;
         } 
