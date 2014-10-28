@@ -1,4 +1,5 @@
-﻿@model MetadataViewModel
+﻿@using GeoNorgeAPI
+@model MetadataViewModel
 @{
     ViewBag.Title = Model.Title + " - " + Model.ContactMetadata.Organization;
     ViewBag.MetaDescription = Model.Abstract;
@@ -50,15 +51,16 @@
     <p>@Model.Purpose</p>
 }
 
-<h3>Kontaktinformasjon</h3>
-<p><strong>Metadatakontakt:</strong> <a href="mailto:@Model.ContactMetadata.Email">@Model.ContactMetadata.Name, @Model.ContactMetadata.Organization</a></p>
-@if (Model.ContactPublisher != null)
+@if (!string.IsNullOrWhiteSpace(Model.SupplementalDescription))
 {
-    <p><strong>Faglig kontakt:</strong> <a href="mailto:@Model.ContactOwner.Email">@Model.ContactOwner.Name, @Model.ContactOwner.Organization</a></p>
+    <h3>Supplerende beskrivelse</h3>
+    <p>@Model.SupplementalDescription</p>
 }
-@if (Model.ContactPublisher != null)
+
+@if (!string.IsNullOrWhiteSpace(Model.SpecificUsage))
 {
-    <p><strong>Teknisk kontakt:</strong> <a href="mailto:@Model.ContactPublisher.Email">@Model.ContactPublisher.Name, @Model.ContactPublisher.Organization</a></p>
+    <h3>Bruksområde</h3>
+    <p>@Model.SpecificUsage</p>
 }
 
 <p class="bg-info shortcuts">
@@ -80,34 +82,161 @@
     {
         <a href="http://norgeskart.no/geoportal/staging/#5/355422/6668909/l/wms/[@Model.DistributionDetails.URL]" class="btn btn-default"><span class="glyphicon glyphicon-picture"></span> Vis tjenesten i Norgeskart</a>
     }
-    
+
     @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
     {
         <a href="@Model.ProductPageUrl" class="btn btn-default">Produktside</a>
     }
-    
+
     @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
     {
         <a href="@Model.ProductSheetUrl" class="btn btn-default">Produktark</a>
     }
-    
+
     @if (!string.IsNullOrWhiteSpace(Model.ProductSpecificationUrl))
     {
         <a href="@Model.ProductSpecificationUrl" class="btn btn-default">Produktspesifikasjon</a>
     }
-    
+
     @if (!string.IsNullOrWhiteSpace(Model.LegendDescriptionUrl))
     {
         <a href="@Model.LegendDescriptionUrl" class="btn btn-default">Tegnforklaring</a>
     }
 </p>
 
-<h3>Detaljer</h3>
-<p><strong>Publisert:</strong> @Html.DisplayFor(m => m.DatePublished)</p>
-@if (Model.MaintenanceFrequencyTranslated() != null)
-{
-    <p><strong>Oppdateringshyppighet:</strong> @Model.MaintenanceFrequencyTranslated()</p>
-}
-<p><strong>Bruksbegrensninger:</strong> @Model.Constraints.UseLimitations</p>
-<p><strong>Andre restriksjoner:</strong> @Model.Constraints.OtherConstraints</p>
 
+<div class="row">
+    <div class="col-sm-6">
+        <h3>Kontaktinformasjon</h3>
+        <p><strong>Metadatakontakt:</strong> 
+            <a href="mailto:@Model.ContactMetadata.Email">
+                @if (!string.IsNullOrWhiteSpace(Model.ContactMetadata.Name))
+                {
+                    <text>@Model.ContactMetadata.Name, </text>
+                }
+                @Model.ContactMetadata.Organization
+            </a></p>
+        @if (Model.ContactOwner != null)
+        {
+            <p><strong>Faglig kontakt:</strong> 
+                <a href="mailto:@Model.ContactOwner.Email">
+                    @if (!string.IsNullOrWhiteSpace(Model.ContactOwner.Name))
+                    {
+                        <text>@Model.ContactOwner.Name, </text>
+                    }
+                    @Model.ContactOwner.Organization
+                </a>
+            </p>
+        }
+        @if (Model.ContactPublisher != null)
+        {
+            <p>
+                <strong>Faglig kontakt:</strong>
+                <a href="mailto:@Model.ContactPublisher.Email">
+                    @if (!string.IsNullOrWhiteSpace(Model.ContactPublisher.Name))
+                    {
+                        <text>@Model.ContactPublisher.Name, </text>
+                    }
+                    @Model.ContactPublisher.Organization
+                </a>
+            </p>
+        }
+        
+        
+
+
+        <h3>Distribusjon</h3>
+        @DisplayValue("Representasjonsform", Model.SpatialRepresentation)
+        @if (Model.DistributionFormat != null)
+        {
+            <text>DisplayValue("Format", Model.DistributionFormat.Name)</text>
+            <text>DisplayValue("Versjon", Model.DistributionFormat.Version)</text>
+        }
+        @DisplayValue("Protokoll", Model.DistributionDetails.Protocol)
+        @DisplayValue("Url", Model.DistributionDetails.URL)
+        @DisplayValue("Lagnavn", Model.DistributionDetails.Name)
+
+        <h3>Restriksjoner</h3>
+        @DisplayValue("Bruksbegrensninger", Model.Constraints.UseLimitations)
+        @DisplayValue("Tilgangsrestriksjoner", Model.Constraints.AccessConstraints)
+        @DisplayValue("Brukerrestriksjoner", Model.Constraints.UseConstraints)
+        @DisplayValue("Andre restriksjoner", Model.Constraints.OtherConstraints)
+        @DisplayValue("Sikkerhetsnivå", Model.Constraints.SecurityConstraints)
+
+        <h3>Kvalitet</h3>
+        @DisplayValue("Målestokkstall", Model.SpatialRepresentation)
+        @DisplayValue("Status", Model.Status)
+        @DisplayValue("Prosesshistorie", Model.ProcessHistory)
+
+
+        
+    </div>
+
+    <div class="col-sm-6">
+        
+        <h3>Tid og rom</h3>
+        @if (Model.DateUpdated != null)
+        {
+            <p><strong>Oppdatert:</strong> @Html.DisplayFor(m => m.DateUpdated)</p>
+        }
+        else if (Model.DatePublished != null)
+        {
+            <p><strong>Publisert:</strong> @Html.DisplayFor(m => m.DatePublished)</p>
+        }
+        else if (Model.DateCreated != null)
+        {
+            <p><strong>Opprettet:</strong> @Html.DisplayFor(m => m.DateCreated)</p>
+        }
+
+        @if (Model.MaintenanceFrequencyTranslated() != null)
+        {
+            <p><strong>Oppdateringshyppighet:</strong> @Model.MaintenanceFrequencyTranslated()</p>
+        }
+        @if (Model.KeywordsPlace != null && Model.KeywordsPlace.Count > 0)
+        {
+            <p>
+                @DisplayKeywords("Geografisk område", Model.KeywordsPlace)
+            </p>
+        }
+        
+        @if (Model.BoundingBox != null)
+        {
+            <p>
+                <strong>Geografisk utstrekning:</strong>
+                Nord: @Model.BoundingBox.NorthBoundLatitude
+                Sør: @Model.BoundingBox.SouthBoundLatitude
+                Øst: @Model.BoundingBox.EastBoundLongitude
+                Vest: @Model.BoundingBox.WestBoundLongitude
+
+            </p>
+        }
+        
+        <h3>Nøkkelord</h3>
+        @DisplayKeywords("Tema", Model.KeywordsTheme)
+        @DisplayKeywords("Inspire", Model.KeywordsInspire)
+        @DisplayKeywords("Samarbeid og lover", Model.KeywordsNationalInitiative)
+        @DisplayKeywords("Annet", Model.KeywordsOther)
+
+    </div>
+</div>
+
+@helper DisplayValue(string label, string value) {
+    if (!string.IsNullOrWhiteSpace(value))
+    {
+        <p><strong>@label:</strong> @value</p>
+    }
+}
+
+@helper DisplayKeywords(string label, List<Keyword> keywords)
+{
+    if (keywords != null && keywords.Any())
+    {
+        <strong>@label:</strong>
+        <ul>
+            @foreach (var keyword in keywords)
+            {
+                <li>@keyword.KeywordValue</li>
+            }
+        </ul>
+    }
+}
