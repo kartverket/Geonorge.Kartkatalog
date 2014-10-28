@@ -44,7 +44,11 @@ namespace Kartverket.Metadatakatalog.Service
                 EnglishAbstract = simpleMetadata.EnglishAbstract,
                 EnglishTitle = simpleMetadata.EnglishTitle,
                 HierarchyLevel = simpleMetadata.HierarchyLevel,
-                Keywords = null,
+                KeywordsPlace = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)),
+                KeywordsTheme = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_THEME, null)),
+                KeywordsInspire = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_GEMET_INSPIRE_V1)),
+                KeywordsNationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)),
+                KeywordsOther = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, null)),
                 LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl,
                 MaintenanceFrequency = simpleMetadata.MaintenanceFrequency,
                 MetadataLanguage = simpleMetadata.MetadataLanguage,
@@ -68,6 +72,22 @@ namespace Kartverket.Metadatakatalog.Service
                 TopicCategory = simpleMetadata.TopicCategory,
                 Uuid = simpleMetadata.Uuid,
             };
+        }
+
+        private List<Keyword> Convert(IEnumerable<SimpleKeyword> simpleKeywords)
+        {
+            var output = new List<Keyword>();
+            foreach (var keyword in simpleKeywords)
+            {
+                output.Add(new Keyword
+                {
+                    EnglishKeyword = keyword.EnglishKeyword,
+                    KeywordValue = keyword.Keyword,
+                    Thesaurus = keyword.Thesaurus,
+                    Type = keyword.Type
+                });
+            }
+            return output;
         }
 
         private List<Thumbnail> Convert(List<SimpleThumbnail> simpleThumbnails)

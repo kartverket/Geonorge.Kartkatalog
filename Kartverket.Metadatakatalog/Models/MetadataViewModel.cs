@@ -31,6 +31,13 @@ namespace Kartverket.Metadatakatalog.Models
         //     an array of one element when value is updated.
         public string HierarchyLevel { get; set; }
         public List<Keyword> Keywords { get; set; }
+
+        public List<Keyword> KeywordsPlace { get; set; }
+        public List<Keyword> KeywordsTheme { get; set; }
+        public List<Keyword> KeywordsInspire { get; set; }
+        public List<Keyword> KeywordsNationalInitiative { get; set; }
+        public List<Keyword> KeywordsOther { get; set; }
+
         public string LegendDescriptionUrl { get; set; }
         //
         // Summary:
@@ -59,6 +66,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string Title { get; set; }
         public string TopicCategory { get; set; }
         public string Uuid { get; set; }
+        
 
         public SeoUrl CreateSeoUrl()
         {
