@@ -11,7 +11,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public int NumFound { get; set; }
         public int Limit { get; set; }
         public int Offset { get; set; }
-        public List<Metadata> MetadataList { get; set; }
+        public List<Metadata> Results { get; set; }
         public List<Facet> Facets { get; set; }
     }
 

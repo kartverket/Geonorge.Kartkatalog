@@ -52,7 +52,7 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
              return queriesFromFacets.ToList(); 
          }
 
-        private static readonly string[] AllFacetFields = new[] { "type" /*, "topic_category"*/ };
+        private static readonly string[] AllFacetFields = new[] { "type" };
 
 
         public IEnumerable<string> SelectedFacetFields(SearchParameters parameters) { 
@@ -67,32 +67,33 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
             try{
 
                 if (string.IsNullOrWhiteSpace(parameters.FreeSearch)){
-                    throw new Exception("FreeSearch parameter missing");
+                    throw new ArgumentException("FreeSearch parameter missing");
                 }
                 
-                //Todo check out how to get this as input 
-                //IDictionary<string, string> FacetParam = new Dictionary<string, string>();
-                //FacetParam.Add("type", "dataset");
-                //FacetParam.Add("contact_publisher_organization", "Norsk Polarinstitutt");
+                
+                IDictionary<string, string> FacetParam = new Dictionary<string, string>();
+                if (!string.IsNullOrWhiteSpace(parameters.Type))
+                    FacetParam.Add("type", parameters.Type);
+                if (!string.IsNullOrWhiteSpace(parameters.Organization))
+                    FacetParam.Add("contact_metadata_organization", parameters.Organization);
 
-                //parameters.Facets = FacetParam;
+                parameters.Facets = FacetParam;
 
                 var solr = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
 
-                var start = (parameters.PageIndex - 1) * parameters.PageSize;
+                var start = (parameters.Offset - 1) * parameters.Limit;
                 var metadataIndexDocs = solr.Query(BuildQuery(parameters), new QueryOptions
                 { 
                          FilterQueries = BuildFilterQueries(parameters), 
-                         Rows = parameters.PageSize,
+                         Rows = parameters.Limit,
                          StartOrCursor = new StartOrCursor.Start(start), 
                          Facet = new FacetParameters { 
-                             Queries = AllFacetFields/*.Except(SelectedFacetFields(parameters)) */
-                                                                                   .Select(f => new SolrFacetFieldQuery(f) {MinCount = 1}) 
-                                                                                   .Cast<ISolrFacetQuery>()
-                                                                                   .ToList(),
+                             Queries = AllFacetFields.Select(f => new SolrFacetFieldQuery(f) {MinCount = 1}) 
+                                                     .Cast<ISolrFacetQuery>()
+                                                     .ToList(),
                          }, 
                      });
-                return SearchResultOutput(metadataIndexDocs,parameters.PageSize,parameters.PageIndex);
+                return SearchResultOutput(metadataIndexDocs, parameters.Limit, parameters.Offset);
             }
             catch(Exception ex){
             
@@ -104,7 +105,7 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
         }
 
 
-        private static SearchResult SearchResultOutput(SolrQueryResults<MetadataIndexDoc> metadataIndexDocs, int PageSize, int PageIndex)
+        private static SearchResult SearchResultOutput(SolrQueryResults<MetadataIndexDoc> metadataIndexDocs, int Limit, int Offset)
         {
             List<Metadata> metadataList = new List<Metadata>(); // map'e fra metadataIndexDocs...
 
@@ -160,8 +161,8 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
             {
 
                 Facet facet = new Facet();
-                facet.Name = facetField.Key;
-                facet.Values = new List<Facet.FacetValue>();
+                facet.FacetField = facetField.Key;
+                facet.FacetResults = new List<Facet.FacetValue>();
 
                 foreach (var facetvalueFromIndex in metadataIndexDocs.FacetFields[facetField.Key])
                 {
@@ -171,7 +172,7 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
                         Name = facetvalueFromIndex.Key,
                         Count = facetvalueFromIndex.Value,
                     };
-                    facet.Values.Add(facetvalue);
+                    facet.FacetResults.Add(facetvalue);
                 }
                 facets.Add(facet);
             }
@@ -179,9 +180,9 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
             SearchResult SResult = new SearchResult
             {
                 NumFound = metadataIndexDocs.NumFound,
-                Limit = PageSize,
-                Offset = PageIndex,
-                MetadataList = metadataList,
+                Limit = Limit,
+                Offset = Offset,
+                Results = metadataList,
                 Facets = facets
             };
             return SResult;

@@ -7,8 +7,8 @@ namespace Kartverket.Metadatakatalog.Models
 {
     public class Facet
     {
-        public string Name { get; set; }
-        public List<FacetValue> Values { get; set; }
+        public string FacetField { get; set; }
+        public List<FacetValue> FacetResults { get; set; }
 
         public class FacetValue
         {

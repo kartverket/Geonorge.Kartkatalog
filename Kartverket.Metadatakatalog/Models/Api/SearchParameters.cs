@@ -7,19 +7,19 @@ namespace Kartverket.Metadatakatalog.Models.Api
 {
     public class SearchParameters
     {
-        public const int DEFAULT_PAGE_SIZE = 10;
+        public const int DEFAULT_LIMIT = 10;
 
         public SearchParameters() { 
              Facets = new Dictionary<string, string>();
-             PageSize = DEFAULT_PAGE_SIZE; 
-             PageIndex = 1; 
+             Limit = DEFAULT_LIMIT; 
+             Offset = 1; 
          } 
 
-        public string FreeSearch { get; set; } 
-        public int PageIndex { get; set; } 
-        public int PageSize { get; set; } 
-        public IDictionary<string, string> Facets { get; set; } 
-
-
+        public string FreeSearch { get; set; }
+        public int Offset { get; set; } 
+        public int Limit { get; set; } 
+        public IDictionary<string, string> Facets { get; set; }
+        public string @Type { get; set; }
+        public string Organization { get; set; } 
     }
 }
