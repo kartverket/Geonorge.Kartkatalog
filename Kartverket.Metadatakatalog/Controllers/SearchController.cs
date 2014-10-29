@@ -49,17 +49,14 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
  
  
          public ICollection<ISolrQuery> BuildFilterQueries(SearchParameters parameters) { 
-             var queriesFromFacets = from p in parameters.Facets 
+             var queriesFromFacets = from p in parameters.Facets
+                                     where p.Value != null && p.Value != ""
                                      select (ISolrQuery)Query.Field(p.Name).Is(p.Value); 
              return queriesFromFacets.ToList(); 
          }
 
-        private static readonly string[] AllFacetFields = new[] { "type" };
 
-
-        /*public IEnumerable<string> SelectedFacetFields(SearchParameters parameters) { 
-             return parameters.Facets.Select(f => f.Key); 
-         }*/
+        string[] AllFacetFields;
 
 
         public SearchResult Get([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))]  SearchParameters parameters)
@@ -70,8 +67,31 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
                 if (string.IsNullOrWhiteSpace(parameters.text)){
                     throw new ArgumentException("text parameter missing");
                 }
+
+                var AllFacetFieldsQuery = parameters.Facets.GroupBy(f => f.Name).Select(group => group.FirstOrDefault());
+
+                List<FacetInput> AllFacetFieldsList = AllFacetFieldsQuery.ToList();
+
+                if (AllFacetFieldsList.Count > 0)
+                {
+
+                    AllFacetFields = new string[AllFacetFieldsList.Count];
+
+                    int fcounter = 0;
+
+                    foreach (var f in AllFacetFieldsList)
+                    {
+                        AllFacetFields[fcounter] = f.Name;
+                        fcounter++;
+                    }
+
+                }
+
+                else {
+                    //Default facet
+                    AllFacetFields = new[] { "type" };
                 
-                List<FacetInput> FacetParam = new List<FacetInput>();
+                }
              
                 var solr = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
 
