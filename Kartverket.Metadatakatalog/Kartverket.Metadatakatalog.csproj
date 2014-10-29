@@ -161,6 +161,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Api\Contact.cs" />
+    <Compile Include="Models\Api\FacetInput.cs" />
+    <Compile Include="Models\Api\FieldValueModelBinder.cs" />
     <Compile Include="Models\Api\Keyword.cs" />
     <Compile Include="Models\Api\Metadata.cs" />
     <Compile Include="Models\Api\SearchParameters.cs" />
@@ -231,6 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="bin\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -10,7 +10,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public const int DEFAULT_LIMIT = 10;
 
         public SearchParameters() { 
-             Facets = new Dictionary<string, string>();
+             Facets = new List<FacetInput>();
              Limit = DEFAULT_LIMIT; 
              Offset = 1; 
          } 
@@ -18,8 +18,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public string text { get; set; }
         public int Offset { get; set; } 
         public int Limit { get; set; } 
-        public IDictionary<string, string> Facets { get; set; }
-        public string @Type { get; set; }
-        public string Organization { get; set; } 
+        public List<FacetInput> Facets { get; set; }
+
     }
 }

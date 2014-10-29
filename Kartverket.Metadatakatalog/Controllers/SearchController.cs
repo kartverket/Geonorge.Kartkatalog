@@ -11,6 +11,8 @@ using SolrNet.Commands.Parameters;
 using SolrNet.DSL;
 using System.Web;
 using Kartverket.Metadatakatalog.Models.Api;
+using System.Web.Mvc;
+
 
 namespace Kartverket.Metadatakatalog.Controllers.Api
 {
@@ -48,43 +50,35 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
  
          public ICollection<ISolrQuery> BuildFilterQueries(SearchParameters parameters) { 
              var queriesFromFacets = from p in parameters.Facets 
-                                     select (ISolrQuery)Query.Field(p.Key).Is(p.Value); 
+                                     select (ISolrQuery)Query.Field(p.Name).Is(p.Value); 
              return queriesFromFacets.ToList(); 
          }
 
         private static readonly string[] AllFacetFields = new[] { "type" };
 
 
-        public IEnumerable<string> SelectedFacetFields(SearchParameters parameters) { 
+        /*public IEnumerable<string> SelectedFacetFields(SearchParameters parameters) { 
              return parameters.Facets.Select(f => f.Key); 
-         }
+         }*/
 
 
-
-        public SearchResult Get([FromUri] SearchParameters parameters)
+        public SearchResult Get([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))]  SearchParameters parameters)
         {
-            
+
             try{
 
                 if (string.IsNullOrWhiteSpace(parameters.text)){
                     throw new ArgumentException("text parameter missing");
                 }
                 
-                
-                IDictionary<string, string> FacetParam = new Dictionary<string, string>();
-                if (!string.IsNullOrWhiteSpace(parameters.Type))
-                    FacetParam.Add("type", parameters.Type);
-                if (!string.IsNullOrWhiteSpace(parameters.Organization))
-                    FacetParam.Add("contact_metadata_organization", parameters.Organization);
-
-                parameters.Facets = FacetParam;
-
+                List<FacetInput> FacetParam = new List<FacetInput>();
+             
                 var solr = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
 
                 var start = (parameters.Offset - 1) * parameters.Limit;
                 var metadataIndexDocs = solr.Query(BuildQuery(parameters), new QueryOptions
                 { 
-                         FilterQueries = BuildFilterQueries(parameters), 
+                         FilterQueries = BuildFilterQueries(parameters),
                          Rows = parameters.Limit,
                          StartOrCursor = new StartOrCursor.Start(start), 
                          Facet = new FacetParameters { 
@@ -117,39 +111,13 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
                     Uuid = metadataIndexDoc.Uuid,
                     Title = metadataIndexDoc.Title,
                     @Abstract = metadataIndexDoc.Abstract,
-                    //Purpose = metadataIndexDoc.Purpose,
                     Type = metadataIndexDoc.Type,
                     Theme = "TODO",
                     Organization = metadataIndexDoc.ContactMetadataOrganization,
                     OrganizationLogo = "TODO",
-                    //ContactMetadata = new Kartverket.Metadatakatalog.Models.Api.Contact
-                    //{
-                    //    Name = metadataIndexDoc.ContactMetadataName,
-                    //    Email = metadataIndexDoc.ContactMetadataEmail,
-                    //    Organization = metadataIndexDoc.ContactMetadataOrganization
-                    //},
-                    //ContactOwner = new Kartverket.Metadatakatalog.Models.Api.Contact
-                    //{
-                    //    Name = metadataIndexDoc.ContactMetadataName,
-                    //    Email = metadataIndexDoc.ContactMetadataEmail,
-                    //    Organization = metadataIndexDoc.ContactMetadataOrganization
-                    //},
-                    //ContactPublisher = new Kartverket.Metadatakatalog.Models.Api.Contact
-                    //{
-                    //    Name = metadataIndexDoc.ContactMetadataName,
-                    //    Email = metadataIndexDoc.ContactMetadataEmail,
-                    //    Organization = metadataIndexDoc.ContactMetadataOrganization
-                    //},
-
-                    //DatePublished = metadataIndexDoc.DatePublished,
-                    //DateUpdated = metadataIndexDoc.DateUpdated,
-                    //LegendDescriptionUrl = metadataIndexDoc.LegendDescriptionUrl,
-                    //ProductPageUrl = metadataIndexDoc.ProductPageUrl,
-                    //ProductSheetUrl = metadataIndexDoc.ProductSheetUrl,
                     ThumbnailUrl = metadataIndexDoc.ThumbnailUrl,
                     DistributionUrl = metadataIndexDoc.DistributionUrl,
                     DistributionProtocol = metadataIndexDoc.DistributionProtocol,
-                    //MaintenanceFrequency = metadataIndexDoc.MaintenanceFrequency,
                     ShowDetailsUrl = "http://metadata.dev.geonorge.no/metadata/?uuid=" + metadataIndexDoc.Uuid
 
                 };
@@ -157,35 +125,35 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
                 metadataList.Add(metadata);
             }
 
-            //List<Facet> facets = new List<Facet>();
+            List<Facet> facets = new List<Facet>();
 
-            //foreach (var facetField in metadataIndexDocs.FacetFields)
-            //{
+            foreach (var facetField in metadataIndexDocs.FacetFields)
+            {
 
-            //    Facet facet = new Facet();
-            //    facet.FacetField = facetField.Key;
-            //    facet.FacetResults = new List<Facet.FacetValue>();
+                Facet facet = new Facet();
+                facet.FacetField = facetField.Key;
+                facet.FacetResults = new List<Facet.FacetValue>();
 
-            //    foreach (var facetvalueFromIndex in metadataIndexDocs.FacetFields[facetField.Key])
-            //    {
+                foreach (var facetvalueFromIndex in metadataIndexDocs.FacetFields[facetField.Key])
+                {
 
-            //        Facet.FacetValue facetvalue = new Facet.FacetValue
-            //        {
-            //            Name = facetvalueFromIndex.Key,
-            //            Count = facetvalueFromIndex.Value,
-            //        };
-            //        facet.FacetResults.Add(facetvalue);
-            //    }
-            //    facets.Add(facet);
-            //}
+                    Facet.FacetValue facetvalue = new Facet.FacetValue
+                    {
+                        Name = facetvalueFromIndex.Key,
+                        Count = facetvalueFromIndex.Value,
+                    };
+                    facet.FacetResults.Add(facetvalue);
+                }
+                facets.Add(facet);
+            }
 
             SearchResult SResult = new SearchResult
             {
                 NumFound = metadataIndexDocs.NumFound,
                 Limit = Limit,
                 Offset = Offset,
-                Results = metadataList/*,
-                Facets = facets*/
+                Results = metadataList,
+                Facets = facets
             };
             return SResult;
         } 
