@@ -63,11 +63,10 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
         {
 
             try{
-
-                if (string.IsNullOrWhiteSpace(parameters.text)){
-                    throw new ArgumentException("text parameter missing");
-                }
-
+                
+                if (parameters == null)
+                    parameters = new SearchParameters();
+                    
 
                 var AllFacetFieldsQuery = parameters.facets.GroupBy(f => f.name).Select(group => group.FirstOrDefault());
 
@@ -96,7 +95,7 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
              
                 var solr = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
 
-                var start = (parameters.offset - 1) * parameters.limit;
+                var start = parameters.offset - 1; //(parameters.offset - 1) * parameters.limit;
                 var metadataIndexDocs = solr.Query(BuildQuery(parameters), new QueryOptions
                 { 
                          FilterQueries = BuildFilterQueries(parameters),
