@@ -7,8 +7,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
 {
     public class FacetInput
     {
-        public string Name { get; set; }
-        public string Value { get; set; }
+        public string name { get; set; }
+        public string value { get; set; }
 
     }
 }

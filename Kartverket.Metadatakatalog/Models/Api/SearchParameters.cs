@@ -10,15 +10,15 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public const int DEFAULT_LIMIT = 10;
 
         public SearchParameters() { 
-             Facets = new List<FacetInput>();
-             Limit = DEFAULT_LIMIT; 
-             Offset = 1; 
+             facets = new List<FacetInput>();
+             limit = DEFAULT_LIMIT; 
+             offset = 1; 
          } 
 
         public string text { get; set; }
-        public int Offset { get; set; } 
-        public int Limit { get; set; } 
-        public List<FacetInput> Facets { get; set; }
+        public int offset { get; set; } 
+        public int limit { get; set; } 
+        public List<FacetInput> facets { get; set; }
 
     }
 }

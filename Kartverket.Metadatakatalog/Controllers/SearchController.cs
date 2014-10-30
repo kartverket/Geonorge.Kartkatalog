@@ -49,9 +49,9 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
  
  
          public ICollection<ISolrQuery> BuildFilterQueries(SearchParameters parameters) { 
-             var queriesFromFacets = from p in parameters.Facets
-                                     where p.Value != null && p.Value != ""
-                                     select (ISolrQuery)Query.Field(p.Name).Is(p.Value); 
+             var queriesFromFacets = from p in parameters.facets
+                                     where p.value != null && p.value != ""
+                                     select (ISolrQuery)Query.Field(p.name).Is(p.value); 
              return queriesFromFacets.ToList(); 
          }
 
@@ -68,7 +68,8 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
                     throw new ArgumentException("text parameter missing");
                 }
 
-                var AllFacetFieldsQuery = parameters.Facets.GroupBy(f => f.Name).Select(group => group.FirstOrDefault());
+
+                var AllFacetFieldsQuery = parameters.facets.GroupBy(f => f.name).Select(group => group.FirstOrDefault());
 
                 List<FacetInput> AllFacetFieldsList = AllFacetFieldsQuery.ToList();
 
@@ -81,7 +82,7 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
 
                     foreach (var f in AllFacetFieldsList)
                     {
-                        AllFacetFields[fcounter] = f.Name;
+                        AllFacetFields[fcounter] = f.name;
                         fcounter++;
                     }
 
@@ -95,11 +96,11 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
              
                 var solr = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
 
-                var start = (parameters.Offset - 1) * parameters.Limit;
+                var start = (parameters.offset - 1) * parameters.limit;
                 var metadataIndexDocs = solr.Query(BuildQuery(parameters), new QueryOptions
                 { 
                          FilterQueries = BuildFilterQueries(parameters),
-                         Rows = parameters.Limit,
+                         Rows = parameters.limit,
                          StartOrCursor = new StartOrCursor.Start(start), 
                          Facet = new FacetParameters { 
                              Queries = AllFacetFields.Select(f => new SolrFacetFieldQuery(f) {MinCount = 1}) 
@@ -107,7 +108,7 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
                                                      .ToList(),
                          }, 
                      });
-                return SearchResultOutput(metadataIndexDocs, parameters.Limit, parameters.Offset);
+                return SearchResultOutput(metadataIndexDocs, parameters.limit, parameters.offset);
             }
             catch(Exception ex){
             
