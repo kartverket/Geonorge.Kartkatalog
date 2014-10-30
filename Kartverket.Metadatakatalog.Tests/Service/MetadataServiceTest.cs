@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using GeoNorgeAPI;
+using Kartverket.Geonorge.Utilities;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
 using Moq;
@@ -16,7 +17,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         public void ReturnNullWhenMetadataIsNotFound()
         {
             var geoNorgeMock = new Mock<IGeoNorge>();
-            var metadataService = new MetadataService(geoNorgeMock.Object);
+            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"));
 
             MetadataViewModel metadata = metadataService.GetMetadataByUuid(Uuid);
             
@@ -29,7 +30,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             MD_Metadata_Type dummyMetadata = SimpleMetadata.CreateDataset().GetMetadata();
             var geoNorgeMock = new Mock<IGeoNorge>();
             geoNorgeMock.Setup(m => m.GetRecordByUuid(Uuid)).Returns(dummyMetadata);
-            var metadataService = new MetadataService(geoNorgeMock.Object);
+            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"));
             
             MetadataViewModel metadata = metadataService.GetMetadataByUuid(Uuid);
 

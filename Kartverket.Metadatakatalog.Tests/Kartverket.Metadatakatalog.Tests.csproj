@@ -55,6 +55,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\GeoNorgeAPI.2.6.2.0\lib\net40\GeoNorgeAPI.dll</HintPath>
     </Reference>
+    <Reference Include="Kartverket.Geonorge.Utilities">
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.4\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
