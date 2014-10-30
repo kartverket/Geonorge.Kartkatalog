@@ -37,33 +37,35 @@
 
 <h2>@Model.ContactMetadata.Organization</h2>
 
+<div class="clearfix">
     @if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
     {
         <img src="@Model.Thumbnails[0].URL" width="300" class="thumbnail pull-right" />
     }
 
-<h3>Sammendrag</h3>
-<p>@Model.Abstract</p>
+    <h3>Sammendrag</h3>
+    <p>@Model.Abstract</p>
 
-@if (!string.IsNullOrWhiteSpace(Model.Purpose))
-{
-    <h3>Formål</h3>
-    <p>@Model.Purpose</p>
-}
+    @if (!string.IsNullOrWhiteSpace(Model.Purpose))
+    {
+        <h3>Formål</h3>
+        <p>@Model.Purpose</p>
+    }
 
-@if (!string.IsNullOrWhiteSpace(Model.SupplementalDescription))
-{
-    <h3>Supplerende beskrivelse</h3>
-    <p>@Model.SupplementalDescription</p>
-}
+    @if (!string.IsNullOrWhiteSpace(Model.SupplementalDescription))
+    {
+        <h3>Supplerende beskrivelse</h3>
+        <p>@Model.SupplementalDescription</p>
+    }
 
-@if (!string.IsNullOrWhiteSpace(Model.SpecificUsage))
-{
-    <h3>Bruksområde</h3>
-    <p>@Model.SpecificUsage</p>
-}
+    @if (!string.IsNullOrWhiteSpace(Model.SpecificUsage))
+    {
+        <h3>Bruksområde</h3>
+        <p>@Model.SpecificUsage</p>
+    }
+</div>
 
-<p class="bg-info shortcuts">
+<p class="shortcuts">
     <a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
         @if (@Model.DistributionDetails.IsWmsUrl())
         {
@@ -75,32 +77,42 @@
         }
         else
         {
-            <text><span class="glyphicon glyphicon-download-alt"></span> Last ned</text>
+            <text><span class="glyphicon glyphicon-download-alt"></span> Last ned datasett</text>
         }
     </a>
     @if (@Model.DistributionDetails.IsWmsUrl())
     {
-        <a href="http://norgeskart.no/geoportal/staging/#5/355422/6668909/l/wms/[@Model.DistributionDetails.URL]" class="btn btn-default"><span class="glyphicon glyphicon-picture"></span> Vis tjenesten i Norgeskart</a>
+        <a href="http://norgeskart.no/geoportal/staging/#5/355422/6668909/l/wms/[@Model.DistributionDetails.URL]" class="btn btn-default">
+            <span class="glyphicon glyphicon-picture"></span> Vis tjenesten i Norgeskart
+        </a>
     }
 
     @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
     {
-        <a href="@Model.ProductPageUrl" class="btn btn-default">Produktside</a>
+        <a href="@Model.ProductPageUrl" class="btn btn-default" title="Gå til produktsiden for @Model.Title">
+            <span class="glyphicon glyphicon-info-sign"></span> Produktside
+        </a>
     }
 
     @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
     {
-        <a href="@Model.ProductSheetUrl" class="btn btn-default">Produktark</a>
+        <a href="@Model.ProductSheetUrl" class="btn btn-default" title="Last ned produktark for @Model.Title">
+            <span class="glyphicon glyphicon-globe"></span> Produktark
+        </a>
     }
 
     @if (!string.IsNullOrWhiteSpace(Model.ProductSpecificationUrl))
     {
-        <a href="@Model.ProductSpecificationUrl" class="btn btn-default">Produktspesifikasjon</a>
+        <a href="@Model.ProductSpecificationUrl" class="btn btn-default" title="Last ned produktspesifikasjon for @Model.Title">
+            <span class="glyphicon glyphicon-list-alt"></span> Produktspesifikasjon
+        </a>
     }
 
     @if (!string.IsNullOrWhiteSpace(Model.LegendDescriptionUrl))
     {
-        <a href="@Model.LegendDescriptionUrl" class="btn btn-default">Tegnforklaring</a>
+        <a href="@Model.LegendDescriptionUrl" class="btn btn-default" title="Last ned kartografi for @Model.Title">
+            <span class="glyphicon glyphicon-picture"></span> Kartografi
+        </a>
     }
 </p>
 
@@ -219,6 +231,8 @@
 
     </div>
 </div>
+
+<a href="@Model.MetadataXmlUrl" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-file"></span> Last ned metadata XML</a>
 
 @helper DisplayValue(string label, string value) {
     if (!string.IsNullOrWhiteSpace(value))

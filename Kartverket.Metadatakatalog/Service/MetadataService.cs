@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GeoNorgeAPI;
+using Kartverket.Geonorge.Utilities;
 using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
 
@@ -8,10 +9,12 @@ namespace Kartverket.Metadatakatalog.Service
     public class MetadataService : IMetadataService
     {
         private readonly IGeoNorge _geoNorge;
+        private readonly GeoNetworkUtil _geoNetworkUtil;
 
-        public MetadataService(IGeoNorge geoNorge)
+        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil)
         {
             _geoNorge = geoNorge;
+            _geoNetworkUtil = geoNetworkUtil;
         }
 
         public MetadataViewModel GetMetadataByUuid(string uuid)
@@ -71,6 +74,7 @@ namespace Kartverket.Metadatakatalog.Service
                 Title = simpleMetadata.Title,
                 TopicCategory = simpleMetadata.TopicCategory,
                 Uuid = simpleMetadata.Uuid,
+                MetadataXmlUrl = _geoNetworkUtil.GetXmlDownloadUrl(simpleMetadata.Uuid)
             };
         }
 

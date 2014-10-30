@@ -1,5 +1,7 @@
 ﻿.shortcuts {
-    border-radius: 4px; 
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    text-align: center;
     padding: 10px; 
-    margin-top:20px; 
+    margin-top:20px;
 }

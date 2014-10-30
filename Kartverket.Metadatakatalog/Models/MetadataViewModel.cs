@@ -66,7 +66,8 @@ namespace Kartverket.Metadatakatalog.Models
         public string Title { get; set; }
         public string TopicCategory { get; set; }
         public string Uuid { get; set; }
-        
+
+        public string MetadataXmlUrl { get; set; }
 
         public SeoUrl CreateSeoUrl()
         {
