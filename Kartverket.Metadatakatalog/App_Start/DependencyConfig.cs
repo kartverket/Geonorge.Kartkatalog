@@ -6,6 +6,7 @@ using Autofac.Core;
 using Autofac.Integration.Mvc;
 using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Service;
+using Kartverket.Geonorge.Utilities;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -30,6 +31,10 @@ namespace Kartverket.Metadatakatalog
                     new NamedParameter("geonetworkPassword", ""),
                     new NamedParameter("geonetworkEndpoint", WebConfigurationManager.AppSettings["GeoNetworkUrl"])
                 });
+
+            builder.RegisterType<GeoNetworkUtil>()
+                .AsSelf()
+                .WithParameter("baseUrl", WebConfigurationManager.AppSettings["GeoNetworkUrl"]);
 
             builder.RegisterType<MetadataService>().As<IMetadataService>();
             builder.RegisterType<SolrMetadataIndexer>().As<MetadataIndexer>();
