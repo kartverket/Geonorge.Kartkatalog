@@ -13,6 +13,8 @@ namespace Kartverket.Metadatakatalog
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.LowercaseUrls = true;
+
             routes.MapRoute("DisplayMetadataUuidAndSlug", "{controller}/{organization}/{title}/{uuid}",
                 new { controller = "Metadata", action = "Index" },
                 new { uuid = @"[a-zA-Z0-9-]+$" }
