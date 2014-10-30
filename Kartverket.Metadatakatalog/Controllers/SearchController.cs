@@ -134,7 +134,7 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
                     @Abstract = metadataIndexDoc.Abstract,
                     Type = metadataIndexDoc.Type,
                     Theme = "TODO",
-                    Organization = metadataIndexDoc.ContactMetadataOrganization,
+                    Organization = metadataIndexDoc.Organization,
                     OrganizationLogo = "TODO",
                     ThumbnailUrl = metadataIndexDoc.ThumbnailUrl,
                     DistributionUrl = metadataIndexDoc.DistributionUrl,

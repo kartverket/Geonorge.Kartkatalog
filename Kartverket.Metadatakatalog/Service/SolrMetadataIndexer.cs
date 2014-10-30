@@ -61,25 +61,12 @@ namespace Kartverket.Metadatakatalog.Service
 
                     if (simpleMetadata.ContactMetadata != null)
                     {
-                        indexDoc.ContactMetadataName = simpleMetadata.ContactMetadata.Name;
-                        indexDoc.ContactMetadataOrganization = simpleMetadata.ContactMetadata.Organization;
-                        indexDoc.ContactMetadataEmail = simpleMetadata.ContactMetadata.Email;
-                    }
-                    if (simpleMetadata.ContactOwner != null)
-                    {
-                        indexDoc.ContactOwnerName = simpleMetadata.ContactOwner.Name;
-                        indexDoc.ContactOwnerOrganization = simpleMetadata.ContactOwner.Organization;
-                        indexDoc.ContactOwnerEmail = simpleMetadata.ContactOwner.Email;
-                    }
-                    if (simpleMetadata.ContactPublisher != null)
-                    {
-                        indexDoc.ContactPublisherName = simpleMetadata.ContactPublisher.Name;
-                        indexDoc.ContactPublisherOrganization = simpleMetadata.ContactPublisher.Organization;
-                        indexDoc.ContactPublisherEmail = simpleMetadata.ContactPublisher.Email;
+                        indexDoc.Organization = simpleMetadata.ContactMetadata.Organization;
                     }
 
+                    indexDoc.Theme = GetTheme(simpleMetadata);
 
-                    // BAD!! Move this into GeoNorgeAPI
+                    // FIXME - BAD!! Move this error handling into GeoNorgeAPI
                     try
                     {
                         indexDoc.DatePublished = simpleMetadata.DatePublished.ToString();
@@ -120,6 +107,30 @@ namespace Kartverket.Metadatakatalog.Service
             }
             _indexer.Index(documentsToIndex);
 
+        }
+
+
+        /*         
+         * DOK-kategoriene:
+
+            BASIS GEODATA	
+            SAMFERDSEL	
+            SAMFUNNSSIKKERHET	
+            FORURENSNING	
+            FRILUFTSLIV	
+            LANDSKAP	
+            NATUR	
+            KULTURMINNER	
+            LANDBRUK	
+            ENERGI	
+            GEOLOGI	
+            KYST/FISKERI
+         * 
+         */
+
+        private string GetTheme(SimpleMetadata simpleMetadata)
+        {
+            return "Basis geodata";
         }
     }
 }

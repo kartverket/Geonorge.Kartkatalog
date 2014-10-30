@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SolrNet.Attributes;
 
 namespace Kartverket.Metadatakatalog.Models
@@ -21,44 +20,21 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("type")]
         public string Type { get; set; }
 
-        [SolrField("contact_metadata_name")]
-        public string ContactMetadataName { get; set; }
+        [SolrField("theme")]
+        public string Theme { get; set; }
 
-        [SolrField("contact_metadata_organization")]
-        public string ContactMetadataOrganization { get; set; }
+        [SolrField("organization")]
+        public string Organization { get; set; }
 
-        [SolrField("contact_metadata_email")]
-        public string ContactMetadataEmail { get; set; }
-
-        [SolrField("contact_owner_name")]
-        public string ContactOwnerName { get; set; }
-
-        [SolrField("contact_owner_organization")]
-        public string ContactOwnerOrganization { get; set; }
-
-        [SolrField("contact_owner_email")]
-        public string ContactOwnerEmail { get; set; }
-
-        [SolrField("contact_publisher_name")]
-        public string ContactPublisherName { get; set; }
-
-        [SolrField("contact_publisher_organization")]
-        public string ContactPublisherOrganization { get; set; }
-
-        [SolrField("contact_publisher_email")]
-        public string ContactPublisherEmail { get; set; }
-        
         [SolrField("topic_category")]
         public string TopicCategory { get; set; }
 
         [SolrField("keyword")]
         public List<string> Keywords { get; set; }
 
-        [SolrField("text")]
-        public List<string> Text { get; set; }
-
-
         // not indexed, only stored fields
+        [SolrField("organization_logo_url")]
+        public string OrganizationLogoUrl { get; set; }
 
         [SolrField("date_published")]
         public string DatePublished { get; set; }
@@ -87,12 +63,9 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("distribution_protocol")]
         public string DistributionProtocol { get; set; }
 
-        //     Values from codelist: http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode
+        // Values from codelist: http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode
         [SolrField("maintenance_frequency")]
         public string MaintenanceFrequency { get; set; }
-
-
-
     }
 
 }
