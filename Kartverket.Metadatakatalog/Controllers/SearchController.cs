@@ -33,6 +33,7 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
                      || Query.Field("organization").Is(qstr)
                      || Query.Field("topic_category").Is(qstr)
                      || Query.Field("keyword").Is(qstr)
+                     || Query.Field("uuid").Is(qstr)
                      ;
                  return query;
              }
