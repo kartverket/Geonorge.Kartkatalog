@@ -14,6 +14,33 @@ using Kartverket.Metadatakatalog.Models.Api;
 using System.Web.Mvc;
 
 
+// Metadata search api examples
+
+// Return all documents:
+// api/search/
+
+// Input only searchstring, returns limit=10 , offset=1 and default facet field=type:
+// api/search/?text=Norge
+
+// Limit hits:
+// ?text=norge&limit=2
+
+// Set offset:
+// ?text=norge&limit=2&offset=3
+
+// Get facet=type with value=service:
+// ?text=norge&facets[0]name=type&facets[0]value=service
+
+// For more facets limitations:
+// ?text=norge&facets[0]name=type&facets[0]value=service&facets[1]name=organization&facets[1]value=kartverket
+
+// Only define facets without facet limitation:
+// ?text=norge&facets[0]name=type&facets[1]name=organization
+
+// Set facets with some limitations:
+// ?text=norge&facets[0]name=type&facets[1]name=organization&facets[1]value=kartverket
+
+
 namespace Kartverket.Metadatakatalog.Controllers.Api
 {
     public class SearchController : ApiController
