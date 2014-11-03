@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GeoNorgeAPI;
+using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
 using Moq;
@@ -32,7 +33,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
             var indexerMock = new Mock<Indexer>();
 
-            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object);
+            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, new Mock<IOrganizationService>().Object);
 
             indexer.RunIndexing();
 
@@ -65,7 +66,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
             var indexerMock = new Mock<Indexer>();
 
-            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object);
+            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, new Mock<IOrganizationService>().Object);
 
             indexer.RunIndexing();
 

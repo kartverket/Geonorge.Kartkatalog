@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GeoNorgeAPI;
+using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
 
@@ -13,11 +15,13 @@ namespace Kartverket.Metadatakatalog.Service
 
         private readonly IGeoNorge _geoNorge;
         private readonly Indexer _indexer;
+        private readonly IOrganizationService _organizationService;
 
-        public SolrMetadataIndexer(IGeoNorge geoNorge, Indexer indexer)
+        public SolrMetadataIndexer(IGeoNorge geoNorge, Indexer indexer, IOrganizationService organizationService)
         {
             _geoNorge = geoNorge;
             _indexer = indexer;
+            _organizationService = organizationService;
         }
 
         public void RunIndexing()
@@ -29,7 +33,7 @@ namespace Kartverket.Metadatakatalog.Service
         {
             Log.Info("Running search from start position: " + startPosition);
 
-            SearchResultsType searchResult = _geoNorge.SearchIso("", startPosition);
+            SearchResultsType searchResult = _geoNorge.SearchIso("", startPosition, 50);
 
             IndexSearchResult(searchResult);
 
@@ -62,6 +66,13 @@ namespace Kartverket.Metadatakatalog.Service
                     if (simpleMetadata.ContactMetadata != null)
                     {
                         indexDoc.Organization = simpleMetadata.ContactMetadata.Organization;
+
+                        Task<Organization> organizationTask = _organizationService.GetOrganizationByName(simpleMetadata.ContactMetadata.Organization);
+                        Organization organization = organizationTask.Result;
+                        if (organization != null)
+                        {
+                            indexDoc.OrganizationLogoUrl = organization.LogoUrl;
+                        }
                     }
 
                     indexDoc.Theme = GetTheme(simpleMetadata);
@@ -128,9 +139,28 @@ namespace Kartverket.Metadatakatalog.Service
          * 
          */
 
-        private string GetTheme(SimpleMetadata simpleMetadata)
+        private string GetTheme(SimpleMetadata metadata)
         {
-            return "Basis geodata";
+            string mapping = MappingFromDOKKeywords(metadata);
+            if (string.IsNullOrWhiteSpace(mapping))
+            {
+                mapping = MappingFromInspireKeywords(metadata);
+            }
+
+            return mapping;
         }
+
+        private string MappingFromInspireKeywords(SimpleMetadata metadata)
+        {
+            
+            return null;
+        }
+
+
+        private string MappingFromDOKKeywords(SimpleMetadata metadata)
+        {
+            return null;
+        }
+
     }
 }
