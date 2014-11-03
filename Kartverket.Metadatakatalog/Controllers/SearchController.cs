@@ -72,7 +72,7 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
          public ICollection<ISolrQuery> BuildFilterQueries(SearchParameters parameters) { 
              var queriesFromFacets = from p in facetsInternal
                                      where p.value != null && p.value != ""
-                                     select (ISolrQuery)Query.Field(p.name).Is(p.value); 
+                                     select (ISolrQuery)Query.Field(p.name).In(p.value.Split(',')); 
              return queriesFromFacets.ToList(); 
          }
 
@@ -225,8 +225,16 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
             {
                 return string.Empty;
             }
+            string[] moreValues = s.Split(',');
+            string strReturn = "";
+            for (int st = 0; st < moreValues.Length;st++ )
+            {
+                strReturn = strReturn + char.ToUpper(s[st]) + moreValues[st].Substring(1);
+                if (st < moreValues.Length-1)
+                    strReturn = strReturn + ",";
+            }
             // Return char and concat substring.
-            return char.ToUpper(s[0]) + s.Substring(1);
+            return strReturn;
         }
 
     }
