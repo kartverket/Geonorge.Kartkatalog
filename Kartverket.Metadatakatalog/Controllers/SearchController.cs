@@ -229,11 +229,11 @@ namespace Kartverket.Metadatakatalog.Controllers.Api
             string strReturn = "";
             for (int st = 0; st < moreValues.Length;st++ )
             {
-                strReturn = strReturn + char.ToUpper(s[st]) + moreValues[st].Substring(1);
+                strReturn = strReturn + char.ToUpper(moreValues[st][0]) + moreValues[st].Substring(1);
                 if (st < moreValues.Length-1)
                     strReturn = strReturn + ",";
             }
-            // Return char and concat substring.
+
             return strReturn;
         }
 
