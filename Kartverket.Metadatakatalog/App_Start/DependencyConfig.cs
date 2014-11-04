@@ -9,6 +9,7 @@ using GeoNorgeAPI;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Geonorge.Utilities;
+using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -43,7 +44,9 @@ namespace Kartverket.Metadatakatalog
             builder.RegisterType<SolrIndexer>().As<Indexer>();
             builder.RegisterType<SolrIndexDocumentCreator>().As<IndexDocumentCreator>();
             builder.RegisterType<ThemeResolver>().AsSelf();
+            builder.RegisterType<SearchService>().As<ISearchService>();
 
+            // from nuget package Kartverket.Geonorge.Utilities
             builder.RegisterType<HttpClientFactory>().As<IHttpClientFactory>();
             builder.RegisterType<OrganizationService>().As<IOrganizationService>().WithParameters(new List<Parameter>
             {

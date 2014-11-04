@@ -1,0 +1,12 @@
+﻿@model SearchViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_SearchBox", Model.Parameters)
+
+@if (Model != null)
+{
+    <p>sokeresultat her</p>
+}

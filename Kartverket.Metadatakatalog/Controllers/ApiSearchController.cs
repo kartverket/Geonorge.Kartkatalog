@@ -8,6 +8,8 @@ using SolrNet;
 using SolrNet.Commands.Parameters;
 using SolrNet.DSL;
 using Kartverket.Metadatakatalog.Models.Api;
+using SearchParameters = Kartverket.Metadatakatalog.Models.Api.SearchParameters;
+using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
 
 
 // Metadata search api examples

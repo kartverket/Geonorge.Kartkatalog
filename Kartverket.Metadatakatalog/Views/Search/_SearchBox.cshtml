@@ -1,0 +1,9 @@
+﻿@model SearchParameters
+
+<h3>Søk i metadatakatalogen</h3>
+<form action="@Url.Action("Index", "Search")" method="get" class="form-inline">
+    <div class="form-group col-sm-4">
+        <input name="text" type="text" class="form-control" style="width: 100%" value="@Model.Text" />    
+    </div>
+    <input type="submit" value="Søk" class="btn btn-primary"/>
+</form>

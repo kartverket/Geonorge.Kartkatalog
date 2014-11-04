@@ -161,6 +161,7 @@
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\MetadataController.cs" />
     <Compile Include="Controllers\ApiSearchController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -174,6 +175,10 @@
     <Compile Include="Models\MetadataIndexDoc.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />
     <Compile Include="Models\Api\SearchResult.cs" />
+    <Compile Include="Models\SearchParameters.cs" />
+    <Compile Include="Models\SearchResult.cs" />
+    <Compile Include="Models\SearchResultItem.cs" />
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\SeoUrl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\UI.Designer.cs">
@@ -186,6 +191,8 @@
     <Compile Include="Service\Indexer.cs" />
     <Compile Include="Service\MetadataIndexer.cs" />
     <Compile Include="Service\MetadataService.cs" />
+    <Compile Include="Service\Search\ISearchService.cs" />
+    <Compile Include="Service\Search\SearchService.cs" />
     <Compile Include="Service\SolrIndexDocumentCreator.cs" />
     <Compile Include="Service\SolrIndexer.cs" />
     <Compile Include="Service\SolrMetadataIndexer.cs" />
@@ -237,6 +244,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Metadata\Index.cshtml" />
     <Content Include="Views\Index\Index.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Search\_SearchBox.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
