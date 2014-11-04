@@ -41,6 +41,7 @@ namespace Kartverket.Metadatakatalog
             builder.RegisterType<MetadataService>().As<IMetadataService>();
             builder.RegisterType<SolrMetadataIndexer>().As<MetadataIndexer>();
             builder.RegisterType<SolrIndexer>().As<Indexer>();
+            builder.RegisterType<SolrIndexDocumentCreator>().As<IndexDocumentCreator>();
 
             builder.RegisterType<HttpClientFactory>().As<IHttpClientFactory>();
             builder.RegisterType<OrganizationService>().As<IOrganizationService>().WithParameters(new List<Parameter>
@@ -48,6 +49,7 @@ namespace Kartverket.Metadatakatalog
                 new NamedParameter("registryUrl", WebConfigurationManager.AppSettings["RegistryUrl"]),
                 new AutowiringParameter()
             });
+            
         }
     }
 }

@@ -182,9 +182,11 @@
       <DependentUpon>UI.resx</DependentUpon>
     </Compile>
     <Compile Include="Service\IMetadataService.cs" />
+    <Compile Include="Service\IndexDocumentCreator.cs" />
     <Compile Include="Service\Indexer.cs" />
     <Compile Include="Service\MetadataIndexer.cs" />
     <Compile Include="Service\MetadataService.cs" />
+    <Compile Include="Service\SolrIndexDocumentCreator.cs" />
     <Compile Include="Service\SolrIndexer.cs" />
     <Compile Include="Service\SolrMetadataIndexer.cs" />
     <Compile Include="Service\ThemeResolver.cs" />
