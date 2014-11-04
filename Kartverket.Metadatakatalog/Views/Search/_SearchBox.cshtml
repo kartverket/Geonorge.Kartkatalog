@@ -1,7 +1,7 @@
 ﻿@model SearchParameters
 
 <h3>Søk i metadatakatalogen</h3>
-<form action="@Url.Action("Index", "Search")" method="get" class="form-inline">
+<form action="@Url.Action("Index", "Search")" method="get" class="form-inline search-box">
     <div class="form-group col-sm-4">
         <input name="text" type="text" class="form-control" style="width: 100%" value="@Model.Text" />    
     </div>

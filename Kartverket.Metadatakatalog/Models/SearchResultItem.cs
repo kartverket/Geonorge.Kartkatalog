@@ -8,5 +8,7 @@
         public string Type { get; set; }
         public string Theme { get; set; }
         public string Organization { get; set; }
+        public string OrganizationLogoUrl { get; set; }
+        public string ThumbnailUrl { get; set; }
     }
 }

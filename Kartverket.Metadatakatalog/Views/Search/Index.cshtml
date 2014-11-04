@@ -6,7 +6,27 @@
 
 @Html.Partial("_SearchBox", Model.Parameters)
 
-@if (Model != null)
+@if (Model.Result != null)
 {
-    <p>sokeresultat her</p>
+    <ul class="search-results">
+        @foreach (var item in Model.Result.Items)
+        {
+            <li>
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="height:70px">
+                        <img src="@item.OrganizationLogoUrl" height="50" class="pull-right">
+                        <h4><a href="@Url.Action("Index", "Metadata", new { uuid = item.Uuid, organization = item.Organization, title = item.Title })">@item.Title</a></h4>
+                        <p>@item.Organization</p>
+                    </div>
+                    <div class="panel-body">
+                        <img src="@item.ThumbnailUrl" width="200" class="pull-left" style="padding-right: 15px;">
+                        <p>@item.Abstract</p>
+                        <p>
+                            <span class="label label-info">@item.Type</span>
+                        </p>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
 }
