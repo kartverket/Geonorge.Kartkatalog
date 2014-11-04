@@ -17,6 +17,7 @@ namespace Kartverket.Metadatakatalog.Service
         public const string DokEnergi = "Energi";
         public const string DokSamfunnssikkerhet = "Samfunnssikkerhet";
         public const string DokForurensning = "Forurensning";
+        public const string DokFriluftsliv = "Friluftsliv";
         public const string DokAnnen = "Annen";
         public const string DokKystFiskeri = "Kyst / fiskeri";
         public const string DokLandskap = "Landskap";
@@ -83,23 +84,62 @@ namespace Kartverket.Metadatakatalog.Service
             {"transportation", DokSamferdsel},
             {"utilitiesCommunication", DokEnergi},
         };
-        
+
+        private readonly Dictionary<string, string> _dokCategoryToTheme = new Dictionary<string, string>
+        {
+            {"basis geodata", DokBasisGeodata},
+            {"samferdsel", DokSamferdsel},
+            {"samfunnssikkerhet", DokSamfunnssikkerhet},
+            {"forurensning", DokForurensning},
+            {"friluftsliv", DokFriluftsliv},
+            {"landskap", DokLandskap},
+            {"natur", DokNatur},
+            {"kulturminner", DokKulturminner},
+            {"landbruk", DokLandbruk},
+            {"energi", DokEnergi},
+            {"geologi", DokGeologi},
+            {"kyst", DokKystFiskeri},
+            {"fiskeri", DokKystFiskeri},
+            {"kyst / fiskeri", DokKystFiskeri},
+            {"plan", DokPlan},
+        };
+
         public string Resolve(SimpleMetadata metadata)
         {
-            string theme = ResolveThemeFromInspireKeywords(metadata);
+            string theme = ResolveThemeFromDokKeywords(metadata);
+            
             if (string.IsNullOrWhiteSpace(theme))
             {
-                theme = ResolveThemeFromTopicCategory(metadata.TopicCategory);
+                theme = ResolveThemeFromInspireKeywords(metadata);
                 if (string.IsNullOrWhiteSpace(theme))
                 {
-                    theme = ResolveCultureKeywords(metadata);
+                    theme = ResolveThemeFromTopicCategory(metadata.TopicCategory);
                     if (string.IsNullOrWhiteSpace(theme))
                     {
-                        theme = DokAnnen;
+                        theme = ResolveCultureKeywords(metadata);
+                        if (string.IsNullOrWhiteSpace(theme))
+                        {
+                            theme = DokAnnen;
+                        }
                     }
                 }
             }
+
             return theme;
+        }
+
+        private string ResolveThemeFromDokKeywords(SimpleMetadata metadata)
+        {
+            foreach (var keyword in metadata.Keywords)
+            {
+                string lowerCaseKeyword = keyword.Keyword.ToLower();
+                string theme;
+                if (_dokCategoryToTheme.TryGetValue(lowerCaseKeyword, out theme))
+                {
+                    return theme;
+                }
+            }
+            return null;
         }
 
         private string ResolveCultureKeywords(SimpleMetadata metadata)
