@@ -3,8 +3,10 @@ using System.Web.Configuration;
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Core;
+using Autofac.Core.Activators.Reflection;
 using Autofac.Integration.Mvc;
 using GeoNorgeAPI;
+using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Geonorge.Utilities;
 
@@ -39,6 +41,16 @@ namespace Kartverket.Metadatakatalog
             builder.RegisterType<MetadataService>().As<IMetadataService>();
             builder.RegisterType<SolrMetadataIndexer>().As<MetadataIndexer>();
             builder.RegisterType<SolrIndexer>().As<Indexer>();
+            builder.RegisterType<SolrIndexDocumentCreator>().As<IndexDocumentCreator>();
+            builder.RegisterType<ThemeResolver>().AsSelf();
+
+            builder.RegisterType<HttpClientFactory>().As<IHttpClientFactory>();
+            builder.RegisterType<OrganizationService>().As<IOrganizationService>().WithParameters(new List<Parameter>
+            {
+                new NamedParameter("registryUrl", WebConfigurationManager.AppSettings["RegistryUrl"]),
+                new AutowiringParameter()
+            });
+            
         }
     }
 }

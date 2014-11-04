@@ -55,8 +55,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\GeoNorgeAPI.2.6.2.0\lib\net40\GeoNorgeAPI.dll</HintPath>
     </Reference>
-    <Reference Include="Kartverket.Geonorge.Utilities">
-      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.4\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
+    <Reference Include="Kartverket.Geonorge.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.7\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -69,10 +70,18 @@
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -114,6 +123,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\MetadataServiceTest.cs" />
     <Compile Include="Service\SolrMetadataIndexerTest.cs" />
+    <Compile Include="Service\ThemeResolverTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

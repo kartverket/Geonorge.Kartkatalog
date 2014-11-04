@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
@@ -25,20 +24,24 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             {
                 Items = new object[] { CreateDummyMetadata(), CreateDummyMetadata() },
                 numberOfRecordsMatched = "2",
-                nextRecord = "21",
+                nextRecord = "51",
             };
 
-            geoNorgeMock.Setup(g => g.SearchIso("", 1, 20, false)).Returns(searchResult);
+            geoNorgeMock.Setup(g => g.SearchIso("", 1, 50, true)).Returns(searchResult);
 
             var indexerMock = new Mock<Indexer>();
 
-            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object);
+            var indexDocumentCreator = new Mock<IndexDocumentCreator>();
+            var indexDocs = new List<MetadataIndexDoc>();
+            indexDocumentCreator.Setup(i => i.CreateIndexDocs(It.IsAny<object[]>())).Returns(indexDocs);
+
+            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexDocumentCreator.Object);
 
             indexer.RunIndexing();
 
-            geoNorgeMock.Verify(g => g.SearchIso("", 1, 20, false));
+            geoNorgeMock.Verify(g => g.SearchIso("", 1, 50, true));
 
-            indexerMock.Verify(i => i.Index(It.Is<IEnumerable<MetadataIndexDoc>>(l => l.Count() == 2)), Times.Once, "Should send a list with two docs to indexer.");
+            indexerMock.Verify(i => i.Index(indexDocs));
         }
 
         [Test]
@@ -48,32 +51,36 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             var firstSearchResult = new SearchResultsType
             {
                 Items = new object[] { CreateDummyMetadata(), CreateDummyMetadata() },
-                numberOfRecordsMatched = "25",
-                nextRecord = "21",
+                numberOfRecordsMatched = "55",
+                nextRecord = "51",
             };
 
             var secondSearchResult = new SearchResultsType
             {
                 Items = new object[] { CreateDummyMetadata(), CreateDummyMetadata(), CreateDummyMetadata(), CreateDummyMetadata(), CreateDummyMetadata(), },
-                numberOfRecordsMatched = "25",
+                numberOfRecordsMatched = "55",
                 numberOfRecordsReturned = "5",
-                nextRecord = "26",
+                nextRecord = "56",
             };
 
-            geoNorgeMock.Setup(g => g.SearchIso("", 1, 20, false)).Returns(firstSearchResult);
-            geoNorgeMock.Setup(g => g.SearchIso("", 21, 20, false)).Returns(secondSearchResult);
+            geoNorgeMock.Setup(g => g.SearchIso("", 1, 50, true)).Returns(firstSearchResult);
+            geoNorgeMock.Setup(g => g.SearchIso("", 51, 50, true)).Returns(secondSearchResult);
 
             var indexerMock = new Mock<Indexer>();
+            var indexDocumentCreator = new Mock<IndexDocumentCreator>();
+            var indexDocs = new List<MetadataIndexDoc>();
 
-            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object);
+            indexDocumentCreator.Setup(i => i.CreateIndexDocs(It.IsAny<object[]>())).Returns(indexDocs);
+
+            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexDocumentCreator.Object);
 
             indexer.RunIndexing();
 
-            geoNorgeMock.Verify(g => g.SearchIso("", 1, 20, false));
-            geoNorgeMock.Verify(g => g.SearchIso("", 21, 20, false));
+            geoNorgeMock.Verify(g => g.SearchIso("", 1, 50, true));
+            geoNorgeMock.Verify(g => g.SearchIso("", 51, 50, true));
 
-            indexerMock.Verify(i => i.Index(It.Is<IEnumerable<MetadataIndexDoc>>(l => l.Count() == 2)), Times.Once, "Should send a list with two docs to indexer.");
-            indexerMock.Verify(i => i.Index(It.Is<IEnumerable<MetadataIndexDoc>>(l => l.Count() == 5)), Times.Once, "Should send a list with five docs to indexer.");
+            indexerMock.Verify(i => i.Index(indexDocs));
+            indexerMock.Verify(i => i.Index(indexDocs));
         }
 
         private static MD_Metadata_Type CreateDummyMetadata()

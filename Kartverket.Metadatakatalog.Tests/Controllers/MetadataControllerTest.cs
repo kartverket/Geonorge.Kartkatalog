@@ -25,9 +25,27 @@ namespace Kartverket.Metadatakatalog.Tests
         public void ShouldReturnMetadataForUuid()
         {
             var serviceMock = new Mock<IMetadataService>();
-            serviceMock.Setup(m => m.GetMetadataByUuid(uuid)).Returns(new MetadataViewModel());
+            serviceMock.Setup(m => m.GetMetadataByUuid(uuid)).Returns(new MetadataViewModel()
+            {
+                Title = "N50",
+                ContactMetadata = new Contact() { Organization = "Kartverket"}
+            });
             var controller = new MetadataController(serviceMock.Object);
-            var result = controller.Index(uuid) as ViewResult;
+            var result = controller.Index(uuid, "kartverket", "n50") as ViewResult;
+            result.Should().NotBeNull();
+        }
+
+        [Test]
+        public void ShouldReturnRedirectUserToSeoUrl()
+        {
+            var serviceMock = new Mock<IMetadataService>();
+            serviceMock.Setup(m => m.GetMetadataByUuid(uuid)).Returns(new MetadataViewModel()
+            {
+                Title = "N50",
+                ContactMetadata = new Contact() { Organization = "Kartverket" }
+            });
+            var controller = new MetadataController(serviceMock.Object);
+            var result = controller.Index(uuid, "blabla", "testing") as RedirectToRouteResult;
             result.Should().NotBeNull();
         }
     }
