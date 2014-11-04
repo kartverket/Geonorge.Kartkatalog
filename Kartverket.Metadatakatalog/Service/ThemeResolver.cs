@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GeoNorgeAPI;
+using Kartverket.Metadatakatalog.Models.Api;
+using www.opengis.net;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -18,6 +20,7 @@ namespace Kartverket.Metadatakatalog.Service
         public const string DokAnnen = "Annen";
         public const string DokKystFiskeri = "Kyst / fiskeri";
         public const string DokLandskap = "Landskap";
+        public const string DokKulturminner = "Kulturminner";
 
         // note use of lowercase keywords - comparison is also done with lower casing of input
         private readonly Dictionary<string, string> _inspireKeywordToTheme = new Dictionary<string, string>
@@ -58,9 +61,71 @@ namespace Kartverket.Metadatakatalog.Service
             {"mineral resources", DokNatur},
         };
 
+        private readonly Dictionary<string, string> _topicCategoryToTheme = new Dictionary<string, string>
+        {
+            {"farming", DokLandbruk},
+            {"biota", DokNatur},
+            {"boundaries", DokBasisGeodata},
+            {"climatologyMeteorologyAtmosphere", DokNatur},
+            {"economy", DokAnnen},
+            {"elevation", DokBasisGeodata},
+            {"environment", DokForurensning},
+            {"geoscientificInformation", DokGeologi},
+            {"health", DokSamfunnssikkerhet},
+            {"imageryBaseMapsEarthCover", DokBasisGeodata},
+            {"intelligenceMilitary", DokAnnen},
+            {"inlandWaters", DokBasisGeodata},
+            {"location", DokBasisGeodata},
+            {"oceans", DokKystFiskeri},
+            {"planningCadastre", DokPlan},
+            {"society", DokKulturminner},
+            {"structure", DokBasisGeodata},
+            {"transportation", DokSamferdsel},
+            {"utilitiesCommunication", DokEnergi},
+        };
+        
         public string Resolve(SimpleMetadata metadata)
         {
-            return ResolveThemeFromInspireKeywords(metadata);
+            string theme = ResolveThemeFromInspireKeywords(metadata);
+            if (string.IsNullOrWhiteSpace(theme))
+            {
+                theme = ResolveThemeFromTopicCategory(metadata.TopicCategory);
+                if (string.IsNullOrWhiteSpace(theme))
+                {
+                    theme = ResolveCultureKeywords(metadata);
+                    if (string.IsNullOrWhiteSpace(theme))
+                    {
+                        theme = DokAnnen;
+                    }
+                }
+            }
+            return theme;
+        }
+
+        private string ResolveCultureKeywords(SimpleMetadata metadata)
+        {
+            foreach (var keyword in metadata.Keywords)
+            {
+                string lowerCaseKeyword = keyword.Keyword.ToLower();
+                if (lowerCaseKeyword == "kultur" || lowerCaseKeyword == "kulturminne" || lowerCaseKeyword == "kulturminner")
+                {
+                    return DokKulturminner;
+                }
+            }
+            return null;
+        }
+
+        private string ResolveThemeFromTopicCategory(string topicCategory)
+        {
+            if (!string.IsNullOrWhiteSpace(topicCategory))
+            {
+                string theme;
+                if (_topicCategoryToTheme.TryGetValue(topicCategory, out theme))
+                {
+                    return theme;
+                }    
+            }
+            return null;
         }
 
         private string ResolveThemeFromInspireKeywords(SimpleMetadata metadata)

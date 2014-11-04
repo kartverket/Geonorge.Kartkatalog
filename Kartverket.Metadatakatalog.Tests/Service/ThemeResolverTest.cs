@@ -8,25 +8,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 {
     class ThemeResolverTest
     {
-        [Test]
-        public void ShouldReturnNullWhenNoKeywordsExist()
-        {
-            SimpleMetadata metadata = SimpleMetadata.CreateDataset();
-
-            string theme = new ThemeResolver().Resolve(metadata);
-            theme.Should().BeNull();
-        }
-
-        [Test]
-        public void ShouldReturnNullWhenInspireKeywordsDoesNotExist()
-        {
-            SimpleMetadata metadata = SimpleMetadata.CreateDataset();
-            metadata.Keywords.Add(new SimpleKeyword() { Keyword = "testing" });
-
-            string theme = new ThemeResolver().Resolve(metadata);
-            theme.Should().BeNull();
-        }
-
+       
         [Test]
         public void InspireCoordinateReferenceSystemsResolveToBasisGeodata()
         {
@@ -224,6 +206,181 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         {
             ResolveInspireKeyword("Mineral resources", ThemeResolver.DokNatur);
         }
+
+        [Test]
+        public void ShouldUseTopicCategoryWhenNoMappingExistsForInspireKeyword()
+        {
+            SimpleMetadata metadata = createMetadataWithInspireKeyword("this inspire keyword does not exist");
+            metadata.TopicCategory = "farming";
+            ResolveTheme(metadata).Should().Be(ThemeResolver.DokLandbruk);
+        }
+
+        [Test]
+        public void TopicCategoryFarmingResolveToLandbruk()
+        {
+            ResolveTopicCategory("farming", ThemeResolver.DokLandbruk);
+        }
+
+        [Test]
+        public void TopicCategoryBiotaResolveToNatur()
+        {
+            ResolveTopicCategory("biota", ThemeResolver.DokNatur);
+        }
+
+        [Test]
+        public void TopicCategoryBoundariesResolveToBasisGeodata()
+        {
+            ResolveTopicCategory("boundaries", ThemeResolver.DokBasisGeodata);
+        }
+        
+        [Test]
+        public void TopicCategoryClimatologyMeteorologyAtmosphereResolveToNatur()
+        {
+            ResolveTopicCategory("climatologyMeteorologyAtmosphere", ThemeResolver.DokNatur);
+        }
+
+        [Test]
+        public void TopicCategoryEconomyResolveToAnnen()
+        {
+            ResolveTopicCategory("economy", ThemeResolver.DokAnnen);
+        }
+
+        [Test]
+        public void TopicCategoryElevationResolveToBasisGeodata()
+        {
+            ResolveTopicCategory("elevation", ThemeResolver.DokBasisGeodata);
+        }
+
+        [Test]
+        public void TopicCategoryEnvironmentResolveToForurensning()
+        {
+            ResolveTopicCategory("environment", ThemeResolver.DokForurensning);
+        }
+
+        [Test]
+        public void TopicCategoryGeoscientificInformationResolveToGeologi()
+        {
+            ResolveTopicCategory("geoscientificInformation", ThemeResolver.DokGeologi);
+        }
+
+        [Test]
+        public void TopicCategoryHealthResolveToSamfunnssikkerhet()
+        {
+            ResolveTopicCategory("health", ThemeResolver.DokSamfunnssikkerhet);
+        }
+
+        [Test]
+        public void TopicCategoryImageryBaseMapsEarthCoverResolveToBasisGeodata()
+        {
+            ResolveTopicCategory("imageryBaseMapsEarthCover", ThemeResolver.DokBasisGeodata);
+        }
+
+        [Test]
+        public void TopicCategoryintelligenceMilitaryResolveToAnnen()
+        {
+            ResolveTopicCategory("intelligenceMilitary", ThemeResolver.DokAnnen);
+        }
+
+        [Test]
+        public void TopicCategoryinlandWatersResolveToBasisGeodata()
+        {
+            ResolveTopicCategory("inlandWaters", ThemeResolver.DokBasisGeodata);
+        }
+
+        [Test]
+        public void TopicCategoryLocationResolveToBasisGeodata()
+        {
+            ResolveTopicCategory("location", ThemeResolver.DokBasisGeodata);
+        }
+
+        [Test]
+        public void TopicCategoryOceansResolveToKystFiskeri()
+        {
+            ResolveTopicCategory("oceans", ThemeResolver.DokKystFiskeri);
+        }
+
+        [Test]
+        public void TopicCategoryPlanningCadastreResolveToPlan()
+        {
+            ResolveTopicCategory("planningCadastre", ThemeResolver.DokPlan);
+        }
+
+        [Test]
+        public void TopicCategorySocietyResolveToKulturminner()
+        {
+            ResolveTopicCategory("society", ThemeResolver.DokKulturminner);
+        }
+
+        [Test]
+        public void TopicCategoryStructureResolveToBasisGeodata()
+        {
+            ResolveTopicCategory("structure", ThemeResolver.DokBasisGeodata);
+        }
+
+        [Test]
+        public void TopicCategoryTransportationResolveToSamferdsel()
+        {
+            ResolveTopicCategory("transportation", ThemeResolver.DokSamferdsel);
+        }
+
+        [Test]
+        public void TopicCategoryUtilitiesCommunicationResolveToEnergi()
+        {
+            ResolveTopicCategory("utilitiesCommunication", ThemeResolver.DokEnergi);
+        }
+
+        [Test]
+        public void ShouldResolveKeywordKulturToKulturminner()
+        {
+            ResolveTheme(CreateMetadataWithKeyword("Kultur")).Should().Be(ThemeResolver.DokKulturminner);
+            ResolveTheme(CreateMetadataWithKeyword("kultur")).Should().Be(ThemeResolver.DokKulturminner);
+        }
+
+        [Test]
+        public void ShouldResolveKeywordKulturminneToKulturminner()
+        {
+            ResolveTheme(CreateMetadataWithKeyword("Kulturminne")).Should().Be(ThemeResolver.DokKulturminner);
+            ResolveTheme(CreateMetadataWithKeyword("kulturminne")).Should().Be(ThemeResolver.DokKulturminner);
+        }
+
+        [Test]
+        public void ShouldResolveKeywordKulturminnerToKulturminner()
+        {
+            ResolveTheme(CreateMetadataWithKeyword("Kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
+            ResolveTheme(CreateMetadataWithKeyword("kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
+        }
+
+        [Test]
+        public void ShouldResolveToAnnenWhenNoKeywordOrTopicCategoryWithMappingExists()
+        {
+            ResolveTheme(SimpleMetadata.CreateDataset()).Should().Be(ThemeResolver.DokAnnen);
+        }
+
+
+        private static SimpleMetadata CreateMetadataWithKeyword(string keyword)
+        {
+            SimpleMetadata metadata = SimpleMetadata.CreateDataset();
+            var keywords = new List<SimpleKeyword>();
+            keywords.Add(new SimpleKeyword()
+            {
+                Keyword = keyword
+            });
+            metadata.Keywords = keywords;
+            return metadata;
+        }
+
+        private static void ResolveTopicCategory(string topicCategory, string expectedTheme)
+        {
+            ResolveTheme(CreateMetadataWithTopicCategory(topicCategory)).Should().Be(expectedTheme);
+        }
+
+        private static SimpleMetadata CreateMetadataWithTopicCategory(string topicCategory)
+        {
+            SimpleMetadata metadata = SimpleMetadata.CreateDataset();
+            metadata.TopicCategory = topicCategory;
+            return metadata;
+        }
+
 
         private static void ResolveInspireKeyword(string inspireKeyword, string expectedTheme)
         {
