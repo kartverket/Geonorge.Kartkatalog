@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using Kartverket.Metadatakatalog.Models;
 using Microsoft.Practices.ServiceLocation;
 using SolrNet;
 using SolrNet.Commands.Parameters;
 using SolrNet.DSL;
-using System.Web;
 using Kartverket.Metadatakatalog.Models.Api;
-using System.Web.Mvc;
 
 
 // Metadata search api examples
@@ -41,9 +37,9 @@ using System.Web.Mvc;
 // ?text=norge&facets[0]name=type&facets[1]name=organization&facets[1]value=kartverket
 
 
-namespace Kartverket.Metadatakatalog.Controllers.Api
+namespace Kartverket.Metadatakatalog.Controllers
 {
-    public class SearchController : ApiController
+    public class ApiSearchController : ApiController
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
