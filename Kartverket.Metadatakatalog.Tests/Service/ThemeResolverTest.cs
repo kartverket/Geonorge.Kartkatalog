@@ -154,9 +154,75 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         }
 
         [Test]
-        public void InspirePopulationDistributionResolveToLandbruk()
+        public void InspirePopulationDistributionResolveToAnnen()
         {
             ResolveInspireKeyword("Population distribution and demography", ThemeResolver.DokAnnen);
+        }
+
+        [Test]
+        public void InspireAreaManagementResolveToAnnen()
+        {
+            ResolveInspireKeyword("Area management / restriction / regulation zones & reporting units", ThemeResolver.DokAnnen);
+        }
+
+        [Test]
+        public void InspireNaturalRiskZonesResolveToNatur()
+        {
+            ResolveInspireKeyword("Natural risk zones", ThemeResolver.DokNatur);
+        }
+
+        [Test]
+        public void InspireAtmosphericConditionsResolveToNatur()
+        {
+            ResolveInspireKeyword("Atmospheric conditions", ThemeResolver.DokNatur);
+        }
+
+        [Test]
+        public void InspireMeteorologicalGeographicalFeaturesResolveToNatur()
+        {
+            ResolveInspireKeyword("Meteorological geographical features", ThemeResolver.DokNatur);
+        }
+
+        [Test]
+        public void InspireOceanographicGeographicalFeaturesResolveToKystFiskeri()
+        {
+            ResolveInspireKeyword("Oceanographic geographical features", ThemeResolver.DokKystFiskeri);
+        }
+
+        [Test]
+        public void InspireSeaRegionsResolveToKystFiskeri()
+        {
+            ResolveInspireKeyword("Sea regions", ThemeResolver.DokKystFiskeri);
+        }
+
+        [Test]
+        public void InspireBioGeographicalRegionsResolveToLandskap()
+        {
+            ResolveInspireKeyword("Bio-geographical regions", ThemeResolver.DokLandskap);
+        }
+
+        [Test]
+        public void InspireHabitatsAndBiotopesResolveToNatur()
+        {
+            ResolveInspireKeyword("Habitats and biotopes", ThemeResolver.DokNatur);
+        }
+
+        [Test]
+        public void InspireSpeciesDistributionResolveToNatur()
+        {
+            ResolveInspireKeyword("Species distribution", ThemeResolver.DokNatur);
+        }
+
+        [Test]
+        public void InspireEnergyResourcesResolveToEnergi()
+        {
+            ResolveInspireKeyword("Energy resources", ThemeResolver.DokEnergi);
+        }
+
+        [Test]
+        public void InspireMineralResourcesResolveToNatur()
+        {
+            ResolveInspireKeyword("Mineral resources", ThemeResolver.DokNatur);
         }
 
         private static void ResolveInspireKeyword(string inspireKeyword, string expectedTheme)
