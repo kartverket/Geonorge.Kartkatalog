@@ -6,7 +6,7 @@ namespace Kartverket.Metadatakatalog.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return RedirectToActionPermanent("Index", "Search");
         }
 
     }
