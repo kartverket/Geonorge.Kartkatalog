@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Kartverket.Metadatakatalog.Models;
 using Microsoft.Practices.ServiceLocation;
 using SolrNet;
@@ -22,23 +21,58 @@ namespace Kartverket.Metadatakatalog.Service.Search
         public SearchResult Search(SearchParameters parameters)
         {
             ISolrQuery query = BuildQuery(parameters);
-            SolrQueryResults<MetadataIndexDoc> metadataIndexDocs = _solrInstance.Query(query, new QueryOptions
+            SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
             {
                 FilterQueries = BuildFilterQueries(parameters),
                 Rows = 30,
-                StartOrCursor = new StartOrCursor.Start(1),
+                StartOrCursor = new StartOrCursor.Start(0),
                 Facet = BuildFacetParameters(),
             });
 
-            return CreateSearchResults(metadataIndexDocs);
+            return CreateSearchResults(queryResults);
         }
 
-        private SearchResult CreateSearchResults(IEnumerable<MetadataIndexDoc> metadataIndexDocs)
+        private SearchResult CreateSearchResults(SolrQueryResults<MetadataIndexDoc> queryResults)
+        {
+            List<SearchResultItem> items = ParseResultDocuments(queryResults);
+
+            List<Facet> facets = ParseFacetResults(queryResults);
+
+            return new SearchResult
+            {
+                Items = items,
+                Facets = facets
+            };
+        }
+
+        private List<Facet> ParseFacetResults(SolrQueryResults<MetadataIndexDoc> queryResults)
+        {
+            List<Facet> facets = new List<Facet>();
+            foreach (var key in queryResults.FacetFields.Keys)
+            {
+                var facet = new Facet
+                {
+                    FacetField = key,
+                    FacetResults = new List<Facet.FacetValue>()
+                };
+                foreach (var facetValueResult in queryResults.FacetFields[key])
+                {
+                    facet.FacetResults.Add(new Facet.FacetValue
+                    {
+                        Name = facetValueResult.Key,
+                        Count = facetValueResult.Value
+                    });
+                }
+                facets.Add(facet);
+            }
+            return facets;
+        }
+
+        private static List<SearchResultItem> ParseResultDocuments(SolrQueryResults<MetadataIndexDoc> queryResults)
         {
             var items = new List<SearchResultItem>();
-            foreach (var doc in metadataIndexDocs)
+            foreach (var doc in queryResults)
             {
-
                 var item = new SearchResultItem
                 {
                     Uuid = doc.Uuid,
@@ -52,24 +86,20 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 };
                 items.Add(item);
             }
-
-            return new SearchResult
-            {
-                Items = items
-            };
+            return items;
         }
 
         private static FacetParameters BuildFacetParameters()
         {
-            return null;
-            /*
             return new FacetParameters
             {
-                Queries = AllFacetFields.Select(f => new SolrFacetFieldQuery(f) { MinCount = 1 })
-                    .Cast<ISolrFacetQuery>()
-                    .ToList(),
+                Queries = new List<ISolrFacetQuery>
+                {
+                    new SolrFacetFieldQuery("theme") { MinCount = 1 }, 
+                    new SolrFacetFieldQuery("type") { MinCount = 1 }, 
+                    new SolrFacetFieldQuery("organization") { MinCount = 1 }
+                }
             };
-             */
         }
 
         private ICollection<ISolrQuery> BuildFilterQueries(SearchParameters parameters)
