@@ -14,8 +14,9 @@
             <ul>
                 @foreach (var facetResult in facet.FacetResults)
                 {
-                    <li>@facetResult.Name (@facetResult.Count)</li>
+                    <li><a href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.Name (@facetResult.Count)</a></li>
                 }
+                <li><a href="@Model.CreateRoutesForFacetFieldsExcept(facet.FacetField)">Vis alle</a></li>
             </ul>
         }
     </div>

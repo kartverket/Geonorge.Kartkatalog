@@ -172,6 +172,7 @@
     <Compile Include="Models\Api\Metadata.cs" />
     <Compile Include="Models\Api\SearchParameters.cs" />
     <Compile Include="Models\Facet.cs" />
+    <Compile Include="Models\FacetParameter.cs" />
     <Compile Include="Models\MetadataIndexDoc.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />
     <Compile Include="Models\Api\SearchResult.cs" />

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Kartverket.Metadatakatalog.Models;
 using Microsoft.Practices.ServiceLocation;
 using SolrNet;
@@ -104,7 +105,18 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
         private ICollection<ISolrQuery> BuildFilterQueries(SearchParameters parameters)
         {
-            return null;
+            return parameters.Facets
+                .Where(f => !string.IsNullOrWhiteSpace(f.Value))
+                .Select(f => new SolrQueryByField(f.Name, f.Value))
+                .ToList<ISolrQuery>();
+
+            /*
+            var queriesFromFacets = from p in facetsInternal
+                                    where p.value != null && p.value != ""
+                                    select (ISolrQuery)Query.Field(p.name).In(p.value.Split(','));
+            return queriesFromFacets.ToList(); 
+            */
+            //return null;
         }
 
         private ISolrQuery BuildQuery(SearchParameters parameters)
