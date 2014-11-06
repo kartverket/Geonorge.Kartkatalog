@@ -2,13 +2,20 @@
 using System.Linq;
 using System.Web.Routing;
 
-namespace Kartverket.Metadatakatalog.Models
+namespace Kartverket.Metadatakatalog.Models.ViewModels
 {
     public class SearchViewModel
     {
-        public SearchParameters Parameters { get; set; }
-        public SearchResult Result { get; set; }
+        public string Text { get; set; }
+        public List<FacetParameter> FacetParameters { get; set; }
+        public SearchResultViewModel Result { get; set; }
 
+        public SearchViewModel(SearchParameters parameters, SearchResult searchResult)
+        {
+            Text = parameters.Text;
+            FacetParameters = parameters.Facets;
+            Result = new SearchResultViewModel(searchResult);
+        }
 
         public RouteValueDictionary LinkForFacetValue(string name, string value)
         {
@@ -22,7 +29,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public RouteValueDictionary CreateRoutesForFacetFieldsExcept(string field, RouteValueDictionary routeValues, int index = 0)
         {
-            IEnumerable<FacetParameter> filteredFacets = Parameters.Facets.Where(f => f.Name != field);
+            IEnumerable<FacetParameter> filteredFacets = FacetParameters.Where(f => f.Name != field);
             foreach (var facetParameter in filteredFacets)
             {
                 routeValues["Facets[" + index + "]" + ".name"] = facetParameter.Name;
@@ -38,5 +45,9 @@ namespace Kartverket.Metadatakatalog.Models
             return routeValues;
         }
 
+        public bool HasFilterForFacetField(string facetField)
+        {
+            return FacetParameters != null && FacetParameters.Any(f => f.Name == facetField);
+        }
     }
 }

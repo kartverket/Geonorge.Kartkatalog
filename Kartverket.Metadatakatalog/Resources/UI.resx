@@ -120,4 +120,25 @@
   <data name="AppPageTitle" xml:space="preserve">
     <value>Metadatakatalogen levert av Geonorge</value>
   </data>
+  <data name="Facet_organization" xml:space="preserve">
+    <value>Organisasjon</value>
+  </data>
+  <data name="Facet_theme" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="Facet_type" xml:space="preserve">
+    <value>Innholdstype</value>
+  </data>
+  <data name="Facet_type_dataset" xml:space="preserve">
+    <value>Datasett</value>
+  </data>
+  <data name="Facet_type_series" xml:space="preserve">
+    <value>Datasettserie</value>
+  </data>
+  <data name="Facet_type_service" xml:space="preserve">
+    <value>Tjeneste</value>
+  </data>
+  <data name="Facet_type_software" xml:space="preserve">
+    <value>Applikasjon</value>
+  </data>
 </root>

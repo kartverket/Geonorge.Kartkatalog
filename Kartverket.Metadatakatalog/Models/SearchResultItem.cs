@@ -1,6 +1,4 @@
-﻿using System.Web.Routing;
-
-namespace Kartverket.Metadatakatalog.Models
+﻿namespace Kartverket.Metadatakatalog.Models
 {
     public class SearchResultItem
     {
@@ -12,18 +10,5 @@ namespace Kartverket.Metadatakatalog.Models
         public string Organization { get; set; }
         public string OrganizationLogoUrl { get; set; }
         public string ThumbnailUrl { get; set; }
-
-        public RouteValueDictionary ShowMetadataLinkRouteValueDictionary()
-        {
-            var routeValueDictionary = new RouteValueDictionary();
-
-            var seoUrl = new SeoUrl(Organization, Title);
-
-            routeValueDictionary["uuid"] = Uuid;
-            routeValueDictionary["organization"] = seoUrl.Organization;
-            routeValueDictionary["title"] = seoUrl.Title;
-
-            return routeValueDictionary;
-        }
     }
 }

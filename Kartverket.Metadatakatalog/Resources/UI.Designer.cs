@@ -68,5 +68,68 @@ namespace Resources {
                 return ResourceManager.GetString("AppPageTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organisasjon.
+        /// </summary>
+        public static string Facet_organization {
+            get {
+                return ResourceManager.GetString("Facet_organization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tema.
+        /// </summary>
+        public static string Facet_theme {
+            get {
+                return ResourceManager.GetString("Facet_theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Innholdstype.
+        /// </summary>
+        public static string Facet_type {
+            get {
+                return ResourceManager.GetString("Facet_type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Datasett.
+        /// </summary>
+        public static string Facet_type_dataset {
+            get {
+                return ResourceManager.GetString("Facet_type_dataset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Datasettserie.
+        /// </summary>
+        public static string Facet_type_series {
+            get {
+                return ResourceManager.GetString("Facet_type_series", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tjeneste.
+        /// </summary>
+        public static string Facet_type_service {
+            get {
+                return ResourceManager.GetString("Facet_type_service", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Applikasjon.
+        /// </summary>
+        public static string Facet_type_software {
+            get {
+                return ResourceManager.GetString("Facet_type_software", resourceCulture);
+            }
+        }
     }
 }
