@@ -161,8 +161,8 @@
         @DisplayValue("Representasjonsform", Model.SpatialRepresentation)
         @if (Model.DistributionFormat != null)
         {
-            <text>DisplayValue("Format", Model.DistributionFormat.Name)</text>
-            <text>DisplayValue("Versjon", Model.DistributionFormat.Version)</text>
+            <text>@DisplayValue("Format", Model.DistributionFormat.Name)</text>
+            <text>@DisplayValue("Versjon", Model.DistributionFormat.Version)</text>
         }
         @DisplayValue("Protokoll", Model.DistributionDetails.Protocol)
         @DisplayValue("Url", Model.DistributionDetails.URL)
