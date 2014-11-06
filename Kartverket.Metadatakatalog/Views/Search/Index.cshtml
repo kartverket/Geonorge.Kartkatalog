@@ -16,7 +16,7 @@
                 {
                     <li><a href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.Name (@facetResult.Count)</a></li>
                 }
-                <li><a href="@Model.CreateRoutesForFacetFieldsExcept(facet.FacetField)">Vis alle</a></li>
+                <li><a href="@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))">Vis alle</a></li>
             </ul>
         }
     </div>
@@ -30,7 +30,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" style="height:70px">
                                 <img src="@item.OrganizationLogoUrl" height="50" class="pull-right">
-                                <h4><a href="@Url.Action("Index", "Metadata", new { uuid = item.Uuid, organization = item.Organization, title = item.Title })">@item.Title</a></h4>
+                                <h4><a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">@item.Title</a></h4>
                                 <p>@item.Organization</p>
                             </div>
                             <div class="panel-body">
