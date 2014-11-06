@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GeoNorgeAPI;
+using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
@@ -15,11 +16,13 @@ namespace Kartverket.Metadatakatalog.Service
 
         private readonly IOrganizationService _organizationService;
         private readonly ThemeResolver _themeResolver;
+        private readonly GeoNetworkUtil _geoNetworkUtil;
 
-        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver)
+        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil)
         {
             _organizationService = organizationService;
             _themeResolver = themeResolver;
+            _geoNetworkUtil = geoNetworkUtil;
         }
 
         public List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems)
@@ -30,67 +33,78 @@ namespace Kartverket.Metadatakatalog.Service
                 var metadataItem = item as MD_Metadata_Type;
                 if (metadataItem != null)
                 {
-                    var simpleMetadata = new SimpleMetadata(metadataItem);
-                    var indexDoc = new MetadataIndexDoc
-                    {
-                        Uuid = simpleMetadata.Uuid,
-                        Title = simpleMetadata.Title,
-                        Abstract = simpleMetadata.Abstract,
-                        Purpose = simpleMetadata.Purpose,
-                        Type = simpleMetadata.HierarchyLevel,
-                    };
-
-                    if (simpleMetadata.ContactMetadata != null)
-                    {
-                        indexDoc.Organization = simpleMetadata.ContactMetadata.Organization;
-
-                        Task<Organization> organizationTask = _organizationService.GetOrganizationByName(simpleMetadata.ContactMetadata.Organization);
-                        Organization organization = organizationTask.Result;
-                        if (organization != null)
-                        {
-                            indexDoc.OrganizationLogoUrl = organization.LogoUrl;
-                        }
-                    }
-
-                    indexDoc.Theme = _themeResolver.Resolve(simpleMetadata);
-
-                    // FIXME - BAD!! Move this error handling into GeoNorgeAPI
                     try
                     {
-                        indexDoc.DatePublished = simpleMetadata.DatePublished.ToString();
-                        indexDoc.DateUpdated = simpleMetadata.DateUpdated.ToString();
+                        var simpleMetadata = new SimpleMetadata(metadataItem);
+                        var indexDoc = new MetadataIndexDoc
+                        {
+                            Uuid = simpleMetadata.Uuid,
+                            Title = simpleMetadata.Title,
+                            Abstract = simpleMetadata.Abstract,
+                            Purpose = simpleMetadata.Purpose,
+                            Type = simpleMetadata.HierarchyLevel,
+                        };
+
+                        if (simpleMetadata.ContactMetadata != null)
+                        {
+                            indexDoc.Organization = simpleMetadata.ContactMetadata.Organization;
+
+                            Task<Organization> organizationTask =
+                                _organizationService.GetOrganizationByName(simpleMetadata.ContactMetadata.Organization);
+                            Organization organization = organizationTask.Result;
+                            if (organization != null)
+                            {
+                                indexDoc.OrganizationLogoUrl = organization.LogoUrl;
+                            }
+                        }
+
+                        indexDoc.Theme = _themeResolver.Resolve(simpleMetadata);
+
+                        // FIXME - BAD!! Move this error handling into GeoNorgeAPI
+                        try
+                        {
+                            indexDoc.DatePublished = simpleMetadata.DatePublished.ToString();
+                            indexDoc.DateUpdated = simpleMetadata.DateUpdated.ToString();
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error("Error parsing datetime", e);
+                        }
+
+                        indexDoc.LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl;
+                        indexDoc.ProductPageUrl = simpleMetadata.ProductPageUrl;
+                        indexDoc.ProductSheetUrl = simpleMetadata.ProductSheetUrl;
+                        indexDoc.ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl;
+
+                        var distributionDetails = simpleMetadata.DistributionDetails;
+                        if (distributionDetails != null)
+                        {
+                            indexDoc.DistributionProtocol = distributionDetails.Protocol;
+                            indexDoc.DistributionUrl = distributionDetails.URL;
+                        }
+
+                        List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;
+                        if (thumbnails != null && thumbnails.Count > 0)
+                        {
+                            indexDoc.ThumbnailUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMetadata.Uuid,
+                                thumbnails[0].URL);
+                        }
+
+                        indexDoc.MaintenanceFrequency = simpleMetadata.MaintenanceFrequency;
+
+                        indexDoc.TopicCategory = simpleMetadata.TopicCategory;
+                        indexDoc.Keywords = simpleMetadata.Keywords.Select(k => k.Keyword).ToList();
+
+                        Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid,
+                            indexDoc.Title));
+
+                        documentsToIndex.Add(indexDoc);
                     }
                     catch (Exception e)
                     {
-                        Log.Error("Error parsing datetime", e);
+                        string identifier = metadataItem.fileIdentifier != null ? metadataItem.fileIdentifier.CharacterString : null;
+                        Log.Error("Exception while parsing metadata: " + identifier, e);
                     }
-
-                    indexDoc.LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl;
-                    indexDoc.ProductPageUrl = simpleMetadata.ProductPageUrl;
-                    indexDoc.ProductSheetUrl = simpleMetadata.ProductSheetUrl;
-                    indexDoc.ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl;
-
-                    var distributionDetails = simpleMetadata.DistributionDetails;
-                    if (distributionDetails != null)
-                    {
-                        indexDoc.DistributionProtocol = distributionDetails.Protocol;
-                        indexDoc.DistributionUrl = distributionDetails.URL;
-                    }
-
-                    List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;
-                    if (thumbnails != null && thumbnails.Count > 0)
-                    {
-                        indexDoc.ThumbnailUrl = thumbnails[0].URL;
-                    }
-
-                    indexDoc.MaintenanceFrequency = simpleMetadata.MaintenanceFrequency;
-
-                    indexDoc.TopicCategory = simpleMetadata.TopicCategory;
-                    indexDoc.Keywords = simpleMetadata.Keywords.Select(k => k.Keyword).ToList();
-
-                    Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid, indexDoc.Title));
-
-                    documentsToIndex.Add(indexDoc);
                 }
             }
             return documentsToIndex;

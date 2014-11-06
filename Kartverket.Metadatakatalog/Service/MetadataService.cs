@@ -70,7 +70,7 @@ namespace Kartverket.Metadatakatalog.Service
                 SpecificUsage = simpleMetadata.SpecificUsage,
                 Status = simpleMetadata.Status,
                 SupplementalDescription = simpleMetadata.SupplementalDescription,
-                Thumbnails = Convert(simpleMetadata.Thumbnails),
+                Thumbnails = Convert(simpleMetadata.Thumbnails, simpleMetadata.Uuid),
                 Title = simpleMetadata.Title,
                 TopicCategory = simpleMetadata.TopicCategory,
                 Uuid = simpleMetadata.Uuid,
@@ -94,15 +94,15 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
-        private List<Thumbnail> Convert(List<SimpleThumbnail> simpleThumbnails)
+        private List<Thumbnail> Convert(List<SimpleThumbnail> simpleThumbnails, string uuid)
         {
-            List<Thumbnail> output = new List<Thumbnail>();
+            var output = new List<Thumbnail>();
             foreach (var simpleThumbnail in simpleThumbnails)
             {
                 output.Add(new Thumbnail
                 {
                     Type = simpleThumbnail.Type,
-                    URL = simpleThumbnail.URL
+                    URL = _geoNetworkUtil.GetThumbnailUrl(uuid, simpleThumbnail.URL)
                 });
             }
             return output;
