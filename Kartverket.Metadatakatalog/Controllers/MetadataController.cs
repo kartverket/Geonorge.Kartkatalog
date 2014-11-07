@@ -29,7 +29,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 return new HttpNotFoundResult();
             
             SeoUrl url = model.CreateSeoUrl();
-            if (!url.Matches(organization, title))
+            if (!url.Matches(organization, title) && !string.IsNullOrWhiteSpace(organization))
                 return RedirectToActionPermanent("Index", new { organization = url.Organization, title = url.Title, uuid = uuid });
 
             return View(model);

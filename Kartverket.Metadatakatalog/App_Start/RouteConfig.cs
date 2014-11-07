@@ -20,6 +20,11 @@ namespace Kartverket.Metadatakatalog
                 new { uuid = @"[a-zA-Z0-9-]+$" }
             );
 
+            routes.MapRoute("DisplayMetadataUuidAndTitle", "{controller}/{title}/{uuid}",
+                new { controller = "Metadata", action = "Index" },
+                new { uuid = @"[a-zA-Z0-9-]+$" }
+            );
+
             routes.MapRoute("DisplayMetadataUuid", "{controller}/{uuid}",
                 new { controller = "Metadata", action = "Index" },
                 new { uuid = @"[a-zA-Z0-9-]+$" }
