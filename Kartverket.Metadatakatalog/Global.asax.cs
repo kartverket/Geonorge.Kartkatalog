@@ -14,14 +14,13 @@ namespace Kartverket.Metadatakatalog
     {
         protected void Application_Start()
         {
-            DependencyConfig.Configure(new ContainerBuilder());
-
             GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            
+
+            DependencyConfig.Configure(new ContainerBuilder());
 
             MvcHandler.DisableMvcResponseHeader = true;
 

@@ -10,5 +10,8 @@
         public string Organization { get; set; }
         public string OrganizationLogoUrl { get; set; }
         public string ThumbnailUrl { get; set; }
+        public string DistributionUrl { get; set; }
+        public string DistributionProtocol { get; set; }
+        public string ShowDetailsUrl { get; set; }
     }
 }

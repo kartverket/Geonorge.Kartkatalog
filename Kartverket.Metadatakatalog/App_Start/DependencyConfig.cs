@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Web.Configuration;
+using System.Web.Http;
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Core;
 using Autofac.Core.Activators.Reflection;
 using Autofac.Integration.Mvc;
-using GeoNorgeAPI;
+using Autofac.Integration.WebApi;
+using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Service;
-using Kartverket.Geonorge.Utilities;
 using Kartverket.Metadatakatalog.Service.Search;
+using GeoNorgeAPI;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -18,10 +21,17 @@ namespace Kartverket.Metadatakatalog
         public static void Configure(ContainerBuilder builder)
         {
             builder.RegisterControllers(typeof(MvcApplication).Assembly).PropertiesAutowired();
+            builder.RegisterApiControllers(Assembly.GetExecutingAssembly()).PropertiesAutowired();
+
             builder.RegisterModule(new AutofacWebTypesModule());
             ConfigureAppDependencies(builder);
             var container = builder.Build();
+
+            // dependency resolver for MVC
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+
+            // dependency resolver for Web API
+            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
         }
 
         private static void ConfigureAppDependencies(ContainerBuilder builder)

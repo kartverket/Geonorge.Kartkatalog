@@ -25,15 +25,15 @@ namespace Kartverket.Metadatakatalog.Service.Search
             SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
             {
                 FilterQueries = BuildFilterQueries(parameters),
-                Rows = 30,
-                StartOrCursor = new StartOrCursor.Start(0),
+                Rows = parameters.Limit,
+                StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
                 Facet = BuildFacetParameters(),
             });
 
-            return CreateSearchResults(queryResults);
+            return CreateSearchResults(queryResults, parameters);
         }
 
-        private SearchResult CreateSearchResults(SolrQueryResults<MetadataIndexDoc> queryResults)
+        private SearchResult CreateSearchResults(SolrQueryResults<MetadataIndexDoc> queryResults, SearchParameters parameters)
         {
             List<SearchResultItem> items = ParseResultDocuments(queryResults);
 
@@ -42,7 +42,10 @@ namespace Kartverket.Metadatakatalog.Service.Search
             return new SearchResult
             {
                 Items = items,
-                Facets = facets
+                Facets = facets,
+                Limit = parameters.Limit,
+                Offset = parameters.Offset,
+                NumFound = queryResults.NumFound
             };
         }
 
@@ -109,14 +112,6 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 .Where(f => !string.IsNullOrWhiteSpace(f.Value))
                 .Select(f => new SolrQueryByField(f.Name, f.Value))
                 .ToList<ISolrQuery>();
-
-            /*
-            var queriesFromFacets = from p in facetsInternal
-                                    where p.value != null && p.value != ""
-                                    select (ISolrQuery)Query.Field(p.name).In(p.value.Split(','));
-            return queriesFromFacets.ToList(); 
-            */
-            //return null;
         }
 
         private ISolrQuery BuildQuery(SearchParameters parameters)
