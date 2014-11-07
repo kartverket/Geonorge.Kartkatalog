@@ -26,7 +26,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 FilterQueries = BuildFilterQueries(parameters),
                 Rows = parameters.Limit,
                 StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
-                Facet = BuildFacetParameters(),
+                Facet = BuildFacetParameters(parameters),
             });
 
             return CreateSearchResults(queryResults, parameters);
@@ -94,16 +94,13 @@ namespace Kartverket.Metadatakatalog.Service.Search
             return items;
         }
 
-        private static FacetParameters BuildFacetParameters()
+        private static FacetParameters BuildFacetParameters(SearchParameters parameters)
         {
             return new FacetParameters
             {
-                Queries = new List<ISolrFacetQuery>
-                {
-                    new SolrFacetFieldQuery("theme") { MinCount = 1 }, 
-                    new SolrFacetFieldQuery("type") { MinCount = 1 }, 
-                    new SolrFacetFieldQuery("organization") { MinCount = 1 }
-                }
+                Queries = parameters.Facets.Select(item => 
+                    new SolrFacetFieldQuery(item.Name) { MinCount = 1 }
+                    ).ToList<ISolrFacetQuery>()
             };
         }
 

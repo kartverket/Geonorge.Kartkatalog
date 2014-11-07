@@ -120,6 +120,9 @@
   <data name="AppPageTitle" xml:space="preserve">
     <value>Metadatakatalogen levert av Geonorge</value>
   </data>
+  <data name="Facet_keyword" xml:space="preserve">
+    <value>Nøkkelord</value>
+  </data>
   <data name="Facet_organization" xml:space="preserve">
     <value>Organisasjon</value>
   </data>

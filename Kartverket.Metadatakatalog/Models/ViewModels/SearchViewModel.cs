@@ -54,7 +54,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         public bool HasFilterForFacetField(string facetField)
         {
-            return FacetParameters != null && FacetParameters.Any(f => f.Name == facetField);
+            return FacetParameters != null && FacetParameters.Any(f => f.Name == facetField && !string.IsNullOrWhiteSpace(f.Value));
         }
 
 
