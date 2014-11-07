@@ -4,7 +4,6 @@ using Kartverket.Metadatakatalog.Models;
 using Microsoft.Practices.ServiceLocation;
 using SolrNet;
 using SolrNet.Commands.Parameters;
-using SolrNet.DSL;
 using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.SearchResult;
 
@@ -86,7 +85,9 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     Theme = doc.Theme,
                     Type = doc.Type,
                     OrganizationLogoUrl = doc.OrganizationLogoUrl,
-                    ThumbnailUrl = doc.ThumbnailUrl
+                    ThumbnailUrl = doc.ThumbnailUrl,
+                    DistributionUrl = doc.DistributionUrl,
+                    DistributionProtocol = doc.DistributionProtocol
                 };
                 items.Add(item);
             }
@@ -119,19 +120,24 @@ namespace Kartverket.Metadatakatalog.Service.Search
             var text = parameters.Text;
             if (!string.IsNullOrEmpty(text))
             {
-                var query = Query.Field("title").Is(text).Boost(4)
-                    || Query.Field("abstract").Is(text).Boost(3)
-                    || Query.Field("purpose").Is(text)
-                    || Query.Field("type").Is(text)
-                    || Query.Field("theme").Is(text)
-                    || Query.Field("organization").Is(text)
-                    || Query.Field("topic_category").Is(text)
-                    || Query.Field("keyword").Is(text)
-                    || Query.Field("uuid").Is(text)
-                    ;
+                var query = new SolrMultipleCriteriaQuery(new[]
+                {
+                    new SolrQuery("title:"+ text + "^45"),
+                    new SolrQuery("title:"+ text + "*^25"),
+                    new SolrQuery("title:"+ text + "~^5"),
+                    new SolrQuery("organization:"+ text + "^3"),
+                    new SolrQuery("organization:"+ text + "*^2"),
+                    new SolrQuery("organization:"+ text + "~^1.5"),
+                    new SolrQuery("abstract:" + text),
+                    new SolrQuery("purpose:" + text), 
+                    new SolrQuery("type:" + text),
+                    new SolrQuery("theme:" + text),
+                    new SolrQuery("topic_category:" + text),
+                    new SolrQuery("keyword:" + text),
+                    new SolrQuery("uuid:" + text)
+                });
                 return query;
             }
-
             return SolrQuery.All; 
         }
     }
