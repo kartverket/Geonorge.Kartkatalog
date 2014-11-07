@@ -7,6 +7,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
     public class SearchViewModel
     {
         public string Text { get; set; }
+        public int Limit { get; set; }
+        public int Offset { get; set; }
+        public int NumFound { get; set; }
         public List<FacetParameter> FacetParameters { get; set; }
         public SearchResultViewModel Result { get; set; }
 
@@ -15,6 +18,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             Text = parameters.Text;
             FacetParameters = parameters.Facets;
             Result = new SearchResultViewModel(searchResult);
+            Limit = searchResult.Limit;
+            Offset = searchResult.Offset;
+            NumFound = searchResult.NumFound;
         }
 
         public RouteValueDictionary LinkForFacetValue(string name, string value)
@@ -35,6 +41,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 routeValues["Facets[" + index + "]" + ".name"] = facetParameter.Name;
                 routeValues["Facets[" + index++ + "]" + ".value"] = facetParameter.Value;
             }
+            routeValues["text"] = Text;
             return routeValues;
         }
 
@@ -49,5 +56,17 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         {
             return FacetParameters != null && FacetParameters.Any(f => f.Name == facetField);
         }
+
+
+        public bool IsPreviousButtonActive()
+        {
+            return Offset > 1 && (Offset - Limit) > 1;
+        }
+
+        public bool IsNextButtonActive()
+        {
+            return NumFound > (Offset + Limit);
+        }
     }
+
 }

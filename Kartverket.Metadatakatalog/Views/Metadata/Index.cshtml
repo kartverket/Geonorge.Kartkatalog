@@ -45,6 +45,63 @@
 
     <h3>Sammendrag</h3>
     <p>@Model.Abstract</p>
+    
+    <h3>Tilgjengelige ressurser</h3>
+    <p>
+        <a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
+            @if (@Model.DistributionDetails.IsWmsUrl())
+            {
+                <text><span class="glyphicon glyphicon-globe"></span> Web Map Service (WMS)</text>
+            }
+            else if (@Model.DistributionDetails.IsWfsUrl())
+            {
+                <text><span class="glyphicon glyphicon-globe"></span> Web Feature Service (WFS)</text>
+            }
+            else if (Model.IsApplication())
+            {
+                <text><span class="glyphicon glyphicon-road"></span> Gå til applikasjon</text>
+            }
+            else
+            {
+                <text><span class="glyphicon glyphicon-download-alt"></span> Last ned datasett</text>
+            }
+        </a>
+        @if (@Model.DistributionDetails.IsWmsUrl())
+        {
+            <a href="http://norgeskart.no/geoportal/staging/#5/355422/6668909/l/wms/[@Model.DistributionDetails.URL]" class="btn btn-default">
+                <span class="glyphicon glyphicon-picture"></span> Vis tjenesten i Norgeskart
+            </a>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
+        {
+            <a href="@Model.ProductPageUrl" class="btn btn-default" title="Gå til produktsiden for @Model.Title">
+                <span class="glyphicon glyphicon-info-sign"></span> Produktside
+            </a>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
+        {
+            <a href="@Model.ProductSheetUrl" class="btn btn-default" title="Last ned produktark for @Model.Title">
+                <span class="glyphicon glyphicon-globe"></span> Produktark
+            </a>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Model.ProductSpecificationUrl))
+        {
+            <a href="@Model.ProductSpecificationUrl" class="btn btn-default" title="Last ned produktspesifikasjon for @Model.Title">
+                <span class="glyphicon glyphicon-list-alt"></span> Produktspesifikasjon
+            </a>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Model.LegendDescriptionUrl))
+        {
+            <a href="@Model.LegendDescriptionUrl" class="btn btn-default" title="Last ned kartografi for @Model.Title">
+                <span class="glyphicon glyphicon-picture"></span> Kartografi
+            </a>
+        }
+    </p>
+    
 
     @if (!string.IsNullOrWhiteSpace(Model.Purpose))
     {
@@ -64,57 +121,6 @@
         <p>@Model.SpecificUsage</p>
     }
 </div>
-
-<p class="shortcuts">
-    <a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
-        @if (@Model.DistributionDetails.IsWmsUrl())
-        {
-            <text><span class="glyphicon glyphicon-globe"></span> Web Map Service (WMS)</text>
-        }
-        else if (@Model.DistributionDetails.IsWfsUrl())
-        {
-            <text><span class="glyphicon glyphicon-globe"></span> Web Feature Service (WFS)</text>
-        }
-        else
-        {
-            <text><span class="glyphicon glyphicon-download-alt"></span> Last ned datasett</text>
-        }
-    </a>
-    @if (@Model.DistributionDetails.IsWmsUrl())
-    {
-        <a href="http://norgeskart.no/geoportal/staging/#5/355422/6668909/l/wms/[@Model.DistributionDetails.URL]" class="btn btn-default">
-            <span class="glyphicon glyphicon-picture"></span> Vis tjenesten i Norgeskart
-        </a>
-    }
-
-    @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
-    {
-        <a href="@Model.ProductPageUrl" class="btn btn-default" title="Gå til produktsiden for @Model.Title">
-            <span class="glyphicon glyphicon-info-sign"></span> Produktside
-        </a>
-    }
-
-    @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
-    {
-        <a href="@Model.ProductSheetUrl" class="btn btn-default" title="Last ned produktark for @Model.Title">
-            <span class="glyphicon glyphicon-globe"></span> Produktark
-        </a>
-    }
-
-    @if (!string.IsNullOrWhiteSpace(Model.ProductSpecificationUrl))
-    {
-        <a href="@Model.ProductSpecificationUrl" class="btn btn-default" title="Last ned produktspesifikasjon for @Model.Title">
-            <span class="glyphicon glyphicon-list-alt"></span> Produktspesifikasjon
-        </a>
-    }
-
-    @if (!string.IsNullOrWhiteSpace(Model.LegendDescriptionUrl))
-    {
-        <a href="@Model.LegendDescriptionUrl" class="btn btn-default" title="Last ned kartografi for @Model.Title">
-            <span class="glyphicon glyphicon-picture"></span> Kartografi
-        </a>
-    }
-</p>
 
 
 <div class="row">

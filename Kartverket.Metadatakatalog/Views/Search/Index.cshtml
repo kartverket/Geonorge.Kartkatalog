@@ -2,7 +2,23 @@
 @model Kartverket.Metadatakatalog.Models.ViewModels.SearchViewModel
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Søk - " + Model.Text;
+}
+
+@helper PreviousButtonDisabled()
+{
+    if (!Model.IsPreviousButtonActive())
+    {
+        <text>disabled</text>
+    }
+}
+
+@helper NextButtonDisabled()
+{
+    if (!Model.IsNextButtonActive())
+    {
+        <text>disabled</text>
+    }
 }
 
 <div class="row">
@@ -27,6 +43,20 @@
     <div class="col-sm-12 col-md-8">
         @if (Model.Result != null)
         {
+            <p class="text-right">@Model.NumFound treff</p>
+        <!--
+            <nav>
+                <ul class="pagination">
+                    <li class="@PreviousButtonDisabled()"><a href="#">&laquo;</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li class="@if (!Model.IsNextButtonActive()) {<text>disabled</text>}"><a href="#">&raquo;</a></li>
+                </ul>
+            </nav>
+            -->
             <ul class="search-results">
                 @foreach (var item in Model.Result.Items)
                 {
@@ -48,6 +78,9 @@
                     </li>
                 }
             </ul>
+
+            
+
         }
     </div>
 </div>
