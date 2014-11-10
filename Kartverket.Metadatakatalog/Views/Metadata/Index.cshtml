@@ -1,14 +1,13 @@
-﻿@using GeoNorgeAPI
-@model MetadataViewModel
+﻿@model Kartverket.Metadatakatalog.Models.MetadataViewModel
 @{
     ViewBag.Title = Model.Title + " - " + Model.ContactMetadata.Organization;
     ViewBag.MetaDescription = Model.Abstract;
-    
+
     var hierarchyLevelCssClass = "";
     var hierarchyLevelLabelText = "";
     if (Model.IsService())
     {
-         hierarchyLevelCssClass = "label-info";
+        hierarchyLevelCssClass = "label-info";
         hierarchyLevelLabelText = "Tjeneste";
     }
     else if (Model.IsDataset())
@@ -53,7 +52,10 @@
 <span class="label @hierarchyLevelCssClass">@hierarchyLevelLabelText</span>
 <h1>@Model.Title</h1>
 
-<h2>@Model.ContactMetadata.Organization</h2>
+@if (Model.ContactMetadata != null)
+{
+    <h2>@Model.ContactMetadata.Organization</h2>
+}
 
 <div class="clearfix">
     @if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
@@ -62,33 +64,36 @@
     }
 
     <h3>Sammendrag</h3>
-    <p>@Model.Abstract</p>
-    
+    @Model.Abstract
+
     <h3>Tilgjengelige ressurser</h3>
     <p>
-        <a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
-            @if (@Model.DistributionDetails.IsWmsUrl())
-            {
-                <text><span class="glyphicon glyphicon-globe"></span> Web Map Service (WMS)</text>
-            }
-            else if (@Model.DistributionDetails.IsWfsUrl())
-            {
-                <text><span class="glyphicon glyphicon-globe"></span> Web Feature Service (WFS)</text>
-            }
-            else if (Model.IsApplication())
-            {
-                <text><span class="glyphicon glyphicon-road"></span> Gå til applikasjon</text>
-            }
-            else
-            {
-                <text><span class="glyphicon glyphicon-download-alt"></span> Last ned datasett</text>
-            }
-        </a>
-        @if (@Model.DistributionDetails.IsWmsUrl())
+        @if (Model.DistributionDetails != null)
         {
-            <a href="http://norgeskart.no/geoportal/staging/#5/355422/6668909/l/wms/[@Model.DistributionDetails.URL]" class="btn btn-default">
-                <span class="glyphicon glyphicon-picture"></span> Vis tjenesten i Norgeskart
+            <a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
+                @if (@Model.DistributionDetails.IsWmsUrl())
+                {
+                    <text><span class="glyphicon glyphicon-globe"></span> Web Map Service (WMS)</text>
+                }
+                else if (@Model.DistributionDetails.IsWfsUrl())
+                {
+                    <text><span class="glyphicon glyphicon-globe"></span> Web Feature Service (WFS)</text>
+                }
+                else if (Model.IsApplication())
+                {
+                    <text><span class="glyphicon glyphicon-road"></span> Gå til applikasjon</text>
+                }
+                else
+                {
+                    <text><span class="glyphicon glyphicon-download-alt"></span> Last ned datasett</text>
+                }
             </a>
+            if (Model.DistributionDetails.IsWmsUrl())
+            {
+                <a href="http://norgeskart.no/geoportal/staging/#5/355422/6668909/l/wms/[@Model.DistributionDetails.URL]" class="btn btn-default">
+                    <span class="glyphicon glyphicon-picture"></span> Vis tjenesten i Norgeskart
+                </a>
+            }
         }
 
         @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
@@ -119,7 +124,6 @@
             </a>
         }
     </p>
-    
 
     @if (!string.IsNullOrWhiteSpace(Model.Purpose))
     {
@@ -154,9 +158,17 @@
             <text>@DisplayValue("Format", Model.DistributionFormat.Name)</text>
             <text>@DisplayValue("Versjon", Model.DistributionFormat.Version)</text>
         }
-        @DisplayValue("Protokoll", Model.DistributionDetails.Protocol)
-        @DisplayValue("Url", Model.DistributionDetails.URL)
-        @DisplayValue("Lagnavn", Model.DistributionDetails.Name)
+        @if (Model.DistributionDetails != null)
+        {
+            <text>DisplayValue("Protokoll", Model.DistributionDetails.Protocol)</text>
+            if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
+            {
+                <p>
+                    <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
+                </p>
+            }
+            <text>DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
+        }
 
         <h3>Restriksjoner</h3>
         @DisplayValue("Bruksbegrensninger", Model.Constraints.UseLimitations)
@@ -171,11 +183,11 @@
         @DisplayValue("Prosesshistorie", Model.ProcessHistory)
 
 
-        
+
     </div>
 
     <div class="col-sm-6">
-        
+
         <h3>Tid og rom</h3>
         @if (Model.DateUpdated != null)
         {
@@ -200,7 +212,7 @@
                 @DisplayKeywords("Geografisk område", Model.KeywordsPlace)
             </p>
         }
-        
+
         @if (Model.BoundingBox != null)
         {
             <p>
@@ -212,7 +224,7 @@
 
             </p>
         }
-        
+
         <h3>Nøkkelord</h3>
         @DisplayKeywords("Tema", Model.KeywordsTheme)
         @DisplayKeywords("Inspire", Model.KeywordsInspire)
@@ -223,12 +235,13 @@
 </div>
 
 <div class="btn-group">
-    <a href="@Model.MetadataXmlUrl" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-file"></span> Last ned metadata XML</a>    
-    <a href="@Model.MetadataEditUrl" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-pencil"></span> Rediger metadata</a>    
+    <a href="@Model.MetadataXmlUrl" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-file"></span> Last ned metadata XML</a>
+    <a href="@Model.MetadataEditUrl" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-pencil"></span> Rediger metadata</a>
 </div>
 
 
-@helper DisplayValue(string label, string value) {
+@helper DisplayValue(string label, string value)
+{
     if (!string.IsNullOrWhiteSpace(value))
     {
         <p><strong>@label:</strong> @value</p>
