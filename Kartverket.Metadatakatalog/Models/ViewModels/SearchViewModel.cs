@@ -36,12 +36,19 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public RouteValueDictionary CreateRoutesForFacetFieldsExcept(string field, RouteValueDictionary routeValues, int index = 0)
         {
             IEnumerable<FacetParameter> filteredFacets = FacetParameters.Where(f => f.Name != field);
+            CreateLinkWithParameters(routeValues, filteredFacets, index);
+            return routeValues;
+        }
+
+        private RouteValueDictionary CreateLinkWithParameters(RouteValueDictionary routeValues, IEnumerable<FacetParameter> filteredFacets, int index = 0)
+        {
             foreach (var facetParameter in filteredFacets)
             {
                 routeValues["Facets[" + index + "]" + ".name"] = facetParameter.Name;
                 routeValues["Facets[" + index++ + "]" + ".value"] = facetParameter.Value;
             }
             routeValues["text"] = Text;
+
             return routeValues;
         }
 
@@ -60,12 +67,42 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         public bool IsPreviousButtonActive()
         {
-            return Offset > 1 && (Offset - Limit) > 1;
+            return Offset > 1 && (Offset - Limit) >= 1;
         }
 
         public bool IsNextButtonActive()
         {
             return NumFound > (Offset + Limit);
+        }
+
+
+        public RouteValueDictionary ParamsForPreviousLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["Offset"] = (Offset - Limit);
+            return routeValues;
+        }
+
+        public RouteValueDictionary ParamsForNextLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["Offset"] = (Offset + Limit);
+            return routeValues;
+        }
+
+        public string ShowingFromAndTo()
+        {
+            int from = Offset;
+            int to = (Offset + Limit - 1);
+
+            if (to > NumFound)
+            {
+                to = NumFound;
+            }
+
+            return string.Format("{0} - {1}", from, to);
         }
     }
 

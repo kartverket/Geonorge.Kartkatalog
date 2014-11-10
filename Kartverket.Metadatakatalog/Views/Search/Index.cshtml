@@ -1,24 +1,15 @@
 ﻿@using Kartverket.Metadatakatalog.Models.ViewModels
 @using Resources
-@model Kartverket.Metadatakatalog.Models.ViewModels.SearchViewModel
+@model SearchViewModel
 
 @{
-    ViewBag.Title = "Søk - " + Model.Text;
-}
-
-@helper PreviousButtonDisabled()
-{
-    if (!Model.IsPreviousButtonActive())
+    if (!string.IsNullOrWhiteSpace(Model.Text))
     {
-        <text>disabled</text>
+        ViewBag.Title = "Søk etter " + Model.Text;
     }
-}
-
-@helper NextButtonDisabled()
-{
-    if (!Model.IsNextButtonActive())
+    else
     {
-        <text>disabled</text>
+        ViewBag.Title = "Søk";
     }
 }
 
@@ -35,6 +26,23 @@
             <li><a href="@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))">Vis alle</a></li>
         }
     </ul>
+}
+
+@helper DisplayPagination()
+{
+    <p class="text-right">Viser @Model.ShowingFromAndTo() av @Model.NumFound treff.</p>
+    <nav class="text-right">
+        <ul class="pagination">
+            @if (Model.IsPreviousButtonActive())
+            {
+                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+            }
+            @if (Model.IsNextButtonActive())
+            {
+                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+            }
+        </ul>
+    </nav>
 }
 
 @section scripts {
@@ -69,20 +77,8 @@
     <div class="col-sm-12 col-md-8">
         @if (Model.Result != null)
         {
-            <p class="text-right">@Model.NumFound treff</p>
-        <!--
-            <nav>
-                <ul class="pagination">
-                    <li class="@PreviousButtonDisabled()"><a href="#">&laquo;</a></li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li class="@if (!Model.IsNextButtonActive()) {<text>disabled</text>}"><a href="#">&raquo;</a></li>
-                </ul>
-            </nav>
-            -->
+            @DisplayPagination()
+            
             <ul class="search-results">
                 @foreach (var item in Model.Result.Items)
                 {
@@ -108,7 +104,7 @@
                 }
             </ul>
 
-            
+            @DisplayPagination()
 
         }
     </div>
