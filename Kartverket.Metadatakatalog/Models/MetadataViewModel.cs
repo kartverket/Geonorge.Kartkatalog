@@ -69,6 +69,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public string MetadataXmlUrl { get; set; }
         public string MetadataEditUrl { get; set; }
+        public string OrganizationLogoUrl { get; set; }
 
         public SeoUrl CreateSeoUrl()
         {

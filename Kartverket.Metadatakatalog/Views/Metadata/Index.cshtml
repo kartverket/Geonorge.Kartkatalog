@@ -49,18 +49,29 @@
     }
 }
 
-<span class="label @hierarchyLevelCssClass">@hierarchyLevelLabelText</span>
+<div class="label @hierarchyLevelCssClass">@hierarchyLevelLabelText</div>
+
 <h1>@Model.Title</h1>
+
+
+
 
 @if (Model.ContactMetadata != null)
 {
-    <h2>@Model.ContactMetadata.Organization</h2>
+    <h2>
+        @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
+        {
+            <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactMetadata.Organization" width="100" />
+        }
+        @Model.ContactMetadata.Organization
+    </h2>
 }
+
 
 <div class="clearfix">
     @if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
     {
-        <img src="@Model.Thumbnails[0].URL" width="300" class="thumbnail pull-right" />
+        <img src="@Model.Thumbnails[0].URL" width="300" class="thumbnail pull-right" alt="Forhåndsvisning av data." />
     }
 
     <h3>Sammendrag</h3>
@@ -160,23 +171,26 @@
         }
         @if (Model.DistributionDetails != null)
         {
-            <text>DisplayValue("Protokoll", Model.DistributionDetails.Protocol)</text>
+            <text>@DisplayValue("Protokoll", Model.DistributionDetails.Protocol)</text>
             if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
             {
                 <p>
                     <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
                 </p>
             }
-            <text>DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
+            <text>@DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
         }
-
-        <h3>Restriksjoner</h3>
-        @DisplayValue("Bruksbegrensninger", Model.Constraints.UseLimitations)
-        @DisplayValue("Tilgangsrestriksjoner", Model.Constraints.AccessConstraints)
-        @DisplayValue("Brukerrestriksjoner", Model.Constraints.UseConstraints)
-        @DisplayValue("Andre restriksjoner", Model.Constraints.OtherConstraints)
-        @DisplayValue("Sikkerhetsnivå", Model.Constraints.SecurityConstraints)
-
+        
+        @if (Model.Constraints != null)
+        {
+            <h3>Restriksjoner</h3>
+            @DisplayValue("Bruksbegrensninger", Model.Constraints.UseLimitations)
+            @DisplayValue("Tilgangsrestriksjoner", Model.Constraints.AccessConstraints)
+            @DisplayValue("Brukerrestriksjoner", Model.Constraints.UseConstraints)
+            @DisplayValue("Andre restriksjoner", Model.Constraints.OtherConstraints)
+            @DisplayValue("Sikkerhetsnivå", Model.Constraints.SecurityConstraints)
+        }
+        
         <h3>Kvalitet</h3>
         @DisplayValue("Målestokkstall", Model.SpatialRepresentation)
         @DisplayValue("Status", Model.Status)
@@ -208,9 +222,9 @@
         }
         @if (Model.KeywordsPlace != null && Model.KeywordsPlace.Count > 0)
         {
-            <p>
+            
                 @DisplayKeywords("Geografisk område", Model.KeywordsPlace)
-            </p>
+            
         }
 
         @if (Model.BoundingBox != null)

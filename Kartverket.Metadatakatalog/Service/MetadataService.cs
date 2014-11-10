@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using GeoNorgeAPI;
 using Kartverket.Geonorge.Utilities;
+using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
 
@@ -11,12 +13,14 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly IGeoNorge _geoNorge;
         private readonly GeoNetworkUtil _geoNetworkUtil;
         private readonly IGeonorgeUrlResolver _geonorgeUrlResolver;
+        private readonly IOrganizationService _organizationService;
 
-        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver)
+        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService)
         {
             _geoNorge = geoNorge;
             _geoNetworkUtil = geoNetworkUtil;
             _geonorgeUrlResolver = geonorgeUrlResolver;
+            _organizationService = organizationService;
         }
 
         public MetadataViewModel GetMetadataByUuid(string uuid)
@@ -31,7 +35,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         private MetadataViewModel CreateMetadataViewModel(SimpleMetadata simpleMetadata)
         {
-            return new MetadataViewModel
+            var metadata = new MetadataViewModel
             {
                 
                 Abstract = simpleMetadata.Abstract,
@@ -79,6 +83,18 @@ namespace Kartverket.Metadatakatalog.Service
                 MetadataXmlUrl = _geoNetworkUtil.GetXmlDownloadUrl(simpleMetadata.Uuid),
                 MetadataEditUrl = _geonorgeUrlResolver.EditMetadata(simpleMetadata.Uuid)
             };
+
+            if (metadata.ContactMetadata != null)
+            {
+                Task<Organization> getOrganizationTask = _organizationService.GetOrganizationByName(metadata.ContactMetadata.Organization);
+                Organization organization = getOrganizationTask.Result;
+                if (organization != null)
+                {
+                    metadata.OrganizationLogoUrl = organization.LogoUrl;
+                }
+            }
+
+            return metadata;
         }
 
         private List<Keyword> Convert(IEnumerable<SimpleKeyword> simpleKeywords)
