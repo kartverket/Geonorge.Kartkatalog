@@ -34,8 +34,11 @@ namespace Kartverket.Metadatakatalog
             GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
         }
 
+        // the order of component registration is significant. must wire up dependencies in other packages before types in this project.
         private static void ConfigureAppDependencies(ContainerBuilder builder)
         {
+
+            // GeoNorgeAPI
             builder.RegisterType<GeoNorge>()
                 .As<IGeoNorge>()
                 .WithParameters(new List<Parameter>
@@ -45,10 +48,26 @@ namespace Kartverket.Metadatakatalog
                     new NamedParameter("geonetworkEndpoint", WebConfigurationManager.AppSettings["GeoNetworkUrl"])
                 });
 
+
+            // from nuget package Kartverket.Geonorge.Utilities
             builder.RegisterType<GeoNetworkUtil>()
                 .AsSelf()
                 .WithParameter("baseUrl", WebConfigurationManager.AppSettings["GeoNetworkUrl"]);
 
+            
+            
+            builder.RegisterType<HttpClientFactory>().As<IHttpClientFactory>();
+            builder.RegisterType<OrganizationService>().As<IOrganizationService>().WithParameters(new List<Parameter>
+            {
+                new NamedParameter("registryUrl", WebConfigurationManager.AppSettings["RegistryUrl"]),
+                new AutowiringParameter()
+            });
+
+            builder.RegisterType<GeonorgeUrlResolver>().As<IGeonorgeUrlResolver>().WithParameter(
+                new NamedParameter("editorUrl", WebConfigurationManager.AppSettings["EditorUrl"])
+            );
+
+            // in app
             builder.RegisterType<MetadataService>().As<IMetadataService>();
             builder.RegisterType<SolrMetadataIndexer>().As<MetadataIndexer>();
             builder.RegisterType<SolrIndexer>().As<Indexer>();
@@ -56,14 +75,7 @@ namespace Kartverket.Metadatakatalog
             builder.RegisterType<ThemeResolver>().AsSelf();
             builder.RegisterType<SearchService>().As<ISearchService>();
 
-            // from nuget package Kartverket.Geonorge.Utilities
-            builder.RegisterType<HttpClientFactory>().As<IHttpClientFactory>();
-            builder.RegisterType<OrganizationService>().As<IOrganizationService>().WithParameters(new List<Parameter>
-            {
-                new NamedParameter("registryUrl", WebConfigurationManager.AppSettings["RegistryUrl"]),
-                new AutowiringParameter()
-            });
-            
+
         }
     }
 }

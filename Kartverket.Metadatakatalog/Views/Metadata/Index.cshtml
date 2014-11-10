@@ -238,7 +238,11 @@
     </div>
 </div>
 
-<a href="@Model.MetadataXmlUrl" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-file"></span> Last ned metadata XML</a>
+<div class="btn-group">
+    <a href="@Model.MetadataXmlUrl" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-file"></span> Last ned metadata XML</a>    
+    <a href="@Model.MetadataEditUrl" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-pencil"></span> Rediger metadata</a>    
+</div>
+
 
 @helper DisplayValue(string label, string value) {
     if (!string.IsNullOrWhiteSpace(value))

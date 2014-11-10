@@ -10,11 +10,13 @@ namespace Kartverket.Metadatakatalog.Service
     {
         private readonly IGeoNorge _geoNorge;
         private readonly GeoNetworkUtil _geoNetworkUtil;
+        private readonly IGeonorgeUrlResolver _geonorgeUrlResolver;
 
-        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil)
+        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver)
         {
             _geoNorge = geoNorge;
             _geoNetworkUtil = geoNetworkUtil;
+            _geonorgeUrlResolver = geonorgeUrlResolver;
         }
 
         public MetadataViewModel GetMetadataByUuid(string uuid)
@@ -74,7 +76,8 @@ namespace Kartverket.Metadatakatalog.Service
                 Title = simpleMetadata.Title,
                 TopicCategory = simpleMetadata.TopicCategory,
                 Uuid = simpleMetadata.Uuid,
-                MetadataXmlUrl = _geoNetworkUtil.GetXmlDownloadUrl(simpleMetadata.Uuid)
+                MetadataXmlUrl = _geoNetworkUtil.GetXmlDownloadUrl(simpleMetadata.Uuid),
+                MetadataEditUrl = _geonorgeUrlResolver.EditMetadata(simpleMetadata.Uuid)
             };
         }
 
