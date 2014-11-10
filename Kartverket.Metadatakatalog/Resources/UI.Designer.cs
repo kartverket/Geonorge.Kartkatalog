@@ -61,7 +61,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Metadatakatalogen levert av Geonorge.
+        ///   Looks up a localized string similar to Kartkatalogen.
         /// </summary>
         public static string AppPageTitle {
             get {
