@@ -32,6 +32,24 @@
         hierarchyLevelLabelText = Model.HierarchyLevel;
     }
 }
+
+@helper ShowContact(string label, Contact contact)
+{
+    if (contact != null)
+    {
+        <p>
+            <strong>@label:</strong><br />
+            <a href="mailto:@contact.Email">
+                @if (!string.IsNullOrWhiteSpace(contact.Name))
+                {
+                    <text>@contact.Name, </text>
+                }
+                @contact.Email
+            </a> &ndash; @contact.Organization
+        </p>
+    }
+}
+
 <span class="label @hierarchyLevelCssClass">@hierarchyLevelLabelText</span>
 <h1>@Model.Title</h1>
 
@@ -122,46 +140,12 @@
     }
 </div>
 
-
 <div class="row">
     <div class="col-sm-6">
         <h3>Kontaktinformasjon</h3>
-        <p><strong>Metadatakontakt:</strong> 
-            <a href="mailto:@Model.ContactMetadata.Email">
-                @if (!string.IsNullOrWhiteSpace(Model.ContactMetadata.Name))
-                {
-                    <text>@Model.ContactMetadata.Name, </text>
-                }
-                @Model.ContactMetadata.Organization
-            </a></p>
-        @if (Model.ContactOwner != null)
-        {
-            <p><strong>Faglig kontakt:</strong> 
-                <a href="mailto:@Model.ContactOwner.Email">
-                    @if (!string.IsNullOrWhiteSpace(Model.ContactOwner.Name))
-                    {
-                        <text>@Model.ContactOwner.Name, </text>
-                    }
-                    @Model.ContactOwner.Organization
-                </a>
-            </p>
-        }
-        @if (Model.ContactPublisher != null)
-        {
-            <p>
-                <strong>Faglig kontakt:</strong>
-                <a href="mailto:@Model.ContactPublisher.Email">
-                    @if (!string.IsNullOrWhiteSpace(Model.ContactPublisher.Name))
-                    {
-                        <text>@Model.ContactPublisher.Name, </text>
-                    }
-                    @Model.ContactPublisher.Organization
-                </a>
-            </p>
-        }
-        
-        
-
+        @ShowContact("Metadatakontakt", Model.ContactMetadata)
+        @ShowContact("Faglig kontakt", Model.ContactOwner)
+        @ShowContact("Teknisk kontakt", Model.ContactPublisher)
 
         <h3>Distribusjon</h3>
         @DisplayValue("Representasjonsform", Model.SpatialRepresentation)
