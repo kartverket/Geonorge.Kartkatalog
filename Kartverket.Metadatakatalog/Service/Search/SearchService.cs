@@ -32,6 +32,22 @@ namespace Kartverket.Metadatakatalog.Service.Search
             return CreateSearchResults(queryResults, parameters);
         }
 
+        public SearchResult SearchByOrganization(SearchByOrganizationParameters parameters)
+        {
+            parameters.CreateFacetOfOrganizationName();
+
+            ISolrQuery query = BuildQuery(parameters);
+            SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
+            {
+                FilterQueries = BuildFilterQueries(parameters),
+                Rows = parameters.Limit,
+                StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
+                Facet = BuildFacetParameters(parameters),
+            });
+
+            return CreateSearchResults(queryResults, parameters);
+        }
+
         private SearchResult CreateSearchResults(SolrQueryResults<MetadataIndexDoc> queryResults, SearchParameters parameters)
         {
             List<SearchResultItem> items = ParseResultDocuments(queryResults);
@@ -87,7 +103,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     OrganizationLogoUrl = doc.OrganizationLogoUrl,
                     ThumbnailUrl = doc.ThumbnailUrl,
                     DistributionUrl = doc.DistributionUrl,
-                    DistributionProtocol = doc.DistributionProtocol
+                    DistributionProtocol = doc.DistributionProtocol,
+                    MaintenanceFrequency = doc.MaintenanceFrequency
                 };
                 items.Add(item);
             }
@@ -136,6 +153,29 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 return query;
             }
             return SolrQuery.All; 
+        }
+
+        private ISolrQuery BuildQuery(SearchByOrganizationParameters parameters)
+        {
+            var text = parameters.Text;
+            if (!string.IsNullOrEmpty(text))
+            {
+                var query = new SolrMultipleCriteriaQuery(new[]
+                {
+                    new SolrQuery("title:"+ text + "^45"),
+                    new SolrQuery("title:"+ text + "*^25"),
+                    new SolrQuery("title:"+ text + "~^5"),
+                    new SolrQuery("abstract:" + text),
+                    new SolrQuery("purpose:" + text), 
+                    new SolrQuery("type:" + text),
+                    new SolrQuery("theme:" + text),
+                    new SolrQuery("topic_category:" + text),
+                    new SolrQuery("keyword:" + text),
+                    new SolrQuery("uuid:" + text)
+                });
+                return query;
+            }
+            return SolrQuery.All;
         }
     }
 }

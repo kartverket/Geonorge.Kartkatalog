@@ -1,0 +1,17 @@
+﻿@using Kartverket.Metadatakatalog.Models.ViewModels
+@using Resources
+
+@helper DisplayFacet(SearchViewModel viewModel, SearchResultFacetViewModel facet, string action, string controller)
+{
+    <h4>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h4>
+    <ul class="facet">
+        @foreach (var facetResult in facet.FacetResults)
+        {
+            <li><a href="@Url.Action(action, controller, viewModel.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.LinkName() (@facetResult.Count)</a></li>
+        }
+        @if (Model.HasFilterForFacetField(facet.FacetField))
+        {
+            <li><a href="@Url.Action(action, controller, viewModel.CreateRoutesForFacetFieldsExcept(facet.FacetField))">Vis alle</a></li>
+        }
+    </ul>
+}

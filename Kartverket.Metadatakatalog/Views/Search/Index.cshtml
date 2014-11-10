@@ -82,22 +82,29 @@
             <ul class="search-results">
                 @foreach (var item in Model.Result.Items)
                 {
-                    <li>
-                        <div class="panel panel-default">
-                            <div class="panel-heading" style="height:70px">
-                                <img src="@item.OrganizationLogoUrl" height="50" class="pull-right">
-                                <h4><a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">@item.Title</a></h4>
-                                <p>@item.Organization</p>
+                    <li style="border-bottom: 1px solid #ccc; margin-bottom: 10px; margin-top: 10px" class="clearfix">
+                        <div class="row">
+                            <div class="col-md-2">
+                                @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
+                                {
+                                    <a href="@Url.Action("Organization", "Metadata", new { organization = @item.OrganizationUrlName() })">
+                                        <img src="@item.OrganizationLogoUrl" width="100" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" style="margin: 5px" />
+                                    </a>
+                                }
                             </div>
-                            <div class="panel-body">
+                            <div class="col-md-10">
+                                <h4><a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">@item.Title</a></h4>
                                 @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
                                 {
-                                    <img src="@item.ThumbnailUrl" width="200" class="pull-left" style="padding-right: 15px;">
+                                    <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                                        <img src="@item.ThumbnailUrl" width="150" class="pull-right" style="margin: 10px;">
+                                    </a>
                                 }
+                                
+                                <p><a href="@Url.Action("Organization", "Metadata", new { organization = @item.OrganizationUrlName() })" title="Vis alle tjenester og datasett fra @item.Organization">@item.Organization</a></p>
+                                
                                 <p>@item.Abstract</p>
-                                <p>
-                                    <span class="label label-info">@item.Type</span>
-                                </p>
+                                
                             </div>
                         </div>
                     </li>

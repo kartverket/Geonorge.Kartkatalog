@@ -13,5 +13,6 @@
         public string DistributionUrl { get; set; }
         public string DistributionProtocol { get; set; }
         public string ShowDetailsUrl { get; set; }
+        public string MaintenanceFrequency { get; set; }
     }
 }

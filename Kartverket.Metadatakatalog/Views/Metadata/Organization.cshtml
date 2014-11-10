@@ -1,0 +1,49 @@
+﻿@using Kartverket.Metadatakatalog.Models.ViewModels
+@using Resources
+@model SearchByOrganizationViewModel
+@{
+    ViewBag.Title = Model.OrganizationFullName;
+}
+
+<h1>@Model.OrganizationFullName</h1>
+
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-3">
+        @Model.NumFound tjenester og datasett tilgjengelig.
+        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
+        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
+    </div>
+    <div class="col-sm-12 col-md-9">
+        <ul class="search-results">
+            @foreach (var item in Model.Result.Items)
+            {
+                <li style="border: 1px solid #ccc; border-radius: 4px; margin: 10px; padding: 10px; width: 180px; height:200px; float:left" class="text-center">
+                    <h4><a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">@item.Title</a></h4>
+                    @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
+                    {
+                        <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                            <img src="@item.ThumbnailUrl" height="100" style="max-height: 100px;">
+                        </a>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+@helper DisplayFacet(SearchResultFacetViewModel facet)
+{
+    <h4>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h4>
+    <ul class="facet">
+        @foreach (var facetResult in facet.FacetResults)
+        {
+            <li><a href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.LinkName() (@facetResult.Count)</a></li>
+        }
+        @if (Model.HasFilterForFacetField(facet.FacetField))
+        {
+            <li><a href="@Url.Action("Organization", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))">Vis alle</a></li>
+        }
+    </ul>
+}

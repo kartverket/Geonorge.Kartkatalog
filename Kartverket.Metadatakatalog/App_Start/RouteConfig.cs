@@ -25,11 +25,14 @@ namespace Kartverket.Metadatakatalog
                 new { uuid = @"[a-zA-Z0-9-]+$" }
             );
 
-            routes.MapRoute("DisplayMetadataUuid", "{controller}/{uuid}",
+            routes.MapRoute("DisplayMetadataUuid", "{controller}/uuid/{uuid}",
                 new { controller = "Metadata", action = "Index" },
                 new { uuid = @"[a-zA-Z0-9-]+$" }
             );
 
+            routes.MapRoute("DisplayOrganizationMetadata", "{controller}/{organization}",
+                new { controller = "Metadata", action = "Organization" }
+            );
             
             routes.MapRoute(
                 name: "Default",

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Routing;
+using WebGrease.Css;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
 {
@@ -14,6 +15,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string Organization { get; set; }
         public string OrganizationLogoUrl { get; set; }
         public string ThumbnailUrl { get; set; }
+        public string MaintenanceFrequency { get; set; }
 
         private SearchResultItemViewModel(SearchResultItem item)
         {
@@ -25,6 +27,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             Organization = item.Organization;
             OrganizationLogoUrl = item.OrganizationLogoUrl;
             ThumbnailUrl = item.ThumbnailUrl;
+            MaintenanceFrequency = item.MaintenanceFrequency;
         }
 
         public static List<SearchResultItemViewModel> CreateFromList(IEnumerable<SearchResultItem> items)
@@ -44,6 +47,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
             return routeValueDictionary;
         }
-        
+
+        public string OrganizationUrlName()
+        {
+            var seoUrl = new SeoUrl(Organization, Title);
+            return seoUrl.Organization;
+        }
     }
 }

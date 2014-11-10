@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Search;
@@ -24,5 +23,6 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             return View(model);
         }
+
     }
 }

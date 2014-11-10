@@ -180,9 +180,11 @@
     <Compile Include="Models\MetadataIndexDoc.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />
     <Compile Include="Models\Api\SearchResult.cs" />
+    <Compile Include="Models\SearchByOrganizationParameters.cs" />
     <Compile Include="Models\SearchParameters.cs" />
     <Compile Include="Models\SearchResult.cs" />
     <Compile Include="Models\SearchResultItem.cs" />
+    <Compile Include="Models\ViewModels\SearchByOrganizationViewModel.cs" />
     <Compile Include="Models\ViewModels\SearchResultFacetValueViewModel.cs" />
     <Compile Include="Models\ViewModels\SearchResultFacetViewModel.cs" />
     <Compile Include="Models\ViewModels\SearchResultItemViewModel.cs" />
@@ -223,6 +225,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Helpers\SearchHelpers.cshtml" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -255,6 +258,7 @@
     <Content Include="Views\Index\Index.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Search\_SearchBox.cshtml" />
+    <Content Include="Views\Metadata\Organization.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
