@@ -25,6 +25,13 @@ namespace Kartverket.Metadatakatalog.Service
             RunSearch(1);
         }
 
+        public void RunIndexingOn(string uuid)
+        {
+            MD_Metadata_Type metadata = _geoNorge.GetRecordByUuid(uuid);
+            MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata));
+            _indexer.Index(metadataIndexDoc);
+        }
+
         private void RunSearch(int startPosition)
         {
             Log.Info("Running search from start position: " + startPosition);

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace Kartverket.Metadatakatalog
@@ -15,22 +11,22 @@ namespace Kartverket.Metadatakatalog
 
             routes.LowercaseUrls = true;
 
-            routes.MapRoute("DisplayMetadataUuidAndSlug", "{controller}/{organization}/{title}/{uuid}",
+            routes.MapRoute("DisplayMetadataUuidAndSlug", "metadata/{organization}/{title}/{uuid}",
                 new { controller = "Metadata", action = "Index" },
                 new { uuid = @"[a-zA-Z0-9-]+$" }
             );
 
-            routes.MapRoute("DisplayMetadataUuidAndTitle", "{controller}/{title}/{uuid}",
+            routes.MapRoute("DisplayMetadataUuidAndTitle", "metadata/{title}/{uuid}",
                 new { controller = "Metadata", action = "Index" },
                 new { uuid = @"[a-zA-Z0-9-]+$" }
             );
 
-            routes.MapRoute("DisplayMetadataUuid", "{controller}/uuid/{uuid}",
+            routes.MapRoute("DisplayMetadataUuid", "metadata/uuid/{uuid}",
                 new { controller = "Metadata", action = "Index" },
                 new { uuid = @"[a-zA-Z0-9-]+$" }
             );
 
-            routes.MapRoute("DisplayOrganizationMetadata", "{controller}/{organization}",
+            routes.MapRoute("DisplayOrganizationMetadata", "metadata/{organization}",
                 new { controller = "Metadata", action = "Organization" }
             );
             

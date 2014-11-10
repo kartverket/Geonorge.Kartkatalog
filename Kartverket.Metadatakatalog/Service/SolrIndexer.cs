@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Kartverket.Metadatakatalog.Models;
 using Microsoft.Practices.ServiceLocation;
@@ -22,6 +21,13 @@ namespace Kartverket.Metadatakatalog.Service
         {
             Log.Info(string.Format("Indexing {0} docs", docs.Count()));
             _solr.AddRange(docs);
+            _solr.Commit();
+        }
+
+        public void Index(MetadataIndexDoc doc)
+        {
+            Log.Info(string.Format("Indexing single document uuid={0} title={1}", doc.Uuid, doc.Title));
+            _solr.Add(doc);
             _solr.Commit();
         }
     }

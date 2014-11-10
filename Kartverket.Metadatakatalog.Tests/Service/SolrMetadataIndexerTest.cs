@@ -57,7 +57,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
             var secondSearchResult = new SearchResultsType
             {
-                Items = new object[] { CreateDummyMetadata(), CreateDummyMetadata(), CreateDummyMetadata(), CreateDummyMetadata(), CreateDummyMetadata(), },
+                Items = new object[] { CreateDummyMetadata(), CreateDummyMetadata(), CreateDummyMetadata(), CreateDummyMetadata(), CreateDummyMetadata() },
                 numberOfRecordsMatched = "55",
                 numberOfRecordsReturned = "5",
                 nextRecord = "56",
@@ -81,6 +81,28 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
             indexerMock.Verify(i => i.Index(indexDocs));
             indexerMock.Verify(i => i.Index(indexDocs));
+        }
+
+        [Test]
+        public void ShouldIndexSingleMetadata()
+        {
+            const string uuid = "12345-123545-1231245-1231232";
+
+            var geoNorgeMock = new Mock<IGeoNorge>();
+            var indexerMock = new Mock<Indexer>();
+            var indexDocumentCreator = new Mock<IndexDocumentCreator>();
+
+            geoNorgeMock.Setup(g => g.GetRecordByUuid(uuid)).Returns(CreateDummyMetadata);
+            var metadataIndexDoc = new MetadataIndexDoc();
+            indexDocumentCreator.Setup(i => i.CreateIndexDoc(It.IsAny<SimpleMetadata>()))
+                .Returns(metadataIndexDoc);
+            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexDocumentCreator.Object);
+            
+            indexer.RunIndexingOn(uuid);
+
+            geoNorgeMock.Verify(g => g.GetRecordByUuid(uuid));
+
+            indexerMock.Verify(i => i.Index(metadataIndexDoc));
         }
 
         private static MD_Metadata_Type CreateDummyMetadata()

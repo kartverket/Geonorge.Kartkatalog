@@ -36,70 +36,11 @@ namespace Kartverket.Metadatakatalog.Service
                     try
                     {
                         var simpleMetadata = new SimpleMetadata(metadataItem);
-                        var indexDoc = new MetadataIndexDoc
+                        var indexDoc = CreateIndexDoc(simpleMetadata);
+                        if (indexDoc != null)
                         {
-                            Uuid = simpleMetadata.Uuid,
-                            Title = simpleMetadata.Title,
-                            Abstract = simpleMetadata.Abstract,
-                            Purpose = simpleMetadata.Purpose,
-                            Type = simpleMetadata.HierarchyLevel,
-                        };
-
-                        if (simpleMetadata.ContactMetadata != null)
-                        {
-                            indexDoc.Organization = simpleMetadata.ContactMetadata.Organization;
-                            indexDoc.OrganizationSeoName = new SeoUrl(indexDoc.Organization, null).Organization;
-
-                            Task<Organization> organizationTask =
-                                _organizationService.GetOrganizationByName(simpleMetadata.ContactMetadata.Organization);
-                            Organization organization = organizationTask.Result;
-                            if (organization != null)
-                            {
-                                indexDoc.OrganizationLogoUrl = organization.LogoUrl;
-                            }
+                            documentsToIndex.Add(indexDoc);    
                         }
-
-                        indexDoc.Theme = _themeResolver.Resolve(simpleMetadata);
-
-                        // FIXME - BAD!! Move this error handling into GeoNorgeAPI
-                        try
-                        {
-                            indexDoc.DatePublished = simpleMetadata.DatePublished.ToString();
-                            indexDoc.DateUpdated = simpleMetadata.DateUpdated.ToString();
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Error("Error parsing datetime", e);
-                        }
-
-                        indexDoc.LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl;
-                        indexDoc.ProductPageUrl = simpleMetadata.ProductPageUrl;
-                        indexDoc.ProductSheetUrl = simpleMetadata.ProductSheetUrl;
-                        indexDoc.ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl;
-
-                        var distributionDetails = simpleMetadata.DistributionDetails;
-                        if (distributionDetails != null)
-                        {
-                            indexDoc.DistributionProtocol = distributionDetails.Protocol;
-                            indexDoc.DistributionUrl = distributionDetails.URL;
-                        }
-
-                        List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;
-                        if (thumbnails != null && thumbnails.Count > 0)
-                        {
-                            indexDoc.ThumbnailUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMetadata.Uuid,
-                                thumbnails[0].URL);
-                        }
-
-                        indexDoc.MaintenanceFrequency = simpleMetadata.MaintenanceFrequency;
-
-                        indexDoc.TopicCategory = simpleMetadata.TopicCategory;
-                        indexDoc.Keywords = simpleMetadata.Keywords.Select(k => k.Keyword).ToList();
-
-                        Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid,
-                            indexDoc.Title));
-
-                        documentsToIndex.Add(indexDoc);
                     }
                     catch (Exception e)
                     {
@@ -110,5 +51,80 @@ namespace Kartverket.Metadatakatalog.Service
             }
             return documentsToIndex;
         }
+
+        public MetadataIndexDoc CreateIndexDoc(SimpleMetadata simpleMetadata)
+        {
+            var indexDoc = new MetadataIndexDoc();
+            
+            try
+            {
+                indexDoc.Uuid = simpleMetadata.Uuid;
+                indexDoc.Title = simpleMetadata.Title;
+                indexDoc.Abstract = simpleMetadata.Abstract;
+                indexDoc.Purpose = simpleMetadata.Purpose;
+                indexDoc.Type = simpleMetadata.HierarchyLevel;
+
+                if (simpleMetadata.ContactMetadata != null)
+                {
+                    indexDoc.Organization = simpleMetadata.ContactMetadata.Organization;
+                    indexDoc.OrganizationSeoName = new SeoUrl(indexDoc.Organization, null).Organization;
+
+                    Task<Organization> organizationTask =
+                        _organizationService.GetOrganizationByName(simpleMetadata.ContactMetadata.Organization);
+                    Organization organization = organizationTask.Result;
+                    if (organization != null)
+                    {
+                        indexDoc.OrganizationLogoUrl = organization.LogoUrl;
+                    }
+                }
+
+                indexDoc.Theme = _themeResolver.Resolve(simpleMetadata);
+
+                // FIXME - BAD!! Move this error handling into GeoNorgeAPI
+                try
+                {
+                    indexDoc.DatePublished = simpleMetadata.DatePublished.ToString();
+                    indexDoc.DateUpdated = simpleMetadata.DateUpdated.ToString();
+                }
+                catch (Exception e)
+                {
+                    Log.Error("Error parsing datetime", e);
+                }
+
+                indexDoc.LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl;
+                indexDoc.ProductPageUrl = simpleMetadata.ProductPageUrl;
+                indexDoc.ProductSheetUrl = simpleMetadata.ProductSheetUrl;
+                indexDoc.ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl;
+
+                var distributionDetails = simpleMetadata.DistributionDetails;
+                if (distributionDetails != null)
+                {
+                    indexDoc.DistributionProtocol = distributionDetails.Protocol;
+                    indexDoc.DistributionUrl = distributionDetails.URL;
+                }
+
+                List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;
+                if (thumbnails != null && thumbnails.Count > 0)
+                {
+                    indexDoc.ThumbnailUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMetadata.Uuid,
+                        thumbnails[0].URL);
+                }
+
+                indexDoc.MaintenanceFrequency = simpleMetadata.MaintenanceFrequency;
+
+                indexDoc.TopicCategory = simpleMetadata.TopicCategory;
+                indexDoc.Keywords = simpleMetadata.Keywords.Select(k => k.Keyword).ToList();
+
+                Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid,
+                    indexDoc.Title));
+            }
+            catch (Exception e)
+            {
+                string identifier = simpleMetadata.Uuid;
+                Log.Error("Exception while parsing metadata: " + identifier, e);
+            }
+            return indexDoc;
+        }
+
     }
 }

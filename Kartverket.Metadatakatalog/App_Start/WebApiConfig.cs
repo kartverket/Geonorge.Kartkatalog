@@ -1,5 +1,4 @@
 ﻿using System.Web.Http;
-using Kartverket.Metadatakatalog.Controllers;
 using Newtonsoft.Json;
 
 namespace Kartverket.Metadatakatalog

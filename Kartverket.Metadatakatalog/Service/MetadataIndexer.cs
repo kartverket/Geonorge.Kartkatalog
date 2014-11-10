@@ -3,5 +3,6 @@
     public interface MetadataIndexer
     {
         void RunIndexing();
+        void RunIndexingOn(string uuid);
     }
 }

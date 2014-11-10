@@ -6,5 +6,6 @@ namespace Kartverket.Metadatakatalog.Service
     public interface Indexer
     {
         void Index(IEnumerable<MetadataIndexDoc> docs);
+        void Index(MetadataIndexDoc doc);
     }
 }
