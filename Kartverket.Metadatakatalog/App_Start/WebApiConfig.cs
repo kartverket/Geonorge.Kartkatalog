@@ -9,6 +9,8 @@ namespace Kartverket.Metadatakatalog
         {
             config.MapHttpAttributeRoutes();
 
+            config.EnableCors();
+
             config.Routes.MapHttpRoute(
                 name: "SearchApi",
                 routeTemplate: "api/search/{search}",
