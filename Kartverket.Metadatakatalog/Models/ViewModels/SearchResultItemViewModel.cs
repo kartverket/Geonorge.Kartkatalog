@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Routing;
-using WebGrease.Css;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
 {
@@ -48,7 +47,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return routeValueDictionary;
         }
 
-        public string OrganizationUrlName()
+        public string OrganizationSeoName()
         {
             var seoUrl = new SeoUrl(Organization, Title);
             return seoUrl.Organization;

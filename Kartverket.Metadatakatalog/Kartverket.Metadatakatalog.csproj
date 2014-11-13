@@ -189,6 +189,7 @@
     <Compile Include="Models\SearchByOrganizationParameters.cs" />
     <Compile Include="Models\SearchParameters.cs" />
     <Compile Include="Models\SearchResult.cs" />
+    <Compile Include="Models\SearchResultForOrganization.cs" />
     <Compile Include="Models\SearchResultItem.cs" />
     <Compile Include="Models\ViewModels\SearchByOrganizationViewModel.cs" />
     <Compile Include="Models\ViewModels\SearchResultFacetValueViewModel.cs" />

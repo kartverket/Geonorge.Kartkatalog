@@ -2,11 +2,11 @@
 {
     public class SearchByOrganizationParameters : SearchParameters
     {
-        public string Organization { get; set; }
+        public string OrganizationSeoName { get; set; }
 
-        public void CreateFacetOfOrganizationName()
+        public void CreateFacetOfOrganizationSeoName()
         {
-            Facets.Add(new FacetParameter { Name = "organization_seo_lowercase", Value = Organization });
+            Facets.Add(new FacetParameter { Name = "organization_seo_lowercase", Value = OrganizationSeoName });
         }
     }
 }

@@ -16,7 +16,7 @@
 @helper DisplayFacet(SearchResultFacetViewModel facet)
 {
     <h4>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h4>
-    <ul class="facet">
+    <ul>
         @foreach (var facetResult in facet.FacetResults)
         {
             <li><a href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.LinkName() (@facetResult.Count)</a></li>
@@ -87,7 +87,7 @@
                             <div class="col-md-2">
                                 @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
                                 {
-                                    <a href="@Url.Action("Organization", "Metadata", new { organization = @item.OrganizationUrlName() })">
+                                    <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
                                         <img src="@item.OrganizationLogoUrl" width="100" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" style="margin: 5px" />
                                     </a>
                                 }
@@ -101,7 +101,7 @@
                                     </a>
                                 }
                                 
-                                <p><a href="@Url.Action("Organization", "Metadata", new { organization = @item.OrganizationUrlName() })" title="Vis alle tjenester og datasett fra @item.Organization">@item.Organization</a></p>
+                                <p><a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">@item.Organization</a></p>
                                 
                                 <p>@item.Abstract</p>
                                 

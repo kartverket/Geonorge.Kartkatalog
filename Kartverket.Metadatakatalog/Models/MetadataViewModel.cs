@@ -76,6 +76,11 @@ namespace Kartverket.Metadatakatalog.Models
             return new SeoUrl(ContactMetadata.Organization, Title);
         }
 
+        public String OrganizationSeoName()
+        {
+            return CreateSeoUrl().Organization;
+        }
+
         public bool IsService()
         {
             return HierarchyLevel == "service";

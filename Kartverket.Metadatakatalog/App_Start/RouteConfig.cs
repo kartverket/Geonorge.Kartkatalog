@@ -26,7 +26,7 @@ namespace Kartverket.Metadatakatalog
                 new { uuid = @"[a-zA-Z0-9-]+$" }
             );
 
-            routes.MapRoute("DisplayOrganizationMetadata", "metadata/{organization}",
+            routes.MapRoute("DisplayOrganizationMetadata", "metadata/{OrganizationSeoName}",
                 new { controller = "Metadata", action = "Organization" }
             );
             

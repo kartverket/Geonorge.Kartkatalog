@@ -1,29 +1,25 @@
-﻿using System.Linq;
-
-namespace Kartverket.Metadatakatalog.Models.ViewModels
+﻿namespace Kartverket.Metadatakatalog.Models.ViewModels
 {
     public class SearchByOrganizationViewModel : SearchViewModel
     {
-        public string Organization { get; set; }
-        public string OrganizationFullName { get; set; }
+        public string OrganizationSeoName { get; set; }
+        public string OrganizationName { get; set; }
+        public string OrganizationLogoUrl { get; set; }
 
-        public SearchByOrganizationViewModel(SearchByOrganizationParameters parameters, SearchResult searchResult) : base(parameters, searchResult)
+        public SearchByOrganizationViewModel(SearchByOrganizationParameters parameters, SearchResultForOrganization searchResult)
+            : base(parameters, searchResult)
         {
-            Organization = parameters.Organization;
-            OrganizationFullName = GetFullOrganizationNameFromFirstItemInSearchResult(searchResult);
-        }
-
-        private string GetFullOrganizationNameFromFirstItemInSearchResult(SearchResult searchResult)
-        {
-            if (searchResult.Items != null && searchResult.Items.Any())
+            OrganizationSeoName = parameters.OrganizationSeoName;
+            if (searchResult.Organization != null)
             {
-                SearchResultItem item = searchResult.Items.FirstOrDefault();
-                if (item != null)
-                {
-                    return item.Organization;
-                }
+                OrganizationName = searchResult.Organization.Name;
+                OrganizationLogoUrl = searchResult.Organization.LogoUrl;    
+            } 
+            else
+            {
+                OrganizationName = searchResult.GetOrganizationNameFromFirstItem();
             }
-            return null; 
         }
+        
     }
 }

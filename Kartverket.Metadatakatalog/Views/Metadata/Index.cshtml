@@ -59,11 +59,13 @@
 @if (Model.ContactMetadata != null)
 {
     <h2>
-        @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
-        {
-            <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactMetadata.Organization" width="100" />
-        }
-        @Model.ContactMetadata.Organization
+        <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName() })" title="Vis alle geografiske tjenester og datasett fra @Model.ContactMetadata.Organization">
+            @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
+            {
+                <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactMetadata.Organization" width="100" />
+            }
+            @Model.ContactMetadata.Organization
+        </a>
     </h2>
 }
 

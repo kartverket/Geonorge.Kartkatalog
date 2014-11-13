@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
 using Microsoft.Practices.ServiceLocation;
 using SolrNet;
@@ -11,10 +13,12 @@ namespace Kartverket.Metadatakatalog.Service.Search
 {
     public class SearchService : ISearchService
     {
+        private readonly IOrganizationService _organizationService;
         private readonly ISolrOperations<MetadataIndexDoc> _solrInstance;
 
-        public SearchService()
+        public SearchService(IOrganizationService organizationService)
         {
+            _organizationService = organizationService;
             _solrInstance = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
         }
 
@@ -32,9 +36,9 @@ namespace Kartverket.Metadatakatalog.Service.Search
             return CreateSearchResults(queryResults, parameters);
         }
 
-        public SearchResult SearchByOrganization(SearchByOrganizationParameters parameters)
+        public SearchResultForOrganization SearchByOrganization(SearchByOrganizationParameters parameters)
         {
-            parameters.CreateFacetOfOrganizationName();
+            parameters.CreateFacetOfOrganizationSeoName();
 
             ISolrQuery query = BuildQuery(parameters);
             SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
@@ -45,7 +49,11 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 Facet = BuildFacetParameters(parameters),
             });
 
-            return CreateSearchResults(queryResults, parameters);
+            SearchResult searchResult = CreateSearchResults(queryResults, parameters);
+            Task<Organization> getOrganizationTask = _organizationService.GetOrganizationByName(searchResult.GetOrganizationNameFromFirstItem());
+            Organization organization = getOrganizationTask.Result;
+
+            return new SearchResultForOrganization(organization, searchResult);
         }
 
         private SearchResult CreateSearchResults(SolrQueryResults<MetadataIndexDoc> queryResults, SearchParameters parameters)

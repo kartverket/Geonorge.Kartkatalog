@@ -2,16 +2,22 @@
 @using Resources
 @model SearchByOrganizationViewModel
 @{
-    ViewBag.Title = Model.OrganizationFullName;
+    ViewBag.Title = Model.OrganizationName;
 }
 
-<h1>@Model.OrganizationFullName</h1>
-
-
+<h1>
+    <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName })">
+        @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
+        {
+            <img src="@Model.OrganizationLogoUrl" width="100" alt="Logo @Model.OrganizationName"/>
+        }
+        @Model.OrganizationName
+    </a>
+</h1>
 
 <div class="row">
     <div class="col-sm-12 col-md-3">
-        @Model.NumFound tjenester og datasett tilgjengelig.
+       
         @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
         @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
     </div>
