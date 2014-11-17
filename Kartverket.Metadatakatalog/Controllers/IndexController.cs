@@ -31,26 +31,23 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View();
         }
 
-        public ActionResult MetadataUpdated()
+        public ActionResult MetadataUpdated(string action, string uuid, string XMLFile)
         {
             HttpStatusCode statusCode;
             try
             {
-                using (var stream = new StreamReader(Request.InputStream))
+                Log.Info("Received notification of updated metadata: " + Request.HttpMethod + ", " + action + ", " + uuid);
+
+                if (!string.IsNullOrWhiteSpace(uuid))
                 {
-                    string body = stream.ReadToEnd();
-                    if (!string.IsNullOrWhiteSpace(body))
-                    {
-                        body = body.Trim();
-                        Log.Info("Running single indexing of metadata with uuid=" + body);
-                        _indexer.RunIndexingOn(body);
-                        statusCode = HttpStatusCode.Accepted;
-                    }
-                    else
-                    {
-                        Log.Warn("Not indexing metadata - body was empty");
-                        statusCode = HttpStatusCode.BadRequest;
-                    }
+                    Log.Info("Running single indexing of metadata with uuid=" + uuid);
+                    _indexer.RunIndexingOn(uuid);
+                    statusCode = HttpStatusCode.Accepted;
+                }
+                else
+                {
+                    Log.Warn("Not indexing metadata - uuid was empty");
+                    statusCode = HttpStatusCode.BadRequest;
                 }
             }
             catch (Exception e)
