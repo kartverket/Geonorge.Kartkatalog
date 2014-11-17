@@ -31,6 +31,8 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateInput(false)] // allow posting of XML to go through
         public ActionResult MetadataUpdated(string action, string uuid, string XMLFile)
         {
             HttpStatusCode statusCode;
