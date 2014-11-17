@@ -130,7 +130,8 @@ namespace Kartverket.Metadatakatalog.Service
 
         private string ResolveThemeFromDokKeywords(SimpleMetadata metadata)
         {
-            foreach (var keyword in metadata.Keywords)
+            List<SimpleKeyword> keywordsDok = SimpleKeyword.Filter(metadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME);
+            foreach (var keyword in keywordsDok)
             {
                 string lowerCaseKeyword = keyword.Keyword.ToLower();
                 string theme;

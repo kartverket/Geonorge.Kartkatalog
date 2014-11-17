@@ -346,8 +346,8 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         [Test]
         public void ShouldResolveKeywordKulturminnerToKulturminner()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
-            ResolveTheme(CreateMetadataWithKeyword("kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
+            ResolveTheme(CreateMetadataWithDokKeyword("Kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
+            ResolveTheme(CreateMetadataWithDokKeyword("kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
         }
 
         [Test]
@@ -359,96 +359,102 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         [Test]
         public void ShouldResolveKeywordBasisGeodataRegardslessOfCase()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Basis geodata")).Should().Be(ThemeResolver.DokBasisGeodata);
-            ResolveTheme(CreateMetadataWithKeyword("basis Geodata")).Should().Be(ThemeResolver.DokBasisGeodata);
+            ResolveTheme(CreateMetadataWithDokKeyword("Basis geodata")).Should().Be(ThemeResolver.DokBasisGeodata);
+            ResolveTheme(CreateMetadataWithDokKeyword("basis Geodata")).Should().Be(ThemeResolver.DokBasisGeodata);
         }
 
         [Test]
         public void ShouldResolveKeywordSamferdsel()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Samferdsel")).Should().Be(ThemeResolver.DokSamferdsel);
+            ResolveTheme(CreateMetadataWithDokKeyword("Samferdsel")).Should().Be(ThemeResolver.DokSamferdsel);
         }
 
         [Test]
         public void ShouldResolveKeywordSamfunnssikkerhet()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Samfunnssikkerhet")).Should().Be(ThemeResolver.DokSamfunnssikkerhet);
+            ResolveTheme(CreateMetadataWithDokKeyword("Samfunnssikkerhet")).Should().Be(ThemeResolver.DokSamfunnssikkerhet);
         }
 
         [Test]
         public void ShouldResolveKeywordForurensning()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Forurensning")).Should().Be(ThemeResolver.DokForurensning);
+            ResolveTheme(CreateMetadataWithDokKeyword("Forurensning")).Should().Be(ThemeResolver.DokForurensning);
         }
 
         [Test]
         public void ShouldResolveKeywordFriluftsliv()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Friluftsliv")).Should().Be(ThemeResolver.DokFriluftsliv);
+            ResolveTheme(CreateMetadataWithDokKeyword("Friluftsliv")).Should().Be(ThemeResolver.DokFriluftsliv);
         }
 
         [Test]
         public void ShouldResolveKeywordLandskap()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Landskap")).Should().Be(ThemeResolver.DokLandskap);
+            ResolveTheme(CreateMetadataWithDokKeyword("Landskap")).Should().Be(ThemeResolver.DokLandskap);
         }
 
         [Test]
         public void ShouldResolveKeywordNatur()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Natur")).Should().Be(ThemeResolver.DokNatur);
+            ResolveTheme(CreateMetadataWithDokKeyword("Natur")).Should().Be(ThemeResolver.DokNatur);
         }
 
         [Test]
         public void ShouldResolveKeywordKulturminner()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
+            ResolveTheme(CreateMetadataWithDokKeyword("Kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
         }
 
         [Test]
         public void ShouldResolveKeywordLandbruk()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Landbruk")).Should().Be(ThemeResolver.DokLandbruk);
+            ResolveTheme(CreateMetadataWithDokKeyword("Landbruk")).Should().Be(ThemeResolver.DokLandbruk);
         }
 
         [Test]
         public void ShouldResolveKeywordEnergi()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Energi")).Should().Be(ThemeResolver.DokEnergi);
+            ResolveTheme(CreateMetadataWithDokKeyword("Energi")).Should().Be(ThemeResolver.DokEnergi);
         }
 
         [Test]
         public void ShouldResolveKeywordGeologi()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Geologi")).Should().Be(ThemeResolver.DokGeologi);
+            ResolveTheme(CreateMetadataWithDokKeyword("Geologi")).Should().Be(ThemeResolver.DokGeologi);
         }
 
         [Test]
         public void ShouldResolveKeywordKystFiskeri()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Kyst / Fiskeri")).Should().Be(ThemeResolver.DokKystFiskeri);
-            ResolveTheme(CreateMetadataWithKeyword("Kyst")).Should().Be(ThemeResolver.DokKystFiskeri);
-            ResolveTheme(CreateMetadataWithKeyword("Fiskeri")).Should().Be(ThemeResolver.DokKystFiskeri);
+            ResolveTheme(CreateMetadataWithDokKeyword("Kyst / Fiskeri")).Should().Be(ThemeResolver.DokKystFiskeri);
+            ResolveTheme(CreateMetadataWithDokKeyword("Kyst")).Should().Be(ThemeResolver.DokKystFiskeri);
+            ResolveTheme(CreateMetadataWithDokKeyword("Fiskeri")).Should().Be(ThemeResolver.DokKystFiskeri);
         }
 
         [Test]
         public void ShouldResolveKeywordPlan()
         {
-            ResolveTheme(CreateMetadataWithKeyword("Plan")).Should().Be(ThemeResolver.DokPlan);
+            ResolveTheme(CreateMetadataWithDokKeyword("Plan")).Should().Be(ThemeResolver.DokPlan);
         }
 
-        private static SimpleMetadata CreateMetadataWithKeyword(string keyword)
+        private static SimpleMetadata CreateMetadataWithKeyword(string keyword, string thesaurus = null)
         {
             SimpleMetadata metadata = SimpleMetadata.CreateDataset();
             var keywords = new List<SimpleKeyword>();
             keywords.Add(new SimpleKeyword()
             {
-                Keyword = keyword
+                Keyword = keyword,
+                Thesaurus = thesaurus
             });
             metadata.Keywords = keywords;
             return metadata;
         }
 
+        private static SimpleMetadata CreateMetadataWithDokKeyword(string keyword)
+        {
+            return CreateMetadataWithKeyword(keyword, SimpleKeyword.THESAURUS_NATIONAL_THEME);
+        }
+        
         private static void ResolveTopicCategory(string topicCategory, string expectedTheme)
         {
             ResolveTheme(CreateMetadataWithTopicCategory(topicCategory)).Should().Be(expectedTheme);
@@ -460,7 +466,6 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             metadata.TopicCategory = topicCategory;
             return metadata;
         }
-
 
         private static void ResolveInspireKeyword(string inspireKeyword, string expectedTheme)
         {
