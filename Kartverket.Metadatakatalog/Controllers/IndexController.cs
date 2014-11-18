@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Service;
@@ -17,6 +16,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             _indexer = indexer;
         }
 
+        //[Authorize]  /* enable this when IDP setup has been completed by Kartverket. */
         public ActionResult Index()
         {
             Log.Info("Run indexing of entire metadata catalogue.");

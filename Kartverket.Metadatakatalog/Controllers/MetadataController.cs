@@ -9,6 +9,8 @@ namespace Kartverket.Metadatakatalog.Controllers
 {
     public class MetadataController : Controller
     {
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly IMetadataService _metadataService;
         private readonly ISearchService _searchService;
 
@@ -27,7 +29,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (InvalidOperationException exception)
             {
-                // todo log exception    
+                Log.Error("Metadata with uuid: " + uuid + " not found.", exception);
             }
             if (model == null)
                 return new HttpNotFoundResult();
