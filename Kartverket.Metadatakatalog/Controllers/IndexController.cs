@@ -16,7 +16,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             _indexer = indexer;
         }
 
-        //[Authorize]  /* enable this when IDP setup has been completed by Kartverket. */
+        [Authorize]
         public ActionResult Index()
         {
             Log.Info("Run indexing of entire metadata catalogue.");
