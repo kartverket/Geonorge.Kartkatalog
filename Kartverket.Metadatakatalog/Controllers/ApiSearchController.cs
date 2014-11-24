@@ -44,8 +44,9 @@ namespace Kartverket.Metadatakatalog.Controllers
             _searchService = searchService;
         }
 
-        public SearchResult Get([System.Web.Http.ModelBinding.ModelBinder(typeof (SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
+        public SearchResult Get([FromUri] SearchParameters parameters)
         {
+            //[System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))]
             if (parameters == null)
                 parameters = new SearchParameters();
             
