@@ -143,7 +143,6 @@
     <Compile Include="Service\MetadataServiceTest.cs" />
     <Compile Include="Service\SolrMetadataIndexerTest.cs" />
     <Compile Include="Service\ThemeResolverTest.cs" />
-    <Compile Include="Service\UnitTest1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
