@@ -66,11 +66,11 @@ namespace Kartverket.Metadatakatalog.Service
 
                 if (simpleMetadata.ContactMetadata != null)
                 {
-                    indexDoc.Organization = simpleMetadata.ContactMetadata.Organization;
+                    indexDoc.Organization = simpleMetadata.ContactOwner.Organization;
                     indexDoc.OrganizationSeoName = new SeoUrl(indexDoc.Organization, null).Organization;
 
                     Task<Organization> organizationTask =
-                        _organizationService.GetOrganizationByName(simpleMetadata.ContactMetadata.Organization);
+                        _organizationService.GetOrganizationByName(simpleMetadata.ContactOwner.Organization);
                     Organization organization = organizationTask.Result;
                     if (organization != null)
                     {
