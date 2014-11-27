@@ -31,6 +31,20 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View();
         }
 
+        public ActionResult ReIndex()
+        {
+            Log.Info("Run reindexing of entire metadata catalogue.");
+            DateTime start = DateTime.Now;
+
+            _indexer.RunReIndexing();
+
+            DateTime stop = DateTime.Now;
+            double seconds = stop.Subtract(start).TotalSeconds;
+            Log.Info(string.Format("Indexing fininshed after {0} seconds.", seconds));
+
+            return View();
+        }
+
         [HttpPost]
         [ValidateInput(false)] // allow posting of XML to go through
         public ActionResult MetadataUpdated(string action, string uuid, string XMLFile)

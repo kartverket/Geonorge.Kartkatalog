@@ -278,6 +278,7 @@
     <Content Include="Views\Metadata\Organization.cshtml" />
     <Content Include="Web.Dev.config" />
     <Content Include="Web.Test.config" />
+    <Content Include="Views\Index\ReIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

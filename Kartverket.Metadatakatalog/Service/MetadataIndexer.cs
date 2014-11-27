@@ -4,5 +4,6 @@
     {
         void RunIndexing();
         void RunIndexingOn(string uuid);
+        void RunReIndexing();
     }
 }

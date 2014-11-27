@@ -49,5 +49,13 @@ namespace Kartverket.Metadatakatalog.Service
             }
         }
 
+
+
+        public void RunReIndexing()
+        {
+            _indexer.DeleteIndex();
+
+            RunSearch(1);
+        }
     }
 }

@@ -24,6 +24,14 @@ namespace Kartverket.Metadatakatalog.Service
             _solr.Commit();
         }
 
+        public void DeleteIndex()
+        {
+            Log.Info("Deletes intire index for reindexing");
+            SolrQuery sq = new SolrQuery("*:*");
+            _solr.Delete(sq);
+            _solr.Commit();
+        }
+
         public void Index(MetadataIndexDoc doc)
         {
             Log.Info(string.Format("Indexing single document uuid={0} title={1}", doc.Uuid, doc.Title));
