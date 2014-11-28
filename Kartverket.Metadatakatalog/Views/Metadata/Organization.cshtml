@@ -4,7 +4,9 @@
 @{
     ViewBag.Title = Model.OrganizationName;
 }
-
+@section breadcrumb {
+    <li class="active">@Model.OrganizationName</li>
+}
 <h1>
     <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName })">
         @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))

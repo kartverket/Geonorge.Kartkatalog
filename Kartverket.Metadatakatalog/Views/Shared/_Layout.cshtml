@@ -65,6 +65,12 @@
                     @TempData["failure"]
                 </div>
             }
+            <ol class="breadcrumb">
+                <li><a href="@Html.GeonorgeUrl()">Geonorge</a></li>
+                <li><a href="/">Kartkatalog</a></li>
+                @RenderSection("breadcrumb", false)
+            </ol>
+
             @RenderBody()
         </div>
     </div>
