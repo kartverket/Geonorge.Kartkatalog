@@ -123,8 +123,17 @@
   <data name="Facet_keyword" xml:space="preserve">
     <value>Nøkkelord</value>
   </data>
+  <data name="Facet_license" xml:space="preserve">
+    <value>Lisens</value>
+  </data>
+  <data name="Facet_nationalinitiative" xml:space="preserve">
+    <value>Samarbeid og lover</value>
+  </data>
   <data name="Facet_organization" xml:space="preserve">
     <value>Organisasjon</value>
+  </data>
+  <data name="Facet_place" xml:space="preserve">
+    <value>Geografisk område</value>
   </data>
   <data name="Facet_theme" xml:space="preserve">
     <value>Tema</value>

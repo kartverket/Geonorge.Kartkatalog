@@ -64,7 +64,7 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.Purpose = simpleMetadata.Purpose;
                 indexDoc.Type = simpleMetadata.HierarchyLevel;
 
-                if (simpleMetadata.ContactMetadata != null)
+                if (simpleMetadata.ContactOwner != null)
                 {
                     indexDoc.Organization = simpleMetadata.ContactOwner.Organization;
                     indexDoc.OrganizationSeoName = new SeoUrl(indexDoc.Organization, null).Organization;
@@ -77,7 +77,14 @@ namespace Kartverket.Metadatakatalog.Service
                         indexDoc.OrganizationLogoUrl = organization.LogoUrl;
                     }
                 }
-
+                if (simpleMetadata.ContactMetadata != null)
+                {
+                    indexDoc.Organization2 = simpleMetadata.ContactMetadata.Organization;
+                }
+                if (simpleMetadata.ContactPublisher != null)
+                {
+                    indexDoc.Organization3 = simpleMetadata.ContactPublisher.Organization;
+                }
                 indexDoc.Theme = _themeResolver.Resolve(simpleMetadata);
 
                 // FIXME - BAD!! Move this error handling into GeoNorgeAPI
@@ -115,6 +122,13 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.TopicCategory = simpleMetadata.TopicCategory;
                 indexDoc.Keywords = simpleMetadata.Keywords.Select(k => k.Keyword).ToList();
 
+                indexDoc.NationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)).Select(k => k.KeywordValue).ToList();
+                indexDoc.Place = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)).Select(k => k.KeywordValue).ToList();
+
+                if (simpleMetadata.Constraints != null)
+                {
+                    indexDoc.license = simpleMetadata.Constraints.UseLimitations;
+                }
                 Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid,
                     indexDoc.Title));
             }
@@ -124,6 +138,22 @@ namespace Kartverket.Metadatakatalog.Service
                 Log.Error("Exception while parsing metadata: " + identifier, e);
             }
             return indexDoc;
+        }
+
+        private List<Keyword> Convert(IEnumerable<SimpleKeyword> simpleKeywords)
+        {
+            var output = new List<Keyword>();
+            foreach (var keyword in simpleKeywords)
+            {
+                output.Add(new Keyword
+                {
+                    EnglishKeyword = keyword.EnglishKeyword,
+                    KeywordValue = keyword.Keyword,
+                    Thesaurus = keyword.Thesaurus,
+                    Type = keyword.Type
+                });
+            }
+            return output;
         }
 
     }

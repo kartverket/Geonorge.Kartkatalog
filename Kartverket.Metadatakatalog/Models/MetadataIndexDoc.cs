@@ -26,6 +26,12 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("organization")]
         public string Organization { get; set; }
 
+        [SolrField("organization2")]
+        public string Organization2 { get; set; }
+
+        [SolrField("organization3")]
+        public string Organization3 { get; set; }
+
         [SolrField("organization_seo_lowercase")]
         public string OrganizationSeoName { get; set; }
 
@@ -69,6 +75,15 @@ namespace Kartverket.Metadatakatalog.Models
         // Values from codelist: http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode
         [SolrField("maintenance_frequency")]
         public string MaintenanceFrequency { get; set; }
+
+        [SolrField("place")]
+        public List<string> Place { get; set; }
+
+        [SolrField("license")]
+        public string license { get; set; }
+
+        [SolrField("nationalinitiative")]
+        public List<string> NationalInitiative { get; set; }
     }
 
 }

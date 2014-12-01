@@ -146,17 +146,13 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 {
                     new SolrQuery("title:"+ text + "^45"),
                     new SolrQuery("title:"+ text + "*^25"),
-                    new SolrQuery("title:"+ text + "~^5"),
+                    //new SolrQuery("title:"+ text + "~^5"),
                     new SolrQuery("organization:"+ text + "^3"),
                     new SolrQuery("organization:"+ text + "*^2"),
-                    new SolrQuery("organization:"+ text + "~^1.5"),
-                    new SolrQuery("abstract:" + text),
-                    new SolrQuery("purpose:" + text), 
-                    new SolrQuery("type:" + text),
-                    new SolrQuery("theme:" + text),
-                    new SolrQuery("topic_category:" + text),
-                    new SolrQuery("keyword:" + text),
-                    new SolrQuery("uuid:" + text)
+                    //new SolrQuery("organization:"+ text + "~^1.5"),
+                    new SolrQuery("allText:" + text + "*"),
+                    new SolrQuery("allText:" + text)
+                    
                 });
                 return query;
             }
