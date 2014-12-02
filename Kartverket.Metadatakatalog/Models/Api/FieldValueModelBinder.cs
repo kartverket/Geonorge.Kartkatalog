@@ -32,7 +32,7 @@ namespace SM.General.Api
         public bool BindModel(HttpActionContext actionContext, ModelBindingContext bindingContext)
         {
             //Overwrite default maximum resursion limit if value set in config file
-            var maxRecurseLimit = "100"; //ConfigurationManager.AppSettings["MaxRecursionLimit"].ToString();
+            var maxRecurseLimit = ConfigurationManager.AppSettings["MaxRecursionLimit"].ToString();
             if (!string.IsNullOrEmpty(maxRecurseLimit) && Regex.IsMatch(maxRecurseLimit, RexChechNumeric))
             {
                 maxRecursionLimit = Convert.ToInt32(maxRecurseLimit);
@@ -255,10 +255,10 @@ namespace SM.General.Api
         private void RecurseNestedObj (object obj, PropertyInfo prop, string pParentName = "", string pParentObjIndex = "")
         {
             //Check recursion limit
-            if (recursionCount > maxRecursionLimit)
-            {
-                throw new Exception(string.Format("Exceed maximum recursion limit {0}", maxRecursionLimit));
-            }
+            //if (recursionCount > maxRecursionLimit)
+            //{
+            //    throw new Exception(string.Format("Exceed maximum recursion limit {0}", maxRecursionLimit));
+            //}
             recursionCount++;
 
             //Valicate collection types
