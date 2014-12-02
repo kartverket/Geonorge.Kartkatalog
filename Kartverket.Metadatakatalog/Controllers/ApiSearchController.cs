@@ -44,21 +44,6 @@ namespace Kartverket.Metadatakatalog.Controllers
             _searchService = searchService;
         }
 
-        //public SearchResult Get([FromUri] SearchParameters parameters)
-        //{
-        //    //[System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))]
-        //    if (parameters == null)
-        //        parameters = new SearchParameters();
-            
-        //    Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
-        //    searchParameters.AddDefaultFacetsIfMissing();
-        //    Models.SearchResult searchResult = _searchService.Search(searchParameters);
-
-        //    var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
-
-        //    return new SearchResult(searchResult, urlHelper);
-        //}
-
         public SearchResult Get([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
         {
             //

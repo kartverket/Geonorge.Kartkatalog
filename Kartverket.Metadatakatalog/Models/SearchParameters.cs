@@ -23,9 +23,14 @@ namespace Kartverket.Metadatakatalog.Models
             AddDefaultFacetsIfMissing(new List<string>());
         }
 
+        public void AddComplexFacetsIfMissing()
+        {
+            AddDefaultFacetsIfMissing(new List<string> { "nationalinitiative", "place", "license" });
+        }
+
         public void AddDefaultFacetsIfMissing(List<string> additionalFacets)
         {
-            var defaultFacets = new List<string> {"theme", "type", "organization", "nationalinitiative", "place", "license"};
+            var defaultFacets = new List<string> {"theme", "type", "organization"};
 
             if (additionalFacets.Any())
             {

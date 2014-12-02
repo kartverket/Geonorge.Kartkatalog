@@ -16,7 +16,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         public ActionResult Index(SearchParameters parameters)
         {
-            parameters.AddDefaultFacetsIfMissing();
+            parameters.AddComplexFacetsIfMissing();
             SearchResult searchResult = _searchService.Search(parameters);
 
             SearchViewModel model = new SearchViewModel(parameters, searchResult);
