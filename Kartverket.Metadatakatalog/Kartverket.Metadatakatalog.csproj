@@ -289,6 +289,7 @@
     <Content Include="Views\Index\ReIndex.cshtml" />
     <Content Include="Views\Shared\_NavbarPartial.cshtml" />
     <Content Include="Views\Search\_SearchBarPartial.cshtml" />
+    <Content Include="Views\Index\IndexSingle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

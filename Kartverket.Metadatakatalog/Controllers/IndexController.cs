@@ -31,6 +31,26 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View();
         }
 
+        [Route("index/single/{uuid}")]
+        public ActionResult IndexSingle(string uuid)
+        {
+            Log.Info("Run indexing of single metadata.");
+            DateTime start = DateTime.Now;
+
+            if (!string.IsNullOrWhiteSpace(uuid))
+            {
+                Log.Info("Running single indexing of metadata with uuid=" + uuid);
+                _indexer.RunIndexingOn(uuid);
+                
+            }
+
+            DateTime stop = DateTime.Now;
+            double seconds = stop.Subtract(start).TotalSeconds;
+            Log.Info(string.Format("Indexing fininshed after {0} seconds.", seconds));
+
+            return View();
+        }
+
         public ActionResult ReIndex()
         {
             Log.Info("Run reindexing of entire metadata catalogue.");
