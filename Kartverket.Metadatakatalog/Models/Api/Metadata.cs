@@ -17,9 +17,12 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public string DistributionUrl { get; set; }
         public string DistributionProtocol { get; set; }
         public string ShowDetailsUrl { get; set; }
+        public string OrganizationUrl { get; set; }
 
         public Metadata(SearchResultItem item, UrlHelper urlHelper)
         {
+
+
             Uuid = item.Uuid;
             Title = item.Title;
             Abstract = item.Abstract;
@@ -31,6 +34,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
             DistributionUrl = item.DistributionUrl;
             DistributionProtocol = item.DistributionProtocol;
             ShowDetailsUrl = urlHelper.Action("Index", "Metadata", new {uuid = item.Uuid}, urlHelper.RequestContext.HttpContext.Request.Url.Scheme);
+            string s = new SeoUrl(item.Organization, "").Organization;
+            OrganizationUrl = urlHelper.RequestContext.HttpContext.Request.Url.Scheme + "://" + urlHelper.RequestContext.HttpContext.Request.Url.Authority + "/metadata/" + s;
         }
 
         public static List<Metadata> CreateFromList(IEnumerable<SearchResultItem> items, UrlHelper urlHelper)
