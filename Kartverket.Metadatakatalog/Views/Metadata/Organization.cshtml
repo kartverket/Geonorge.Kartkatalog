@@ -7,41 +7,51 @@
 @section breadcrumb {
     <li class="active">@Model.OrganizationName</li>
 }
-<h1>
-    <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName })">
-        @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
-        {
-            <img src="@Model.OrganizationLogoUrl" width="100" alt="Logo @Model.OrganizationName"/>
-        }
-        @Model.OrganizationName
-    </a>
-</h1>
 
+@if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
+{
+    <div class="row">
+        <img src="@Model.OrganizationLogoUrl" width="100" alt="Logo @Model.OrganizationName" />
+        <p></p>
+        </div>
+}
 <div class="row">
-    <div class="col-sm-12 col-md-3">
-       
-        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
-        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
-    </div>
-    <div class="col-sm-12 col-md-9">
-        <ul class="search-results">
-            @foreach (var item in Model.Result.Items)
-            {
-                <li style="border: 1px solid #ccc; border-radius: 4px; margin: 10px; padding: 10px; width: 180px; height:200px; float:left" class="text-center">
-                    <h4><a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">@item.Title</a></h4>
-                    @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
-                    {
-                        <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                            <img src="@item.ThumbnailUrl" height="100" style="max-height: 100px;">
-                        </a>
-                    }
-                </li>
-            }
-        </ul>
+    <div class="page-header">
+
+        <h1 class="h-md">
+            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName })">
+
+                @Model.OrganizationName
+            </a>
+        </h1>
+        <hr>
     </div>
 </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-3">
 
-@helper DisplayFacet(SearchResultFacetViewModel facet)
+            @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
+            @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
+        </div>
+        <div class="col-sm-12 col-md-9">
+            <ul class="search-results">
+                @foreach (var item in Model.Result.Items)
+                {
+                    <li style="border: 1px solid #ccc; border-radius: 4px; margin: 10px; padding: 10px; width: 180px; height:200px; float:left" class="text-center">
+                        <h4><a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">@item.Title</a></h4>
+                        @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
+                        {
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                                <img src="@item.ThumbnailUrl" height="100" style="max-height: 100px;">
+                            </a>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    @helper DisplayFacet(SearchResultFacetViewModel facet)
 {
     <h4>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h4>
     <ul class="facet">
