@@ -84,6 +84,10 @@ namespace Kartverket.Metadatakatalog.Models
 
         [SolrField("nationalinitiative")]
         public List<string> NationalInitiative { get; set; }
+
+        //Search score?
+        [SolrField("score")]
+        public double? Score { get; set; }
     }
 
 }

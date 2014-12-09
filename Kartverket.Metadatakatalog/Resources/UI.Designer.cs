@@ -124,7 +124,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Innholdstype.
+        ///   Looks up a localized string similar to Type.
         /// </summary>
         public static string Facet_type {
             get {

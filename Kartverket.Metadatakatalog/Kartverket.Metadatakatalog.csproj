@@ -232,6 +232,7 @@
     <Content Include="Content\common.css" />
     <Content Include="Content\geonorge-default.css" />
     <Content Include="Content\img\kvlogo_col.png" />
+    <Content Include="Content\jquery.typeahead.css" />
     <Content Include="Content\kartverket_logo.png" />
     <Content Include="Content\logo_kartverket_norgedigitalt.png" />
     <Content Include="Content\navbar.css" />
@@ -245,7 +246,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\fonts\MetaComp-Book.ttf" />
+    <Content Include="fonts\MetaComp-Book.ttf" />
     <Content Include="Content\fonts\MetaWeb-Book.eot" />
     <Content Include="Content\fonts\MetaWeb-Book.woff" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
@@ -255,6 +256,9 @@
     <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery.typeahead.js" />
+    <Content Include="Scripts\jquery.typeahead.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />

@@ -13,36 +13,43 @@
     }
 }
 
+
+
 @helper DisplayFacet(SearchResultFacetViewModel facet)
 {
     <h4>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h4>
-    <ul>
-        @foreach (var facetResult in facet.FacetResults)
+
+
+    
+        foreach (var facetResult in facet.FacetResults)
         {
-            <li><a href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.LinkName() (@facetResult.Count)</a></li>
+            <div class="filter-options"><a class="btn btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.LinkName() (@facetResult.Count)</a></div>
         }
-        @if (Model.HasFilterForFacetField(facet.FacetField))
+        if (Model.HasFilterForFacetField(facet.FacetField))
         {
-            <li><a href="@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))">Vis alle</a></li>
+            <div class="filter-options"><a href="@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))">Vis alle</a></div>
         }
-    </ul>
+ 
 }
 
 @helper DisplayPagination()
 {
-    <p class="text-right">Viser @Model.ShowingFromAndTo() av @Model.NumFound treff.</p>
-    <nav class="text-right">
-        <ul class="pagination">
-            @if (Model.IsPreviousButtonActive())
-            {
-                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
-            }
-            @if (Model.IsNextButtonActive())
-            {
-                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
-            }
-        </ul>
-    </nav>
+    <ul class="nav nav-tabs col-xs-12 col-sm-12 col-md-12 col-lg-12" role="tablist">
+        <li class="active"><a href="#"  role="tab" >Kartkatalogen viser @Model.ShowingFromAndTo() av @Model.NumFound treff.</a></li>
+        <li class="btn-group pull-right">
+            
+                @if (Model.IsPreviousButtonActive())
+                {
+                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                }
+                @if (Model.IsNextButtonActive())
+                {
+                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                }
+           
+        </li>
+    </ul>
+    
 }
 
 @section scripts {
@@ -63,33 +70,122 @@
             }
         });
     </script>
-}
+
+    <script>
+        //$(function () {
+        //    function log(message) {
+        //        $("<div>").text(message).prependTo("#log");
+        //        $("#log").scrollTop(0);
+        //    }
+
+        //    $("#txtSearch").autocomplete({
+        //        source: function (request, response) {
+        //            $.ajax({
+        //                url: "/api/search/",
+        //                dataType: "jsonp",
+        //                data: {
+        //                    text: request.term
+        //                },
+        //                success: function (data) {
+        //                    response(data);
+        //                }
+        //            });
+        //        },
+        //        minLength: 3,
+        //        select: function (event, ui) {
+        //            log(ui.item ?
+        //              "Selected: " + ui.item.label :
+        //              "Nothing selected, input was " + this.value);
+        //        },
+        //        open: function () {
+        //            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        //        },
+        //        close: function () {
+        //            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+        //        }
+        //    });
+        //});
+
+
+    //$('#txtSearch').typeahead({
+    //    minLength: 2,
+    //    dynamic: true,
+    //    delay: 500,
+    //    backdrop: false,
+    //    selector: {
+    //        filter: "input-group-btn",
+    //        filterButton: "btn btn-default",
+    //        dropdown: "autocomplete",
+    //        hint: "form-control"
+    //    },
+    //    display: "metadata",
+    //    template: '<div class="row"><span>{{Title}}</span></div>',
+    //    source: {
+    //    metadata: {
+    //                url: [{
+    //                    type: "GET",
+    //                    url: "/api/search/",
+    //                    data: {
+    //                        text: "{{query}}"
+    //                    }
+    //                }, "Results"],
+    //                display: "Title",
+    //                template: '<div class="row"><span>{{Title}}</span></div>'
+    //    }
+    //    },
+    //callback: {
+    //        onClick: function (node, a, obj, e) {
+    //            document.getElementById("searchForm").submit();
+    //            //alert(JSON.stringify(obj));
+
+    //        },
+    //        onResult: function (node, query, obj, objCount) {
+
+    //            var text = "";
+                
+    //            for (i = 0; i < objCount; i++) {
+    //                text ='<a href="#">' + obj[i].Title + '</a>';
+    //                $('#autocomplete').append(text);
+    //            }
+                
+
+    //        }
+    //},
+    //debug: true
+    //});
+    </script>
+    }
 <article class="row">
     @Html.Partial("_SearchBarPartial", Model)
 </article>
 
     <div class="row">
-        <div class="col-sm-12 col-md-4">
-            
-
-            @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
-            @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
-            @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
-            @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
-            @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "place"))
-            @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))
-            @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
+        <div class="col-sm-12 col-md-4 pull-left">
+            <div class="panel panel-info" id="filterInner">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Søkefilter<span class="glyphicon glyphicon-filter pull-right"></span></h2>
+                </div>
+                <div class="panel-body">
+                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
+                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
+                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
+                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
+                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "place"))
+                    @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))*@
+                    @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
+                </div>
+                </div>
         </div>
-        <div class="col-sm-12 col-md-8">
+        <div class="col-sm-12 col-md-8 pull-right">
             @if (Model.Result != null)
             {
                 @DisplayPagination()
 
-                <ul class="search-results">
+                <div class="search-results">
                     @foreach (var item in Model.Result.Items)
                     {
-                        <li style="border-bottom: 1px solid #ccc; margin-bottom: 10px; margin-top: 10px" class="clearfix">
-                            <div class="row">
+                        <div class="row result-row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="col-md-2">
                                     @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
                                     {
@@ -113,9 +209,9 @@
 
                                 </div>
                             </div>
-                        </li>
+                        </div>
                     }
-                </ul>
+                </div>
 
                 @DisplayPagination()
 

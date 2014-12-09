@@ -139,7 +139,7 @@
     <value>Tema</value>
   </data>
   <data name="Facet_type" xml:space="preserve">
-    <value>Innholdstype</value>
+    <value>Type</value>
   </data>
   <data name="Facet_type_dataset" xml:space="preserve">
     <value>Datasett</value>

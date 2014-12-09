@@ -13,6 +13,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
 {
     public class SearchService : ISearchService
     {
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly IOrganizationService _organizationService;
         private readonly ISolrOperations<MetadataIndexDoc> _solrInstance;
 
@@ -31,6 +33,9 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 Rows = parameters.Limit,
                 StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
                 Facet = BuildFacetParameters(parameters),
+                Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", 
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","product_page_url",
+                    "score" }
             });
 
             return CreateSearchResults(queryResults, parameters);
@@ -46,7 +51,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 FilterQueries = BuildFilterQueries(parameters),
                 Rows = parameters.Limit,
                 StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
-                Facet = BuildFacetParameters(parameters),
+                Facet = BuildFacetParameters(parameters)
+                
             });
 
             SearchResult searchResult = CreateSearchResults(queryResults, parameters);
@@ -100,6 +106,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
             var items = new List<SearchResultItem>();
             foreach (var doc in queryResults)
             {
+                Log.Info(doc.Score + " " + doc.Title + " " + doc.Uuid);
+
                 var item = new SearchResultItem
                 {
                     Uuid = doc.Uuid,
@@ -144,14 +152,20 @@ namespace Kartverket.Metadatakatalog.Service.Search
             {
                 var query = new SolrMultipleCriteriaQuery(new[]
                 {
-                    new SolrQuery("title:"+ text + "^45"),
-                    new SolrQuery("title:"+ text + "*^25"),
-                    //new SolrQuery("title:"+ text + "~^5"),
+                    new SolrQuery("title:"+ text + "^50"),
+                    new SolrQuery("title:"+ text + "*^40"),
+                    new SolrQuery("title:"+ text + "~^1.1"),
+                    new SolrQuery("title_lowercase:"+ text + "^50"),
+                    new SolrQuery("title_lowercase:"+ text + "*^40"),
+                    new SolrQuery("title_lowercase:"+ text + "~^1.1"),
                     //new SolrQuery("organization:"+ text + "^3"),
                     //new SolrQuery("organization:"+ text + "*^2"),
                     //new SolrQuery("organization:"+ text + "~^1.5"),
-                    new SolrQuery("allText:" + text + "*"),
-                    new SolrQuery("allText:" + text)
+                    new SolrQuery("allText:" + text + "^1.2"),
+                    new SolrQuery("allText:" + text + "*^1.1"),
+                    new SolrQuery("allText:" + text + "~"),
+                    new SolrQuery("allText2:" + text + ""),  //Stemmer
+                    new SolrQuery("allText3:" + text)        //Fonetisk
                     
                 });
                 return query;
