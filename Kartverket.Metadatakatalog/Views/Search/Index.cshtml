@@ -35,16 +35,16 @@
 @helper DisplayPagination()
 {
     <ul class="nav nav-tabs col-xs-12 col-sm-12 col-md-12 col-lg-12" role="tablist">
-        <li class="active"><a href="#"  role="tab" >Kartkatalogen viser @Model.ShowingFromAndTo() av @Model.NumFound treff.</a></li>
+        <li class="active"><span  role="tab" >Kartkatalogen viser @Model.ShowingFromAndTo() av @Model.NumFound treff.</span></li>
         <li class="btn-group pull-right">
             
                 @if (Model.IsPreviousButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                    <span><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></span>
                 }
                 @if (Model.IsNextButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                    <span><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></span>
                 }
            
         </li>
@@ -161,21 +161,23 @@
 
     <div class="row">
         <div class="col-sm-12 col-md-4 pull-left">
-            <div class="panel panel-info" id="filterInner">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Søkefilter<span class="glyphicon glyphicon-filter pull-right"></span></h2>
+            <div class="hidden-sm hidden-xs">
+                <div class="panel panel-info" id="filterInner">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Søkefilter<span class="glyphicon glyphicon-filter pull-right"></span></h2>
+                    </div>
+                    <div class="panel-body">
+                        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
+                        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
+                        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
+                        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
+                        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "place"))
+                        @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))*@
+                        @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
+                    </div>
                 </div>
-                <div class="panel-body">
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "place"))
-                    @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))*@
-                    @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
-                </div>
-                </div>
-        </div>
+            </div>
+         </div>
         <div class="col-sm-12 col-md-8 pull-right">
             @if (Model.Result != null)
             {
@@ -187,6 +189,10 @@
                         <div class="row result-row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="col-md-2">
+
+                                   
+
+
                                     @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
                                     {
                                         <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
@@ -206,10 +212,11 @@
                                     <p><a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">@item.Organization</a></p>
 
                                     <p>@item.Abstract</p>
-
+                                    <div class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</div>
                                 </div>
                             </div>
                         </div>
+                        <hr />
                     }
                 </div>
 

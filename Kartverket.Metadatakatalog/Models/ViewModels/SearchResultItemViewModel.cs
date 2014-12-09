@@ -16,6 +16,28 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string ThumbnailUrl { get; set; }
         public string MaintenanceFrequency { get; set; }
 
+        public string GetInnholdstypeCSS()
+        {
+            string t = "label-default";
+            if (Type=="dataset") t="label-success";
+            else if (Type=="software") t="label-warning";
+            else if (Type=="service") t="label-info";
+            else if (Type=="series") t="label-primary";
+
+            return t;
+        }
+
+        public string GetInnholdstype()
+        {
+            string t = Type;
+            if (Type=="dataset") t="Datasett";
+            else if (Type=="software") t="Applikasjon";
+            else if (Type=="service") t="Tjeneste";
+            else if (Type=="series") t="Datasettserie";
+
+            return t;
+        }
+
         private SearchResultItemViewModel(SearchResultItem item)
         {
             Uuid = item.Uuid;

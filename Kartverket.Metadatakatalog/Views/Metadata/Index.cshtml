@@ -54,9 +54,13 @@
     }
 }
 
-<div class="label @hierarchyLevelCssClass">@hierarchyLevelLabelText</div>
 
-<h1>@Model.Title</h1>
+
+<div class="page-header">
+    <h1 class="h-md">@Model.Title</h1>
+    <hr>
+</div>
+
 
 
 
@@ -80,7 +84,7 @@
     {
         <img src="@Model.Thumbnails[0].URL" width="300" class="thumbnail pull-right" alt="Forhåndsvisning av data." />
     }
-
+    <div class="label @hierarchyLevelCssClass">@hierarchyLevelLabelText</div>
     <h3>Sammendrag</h3>
     @Model.Abstract
 
@@ -171,7 +175,11 @@
 
 <div class="row">
     <div class="col-sm-6">
-        <h3>Kontaktinformasjon</h3>
+        <div class="page-header">
+            <h3 class="h-md">Kontaktinformasjon</h3>
+            <hr>
+        </div>
+      
         @ShowContact("Metadatakontakt", Model.ContactMetadata)
         @ShowContact("Faglig kontakt", Model.ContactOwner)
         @ShowContact("Teknisk kontakt", Model.ContactPublisher)
@@ -206,7 +214,7 @@
         }
         
         <h3>Kvalitet</h3>
-        @DisplayValue("Målestokkstall", Model.SpatialRepresentation)
+        @DisplayValue("Målestokkstall", Model.ResolutionScale)
         @DisplayValue("Status", Model.Status)
         @DisplayValue("Prosesshistorie", Model.ProcessHistory)
 
@@ -215,52 +223,54 @@
     </div>
 
     <div class="col-sm-6">
+        <div class="page-header">
+            <h3 class="h-md">Tid og rom</h3>
+            <hr>
+        </div>
+            @if (Model.DateUpdated != null)
+            {
+                <p><strong>Oppdatert:</strong> @Html.DisplayFor(m => m.DateUpdated)</p>
+            }
+            else if (Model.DatePublished != null)
+            {
+                <p><strong>Publisert:</strong> @Html.DisplayFor(m => m.DatePublished)</p>
+            }
+            else if (Model.DateCreated != null)
+            {
+                <p><strong>Opprettet:</strong> @Html.DisplayFor(m => m.DateCreated)</p>
+            }
 
-        <h3>Tid og rom</h3>
-        @if (Model.DateUpdated != null)
-        {
-            <p><strong>Oppdatert:</strong> @Html.DisplayFor(m => m.DateUpdated)</p>
-        }
-        else if (Model.DatePublished != null)
-        {
-            <p><strong>Publisert:</strong> @Html.DisplayFor(m => m.DatePublished)</p>
-        }
-        else if (Model.DateCreated != null)
-        {
-            <p><strong>Opprettet:</strong> @Html.DisplayFor(m => m.DateCreated)</p>
-        }
+            @if (Model.MaintenanceFrequencyTranslated() != null)
+            {
+                <p><strong>Oppdateringshyppighet:</strong> @Model.MaintenanceFrequencyTranslated()</p>
+            }
+            @if (Model.KeywordsPlace != null && Model.KeywordsPlace.Count > 0)
+            {
 
-        @if (Model.MaintenanceFrequencyTranslated() != null)
-        {
-            <p><strong>Oppdateringshyppighet:</strong> @Model.MaintenanceFrequencyTranslated()</p>
-        }
-        @if (Model.KeywordsPlace != null && Model.KeywordsPlace.Count > 0)
-        {
-            
                 @DisplayKeywords("Geografisk område", Model.KeywordsPlace)
-            
-        }
 
-        @if (Model.BoundingBox != null)
-        {
-            <p>
-                <strong>Geografisk utstrekning:</strong>
-                Nord: @Model.BoundingBox.NorthBoundLatitude
-                Sør: @Model.BoundingBox.SouthBoundLatitude
-                Øst: @Model.BoundingBox.EastBoundLongitude
-                Vest: @Model.BoundingBox.WestBoundLongitude
+            }
 
-            </p>
-        }
+            @if (Model.BoundingBox != null)
+            {
+                <p>
+                    <strong>Geografisk utstrekning:</strong>
+                    Nord: @Model.BoundingBox.NorthBoundLatitude
+                    Sør: @Model.BoundingBox.SouthBoundLatitude
+                    Øst: @Model.BoundingBox.EastBoundLongitude
+                    Vest: @Model.BoundingBox.WestBoundLongitude
 
-        <h3>Nøkkelord</h3>
-        @DisplayKeywords("Tema", Model.KeywordsTheme)
-        @DisplayKeywords("DOK-kategori", Model.KeywordsNationalTheme)
-        @DisplayKeywords("Samarbeid og lover", Model.KeywordsNationalInitiative)
-        @DisplayKeywords("Inspire", Model.KeywordsInspire)
-        @DisplayKeywords("Annet", Model.KeywordsOther)
+                </p>
+            }
 
-    </div>
+            <h3>Nøkkelord</h3>
+            @DisplayKeywords("Tema", Model.KeywordsTheme)
+            @DisplayKeywords("DOK-kategori", Model.KeywordsNationalTheme)
+            @DisplayKeywords("Samarbeid og lover", Model.KeywordsNationalInitiative)
+            @DisplayKeywords("Inspire", Model.KeywordsInspire)
+            @DisplayKeywords("Annet", Model.KeywordsOther)
+
+        </div>
 </div>
 
 <div class="btn-group">
