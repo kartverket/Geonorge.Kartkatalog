@@ -108,10 +108,17 @@
             </a>
             if (Model.DistributionDetails.IsWmsUrl())
             {
-                <a href="http://norgeskart.no/geoportal/staging/#5/355422/6668909/l/wms/[@Model.DistributionDetails.URL]" class="btn btn-default">
+                <a href="http://norgeskart.no/geoportal/staging/#5/355422/6668909/l/wms/[@Model.DistributionDetails.URL]" class="btn btn-default" target="_blank">
                     <span class="glyphicon glyphicon-picture"></span> Vis tjenesten i Norgeskart
                 </a>
             }
+            if (Model.DistributionDetails.IsWfsUrl())
+            {
+                <a href="http://norgeskart.no/geoportal/staging/#5/355422/6668909/l/wfs/[@Model.DistributionDetails.URL]" class="btn btn-default" target="_blank">
+                    <span class="glyphicon glyphicon-picture"></span> Vis tjenesten i Norgeskart
+                </a>
+            }
+
         }
 
         @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
