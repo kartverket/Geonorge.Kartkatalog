@@ -114,7 +114,7 @@ namespace Kartverket.Metadatakatalog.Service
                 if (thumbnails != null && thumbnails.Count > 0)
                 {
                     indexDoc.ThumbnailUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMetadata.Uuid,
-                        thumbnails[0].URL);
+                        thumbnails[thumbnails.Count-1].URL);
                 }
 
                 indexDoc.MaintenanceFrequency = simpleMetadata.MaintenanceFrequency;

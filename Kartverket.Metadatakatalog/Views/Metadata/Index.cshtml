@@ -82,7 +82,7 @@
 <div class="clearfix">
     @if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
     {
-        <img src="@Model.Thumbnails[0].URL" width="300" class="thumbnail pull-right" alt="Forhåndsvisning av data." />
+        <img src="@Model.Thumbnails[Model.Thumbnails.Count-1].URL" width="300" class="thumbnail pull-right" alt="Forhåndsvisning av data." />
     }
     <div class="label @hierarchyLevelCssClass">@hierarchyLevelLabelText</div>
     <h3>Sammendrag</h3>
