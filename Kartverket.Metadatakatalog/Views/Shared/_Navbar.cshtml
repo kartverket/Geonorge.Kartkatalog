@@ -1,9 +1,6 @@
-﻿@using Kartverket.Metadatakatalog.Helpers
-
-
-<div id="logo-on-sm">
+﻿<div id="logo-on-sm">
     @* Logo vises over navbar på xs-devices  *@
-    <img src="~/Content/img/kvlogo_col.png" alt="Kartverkets logo" />
+<img src="~/Content/img/kvlogo_col.png" alt="Kartverkets logo" />
 </div>
 
 <header class="navbar navbar-geonorge" role="banner">
@@ -18,7 +15,7 @@
             </tbody>
         </table>
         <div class="navbar-header">
-            <a href="@Html.GeonorgeUrl()" class="navbar-title">
+            <a href="/" class="navbar-title">
                 <div class="navbar-headline"><strong>Geonorge</strong></div>
                 <div class="navbar-subline">- hele Norges kartportal</div>
             </a>
@@ -27,11 +24,14 @@
             <tbody role="presentation">
                 <tr role="presentation">
                     <td role="presentation">
-                        <a href="/">Kartkatalogen</a>
+                        <a href="/">@ViewBag.Title</a>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    
+    <div id="ribbon-container">
+        <div id="beta-ribbon"><span>Beta 2.0</span></div>
+
+    </div>
 </header>

@@ -234,7 +234,6 @@
     <Content Include="Content\img\favicon.ico" />
     <Content Include="Content\img\kvlogo_col.png" />
     <Content Include="Content\img\logo-graphic-512.png" />
-    <Content Include="Content\jquery.typeahead.css" />
     <Content Include="Content\kartverket_logo.png" />
     <Content Include="Content\logo_kartverket_norgedigitalt.png" />
     <Content Include="Content\navbar.css" />
