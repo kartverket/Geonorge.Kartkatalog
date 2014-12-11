@@ -12,7 +12,12 @@ ul.search-results {
     padding-left: 0;
     list-style-type: none;
 }
-
+.nav-tabs {
+border-bottom: 0;
+}
+.search-filter-wrapper {
+padding: 0 15px 40px 15px;
+}
 .nav-tabs > li.active {
 border-bottom: 2px solid #249446;
 }
