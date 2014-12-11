@@ -23,11 +23,11 @@
     
         foreach (var facetResult in facet.FacetResults)
         {
-            <div class="filter-options"><a class="btn btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.LinkName() (@facetResult.Count)</a></div>
+            <div class="filter-options"><a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.LinkName() (@facetResult.Count)</a></div>
         }
         if (Model.HasFilterForFacetField(facet.FacetField))
         {
-            <div class="filter-options"><a href="@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))">Vis alle</a></div>
+            <div class="filter-options"><a class="btn-link" href="@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))">Vis alle</a></div>
         }
  
 }
@@ -160,7 +160,7 @@
 </article>
 
     <div class="row">
-        <div class="col-sm-12 col-md-4 pull-left">
+        <div class="col-sm-12 col-md-3 pull-left">
             <div class="hidden-sm hidden-xs">
                 <div class="panel panel-info" id="filterInner">
                     <div class="panel-heading">
@@ -178,7 +178,7 @@
                 </div>
             </div>
          </div>
-        <div class="col-sm-12 col-md-8 pull-right">
+        <div class="col-sm-12 col-md-9 pull-right">
             @if (Model.Result != null)
             {
                 @DisplayPagination()
