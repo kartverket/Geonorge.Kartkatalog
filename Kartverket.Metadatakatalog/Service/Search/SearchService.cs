@@ -26,15 +26,31 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
         public SearchResult Search(SearchParameters parameters)
         {
+            //OrderBy score, tittel, dato(nyeste, oppdatert), organisasjon
             ISolrQuery query = BuildQuery(parameters);
+            var order =new[] {new SortOrder("score", Order.DESC)};
+            if (parameters.orderby == OrderBy.title)
+            {
+                order = new[] { new SortOrder("title", Order.ASC) };
+            }
+            //else if (parameters.orderby == OrderBy.newest)
+            //{
+            //    order = new[] { new SortOrder("date_published", Order.DESC) };
+            //}
+            //if (string.IsNullOrWhiteSpace(parameters.Text) && parameters.Facets.Count == 0)
+            //{
+            //    order = new[] { new SortOrder("date_published", Order.DESC) };
+            //}
+
             SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
             {
                 FilterQueries = BuildFilterQueries(parameters),
+                OrderBy = order,
                 Rows = parameters.Limit,
                 StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
                 Facet = BuildFacetParameters(parameters),
                 Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", 
-                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","product_page_url",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","product_page_url", "date_published",
                     "score" }
             });
 
@@ -44,11 +60,20 @@ namespace Kartverket.Metadatakatalog.Service.Search
         public SearchResultForOrganization SearchByOrganization(SearchByOrganizationParameters parameters)
         {
             parameters.CreateFacetOfOrganizationSeoName();
-
+            var order = new[] { new SortOrder("score", Order.DESC) };
+            if (parameters.orderby == OrderBy.title)
+            {
+                order = new[] { new SortOrder("title", Order.ASC) };
+            }
+            else if (parameters.orderby == OrderBy.newest)
+            {
+                order = new[] { new SortOrder("date_published", Order.DESC) };
+            }
             ISolrQuery query = BuildQuery(parameters);
             SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
             {
                 FilterQueries = BuildFilterQueries(parameters),
+                OrderBy = order,
                 Rows = parameters.Limit,
                 StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
                 Facet = BuildFacetParameters(parameters)
@@ -154,18 +179,18 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 {
                     new SolrQuery("title:"+ text + "^50"),
                     new SolrQuery("title:"+ text + "*^40"),
-                    new SolrQuery("title:"+ text + "~^1.1"),
+                    new SolrQuery("title:"+ text + "~2^1.1"),
                     new SolrQuery("title_lowercase:"+ text + "^50"),
                     new SolrQuery("title_lowercase:"+ text + "*^40"),
-                    new SolrQuery("title_lowercase:"+ text + "~^1.1"),
+                    new SolrQuery("title_lowercase:"+ text + "~2^1.1"),
                     //new SolrQuery("organization:"+ text + "^3"),
                     //new SolrQuery("organization:"+ text + "*^2"),
                     //new SolrQuery("organization:"+ text + "~^1.5"),
                     new SolrQuery("allText:" + text + "^1.2"),
                     new SolrQuery("allText:" + text + "*^1.1"),
-                    new SolrQuery("allText:" + text + "~"),
-                    new SolrQuery("allText2:" + text + ""),  //Stemmer
-                    new SolrQuery("allText3:" + text)        //Fonetisk
+                    new SolrQuery("allText:" + text + "~2"),   //Fuzzy
+                    new SolrQuery("allText2:" + text + "")  //Stemmer
+                    //new SolrQuery("allText3:" + text)        //Fonetisk
                     
                 });
                 return query;

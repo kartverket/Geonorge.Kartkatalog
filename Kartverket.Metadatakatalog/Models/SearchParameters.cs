@@ -3,6 +3,14 @@ using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Models
 {
+    public enum OrderBy
+    {
+        score,
+        title,
+        newest,
+        updated
+    }
+
     public class SearchParameters
     {
         public SearchParameters()
@@ -10,11 +18,13 @@ namespace Kartverket.Metadatakatalog.Models
             Facets = new List<FacetParameter>();
             Offset = 1;
             Limit = 30;
+            orderby = OrderBy.score;
         }
 
         public string Text { get; set; }
         public int Limit { get; set; }
         public int Offset { get; set; }
+        public OrderBy orderby { get; set; }
         public List<FacetParameter> Facets { get; set; }
 
 
