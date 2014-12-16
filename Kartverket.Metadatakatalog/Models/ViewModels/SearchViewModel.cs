@@ -72,7 +72,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         public bool IsNextButtonActive()
         {
-            return NumFound > (Offset + Limit);
+            return NumFound > (Offset + Limit-1);
         }
 
 
