@@ -74,13 +74,16 @@ namespace Kartverket.Metadatakatalog.Models
 
         public SeoUrl CreateSeoUrl()
         {
-            return new SeoUrl(ContactMetadata.Organization, Title);
+            return new SeoUrl(ContactOwner.Organization, Title);
         }
+
 
         public String OrganizationSeoName()
         {
             return CreateSeoUrl().Organization;
         }
+
+
 
         public bool IsService()
         {

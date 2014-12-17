@@ -85,15 +85,16 @@ namespace Kartverket.Metadatakatalog.Service
                 MetadataEditUrl = _geonorgeUrlResolver.EditMetadata(simpleMetadata.Uuid)
             };
 
-            if (metadata.ContactMetadata != null)
+            if (metadata.ContactOwner != null)
             {
-                Task<Organization> getOrganizationTask = _organizationService.GetOrganizationByName(metadata.ContactMetadata.Organization);
+                Task<Organization> getOrganizationTask = _organizationService.GetOrganizationByName(metadata.ContactOwner.Organization);
                 Organization organization = getOrganizationTask.Result;
                 if (organization != null)
                 {
                     metadata.OrganizationLogoUrl = organization.LogoUrl;
                 }
             }
+
 
             return metadata;
         }

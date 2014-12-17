@@ -65,15 +65,15 @@
 
 
 
-@if (Model.ContactMetadata != null)
+@if (Model.ContactOwner != null)
 {
     <h2>
-        <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName() })" title="Vis alle geografiske tjenester og datasett fra @Model.ContactMetadata.Organization">
+        <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName() })" title="Vis alle geografiske tjenester og datasett fra @Model.ContactOwner.Organization">
             @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
             {
-                <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactMetadata.Organization" width="100" />
+                <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactOwner.Organization" width="100" />
             }
-            @Model.ContactMetadata.Organization
+            @Model.ContactOwner.Organization
         </a>
     </h2>
 }
