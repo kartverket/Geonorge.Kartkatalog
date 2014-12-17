@@ -74,7 +74,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public SeoUrl CreateSeoUrl()
         {
-            return new SeoUrl(ContactOwner.Organization, Title);
+            return new SeoUrl((ContactOwner.Organization != null ? ContactOwner.Organization : ""), Title);
         }
 
 
