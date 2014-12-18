@@ -77,6 +77,21 @@ namespace Kartverket.Metadatakatalog.Models
             return new SeoUrl((ContactOwner.Organization != null ? ContactOwner.Organization : ""), Title);
         }
 
+        public String DistributionDetailsWmsUrl()
+        {
+            if (!string.IsNullOrWhiteSpace(DistributionDetails.Name))
+                return "#5/355422/6668909/l/wms/[" + DistributionDetails.URL + "]+" + DistributionDetails.Name;
+            else
+                return "#5/355422/6668909/l/wms/[" + DistributionDetails.URL + "]";
+
+        }
+        public String DistributionDetailsWfsUrl()
+        {
+            if (!string.IsNullOrWhiteSpace(DistributionDetails.Name))
+                return "#5/355422/6668909/l/wfs/[" + DistributionDetails.URL + "]+" + DistributionDetails.Name;
+            else
+                return "#5/355422/6668909/l/wfs/[" + DistributionDetails.URL + "]";
+        }
 
         public String OrganizationSeoName()
         {
