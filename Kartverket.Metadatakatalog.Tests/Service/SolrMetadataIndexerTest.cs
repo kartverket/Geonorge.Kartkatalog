@@ -16,14 +16,14 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             log4net.Config.BasicConfigurator.Configure();
         }
 
-        [Test]
-        public void SearchGeonorge()
-        {
+        //[Test]
+        //public void SearchGeonorge()
+        //{
             
-                IGeoNorge g = new GeoNorge("","","https://www.geonorge.no/geonetworkbeta/");
-                var result = g.GetRecordByUuid("0e937264-abb0-4bcd-b690-73832640a44a");
+        //        IGeoNorge g = new GeoNorge("","","https://www.geonorge.no/geonetworkbeta/");
+        //        var result = g.GetRecordByUuid("0e937264-abb0-4bcd-b690-73832640a44a");
 
-        }
+        //}
 
         [Test]
         public void ShouldSearchAndIndexTwoMetadataEntriesFromGeonorge()

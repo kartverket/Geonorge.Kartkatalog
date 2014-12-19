@@ -106,9 +106,9 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         }
 
         [Test]
-        public void InspireHumanHealthResolveToEnergi()
+        public void InspireHumanHealthResolveToSamfunnssikkerhet()
         {
-            ResolveInspireKeyword("Human health and safety", ThemeResolver.DokEnergi);
+            ResolveInspireKeyword("Human health and safety", ThemeResolver.DokSamfunnssikkerhet);
         }
 
         [Test]
@@ -142,9 +142,9 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         }
 
         [Test]
-        public void InspireAreaManagementResolveToAnnen()
+        public void InspireAreaManagementResolveToPlan()
         {
-            ResolveInspireKeyword("Area management / restriction / regulation zones & reporting units", ThemeResolver.DokAnnen);
+            ResolveInspireKeyword("Area management / restriction / regulation zones & reporting units", ThemeResolver.DokPlan);
         }
 
         [Test]
