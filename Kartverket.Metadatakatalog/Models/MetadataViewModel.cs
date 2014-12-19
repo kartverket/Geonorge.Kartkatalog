@@ -80,7 +80,7 @@ namespace Kartverket.Metadatakatalog.Models
         public String DistributionDetailsWmsUrl()
         {
             if (!string.IsNullOrWhiteSpace(DistributionDetails.Name))
-                return "#5/355422/6668909/l/wms/[" + DistributionDetails.URL + "]+" + DistributionDetails.Name;
+                return "#5/355422/6668909/l/wms/[" + DistributionDetails.URL + "]/+" + DistributionDetails.Name;
             else
                 return "#5/355422/6668909/l/wms/[" + DistributionDetails.URL + "]";
 
@@ -88,7 +88,7 @@ namespace Kartverket.Metadatakatalog.Models
         public String DistributionDetailsWfsUrl()
         {
             if (!string.IsNullOrWhiteSpace(DistributionDetails.Name))
-                return "#5/355422/6668909/l/wfs/[" + DistributionDetails.URL + "]+" + DistributionDetails.Name;
+                return "#5/355422/6668909/l/wfs/[" + DistributionDetails.URL + "]/+" + DistributionDetails.Name;
             else
                 return "#5/355422/6668909/l/wfs/[" + DistributionDetails.URL + "]";
         }
