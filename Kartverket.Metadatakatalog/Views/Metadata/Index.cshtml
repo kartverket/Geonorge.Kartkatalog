@@ -93,24 +93,28 @@
     <p>
         @if (Model.DistributionDetails != null)
         {
-            <a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
+           
                 @if (@Model.DistributionDetails.IsWmsUrl())
                 {
-                    <text><span class="glyphicon glyphicon-globe"></span> Web Map Service (WMS)</text>
+                    
                 }
                 else if (@Model.DistributionDetails.IsWfsUrl())
                 {
-                    <text><span class="glyphicon glyphicon-globe"></span> Web Feature Service (WFS)</text>
+                   
                 }
                 else if (Model.IsApplication())
                 {
-                    <text><span class="glyphicon glyphicon-road"></span> Gå til applikasjon</text>
+                     <text><a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
+                                <span class="glyphicon glyphicon-road"></span> Gå til applikasjon
+                            </a></text>
                 }
                 else
                 {
-                    <text><span class="glyphicon glyphicon-download-alt"></span> Last ned datasett</text>
+                     <text><a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
+                               <span class="glyphicon glyphicon-download-alt"></span> Last ned datasett
+                            </a></text>
                 }
-            </a>
+            
             if (Model.DistributionDetails.IsWmsUrl())
             {
                <a href="@Html.NorgeskartUrl()@Model.DistributionDetailsWmsUrl()" class="btn btn-default" target="_blank">

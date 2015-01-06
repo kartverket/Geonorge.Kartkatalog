@@ -88,6 +88,9 @@ namespace Kartverket.Metadatakatalog.Models
         //Search score?
         [SolrField("score")]
         public double? Score { get; set; }
+
+        [SolrField("distribution_name")]
+        public string DistributionName { get; set; }
     }
 
 }

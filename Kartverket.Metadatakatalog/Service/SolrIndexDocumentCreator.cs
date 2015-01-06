@@ -108,6 +108,7 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     indexDoc.DistributionProtocol = distributionDetails.Protocol;
                     indexDoc.DistributionUrl = distributionDetails.URL;
+                    indexDoc.DistributionName = distributionDetails.Name;
                 }
 
                 List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;

@@ -145,7 +145,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     ThumbnailUrl = doc.ThumbnailUrl,
                     DistributionUrl = doc.DistributionUrl,
                     DistributionProtocol = doc.DistributionProtocol,
-                    MaintenanceFrequency = doc.MaintenanceFrequency
+                    MaintenanceFrequency = doc.MaintenanceFrequency,
+                    DistributionName = doc.DistributionName
                 };
                 items.Add(item);
             }

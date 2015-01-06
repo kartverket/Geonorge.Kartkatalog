@@ -18,6 +18,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public string DistributionProtocol { get; set; }
         public string ShowDetailsUrl { get; set; }
         public string OrganizationUrl { get; set; }
+        public string DistributionName { get; set; }
 
         public Metadata(SearchResultItem item, UrlHelper urlHelper)
         {
@@ -33,6 +34,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             ThumbnailUrl = item.ThumbnailUrl;
             DistributionUrl = item.DistributionUrl;
             DistributionProtocol = item.DistributionProtocol;
+            DistributionName = item.DistributionName;
             ShowDetailsUrl = urlHelper.Action("Index", "Metadata", new {uuid = item.Uuid}, urlHelper.RequestContext.HttpContext.Request.Url.Scheme);
             string s = new SeoUrl(item.Organization, "").Organization;
             OrganizationUrl = urlHelper.RequestContext.HttpContext.Request.Url.Scheme + "://" + urlHelper.RequestContext.HttpContext.Request.Url.Authority + "/metadata/" + s;

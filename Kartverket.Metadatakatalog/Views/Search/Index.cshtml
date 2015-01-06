@@ -212,7 +212,17 @@
 
                                 <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization"><h5>@item.Organization</h5></a>
 
-                                <p>@item.Abstract</p>
+                                <p>
+                                    @if (item.Abstract.Length > 650)
+                                    {
+                                        @item.Abstract.Substring(0,654)<text>...</text>
+                                    }
+                                    else
+                                    {
+                                        @item.Abstract
+                                    }
+                                        
+                                </p>
                                 <div class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</div>
                             </div>
                         </div>
