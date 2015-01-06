@@ -157,7 +157,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
             return new FacetParameters
             {
                 Queries = parameters.Facets.Select(item => 
-                    new SolrFacetFieldQuery(item.Name) { MinCount = 1 }
+                    new SolrFacetFieldQuery(item.Name) { MinCount = 1, Sort=false }
                     ).ToList<ISolrFacetQuery>()
             };
         }
