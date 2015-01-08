@@ -163,6 +163,22 @@
                 <span class="glyphicon glyphicon-picture"></span> Kartografi
             </a>
         }
+        @if (!string.IsNullOrWhiteSpace(Model.ParentIdentifier))
+        {
+            <a href="/metadata/org/title/@Model.ParentIdentifier" class="btn btn-default" title="Overordnet metadata for @Model.Title">
+                    <span class="glyphicon glyphicon-picture"></span> Overordnet metadata
+                </a>
+        }
+        @if (Model.OperatesOn != null)
+        {
+            foreach (var id in Model.OperatesOn)
+            {
+                <a href="/metadata/org/title/@id" class="btn btn-default" title="Relatert metadata for @Model.Title">
+                    <span class="glyphicon glyphicon-picture"></span> Relaterte metadata
+                </a>
+            }
+        }
+        
     </p>
 
     @if (!string.IsNullOrWhiteSpace(Model.Purpose))

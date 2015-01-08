@@ -82,7 +82,8 @@ namespace Kartverket.Metadatakatalog.Service
                 TopicCategory = simpleMetadata.TopicCategory,
                 Uuid = simpleMetadata.Uuid,
                 MetadataXmlUrl = _geoNetworkUtil.GetXmlDownloadUrl(simpleMetadata.Uuid),
-                MetadataEditUrl = _geonorgeUrlResolver.EditMetadata(simpleMetadata.Uuid)
+                MetadataEditUrl = _geonorgeUrlResolver.EditMetadata(simpleMetadata.Uuid),
+                ParentIdentifier = simpleMetadata.ParentIdentifier
             };
 
             if (metadata.ContactOwner != null)

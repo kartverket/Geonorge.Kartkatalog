@@ -32,7 +32,11 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Log.Error("Metadata with uuid: " + uuid + " not found.", exception);
             }
             if (model == null)
-                return new HttpNotFoundResult();
+            {
+                Log.Error("Metadata with uuid: " + uuid + " not found.");
+                return new HttpNotFoundResult("Metadata with uuid: " + uuid + " not found.");
+            }
+                
             
             SeoUrl url = model.CreateSeoUrl();
             if (!url.Matches(organization, title) && !string.IsNullOrWhiteSpace(organization))

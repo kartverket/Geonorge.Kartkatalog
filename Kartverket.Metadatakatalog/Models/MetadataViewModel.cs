@@ -157,6 +157,8 @@ namespace Kartverket.Metadatakatalog.Models
                 {"unknown", "Ukjent"},
             };
         }
+
+        public string ParentIdentifier { get; set; }
     }
 
     public class BoundingBox
