@@ -33,14 +33,14 @@ namespace Kartverket.Metadatakatalog.Service.Search
             {
                 order = new[] { new SortOrder("title", Order.ASC) };
             }
-            //else if (parameters.orderby == OrderBy.newest)
-            //{
-            //    order = new[] { new SortOrder("date_published", Order.DESC) };
-            //}
-            //if (string.IsNullOrWhiteSpace(parameters.Text) && parameters.Facets.Count == 0)
-            //{
-            //    order = new[] { new SortOrder("date_published", Order.DESC) };
-            //}
+            else if (parameters.orderby == OrderBy.organization)
+            {
+                order = new[] { new SortOrder("organization", Order.ASC) };
+            }
+            else if (string.IsNullOrWhiteSpace(parameters.Text) && HasNoFacetvalue(parameters.Facets))
+            {
+                order = new[] { new SortOrder("title", Order.ASC) };
+            }
 
             SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
             {
@@ -55,6 +55,21 @@ namespace Kartverket.Metadatakatalog.Service.Search
             });
 
             return CreateSearchResults(queryResults, parameters);
+        }
+
+        private bool HasNoFacetvalue(List<FacetParameter> list)
+        {
+
+            bool hasnovalue = true;
+            foreach (FacetParameter f in list)
+            {
+                if (!string.IsNullOrEmpty(f.Value))
+                {
+                    hasnovalue = false;
+                    break;
+                }
+            }
+            return hasnovalue;
         }
 
         public SearchResultForOrganization SearchByOrganization(SearchByOrganizationParameters parameters)
