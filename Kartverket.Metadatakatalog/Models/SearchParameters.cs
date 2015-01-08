@@ -7,6 +7,7 @@ namespace Kartverket.Metadatakatalog.Models
     {
         score,
         title,
+        organization,
         newest,
         updated
     }

@@ -109,6 +109,7 @@ namespace Kartverket.Metadatakatalog.Service
                     indexDoc.DistributionProtocol = distributionDetails.Protocol;
                     indexDoc.DistributionUrl = distributionDetails.URL;
                     indexDoc.DistributionName = distributionDetails.Name;
+                    if (!string.IsNullOrEmpty(indexDoc.DistributionName) && indexDoc.DistributionProtocol.Contains("WMS")) indexDoc.Type = "servicelayer";
                 }
 
                 List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;

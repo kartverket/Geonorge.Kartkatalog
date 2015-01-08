@@ -31,7 +31,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View();
         }
 
-        [Route("index/single/{uuid}")]
+        [Route("IndexSingle/{uuid}")]
         public ActionResult IndexSingle(string uuid)
         {
             Log.Info("Run indexing of single metadata.");

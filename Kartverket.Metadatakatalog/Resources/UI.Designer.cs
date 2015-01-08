@@ -160,6 +160,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to WMS-lag (Tjenestelag).
+        /// </summary>
+        public static string Facet_type_servicelayer {
+            get {
+                return ResourceManager.GetString("Facet_type_servicelayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Applikasjon.
         /// </summary>
         public static string Facet_type_software {

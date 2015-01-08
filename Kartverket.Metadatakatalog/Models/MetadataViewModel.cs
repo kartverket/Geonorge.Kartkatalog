@@ -85,7 +85,7 @@ namespace Kartverket.Metadatakatalog.Models
         public String DistributionDetailsWmsUrl()
         {
             if (!string.IsNullOrWhiteSpace(DistributionDetails.Name))
-                return "#5/355422/6668909/l/wms/[" + DistributionDetails.URL.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/+" + DistributionDetails.Name;
+                return "#5/355422/6668909/*/l/wms/[" + DistributionDetails.URL.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/+" + DistributionDetails.Name;
             else
                 return "#5/355422/6668909/l/wms/[" + DistributionDetails.URL.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]";
 
@@ -93,7 +93,7 @@ namespace Kartverket.Metadatakatalog.Models
         public String DistributionDetailsWfsUrl()
         {
             if (!string.IsNullOrWhiteSpace(DistributionDetails.Name))
-                return "#5/355422/6668909/l/wfs/[" + DistributionDetails.URL.Replace("request=GetCapabilities&service=WFS", "").Replace("service=WFS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wfs", "").Replace("service=wfs&request=getcapabilities", "") + "]/+" + DistributionDetails.Name;
+                return "#5/355422/6668909/*/l/wfs/[" + DistributionDetails.URL.Replace("request=GetCapabilities&service=WFS", "").Replace("service=WFS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wfs", "").Replace("service=wfs&request=getcapabilities", "") + "]/+" + DistributionDetails.Name;
             else
                 return "#5/355422/6668909/l/wfs/[" + DistributionDetails.URL.Replace("request=GetCapabilities&service=WFS", "").Replace("service=WFS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wfs", "").Replace("service=wfs&request=getcapabilities", "") + "]";
         }
@@ -108,6 +108,11 @@ namespace Kartverket.Metadatakatalog.Models
         public bool IsService()
         {
             return HierarchyLevel == "service";
+        }
+
+        public bool IsServiceLayer()
+        {
+            return HierarchyLevel == "service" && !string.IsNullOrWhiteSpace(DistributionDetails.Name);
         }
 
         public bool IsDataset()

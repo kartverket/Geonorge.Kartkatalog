@@ -1,5 +1,6 @@
 ﻿@using Kartverket.Metadatakatalog.Models.ViewModels
 @using Resources
+@using Kartverket.Metadatakatalog.Helpers
 @model SearchViewModel
 
 @{
@@ -37,6 +38,25 @@
     <div class="search-filter-wrapper">
         <ul class="nav nav-tabs col-xs-12 col-sm-12 col-md-12 col-lg-12" role="tablist">
             <li class="active"><span role="tab">Kartkatalogen viser @Model.ShowingFromAndTo() av @Model.NumFound treff.</span></li>
+
+            <li class="pull-right">
+                <label>Sorter etter:</label>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="@Url.Action("Index", Model.ParamsForOrderByScoreLink())">Relevans</a></li>
+                    <li><a href="@Url.Action("Index", Model.ParamsForOrderByTitleLink())">Navn</a></li>
+                    <li><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())">Organisasjon</a></li>
+                </ul>
+</li>
+        </ul>
+    </div>
+}
+
+@helper DisplayPaginationBottom()
+{
+    <div class="search-filter-wrapper">
+        <ul class="nav nav-tabs col-xs-12 col-sm-12 col-md-12 col-lg-12" role="tablist">
+            <li class="active"><span role="tab">Kartkatalogen viser @Model.ShowingFromAndTo() av @Model.NumFound treff.</span></li>
+
             <li class="btn-group pull-right">
 
                 @if (Model.IsPreviousButtonActive())
@@ -49,6 +69,7 @@
                 }
 
             </li>
+           
         </ul>
     </div>
 }
@@ -224,6 +245,31 @@
                                         
                                 </p>
                                 <div class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</div>
+                                @if (item.GetInnholdstype() == "Datasett")
+                                {
+                                <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <span class="glyphicon glyphicon-download-alt"></span> Last ned
+                                </a>
+                                }
+                                else if (item.GetInnholdstype() == "Tjeneste" || item.GetInnholdstype() == "WMS-lag (Tjenestelag)")
+                                {
+                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                        <span class="glyphicon glyphicon-map-marker"></span> Vis i kart
+                                    </a>
+                                }
+                                else if (item.GetInnholdstype() == "Applikasjon")
+                                {
+                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                        <span class="glyphicon glyphicon-globe"></span> Vis applikasjon
+                                    </a>
+                                }
+                                else
+                                {
+                                <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <span class="glyphicon glyphicon-download-alt"></span> Last ned
+                                </a>
+                                }
+                               
                             </div>
                         </div>
                     </div>
@@ -231,7 +277,7 @@
                 }
             </div>
 
-            @DisplayPagination()
+            @DisplayPaginationBottom()
 
         }
     </div>

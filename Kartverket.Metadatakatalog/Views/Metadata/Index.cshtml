@@ -6,15 +6,20 @@
 
     var hierarchyLevelCssClass = "";
     var hierarchyLevelLabelText = "";
-    if (Model.IsService())
-    {
-        hierarchyLevelCssClass = "label-info";
-        hierarchyLevelLabelText = "Tjeneste";
-    }
-    else if (Model.IsDataset())
+    if (Model.IsDataset())
     {
         hierarchyLevelCssClass = "label-success";
         hierarchyLevelLabelText = "Datasett";
+    }
+    else if (Model.IsServiceLayer())
+    {
+        hierarchyLevelCssClass = "label-info";
+        hierarchyLevelLabelText = "WMS-lag (Tjenestelag)";
+    }
+    else if (Model.IsService())
+    {
+        hierarchyLevelCssClass = "label-info";
+        hierarchyLevelLabelText = "Tjeneste";
     }
     else if (Model.IsApplication())
     {
@@ -26,6 +31,7 @@
         hierarchyLevelCssClass = "label-primary";
         hierarchyLevelLabelText = "Datasettserie";
     }
+    
     else
     {
         hierarchyLevelCssClass = "label-default";
@@ -94,11 +100,11 @@
         @if (Model.DistributionDetails != null)
         {
            
-                @if (@Model.DistributionDetails.IsWmsUrl())
+                if (Model.DistributionDetails.IsWmsUrl())
                 {
                     
                 }
-                else if (@Model.DistributionDetails.IsWfsUrl())
+                else if (Model.DistributionDetails.IsWfsUrl())
                 {
                    
                 }
@@ -114,19 +120,19 @@
                                <span class="glyphicon glyphicon-download-alt"></span> Last ned datasett
                             </a></text>
                 }
-            
-            if (Model.DistributionDetails.IsWmsUrl())
-            {
-               <a href="@Html.NorgeskartUrl()@Model.DistributionDetailsWmsUrl()" class="btn btn-default" target="_blank">
-                    <span class="glyphicon glyphicon-picture"></span> Vis tjenesten i kartet
-                </a>
-            }
-            if (Model.DistributionDetails.IsWfsUrl())
-            {
-                <a href="@Html.NorgeskartUrl()@Model.DistributionDetailsWfsUrl()" class="btn btn-default" target="_blank">
-                    <span class="glyphicon glyphicon-picture"></span> Vis tjenesten i kartet
-                </a>
-            }
+
+                if (Model.DistributionDetails.IsWmsUrl())
+                {
+                    <a href="@Html.NorgeskartUrl()@Model.DistributionDetailsWmsUrl()" class="btn btn-default btn-primary" target="_blank">
+                        <span class="glyphicon glyphicon-map-marker"></span> Vis tjenesten i kartet
+                    </a>
+                }
+                if (Model.DistributionDetails.IsWfsUrl())
+                {
+                    <a href="@Html.NorgeskartUrl()@Model.DistributionDetailsWfsUrl()" class="btn btn-default btn-primary" target="_blank">
+                        <span class="glyphicon glyphicon-map-marker"></span> Vis tjenesten i kartet
+                    </a>
+                }
 
         }
 

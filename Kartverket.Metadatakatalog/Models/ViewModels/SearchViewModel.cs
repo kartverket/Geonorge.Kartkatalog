@@ -91,6 +91,29 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             routeValues["Offset"] = (Offset + Limit);
             return routeValues;
         }
+        
+        public RouteValueDictionary ParamsForOrderByScoreLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["orderby"] = 0;
+            return routeValues;
+        }
+
+        public RouteValueDictionary ParamsForOrderByTitleLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["orderby"] = 1;
+            return routeValues;
+        }
+        public RouteValueDictionary ParamsForOrderByOrganizationLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["orderby"] = 2;
+            return routeValues;
+        }
 
         public string ShowingFromAndTo()
         {

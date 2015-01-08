@@ -50,7 +50,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
                 Facet = BuildFacetParameters(parameters),
                 Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", 
-                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","product_page_url", "date_published",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published",
                     "score" }
             });
 
