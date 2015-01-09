@@ -81,6 +81,14 @@ namespace Kartverket.Metadatakatalog.Models
             else
                 return new SeoUrl("", Title);
         }
+        public String DistributionDetailsGetCapabilitiesUrl()
+        {
+            string tmp= DistributionDetails.URL.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "");
+            if (DistributionDetails.IsWmsUrl())
+            return tmp + "request=GetCapabilities&service=WMS";
+            else return tmp + "request=GetCapabilities&service=WFS";
+
+        }
 
         public String DistributionDetailsWmsUrl()
         {

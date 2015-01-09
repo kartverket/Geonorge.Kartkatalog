@@ -223,9 +223,19 @@
             <text>@DisplayValue("Protokoll", Model.DistributionDetails.Protocol)</text>
             if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
             {
-                <p>
+                if (Model.IsService() || Model.IsServiceLayer())
+                {
+                  <p>
+                    <strong>Get Capabilities Url:</strong> <a href="@Model.DistributionDetailsGetCapabilitiesUrl()">@Model.DistributionDetails.URL</a>
+                  </p>  
+                }
+                else
+                {
+                  <p>
                     <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
-                </p>
+                  </p>  
+                }
+                
             }
             <text>@DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
         }
