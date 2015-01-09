@@ -37,9 +37,21 @@ namespace Kartverket.Metadatakatalog.Service.Search
             {
                 order = new[] { new SortOrder("organization", Order.ASC) };
             }
+            else if (parameters.orderby == OrderBy.newest)
+            {
+                order = new[] { new SortOrder("date_published", Order.DESC) };
+            }
+            else if (parameters.orderby == OrderBy.updated)
+            {
+                order = new[] { new SortOrder("date_updated", Order.DESC) };
+            }
             else if (string.IsNullOrWhiteSpace(parameters.Text) && HasNoFacetvalue(parameters.Facets))
             {
                 order = new[] { new SortOrder("title", Order.ASC) };
+            }
+            else if (parameters.orderby == OrderBy.score)
+            {
+                order = new[] { new SortOrder("score", Order.DESC) };
             }
 
             SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
@@ -50,7 +62,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
                 Facet = BuildFacetParameters(parameters),
                 Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", 
-                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated",
                     "score" }
             });
 

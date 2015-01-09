@@ -90,8 +90,8 @@ namespace Kartverket.Metadatakatalog.Service
                 // FIXME - BAD!! Move this error handling into GeoNorgeAPI
                 try
                 {
-                    indexDoc.DatePublished = simpleMetadata.DatePublished.ToString();
-                    indexDoc.DateUpdated = simpleMetadata.DateUpdated.ToString();
+                    indexDoc.DatePublished = simpleMetadata.DatePublished;
+                    indexDoc.DateUpdated = simpleMetadata.DateUpdated;
                 }
                 catch (Exception e)
                 {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SolrNet.Attributes;
+using System;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -46,10 +47,10 @@ namespace Kartverket.Metadatakatalog.Models
         public string OrganizationLogoUrl { get; set; }
 
         [SolrField("date_published")]
-        public string DatePublished { get; set; }
+        public DateTime? DatePublished { get; set; }
 
         [SolrField("date_updated")]
-        public string DateUpdated { get; set; }
+        public DateTime? DateUpdated { get; set; }
 
         [SolrField("legend_description_url")]
         public string LegendDescriptionUrl { get; set; }

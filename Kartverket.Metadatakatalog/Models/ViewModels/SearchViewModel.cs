@@ -10,6 +10,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public int Limit { get; set; }
         public int Offset { get; set; }
         public int NumFound { get; set; }
+        public int orderby { get; set; }
         public List<FacetParameter> FacetParameters { get; set; }
         public SearchResultViewModel Result { get; set; }
 
@@ -21,6 +22,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             Limit = searchResult.Limit;
             Offset = searchResult.Offset;
             NumFound = searchResult.NumFound;
+            orderby = (int)parameters.orderby;
         }
 
         public RouteValueDictionary LinkForFacetValue(string name, string value)

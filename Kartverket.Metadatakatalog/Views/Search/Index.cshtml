@@ -41,12 +41,50 @@
 
             <li class="pull-right">
                 <label>Sorter etter:</label>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="@Url.Action("Index", Model.ParamsForOrderByScoreLink())">Relevans</a></li>
-                    <li><a href="@Url.Action("Index", Model.ParamsForOrderByTitleLink())">Navn</a></li>
-                    <li><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())">Organisasjon</a></li>
-                </ul>
-</li>
+                <select id="orderby">
+                    @if (Model.orderby == 0)
+                    {
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByScoreLink())" selected="selected">Relevans</option>
+                    }
+                    else { 
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByScoreLink())" >Relevans</option>
+                    }
+                    @if (Model.orderby == 1)
+                    {
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" selected="selected">Navn</option>
+                    }
+                    else
+                    {
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByTitleLink())">Navn</option>
+                    }
+                    @if (Model.orderby == 2)
+                    {
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" selected="selected">Organisasjon</option>
+                    }
+                    else
+                    {
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())">Organisasjon</option>
+                    }
+                    @if (Model.orderby == 3)
+                    {
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" selected="selected">Dato oppdatert (metadata)</option>
+                    }
+                    else
+                    {
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())">Dato oppdatert (metadata)</option>
+                    }
+                    @if (Model.orderby == 4)
+                    {
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" selected="selected">Dato oppdatert (ressurs)</option>
+                    }
+                    else
+                    {
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())">Dato oppdatert (ressurs)</option>
+                    }
+                    
+                 </select>
+
+            </li>
         </ul>
     </div>
 }
@@ -91,6 +129,10 @@
                 );
             }
         });
+        $("#orderby").change(function () {
+            document.location.href = $(this).val();
+        });
+
     </script>
 
     <script>
