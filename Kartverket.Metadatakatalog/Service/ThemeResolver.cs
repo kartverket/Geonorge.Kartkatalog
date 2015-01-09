@@ -107,23 +107,26 @@ namespace Kartverket.Metadatakatalog.Service
         public string Resolve(SimpleMetadata metadata)
         {
             string theme = ResolveThemeFromDokKeywords(metadata);
-            
             if (string.IsNullOrWhiteSpace(theme))
             {
-                theme = ResolveThemeFromInspireKeywords(metadata);
-                if (string.IsNullOrWhiteSpace(theme))
-                {
-                    theme = ResolveThemeFromTopicCategory(metadata.TopicCategory);
-                    if (string.IsNullOrWhiteSpace(theme))
-                    {
-                        theme = ResolveCultureKeywords(metadata);
-                        if (string.IsNullOrWhiteSpace(theme))
-                        {
-                            theme = DokAnnen;
-                        }
-                    }
-                }
+                theme = DokAnnen;
             }
+            //if (string.IsNullOrWhiteSpace(theme))
+            //{
+            //    theme = ResolveThemeFromInspireKeywords(metadata);
+            //    if (string.IsNullOrWhiteSpace(theme))
+            //    {
+            //        theme = ResolveThemeFromTopicCategory(metadata.TopicCategory);
+            //        if (string.IsNullOrWhiteSpace(theme))
+            //        {
+            //            theme = ResolveCultureKeywords(metadata);
+            //            if (string.IsNullOrWhiteSpace(theme))
+            //            {
+            //                theme = DokAnnen;
+            //            }
+            //        }
+            //    }
+            //}
 
             return theme;
         }
