@@ -116,6 +116,20 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             routeValues["orderby"] = 2;
             return routeValues;
         }
+        public RouteValueDictionary ParamsForOrderByMetadataUpdateLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["orderby"] = 3;
+            return routeValues;
+        }
+        public RouteValueDictionary ParamsForOrderByResourceUpdateLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["orderby"] = 4;
+            return routeValues;
+        }
 
         public string ShowingFromAndTo()
         {

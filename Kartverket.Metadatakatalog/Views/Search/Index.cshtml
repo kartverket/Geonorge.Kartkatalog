@@ -67,19 +67,19 @@
                     }
                     @if (Model.orderby == 3)
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" selected="selected">Dato oppdatert (metadata)</option>
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByMetadataUpdateLink())" selected="selected">Dato oppdatert (metadata)</option>
                     }
                     else
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())">Dato oppdatert (metadata)</option>
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByMetadataUpdateLink())">Dato oppdatert (metadata)</option>
                     }
                     @if (Model.orderby == 4)
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" selected="selected">Dato oppdatert (ressurs)</option>
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByResourceUpdateLink())" selected="selected">Dato oppdatert (ressurs)</option>
                     }
                     else
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())">Dato oppdatert (ressurs)</option>
+                        <option value="@Url.Action("Index", Model.ParamsForOrderByResourceUpdateLink())">Dato oppdatert (ressurs)</option>
                     }
                     
                  </select>
