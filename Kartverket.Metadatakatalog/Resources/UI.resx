@@ -132,7 +132,13 @@
   <data name="Facet_organization" xml:space="preserve">
     <value>Organisasjon</value>
   </data>
+  <data name="Facet_organizationgroup" xml:space="preserve">
+    <value>Organisasjon</value>
+  </data>
   <data name="Facet_place" xml:space="preserve">
+    <value>Geografisk område</value>
+  </data>
+  <data name="Facet_placegroups" xml:space="preserve">
     <value>Geografisk område</value>
   </data>
   <data name="Facet_theme" xml:space="preserve">

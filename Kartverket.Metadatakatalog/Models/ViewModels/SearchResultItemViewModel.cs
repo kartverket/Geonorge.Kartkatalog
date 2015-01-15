@@ -16,6 +16,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string ThumbnailUrl { get; set; }
         public string MaintenanceFrequency { get; set; }
         public string DownloadUrl { get; set; }
+        public string ServiceUrl { get; set; }
 
         public string GetInnholdstypeCSS()
         {
@@ -52,6 +53,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             OrganizationLogoUrl = item.OrganizationLogoUrl;
             ThumbnailUrl = item.ThumbnailUrl;
             MaintenanceFrequency = item.MaintenanceFrequency;
+            ServiceUrl = item.DistributionUrl;
 
             if (Type == "service" || Type == "servicelayer")
             {

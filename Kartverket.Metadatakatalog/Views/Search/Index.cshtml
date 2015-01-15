@@ -112,6 +112,8 @@
     </div>
 }
 
+
+
 @section scripts {
     <script>
         $('ul.facet').each(function () {
@@ -135,90 +137,10 @@
 
     </script>
 
-    <script>
-        //$(function () {
-        //    function log(message) {
-        //        $("<div>").text(message).prependTo("#log");
-        //        $("#log").scrollTop(0);
-        //    }
-
-        //    $("#txtSearch").autocomplete({
-        //        source: function (request, response) {
-        //            $.ajax({
-        //                url: "/api/search/",
-        //                dataType: "jsonp",
-        //                data: {
-        //                    text: request.term
-        //                },
-        //                success: function (data) {
-        //                    response(data);
-        //                }
-        //            });
-        //        },
-        //        minLength: 3,
-        //        select: function (event, ui) {
-        //            log(ui.item ?
-        //              "Selected: " + ui.item.label :
-        //              "Nothing selected, input was " + this.value);
-        //        },
-        //        open: function () {
-        //            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
-        //        },
-        //        close: function () {
-        //            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
-        //        }
-        //    });
-        //});
-
-
-        //$('#txtSearch').typeahead({
-        //    minLength: 2,
-        //    dynamic: true,
-        //    delay: 500,
-        //    backdrop: false,
-        //    selector: {
-        //        filter: "input-group-btn",
-        //        filterButton: "btn btn-default",
-        //        dropdown: "autocomplete",
-        //        hint: "form-control"
-        //    },
-        //    display: "metadata",
-        //    template: '<div class="row"><span>{{Title}}</span></div>',
-        //    source: {
-        //    metadata: {
-        //                url: [{
-        //                    type: "GET",
-        //                    url: "/api/search/",
-        //                    data: {
-        //                        text: "{{query}}"
-        //                    }
-        //                }, "Results"],
-        //                display: "Title",
-        //                template: '<div class="row"><span>{{Title}}</span></div>'
-        //    }
-        //    },
-        //callback: {
-        //        onClick: function (node, a, obj, e) {
-        //            document.getElementById("searchForm").submit();
-        //            //alert(JSON.stringify(obj));
-
-        //        },
-        //        onResult: function (node, query, obj, objCount) {
-
-        //            var text = "";
-
-        //            for (i = 0; i < objCount; i++) {
-        //                text ='<a href="#">' + obj[i].Title + '</a>';
-        //                $('#autocomplete').append(text);
-        //            }
-
-
-        //        }
-        //},
-        //debug: true
-        //});
-    </script>
+   
 }
+
+
 <article class="row">
     @Html.Partial("_SearchBarPartial", Model)
 </article>
@@ -233,9 +155,9 @@
                 <div class="panel-body">
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
+                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organizationgroup"))
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "place"))
+                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))
                     @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))*@
                     @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
                 </div>
@@ -298,6 +220,11 @@
                                     <a href="@Html.NorgeskartUrl()@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-map-marker"></span> Vis i kart
                                     </a>
+                                    
+                                    <a onclick='javascript:msgAddMapLayer("@item.ServiceUrl")' class="btn btn-xs btn-bunnmarg btn-default">
+                                        <span class="glyphicon glyphicon-plus"></span> Legg til kartlag
+                                    </a>
+
                                 }
                                 else if (item.GetInnholdstype() == "Applikasjon")
                                 {

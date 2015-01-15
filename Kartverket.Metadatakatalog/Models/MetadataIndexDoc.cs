@@ -92,6 +92,12 @@ namespace Kartverket.Metadatakatalog.Models
 
         [SolrField("distribution_name")]
         public string DistributionName { get; set; }
+
+        [SolrField("placegroups")]
+        public List<string> Placegroups { get; set; }
+
+        [SolrField("organizationgroup")]
+        public string Organizationgroup { get; set; }
     }
 
 }

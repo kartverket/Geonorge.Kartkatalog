@@ -36,12 +36,12 @@ namespace Kartverket.Metadatakatalog.Models
 
         public void AddComplexFacetsIfMissing()
         {
-            AddDefaultFacetsIfMissing(new List<string> { "nationalinitiative", "place", "license" });
+            AddDefaultFacetsIfMissing(new List<string> { "nationalinitiative", "placegroups", "license" });
         }
 
         public void AddDefaultFacetsIfMissing(List<string> additionalFacets)
         {
-            var defaultFacets = new List<string> {"theme", "type", "organization"};
+            var defaultFacets = new List<string> { "theme", "type", "organizationgroup" };
 
             if (additionalFacets.Any())
             {

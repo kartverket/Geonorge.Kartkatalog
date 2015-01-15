@@ -106,11 +106,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organisasjon.
+        /// </summary>
+        public static string Facet_organizationgroup {
+            get {
+                return ResourceManager.GetString("Facet_organizationgroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Geografisk område.
         /// </summary>
         public static string Facet_place {
             get {
                 return ResourceManager.GetString("Facet_place", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Geografisk område.
+        /// </summary>
+        public static string Facet_placegroups {
+            get {
+                return ResourceManager.GetString("Facet_placegroups", resourceCulture);
             }
         }
         

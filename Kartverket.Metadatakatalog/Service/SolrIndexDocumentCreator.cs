@@ -16,6 +16,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         private readonly IOrganizationService _organizationService;
         private readonly ThemeResolver _themeResolver;
+        private readonly PlaceResolver _placeResolver;
         private readonly GeoNetworkUtil _geoNetworkUtil;
 
         public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil)
@@ -23,6 +24,7 @@ namespace Kartverket.Metadatakatalog.Service
             _organizationService = organizationService;
             _themeResolver = themeResolver;
             _geoNetworkUtil = geoNetworkUtil;
+            _placeResolver = new PlaceResolver();
         }
 
         public List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems)
@@ -67,6 +69,15 @@ namespace Kartverket.Metadatakatalog.Service
                 if (simpleMetadata.ContactOwner != null)
                 {
                     indexDoc.Organization = simpleMetadata.ContactOwner.Organization;
+                    indexDoc.Organizationgroup = indexDoc.Organization;
+                    if (indexDoc.Organizationgroup.ToLower().Contains("fylkeskommune")) indexDoc.Organizationgroup = "Fylkeskommune";
+                    else
+                    {
+                        if (indexDoc.Organizationgroup.ToLower().Contains("fylke")) indexDoc.Organizationgroup = "Fylke";
+                        if (indexDoc.Organizationgroup.ToLower().Contains("kommune")) indexDoc.Organizationgroup = "Kommune";
+                        if (indexDoc.Organizationgroup.ToLower().Contains("regionråd")) indexDoc.Organizationgroup = "Kommune";
+                        if (indexDoc.Organizationgroup.ToLower().Contains("teknisk etat")) indexDoc.Organizationgroup = "Kommune";
+                    }
                     indexDoc.OrganizationSeoName = new SeoUrl(indexDoc.Organization, null).Organization;
 
                     Task<Organization> organizationTask =
@@ -126,7 +137,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                 indexDoc.NationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)).Select(k => k.KeywordValue).ToList();
                 indexDoc.Place = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)).Select(k => k.KeywordValue).ToList();
-
+                indexDoc.Placegroups = _placeResolver.Resolve(simpleMetadata);
                 if (simpleMetadata.Constraints != null)
                 {
                     indexDoc.license = simpleMetadata.Constraints.UseLimitations;

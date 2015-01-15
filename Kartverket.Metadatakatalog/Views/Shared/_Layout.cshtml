@@ -22,6 +22,10 @@
         @Resources.UI.AppPageTitle
     </title>
     @Styles.Render("~/Content/css")
+    @RenderSection("head", false)
+   
+    <script type="text/javascript" src="/Scripts/easyXDM.js"></script>
+   
 </head>
 <body class="geonorge-container prototype  geonorge">
     <div id="logo-on-sm">
@@ -29,30 +33,40 @@
     </div>
 
     @Html.Partial("_NavbarPartial")
-   
 
     <div class="body-content">
         <div class="container">
-            @if (TempData["success"] != null)
-            {
-                <div class="alert alert-success">
-                    @TempData["success"]
-                </div>
-            }
-            @if (TempData["failure"] != null)
-            {
-                <div class="alert alert-danger">
-                    @TempData["failure"]
-                </div>
-            }
-            <ol class="breadcrumb">
-                <li><a href="@Html.GeonorgeUrl()">Geonorge</a></li>
-                <li><a href="/">Kartkatalogen</a></li>
-                @RenderSection("breadcrumb", false)
-            </ol>
+            <ul class="nav nav-tabs navbar-right" role="tablist" id="navTab">
+                <li role="presentation" class="active"><a href="#kartkatalog" aria-controls="kartkatalog" role="tab" data-toggle="tab">Kartkatalog</a></li>
+                <li role="presentation"><a href="#kart" aria-controls="kart" role="tab" data-toggle="tab">Kartsøk</a></li>
 
-            @RenderBody()
+            </ul>
         </div>
+
+    </div>
+    
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="kartkatalog">
+            <div class="body-content">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li><a href="@Html.GeonorgeUrl()">Geonorge</a></li>
+                        <li><a href="/">Kartkatalogen</a></li>
+                        @RenderSection("breadcrumb", false)
+                    </ol>
+                    @RenderBody()
+
+                </div>
+
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="kart">
+            
+            @Html.Partial("_Map")
+
+
+        </div>
+
     </div>
     <footer class="page-footer" role="contentinfo">
         <div class="top-shadow">&nbsp;</div>
@@ -83,6 +97,62 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script>
+    // by Kartverket/Thomas Hirsch 2012 / public domain.
+    var hash = 'http://norgeskart.no/geoportal/testing/dynamisk.html';
+    //var hash = 'http://norgeskart.no/geoportal/staging';
+
+    var socket = new easyXDM.Socket({
+        remote: hash,
+        onMessage: function (message, origin) {
+            //var reslist2 = document.getElementById('result');
+            //reslist2.innerHTML = reslist2.innerHTML + message;
+            var json = easyXDM.getJSONObject().parse(message);
+
+            if (json) {
+                if (json.type === 'layerLoaded') {
+                    //var reslist = document.getElementById('layerlist');
+                    //var layeritem = '<li  class="list-group-item">';
+                    //layeritem = layeritem + '<input type="checkbox" /> <a onclick="javascript:msgShowLayer(\'' + json.parent + '\')" class="btn btn-xs btn-bunnmarg btn-default">';
+                    //layeritem = layeritem + '<span class="glyphicon glyphicon-plus"></span> ' + json.title;
+                    //layeritem = layeritem + '</a>';
+                    //layeritem = layeritem + '</li>';
+
+
+                    //reslist.innerHTML = layeritem + reslist.innerHTML;
+                }
+            }
+
+
+        },
+        container: document.getElementById("container"),
+        onReady: function () {
+            this.container.getElementsByTagName("iframe")[0].style.height = "700px";
+            this.container.getElementsByTagName("iframe")[0].style.width = "100%";
+        }
+    });
+
+    function postMessage(msg) {
+        var message = JSON.stringify(msg);
+        socket.postMessage(message);
+        var reslist = document.getElementById('command');
+        reslist.innerHTML = message + '</br>' + reslist.innerHTML;
+    }
+
+
+    function msgAddMapLayer(layer) {
+        $('#navTab a:last').tab('show')
+        postMessage({ "cmd": "addDataSource", "type": "wms", "url": layer });  
+    }
+
+    function msgShowLayer(id) {
+        postMessage({ "cmd": "setVisible", "id": id });
+    }
+
+
+    </script>
+
     @RenderSection("scripts", false)
 </body>
+
 </html>

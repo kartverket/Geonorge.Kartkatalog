@@ -56,14 +56,22 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
             SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
             {
+
+                //WMS lag skal få redusert sin boost
+
                 FilterQueries = BuildFilterQueries(parameters),
                 OrderBy = order,
                 Rows = parameters.Limit,
                 StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
                 Facet = BuildFacetParameters(parameters),
-                Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", 
+                Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
                     "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated",
-                    "score" }
+                    "score" },
+                ExtraParams = new Dictionary<string, string> {
+                    {"bf", "{type:servicelayer^0.1}"}
+                    
+                  }
+          
             });
 
             return CreateSearchResults(queryResults, parameters);
@@ -185,7 +193,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
             return new FacetParameters
             {
                 Queries = parameters.Facets.Select(item => 
-                    new SolrFacetFieldQuery(item.Name) { MinCount = 2, Limit=30,  Sort=false }
+                    new SolrFacetFieldQuery(item.Name) { MinCount = 1, Limit=150,  Sort=false }
                     ).ToList<ISolrFacetQuery>()
             };
         }
@@ -217,7 +225,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     new SolrQuery("allText:" + text + "^1.2"),
                     new SolrQuery("allText:" + text + "*^1.1"),
                     new SolrQuery("allText:" + text + "~2"),   //Fuzzy
-                    new SolrQuery("allText2:" + text + "")  //Stemmer
+                    new SolrQuery("allText2:" + text + "") //Stemmer
+                    
                     //new SolrQuery("allText3:" + text)        //Fonetisk
                     
                 });
