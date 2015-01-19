@@ -242,8 +242,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
             {
                 var query = new SolrMultipleCriteriaQuery(new[]
                 {
-                    new SolrQuery("title:"+ text + "^45"),
-                    new SolrQuery("title:"+ text + "*^25"),
+                    new SolrQuery("titleText:"+ text + "^45"),
+                    new SolrQuery("titleText:"+ text + "*^25"),
                     new SolrQuery("allText:" + text + "*"),
                     new SolrQuery("allText:" + text)
                 });
