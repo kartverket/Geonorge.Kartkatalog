@@ -98,6 +98,10 @@ namespace Kartverket.Metadatakatalog.Models
 
         [SolrField("organizationgroup")]
         public string Organizationgroup { get; set; }
+
+        [SolrField("typenumber")]
+        public int typenumber { get; set; }
+        
     }
 
 }

@@ -5,7 +5,49 @@
     padding: 10px; 
     margin-top:20px;
 }
+.bottom-edge-kartkatalogen {
+    border-bottom: 4px solid #249446;
+}
+.bottom-edge-kart {
+    border-bottom: 4px solid #898d8d;
+}
+.nav-tabs > li.background-kartkatalogen > a, .nav-tabs > li.background-kartkatalogen > a:active, .nav-tabs > li.background-kartkatalogen > a:hover, .nav-tabs > li.background-kartkatalogen > a:focus {
+    color: white;
+    border-radius: 0 0 0 0;
+    background-color: #249446;
+    border: 0px;
+    padding: 5px 5px;
+    border-bottom: 0px;
+}
+.nav-tabs > li.background-kart > a, .nav-tabs > li.background-kart > a:active, .nav-tabs > li.background-kart > a:hover, .nav-tabs > li.background-kart > a:focus {
+    color: white;
+    border-radius: 0 0 0 0;
+    background-color: #898d8d;
+    border: 0px;
+    padding: 5px 5px;
+    border-bottom: 0px;
+}
+.geonorge-container ul.breadcrumb  {
+    border-bottom: 0px; 
+    padding: 0px;
+}
+.geonorge-container .nav-tabs > li.active  {
+    border-bottom: 0px;
+}
+.search-filter-wrapper .nav-tabs > li.active {
+    border-bottom: 2px solid #249446;
+}
 
+
+a.background-kartkatalogen {
+    background-color: #249446;
+}
+.navtab-container {
+
+}
+#navTab {
+
+}
 form.search-box { margin-bottom: 20px; }
 
 ul.search-results {

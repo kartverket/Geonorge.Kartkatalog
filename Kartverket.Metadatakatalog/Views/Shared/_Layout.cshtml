@@ -34,11 +34,16 @@
 
     @Html.Partial("_NavbarPartial")
 
-    <div class="body-content">
+    <div class="navtab-container bottom-edge-kartkatalogen" id="navTabCont">
         <div class="container">
+            <ul class="breadcrumb navbar-left">
+                <li><a href="@Html.GeonorgeUrl()">Geonorge</a></li>
+                <li><a href="/">Kartkatalogen</a></li>
+                @RenderSection("breadcrumb", false)
+            </ul>
             <ul class="nav nav-tabs navbar-right" role="tablist" id="navTab">
-                <li role="presentation" class="active"><a href="#kartkatalog" aria-controls="kartkatalog" role="tab" data-toggle="tab">Kartkatalog</a></li>
-                <li role="presentation"><a href="#kart" aria-controls="kart" role="tab" data-toggle="tab">Kartsøk</a></li>
+                <li role="presentation" class="background-kartkatalogen active"><a class="background-kartkatalogen" href="#kartkatalog" aria-controls="kartkatalog" role="tab" data-toggle="tab">Kartkatalogen</a></li>
+                <li role="presentation" class="background-kart"><a href="#kart" aria-controls="kart" role="tab" data-toggle="tab">Kartsøk</a></li>
 
             </ul>
         </div>
@@ -49,11 +54,7 @@
         <div role="tabpanel" class="tab-pane active" id="kartkatalog">
             <div class="body-content">
                 <div class="container">
-                    <ol class="breadcrumb">
-                        <li><a href="@Html.GeonorgeUrl()">Geonorge</a></li>
-                        <li><a href="/">Kartkatalogen</a></li>
-                        @RenderSection("breadcrumb", false)
-                    </ol>
+                    
                     @RenderBody()
 
                 </div>
@@ -138,10 +139,19 @@
         var reslist = document.getElementById('command');
         reslist.innerHTML = message + '</br>' + reslist.innerHTML;
     }
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        //e.target // newly activated tab
+        //e.relatedTarget // previous active tab
+        $("#navTabCont").toggleClass("bottom-edge-kart");
+        $("#navTabCont").toggleClass("bottom-edge-kartkatalogen");
+    })
 
+    
 
     function msgAddMapLayer(layer) {
         $('#navTab a:last').tab('show')
+        
+
         postMessage({ "cmd": "addDataSource", "type": "wms", "url": layer });  
     }
 

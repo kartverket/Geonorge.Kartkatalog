@@ -66,11 +66,11 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 Facet = BuildFacetParameters(parameters),
                 Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
                     "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated",
-                    "score" },
-                ExtraParams = new Dictionary<string, string> {
-                    {"bf", "{type:servicelayer^0.1}"}
+                    "score" }
+                //ExtraParams = new Dictionary<string, string> {
+                //    {"q", ""}
                     
-                  }
+                  //}
           
             });
 
@@ -213,20 +213,20 @@ namespace Kartverket.Metadatakatalog.Service.Search
             {
                 var query = new SolrMultipleCriteriaQuery(new[]
                 {
-                    new SolrQuery("title:"+ text + "^50"),
-                    new SolrQuery("title:"+ text + "*^40"),
-                    new SolrQuery("title:"+ text + "~2^1.1"),
-                    new SolrQuery("title_lowercase:"+ text + "^50"),
-                    new SolrQuery("title_lowercase:"+ text + "*^40"),
-                    new SolrQuery("title_lowercase:"+ text + "~2^1.1"),
+                    new SolrQuery("titleText:"+ text + "^50"),
+                    new SolrQuery("titleText:"+ text + "*^40"),
+                    new SolrQuery("titleText:"+ text + "~2^1.1"),
+                    //new SolrQuery("title_lowercase:"+ text + "^50"),
+                    //new SolrQuery("title_lowercase:"+ text + "*^40"),
+                    //new SolrQuery("title_lowercase:"+ text + "~2^1.1"),
                     //new SolrQuery("organization:"+ text + "^3"),
                     //new SolrQuery("organization:"+ text + "*^2"),
                     //new SolrQuery("organization:"+ text + "~^1.5"),
                     new SolrQuery("allText:" + text + "^1.2"),
                     new SolrQuery("allText:" + text + "*^1.1"),
-                    new SolrQuery("allText:" + text + "~2"),   //Fuzzy
-                    new SolrQuery("allText2:" + text + "") //Stemmer
-                    
+                    new SolrQuery("allText:" + text + "~1"),   //Fuzzy
+                    new SolrQuery("allText2:" + text + ""), //Stemmer
+                    new SolrQuery("!boost b=typenumber")
                     //new SolrQuery("allText3:" + text)        //Fonetisk
                     
                 });

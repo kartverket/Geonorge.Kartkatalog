@@ -144,6 +144,15 @@ namespace Kartverket.Metadatakatalog.Service
                 }
                 Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid,
                     indexDoc.Title));
+                
+                indexDoc.typenumber = 1;
+                if (indexDoc.Type == "dataset")
+                    indexDoc.typenumber = 100;
+                if (indexDoc.Type == "service")
+                    indexDoc.typenumber = 100;
+                if (indexDoc.Type == "software")
+                    indexDoc.typenumber = 80;
+                
             }
             catch (Exception e)
             {
