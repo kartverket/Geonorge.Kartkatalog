@@ -155,9 +155,10 @@
                 <div class="panel-body">
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organizationgroup"))
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))
+                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))                    
+                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
+
                     @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))*@
                     @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
                 </div>
@@ -221,9 +222,9 @@
                                         <span class="glyphicon glyphicon-map-marker"></span> Vis i kart
                                     </a>
                                     
-                                    <a onclick='javascript:msgAddMapLayer("@item.ServiceUrl")' class="btn btn-xs btn-bunnmarg btn-default">
+                                    @*<a onclick='javascript:msgAddMapLayer("@item.ServiceUrl")' class="btn btn-xs btn-bunnmarg btn-default">
                                         <span class="glyphicon glyphicon-plus"></span> Legg til kartlag
-                                    </a>
+                                    </a>*@
 
                                 }
                                 else if (item.GetInnholdstype() == "Applikasjon")

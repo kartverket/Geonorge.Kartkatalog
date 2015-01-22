@@ -68,17 +68,17 @@ namespace Kartverket.Metadatakatalog.Service
 
                 if (simpleMetadata.ContactOwner != null)
                 {
-                    indexDoc.Organization = simpleMetadata.ContactOwner.Organization;
-                    indexDoc.Organizationgroup = indexDoc.Organization;
-                    if (indexDoc.Organizationgroup.ToLower().Contains("fylkeskommune")) indexDoc.Organizationgroup = "Fylkeskommune";
+                    indexDoc.Organizationgroup = simpleMetadata.ContactOwner.Organization;
+                    indexDoc.Organization = indexDoc.Organizationgroup;
+                    if (indexDoc.Organization.ToLower().Contains("fylkeskommune")) indexDoc.Organization = "Fylkeskommune";
                     else
                     {
-                        if (indexDoc.Organizationgroup.ToLower().Contains("fylke")) indexDoc.Organizationgroup = "Fylke";
-                        if (indexDoc.Organizationgroup.ToLower().Contains("kommune")) indexDoc.Organizationgroup = "Kommune";
-                        if (indexDoc.Organizationgroup.ToLower().Contains("regionråd")) indexDoc.Organizationgroup = "Kommune";
-                        if (indexDoc.Organizationgroup.ToLower().Contains("teknisk etat")) indexDoc.Organizationgroup = "Kommune";
+                        if (indexDoc.Organization.ToLower().Contains("fylke")) indexDoc.Organization = "Fylke";
+                        if (indexDoc.Organization.ToLower().Contains("kommune")) indexDoc.Organization = "Kommune";
+                        if (indexDoc.Organization.ToLower().Contains("regionråd")) indexDoc.Organization = "Kommune";
+                        if (indexDoc.Organization.ToLower().Contains("teknisk etat")) indexDoc.Organization = "Kommune";
                     }
-                    indexDoc.OrganizationSeoName = new SeoUrl(indexDoc.Organization, null).Organization;
+                    indexDoc.OrganizationSeoName = new SeoUrl(indexDoc.Organizationgroup, null).Organization;
 
                     Task<Organization> organizationTask =
                         _organizationService.GetOrganizationByName(simpleMetadata.ContactOwner.Organization);
