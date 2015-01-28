@@ -202,8 +202,10 @@
                                     }
 
                                 </p>
-                                <p>Tilgjengelig som:</p>
-                                <div title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</div>
+                                <p>
+                                    Tilgjengelig som:
+                                    <span title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
+                                </p>
 
 
                             </div>
@@ -251,19 +253,19 @@
                                     <a disabled="disabled" href="@Html.NorgeskartUrl()@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span disabled="disabled" class="glyphicon glyphicon-map-marker"></span>vis i kart
                                     </a>
-
-                                    @*<a  onclick='javascript:msgAddMapLayer("@item.ServiceUrl")' class="btn btn-xs btn-bunnmarg btn-default">
-                <span class="glyphicon glyphicon-plus"></span> Legg til kartlag
-            </a>*@
                                 }
+              
+                                @if (item.IsOpendata)
+                                {
+                                    <br /> <br /> <br /> <br /> <br />    
+                                    <img src="~/Content/img/opendata.png" class="bottom">
+                                }
+                               
 
                             </div>
 
                             <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 pull-right col-img">
-                                @if (item.IsOpendata)
-                                {
-                                    <img src="~/Content/img/opendata.png" class="center-block">
-                                }
+                                
                                 @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
                                 {
                                     <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
