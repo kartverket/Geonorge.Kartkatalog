@@ -106,4 +106,99 @@ border-bottom: 2px solid #249446;
 .page-footer .no-margin-bottom {
   margin-bottom: 0;
 }
+
+body {
+  font-size: 12px;
+  padding-bottom: 20px;
+}
+.margin-bottom-large {
+  margin-bottom: 30px;
+}
+.prototype {
+  background-image: linear-gradient(white, #f6f6f6);
+}
+@media (min-width: 1200px) {
+  .prototype .container {
+    width: 954px;
+  }
+}
+.geonorge-container {
+  /***************** AUTOCOMPLETE ************************/
+  /*geonorge*/
+}
+.geonorge-container .auto-results-outer {
+  display: table-cell;
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+.geonorge-container .auto-results-outer .form-control {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+.geonorge-container .auto-results-wrapper {
+  position: relative;
+  top: 33px;
+}
+.geonorge-container .auto-results {
+  position: absolute;
+  top: 0;
+  margin: 0px;
+  width: 100%;
+  min-height: 40px;
+  border-color: #cecece;
+  border-width: 1px;
+  z-index: 1000;
+  background: #ffffff;
+  padding: 0;
+  -webkit-box-shadow: 0 3px 15px -3px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 0 3px 15px -3px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 3px 15px -3px rgba(0, 0, 0, 0.6);
+}
+.geonorge-container .auto-results-title {
+  font-weight: 700;
+  margin: 5px 10px;
+}
+.geonorge-container .auto-result-row {
+  padding: 0;
+}
+.geonorge-container .auto-result-row:nth-child(even) {
+  background: #f2f2f2;
+}
+.geonorge-container .auto-result-row a:hover,
+.geonorge-container .auto-result-row a:focus,
+.geonorge-container .auto-result-row a.highlight {
+  background-color: #ccc;
+  /*color: #fff;*/
+}
+.geonorge-container .highlight a {
+  color: #fff;
+}
+.geonorge-container .auto-results-col {
+  display: block;
+  padding: 5px 0px;
+}
+.geonorge-container .auto-results-inner {
+  display: block;
+  padding: 5px 10px;
+}
+.geonorge-container .auto-results-col table {
+  width: 100%;
+}
+.geonorge-container .auto-results-col table td:first-child {
+  width: 20%;
+}
+.geonorge-container .col-no-padding {
+  padding: 0 !important;
+}
+.geonorge-container .relevant-information img {
+  max-width: 100%;
+}
+.geonorge-container .inline-block {
+  display: inline-block;
+}
+
+
 /*# sourceMappingURL=page-footer.css.map *
