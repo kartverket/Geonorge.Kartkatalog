@@ -252,6 +252,7 @@
     <Content Include="Content\fonts\MetaWeb-Book.eot" />
     <Content Include="Content\fonts\MetaWeb-Book.woff" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="master.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\easyXDM.js" />
