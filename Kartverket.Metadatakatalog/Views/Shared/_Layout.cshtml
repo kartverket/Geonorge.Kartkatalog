@@ -101,38 +101,38 @@
     @Scripts.Render("~/bundles/bootstrap")
     <script>
     // by Kartverket/Thomas Hirsch 2012 / public domain.
-    var hash = 'http://norgeskart.no/geoportal/testing/dynamisk.html';
+    //var hash = 'http://norgeskart.no/geoportal/testing/dynamisk.html';
     //var hash = 'http://norgeskart.no/geoportal/staging';
 
-    var socket = new easyXDM.Socket({
-        remote: hash,
-        onMessage: function (message, origin) {
-            //var reslist2 = document.getElementById('result');
-            //reslist2.innerHTML = reslist2.innerHTML + message;
-            var json = easyXDM.getJSONObject().parse(message);
+    //var socket = new easyXDM.Socket({
+    //    remote: hash,
+    //    onMessage: function (message, origin) {
+    //        var reslist2 = document.getElementById('result');
+    //        reslist2.innerHTML = reslist2.innerHTML + message;
+    //        var json = easyXDM.getJSONObject().parse(message);
 
-            if (json) {
-                if (json.type === 'layerLoaded') {
-                    //var reslist = document.getElementById('layerlist');
-                    //var layeritem = '<li  class="list-group-item">';
-                    //layeritem = layeritem + '<input type="checkbox" /> <a onclick="javascript:msgShowLayer(\'' + json.parent + '\')" class="btn btn-xs btn-bunnmarg btn-default">';
-                    //layeritem = layeritem + '<span class="glyphicon glyphicon-plus"></span> ' + json.title;
-                    //layeritem = layeritem + '</a>';
-                    //layeritem = layeritem + '</li>';
-
-
-                    //reslist.innerHTML = layeritem + reslist.innerHTML;
-                }
-            }
+    //        if (json) {
+    //            if (json.type === 'layerLoaded') {
+    //                var reslist = document.getElementById('layerlist');
+    //                var layeritem = '<li  class="list-group-item">';
+    //                layeritem = layeritem + '<input type="checkbox" /> <a onclick="javascript:msgShowLayer(\'' + json.parent + '\')" class="btn btn-xs btn-bunnmarg btn-default">';
+    //                layeritem = layeritem + '<span class="glyphicon glyphicon-plus"></span> ' + json.title;
+    //                layeritem = layeritem + '</a>';
+    //                layeritem = layeritem + '</li>';
 
 
-        },
-        container: document.getElementById("container"),
-        onReady: function () {
-            this.container.getElementsByTagName("iframe")[0].style.height = "700px";
-            this.container.getElementsByTagName("iframe")[0].style.width = "100%";
-        }
-    });
+    //                reslist.innerHTML = layeritem + reslist.innerHTML;
+    //            }
+    //        }
+
+
+    //    },
+    //    container: document.getElementById("container"),
+    //    onReady: function () {
+    //        this.container.getElementsByTagName("iframe")[0].style.height = "700px";
+    //        this.container.getElementsByTagName("iframe")[0].style.width = "100%";
+    //    }
+    //});
 
     function postMessage(msg) {
         var message = JSON.stringify(msg);
