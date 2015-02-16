@@ -17,6 +17,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string MaintenanceFrequency { get; set; }
         public string DownloadUrl { get; set; }
         public string ServiceUrl { get; set; }
+        public bool IsOpendata { get; set; }
 
         public string GetInnholdstypeCSS()
         {
@@ -54,6 +55,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             ThumbnailUrl = item.ThumbnailUrl;
             MaintenanceFrequency = item.MaintenanceFrequency;
             ServiceUrl = item.DistributionUrl;
+            if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data")) IsOpendata = true;
+
 
             if (Type == "service" || Type == "servicelayer")
             {

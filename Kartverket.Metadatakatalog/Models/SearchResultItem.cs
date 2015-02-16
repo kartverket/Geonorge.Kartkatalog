@@ -1,4 +1,5 @@
-﻿namespace Kartverket.Metadatakatalog.Models
+﻿using System.Collections.Generic;
+namespace Kartverket.Metadatakatalog.Models
 {
     public class SearchResultItem
     {
@@ -15,5 +16,7 @@
         public string DistributionName { get; set; }
         public string ShowDetailsUrl { get; set; }
         public string MaintenanceFrequency { get; set; }
+        public List<string> NationalInitiative { get; set; }
+        
     }
 }

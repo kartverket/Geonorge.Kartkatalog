@@ -235,6 +235,7 @@
     <Content Include="Content\img\favicon.ico" />
     <Content Include="Content\img\kvlogo_col.png" />
     <Content Include="Content\img\logo-graphic-512.png" />
+    <Content Include="Content\img\opendata.png" />
     <Content Include="Content\kartverket_logo.png" />
     <Content Include="Content\logo_kartverket_norgedigitalt.png" />
     <Content Include="Content\navbar.css" />
@@ -299,6 +300,7 @@
     <Content Include="Views\Search\_SearchBarPartial.cshtml" />
     <Content Include="Views\Index\IndexSingle.cshtml" />
     <Content Include="Views\Shared\_Map.cshtml" />
+    <Content Include="Views\Shared\_Analytics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

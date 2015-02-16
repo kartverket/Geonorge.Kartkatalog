@@ -86,6 +86,40 @@
 
             </li>
         </ul>
+        <div class="col-md-12 view-navigation">
+            <div class="nav nav-tabs">
+                <ul class="nav nav-pills pull-left">
+                    <li><a onclick="listView()" id="button-listView" class="active"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Liste</a></li>
+                    <li><a onclick="galleryView()" id="button-galleryView" class=""><span class="glyphicon glyphicon-th" aria-hidden="true"></span> Galleri</a></li>
+                    <li><a onclick="tableView()" id="button-tableView" class=""><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Tabell</a></li>
+                </ul>
+                <ul class="pagination pagination-sm pull-right">
+                    <li class="disabled">
+                        <span>
+                            <span aria-hidden="true">&laquo;</span>
+                        </span>
+                    </li>
+                    <li class="active">
+                        <span>1 <span class="sr-only">(current)</span></span>
+                    </li>
+                    <li class="">
+                        <span>2 <span class="sr-only">(current)</span></span>
+                    </li>
+                    <li class="">
+                        <span>3 <span class="sr-only">(current)</span></span>
+                    </li>
+                    <li class="">
+                        <span>4 <span class="sr-only">(current)</span></span>
+                    </li>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
     </div>
 }
 
@@ -136,7 +170,58 @@
         });
 
     </script>
+    <script>
+        function listView() {
+            $(".kartkatalog-table-heading").remove();
 
+            // Buttons   
+            $('#button-listView').addClass('active');
+            $('#button-galleryView').removeClass('active');
+            $('#button-tableView').removeClass('active');
+
+            $('.search-results').removeClass('table-view');
+            $('.search-results').removeClass('gallery-view');
+            $('.search-results').addClass('list-view');
+        }
+
+        function galleryView() {
+            $(".kartkatalog-table-heading").remove();
+
+            // Buttons
+            $('#button-listView').removeClass('active');
+            $('#button-galleryView').addClass('active');
+            $('#button-tableView').removeClass('active');
+
+            $('.search-results').removeClass('table-view');
+            $('.search-results').removeClass('list-view');
+            $('.search-results').addClass('gallery-view');
+        }
+
+
+
+        function tableView() {
+            $(".kartkatalog-table-heading").remove();
+            $('.search-results').prepend("<div class='col-sm-12 kartkatalog-table-heading'><div class='col-sm-9'><div class='col-md-4'><h4>Tittel</h4></div><div class='col-md-4'><h4>Eier / leverandør</h4></div><div class='col-md-4'><h4>Beskrivelse</h4></div></div><div class='col-sm-3'><div class='col-sm-3'><h4></h4></div><div class='col-sm-3'><h4></h4></div><div class='col-sm-3'><h4></h4></div><div class='col-sm-3'><h4></h4></div></div></div>");
+
+            // Buttons
+            $('#button-listView').removeClass('active');
+            $('#button-galleryView').removeClass('active');
+            $('#button-tableView').addClass('active');
+
+            $('.search-results').removeClass('gallery-view');
+            $('.search-results').removeClass('list-view');
+            $('.search-results').addClass('table-view');
+
+            $(window).scroll(function () {
+                if ($(window).scrollTop() > 350) {
+                    $(".kartkatalog-table-heading").css({ "top": ($(window).scrollTop()) - 350 + "px" });
+                    $(".kartkatalog-table-heading").css("background-color", "white");
+                    $(".kartkatalog-table-heading").css("z-index", "400");
+                }
+            });
+        }
+
+    </script>
    
 }
 
@@ -173,73 +258,106 @@
             <div class="search-results">
                 @foreach (var item in Model.Result.Items)
                 {
-                    <div class="row result-row">
+                    <div class="row result-row metadata">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="col-md-2">
-
-
+                            <div class="hidden-xs col-sm-1 col-md-1 col-lg-1 top-padding hide-overflow col-logo">
 
 
                                 @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
                                 {
                                     <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
-                                        <img src="@item.OrganizationLogoUrl" width="100" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" style="margin: 5px" />
+                                        <img src="@item.OrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
                                     </a>
                                 }
                             </div>
-                            <div class="col-md-10">
+                            <div class="col-no-padding-xs col-xs-12 col-sm-5 col-md-5 col-lg-5 col-title">
                                 <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())"><h4 class="role-button" role="button">@item.Title</h4></a>
-                                @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
-                                {
-                                    <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                        <img src="@item.ThumbnailUrl" width="150" class="pull-right" style="margin: 10px;">
-                                    </a>
-                                }
+
 
                                 <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization"><h5>@item.Organization</h5></a>
 
                                 <p>
                                     @if (item.Abstract.Length > 650)
                                     {
-                                        @item.Abstract.Substring(0,654)<text>...</text>
+                                        @item.Abstract.Substring(0, 654)<text>...</text>
                                     }
                                     else
                                     {
                                         @item.Abstract
                                     }
-                                        
-                                </p>
-                                <div class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</div>
-                                @if (item.GetInnholdstype() == "Datasett")
-                                {
-                                <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
-                                    <span class="glyphicon glyphicon-download-alt"></span> Last ned
-                                </a>
-                                }
-                                else if (item.GetInnholdstype() == "Tjeneste" || item.GetInnholdstype() == "WMS-lag (Tjenestelag)")
-                                {
-                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
-                                        <span class="glyphicon glyphicon-map-marker"></span> Vis i kart
-                                    </a>
-                                    
-                                    @*<a onclick='javascript:msgAddMapLayer("@item.ServiceUrl")' class="btn btn-xs btn-bunnmarg btn-default">
-                                        <span class="glyphicon glyphicon-plus"></span> Legg til kartlag
-                                    </a>*@
 
-                                }
-                                else if (item.GetInnholdstype() == "Applikasjon")
+                                </p>
+                                <p>
+                                    Tilgjengelig som:
+                                    <span title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
+                                </p>
+
+
+                            </div>
+                            <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
+                                @if (item.GetInnholdstype() == "Datasett" || item.GetInnholdstype() == "Datasettserie")
                                 {
                                     <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
-                                        <span class="glyphicon glyphicon-globe"></span> Vis applikasjon
+                                        <span class="glyphicon glyphicon-download-alt"></span>last ned
                                     </a>
                                 }
                                 else
                                 {
-                                <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
-                                    <span class="glyphicon glyphicon-download-alt"></span> Last ned
-                                </a>
+                                    <a disabled="disabled" href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                        <span class="glyphicon glyphicon-download-alt" disabled="disabled"></span>last ned
+                                    </a>
+                                }
+                                
+                                <br />
+                                @if (item.GetInnholdstype() == "Applikasjon")
+                                {
+                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default"  target="_blank">
+                                        <span  class="glyphicon glyphicon-globe"></span>besøk nettside
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" disabled="disabled" target="_blank">
+                                        <span disabled="disabled" class="glyphicon glyphicon-globe"></span>besøk nettside
+                                    </a>
+                                }
+                                <br />
+                                @if (item.GetInnholdstype() == "Tjeneste" || item.GetInnholdstype() == "WMS-lag (Tjenestelag)")
+                                {
+                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                        <span class="glyphicon glyphicon-map-marker"></span>vis i kart
+                                    </a>
+
+                                    @*<a  onclick='javascript:msgAddMapLayer("@item.ServiceUrl")' class="btn btn-xs btn-bunnmarg btn-default">
+                <span class="glyphicon glyphicon-plus"></span> Legg til kartlag
+            </a>*@
+
+                                }
+                                else
+                                {
+                                    <a disabled="disabled" href="@Html.NorgeskartUrl()@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                        <span disabled="disabled" class="glyphicon glyphicon-map-marker"></span>vis i kart
+                                    </a>
+                                }
+              
+                                @if (item.IsOpendata)
+                                {
+                                    <br /> <br /> <br /> <br /> <br />    
+                                    <img src="~/Content/img/opendata.png" class="bottom">
                                 }
                                
+
+                            </div>
+
+                            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 pull-right col-img">
+                                
+                                @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
+                                {
+                                    <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                                        <img alt="@item.Title illustrasjonsbilde" src="@item.ThumbnailUrl" class="img-responsive pull-right">
+                                    </a>
+                                }
+
                             </div>
                         </div>
                     </div>
