@@ -19,6 +19,11 @@ namespace Kartverket.Metadatakatalog.Models
         public DateTime? DateMetadataUpdated { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:d}")]
+        public DateTime? DateMetadataValidFrom { get; set; }
+        [DisplayFormat(DataFormatString = "{0:d}")]
+        public DateTime? DateMetadataValidTo { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? DatePublished { get; set; }
         public DateTime? DateUpdated { get; set; }
         public DistributionDetails DistributionDetails { get; set; }
@@ -67,6 +72,9 @@ namespace Kartverket.Metadatakatalog.Models
         public string Title { get; set; }
         public string TopicCategory { get; set; }
         public string Uuid { get; set; }
+
+        public string ResourceReferenceCode { get; set; }
+        public string ResourceReferenceCodespace { get; set; }
 
         public string MetadataXmlUrl { get; set; }
         public string MetadataEditUrl { get; set; }
