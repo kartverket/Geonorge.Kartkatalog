@@ -164,22 +164,87 @@
                 <span class="glyphicon glyphicon-picture"></span> Kartografi
             </a>
         }
+        
+        <script>
+
+            function getMetadata(uuid) {
+
+                $.getJSON("/api/search?text=" + uuid, function (result) {
+
+
+                    if (result.length != 0) {
+
+                        if (result.Results[0] != null) {
+                            var title = result.Results[0].Title;
+                            //$("#related-" + uuid).text(title);
+                            //alert(document.getElementById('related-' + uuid).innerText);
+                            document.getElementById('related-' + uuid).innerText = title;
+                            //alert(document.getElementById('related-' + uuid).innerText)
+                            //document.getElementById('#related-' + uuid).innerHTML = title;
+
+                        }
+                        else
+                            $("#related-" + uuid).text("Tittel mangler");
+                    }
+
+                    else {
+                        $("#related-" + uuid).text("Tittel mangler");
+                    }
+
+                });
+            };
+        </script>
+
+
+
         @if (!string.IsNullOrWhiteSpace(Model.ParentIdentifier))
         {
-            <a href="/metadata/org/title/@Model.ParentIdentifier" class="btn btn-default" title="Overordnet metadata for @Model.Title">
-                    <span class="glyphicon glyphicon-picture"></span> Overordnet metadata
-                </a>
+            <h4>Overordnet metadata</h4>
+            <script>getMetadata('@Model.ParentIdentifier');</script>
+            <a id="related-@Model.ParentIdentifier" href="/metadata/org/title/@Model.ParentIdentifier" title="Overordnet metadata for @Model.Title">
+            </a>
         }
         @if (Model.OperatesOn != null)
         {
-            foreach (var id in Model.OperatesOn)
-            {
-                <a href="/metadata/org/title/@id" class="btn btn-default" title="Relatert metadata for @Model.Title">
-                    <span class="glyphicon glyphicon-picture"></span> Relaterte metadata
-                </a>
+            if (Model.OperatesOn.Count > 0)
+            {        
+            <h4>Relaterte metadata</h4>
+            <div class="pre-scrollable" style="max-height: 100px; width: 400px;@(Model.OperatesOn.Count <= 2 ? "overflow-y: visible" : "")">
+                <ul id="relatedList">
+                    @foreach (var id in Model.OperatesOn)
+                    {
+                        <script>getMetadata('@id');</script>
+                        <li>
+                            <a id="related-@id" href="/metadata/org/title/@id" class="" title="Relatert metadata for @Model.Title">
+
+                            </a>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+            <script>
+
+                $(function () {
+                    $.fn.sortList = function () {
+                        var mylist = $(this);
+                        var listitems = $('li', mylist).get();
+                        listitems.sort(function (a, b) {
+                            var compA = $(a).text().toUpperCase();
+                            var compB = $(b).text().toUpperCase();
+                            return (compA < compB) ? -1 : 1;
+                        });
+                        $.each(listitems, function (i, itm) {
+                            alert
+                            mylist.append(itm);
+                        });
+                    
+                    }
+                });
+                setTimeout('$("ul#relatedList").sortList()', 3000);
+            </script>    
             }
         }
-        
     </p>
 
     @if (!string.IsNullOrWhiteSpace(Model.Purpose))
@@ -207,7 +272,7 @@
             <h3 class="h-md">Kontaktinformasjon</h3>
             <hr>
         </div>
-      
+
         @ShowContact("Metadatakontakt", Model.ContactMetadata)
         @ShowContact("Faglig kontakt", Model.ContactOwner)
         @ShowContact("Teknisk kontakt", Model.ContactPublisher)
@@ -228,19 +293,19 @@
                 {
                   <p>
                     <strong>Get Capabilities Url:</strong> <a href="@Model.DistributionDetailsGetCapabilitiesUrl()">@Model.DistributionDetails.URL</a>
-                  </p>  
+                  </p>
                 }
                 else
                 {
                   <p>
                     <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
-                  </p>  
+                  </p>
                 }
-                
+
             }
             <text>@DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
         }
-        
+
         @if (Model.Constraints != null)
         {
             <h3>Restriksjoner</h3>
@@ -250,7 +315,7 @@
             @DisplayValue("Andre restriksjoner", Model.Constraints.OtherConstraints)
             @DisplayValue("Sikkerhetsnivå", Model.Constraints.SecurityConstraints)
         }
-        
+
         <h3>Kvalitet</h3>
         @DisplayValue("Målestokkstall", Model.ResolutionScale)
         @DisplayValue("Status", Model.Status)
