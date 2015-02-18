@@ -173,11 +173,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     Uuid = doc.Uuid,
                     Title = doc.Title,
                     Abstract = doc.Abstract,
-<<<<<<< .merge_file_a10152
-                    Organization = doc.Organization,
-=======
                     Organization = doc.Organizationgroup,
->>>>>>> .merge_file_a05040
                     Theme = doc.Theme,
                     Type = doc.Type,
                     OrganizationLogoUrl = doc.OrganizationLogoUrl,
