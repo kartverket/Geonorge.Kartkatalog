@@ -43,7 +43,7 @@
     <li class="active">@Model.Title</li>
 }
 
-
+   
 @helper ShowContact(string label, Contact contact)
 {
     if (contact != null)
@@ -265,7 +265,6 @@
             </script>    
             }
         }
-        
     </p>
 
     @if (!string.IsNullOrWhiteSpace(Model.Purpose))
@@ -306,7 +305,7 @@
             <h3 class="h-md">Kontaktinformasjon</h3>
             <hr>
         </div>
-      
+
         @ShowContact("Metadatakontakt", Model.ContactMetadata)
         @ShowContact("Faglig kontakt", Model.ContactOwner)
         @ShowContact("Teknisk kontakt", Model.ContactPublisher)
@@ -335,15 +334,15 @@
                 {
                   <p>
                     <strong>Get Capabilities Url:</strong> <a href="@Model.DistributionDetailsGetCapabilitiesUrl()">@Model.DistributionDetails.URL</a>
-                  </p>  
+                  </p>
                 }
                 else
                 {
                   <p>
                     <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
-                  </p>  
+                  </p>
                 }
-                
+
             }
             <text>@DisplayValue("Geografisk distribusjonsinndeling", Model.UnitsOfDistribution)</text>
             <text>@DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
@@ -369,11 +368,12 @@
             @DisplayValue("Andre restriksjoner", Model.Constraints.OtherConstraints)
             @DisplayValue("Sikkerhetsnivå", Model.Constraints.SecurityConstraints)
         }
-        
+
         <h3>Kvalitet</h3>
         @DisplayValue("Målestokkstall", Model.ResolutionScale)
         @DisplayValue("Status", Model.Status)
         @DisplayValue("Prosesshistorie", Model.ProcessHistory)
+<<<<<<< .merge_file_a03400
         <h4>Konformitet</h4>
         <p>
             <strong>Standard: </strong>@Model.QualitySpecification.Title <br />
@@ -381,6 +381,11 @@
             <strong>Forklaring av resultat: </strong>@Model.QualitySpecification.Explanation <br />
             @(Model.QualitySpecification.Result ? "Godkjent" : "Ikke godkjent")
         </p>
+=======
+
+         
+
+>>>>>>> .merge_file_a04084
     </div>
 
     <div class="col-sm-6">
