@@ -66,7 +66,7 @@
     </Reference>
     <Reference Include="Kartverket.Geonorge.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.14\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.15\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Kentor.AuthServices">
       <HintPath>..\packages\Kentor.AuthServices.0.10.0.0\lib\net45\Kentor.AuthServices.dll</HintPath>
@@ -84,7 +84,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.15\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SolrNet, Version=0.4.0.2002, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -96,7 +96,7 @@
     <Reference Include="System.identitymodel.services" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.14\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.15\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Cors">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.2\lib\net45\System.Web.Cors.dll</HintPath>

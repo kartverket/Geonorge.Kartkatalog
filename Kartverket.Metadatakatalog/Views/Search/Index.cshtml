@@ -182,6 +182,8 @@
             $('.search-results').removeClass('table-view');
             $('.search-results').removeClass('gallery-view');
             $('.search-results').addClass('list-view');
+
+            localStorage.setItem("visningstype", "liste");
         }
 
         function galleryView() {
@@ -195,6 +197,8 @@
             $('.search-results').removeClass('table-view');
             $('.search-results').removeClass('list-view');
             $('.search-results').addClass('gallery-view');
+
+            localStorage.setItem("visningstype", "galleri");
         }
 
 
@@ -212,6 +216,8 @@
             $('.search-results').removeClass('list-view');
             $('.search-results').addClass('table-view');
 
+            localStorage.setItem("visningstype", "tabell");
+
             $(window).scroll(function () {
                 if ($(window).scrollTop() > 350) {
                     $(".kartkatalog-table-heading").css({ "top": ($(window).scrollTop()) - 350 + "px" });
@@ -219,6 +225,14 @@
                     $(".kartkatalog-table-heading").css("z-index", "400");
                 }
             });
+        }
+
+        function valgtVisningstype() {
+            var visningstype = localStorage.getItem("visningstype");
+
+            if (visningstype.toString() == "galleri") { galleryView() }
+            if (visningstype.toString() == "liste") { listView() }
+            if (visningstype.toString() == "tabell") { tableView() }
         }
 
     </script>
