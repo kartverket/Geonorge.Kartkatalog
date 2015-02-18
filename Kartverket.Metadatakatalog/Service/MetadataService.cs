@@ -87,6 +87,9 @@ namespace Kartverket.Metadatakatalog.Service
                 ParentIdentifier = simpleMetadata.ParentIdentifier,
                 DateMetadataValidFrom = string.IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidFrom) ? (DateTime?)null : DateTime.Parse(simpleMetadata.ValidTimePeriod.ValidFrom),
                 DateMetadataValidTo = string.IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidTo) ? (DateTime?)null : DateTime.Parse(simpleMetadata.ValidTimePeriod.ValidTo),
+                DistributionFormats = simpleMetadata.DistributionFormats,
+                UnitsOfDistribution = simpleMetadata.DistributionDetails != null ? simpleMetadata.DistributionDetails.UnitsOfDistribution : null,
+                ReferenceSystems = simpleMetadata.ReferenceSystems != null ? simpleMetadata.ReferenceSystems : null
             };
 
             if (simpleMetadata.ResourceReference != null)
@@ -161,7 +164,8 @@ namespace Kartverket.Metadatakatalog.Service
                 output = new QualitySpecification
                 {
                     Title = simpleQualitySpecification.Title,
-                    Date = simpleQualitySpecification.Date,
+                    Date= (simpleQualitySpecification.Date != null && !string.IsNullOrWhiteSpace(simpleQualitySpecification.Date)) ? DateTime.Parse(simpleQualitySpecification.Date) : (DateTime?)null,
+                    //Date = simpleQualitySpecification.Date,
                     DateType = simpleQualitySpecification.DateType,
                     Explanation = simpleQualitySpecification.Explanation,
                     Result = simpleQualitySpecification.Result

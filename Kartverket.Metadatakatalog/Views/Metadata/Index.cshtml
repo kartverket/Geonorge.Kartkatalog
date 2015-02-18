@@ -95,6 +95,7 @@
                 if (thumb.Type == "thumbnail") 
                 {
                 <img src="@thumb.URL" width="300" class="thumbnail pull-right" alt="Forhåndsvisning av data." />
+                    break;
                 }   
             }        
     }
@@ -311,10 +312,18 @@
 
         <h3>Distribusjon</h3>
         @DisplayValue("Representasjonsform", Model.SpatialRepresentation)
-        @if (Model.DistributionFormat != null)
+        @if (Model.DistributionFormats != null)
         {
-            <text>@DisplayValue("Format", Model.DistributionFormat.Name)</text>
-            <text>@DisplayValue("Versjon", Model.DistributionFormat.Version)</text>
+            foreach (var format in Model.DistributionFormats)
+            {
+                <p>
+                    <b>Format:</b> @format.Name
+                    @if (!string.IsNullOrWhiteSpace(format.Version)) 
+                    { 
+                    <b>Versjon:</b> @format.Version
+                    }    
+                </p>
+            }
         }
         @if (Model.DistributionDetails != null)
         {
@@ -335,7 +344,19 @@
                 }
 
             }
+            <text>@DisplayValue("Geografisk distribusjonsinndeling", Model.UnitsOfDistribution)</text>
             <text>@DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
+        }
+        
+        @if (Model.ReferenceSystems != null)
+        {
+            foreach (var refsys in Model.ReferenceSystems)
+            {
+                <p>
+                    <strong>Romlig referansesystem: </strong>@refsys.CoordinateSystem
+                    <br><strong>Koderom: </strong>@refsys.Namespace
+                </p>
+            }
         }
 
         @if (Model.Constraints != null)
@@ -352,9 +373,13 @@
         @DisplayValue("Målestokkstall", Model.ResolutionScale)
         @DisplayValue("Status", Model.Status)
         @DisplayValue("Prosesshistorie", Model.ProcessHistory)
-
-
-
+        <h4>Konformitet</h4>
+        <p>
+            <strong>Standard: </strong>@Model.QualitySpecification.Title <br />
+            <strong>Dato: </strong>@Html.DisplayFor(m => m.QualitySpecification.Date) (@Model.QualitySpecification.DateType) <br />
+            <strong>Forklaring av resultat: </strong>@Model.QualitySpecification.Explanation <br />
+            @(Model.QualitySpecification.Result ? "Godkjent" : "Ikke godkjent")
+        </p>
     </div>
 
     <div class="col-sm-6">

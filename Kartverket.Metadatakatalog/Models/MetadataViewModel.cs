@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GeoNorgeAPI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,7 +16,9 @@ namespace Kartverket.Metadatakatalog.Models
         public Contact ContactMetadata { get; set; }
         public Contact ContactOwner { get; set; }
         public Contact ContactPublisher { get; set; }
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? DateCreated { get; set; }
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? DateMetadataUpdated { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:d}")]
@@ -25,9 +28,13 @@ namespace Kartverket.Metadatakatalog.Models
 
         [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? DatePublished { get; set; }
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? DateUpdated { get; set; }
         public DistributionDetails DistributionDetails { get; set; }
         public DistributionFormat DistributionFormat { get; set; }
+        public List<SimpleDistributionFormat> DistributionFormats { get; set; }
+        public string UnitsOfDistribution { get; set; }
+        public List<SimpleReferenceSystem> ReferenceSystems { get; set; }
         public string EnglishAbstract { get; set; }
         public string EnglishTitle { get; set; }
         //
@@ -237,7 +244,8 @@ namespace Kartverket.Metadatakatalog.Models
 
     public class QualitySpecification
     {
-        public string Date { get; set; }
+        [DisplayFormat(DataFormatString = "{0:d}")]
+        public DateTime? Date { get; set; }
         public string DateType { get; set; }
         public string Explanation { get; set; }
         public bool Result { get; set; }
