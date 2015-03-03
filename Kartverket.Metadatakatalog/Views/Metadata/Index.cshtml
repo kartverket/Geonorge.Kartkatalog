@@ -196,11 +196,7 @@
 
                         if (result.Results[0] != null) {
                             var title = result.Results[0].Title;
-                            //$("#related-" + uuid).text(title);
-                            //alert(document.getElementById('related-' + uuid).innerText);
-                            document.getElementById('related-' + uuid).innerText = title;
-                            //alert(document.getElementById('related-' + uuid).innerText)
-                            //document.getElementById('#related-' + uuid).innerHTML = title;
+                            $("#related-" + uuid).text(title);
 
                         }
                         else
@@ -233,12 +229,12 @@
                 <ul id="relatedList">
                     @foreach (var id in Model.OperatesOn)
                     {
-                        <script>getMetadata('@id');</script>
                         <li>
                             <a id="related-@id" href="/metadata/org/title/@id" class="" title="Relatert metadata for @Model.Title">
 
                             </a>
                         </li>
+                        <script>getMetadata('@id');</script>
                     }
                 </ul>
 
