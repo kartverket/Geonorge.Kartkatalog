@@ -340,7 +340,7 @@
                                 
                                 @if (item.GetInnholdstype() == "Tjeneste" || item.GetInnholdstype() == "WMS-lag (Tjenestelag)")
                                 {
-                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-map-marker"></span>vis i kart
                                     </a>
 
@@ -351,7 +351,7 @@
                                 }
                                 else
                                 {
-                                    <a disabled="disabled" href="@Html.NorgeskartUrl()@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <a disabled="disabled" href="@Html.NorgeskartUrl()@item.DownloadUrl/" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span disabled="disabled" class="glyphicon glyphicon-map-marker"></span>vis i kart
                                     </a>
                                 }
