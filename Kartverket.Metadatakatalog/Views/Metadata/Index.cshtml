@@ -131,13 +131,13 @@
 
                 if (Model.DistributionDetails.IsWmsUrl())
                 {
-                    <a href="@Html.NorgeskartUrl()@Model.DistributionDetailsWmsUrl()" class="btn btn-default btn-primary" target="_blank">
+                    <a href="@Html.NorgeskartUrl()@Model.DistributionDetailsWmsUrl()/" class="btn btn-default btn-primary" target="_blank">
                         <span class="glyphicon glyphicon-map-marker"></span> Vis tjenesten i kartet
                     </a>
                 }
                 if (Model.DistributionDetails.IsWfsUrl())
                 {
-                    <a href="@Html.NorgeskartUrl()@Model.DistributionDetailsWfsUrl()" class="btn btn-default btn-primary" target="_blank">
+                    <a href="@Html.NorgeskartUrl()@Model.DistributionDetailsWfsUrl()/" class="btn btn-default btn-primary" target="_blank">
                         <span class="glyphicon glyphicon-map-marker"></span> Vis tjenesten i kartet
                     </a>
                 }
