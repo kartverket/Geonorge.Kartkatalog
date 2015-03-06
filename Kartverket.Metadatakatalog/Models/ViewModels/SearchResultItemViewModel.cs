@@ -63,16 +63,16 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 if (!string.IsNullOrWhiteSpace(item.DistributionProtocol) && item.DistributionProtocol.Contains(("OGC:WMS")))
                 {
                     if (!string.IsNullOrWhiteSpace(item.DistributionName))
-                        DownloadUrl = "#5/355422/6668909/*/l/wms/[" + item.DistributionUrl.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/+" + item.DistributionName;
+                        DownloadUrl = "#5/355422/6668909/*/l/wms/[" + item.DistributionUrl.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/+" + item.DistributionName + "/";
                     else
-                        DownloadUrl =  "#5/355422/6668909/l/wms/[" + item.DistributionUrl.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]";
+                        DownloadUrl =  "#5/355422/6668909/l/wms/[" + item.DistributionUrl.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/";
                 }
                 else if (!string.IsNullOrWhiteSpace(item.DistributionProtocol) && item.DistributionProtocol.Contains(("OGC:WFS")))
                 {
                     if (!string.IsNullOrWhiteSpace(item.DistributionName))
-                        DownloadUrl = "#5/355422/6668909/*/l/wfs/[" + item.DistributionUrl.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/+" + item.DistributionName;
+                        DownloadUrl = "#5/355422/6668909/*/l/wfs/[" + item.DistributionUrl.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/+" + item.DistributionName + "/";
                     else
-                        DownloadUrl = "#5/355422/6668909/l/wfs/[" + item.DistributionUrl.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]";
+                        DownloadUrl = "#5/355422/6668909/l/wfs/[" + item.DistributionUrl.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/";
                 }
             }
             else DownloadUrl = item.DistributionUrl;
