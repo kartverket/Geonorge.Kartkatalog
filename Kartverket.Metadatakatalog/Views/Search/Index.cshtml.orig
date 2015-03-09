@@ -182,8 +182,11 @@
             $('.search-results').removeClass('table-view');
             $('.search-results').removeClass('gallery-view');
             $('.search-results').addClass('list-view');
+<<<<<<< .merge_file_a03604
+=======
 
             localStorage.setItem("visningstype", "liste");
+>>>>>>> .merge_file_a04164
         }
 
         function galleryView() {
@@ -197,8 +200,11 @@
             $('.search-results').removeClass('table-view');
             $('.search-results').removeClass('list-view');
             $('.search-results').addClass('gallery-view');
+<<<<<<< .merge_file_a03604
+=======
 
             localStorage.setItem("visningstype", "galleri");
+>>>>>>> .merge_file_a04164
         }
 
 
@@ -216,8 +222,11 @@
             $('.search-results').removeClass('list-view');
             $('.search-results').addClass('table-view');
 
+<<<<<<< .merge_file_a03604
+=======
             localStorage.setItem("visningstype", "tabell");
 
+>>>>>>> .merge_file_a04164
             $(window).scroll(function () {
                 if ($(window).scrollTop() > 350) {
                     $(".kartkatalog-table-heading").css({ "top": ($(window).scrollTop()) - 350 + "px" });
@@ -227,6 +236,8 @@
             });
         }
 
+<<<<<<< .merge_file_a03604
+=======
         function valgtVisningstype() {
             var visningstype = localStorage.getItem("visningstype");
 
@@ -235,6 +246,7 @@
             if (visningstype.toString() == "tabell") { tableView() }
         }
 
+>>>>>>> .merge_file_a04164
     </script>
    
 }
@@ -336,11 +348,9 @@
                                     </a>
                                 }
                                 <br />
-
-                                
                                 @if (item.GetInnholdstype() == "Tjeneste" || item.GetInnholdstype() == "WMS-lag (Tjenestelag)")
                                 {
-                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-map-marker"></span>vis i kart
                                     </a>
 
@@ -351,7 +361,7 @@
                                 }
                                 else
                                 {
-                                    <a disabled="disabled" href="@Html.NorgeskartUrl()@item.DownloadUrl/" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <a disabled="disabled" href="@Html.NorgeskartUrl()@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span disabled="disabled" class="glyphicon glyphicon-map-marker"></span>vis i kart
                                     </a>
                                 }

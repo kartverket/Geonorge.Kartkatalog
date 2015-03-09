@@ -26,7 +26,72 @@
     
     @Html.Partial("_Analytics")
     <script type="text/javascript" src="/Scripts/easyXDM.js"></script>
-   
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script>
+        // by Kartverket/Thomas Hirsch 2012 / public domain.
+        //var hash = 'http://norgeskart.no/geoportal/testing/dynamisk.html';
+        //var hash = 'http://norgeskart.no/geoportal/staging';
+
+        //var socket = new easyXDM.Socket({
+        //    remote: hash,
+        //    onMessage: function (message, origin) {
+        //        var reslist2 = document.getElementById('result');
+        //        reslist2.innerHTML = reslist2.innerHTML + message;
+        //        var json = easyXDM.getJSONObject().parse(message);
+
+        //        if (json) {
+        //            if (json.type === 'layerLoaded') {
+        //                var reslist = document.getElementById('layerlist');
+        //                var layeritem = '<li  class="list-group-item">';
+        //                layeritem = layeritem + '<input type="checkbox" /> <a onclick="javascript:msgShowLayer(\'' + json.parent + '\')" class="btn btn-xs btn-bunnmarg btn-default">';
+        //                layeritem = layeritem + '<span class="glyphicon glyphicon-plus"></span> ' + json.title;
+        //                layeritem = layeritem + '</a>';
+        //                layeritem = layeritem + '</li>';
+
+
+        //                reslist.innerHTML = layeritem + reslist.innerHTML;
+        //            }
+        //        }
+
+
+        //    },
+        //    container: document.getElementById("container"),
+        //    onReady: function () {
+        //        this.container.getElementsByTagName("iframe")[0].style.height = "700px";
+        //        this.container.getElementsByTagName("iframe")[0].style.width = "100%";
+        //    }
+        //});
+
+        function postMessage(msg) {
+            var message = JSON.stringify(msg);
+            socket.postMessage(message);
+            var reslist = document.getElementById('command');
+            reslist.innerHTML = message + '</br>' + reslist.innerHTML;
+        }
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            //e.target // newly activated tab
+            //e.relatedTarget // previous active tab
+            $("#navTabCont").toggleClass("bottom-edge-kart");
+            $("#navTabCont").toggleClass("bottom-edge-kartkatalogen");
+        })
+
+
+
+        function msgAddMapLayer(layer) {
+            $('#navTab a:last').tab('show')
+
+
+            postMessage({ "cmd": "addDataSource", "type": "wms", "url": layer });
+        }
+
+        function msgShowLayer(id) {
+            postMessage({ "cmd": "setVisible", "id": id });
+        }
+
+
+    </script>
+    @RenderSection("scripts", false)
 </head>
 <body class="geonorge-container prototype  geonorge" onload="valgtVisningstype()">
     <div id="logo-on-sm">
@@ -97,73 +162,6 @@
 
     </footer>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    <script>
-    // by Kartverket/Thomas Hirsch 2012 / public domain.
-    //var hash = 'http://norgeskart.no/geoportal/testing/dynamisk.html';
-    //var hash = 'http://norgeskart.no/geoportal/staging';
-
-    //var socket = new easyXDM.Socket({
-    //    remote: hash,
-    //    onMessage: function (message, origin) {
-    //        var reslist2 = document.getElementById('result');
-    //        reslist2.innerHTML = reslist2.innerHTML + message;
-    //        var json = easyXDM.getJSONObject().parse(message);
-
-    //        if (json) {
-    //            if (json.type === 'layerLoaded') {
-    //                var reslist = document.getElementById('layerlist');
-    //                var layeritem = '<li  class="list-group-item">';
-    //                layeritem = layeritem + '<input type="checkbox" /> <a onclick="javascript:msgShowLayer(\'' + json.parent + '\')" class="btn btn-xs btn-bunnmarg btn-default">';
-    //                layeritem = layeritem + '<span class="glyphicon glyphicon-plus"></span> ' + json.title;
-    //                layeritem = layeritem + '</a>';
-    //                layeritem = layeritem + '</li>';
-
-
-    //                reslist.innerHTML = layeritem + reslist.innerHTML;
-    //            }
-    //        }
-
-
-    //    },
-    //    container: document.getElementById("container"),
-    //    onReady: function () {
-    //        this.container.getElementsByTagName("iframe")[0].style.height = "700px";
-    //        this.container.getElementsByTagName("iframe")[0].style.width = "100%";
-    //    }
-    //});
-
-    function postMessage(msg) {
-        var message = JSON.stringify(msg);
-        socket.postMessage(message);
-        var reslist = document.getElementById('command');
-        reslist.innerHTML = message + '</br>' + reslist.innerHTML;
-    }
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-        //e.target // newly activated tab
-        //e.relatedTarget // previous active tab
-        $("#navTabCont").toggleClass("bottom-edge-kart");
-        $("#navTabCont").toggleClass("bottom-edge-kartkatalogen");
-    })
-
-    
-
-    function msgAddMapLayer(layer) {
-        $('#navTab a:last').tab('show')
-        
-
-        postMessage({ "cmd": "addDataSource", "type": "wms", "url": layer });  
-    }
-
-    function msgShowLayer(id) {
-        postMessage({ "cmd": "setVisible", "id": id });
-    }
-
-
-    </script>
-
-    @RenderSection("scripts", false)
 </body>
 
 </html>

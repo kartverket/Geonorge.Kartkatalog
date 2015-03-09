@@ -5,6 +5,7 @@ using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
+using System;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -83,8 +84,19 @@ namespace Kartverket.Metadatakatalog.Service
                 Uuid = simpleMetadata.Uuid,
                 MetadataXmlUrl = _geoNetworkUtil.GetXmlDownloadUrl(simpleMetadata.Uuid),
                 MetadataEditUrl = _geonorgeUrlResolver.EditMetadata(simpleMetadata.Uuid),
-                ParentIdentifier = simpleMetadata.ParentIdentifier
+                ParentIdentifier = simpleMetadata.ParentIdentifier,
+                DateMetadataValidFrom = string.IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidFrom) ? (DateTime?)null : DateTime.Parse(simpleMetadata.ValidTimePeriod.ValidFrom),
+                DateMetadataValidTo = string.IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidTo) ? (DateTime?)null : DateTime.Parse(simpleMetadata.ValidTimePeriod.ValidTo),
+                DistributionFormats = simpleMetadata.DistributionFormats,
+                UnitsOfDistribution = simpleMetadata.DistributionDetails != null ? simpleMetadata.DistributionDetails.UnitsOfDistribution : null,
+                ReferenceSystems = simpleMetadata.ReferenceSystems != null ? simpleMetadata.ReferenceSystems : null
             };
+
+            if (simpleMetadata.ResourceReference != null)
+            {
+                metadata.ResourceReferenceCode = simpleMetadata.ResourceReference.Code != null ? simpleMetadata.ResourceReference.Code : null;
+                metadata.ResourceReferenceCodespace = simpleMetadata.ResourceReference.Codespace != null ? simpleMetadata.ResourceReference.Codespace : null;
+            }
 
             if (metadata.ContactOwner != null)
             {
@@ -152,7 +164,8 @@ namespace Kartverket.Metadatakatalog.Service
                 output = new QualitySpecification
                 {
                     Title = simpleQualitySpecification.Title,
-                    Date = simpleQualitySpecification.Date,
+                    Date= (simpleQualitySpecification.Date != null && !string.IsNullOrWhiteSpace(simpleQualitySpecification.Date)) ? DateTime.Parse(simpleQualitySpecification.Date) : (DateTime?)null,
+                    //Date = simpleQualitySpecification.Date,
                     DateType = simpleQualitySpecification.DateType,
                     Explanation = simpleQualitySpecification.Explanation,
                     Result = simpleQualitySpecification.Result
