@@ -8,6 +8,7 @@ using SolrNet;
 using SolrNet.Commands.Parameters;
 using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.SearchResult;
+using System;
 
 namespace Kartverket.Metadatakatalog.Service.Search
 {
@@ -53,28 +54,38 @@ namespace Kartverket.Metadatakatalog.Service.Search
             {
                 order = new[] { new SortOrder("score", Order.DESC) };
             }
-
-            SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
+            try
             {
 
-                //WMS lag skal få redusert sin boost
 
-                FilterQueries = BuildFilterQueries(parameters),
-                OrderBy = order,
-                Rows = parameters.Limit,
-                StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
-                Facet = BuildFacetParameters(parameters),
-                Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
+                {
+
+                    //WMS lag skal få redusert sin boost
+
+                    FilterQueries = BuildFilterQueries(parameters),
+                    OrderBy = order,
+                    Rows = parameters.Limit,
+                    StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
+                    Facet = BuildFacetParameters(parameters),
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
                     "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
                     "score" }
-                //ExtraParams = new Dictionary<string, string> {
-                //    {"q", ""}
-                    
-                  //}
-          
-            });
+                    //ExtraParams = new Dictionary<string, string> {
+                    //    {"q", ""}
 
-            return CreateSearchResults(queryResults, parameters);
+                    //}
+
+                });
+                return CreateSearchResults(queryResults, parameters);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error in search", ex);
+
+                return CreateSearchResults(null, parameters);
+            }
+            
         }
 
         private bool HasNoFacetvalue(List<FacetParameter> list)
@@ -105,6 +116,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 order = new[] { new SortOrder("date_published", Order.DESC) };
             }
             ISolrQuery query = BuildQuery(parameters);
+            
             SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
             {
                 FilterQueries = BuildFilterQueries(parameters),
@@ -141,22 +153,25 @@ namespace Kartverket.Metadatakatalog.Service.Search
         private List<Facet> ParseFacetResults(SolrQueryResults<MetadataIndexDoc> queryResults)
         {
             List<Facet> facets = new List<Facet>();
-            foreach (var key in queryResults.FacetFields.Keys)
+            if (queryResults != null)
             {
-                var facet = new Facet
+                foreach (var key in queryResults.FacetFields.Keys)
                 {
-                    FacetField = key,
-                    FacetResults = new List<Facet.FacetValue>()
-                };
-                foreach (var facetValueResult in queryResults.FacetFields[key])
-                {
-                    facet.FacetResults.Add(new Facet.FacetValue
+                    var facet = new Facet
                     {
-                        Name = facetValueResult.Key,
-                        Count = facetValueResult.Value
-                    });
+                        FacetField = key,
+                        FacetResults = new List<Facet.FacetValue>()
+                    };
+                    foreach (var facetValueResult in queryResults.FacetFields[key])
+                    {
+                        facet.FacetResults.Add(new Facet.FacetValue
+                        {
+                            Name = facetValueResult.Key,
+                            Count = facetValueResult.Value
+                        });
+                    }
+                    facets.Add(facet);
                 }
-                facets.Add(facet);
             }
             return facets;
         }
@@ -164,27 +179,30 @@ namespace Kartverket.Metadatakatalog.Service.Search
         private static List<SearchResultItem> ParseResultDocuments(SolrQueryResults<MetadataIndexDoc> queryResults)
         {
             var items = new List<SearchResultItem>();
-            foreach (var doc in queryResults)
+            if (queryResults != null)
             {
-                Log.Info(doc.Score + " " + doc.Title + " " + doc.Uuid);
-
-                var item = new SearchResultItem
+                foreach (var doc in queryResults)
                 {
-                    Uuid = doc.Uuid,
-                    Title = doc.Title,
-                    Abstract = doc.Abstract,
-                    Organization = doc.Organizationgroup,
-                    Theme = doc.Theme,
-                    Type = doc.Type,
-                    OrganizationLogoUrl = doc.OrganizationLogoUrl,
-                    ThumbnailUrl = doc.ThumbnailUrl,
-                    DistributionUrl = doc.DistributionUrl,
-                    DistributionProtocol = doc.DistributionProtocol,
-                    MaintenanceFrequency = doc.MaintenanceFrequency,
-                    DistributionName = doc.DistributionName,
-                    NationalInitiative = doc.NationalInitiative
-                };
-                items.Add(item);
+                    Log.Debug(doc.Score + " " + doc.Title + " " + doc.Uuid);
+
+                    var item = new SearchResultItem
+                    {
+                        Uuid = doc.Uuid,
+                        Title = doc.Title,
+                        Abstract = doc.Abstract,
+                        Organization = doc.Organizationgroup,
+                        Theme = doc.Theme,
+                        Type = doc.Type,
+                        OrganizationLogoUrl = doc.OrganizationLogoUrl,
+                        ThumbnailUrl = doc.ThumbnailUrl,
+                        DistributionUrl = doc.DistributionUrl,
+                        DistributionProtocol = doc.DistributionProtocol,
+                        MaintenanceFrequency = doc.MaintenanceFrequency,
+                        DistributionName = doc.DistributionName,
+                        NationalInitiative = doc.NationalInitiative
+                    };
+                    items.Add(item);
+                }
             }
             return items;
         }
@@ -210,8 +228,11 @@ namespace Kartverket.Metadatakatalog.Service.Search
         private ISolrQuery BuildQuery(SearchParameters parameters)
         {
             var text = parameters.Text;
+           
+            
             if (!string.IsNullOrEmpty(text))
             {
+                text = text.Replace(":", " ");
                 var query = new SolrMultipleCriteriaQuery(new[]
                 {
                     new SolrQuery("titleText:"+ text + "^50"),
@@ -231,6 +252,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     //new SolrQuery("allText3:" + text)        //Fonetisk
                     
                 });
+                Log.Debug("Query: " + query.ToString());
                 return query;
             }
             return SolrQuery.All; 
@@ -239,8 +261,10 @@ namespace Kartverket.Metadatakatalog.Service.Search
         private ISolrQuery BuildQuery(SearchByOrganizationParameters parameters)
         {
             var text = parameters.Text;
+            
             if (!string.IsNullOrEmpty(text))
             {
+                text = text.Replace(":", " ");
                 var query = new SolrMultipleCriteriaQuery(new[]
                 {
                     new SolrQuery("titleText:"+ text + "^45"),
@@ -248,6 +272,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     new SolrQuery("allText:" + text + "*"),
                     new SolrQuery("allText:" + text)
                 });
+                Log.Debug("Query: " + query.ToString());
                 return query;
             }
             return SolrQuery.All;

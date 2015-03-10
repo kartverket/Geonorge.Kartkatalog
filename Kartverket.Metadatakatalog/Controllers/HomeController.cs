@@ -2,6 +2,7 @@
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
+    [HandleError]
     public class HomeController : Controller
     {
         public ActionResult Index()

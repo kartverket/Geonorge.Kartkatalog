@@ -5,6 +5,7 @@ using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
+    [HandleError]
     public class SearchController : Controller
     {
         private readonly ISearchService _searchService;

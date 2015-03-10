@@ -171,6 +171,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\MetadataController.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="Models\SearchResult.cs" />
     <Compile Include="Models\SearchResultForOrganization.cs" />
     <Compile Include="Models\SearchResultItem.cs" />
+    <Compile Include="Models\ViewModels\NotFoundModel.cs" />
     <Compile Include="Models\ViewModels\SearchByOrganizationViewModel.cs" />
     <Compile Include="Models\ViewModels\SearchResultFacetValueViewModel.cs" />
     <Compile Include="Models\ViewModels\SearchResultFacetViewModel.cs" />
@@ -299,6 +301,7 @@
     <Content Include="Views\Index\IndexSingle.cshtml" />
     <Content Include="Views\Shared\_Map.cshtml" />
     <Content Include="Views\Shared\_Analytics.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
