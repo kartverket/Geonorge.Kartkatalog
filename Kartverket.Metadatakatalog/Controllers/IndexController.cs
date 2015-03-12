@@ -94,5 +94,9 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             return new HttpStatusCodeResult(statusCode);
         }
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            Log.Error("Error", filterContext.Exception);
+        }
     }
 }
