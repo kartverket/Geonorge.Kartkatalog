@@ -33,6 +33,7 @@ using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
+    [HandleError]
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class ApiSearchController : ApiController
     {

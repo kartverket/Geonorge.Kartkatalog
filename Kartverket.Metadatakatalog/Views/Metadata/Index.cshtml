@@ -370,6 +370,9 @@
         @DisplayValue("Målestokkstall", Model.ResolutionScale)
         @DisplayValue("Status", Model.Status)
         @DisplayValue("Prosesshistorie", Model.ProcessHistory)
+        
+        @if (Model.QualitySpecification != null)
+        {
         <h4>Konformitet</h4>
         <p>
             <strong>Standard: </strong>@Model.QualitySpecification.Title <br />
@@ -377,6 +380,7 @@
             <strong>Forklaring av resultat: </strong>@Model.QualitySpecification.Explanation <br />
             @(Model.QualitySpecification.Result ? "Godkjent" : "Ikke godkjent")
         </p>
+        }
     </div>
 
     <div class="col-sm-6">

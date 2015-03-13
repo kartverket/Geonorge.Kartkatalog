@@ -5,6 +5,7 @@ using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
+    [HandleError]
     public class IndexController : Controller
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
