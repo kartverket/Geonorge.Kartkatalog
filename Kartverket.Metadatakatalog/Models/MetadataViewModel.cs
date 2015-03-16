@@ -101,9 +101,18 @@ namespace Kartverket.Metadatakatalog.Models
             if (!string.IsNullOrWhiteSpace(DistributionDetails.URL))
             {
                 string tmp = DistributionDetails.URL.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "");
+                tmp = tmp.Replace("request=GetCapabilities&service=WFS", "").Replace("service=WFS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wfs", "").Replace("service=wfs&request=getcapabilities", "");
+                tmp = tmp.Replace("request=GetCapabilities&service=WCS", "").Replace("service=WCS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wcs", "").Replace("service=wcs&request=getcapabilities", "");
+                tmp = tmp.Replace("request=GetCapabilities&service=CSW", "").Replace("service=CSW&request=GetCapabilities", "").Replace("request=getcapabilities&service=csw", "").Replace("service=csw&request=getcapabilities", "");
                 if (DistributionDetails.IsWmsUrl())
                     return tmp + "request=GetCapabilities&service=WMS";
-                else return tmp + "request=GetCapabilities&service=WFS";
+                else if (DistributionDetails.IsWfsUrl())
+                    return tmp + "request=GetCapabilities&service=WFS";
+                else if (!string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:WCS")))
+                    return tmp + "request=GetCapabilities&service=WCS";
+                else if (!string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:CSW")))
+                    return tmp + "request=GetCapabilities&service=CSW";
+                else return tmp;
             }
             else return "";
             
