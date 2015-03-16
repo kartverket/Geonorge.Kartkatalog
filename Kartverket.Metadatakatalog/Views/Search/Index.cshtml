@@ -238,13 +238,13 @@
                             <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
                                 @if (item.ShowDownloadLink())
                                 {
-                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <a href="@item.DownloadUrl" title="last ned" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-download-alt"></span>last ned
                                     </a>
                                 }
                                 else
                                 {
-                                    <a disabled="disabled" href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <a disabled="disabled" href="@item.DownloadUrl" title="last ned" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-download-alt" disabled="disabled"></span>last ned
                                     </a>
                                 }
@@ -252,13 +252,13 @@
                                 <br />
                                 @if (item.ShowWebsiteLink())
                                 {
-                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default"  target="_blank">
-                                        <span  class="glyphicon glyphicon-globe"></span>besøk nettside
+                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" title="besøk nettside" target="_blank">
+                                        <span class="glyphicon glyphicon-globe"></span>besøk nettside
                                     </a>
                                 }
                                 else
                                 {
-                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" disabled="disabled" target="_blank">
+                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" title="besøk nettside" disabled="disabled" target="_blank">
                                         <span disabled="disabled" class="glyphicon glyphicon-globe"></span>besøk nettside
                                     </a>
                                 }
@@ -267,7 +267,7 @@
                                 
                                 @if (item.ShowMapLink())
                                 {
-                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis i kart" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-map-marker"></span>vis i kart
                                     </a>
 
@@ -278,7 +278,7 @@
                                 }
                                 else
                                 {
-                                    <a disabled="disabled" href="@Html.NorgeskartUrl()@item.DownloadUrl/" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <a disabled="disabled" href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis i kart"  class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span disabled="disabled" class="glyphicon glyphicon-map-marker"></span>vis i kart
                                     </a>
                                 }
@@ -286,9 +286,9 @@
                                 @if (item.IsOpendata)
                                 {
                                     <br /><br />
-                                    <img src="~/Content/img/unlock.png" class="bottom">
+                                    <img title="Open data" src="~/Content/img/unlock.png" class="bottom" alt="Opne data" />
                                 }
-                                
+
                                 @*else
                                 {
                                     <br /><br />
