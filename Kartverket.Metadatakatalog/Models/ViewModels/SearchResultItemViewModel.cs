@@ -46,7 +46,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         public bool ShowDownloadLink()
         {
-            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && DistributionProtocol.Contains("WWW:LINK") && (Type == "dataset" || Type == "series") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
+            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && DistributionProtocol.Contains("WWW:DOWNLOAD") && (Type == "dataset" || Type == "series") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
             else return false;
         }
         public bool ShowMapLink()
@@ -56,7 +56,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         }
         public bool ShowWebsiteLink()
         {
-            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && DistributionProtocol.Contains("WWW:LINK") && Type == "software" && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
+            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && !string.IsNullOrWhiteSpace(DownloadUrl) && DistributionProtocol.Contains("WWW:LINK") && Type == "software") return true;
             else return false;
         }
 
