@@ -28,7 +28,6 @@
     <script type="text/javascript" src="/Scripts/easyXDM.js"></script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/js")
     <script>
         // by Kartverket/Thomas Hirsch 2012 / public domain.
         //var hash = 'http://norgeskart.no/geoportal/testing/dynamisk.html';
@@ -94,7 +93,7 @@
     </script>
     @RenderSection("scripts", false)
 </head>
-<body class="geonorge-container prototype  geonorge" onload="valgtVisningstype()">
+<body class="geonorge-container prototype  geonorge" onload="valgtVisningstype()" >
     <div id="logo-on-sm">
         <img src="/Content/img/kvlogo_col.png" alt="Kartverkets logo" />
     </div>

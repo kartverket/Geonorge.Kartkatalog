@@ -105,44 +105,27 @@
 
     <h3>Tilgjengelige ressurser</h3>
     <p>
-        @if (Model.DistributionDetails != null)
+       
+        @if (Model.ShowWebsiteLink())
         {
-           
-                if (Model.DistributionDetails.IsWmsUrl())
-                {
-                    
-                }
-                else if (Model.DistributionDetails.IsWfsUrl())
-                {
-                   
-                }
-                else if (Model.IsApplication())
-                {
-                     <text><a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
-                                <span class="glyphicon glyphicon-road"></span> Gå til applikasjon
-                            </a></text>
-                }
-                else
-                {
-                     <text><a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
-                               <span class="glyphicon glyphicon-download-alt"></span> Last ned datasett
-                            </a></text>
-                }
-
-                if (Model.DistributionDetails.IsWmsUrl())
-                {
-                    <a href="@Html.NorgeskartUrl()@Model.DistributionDetailsWmsUrl()/" class="btn btn-default btn-primary" target="_blank">
-                        <span class="glyphicon glyphicon-map-marker"></span> Vis tjenesten i kartet
-                    </a>
-                }
-                if (Model.DistributionDetails.IsWfsUrl())
-                {
-                    <a href="@Html.NorgeskartUrl()@Model.DistributionDetailsWfsUrl()/" class="btn btn-default btn-primary" target="_blank">
-                        <span class="glyphicon glyphicon-map-marker"></span> Vis tjenesten i kartet
-                    </a>
-                }
-
+            <a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
+                <span class="glyphicon glyphicon-road"></span> besøk nettside
+            </a>
         }
+                
+        @if (Model.ShowDownloadLink())
+        {
+            <a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
+                <span class="glyphicon glyphicon-download-alt"></span> Last ned datasett
+            </a>
+        }
+
+        @if (Model.ShowMapLink())
+        {
+            <a href="@Html.NorgeskartUrl()@Model.MapUrl()/" class="btn btn-default btn-primary" target="_blank">
+                <span class="glyphicon glyphicon-map-marker"></span> Vis tjenesten i kartet
+            </a>
+        }       
 
         @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
         {
