@@ -244,7 +244,7 @@
 
                             </div>
                             <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
-                                @if (item.GetInnholdstype() == "Datasett" || item.GetInnholdstype() == "Datasettserie")
+                                @if (item.ShowDownloadLink())
                                 {
                                     <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-download-alt"></span>last ned
@@ -258,7 +258,7 @@
                                 }
                                 
                                 <br />
-                                @if (item.GetInnholdstype() == "Applikasjon")
+                                @if (item.ShowWebsiteLink())
                                 {
                                     <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default"  target="_blank">
                                         <span  class="glyphicon glyphicon-globe"></span>besøk nettside
@@ -273,7 +273,7 @@
                                 <br />
 
                                 
-                                @if (item.GetInnholdstype() == "Tjeneste" || item.GetInnholdstype() == "WMS-lag (Tjenestelag)")
+                                @if (item.ShowMapLink())
                                 {
                                     <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-map-marker"></span>vis i kart

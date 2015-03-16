@@ -17,6 +17,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string MaintenanceFrequency { get; set; }
         public string DownloadUrl { get; set; }
         public string ServiceUrl { get; set; }
+        public string DistributionProtocol { get; set; }
         public bool IsOpendata { get; set; }
 
         public string GetInnholdstypeCSS()
@@ -43,6 +44,22 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return t;
         }
 
+        public bool ShowDownloadLink()
+        {
+            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && DistributionProtocol.Contains("WWW:DOWNLOAD") && (Type == "dataset" || Type == "series") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
+            else return false;
+        }
+        public bool ShowMapLink()
+        {
+            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") || DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
+            else return false;
+        }
+        public bool ShowWebsiteLink()
+        {
+            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && !string.IsNullOrWhiteSpace(DownloadUrl) && DistributionProtocol.Contains("WWW:LINK") && Type == "software") return true;
+            else return false;
+        }
+
         private SearchResultItemViewModel(SearchResultItem item)
         {
             Uuid = item.Uuid;
@@ -55,6 +72,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             ThumbnailUrl = item.ThumbnailUrl;
             MaintenanceFrequency = item.MaintenanceFrequency;
             ServiceUrl = item.DistributionUrl;
+            DistributionProtocol = item.DistributionProtocol;
             if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data")) IsOpendata = true;
 
 

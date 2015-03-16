@@ -42,8 +42,10 @@ namespace Kartverket.Metadatakatalog.Controllers
             SeoUrl url = model.CreateSeoUrl();
             if (!url.Matches(organization, title) && !string.IsNullOrWhiteSpace(organization))
                 return RedirectToActionPermanent("Index", new { organization = url.Organization, title = url.Title, uuid = uuid });
-
+           
             return View(model);
+            
+
         }
 
         public ActionResult Organization(SearchByOrganizationParameters parameters)
@@ -54,6 +56,11 @@ namespace Kartverket.Metadatakatalog.Controllers
             SearchResultForOrganization searchResult = _searchService.SearchByOrganization(parameters);
             var model = new SearchByOrganizationViewModel(parameters, searchResult);
             return View(model);
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            Log.Error("Error", filterContext.Exception);
         }
     }
 }
