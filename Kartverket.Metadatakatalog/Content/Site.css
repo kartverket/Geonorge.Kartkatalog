@@ -61,6 +61,14 @@
 }
 
 
+/* ----- List view ----*/
+.search-results .col-actions img {
+    width: 10px;
+    margin-left: 6px;
+}
+
+
+
 
 /* ---- Gallery view ---- */
 .search-results.gallery-view .result-row{
