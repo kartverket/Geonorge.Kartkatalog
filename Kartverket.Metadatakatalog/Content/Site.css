@@ -15,6 +15,7 @@
 	padding-left: 0!important;
 	padding-right: 0!important;
 	margin-bottom: 20px;
+    clear: both;
 }
 
 .search-filter-wrapper ul {
@@ -286,6 +287,47 @@
 .search-results.document.gallery-view .result-row{
 	margin-bottom: 30px;
 }
+
+/* Responsive */ 
+
+@media (max-width: 992px){
+	.search-results.document.gallery-view .result-row{
+		width: 33.33333%;
+	}
+	.col-sm-12.pull-right{
+		float: none!important;
+	}
+}
+
+@media (max-width: 600px){
+    .search-filter-wrapper > .nav-tabs li{
+        display: block;
+        float:none!important;
+        margin: 5px 0;
+    }
+	.search-results.gallery-view .result-row{
+		width: 50%;
+	}
+	.search-results.document.gallery-view .result-row{
+		width: 50%;
+	}
+	#button-tableView{
+		display: none;
+	}
+}
+
+@media (max-width: 450px){
+	.search-results.gallery-view .result-row{
+		width: 100%;
+	}
+	.search-results.register.gallery-view .result-row{
+		width: 100%;
+	}
+	.search-results.register.list-view .col-actions{
+		width: 100%;
+	}
+}
+
 
 /*Fra Benjamin over*/
 
