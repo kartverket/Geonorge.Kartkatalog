@@ -157,13 +157,14 @@
                 );
             }
         });
-        $("#orderby").change(function () {
-            document.location.href = $(this).val();
+        $(document).ready(function () {
+            $("#orderby").change(
+                 function () {
+                     location.href = $(this).val();
+                 }
+             );
         });
-
     </script>
-
-   
 }
 
 
