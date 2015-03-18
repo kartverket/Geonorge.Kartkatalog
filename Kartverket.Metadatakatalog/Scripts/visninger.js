@@ -94,7 +94,14 @@ function valgtVisningstype() {
 
     if (visningstype == "galleri") { galleryView() }
     if (visningstype == "liste") { listView() }
-    if (visningstype == "tabell") { tableView() }
+    if (visningstype == "tabell") {
+        // Listevisning ved liten skjerm
+        if ($(window).width() < 600) {
+            listView();
+        } else {
+            tableView()
+        }
+    }
 }
 
 
