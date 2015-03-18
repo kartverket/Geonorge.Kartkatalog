@@ -4,7 +4,7 @@
 }
 
 .search-filter-wrapper {
-	padding: 0px 0px 40px !important;
+	padding: 0!important;
 }
 
 .search-filter-wrapper>.nav-tabs{
@@ -189,7 +189,7 @@
 }
 
 
-.search-results.table-view .kartkatalog-table-heading{
+.search-results.table-view .table-heading{
 	padding: 0;
 	border-bottom: 2px solid #249446;	margin-bottom: 20px;
 }
