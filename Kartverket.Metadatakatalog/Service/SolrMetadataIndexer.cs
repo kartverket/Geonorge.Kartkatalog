@@ -29,8 +29,14 @@ namespace Kartverket.Metadatakatalog.Service
         public void RunIndexingOn(string uuid)
         {
             MD_Metadata_Type metadata = _geoNorge.GetRecordByUuid(uuid);
-            MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata));
-            _indexer.Index(metadataIndexDoc);
+            if (metadata == null)
+            {
+                _indexer.RemoveIndexDocument(uuid);
+            }
+            else { 
+                MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata));
+                _indexer.Index(metadataIndexDoc);
+            }
         }
 
         private void RunSearch(int startPosition)

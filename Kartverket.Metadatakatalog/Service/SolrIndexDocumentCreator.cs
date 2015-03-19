@@ -70,6 +70,7 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     indexDoc.Organizationgroup = simpleMetadata.ContactOwner.Organization;
                     indexDoc.Organization = indexDoc.Organizationgroup;
+                    indexDoc.OrganizationContactname = simpleMetadata.ContactOwner.Name;
                     if (indexDoc.Organization != null) { 
                         if (indexDoc.Organization.ToLower().Contains("fylkeskommune")) indexDoc.Organization = "Fylkeskommune";
                         else
@@ -93,10 +94,14 @@ namespace Kartverket.Metadatakatalog.Service
                 if (simpleMetadata.ContactMetadata != null)
                 {
                     indexDoc.Organization2 = simpleMetadata.ContactMetadata.Organization;
+                    indexDoc.Organization2Contactname = simpleMetadata.ContactMetadata.Name;
+
                 }
                 if (simpleMetadata.ContactPublisher != null)
                 {
                     indexDoc.Organization3 = simpleMetadata.ContactPublisher.Organization;
+                    indexDoc.Organization3Contactname = simpleMetadata.ContactPublisher.Name;
+
                 }
                 indexDoc.Theme = _themeResolver.Resolve(simpleMetadata);
 
@@ -155,6 +160,7 @@ namespace Kartverket.Metadatakatalog.Service
                 if (indexDoc.Type == "software")
                     indexDoc.typenumber = 80;
                 
+
             }
             catch (Exception e)
             {

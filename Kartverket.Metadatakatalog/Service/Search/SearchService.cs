@@ -233,6 +233,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
             if (!string.IsNullOrEmpty(text))
             {
                 text = text.Replace(":", " ");
+                if (text.Trim().Length == 0) return SolrQuery.All;
+
                 var query = new SolrMultipleCriteriaQuery(new[]
                 {
                     new SolrQuery("titleText:"+ text + "^50"),

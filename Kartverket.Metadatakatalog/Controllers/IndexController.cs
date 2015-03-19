@@ -52,18 +52,26 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult ReIndex()
         {
-            Log.Info("Run reindexing of entire metadata catalogue.");
-            DateTime start = DateTime.Now;
+            string role = GetSecurityClaim("role");
+            if (role == "nd.metadata_admin")
+            {
+                Log.Info("Run reindexing of entire metadata catalogue.");
+                DateTime start = DateTime.Now;
 
-            _indexer.RunReIndexing();
+                _indexer.RunReIndexing();
 
-            DateTime stop = DateTime.Now;
-            double seconds = stop.Subtract(start).TotalSeconds;
-            Log.Info(string.Format("Indexing fininshed after {0} seconds.", seconds));
+                DateTime stop = DateTime.Now;
+                double seconds = stop.Subtract(start).TotalSeconds;
+                Log.Info(string.Format("Indexing fininshed after {0} seconds.", seconds));
 
-            return View();
+           
+                return View();
+            }
+            else
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
         }
 
         [HttpPost]
@@ -78,7 +86,9 @@ namespace Kartverket.Metadatakatalog.Controllers
                 if (!string.IsNullOrWhiteSpace(uuid))
                 {
                     Log.Info("Running single indexing of metadata with uuid=" + uuid);
+
                     _indexer.RunIndexingOn(uuid);
+
                     statusCode = HttpStatusCode.Accepted;
                 }
                 else
@@ -97,6 +107,27 @@ namespace Kartverket.Metadatakatalog.Controllers
         protected override void OnException(ExceptionContext filterContext)
         {
             Log.Error("Error", filterContext.Exception);
+        }
+
+        private string GetSecurityClaim(string type)
+        {
+            string result = null;
+            foreach (var claim in System.Security.Claims.ClaimsPrincipal.Current.Claims)
+            {
+                if (claim.Type == type && !string.IsNullOrWhiteSpace(claim.Value))
+                {
+                    result = claim.Value;
+                    break;
+                }
+            }
+
+            // bad hack, must fix BAAT
+            if (!string.IsNullOrWhiteSpace(result) && type.Equals("organization") && result.Equals("Statens kartverk"))
+            {
+                result = "Kartverket";
+            }
+
+            return result;
         }
     }
 }

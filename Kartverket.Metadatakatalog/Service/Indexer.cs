@@ -8,5 +8,6 @@ namespace Kartverket.Metadatakatalog.Service
         void Index(IEnumerable<MetadataIndexDoc> docs);
         void Index(MetadataIndexDoc doc);
         void DeleteIndex();
+        void RemoveIndexDocument(string uuid);
     }
 }

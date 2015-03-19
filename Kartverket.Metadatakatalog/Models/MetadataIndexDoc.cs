@@ -33,6 +33,15 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("organization3")]
         public string Organization3 { get; set; }
 
+        [SolrField("organizationContactname")]
+        public string OrganizationContactname { get; set; }
+
+        [SolrField("organization2Contactname")]
+        public string Organization2Contactname { get; set; }
+
+        [SolrField("organization3Contactname")]
+        public string Organization3Contactname { get; set; }
+
         [SolrField("organization_seo_lowercase")]
         public string OrganizationSeoName { get; set; }
 

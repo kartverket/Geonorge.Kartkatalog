@@ -38,5 +38,13 @@ namespace Kartverket.Metadatakatalog.Service
             _solr.Add(doc);
             _solr.Commit();
         }
+
+
+        public void RemoveIndexDocument(string uuid)
+        {
+            Log.Info(string.Format("Removes document uuid={0} from index", uuid));
+            _solr.Delete(uuid);
+            _solr.Commit();
+        }
     }
 }
