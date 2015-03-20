@@ -234,66 +234,9 @@
 	float: left;
 }
 
-.search-results.table-view .kartkatalog-table-heading{
-	position: relative;
-
-}
-
-
-
-
-
-
-.search-results.document.gallery-view .result-row {
-	width: 25%;
-}
-
-.search-results.table-view .peoduktark-table-heading{
-	padding: 0;
-	border-bottom: 2px solid #8C4799;
-}
-
-.search-results.document.gallery-view .col-title h4 {
-	border: 1px solid #8C4799;
-
-}
-
-.search-results.document.gallery-view .col-title:hover h4{
-	background-color: #8C4799;
-}
-
-.search-results.document.table-view .col-actions:nth-child(3) {
-	width: 6.25%;
-}
-
-.search-results.document.table-view .col-actions:nth-child(4) {
-	width: 18.75%;
-}
-
-.search-results.document.table-view .col-actions .status, .search-results.document.table-view .col-actions .reference{
-	display: none;
-}
-
-.search-results.document.table-view .col-actions .status-value, .search-results.document.table-view .col-actions .reference-value{
-	width: 50%;
-}
-
-
-
-.search-results.document.gallery-view .col-img, .search-results.document.gallery-view .col-title {
-	height: 200px;
-}
-
-.search-results.document.gallery-view .result-row{
-	margin-bottom: 30px;
-}
-
 /* Responsive */ 
 
 @media (max-width: 992px){
-	.search-results.document.gallery-view .result-row{
-		width: 33.33333%;
-	}
 	.col-sm-12.pull-right{
 		float: none!important;
 	}
@@ -306,9 +249,6 @@
         margin: 5px 0;
     }
 	.search-results.gallery-view .result-row{
-		width: 50%;
-	}
-	.search-results.document.gallery-view .result-row{
 		width: 50%;
 	}
 	#button-tableView{
@@ -337,7 +277,7 @@ top: 0px;
 left: 0px;
 position: fixed;
 display: block;
-opacity: .9;
+opacity: .5;
 background-color: #fff;
 z-index: 699;
 text-align: center;
