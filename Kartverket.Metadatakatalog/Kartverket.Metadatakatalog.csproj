@@ -234,6 +234,7 @@
     <Content Include="Content\geonorge-default.css" />
     <Content Include="Content\img\favicon.ico" />
     <Content Include="Content\img\kvlogo_col.png" />
+    <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\lock.png" />
     <Content Include="Content\img\logo-graphic-512.png" />
     <Content Include="Content\img\opendata.png" />
