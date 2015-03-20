@@ -89,7 +89,7 @@ function SortBy(sort) {
 
 }
 
-function valgtVisningstype() {
+$(document).ready(function () {
     var visningstype = localStorage.getItem("visningstype");
 
     if (visningstype == "galleri") { galleryView() }
@@ -102,7 +102,11 @@ function valgtVisningstype() {
             tableView()
         }
     }
-}
+});
 
 
+// Loading animation
+$(window).load(function () {
+    $('#loading').hide();
+});
 
