@@ -13,6 +13,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public int orderby { get; set; }
         public List<FacetParameter> FacetParameters { get; set; }
         public SearchResultViewModel Result { get; set; }
+        public int pages { get; set; }
 
         public SearchViewModel(SearchParameters parameters, SearchResult searchResult)
         {
@@ -23,6 +24,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             Offset = searchResult.Offset;
             NumFound = searchResult.NumFound;
             orderby = (int)parameters.orderby;
+
+            pages = NumFound / Limit;
         }
 
         public RouteValueDictionary LinkForFacetValue(string name, string value)
@@ -77,6 +80,15 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return NumFound > (Offset + Limit-1);
         }
 
+        public RouteValueDictionary ParamsForPageNumber(int page)
+        {
+            page = page - 1;
+            
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["Offset"] = page * Limit + 1;
+            return routeValues;
+        }
 
         public RouteValueDictionary ParamsForPreviousLink()
         {

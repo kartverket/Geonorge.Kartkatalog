@@ -102,11 +102,17 @@
                         {
                             <span><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></span>
                         }
+                        @{ 
+                            for (int i = 1; i <= Model.pages; i++)
+                            {
+                               <span><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></span>
+                            }
+                        }
                         @if (Model.IsNextButtonActive())
                         {
                             <span><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></span>
                         }
-
+                        
                     </li>
                 </ul>
             </div>
