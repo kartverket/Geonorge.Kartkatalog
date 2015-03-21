@@ -14,7 +14,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public List<FacetParameter> FacetParameters { get; set; }
         public SearchResultViewModel Result { get; set; }
         public int pages { get; set; }
-        
+        public int page { get; set; }
 
         public SearchViewModel(SearchParameters parameters, SearchResult searchResult)
         {
@@ -25,9 +25,33 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             Offset = searchResult.Offset;
             NumFound = searchResult.NumFound;
             orderby = (int)parameters.orderby;
-            
+            page = 1;
+            visiblePages = 10;
+
+            //Finne totalt antall sider
             pages = NumFound / Limit;
 
+            //Test om det er noe bak komma.... 
+            if ((Limit*pages) != NumFound)
+            {
+                pages = pages + 1;
+            }
+        }
+
+        public bool IsActivePage(int i) {
+            //page = 1;
+
+            //Finne hvilke side en er på
+            if (Offset != 1)
+            {
+                page = (Offset / Limit) + 1;
+            }
+
+            if (i == page)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public RouteValueDictionary LinkForFacetValue(string name, string value)

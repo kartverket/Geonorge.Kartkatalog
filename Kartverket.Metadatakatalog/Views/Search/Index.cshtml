@@ -100,17 +100,26 @@
 
                         @if (Model.IsPreviousButtonActive())
                         {
-                            <span><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></span>
+                            <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                         }
-                        @{ 
+                        @{
                             for (int i = 1; i <= Model.pages; i++)
                             {
-                               <span><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></span>
+                                if (Model.IsActivePage(i))
+                                {
+                                    <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                                }
+
+
                             }
-                        }
+}
                         @if (Model.IsNextButtonActive())
                         {
-                            <span><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></span>
+                            <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
                         }
                         
                     </li>
