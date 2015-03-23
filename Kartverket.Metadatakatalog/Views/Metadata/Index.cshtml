@@ -346,7 +346,12 @@
             @DisplayValue("Tilgangsrestriksjoner", Model.Constraints.AccessConstraints)
             @DisplayValue("Brukerrestriksjoner", Model.Constraints.UseConstraints)
             @DisplayValue("Andre restriksjoner", Model.Constraints.OtherConstraints)
+            if (Model.Constraints != null && Model.Constraints.OtherConstraintsLink != null)
+            {
+                <strong>Lisens: </strong> <a href="@Model.Constraints.OtherConstraintsLink" target="_blank">@Model.Constraints.OtherConstraintsLinkText</a>
+            }
             @DisplayValue("Sikkerhetsnivå", Model.Constraints.SecurityConstraints)
+            // skal stå her
         }
         
         <h3>Kvalitet</h3>

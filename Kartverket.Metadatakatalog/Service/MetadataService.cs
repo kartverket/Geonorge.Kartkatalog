@@ -229,6 +229,8 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     AccessConstraints = simpleConstraints.AccessConstraints,
                     OtherConstraints = simpleConstraints.OtherConstraints,
+                    OtherConstraintsLink = simpleConstraints.OtherConstraintsLink,
+                    OtherConstraintsLinkText = simpleConstraints.OtherConstraintsLinkText,
                     SecurityConstraints = simpleConstraints.SecurityConstraints,
                     UseConstraints = simpleConstraints.UseConstraints,
                     UseLimitations = simpleConstraints.UseLimitations
