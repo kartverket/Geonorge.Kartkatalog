@@ -45,17 +45,26 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             //Hvilke sider som skal være synlige
             if (pages > 10)
             {
-                if (page > 5)
+                startPage = 1;
+                endPage = 10;
+
+
+                if (page > 5 && page <= (pages-5))
                 {
-                    startPage = page-4;
+                    startPage = page - 4;
                     endPage = page + 5;
                 }
+                if (page > (pages-5) && page > 5) {
+                    startPage = pages - 9;
+                    endPage = pages;
+                }
 
-                startPage = page;
+                
+            }
+            else { 
+                startPage = 1;
                 endPage = pages;
             }
-            startPage = 1;
-            endPage = pages;
         }
 
         public bool IsActivePage(int i) {
