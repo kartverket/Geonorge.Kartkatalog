@@ -48,7 +48,6 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 startPage = 1;
                 endPage = 10;
 
-
                 if (page > 5 && page <= (pages-5))
                 {
                     startPage = page - 4;
@@ -58,8 +57,6 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                     startPage = pages - 9;
                     endPage = pages;
                 }
-
-                
             }
             else { 
                 startPage = 1;
@@ -68,13 +65,6 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         }
 
         public bool IsActivePage(int i) {
-            ////page = 1;
-
-            ////Finne hvilke side en er på
-            //if (Offset != 1)
-            //{
-            //    page = (Offset / Limit) + 1;
-            //}
 
             if (i == page)
             {
