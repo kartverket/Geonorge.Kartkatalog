@@ -55,13 +55,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Arkitektum.GIS.Lib.MetadataCSW, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Arkitektum.GIS.Lib.MetadataCSW, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Arkitektum.GIS.Lib.MetadataCSW.1.5.0.0\lib\net40\Arkitektum.GIS.Lib.MetadataCSW.dll</HintPath>
+      <HintPath>..\packages\Arkitektum.GIS.Lib.MetadataCSW.1.6.0.0\lib\net40\Arkitektum.GIS.Lib.MetadataCSW.dll</HintPath>
     </Reference>
-    <Reference Include="Arkitektum.GIS.Lib.SerializeUtil, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Arkitektum.GIS.Lib.SerializeUtil, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Arkitektum.GIS.Lib.SerializeUtil.1.1.0.0\lib\net40\Arkitektum.GIS.Lib.SerializeUtil.dll</HintPath>
+      <HintPath>..\packages\Arkitektum.GIS.Lib.SerializeUtil.1.2.0.0\lib\net40\Arkitektum.GIS.Lib.SerializeUtil.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.dll</HintPath>
@@ -69,14 +69,14 @@
     <Reference Include="FluentAssertions.Core">
       <HintPath>..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
-    <Reference Include="GeoNorgeAPI">
-      <HintPath>..\packages\GeoNorgeAPI.2.7.3.0\lib\net40\GeoNorgeAPI.dll</HintPath>
+    <Reference Include="GeoNorgeAPI, Version=2.7.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\GeoNorgeAPI.2.7.7.0\lib\net40\GeoNorgeAPI.dll</HintPath>
     </Reference>
     <Reference Include="Kartverket.Geonorge.Utilities">
       <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.15\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
