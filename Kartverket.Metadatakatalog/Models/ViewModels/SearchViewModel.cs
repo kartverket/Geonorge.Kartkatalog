@@ -134,6 +134,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             var routeValues = new RouteValueDictionary();
             routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
             routeValues["Offset"] = page * Limit + 1;
+            routeValues["orderby"] = orderby;
             return routeValues;
         }
 
@@ -142,6 +143,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             var routeValues = new RouteValueDictionary();
             routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
             routeValues["Offset"] = (Offset - Limit);
+            routeValues["orderby"] = orderby;
             return routeValues;
         }
 
@@ -150,6 +152,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             var routeValues = new RouteValueDictionary();
             routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
             routeValues["Offset"] = (Offset + Limit);
+            routeValues["orderby"] = orderby;
             return routeValues;
         }
         
