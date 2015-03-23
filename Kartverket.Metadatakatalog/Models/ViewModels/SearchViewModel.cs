@@ -15,6 +15,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public SearchResultViewModel Result { get; set; }
         public int pages { get; set; }
         public int page { get; set; }
+        public int startPage { get; set; }
+        public int endPage { get; set; }
 
         public SearchViewModel(SearchParameters parameters, SearchResult searchResult)
         {
@@ -26,7 +28,10 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             NumFound = searchResult.NumFound;
             orderby = (int)parameters.orderby;
             page = 1;
-            visiblePages = 10;
+            if (Offset != 1)
+            {
+                page = (Offset / Limit) + 1;
+            }
 
             //Finne totalt antall sider
             pages = NumFound / Limit;
@@ -36,16 +41,31 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             {
                 pages = pages + 1;
             }
+
+            //Hvilke sider som skal være synlige
+            if (pages > 10)
+            {
+                if (page > 5)
+                {
+                    startPage = page-4;
+                    endPage = page + 5;
+                }
+
+                startPage = page;
+                endPage = pages;
+            }
+            startPage = 1;
+            endPage = pages;
         }
 
         public bool IsActivePage(int i) {
-            //page = 1;
+            ////page = 1;
 
-            //Finne hvilke side en er på
-            if (Offset != 1)
-            {
-                page = (Offset / Limit) + 1;
-            }
+            ////Finne hvilke side en er på
+            //if (Offset != 1)
+            //{
+            //    page = (Offset / Limit) + 1;
+            //}
 
             if (i == page)
             {

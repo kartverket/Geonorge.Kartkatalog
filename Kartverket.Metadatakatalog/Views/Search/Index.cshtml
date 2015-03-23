@@ -103,7 +103,10 @@
                             <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                         }
                         @{
-                            for (int i = 1; i <= Model.pages; i++)
+                            
+                            
+                            for (int i = Model.startPage; i <= Model.endPage; i++)
+                            //for (int i = 1; i <= Model.pages; i++)
                             {
                                 if (Model.IsActivePage(i))
                                 {
