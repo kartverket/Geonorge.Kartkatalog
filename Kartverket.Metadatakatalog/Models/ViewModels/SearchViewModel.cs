@@ -43,18 +43,18 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             }
 
             //Hvilke sider som skal være synlige
-            if (pages > 10)
+            if (pages > 5)
             {
                 startPage = 1;
-                endPage = 10;
+                endPage = 5;
 
-                if (page > 5 && page <= (pages-5))
+                if (page > 3 && page <= (pages-2))
                 {
-                    startPage = page - 4;
-                    endPage = page + 5;
+                    startPage = page - 2;
+                    endPage = page + 2;
                 }
-                if (page > (pages-5) && page > 5) {
-                    startPage = pages - 9;
+                if (page > (pages-2) && page > 3) {
+                    startPage = pages - 4;
                     endPage = pages;
                 }
             }
