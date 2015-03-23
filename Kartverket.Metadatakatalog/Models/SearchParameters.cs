@@ -18,7 +18,7 @@ namespace Kartverket.Metadatakatalog.Models
         {
             Facets = new List<FacetParameter>();
             Offset = 1;
-            Limit = 50;
+            Limit = 30;
             orderby = OrderBy.score;
         }
 
