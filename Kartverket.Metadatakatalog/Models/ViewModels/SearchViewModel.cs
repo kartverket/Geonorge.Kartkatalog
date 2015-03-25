@@ -114,6 +114,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return FacetParameters != null && FacetParameters.Any(f => f.Name == facetField && !string.IsNullOrWhiteSpace(f.Value));
         }
 
+        public bool HasFacetFieldValue(string facetField, string facetValue)
+        {
+            return FacetParameters != null && FacetParameters.Any(f => f.Name == facetField && f.Value == facetValue);
+        }
+
 
         public bool IsPreviousButtonActive()
         {

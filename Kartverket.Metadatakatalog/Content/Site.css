@@ -499,6 +499,11 @@ body {
     padding: 10px 0 0 0 !important;
 }
 
+.btn .glyphicon {
+  padding-right: 5px;
+  margin-right: 5px;
+  border-right: 1px solid #ddd;
+}
 
 
 /*# sourceMappingURL=page-footer.css.map *

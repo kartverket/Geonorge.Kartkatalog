@@ -24,13 +24,19 @@
     
         foreach (var facetResult in facet.FacetResults)
         {
-            <div class="filter-options"><a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.LinkName() (@facetResult.Count)</a></div>
+            <div class="filter-options"><a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b style='font-weight: 800;'>" : "") @facetResult.LinkName() @Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b>" : "") (@facetResult.Count)</a></div>
         }
         if (Model.HasFilterForFacetField(facet.FacetField))
         {
-            <div class="filter-options"><a class="btn-link" href="@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))">Vis alle</a></div>
+            @*<div class="filter-options"><a class="btn-link" href="@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))">Vis alle</a></div>*@
+            <div class="filter-options">
+                <button type="button" role="button" class="btn btn-default reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
+                    <span class="glyphicon glyphicon-remove pull-left"></span>
+                    Vis alle
+                </button>
+            </div>
         }
- 
+
 }
 
 @helper DisplayPagination()
