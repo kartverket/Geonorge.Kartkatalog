@@ -13,6 +13,10 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public int orderby { get; set; }
         public List<FacetParameter> FacetParameters { get; set; }
         public SearchResultViewModel Result { get; set; }
+        public int pages { get; set; }
+        public int page { get; set; }
+        public int startPage { get; set; }
+        public int endPage { get; set; }
 
         public SearchViewModel(SearchParameters parameters, SearchResult searchResult)
         {
@@ -23,6 +27,50 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             Offset = searchResult.Offset;
             NumFound = searchResult.NumFound;
             orderby = (int)parameters.orderby;
+            page = 1;
+            if (Offset != 1)
+            {
+                page = (Offset / Limit) + 1;
+            }
+
+            //Finne totalt antall sider
+            pages = NumFound / Limit;
+
+            //Test om det er noe bak komma.... 
+            if ((Limit*pages) != NumFound)
+            {
+                pages = pages + 1;
+            }
+
+            //Hvilke sider som skal være synlige
+            if (pages > 5)
+            {
+                startPage = 1;
+                endPage = 5;
+
+                if (page > 3 && page <= (pages-2))
+                {
+                    startPage = page - 2;
+                    endPage = page + 2;
+                }
+                if (page > (pages-2) && page > 3) {
+                    startPage = pages - 4;
+                    endPage = pages;
+                }
+            }
+            else { 
+                startPage = 1;
+                endPage = pages;
+            }
+        }
+
+        public bool IsActivePage(int i) {
+
+            if (i == page)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public RouteValueDictionary LinkForFacetValue(string name, string value)
@@ -66,6 +114,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return FacetParameters != null && FacetParameters.Any(f => f.Name == facetField && !string.IsNullOrWhiteSpace(f.Value));
         }
 
+        public bool HasFacetFieldValue(string facetField, string facetValue)
+        {
+            return FacetParameters != null && FacetParameters.Any(f => f.Name == facetField && f.Value == facetValue);
+        }
+
 
         public bool IsPreviousButtonActive()
         {
@@ -77,12 +130,25 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return NumFound > (Offset + Limit-1);
         }
 
+        
+
+        public RouteValueDictionary ParamsForPageNumber(int page)
+        {
+            page = page - 1;
+            
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["Offset"] = page * Limit + 1;
+            routeValues["orderby"] = orderby;
+            return routeValues;
+        }
 
         public RouteValueDictionary ParamsForPreviousLink()
         {
             var routeValues = new RouteValueDictionary();
             routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
             routeValues["Offset"] = (Offset - Limit);
+            routeValues["orderby"] = orderby;
             return routeValues;
         }
 
@@ -91,6 +157,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             var routeValues = new RouteValueDictionary();
             routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
             routeValues["Offset"] = (Offset + Limit);
+            routeValues["orderby"] = orderby;
             return routeValues;
         }
         

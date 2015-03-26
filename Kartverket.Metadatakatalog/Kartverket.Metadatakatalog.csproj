@@ -45,11 +45,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Arkitektum.GIS.Lib.MetadataCSW">
-      <HintPath>..\packages\Arkitektum.GIS.Lib.MetadataCSW.1.5.0.0\lib\net40\Arkitektum.GIS.Lib.MetadataCSW.dll</HintPath>
+    <Reference Include="Arkitektum.GIS.Lib.MetadataCSW, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Arkitektum.GIS.Lib.MetadataCSW.1.6.0.0\lib\net40\Arkitektum.GIS.Lib.MetadataCSW.dll</HintPath>
     </Reference>
-    <Reference Include="Arkitektum.GIS.Lib.SerializeUtil">
-      <HintPath>..\packages\Arkitektum.GIS.Lib.SerializeUtil.1.1.0.0\lib\net40\Arkitektum.GIS.Lib.SerializeUtil.dll</HintPath>
+    <Reference Include="Arkitektum.GIS.Lib.SerializeUtil, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Arkitektum.GIS.Lib.SerializeUtil.1.2.0.0\lib\net40\Arkitektum.GIS.Lib.SerializeUtil.dll</HintPath>
     </Reference>
     <Reference Include="Autofac">
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
@@ -60,8 +62,9 @@
     <Reference Include="Autofac.Integration.WebApi">
       <HintPath>..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="GeoNorgeAPI">
-      <HintPath>..\packages\GeoNorgeAPI.2.7.3.0\lib\net40\GeoNorgeAPI.dll</HintPath>
+    <Reference Include="GeoNorgeAPI, Version=2.7.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\GeoNorgeAPI.2.7.7.0\lib\net40\GeoNorgeAPI.dll</HintPath>
     </Reference>
     <Reference Include="Kartverket.Geonorge.Utilities">
       <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.15\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
@@ -234,6 +237,7 @@
     <Content Include="Content\geonorge-default.css" />
     <Content Include="Content\img\favicon.ico" />
     <Content Include="Content\img\kvlogo_col.png" />
+    <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\lock.png" />
     <Content Include="Content\img\logo-graphic-512.png" />
     <Content Include="Content\img\opendata.png" />

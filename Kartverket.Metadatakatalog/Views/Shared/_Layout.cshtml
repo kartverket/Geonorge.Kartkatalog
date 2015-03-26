@@ -23,7 +23,7 @@
     </title>
     @Styles.Render("~/Content/css")
     @RenderSection("head", false)
-    
+
     @Html.Partial("_Analytics")
     <script type="text/javascript" src="/Scripts/easyXDM.js"></script>
     @Scripts.Render("~/bundles/jquery")
@@ -94,7 +94,7 @@
     </script>
     @RenderSection("scripts", false)
 </head>
-<body class="geonorge-container prototype  geonorge" >
+<body class="geonorge-container prototype  geonorge">
     <div id="logo-on-sm">
         <img src="/Content/img/kvlogo_col.png" alt="Kartverkets logo" />
     </div>
@@ -116,21 +116,23 @@
         </div>
 
     </div>
-    
+
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="kartkatalog">
             <div class="body-content">
                 <div class="container">
-                    <div id="loading">
-                        <img id="loading-image" src="/Content/img/loader.gif" alt="Laster..." />
-                    </div>
+                    <!--
+                        <div id="loading">
+                            <img id="loading-image" src="/Content/img/loader.gif" alt="Laster..." />
+                        </div>
+                    -->
                     @RenderBody()
                 </div>
 
             </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="kart">
-            
+
             @*@Html.Partial("_Map")*@
 
 

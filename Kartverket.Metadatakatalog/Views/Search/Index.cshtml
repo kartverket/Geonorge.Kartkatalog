@@ -24,13 +24,18 @@
     
         foreach (var facetResult in facet.FacetResults)
         {
-            <div class="filter-options"><a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.LinkName() (@facetResult.Count)</a></div>
+            <div class="filter-options"><a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b style='font-weight: 800;'>" : "") @facetResult.LinkName() @Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b>" : "") (@facetResult.Count)</a></div>
         }
         if (Model.HasFilterForFacetField(facet.FacetField))
         {
-            <div class="filter-options"><a class="btn-link" href="@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))">Vis alle</a></div>
+            <div class="filter-options">
+                <button type="button" role="button" class="btn btn-default reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
+                    <span class="glyphicon glyphicon-remove pull-left"></span>
+                    Vis alle
+                </button>
+            </div>
         }
- 
+
 }
 
 @helper DisplayPagination()
@@ -100,13 +105,26 @@
 
                         @if (Model.IsPreviousButtonActive())
                         {
-                            <span><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></span>
+                            <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                         }
+                        
+                        @for (int i = Model.startPage; i <= Model.endPage; i++)
+                        {
+                            if (Model.IsActivePage(i))
+                            {
+                                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                            }
+                        }
+                        
                         @if (Model.IsNextButtonActive())
                         {
-                            <span><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></span>
+                            <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
                         }
-
+                        
                     </li>
                 </ul>
             </div>
@@ -120,22 +138,38 @@
     <div class="search-filter-wrapper">
         <ul class="nav nav-tabs col-xs-12 col-sm-12 col-md-12 col-lg-12" role="tablist">
             <li class="active"><span role="tab">Kartkatalogen viser @Model.ShowingFromAndTo() av @Model.NumFound treff.</span></li>
-
-            <li class="btn-group pull-right pagination pagination-sm">
-
-                @if (Model.IsPreviousButtonActive())
-                {
-                    <span><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></span>
-                }
-                @if (Model.IsNextButtonActive())
-                {
-                    <span><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></span>
-                }
-
-            </li>
-           
         </ul>
-    </div>
+        <div class="col-md-12 view-navigation">
+            <div class="nav nav-tabs">
+                
+                <ul class="pagination pagination-sm pull-right">
+
+                        @if (Model.IsPreviousButtonActive())
+                        {
+                        <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                        }
+
+                        @for (int i = Model.startPage; i <= Model.endPage; i++)
+                        {
+                            if (Model.IsActivePage(i))
+                            {
+                                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                            }
+                        }
+
+                        @if (Model.IsNextButtonActive())
+                        {
+                            <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                        }
+                    </ul>
+                </div>
+
+            </div>
+        </div>
 }
 
 

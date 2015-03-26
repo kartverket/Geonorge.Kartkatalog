@@ -34,7 +34,7 @@ function galleryView() {
 
 function tableView() {
     $(".table-heading").remove();
-    $('.search-results').prepend("<div class='clearfix'></div><div class='col-xs-12 table-heading'><div class='col-xs-9'><div class='col-xs-4'><h4>Tittel</h4></div><div class='col-xs-4'><h4>Eier / leverandør</h4></div><div class='col-xs-4'><h4>Beskrivelse</h4></div></div><div class='col-xs-3'><div class='col-sm-3'><h4></h4></div><div class='col-xs-3'><h4></h4></div><div class='col-xs-3'><h4></h4></div><div class='col-xs-3'><h4></h4></div></div></div>");
+    $('.search-results').prepend("<div class='clearfix'></div><div class='col-xs-12 table-heading'><div class='col-xs-9'><div class='col-xs-4'><h4>Tittel</h4></div><div class='col-xs-4'><h4>Eier</h4></div><div class='col-xs-4'><h4>Type</h4></div></div><div class='col-xs-3'><div class='col-sm-3'><h4></h4></div><div class='col-xs-3'><h4></h4></div><div class='col-xs-3'><h4></h4></div><div class='col-xs-3'><h4></h4></div></div></div>");
 
     // Buttons
     $('#button-listView').removeClass('active');
@@ -106,7 +106,9 @@ $(document).ready(function () {
 
 
 // Loading animation
+/*
 $(window).load(function () {
     $('#loading').hide();
 });
+*/
 
