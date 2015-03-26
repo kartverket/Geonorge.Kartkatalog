@@ -17,6 +17,9 @@ namespace Kartverket.Metadatakatalog.Models
         public string ShowDetailsUrl { get; set; }
         public string MaintenanceFrequency { get; set; }
         public List<string> NationalInitiative { get; set; }
+        public string ServiceDistributionNameForDataset { get; set; }
+        public string ServiceDistributionUrlForDataset { get; set; }
+        public string ServiceDistributionProtocolForDataset { get; set; }
         
     }
 }

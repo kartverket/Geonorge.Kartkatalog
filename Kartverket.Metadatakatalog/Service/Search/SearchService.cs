@@ -70,7 +70,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     Facet = BuildFacetParameters(parameters),
                     Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
                     "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
-                    "score" }
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset" }
                     //ExtraParams = new Dictionary<string, string> {
                     //    {"q", ""}
 
@@ -199,7 +199,10 @@ namespace Kartverket.Metadatakatalog.Service.Search
                         DistributionProtocol = doc.DistributionProtocol,
                         MaintenanceFrequency = doc.MaintenanceFrequency,
                         DistributionName = doc.DistributionName,
-                        NationalInitiative = doc.NationalInitiative
+                        NationalInitiative = doc.NationalInitiative,
+                        ServiceDistributionNameForDataset = doc.ServiceDistributionNameForDataset,
+                        ServiceDistributionUrlForDataset = doc.ServiceDistributionUrlForDataset,
+                        ServiceDistributionProtocolForDataset = doc.ServiceDistributionProtocolForDataset
                     };
                     items.Add(item);
                 }

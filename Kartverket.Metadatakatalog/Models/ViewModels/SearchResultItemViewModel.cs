@@ -54,6 +54,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") || DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
             else return false;
         }
+        public bool ShowServiceMapLink()
+        {
+            if  (!string.IsNullOrWhiteSpace(ServiceUrl)) return true;
+            else return false;
+        }
         public bool ShowWebsiteLink()
         {
             if (!string.IsNullOrWhiteSpace(DistributionProtocol) && !string.IsNullOrWhiteSpace(DownloadUrl) && DistributionProtocol.Contains("WWW:LINK") && Type == "software") return true;
@@ -71,10 +76,27 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             OrganizationLogoUrl = item.OrganizationLogoUrl;
             ThumbnailUrl = item.ThumbnailUrl;
             MaintenanceFrequency = item.MaintenanceFrequency;
-            ServiceUrl = item.DistributionUrl;
+            
             DistributionProtocol = item.DistributionProtocol;
             if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data")) IsOpendata = true;
-
+            if (Type == "dataset")
+            {
+                if (!string.IsNullOrWhiteSpace(item.ServiceDistributionProtocolForDataset) && item.ServiceDistributionProtocolForDataset.Contains(("OGC:WMS")))
+                {
+                    if (!string.IsNullOrWhiteSpace(item.ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(item.ServiceDistributionUrlForDataset))
+                        ServiceUrl = "#5/355422/6668909/*/l/wms/[" + item.ServiceDistributionUrlForDataset.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/+" + item.ServiceDistributionNameForDataset;
+                    else if (!string.IsNullOrWhiteSpace(item.ServiceDistributionUrlForDataset))
+                        ServiceUrl = "#5/355422/6668909/l/wms/[" + item.ServiceDistributionUrlForDataset.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]";
+                }
+                else if (!string.IsNullOrWhiteSpace(item.ServiceDistributionProtocolForDataset) && item.ServiceDistributionProtocolForDataset.Contains(("OGC:WFS")))
+                {
+                    if (!string.IsNullOrWhiteSpace(item.ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(item.ServiceDistributionUrlForDataset))
+                        ServiceUrl = "#5/355422/6668909/*/l/wfs/[" + item.ServiceDistributionUrlForDataset.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/+" + item.ServiceDistributionNameForDataset;
+                    else if (!string.IsNullOrWhiteSpace(item.DistributionUrl))
+                        ServiceUrl = "#5/355422/6668909/l/wfs/[" + item.ServiceDistributionUrlForDataset.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]";
+                }
+               
+            }
 
             if (Type == "service" || Type == "servicelayer")
             {

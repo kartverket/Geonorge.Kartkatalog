@@ -110,7 +110,15 @@ namespace Kartverket.Metadatakatalog.Models
 
         [SolrField("typenumber")]
         public int typenumber { get; set; }
-        
+
+        [SolrField("ServiceDistributionUrlForDataset")]
+        public string ServiceDistributionUrlForDataset { get; set; }
+
+        [SolrField("ServiceDistributionProtocolForDataset")]
+        public string ServiceDistributionProtocolForDataset { get; set; }
+
+        [SolrField("ServiceDistributionNameForDataset")]
+        public string ServiceDistributionNameForDataset { get; set; }
     }
 
 }

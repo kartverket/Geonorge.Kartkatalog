@@ -33,8 +33,8 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 _indexer.RemoveIndexDocument(uuid);
             }
-            else { 
-                MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata));
+            else {
+                MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge);
                 _indexer.Index(metadataIndexDoc);
             }
         }
@@ -47,7 +47,7 @@ namespace Kartverket.Metadatakatalog.Service
             try
             {
                 searchResult = _geoNorge.SearchIso("", startPosition, 50, true);
-                List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult.Items);
+                List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult.Items, _geoNorge);
                 _indexer.Index(indexDocs);
                 runningSingle = false;
             }
@@ -61,7 +61,7 @@ namespace Kartverket.Metadatakatalog.Service
                     try
                     {
                         SearchResultsType searchResult2 = _geoNorge.SearchIso("", startPosition, 1, true);
-                        List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult2.Items);
+                        List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult2.Items, _geoNorge);
                         _indexer.Index(indexDocs);
                         startPosition++;
                         runningSingle = true;

@@ -277,6 +277,12 @@
             </a>*@
 
                                 }
+                                else if (item.ShowServiceMapLink())
+                                {
+                                    <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis i kart" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                        <span class="glyphicon glyphicon-map-marker"></span>vis i kart
+                                    </a>
+                                }
                                 else
                                 {
                                     <a disabled="disabled" href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis i kart"  class="btn btn-xs btn-bunnmarg btn-default" target="_blank">

@@ -7,6 +7,8 @@ using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
+using System.Net;
+using System.Net.Http;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -27,7 +29,7 @@ namespace Kartverket.Metadatakatalog.Service
             _placeResolver = new PlaceResolver();
         }
 
-        public List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems)
+        public List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems, IGeoNorge geoNorge)
         {
             var documentsToIndex = new List<MetadataIndexDoc>();
             foreach (var item in searchResultItems)
@@ -38,7 +40,7 @@ namespace Kartverket.Metadatakatalog.Service
                     try
                     {
                         var simpleMetadata = new SimpleMetadata(metadataItem);
-                        var indexDoc = CreateIndexDoc(simpleMetadata);
+                        var indexDoc = CreateIndexDoc(simpleMetadata, geoNorge);
                         if (indexDoc != null)
                         {
                             documentsToIndex.Add(indexDoc);    
@@ -54,7 +56,7 @@ namespace Kartverket.Metadatakatalog.Service
             return documentsToIndex;
         }
 
-        public MetadataIndexDoc CreateIndexDoc(SimpleMetadata simpleMetadata)
+        public MetadataIndexDoc CreateIndexDoc(SimpleMetadata simpleMetadata, IGeoNorge geoNorge)
         {
             var indexDoc = new MetadataIndexDoc();
             
@@ -135,6 +137,26 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     indexDoc.ThumbnailUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMetadata.Uuid,
                         thumbnails[thumbnails.Count-1].URL);
+                    
+                    //teste om 404 evt timeout? - settes tom om krav ikke følges
+                    try
+                    {
+                        using (var client = new HttpClient())
+                        {
+                            client.DefaultRequestHeaders.Accept.Clear();
+                            HttpResponseMessage response = client.GetAsync(new Uri(indexDoc.ThumbnailUrl)).Result;
+                            if (response.StatusCode != HttpStatusCode.OK)
+                            {
+                                Log.Error("Feil ressurslenke i metadata: " + simpleMetadata.Uuid + " til " + indexDoc.ThumbnailUrl + " statuskode: " + response.StatusCode + " fjernet fra index");
+                                indexDoc.ThumbnailUrl = "";
+                            }
+                        }
+                    }
+                    catch (Exception ex) {
+                        Log.Error("Exception while testing resurces for metadata: " + simpleMetadata.Uuid, ex);
+                    }
+
+
                 }
 
                 indexDoc.MaintenanceFrequency = simpleMetadata.MaintenanceFrequency;
@@ -149,8 +171,6 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     indexDoc.license = simpleMetadata.Constraints.UseLimitations;
                 }
-                Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid,
-                    indexDoc.Title));
                 
                 indexDoc.typenumber = 1;
                 if (indexDoc.Type == "dataset")
@@ -159,6 +179,23 @@ namespace Kartverket.Metadatakatalog.Service
                     indexDoc.typenumber = 100;
                 if (indexDoc.Type == "software")
                     indexDoc.typenumber = 80;
+
+                if (indexDoc.Type == "dataset" && simpleMetadata.OperatesOn != null && simpleMetadata.OperatesOn.Count > 0)
+                {
+                    MD_Metadata_Type m =  geoNorge.GetRecordByUuid(simpleMetadata.OperatesOn[0]);
+                    SimpleMetadata sm = new SimpleMetadata(m);
+                    var servicedistributionDetails = sm.DistributionDetails;
+                    if (servicedistributionDetails != null)
+                    {
+                        indexDoc.ServiceDistributionProtocolForDataset = servicedistributionDetails.Protocol;
+                        indexDoc.ServiceDistributionUrlForDataset = servicedistributionDetails.URL;
+                        indexDoc.ServiceDistributionNameForDataset = servicedistributionDetails.Name;
+                    }
+               
+                }
+
+                Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid,
+                    indexDoc.Title));
                 
 
             }

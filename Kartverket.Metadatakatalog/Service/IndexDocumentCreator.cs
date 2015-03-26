@@ -6,7 +6,7 @@ namespace Kartverket.Metadatakatalog.Service
 {
     public interface IndexDocumentCreator
     {
-        List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems);
-        MetadataIndexDoc CreateIndexDoc(SimpleMetadata metadata);
+        List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems, IGeoNorge geoNorge);
+        MetadataIndexDoc CreateIndexDoc(SimpleMetadata metadata, IGeoNorge geoNorge);
     }
 }
