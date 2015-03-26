@@ -28,7 +28,6 @@
         }
         if (Model.HasFilterForFacetField(facet.FacetField))
         {
-            @*<div class="filter-options"><a class="btn-link" href="@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))">Vis alle</a></div>*@
             <div class="filter-options">
                 <button type="button" role="button" class="btn btn-default reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
                     <span class="glyphicon glyphicon-remove pull-left"></span>
