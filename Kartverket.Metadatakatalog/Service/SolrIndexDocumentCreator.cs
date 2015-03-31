@@ -91,6 +91,25 @@ namespace Kartverket.Metadatakatalog.Service
                     if (organization != null)
                     {
                         indexDoc.OrganizationLogoUrl = organization.LogoUrl;
+                        try
+                        {
+                            using (var client = new HttpClient())
+                            {
+                                client.DefaultRequestHeaders.Accept.Clear();
+                                HttpResponseMessage response = client.GetAsync(new Uri(indexDoc.OrganizationLogoUrl)).Result;
+                                if (response.StatusCode != HttpStatusCode.OK)
+                                {
+                                    Log.Error("Feil ressurslenke til logo i metadata: " + simpleMetadata.Uuid + " til " + indexDoc.OrganizationLogoUrl + " statuskode: " + response.StatusCode + " fjernet fra index");
+                                    indexDoc.OrganizationLogoUrl = "";
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("Exception while testing resurces for metadata: " + simpleMetadata.Uuid, ex);
+                        }
+
+
                     }
                 }
                 if (simpleMetadata.ContactMetadata != null)
@@ -182,6 +201,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                 if (indexDoc.Type == "dataset" && simpleMetadata.OperatesOn != null && simpleMetadata.OperatesOn.Count > 0)
                 {
+                    //TODO Må oppdatere datasett med services
                     MD_Metadata_Type m =  geoNorge.GetRecordByUuid(simpleMetadata.OperatesOn[0]);
                     SimpleMetadata sm = new SimpleMetadata(m);
                     var servicedistributionDetails = sm.DistributionDetails;

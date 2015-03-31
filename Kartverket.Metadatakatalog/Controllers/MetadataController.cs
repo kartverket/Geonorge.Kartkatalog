@@ -30,12 +30,13 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (InvalidOperationException exception)
             {
-                Log.Error("Metadata with uuid: " + uuid + " not found.", exception);
+                Log.Error("Metadata with uuid: " + uuid + " not found in Geonetwork.", exception);
+                //throw new Exception("Metadata with uuid: " + uuid + " not found in Geonetwork.");
             }
             if (model == null)
             {
                 Log.Error("Metadata with uuid: " + uuid + " not found.");
-                return new HttpNotFoundResult("Metadata with uuid: " + uuid + " not found.");
+                return new HttpNotFoundResult("Metadata with uuid: " + uuid + " not found in Geonetwork.");
             }
                 
             
