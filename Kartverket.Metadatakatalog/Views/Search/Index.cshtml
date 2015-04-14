@@ -18,7 +18,7 @@
 
 @helper DisplayFacet(SearchResultFacetViewModel facet)
 {
-    <h4>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h4>
+    <h3 style="font-size:18px">@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h3>
 
 
     
@@ -45,7 +45,7 @@
             <li class="active"><span role="tab">Kartkatalogen viser @Model.ShowingFromAndTo() av @Model.NumFound treff.</span></li>
 
             <li class="pull-right">
-                <label>Sorter etter:</label>
+                <label for="orderby">Sorter etter:</label>
                 <select id="orderby">
                     @if (Model.orderby == 0)
                     {
