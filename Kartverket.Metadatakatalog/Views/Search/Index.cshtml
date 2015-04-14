@@ -248,7 +248,13 @@
                                 </a>
 
 
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization"><h5>@item.Organization</h5></a>
+                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">
+                                @if (item.Organization != null)
+                                {
+                                    <h5>@item.Organization</h5>
+                                }
+                                    
+                                </a>
 
                                 <p>
                                     @if (item.Abstract.Length > 650)
@@ -271,13 +277,13 @@
                             <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
                                 @if (item.ShowDownloadLink())
                                 {
-                                    <a href="@item.DownloadUrl" title="last ned datasett for @item.Title" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-download-alt"></span>last ned
                                     </a>
                                 }
                                 else
                                 {
-                                    <a href="@item.DownloadUrl" title="last ned datasett for @item.Title" class="btn btn-xs btn-bunnmarg btn-default disabled" target="_blank">
+                                    <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" class="btn btn-xs btn-bunnmarg btn-default disabled" target="_blank">
                                         <span class="glyphicon glyphicon-download-alt"></span>last ned
                                     </a>
                                 }
@@ -285,13 +291,13 @@
                                 <br />
                                 @if (item.ShowWebsiteLink())
                                 {
-                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" title="besøk nettside til @item.Title" target="_blank">
+                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Besøk nettsiden til @item.Title" target="_blank">
                                         <span class="glyphicon glyphicon-globe"></span>besøk nettside
                                     </a>
                                 }
                                 else
                                 {
-                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default disabled" title="besøk nettside til @item.Title" target="_blank">
+                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default disabled" title="Besøk nettsiden til @item.Title" target="_blank">
                                         <span class="glyphicon glyphicon-globe"></span>besøk nettside
                                     </a>
                                 }
