@@ -61,6 +61,12 @@
 	color: #ccc;
 }
 
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+    color: #ccc;
+    opacity: 1;
+}
+
+
 
 /* ----- List view ----*/
 .search-results .col-actions img {

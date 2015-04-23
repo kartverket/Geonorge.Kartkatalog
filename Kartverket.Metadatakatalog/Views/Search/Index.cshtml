@@ -18,7 +18,7 @@
 
 @helper DisplayFacet(SearchResultFacetViewModel facet)
 {
-    <h4>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h4>
+    <h3 style="font-size:18px">@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h3>
 
 
     
@@ -45,7 +45,7 @@
             <li class="active"><span role="tab">Kartkatalogen viser @Model.ShowingFromAndTo() av @Model.NumFound treff.</span></li>
 
             <li class="pull-right">
-                <label>Sorter etter:</label>
+                <label for="orderby">Sorter etter:</label>
                 <select id="orderby">
                     @if (Model.orderby == 0)
                     {
@@ -100,32 +100,28 @@
                 </ul>
 
                                 
-                <ul class="pagination pagination-sm pull-right">
-                    <li class="btn-group pull-right">
-
-                        @if (Model.IsPreviousButtonActive())
-                        {
-                            <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
-                        }
+                <ul class="pagination pagination-sm pull-right btn-group">
+                    @if (Model.IsPreviousButtonActive())
+                    {
+                        <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                    }
                         
-                        @for (int i = Model.startPage; i <= Model.endPage; i++)
+                    @for (int i = Model.startPage; i <= Model.endPage; i++)
+                    {
+                        if (Model.IsActivePage(i))
                         {
-                            if (Model.IsActivePage(i))
-                            {
-                                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                            }
-                            else
-                            {
-                                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                            }
+                            <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                         }
-                        
-                        @if (Model.IsNextButtonActive())
+                        else
                         {
-                            <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                            <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                         }
+                    }
                         
-                    </li>
+                    @if (Model.IsNextButtonActive())
+                    {
+                        <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                    }
                 </ul>
             </div>
 
@@ -247,10 +243,18 @@
                                 }
                             </div>
                             <div class="col-no-padding-xs col-xs-12 col-sm-5 col-md-5 col-lg-5 col-title">
-                                <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())"><h4 class="role-button" role="button">@item.Title</h4></a>
+                                <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                                    <h4 class="role-button" role="button">@item.Title</h4>
+                                </a>
 
 
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization"><h5>@item.Organization</h5></a>
+                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">
+                                @if (item.Organization != null)
+                                {
+                                    <h5>@item.Organization</h5>
+                                }
+                                    
+                                </a>
 
                                 <p>
                                     @if (item.Abstract.Length > 650)
@@ -273,28 +277,28 @@
                             <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
                                 @if (item.ShowDownloadLink())
                                 {
-                                    <a href="@item.DownloadUrl" title="last ned" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-download-alt"></span>last ned
                                     </a>
                                 }
                                 else
                                 {
-                                    <a disabled="disabled" href="@item.DownloadUrl" title="last ned" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
-                                        <span class="glyphicon glyphicon-download-alt" disabled="disabled"></span>last ned
+                                    <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" class="btn btn-xs btn-bunnmarg btn-default disabled" target="_blank">
+                                        <span class="glyphicon glyphicon-download-alt"></span>last ned
                                     </a>
                                 }
                                 
                                 <br />
                                 @if (item.ShowWebsiteLink())
                                 {
-                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" title="besøk nettside" target="_blank">
+                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Besøk nettsiden til @item.Title" target="_blank">
                                         <span class="glyphicon glyphicon-globe"></span>besøk nettside
                                     </a>
                                 }
                                 else
                                 {
-                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" title="besøk nettside" disabled="disabled" target="_blank">
-                                        <span disabled="disabled" class="glyphicon glyphicon-globe"></span>besøk nettside
+                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default disabled" title="Besøk nettsiden til @item.Title" target="_blank">
+                                        <span class="glyphicon glyphicon-globe"></span>besøk nettside
                                     </a>
                                 }
                                 <br />
@@ -302,32 +306,27 @@
                                 
                                 @if (item.ShowMapLink())
                                 {
-                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis i kart" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-map-marker"></span>vis i kart
                                     </a>
-
-                                    @*<a  onclick='javascript:msgAddMapLayer("@item.ServiceUrl")' class="btn btn-xs btn-bunnmarg btn-default">
-                <span class="glyphicon glyphicon-plus"></span> Legg til kartlag
-            </a>*@
-
                                 }
                                 else if (item.ShowServiceMapLink())
                                 {
-                                    <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis i kart" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
+                                    <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis @item.Title i kart" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-map-marker"></span>vis i kart
                                     </a>
                                 }
                                 else
                                 {
-                                    <a disabled="disabled" href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis i kart"  class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
-                                        <span disabled="disabled" class="glyphicon glyphicon-map-marker"></span>vis i kart
+                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" class="btn btn-xs btn-bunnmarg btn-default disabled" target="_blank">
+                                        <span class="glyphicon glyphicon-map-marker"></span>vis i kart
                                     </a>
                                 }
               
                                 @if (item.IsOpendata)
                                 {
                                     <br /><br />
-                                    <img title="Open data" src="~/Content/img/unlock.png" class="bottom" alt="Opne data" />
+                                    <img title="Åpne data" src="~/Content/img/unlock.png" class="bottom" alt="Åpne data" />
                                 }
 
                                 @*else

@@ -7,7 +7,7 @@
         <div class="input-group-btn">
             <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
                 <span>Kartkatalogen</span>@*Set this to the text-property of the selected element (searchOptions.js).*@
-                <div><span class="caret"></span></div>
+                <span class="caret" style="float:right; margin-top:9px;"></span>
             </button>
             <ul class="geonorge-dropdown dropdown-menu" id="search-dropdown" tabindex="-1">
                 <li tabindex="0" class="left-edge-geonorge"><a href="@Html.GeonorgeUrl()">Søk i Alt</a></li>
@@ -20,7 +20,7 @@
         </div><!-- /input-group-btn -->
 
         <div class="typeahead-query">
-            <input name="text" type="search" class="form-control" id="txtSearch" value="@Model.Text" autocomplete="off" />
+            <input name="text" type="search" class="form-control" title="Søketekst" value="@Model.Text" autocomplete="off" />
             
         </div>
         <span class="input-group-btn typeahead-button">

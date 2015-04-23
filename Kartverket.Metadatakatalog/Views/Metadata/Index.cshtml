@@ -92,7 +92,7 @@
     {
         foreach (var thumb in Model.Thumbnails)
             {
-                if (thumb.Type == "thumbnail") 
+                if (thumb.Type == "thumbnail" || thumb.Type == "miniatyrbilde") 
                 {
                 <img src="@thumb.URL" width="300" class="thumbnail pull-right" alt="Forhåndsvisning av data." />
                     break;
