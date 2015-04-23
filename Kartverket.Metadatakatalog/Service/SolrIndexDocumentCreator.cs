@@ -199,17 +199,40 @@ namespace Kartverket.Metadatakatalog.Service
                 if (indexDoc.Type == "software")
                     indexDoc.typenumber = 80;
 
-                if (indexDoc.Type == "dataset" && simpleMetadata.OperatesOn != null && simpleMetadata.OperatesOn.Count > 0)
+                if (indexDoc.Type == "dataset")
                 {
                     //TODO Må oppdatere datasett med services
-                    MD_Metadata_Type m =  geoNorge.GetRecordByUuid(simpleMetadata.OperatesOn[0]);
-                    SimpleMetadata sm = new SimpleMetadata(m);
-                    var servicedistributionDetails = sm.DistributionDetails;
-                    if (servicedistributionDetails != null)
+                    string searchString = indexDoc.Uuid;
+                    //Sjekk om denne er koblet til noen tjenester
+                    var filters = new object[]
                     {
-                        indexDoc.ServiceDistributionProtocolForDataset = servicedistributionDetails.Protocol;
-                        indexDoc.ServiceDistributionUrlForDataset = servicedistributionDetails.URL;
-                        indexDoc.ServiceDistributionNameForDataset = servicedistributionDetails.Name;
+                        new PropertyIsLikeType
+                            {
+                                escapeChar = "\\",
+                                singleChar = "_",
+                                wildCard = "%",
+                                PropertyName = new PropertyNameType {Text = new[] {"srv:operatesOn"}},
+                                Literal = new LiteralType {Text = new[] {searchString}}
+                            }
+                    };
+
+                    var filterNames = new ItemsChoiceType23[]
+                    {
+                        ItemsChoiceType23.PropertyIsLike, 
+                    };
+
+                    var res = geoNorge.SearchWithFilters(filters, filterNames);
+                    if (res.numberOfRecordsMatched != "0")
+                    {
+                        MD_Metadata_Type m = geoNorge.GetRecordByUuid(((www.opengis.net.DCMIRecordType)(res.Items[0])).Items[0].Text[0]);
+                        SimpleMetadata sm = new SimpleMetadata(m);
+                        var servicedistributionDetails = sm.DistributionDetails;
+                        if (servicedistributionDetails != null)
+                        {
+                            indexDoc.ServiceDistributionProtocolForDataset = servicedistributionDetails.Protocol;
+                            indexDoc.ServiceDistributionUrlForDataset = servicedistributionDetails.URL;
+                            indexDoc.ServiceDistributionNameForDataset = servicedistributionDetails.Name;
+                        }
                     }
                
                 }
