@@ -231,36 +231,52 @@ namespace Kartverket.Metadatakatalog.Service.Search
         private ISolrQuery BuildQuery(SearchParameters parameters)
         {
             var text = parameters.Text;
-           
+            ISolrQuery query;
             
             if (!string.IsNullOrEmpty(text))
             {
                 text = text.Replace(":", " ");
-                if (text.Trim().Length == 0) return SolrQuery.All;
-
-                var query = new SolrMultipleCriteriaQuery(new[]
+                text = text.Replace("!", " ");
+                text = text.Replace("{", " ");
+                text = text.Replace("}", " ");
+                text = text.Replace("[", " ");
+                text = text.Replace("]", " ");
+                text = text.Replace("(", " ");
+                text = text.Replace(")", " ");
+                text = text.Replace("^", " ");
+                
+                if (text.Trim().Length == 0) query = SolrQuery.All;
+                else if (text.Trim().Length < 5)
                 {
-                    new SolrQuery("titleText:"+ text + "^50"),
-                    new SolrQuery("titleText:"+ text + "*^40"),
-                    new SolrQuery("titleText:"+ text + "~2^1.1"),
-                    //new SolrQuery("title_lowercase:"+ text + "^50"),
-                    //new SolrQuery("title_lowercase:"+ text + "*^40"),
-                    //new SolrQuery("title_lowercase:"+ text + "~2^1.1"),
-                    //new SolrQuery("organization:"+ text + "^3"),
-                    //new SolrQuery("organization:"+ text + "*^2"),
-                    //new SolrQuery("organization:"+ text + "~^1.5"),
-                    new SolrQuery("allText:" + text + "^1.2"),
-                    new SolrQuery("allText:" + text + "*^1.1"),
-                    new SolrQuery("allText:" + text + "~1"),   //Fuzzy
-                    new SolrQuery("allText2:" + text + ""), //Stemmer
-                    new SolrQuery("!boost b=typenumber")
-                    //new SolrQuery("allText3:" + text)        //Fonetisk
-                    
-                });
-                Log.Debug("Query: " + query.ToString());
-                return query;
+                    query = new SolrMultipleCriteriaQuery(new[]
+                    {
+                        new SolrQuery("titleText:"+ text + "^50"),
+                        new SolrQuery("titleText:"+ text + "*^40"),
+                        new SolrQuery("allText:" + text + "^1.2"),
+                        new SolrQuery("allText:" + text + "*^1.1"),
+                        new SolrQuery("!boost b=typenumber")
+                    });
+                }
+                else
+                {
+                    query = new SolrMultipleCriteriaQuery(new[]
+                    {
+                        new SolrQuery("titleText:"+ text + "^50"),
+                        new SolrQuery("titleText:"+ text + "*^40"),
+                        new SolrQuery("titleText:"+ text + "~2^1.1"),
+                        new SolrQuery("allText:" + text + "^1.2"),
+                        new SolrQuery("allText:" + text + "*^1.1"),
+                        new SolrQuery("allText:" + text + "~1"),   //Fuzzy
+                        new SolrQuery("allText2:" + text + ""), //Stemmer
+                        new SolrQuery("!boost b=typenumber")
+                        //new SolrQuery("allText3:" + text)        //Fonetisk
+                    });
+                }
             }
-            return SolrQuery.All; 
+            else query = SolrQuery.All;
+            
+            Log.Debug("Query: " + query.ToString());
+            return query; 
         }
 
         private ISolrQuery BuildQuery(SearchByOrganizationParameters parameters)
