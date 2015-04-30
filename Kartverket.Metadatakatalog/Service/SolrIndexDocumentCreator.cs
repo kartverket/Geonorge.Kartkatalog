@@ -130,7 +130,7 @@ namespace Kartverket.Metadatakatalog.Service
                 try
                 {
                     indexDoc.DatePublished = simpleMetadata.DatePublished;
-                    indexDoc.DateUpdated = simpleMetadata.DateUpdated;
+                    indexDoc.DateUpdated = simpleMetadata.DateMetadataUpdated;
                 }
                 catch (Exception e)
                 {
