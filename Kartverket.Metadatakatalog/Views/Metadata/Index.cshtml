@@ -378,7 +378,11 @@
         </div>
             @if (Model.DateUpdated != null)
             {
-                <p><strong>Oppdatert:</strong> @Html.DisplayFor(m => m.DateUpdated)</p>
+                <p><strong>Oppdatert(Ressurs):</strong> @Html.DisplayFor(m => m.DateUpdated)</p>
+            }
+            @if (Model.DateMetadataUpdated != null)
+            {
+                <p><strong>Oppdatert(Metadata):</strong> @Html.DisplayFor(m => m.DateMetadataUpdated)</p>
             }
             @if (Model.DatePublished != null)
             {
