@@ -129,8 +129,14 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         {
             return NumFound > (Offset + Limit-1);
         }
-
-        
+        public bool IsLastButtonActive()
+        {
+            return NumFound > (Offset + Limit - 1);
+        }
+        public bool IsFirstButtonActive()
+        {
+            return Offset > 1 && (Offset - Limit) >= 1;
+        }
 
         public RouteValueDictionary ParamsForPageNumber(int page)
         {
@@ -150,6 +156,14 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             routeValues["Offset"] = (Offset - Limit);
             routeValues["orderby"] = orderby;
             return routeValues;
+        }
+        public RouteValueDictionary ParamsForFirstLink()
+        {
+            return ParamsForPageNumber(1);
+        }
+        public RouteValueDictionary ParamsForLastLink()
+        {
+            return ParamsForPageNumber(pages);
         }
 
         public RouteValueDictionary ParamsForNextLink()

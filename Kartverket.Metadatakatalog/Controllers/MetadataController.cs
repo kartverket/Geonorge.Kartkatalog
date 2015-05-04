@@ -52,7 +52,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         public ActionResult Organization(SearchByOrganizationParameters parameters)
         {
             parameters.AddDefaultFacetsIfMissing();
-            parameters.Limit = 200;
+            parameters.Limit = 30;
             parameters.orderby = OrderBy.title;
             SearchResultForOrganization searchResult = _searchService.SearchByOrganization(parameters);
             var model = new SearchByOrganizationViewModel(parameters, searchResult);
