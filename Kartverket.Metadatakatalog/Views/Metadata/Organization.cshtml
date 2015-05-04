@@ -227,12 +227,12 @@
 
     foreach (var facetResult in facet.FacetResults)
     {
-        <div class="filter-options"><a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b style='font-weight: 800;'>" : "") @facetResult.LinkName() @Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b>" : "") (@facetResult.Count)</a></div>
+        <div class="filter-options"><a class="btn-link" href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b style='font-weight: 800;'>" : "") @facetResult.LinkName() @Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b>" : "") (@facetResult.Count)</a></div>
     }
     if (Model.HasFilterForFacetField(facet.FacetField))
     {
         <div class="filter-options">
-            <button type="button" role="button" class="btn btn-default reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
+            <button type="button" role="button" class="btn btn-default reset" onclick="location.href = '@Url.Action("Organization", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
                 <span class="glyphicon glyphicon-remove pull-left"></span>
                 Vis alle
             </button>
@@ -252,43 +252,43 @@
                 <select id="orderby">
                     @if (Model.orderby == 0)
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByScoreLink())" selected="selected">Relevans</option>
+                        <option value="@Url.Action("Organization", Model.ParamsForOrderByScoreLink())" selected="selected">Relevans</option>
                     }
                     else
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByScoreLink())">Relevans</option>
+                        <option value="@Url.Action("Organization", Model.ParamsForOrderByScoreLink())">Relevans</option>
                     }
                     @if (Model.orderby == 1)
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" selected="selected">Navn</option>
+                        <option value="@Url.Action("Organization", Model.ParamsForOrderByTitleLink())" selected="selected">Navn</option>
                     }
                     else
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByTitleLink())">Navn</option>
+                        <option value="@Url.Action("Organization", Model.ParamsForOrderByTitleLink())">Navn</option>
                     }
                     @if (Model.orderby == 2)
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" selected="selected">Organisasjon</option>
+                        <option value="@Url.Action("Organization", Model.ParamsForOrderByOrganizationLink())" selected="selected">Organisasjon</option>
                     }
                     else
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())">Organisasjon</option>
+                        <option value="@Url.Action("Organization", Model.ParamsForOrderByOrganizationLink())">Organisasjon</option>
                     }
                     @if (Model.orderby == 3)
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByMetadataUpdateLink())" selected="selected">Dato oppdatert (metadata)</option>
+                        <option value="@Url.Action("Organization", Model.ParamsForOrderByMetadataUpdateLink())" selected="selected">Dato oppdatert (metadata)</option>
                     }
                     else
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByMetadataUpdateLink())">Dato oppdatert (metadata)</option>
+                        <option value="@Url.Action("Organization", Model.ParamsForOrderByMetadataUpdateLink())">Dato oppdatert (metadata)</option>
                     }
                     @if (Model.orderby == 4)
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByResourceUpdateLink())" selected="selected">Dato oppdatert (ressurs)</option>
+                        <option value="@Url.Action("Organization", Model.ParamsForOrderByResourceUpdateLink())" selected="selected">Dato oppdatert (ressurs)</option>
                     }
                     else
                     {
-                        <option value="@Url.Action("Index", Model.ParamsForOrderByResourceUpdateLink())">Dato oppdatert (ressurs)</option>
+                        <option value="@Url.Action("Organization", Model.ParamsForOrderByResourceUpdateLink())">Dato oppdatert (ressurs)</option>
                     }
 
                 </select>
@@ -307,33 +307,33 @@
                 <ul class="pagination pagination-sm pull-right btn-group">
                     @if (Model.IsFirstButtonActive())
                     {
-                        <li><a aria-label="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
+                        <li><a aria-label="Første" href="@Url.Action("Organization", Model.ParamsForFirstLink())">&laquo;</a></li>
                     }
-                    
+                   
                     @if (Model.IsPreviousButtonActive())
                     {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                        <li><a href="@Url.Action("Organization", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                     }
 
                     @for (int i = Model.startPage; i <= Model.endPage; i++)
                     {
                         if (Model.IsActivePage(i))
                         {
-                            <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                            <li class="active"><a href="@Url.Action("Organization", Model.ParamsForPageNumber(i))">@i</a></li>
                         }
                         else
                         {
-                            <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                            <li><a href="@Url.Action("Organization", Model.ParamsForPageNumber(i))">@i</a></li>
                         }
                     }
 
                     @if (Model.IsNextButtonActive())
                     {
-                        <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                        <li><a href="@Url.Action("Organization", Model.ParamsForNextLink())">Neste &raquo;</a></li>
                     }
                     @if (Model.IsLastButtonActive())
                     {
-                        <li><a aria-label="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
+                        <li><a aria-label="Siste" href="@Url.Action("Organization", Model.ParamsForLastLink())"> &raquo;</a></li>
                     }
                 </ul>
             </div>
@@ -353,26 +353,35 @@
 
                 <ul class="pagination pagination-sm pull-right">
 
+                    @if (Model.IsFirstButtonActive())
+                    {
+                        <li><a aria-label="Første" href="@Url.Action("Organization", Model.ParamsForFirstLink())">&laquo;</a></li>
+                    }
+
                     @if (Model.IsPreviousButtonActive())
                     {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                        <li><a href="@Url.Action("Organization", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                     }
 
                     @for (int i = Model.startPage; i <= Model.endPage; i++)
                     {
                         if (Model.IsActivePage(i))
                         {
-                            <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                            <li class="active"><a href="@Url.Action("Organization", Model.ParamsForPageNumber(i))">@i</a></li>
                         }
                         else
                         {
-                            <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                            <li><a href="@Url.Action("Organization", Model.ParamsForPageNumber(i))">@i</a></li>
                         }
                     }
 
                     @if (Model.IsNextButtonActive())
                     {
-                        <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                        <li><a href="@Url.Action("Organization", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                    }
+                    @if (Model.IsLastButtonActive())
+                    {
+                        <li><a aria-label="Siste" href="@Url.Action("Organization", Model.ParamsForLastLink())"> &raquo;</a></li>
                     }
                 </ul>
             </div>

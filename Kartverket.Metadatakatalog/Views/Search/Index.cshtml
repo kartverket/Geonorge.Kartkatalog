@@ -149,9 +149,14 @@
                 
                 <ul class="pagination pagination-sm pull-right">
 
+                        @if (Model.IsFirstButtonActive())
+                        {
+                            <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
+                        }
+
                         @if (Model.IsPreviousButtonActive())
                         {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                            <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                         }
 
                         @for (int i = Model.startPage; i <= Model.endPage; i++)
@@ -169,6 +174,10 @@
                         @if (Model.IsNextButtonActive())
                         {
                             <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                        }
+                        @if (Model.IsLastButtonActive())
+                        {
+                            <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
                         }
                     </ul>
                 </div>
