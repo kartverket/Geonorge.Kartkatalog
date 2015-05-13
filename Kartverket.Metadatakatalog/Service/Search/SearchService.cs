@@ -106,6 +106,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
         public SearchResultForOrganization SearchByOrganization(SearchByOrganizationParameters parameters)
         {
             parameters.CreateFacetOfOrganizationSeoName();
+            parameters.AddComplexFacetsIfMissing();
             var order = new[] { new SortOrder("score", Order.DESC) };
             if (parameters.orderby == OrderBy.title)
             {

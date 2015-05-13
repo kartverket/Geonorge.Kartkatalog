@@ -74,8 +74,8 @@
                     <div class="panel-body">
                         @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
                         @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
-                        @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))*@
-                        @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))*@
+                        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
+                        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))
                     </div>
                 </div>
             </div>
