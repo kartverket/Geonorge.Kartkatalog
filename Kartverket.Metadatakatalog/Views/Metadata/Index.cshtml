@@ -155,19 +155,72 @@
             </a>
         }
         
-        @if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
-        {
-        <p>
-            @foreach (var thumb in Model.Thumbnails)
+        
+     @if (!string.IsNullOrEmpty(Model.CoverageUrl))
+      {
+         if(Model.CoverageUrl.IndexOf("TYPE:") > -1)
+         {
+            string CoverageLink = "";
+            var coverageStr = Model.CoverageUrl;
+            var startPos = 5;
+            var endPosType = coverageStr.IndexOf("@PATH");
+            var typeStr = coverageStr.Substring(startPos, endPosType - startPos);            
+
+            var endPath = coverageStr.IndexOf("@LAYER");
+            var pathStr = coverageStr.Substring(endPosType + startPos + 1, endPath - (endPosType + startPos + 1));
+
+            var startLayer = endPath + 7;
+            var endLayer = coverageStr.Length - startLayer;
+            var layerStr = coverageStr.Substring(startLayer, endLayer);
+             
+            if (typeStr == "WMS")
             {
-                if (thumb.Type == "dekningsoversikt")
-                {
-                    <img src="@thumb.URL" width="300"
-                          alt="@thumb.Type" />
-                }
+                CoverageLink = "http://norgeskart.no/geoportal/#5/355422/6668909/l/wms/[" + pathStr + "]/+" + layerStr;
             }
+           
+            else if (typeStr == "WFS")
+            {
+                CoverageLink = "http://norgeskart.no/geoportal/#5/355422/6668909/l/wms/[" + pathStr + "]/+" + layerStr;
+            }
+            
+            else if (typeStr == "GeoJSON")
+            {
+                CoverageLink = "http://norgeskart.no/geoportal/#5/355422/6668909/l/wms/[" + pathStr + "]/+" + layerStr;
+            }
+        
+           <a href="#" class="btn btn-default" title="Gå til dekningskart for @Model.Title" onclick="window.open('@CoverageLink', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes');">
+                <span class="glyphicon glyphicon-info-sign"></span> Vis dekningskart
+            </a>
+         
+         }
+         else
+         {
+        <p>
+            <a href="#" class="btn btn-default" title="Gå til dekningskart for @Model.Title" onclick="window.open('@Model.CoverageUrl', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, top=100, left=50, width=800, height=600');">
+                <span class="glyphicon glyphicon-info-sign"></span> Vis dekningskart
+            </a>
+
         </p>
+         }
+      }
+     else
+     {
+        if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
+        {
+            <p>
+                @foreach (var thumb in Model.Thumbnails)
+                {
+                    if (thumb.Type == "dekningsoversikt")
+                    {
+                        <a href="#" class="btn btn-default" title="Gå til dekningskart for @Model.Title" onclick="window.open('@thumb.URL', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, top=100, left=50, width=400, height=400');">
+                            <span class="glyphicon glyphicon-info-sign"></span> Vis dekningskart
+                        </a>
+                    }
+                }
+            </p>
         }
+
+     }
         <script>
 
             function getMetadata(uuid) {
@@ -352,6 +405,7 @@
             }
             @DisplayValue("Sikkerhetsnivå", Model.Constraints.SecurityConstraints)
             // skal stå her
+            @DisplayValue("Lovhenvisning", Model.Constraints.SecurityConstraintsNote)
         }
         
         <h3>Kvalitet</h3>

@@ -64,6 +64,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string ProductPageUrl { get; set; }
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
+        public string CoverageUrl { get; set; }
         public string Purpose { get; set; }
         public QualitySpecification QualitySpecification { get; set; }
         public ReferenceSystem ReferenceSystem { get; set; }
@@ -245,6 +246,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string OtherConstraintsLink { get; set; }
         public string OtherConstraintsLinkText { get; set; }
         public string SecurityConstraints { get; set; }
+        public string SecurityConstraintsNote { get; set; }
         public string UseConstraints { get; set; }
         public string UseLimitations { get; set; }
     }

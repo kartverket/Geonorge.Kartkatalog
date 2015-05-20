@@ -70,6 +70,7 @@ namespace Kartverket.Metadatakatalog.Service
                 ProductPageUrl = simpleMetadata.ProductPageUrl,
                 ProductSheetUrl = simpleMetadata.ProductSheetUrl,
                 ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl,
+                CoverageUrl = simpleMetadata.CoverageUrl,
                 Purpose = simpleMetadata.Purpose,
                 QualitySpecification = Convert(simpleMetadata.QualitySpecification),
                 ReferenceSystem = Convert(simpleMetadata.ReferenceSystem),
@@ -232,6 +233,7 @@ namespace Kartverket.Metadatakatalog.Service
                     OtherConstraintsLink = simpleConstraints.OtherConstraintsLink,
                     OtherConstraintsLinkText = simpleConstraints.OtherConstraintsLinkText,
                     SecurityConstraints = simpleConstraints.SecurityConstraints,
+                    SecurityConstraintsNote = simpleConstraints.SecurityConstraintsNote,
                     UseConstraints = simpleConstraints.UseConstraints,
                     UseLimitations = simpleConstraints.UseLimitations
                 };
