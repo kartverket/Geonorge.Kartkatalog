@@ -9,9 +9,6 @@ namespace Kartverket.Metadatakatalog.Models.Api
         {
             Limit = searchResult.Limit;
             Offset = searchResult.Offset;
-            /// <summary>
-            /// Number of items found
-            /// </summary>
             NumFound = searchResult.NumFound;
             Results = Metadata.CreateFromList(searchResult.Items, urlHelper);
             Facets = Facet.CreateFromList(searchResult.Facets);
