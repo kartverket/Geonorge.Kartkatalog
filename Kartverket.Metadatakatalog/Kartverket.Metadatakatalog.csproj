@@ -62,6 +62,12 @@
     <Reference Include="Autofac.Integration.WebApi">
       <HintPath>..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="GeoNorgeAPI, Version=2.7.7.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\GeoNorgeAPI.2.7.7.0\lib\net40\GeoNorgeAPI.dll</HintPath>
@@ -184,6 +190,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\HtmlHelperExtensions.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Api\Contact.cs" />
     <Compile Include="Models\Api\Facet.cs" />
     <Compile Include="Models\Api\FacetInput.cs" />
@@ -193,6 +200,7 @@
     <Compile Include="Models\Api\SearchParameters.cs" />
     <Compile Include="Models\Facet.cs" />
     <Compile Include="Models\FacetParameter.cs" />
+    <Compile Include="Models\MetadataContext.cs" />
     <Compile Include="Models\MetadataIndexDoc.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />
     <Compile Include="Models\Api\SearchResult.cs" />
