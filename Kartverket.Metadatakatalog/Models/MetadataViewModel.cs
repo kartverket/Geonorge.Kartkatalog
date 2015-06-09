@@ -64,6 +64,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string ProductPageUrl { get; set; }
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
+        public string CoverageUrl { get; set; }
         public string Purpose { get; set; }
         public QualitySpecification QualitySpecification { get; set; }
         public ReferenceSystem ReferenceSystem { get; set; }
@@ -238,6 +239,42 @@ namespace Kartverket.Metadatakatalog.Models
             };
         }
 
+
+        public string GetCoverageLink(){
+
+            string CoverageLink = "";
+            var coverageStr = CoverageUrl;
+            var startPos = 5;
+            var endPosType = coverageStr.IndexOf("@PATH");
+            var typeStr = coverageStr.Substring(startPos, endPosType - startPos);
+
+            var endPath = coverageStr.IndexOf("@LAYER");
+            var pathStr = coverageStr.Substring(endPosType + startPos + 1, endPath - (endPosType + startPos + 1));
+
+            var startLayer = endPath + 7;
+            var endLayer = coverageStr.Length - startLayer;
+            var layerStr = coverageStr.Substring(startLayer, endLayer);
+
+            if (typeStr == "WMS")
+            {
+                CoverageLink = "http://norgeskart.no/geoportal/#5/355422/6668909/l/wms/[" + pathStr + "]/+" + layerStr;
+            }
+
+            else if (typeStr == "WFS")
+            {
+                CoverageLink = "http://norgeskart.no/geoportal/#11/255216/6653881/l/wfs/[" + pathStr + "]/+" + layerStr;
+            }
+
+            else if (typeStr == "GeoJSON")
+            {
+                CoverageLink = "http://norgeskart.no/geoportal/staging/#4/355422/6668909/l/geojson/[" + pathStr + "]/+" + layerStr;
+            }
+
+            return CoverageLink;
+        
+        }
+
+
         public string ParentIdentifier { get; set; }
     }
 
@@ -257,6 +294,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string OtherConstraintsLink { get; set; }
         public string OtherConstraintsLinkText { get; set; }
         public string SecurityConstraints { get; set; }
+        public string SecurityConstraintsNote { get; set; }
         public string UseConstraints { get; set; }
         public string UseLimitations { get; set; }
     }
