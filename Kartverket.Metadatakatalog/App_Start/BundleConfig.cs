@@ -26,6 +26,8 @@ namespace Kartverket.Metadatakatalog
                       "~/Content/common.css",
                       "~/Content/navbar.css",
                       "~/Content/searchbar.css",
+                      "~/Content/chosen.css",
+
                      
                       "~/Content/site.css"));
             // "~/Content/jquery.typeahead.css",
