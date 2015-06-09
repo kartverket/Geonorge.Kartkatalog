@@ -9,6 +9,7 @@ using Kartverket.Metadatakatalog.Models;
 using SolrNet;
 using log4net;
 using System;
+using System.Data.Entity;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -25,6 +26,8 @@ namespace Kartverket.Metadatakatalog
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             DependencyConfig.Configure(new ContainerBuilder());
+
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<MetadataContext, Migrations.Configuration>());
 
             MvcHandler.DisableMvcResponseHeader = true;
 
