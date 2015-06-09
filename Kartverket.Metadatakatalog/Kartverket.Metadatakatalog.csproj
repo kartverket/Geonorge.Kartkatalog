@@ -209,6 +209,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
@@ -370,6 +371,7 @@
     <Content Include="Views\Shared\_Map.cshtml" />
     <Content Include="Views\Shared\_Analytics.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Download\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Util\" />
