@@ -13,7 +13,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public int offset { get; set; }
         /// <summary>
-        /// This param indicates the maximum number of constraint counts that should be returned. Default is 100.
+        /// This param indicates the maximum number of constraint counts that should be returned. Default is 10.
         /// </summary>
         public int limit { get; set; }
         /// <summary>

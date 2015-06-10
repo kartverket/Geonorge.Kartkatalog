@@ -237,6 +237,17 @@ namespace Kartverket.Metadatakatalog.Service
                
                 }
 
+                //add DistributionProtocols
+                indexDoc.DistributionProtocols = new List<string>();
+                if (!String.IsNullOrEmpty(indexDoc.DistributionProtocol))
+                {
+                    indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.DistributionProtocol));
+                }
+                if (!String.IsNullOrEmpty(indexDoc.ServiceDistributionProtocolForDataset))
+                {
+                    indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.ServiceDistributionProtocolForDataset));
+                }
+
                 Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid,
                     indexDoc.Title));
                 
@@ -248,6 +259,21 @@ namespace Kartverket.Metadatakatalog.Service
                 Log.Error("Exception while parsing metadata: " + identifier, e);
             }
             return indexDoc;
+        }
+
+        private string ConvertProtocolToSimpleName(string protocol) {
+            if (protocol.ToLower().Contains("wmts")) return "WMTS-tjeneste";
+            else if (protocol.ToLower().Contains("wfs")) return "WFS-tjeneste";
+            else if (protocol.ToLower().Contains("wms")) return "WMS-tjeneste";
+            else if (protocol.ToLower().Contains("csw")) return "CSW-tjeneste";
+            else if (protocol.ToLower().Contains("sos")) return "SOS-tjeneste";
+            else if (protocol.ToLower().Contains("download")) return "Nedlastingsside";
+            else if (protocol.ToLower().Contains("link")) return "Webside";
+            else if (protocol.ToLower().Contains("rest")) return "REST-API";
+            else if (protocol.ToLower().Contains("wcs")) return "WCS-tjeneste";
+            else if (protocol.ToLower().Contains("ws")) return "Webservice";
+            else if (protocol.ToLower().Contains("wps")) return "WPS-tjeneste";
+            else return protocol;
         }
 
         private List<Keyword> Convert(IEnumerable<SimpleKeyword> simpleKeywords)

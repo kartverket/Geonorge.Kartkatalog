@@ -59,6 +59,12 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public string DistributionName { get; set; }
 
+        /// <summary>
+        /// True if one of the nationalinitiativs(Samarbeid og lover) is "Åpne data"
+        /// </summary>
+        public bool IsOpenData { get; set; }
+        public Metadata() { 
+        }
         public Metadata(SearchResultItem item, UrlHelper urlHelper)
         {
 
@@ -74,9 +80,16 @@ namespace Kartverket.Metadatakatalog.Models.Api
             DistributionUrl = item.DistributionUrl;
             DistributionProtocol = item.DistributionProtocol;
             DistributionName = item.DistributionName;
-            ShowDetailsUrl = urlHelper.Action("Index", "Metadata", new {uuid = item.Uuid}, urlHelper.RequestContext.HttpContext.Request.Url.Scheme);
-            string s = new SeoUrl(item.Organization, "").Organization;
-            OrganizationUrl = urlHelper.RequestContext.HttpContext.Request.Url.Scheme + "://" + urlHelper.RequestContext.HttpContext.Request.Url.Authority + "/metadata/" + s;
+            if (urlHelper != null)
+            {
+                ShowDetailsUrl = urlHelper.Action("Index", "Metadata", new { uuid = item.Uuid }, urlHelper.RequestContext.HttpContext.Request.Url.Scheme);
+                string s = new SeoUrl(item.Organization, "").Organization;
+                OrganizationUrl = urlHelper.RequestContext.HttpContext.Request.Url.Scheme + "://" + urlHelper.RequestContext.HttpContext.Request.Url.Authority + "/metadata/" + s;
+            }
+           
+            if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data"))
+                IsOpenData = true;
+            else IsOpenData = false;
         }
 
         public static List<Metadata> CreateFromList(IEnumerable<SearchResultItem> items, UrlHelper urlHelper)

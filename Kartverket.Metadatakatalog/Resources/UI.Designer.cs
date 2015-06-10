@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Distribusjonsprotokoll.
+        /// </summary>
+        public static string Facet_DistributionProtocols {
+            get {
+                return ResourceManager.GetString("Facet_DistributionProtocols", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nøkkelord.
         /// </summary>
         public static string Facet_keyword {

@@ -581,6 +581,11 @@
             The layer for services
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.IsOpenData">
+            <summary>
+            True if one of the nationalinitiativs(Samarbeid og lover) is "Åpne data"
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.text">
             <summary>
             The text to search for
@@ -593,7 +598,7 @@
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.limit">
             <summary>
-            This param indicates the maximum number of constraint counts that should be returned. Default is 100.
+            This param indicates the maximum number of constraint counts that should be returned. Default is 10.
             </summary>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.facets">
@@ -645,6 +650,11 @@
         <member name="P:Resources.UI.AppPageTitle">
             <summary>
               Looks up a localized string similar to Kartkatalogen.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Facet_DistributionProtocols">
+            <summary>
+              Looks up a localized string similar to Distribusjonsprotokoll.
             </summary>
         </member>
         <member name="P:Resources.UI.Facet_keyword">
