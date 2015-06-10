@@ -65,6 +65,79 @@
     opacity: 1;
 }
 
+.facet-sok-emne:first-child {
+    padding: 0 0 15px 0;
+}
+
+.facet-sok-emne {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.facet-sok-tittel {
+    display: block;
+}
+
+
+    .facet-sok-tittel h3 {
+        display: inline;
+        font-size: 18px;
+    }
+
+
+    .facet-sok-tittel .indicator {
+        float: right;
+        font-family: 'Glyphicons Halflings';
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+        .facet-sok-tittel .indicator:before {
+            content: "\e113";
+        }
+
+    .facet-sok-tittel.collapsed .indicator:before {
+        content: "\e114";
+    }
+
+
+
+.facet-sok-undertitler {
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.nav-pills-small > li {
+    margin: 0!important;
+}
+
+.nav-pills-small > li > a {
+    padding: 2px 15px;
+    border-radius: 0;
+}
+
+
+.nav-pills-small > li.active a {
+    background: none !important;
+    color: #007294;
+    background-color: #f8f8f8 !important;
+    border-left: 2px solid #007294;
+    font-weight: bold;
+}
+
+
+.nav-pills-small > li.active > a:hover, .nav-pills-small > li.active > a:focus {
+    color: #1183A5;
+}
+
+.list-heading {
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.list-btn {
+    margin-top: 5px;
+}
 
 
 /* ----- List view ----*/
@@ -577,8 +650,8 @@ body {
         content: "\e014";
     }
 
-    .btn .glyphicon.glyphicon-remove {
-        padding-right: 0;
-        margin-right: 0;
-        border-right: 0;
-    }
+.btn .glyphicon.glyphicon-remove {
+    padding-right: 0;
+    margin-right: 0;
+    border-right: 0;
+}
