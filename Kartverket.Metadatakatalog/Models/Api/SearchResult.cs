@@ -5,6 +5,13 @@ namespace Kartverket.Metadatakatalog.Models.Api
 {
     public class SearchResult
     {
+        public SearchResult(Models.SearchResult searchResult)
+        {
+            Limit = searchResult.Limit;
+            Offset = searchResult.Offset;
+            NumFound = searchResult.NumFound;
+        }
+
         public SearchResult(Models.SearchResult searchResult, UrlHelper urlHelper)
         {
             Limit = searchResult.Limit;

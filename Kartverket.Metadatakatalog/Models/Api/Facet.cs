@@ -13,7 +13,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// The facet result
         /// </summary>
         public List<FacetValue> FacetResults { get; set; }
-
+        public Facet() { }
         private Facet(Models.Facet item)
         {
             FacetField = item.FacetField;
@@ -35,6 +35,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             /// The number of items that has this facet
             /// </summary>
             public int Count { get; set; }
+            public FacetValue() { }
 
             private FacetValue(Models.Facet.FacetValue item)
             {
