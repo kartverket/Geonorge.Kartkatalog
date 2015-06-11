@@ -121,7 +121,7 @@
     <value>Kartkatalogen</value>
   </data>
   <data name="Facet_DistributionProtocols" xml:space="preserve">
-    <value>Distribusjonsprotokoll</value>
+    <value>Distribusjonstype</value>
   </data>
   <data name="Facet_keyword" xml:space="preserve">
     <value>Nøkkelord</value>

@@ -332,7 +332,7 @@
         }
         @if (Model.DistributionDetails != null)
         {
-            <text>@DisplayValue("Protokoll", Model.DistributionDetails.Protocol)</text>
+            <text>@DisplayValue("Distribusjonstype", Model.DistributionDetails.Protocol)</text>
             if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
             {
                 if (Model.IsService() || Model.IsServiceLayer())
