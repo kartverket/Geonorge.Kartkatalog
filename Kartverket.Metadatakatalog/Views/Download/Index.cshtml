@@ -2,75 +2,130 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Min handlekurv</h2>
+<h1></h1>
+<div class="page-header">
+    <h3 class="h-md">Min handlekurv</h3>
+    <hr>
+</div>
+
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-3"><h3 class="panel-title">Projeksjon:</h3></div>
-            <div class="col-md-3"><h3 class="panel-title">Filformat:</h3></div>
-            <div class="col-md-3"><h3 class="panel-title">Område:</h3></div>
-        </div>
 
+ 
 
-    </div>
     <div class="list-group">
-        @for (int i = 0; i < 7; i++) { 
-        <div class="list-group-item">
-            <div class="row">
-                <div class="col-md-2">Norges maritime grenser</div>
-                <div class="col-md-3">
-                    <select data-placeholder="Projeksjon" multiple class="chosen-select form-control" tabindex="18" id="multiple-label-example">
-                        <option value=""></option>
-                        <optgroup label="ETRS">
-                            <option>ETRS89</option>
-                        </optgroup>
-                        <optgroup label="UTM">
-                            <option selected>UTM32N</option>
-                            <option selected>UTM33N</option>
-                        </optgroup>
+        
+        @for (int i = 1; i < 8; i++)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-md-1">
+                        <img src="http://forskning.no/sites/forskning.no/files/kartverket_None.jpg" class="list-icon" />
+                    </div>
+                    <div class="col-md-11">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="lead">
+                                    Norges maritime grenser
+                                    <a data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="list-btn-remove"><span class="glyphicon glyphicon-remove"></span></a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <em>Projeksjon:</em>
+                                    <select data-placeholder="Klikk for å velge projeksjon" multiple class="chosen-select form-control" tabindex="18" id="multiple-label-example">
+                                        <option value=""></option>
+                                        <optgroup label="ETRS">
+                                            <option>ETRS89</option>
+                                        </optgroup>
+                                        <optgroup label="UTM">
+                                            <option selected>UTM32N</option>
+                                            <option selected>UTM33N</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <em>Filformat:</em>
+                                    <select data-placeholder="Klikk for å velge filformat" multiple class="chosen-select form-control" tabindex="18" id="multiple-label-example">
+                                        <option value=""></option>
+                                        <optgroup label="SOSI">
+                                            <option>SOSI 4.0</option>
+                                            <option>SOSI 4.5</option>
+                                        </optgroup>
+                                        <optgroup label="GML">
+                                            <option selected>GML 3.1</option>
+                                            <option selected>GML 3.2.1</option>
+                                        </optgroup>
+                                        <option>SHAPE</option>
 
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select data-placeholder="Filformat" multiple class="chosen-select form-control" tabindex="18" id="multiple-label-example">
-                        <option value=""></option>
-                        <optgroup label="SOSI">
-                            <option>SOSI 4.0</option>
-                            <option>SOSI 4.5</option>
-                        </optgroup>
-                        <optgroup label="GML">
-                            <option selected>GML 3.1</option>
-                            <option selected>GML 3.2.1</option>
-                        </optgroup>
-                        <option>SHAPE</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                    </select>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <em>Område:</em>
+                                    <div class="input-group ">
+                                        <select data-placeholder="Klikk for å velge område" multiple class="chosen-select form-control" tabindex="18" id="multiple-label-example">
+                                            <option value=""></option>
+                                            <option selected>Hele landet</option>
+                                            <optgroup label="Telemark">
+                                                <option>Bø i Telemark</option>
+                                                <option>Gvarv</option>
+                                            </optgroup>
+                                        </select>
+                                        <span class="input-group-btn" data-toggle="modal" data-target="#kartModal">
+                                            <button data-placement="bottom" title="Velg fra kart" data-toggle="tooltip" class="btn btn-default btn-nodivider btn-fullheight" type="button"><span class="glyphicon glyphicon-globe"></span></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <select data-placeholder="Område" multiple class="chosen-select form-control" tabindex="18" id="multiple-label-example">
-                        <option value=""></option>
-                        <option selected>Hele landet</option>
-                        <optgroup label="Telemark">
-                            <option>Bø i Telemark</option>
-                            <option>Gvarv</option>
-                        </optgroup>
-                    </select>
-                </div>
-                <div class="col-md-1">
-                    <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-                </div>
-                <div class="clearfix"></div>
             </div>
-        </div>
         }
     </div>
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="pull-right">
-            <button class="btn btn-default">Avbryt</button>
-            <button class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Last ned</button>
+        <div class="form-group">
+            <div class="pull-right">
+
+                <button class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span> Handle mer</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="pull-right">
+                <button class="btn btn-default">Avbryt</button>
+                <button class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Last ned</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="kartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Områdevelger</h4>
+            </div>
+            <div class="modal-body">
+                <iframe longdesc="" title="" src="http://www.norgeskart.no/dynamisk-med-navigasjon.html#6/166195/6636879/+embed.box" width="100%" height="424"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
+                <button type="button" class="btn btn-primary">Legg til område</button>
+            </div>
         </div>
     </div>
 </div>
@@ -80,6 +135,10 @@
         $(document).ready(function () {
             $(".chosen-select").chosen();
             $("select").chosen();
+
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
         });
 
 
