@@ -53,6 +53,7 @@
 
 .col-actions .btn {
     color: #337AB7;
+    margin-bottom: 5px;
 }
 
 
@@ -633,6 +634,14 @@ body {
 
 /* Chosen select list */
 
+.chosen-container{
+    width: 100%!important;
+}
+
+.chosen-input-group {
+    width: calc(100% - 37px);
+}
+
 .chosen-container-multi .chosen-choices {
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
     background-image: none;
@@ -678,14 +687,17 @@ body {
     background-image: none;
 }
 
-
-.list-icon {
+.list-icon{
+    text-align: center;
+}
+.list-icon img {
+    max-height: 75px;
     max-width: 100%;
 }
 
 .list-btn-remove {
     line-height: 1.4em;
-    font-size: 15px;
+    font-size: 13px;
     border-left: 1px solid #CCC;
     padding-left: 5px;
     color: #777;
@@ -707,4 +719,10 @@ body {
     height: 100%;
     position: absolute;
     top: 0;
+}
+
+
+.btn-handlekurv {
+    font-size: 1.4em;
+    margin-top: 60px;
 }
