@@ -13,6 +13,9 @@ namespace Kartverket.Metadatakatalog
                         ));
             //"~/Scripts/jquery.typeahead.js"
 
+            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
+                        "~/Scripts/modernizr-*"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"
                         ));
