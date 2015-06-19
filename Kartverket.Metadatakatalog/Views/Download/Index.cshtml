@@ -64,10 +64,10 @@
             // Midlertidig seeding av dataset i localStorage
             var orderItems = []
             orderItems.push("75461f65-eaea-4495-b2ab-3bc04d261669");
-         /*   orderItems.push("aee42bb6-d0e9-4d70-86fe-6ea76c381055");
-            orderItems.push("ea192681-d039-42ec-b1bc-f3ce04c189ac");
-            orderItems.push("442cae64-b447-478d-b384-545bc1d9ab48");
-            orderItems.push("58e0dbf8-0d47-47c8-8086-107a3fa2dfa4");*/
+            /*   orderItems.push("aee42bb6-d0e9-4d70-86fe-6ea76c381055");
+               orderItems.push("ea192681-d039-42ec-b1bc-f3ce04c189ac");
+               orderItems.push("442cae64-b447-478d-b384-545bc1d9ab48");
+               orderItems.push("58e0dbf8-0d47-47c8-8086-107a3fa2dfa4");*/
             if (Modernizr.localstorage) {
                 console.log('window.localStorage is available!');
                 localStorage["orderItems"] = JSON.stringify(orderItems);
@@ -81,7 +81,6 @@
                 if (segment == null) segment = '';
                 var val;
                 var localStorageKey;
-                console.log(typeof data);
                 var items = []
                 $.each(data, function (key, val) {
                     if (segment != '' && segment != null) {
@@ -91,11 +90,11 @@
                     }
 
                     if (typeof val == 'object') {
-                        
+
                         $.each($(this), function (key, val) {
                             items.push(val);
                         });
-                        
+
                     } else {
                         localStorage[localStorageKey] = val;
                     }
@@ -124,15 +123,15 @@
 
             var storedOrderItems = JSON.parse(localStorage["orderItems"]);
 
-            //Kommenter ut blokken nedefor 
+            //Kommenter ut blokken nedefor
 
-        /*    $.each(storedOrderItems, function (key, val) { //TODO 
-                getJsonData('api', ['capabilities'], val);
-               // getJsonData('api', ['codelists', 'projection'], val);
-               // getJsonData('api', ['codelists', 'area'], val);
-               // getJsonData('api', ['codelists', 'format'], val);
-            });
-        */
+            /*    $.each(storedOrderItems, function (key, val) { //TODO
+                    getJsonData('api', ['capabilities'], val);
+                   // getJsonData('api', ['codelists', 'projection'], val);
+                   // getJsonData('api', ['codelists', 'area'], val);
+                   // getJsonData('api', ['codelists', 'format'], val);
+                });
+            */
 
         });
 
