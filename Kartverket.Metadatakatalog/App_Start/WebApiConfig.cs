@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -25,7 +26,7 @@ namespace Kartverket.Metadatakatalog
 */
 
             config.Formatters.JsonFormatter.SerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
-
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
         }
     }
 

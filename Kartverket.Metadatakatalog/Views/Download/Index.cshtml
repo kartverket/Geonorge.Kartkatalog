@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Newtonsoft.Json
+
+@{
     ViewBag.Title = "Index";
 }
 
@@ -10,91 +12,13 @@
 
 <div class="panel panel-default">
 
- 
+    <div class="list-group" id="orderlist"></div>
 
-    <div class="list-group">
-        
-        @for (int i = 1; i < 8; i++)
-        {
-            <div class="list-group-item">
-                <div class="row">
-                    <div class="col-md-1">
-                        <img src="http://forskning.no/sites/forskning.no/files/kartverket_None.jpg" class="list-icon" />
-                    </div>
-                    <div class="col-md-11">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p class="lead">
-                                    Norges maritime grenser
-                                    <a data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="list-btn-remove"><span class="glyphicon glyphicon-remove"></span></a>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <em>Projeksjon:</em>
-                                    <select data-placeholder="Klikk for å velge projeksjon" multiple class="chosen-select form-control" tabindex="18" id="multiple-label-example">
-                                        <option value=""></option>
-                                        <optgroup label="ETRS">
-                                            <option>ETRS89</option>
-                                        </optgroup>
-                                        <optgroup label="UTM">
-                                            <option selected>UTM32N</option>
-                                            <option selected>UTM33N</option>
-                                        </optgroup>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <em>Filformat:</em>
-                                    <select data-placeholder="Klikk for å velge filformat" multiple class="chosen-select form-control" tabindex="18" id="multiple-label-example">
-                                        <option value=""></option>
-                                        <optgroup label="SOSI">
-                                            <option>SOSI 4.0</option>
-                                            <option>SOSI 4.5</option>
-                                        </optgroup>
-                                        <optgroup label="GML">
-                                            <option selected>GML 3.1</option>
-                                            <option selected>GML 3.2.1</option>
-                                        </optgroup>
-                                        <option>SHAPE</option>
-
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <em>Område:</em>
-                                    <div class="input-group ">
-                                        <select data-placeholder="Klikk for å velge område" multiple class="chosen-select form-control" tabindex="18" id="multiple-label-example">
-                                            <option value=""></option>
-                                            <option selected>Hele landet</option>
-                                            <optgroup label="Telemark">
-                                                <option>Bø i Telemark</option>
-                                                <option>Gvarv</option>
-                                            </optgroup>
-                                        </select>
-                                        <span class="input-group-btn" data-toggle="modal" data-target="#kartModal">
-                                            <button data-placement="bottom" title="Velg fra kart" data-toggle="tooltip" class="btn btn-default btn-nodivider btn-fullheight" type="button"><span class="glyphicon glyphicon-globe"></span></button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
 </div>
 <div class="row">
     <div class="col-md-12">
         <div class="form-group">
             <div class="pull-right">
-
                 <button class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span> Handle mer</button>
             </div>
             <div class="clearfix"></div>
@@ -129,18 +53,106 @@
         </div>
     </div>
 </div>
+
 @section scripts {
     <script src="~/Scripts/chosen.jquery.js"></script>
     <script>
         $(document).ready(function () {
-            $(".chosen-select").chosen();
+
             $("select").chosen();
 
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
-            })
+            // Midlertidig seeding av dataset i localStorage
+            var orderItems = []
+            orderItems.push("75461f65-eaea-4495-b2ab-3bc04d261669");
+         /*   orderItems.push("aee42bb6-d0e9-4d70-86fe-6ea76c381055");
+            orderItems.push("ea192681-d039-42ec-b1bc-f3ce04c189ac");
+            orderItems.push("442cae64-b447-478d-b384-545bc1d9ab48");
+            orderItems.push("58e0dbf8-0d47-47c8-8086-107a3fa2dfa4");*/
+            if (Modernizr.localstorage) {
+                console.log('window.localStorage is available!');
+                localStorage["orderItems"] = JSON.stringify(orderItems);
+
+            } else {
+                console.log('no native support for HTML5 storage :(');
+            }
+
+
+            function getJsonObjects(data, segment, uuid) {
+                if (segment == null) segment = '';
+                var val;
+                var localStorageKey;
+                console.log(typeof data);
+                var items = []
+                $.each(data, function (key, val) {
+                    if (segment != '' && segment != null) {
+                        localStorageKey = uuid + segment + key;
+                    } else {
+                        localStorageKey = uuid + key;
+                    }
+
+                    if (typeof val == 'object') {
+                        
+                        $.each($(this), function (key, val) {
+                            items.push(val);
+                        });
+                        
+                    } else {
+                        localStorage[localStorageKey] = val;
+                    }
+                });
+                if (items.length > 0) {
+                    localStorageKey = uuid + segment;
+                    localStorage[localStorageKey] = JSON.stringify(items);
+                }
+            }
+
+            function getJsonData(baseuri, segments, uuid) {
+                segmentUri = '/';
+                segmentString = '.';
+                $.each(segments, function (pos, segment) {
+                    segmentUri += segment + '/';
+                    segmentString += segment + '.';
+                });
+                $.getJSON('http://download.dev.geonorge.no/' + baseuri + segmentUri + uuid,
+                    {
+                        json: 'true'
+                    },
+                    function (data) {
+                        getJsonObjects(data, segmentString, uuid);
+                    });
+            }
+
+            var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+
+            //Kommenter ut blokken nedefor 
+
+        /*    $.each(storedOrderItems, function (key, val) { //TODO 
+                getJsonData('api', ['capabilities'], val);
+               // getJsonData('api', ['codelists', 'projection'], val);
+               // getJsonData('api', ['codelists', 'area'], val);
+               // getJsonData('api', ['codelists', 'format'], val);
+            });
+        */
+
         });
 
+
+
+
+        $(document).ready(function () {
+
+            // Inkludering av OrderItem partial view
+            var content = '@Html.Raw((Html.Partial("_OrderItem").ToString().Replace(Environment.NewLine, "")))';
+            orderItems = (JSON.parse(localStorage.getItem('orderItems')));
+            $.each(orderItems, function (key, val) {
+                $("#orderlist").append('<div id="orderuuid' + val + '">' + content + '</div>');
+
+            });
+        });
+
+        $(document).ready(function () {
+            $(".chosen-select").chosen();
+        });
 
 
     </script>

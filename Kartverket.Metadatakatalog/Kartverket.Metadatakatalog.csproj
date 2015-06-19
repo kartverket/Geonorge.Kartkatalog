@@ -375,6 +375,7 @@
     <Content Include="Views\Shared\_Analytics.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Download\Index.cshtml" />
+    <Content Include="Views\Download\_OrderItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Util\" />
