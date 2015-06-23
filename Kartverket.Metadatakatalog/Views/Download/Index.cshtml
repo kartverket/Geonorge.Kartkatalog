@@ -12,7 +12,14 @@
 
 <div class="panel panel-default">
 
-    <div class="list-group" id="orderlist"></div>
+    <div class="list-group" id="orderlist">
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 8em; width: 2%;">
+                Laster datasett
+            </div>
+        </div>
+
+    </div>
 
 </div>
 <div class="row">
@@ -57,17 +64,85 @@
 @section scripts {
     <script src="~/Scripts/chosen.jquery.js"></script>
     <script>
-        $(document).ready(function () {
 
+        var objCount = 0;
+        var objCountLoaded = 0;
+
+        function getJsonObjects(data, segment, uuid) {
+            if (segment == null) segment = '';
+            var val;
+            var localStorageKey;
+            var items = [];
+            var parentObj = '';
+            $.each(data, function (key, val) {
+                if (segment != '' && segment != null) {
+                    localStorageKey = uuid + segment + '.' + key;
+                } else {
+                    localStorageKey = uuid + key;
+                }
+
+                if (typeof val == 'object') {
+                    if (typeof key == 'string') {
+                        parentObj = '.' + key;
+                    }
+                    $.each($(this), function (key, val) {
+                        items.push(val);
+                    });
+
+                } else {
+                    localStorage[localStorageKey] = val;
+                }
+            });
+            if (items.length > 0) {
+                localStorageKey = uuid + segment + parentObj;
+                localStorage[localStorageKey] = JSON.stringify(items);
+            }
+        }
+
+        function getJsonData(baseuri, segments, uuid) {
+            segmentUri = '';
+            segmentString = '';
+            $.each(segments, function (pos, segment) {
+                segmentUri += '/' + segment;
+                segmentString += '.' + segment;
+            });
+
+            var jsonUri = 'http://download.dev.geonorge.no/' + baseuri + segmentUri + '/' + uuid + '?json=true';
+            $.ajax({
+                url: jsonUri,
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    getJsonObjects(data, segmentString, uuid);
+                    if (data.supportsProjectionSelection) {
+                        getJsonData('api', ['codelists', 'projection'], uuid);
+                    }
+                    if (data.supportsFormatSelection) {
+                        getJsonData('api', ['codelists', 'format'], uuid);
+                    }
+                    if (data.supportsPolygonSelection) {
+                        getJsonData('api', ['codelists', 'polygon'], uuid);
+                    }
+                    if (data.supportsAreaSelection) {
+                        getJsonData('api', ['codelists', 'area'], uuid);
+                    }
+
+                }
+            });
+
+        }
+
+
+        $(document).ready(function () {
             $("select").chosen();
 
             // Midlertidig seeding av dataset i localStorage
-            var orderItems = []
+            var orderItems = [];
             orderItems.push("75461f65-eaea-4495-b2ab-3bc04d261669");
-            /*   orderItems.push("aee42bb6-d0e9-4d70-86fe-6ea76c381055");
-               orderItems.push("ea192681-d039-42ec-b1bc-f3ce04c189ac");
-               orderItems.push("442cae64-b447-478d-b384-545bc1d9ab48");
-               orderItems.push("58e0dbf8-0d47-47c8-8086-107a3fa2dfa4");*/
+            orderItems.push("aee42bb6-d0e9-4d70-86fe-6ea76c381055");
+            orderItems.push("ea192681-d039-42ec-b1bc-f3ce04c189ac");
+            orderItems.push("442cae64-b447-478d-b384-545bc1d9ab48");
+            orderItems.push("58e0dbf8-0d47-47c8-8086-107a3fa2dfa4");
             if (Modernizr.localstorage) {
                 console.log('window.localStorage is available!');
                 localStorage["orderItems"] = JSON.stringify(orderItems);
@@ -76,82 +151,75 @@
                 console.log('no native support for HTML5 storage :(');
             }
 
-
-            function getJsonObjects(data, segment, uuid) {
-                if (segment == null) segment = '';
-                var val;
-                var localStorageKey;
-                var items = []
-                $.each(data, function (key, val) {
-                    if (segment != '' && segment != null) {
-                        localStorageKey = uuid + segment + key;
-                    } else {
-                        localStorageKey = uuid + key;
-                    }
-
-                    if (typeof val == 'object') {
-
-                        $.each($(this), function (key, val) {
-                            items.push(val);
-                        });
-
-                    } else {
-                        localStorage[localStorageKey] = val;
-                    }
-                });
-                if (items.length > 0) {
-                    localStorageKey = uuid + segment;
-                    localStorage[localStorageKey] = JSON.stringify(items);
-                }
-            }
-
-            function getJsonData(baseuri, segments, uuid) {
-                segmentUri = '/';
-                segmentString = '.';
-                $.each(segments, function (pos, segment) {
-                    segmentUri += segment + '/';
-                    segmentString += segment + '.';
-                });
-                $.getJSON('http://download.dev.geonorge.no/' + baseuri + segmentUri + uuid,
-                    {
-                        json: 'true'
-                    },
-                    function (data) {
-                        getJsonObjects(data, segmentString, uuid);
-                    });
-            }
-
             var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+            objCount = storedOrderItems.length;
+            $.each(storedOrderItems, function (key, val) {
+                getJsonData('api', ['capabilities'], val);
+                objCountLoaded++;
+                var percentLoaded = (objCountLoaded / objCount) * 100;
+                $("#orderlist .progress-bar").css('width', percentLoaded + '%');
+                $("#orderlist .progress-bar").attr('aria-valuenow', percentLoaded);
+                $("#orderlist .progress-bar").text(objCountLoaded + ' av ' + objCount + ' datasett er lastet');
 
-            //Kommenter ut blokken nedefor
-
-            /*    $.each(storedOrderItems, function (key, val) { //TODO
-                    getJsonData('api', ['capabilities'], val);
-                   // getJsonData('api', ['codelists', 'projection'], val);
-                   // getJsonData('api', ['codelists', 'area'], val);
-                   // getJsonData('api', ['codelists', 'format'], val);
-                });
-            */
+                //  $('#orderlist').append('<div id="orderuuid' + val + '">' + '</div>');
+            });
 
         });
 
-
-
-
         $(document).ready(function () {
-
             // Inkludering av OrderItem partial view
             var content = '@Html.Raw((Html.Partial("_OrderItem").ToString().Replace(Environment.NewLine, "")))';
             orderItems = (JSON.parse(localStorage.getItem('orderItems')));
             $.each(orderItems, function (key, val) {
                 $("#orderlist").append('<div id="orderuuid' + val + '">' + content + '</div>');
 
+                $("#orderuuid" + val + " .uuid").append(val);
+
+                // Populering av Projeksjonliste
+                var orderItemProjeksjoner = (JSON.parse(localStorage.getItem(val + '.codelists.projection')));
+                var orderItemSelectProjeksjoner = $('#orderuuid' + val + ' .selectProjeksjoner');
+                $.each(orderItemProjeksjoner, function (key, val) {
+                    orderItemSelectProjeksjoner.append($("<option />").val(key).text(val.name));
+                });
+
+
+                // Populering av Filformatliste
+                var orderItemFormater = (JSON.parse(localStorage.getItem(val + '.codelists.format')));
+                var orderItemSelectFormater = $('#orderuuid' + val + ' .selectFormater');
+                $.each(orderItemFormater, function (key, val) {
+                    orderItemSelectFormater.append($("<option />").val(key).text(val.name));
+                });
+
+                // Populering av Områdeliste
+                var orderItemOmraader = (JSON.parse(localStorage.getItem(val + '.codelists.area')));
+                var orderItemSelectOmraader = $('#orderuuid' + val + ' .selectOmraader');
+                var orderItemSelectOmraaderFylker = $('#orderuuid' + val + ' .selectOmraader .selectOmraaderFylker');
+                var orderItemSelectOmraaderKommuner = $('#orderuuid' + val + ' .selectOmraader .selectOmraaderKommuner');
+                $.each(orderItemOmraader, function (key, val) {
+                    if (val.type == 'fylke') {
+                        orderItemSelectOmraaderFylker.append($("<option />").val(key).text(val.name));
+                    }
+                    else if (val.type == 'kommune') {
+                        orderItemSelectOmraaderKommuner.append($("<option />").val(key).text(val.name));
+                    }
+                    else {
+                        orderItemSelectOmraader.append($("<option />").val(key).text(val.name));
+                    }
+                });
             });
         });
 
         $(document).ready(function () {
             $(".chosen-select").chosen();
+            $('[data-toggle="tooltip"]').tooltip();
         });
+
+        $(window).load(function () {
+            $("#orderlist .progress").fadeOut("slow");
+        });
+
+
+
 
 
     </script>
