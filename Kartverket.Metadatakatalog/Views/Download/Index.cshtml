@@ -9,18 +9,27 @@
     <h3 class="h-md">Min handlekurv</h3>
     <hr>
 </div>
-
+<div class="progress">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 8em; width: 2%;">
+        Laster datasett
+    </div>
+</div>
 <div class="panel panel-default">
 
     <div class="list-group" id="orderlist">
-        <div class="progress">
-            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 8em; width: 2%;">
-                Laster datasett
-            </div>
-        </div>
+        
 
     </div>
-
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="pull-right">
+                <button class="btn btn-danger" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
 </div>
 <div class="row">
     <div class="col-md-12">
@@ -56,6 +65,24 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
                 <button type="button" class="btn btn-primary">Legg til område</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Fjerning av datasett</h4>
+            </div>
+            <div class="modal-body">
+                Er du sikker på at du vil fjerne alle datasett fra handlekurven?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Nei</button>
+                <button type="button" id="remove-all-items-submit" class="btn btn-primary">Ja</button>
             </div>
         </div>
     </div>
@@ -125,7 +152,6 @@
                     if (data.supportsAreaSelection) {
                         getJsonData('api', ['codelists', 'area'], uuid);
                     }
-
                 }
             });
         }
@@ -154,9 +180,9 @@
                 getJsonData('api', ['capabilities'], val);
                 objCountLoaded++;
                 var percentLoaded = (objCountLoaded / objCount) * 100;
-                $("#orderlist .progress-bar").css('width', percentLoaded + '%');
-                $("#orderlist .progress-bar").attr('aria-valuenow', percentLoaded);
-                $("#orderlist .progress-bar").text(objCountLoaded + ' av ' + objCount + ' datasett er lastet');
+                $(".progress-bar").css('width', percentLoaded + '%');
+                $(".progress-bar").attr('aria-valuenow', percentLoaded);
+                $(".progress-bar").text(objCountLoaded + ' av ' + objCount + ' datasett er lastet');
             });
         });
 
@@ -212,7 +238,7 @@
         });
 
         $(window).load(function () {
-            $("#orderlist .progress").fadeOut("slow");
+            $(".progress").fadeOut("slow");
 
             // Fjerning av datasett fra handlekurv
             $('#orderlist').on('click', '.remove-item', (function (e) {
@@ -227,11 +253,30 @@
                 Object.keys(localStorage)
                       .forEach(function (key) {
                           if (key.substring(0, uuidLength) == uuid) {
-                              localStorage.removeItem(key); 
+                              localStorage.removeItem(key);
                           }
                       });
                 $(this).closest('.order-item').remove();
             }));
+
+            // Fjerning av alle datasett fra handlekurv
+            //  $('#orderlist').on('click', '#remove-all-items', (function (e) {
+            $('#remove-all-items').click(function () {
+                $('#remove-all-items-modal').modal('show')
+            });
+
+
+            $('#remove-all-items-submit').click(function () {
+
+                Object.keys(localStorage)
+                      .forEach(function (key) {
+                          if (key != 'visningstype') {
+                              localStorage.removeItem(key);
+                          }
+                      });
+                $('#remove-all-items-modal').modal('hide')
+                $('.order-item').remove();
+            });
 
 
         });
