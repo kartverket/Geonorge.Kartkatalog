@@ -64,7 +64,6 @@
 @section scripts {
     <script src="~/Scripts/chosen.jquery.js"></script>
     <script>
-
         var objCount = 0;
         var objCountLoaded = 0;
 
@@ -129,9 +128,7 @@
 
                 }
             });
-
         }
-
 
         $(document).ready(function () {
             $("select").chosen();
@@ -160,10 +157,7 @@
                 $("#orderlist .progress-bar").css('width', percentLoaded + '%');
                 $("#orderlist .progress-bar").attr('aria-valuenow', percentLoaded);
                 $("#orderlist .progress-bar").text(objCountLoaded + ' av ' + objCount + ' datasett er lastet');
-
-                //  $('#orderlist').append('<div id="orderuuid' + val + '">' + '</div>');
             });
-
         });
 
         $(document).ready(function () {
@@ -171,9 +165,11 @@
             var content = '@Html.Raw(System.Text.RegularExpressions.Regex.Replace(Html.Partial("_OrderItem").ToString(), @"\r\n?|\n", ""))';
             orderItems = (JSON.parse(localStorage.getItem('orderItems')));
             $.each(orderItems, function (key, val) {
-                $("#orderlist").append('<div id="orderuuid' + val + '">' + content + '</div>');
+                $("#orderlist").append('<div id="orderuuid' + val + '" class="order-item">' + content + '</div>');
 
                 $("#orderuuid" + val + " .uuid").append(val);
+
+                $("#orderuuid" + val + " .remove-item").attr('uuid', val);
 
                 // Populering av Projeksjonliste
                 var orderItemProjeksjoner = (JSON.parse(localStorage.getItem(val + '.codelists.projection')));
@@ -217,11 +213,27 @@
 
         $(window).load(function () {
             $("#orderlist .progress").fadeOut("slow");
+
+            // Fjerning av datasett fra handlekurv
+            $('#orderlist').on('click', '.remove-item', (function (e) {
+                var uuid = $(this).attr('uuid');
+                var uuidLength = uuid.length;
+                var orderItems = JSON.parse(localStorage["orderItems"]);
+                orderItems = $.grep(orderItems, function (value) {
+                    return value != uuid;
+                });
+                localStorage["orderItems"] = JSON.stringify(orderItems);
+
+                Object.keys(localStorage)
+                      .forEach(function (key) {
+                          if (key.substring(0, uuidLength) == uuid) {
+                              localStorage.removeItem(key); 
+                          }
+                      });
+                $(this).closest('.order-item').remove();
+            }));
+
+
         });
-
-
-
-
-
     </script>
 }
