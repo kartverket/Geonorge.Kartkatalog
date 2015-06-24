@@ -168,7 +168,7 @@
 
         $(document).ready(function () {
             // Inkludering av OrderItem partial view
-            var content = '@Html.Raw((Html.Partial("_OrderItem").ToString().Replace("\r\n", "")))';
+            var content = '@Html.Raw(System.Text.RegularExpressions.Regex.Replace(Html.Partial("_OrderItem").ToString(), @"\r\n?|\n", ""))';
             orderItems = (JSON.parse(localStorage.getItem('orderItems')));
             $.each(orderItems, function (key, val) {
                 $("#orderlist").append('<div id="orderuuid' + val + '">' + content + '</div>');
@@ -197,7 +197,8 @@
                 var orderItemSelectOmraaderKommuner = $('#orderuuid' + val + ' .selectOmraader .selectOmraaderKommuner');
                 $.each(orderItemOmraader, function (key, val) {
                     if (val.type == 'fylke') {
-                        orderItemSelectOmraaderFylker.append($("<option />").val(key).text(val.name));
+                        orderItemSelectOmraaderFylker.append($(
+                            "<option />").val(key).text(val.name));
                     }
                     else if (val.type == 'kommune') {
                         orderItemSelectOmraaderKommuner.append($("<option />").val(key).text(val.name));
