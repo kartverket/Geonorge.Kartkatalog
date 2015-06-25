@@ -228,8 +228,10 @@
     <Compile Include="Models\Api\Keyword.cs" />
     <Compile Include="Models\Api\Metadata.cs" />
     <Compile Include="Models\Api\SearchParameters.cs" />
+    <Compile Include="Models\download_rest.cs" />
     <Compile Include="Models\Facet.cs" />
     <Compile Include="Models\FacetParameter.cs" />
+    <Compile Include="Models\LoggingHandler.cs" />
     <Compile Include="Models\MetadataContext.cs" />
     <Compile Include="Models\MetadataIndexDoc.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />
@@ -253,6 +255,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UI.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\DownloadService.cs" />
     <Compile Include="Service\IMetadataService.cs" />
     <Compile Include="Service\IndexDocumentCreator.cs" />
     <Compile Include="Service\Indexer.cs" />
@@ -376,6 +379,7 @@
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Download\Index.cshtml" />
     <Content Include="Views\Download\_OrderItem.cshtml" />
+    <Content Include="Views\Download\Order.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Util\" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -11,6 +12,18 @@ namespace Kartverket.Metadatakatalog.Controllers
         // GET: Download
         public ActionResult Index()
         {
+            return View();
+        }
+
+        // Must take order model as input
+        //[HttpPost]
+        public ActionResult Order()
+        {
+            DownloadService download = new DownloadService();
+
+            //send order model as input
+            download.Order();
+
             return View();
         }
     }
