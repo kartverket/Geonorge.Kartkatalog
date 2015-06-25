@@ -15,10 +15,15 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View();
         }
 
-        // Must take order model as input
-        //[HttpPost]
-        public ActionResult Order()
+        [HttpPost]
+        public ActionResult Order(FormCollection order)
         {
+
+            foreach (var key in order.AllKeys)
+            {
+                var value = order[key];
+            }
+
             DownloadService download = new DownloadService();
 
             //send order model as input
