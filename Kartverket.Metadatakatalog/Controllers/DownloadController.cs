@@ -22,9 +22,9 @@ namespace Kartverket.Metadatakatalog.Controllers
             DownloadService download = new DownloadService();
 
             //send order model as input
-            download.Order();
+            var model = download.Order();
 
-            return View();
+            return View(model);
         }
     }
 }
