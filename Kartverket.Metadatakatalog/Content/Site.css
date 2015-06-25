@@ -638,6 +638,29 @@ body {
     width: 100%!important;
 }
 
+.form-group.disabled, .form-group.disabled .btn:hover{
+     cursor: not-allowed!important;
+    
+}
+
+.disabled .chosen-container {
+    pointer-events: none!important;
+}
+
+.disabled .btn {
+    opacity: 0.65;
+    pointer-events: none!important;
+}
+
+.disabled .chosen-container:hover{
+    
+}
+
+.disabled .chosen-container .chosen-choices {
+    background-color: #eee;
+    
+}
+
 .chosen-input-group {
     width: calc(100% - 37px);
 }

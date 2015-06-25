@@ -17,7 +17,7 @@
 <div class="panel panel-default">
 
     <div class="list-group" id="orderlist">
-        
+
 
     </div>
 </div>
@@ -192,43 +192,61 @@
             orderItems = (JSON.parse(localStorage.getItem('orderItems')));
             $.each(orderItems, function (key, val) {
                 $("#orderlist").append('<div id="orderuuid' + val + '" class="order-item">' + content + '</div>');
-
                 $("#orderuuid" + val + " .uuid").append(val);
-
                 $("#orderuuid" + val + " .remove-item").attr('uuid', val);
 
-                // Populering av Projeksjonliste
-                var orderItemProjeksjoner = (JSON.parse(localStorage.getItem(val + '.codelists.projection')));
-                var orderItemSelectProjeksjoner = $('#orderuuid' + val + ' .selectProjeksjoner');
-                $.each(orderItemProjeksjoner, function (key, val) {
-                    orderItemSelectProjeksjoner.append($("<option />").val(key).text(val.name));
-                });
+                var supportsProjectionSelection = localStorage.getItem(val + '.capabilities.supportsProjectionSelection');
+                var supportsFormatSelection = localStorage.getItem(val + '.capabilities.supportsFormatSelection');
+                var supportsPolygonSelection = localStorage.getItem(val + '.capabilities.supportsPolygonSelection');
+                var supportsAreaSelection = localStorage.getItem(val + '.capabilities.supportsAreaSelection');
 
+                // Populering av Projeksjonliste
+                if (supportsProjectionSelection) {
+                    var orderItemProjeksjoner = (JSON.parse(localStorage.getItem(val + '.codelists.projection')));
+                    var orderItemSelectProjeksjoner = $('#orderuuid' + val + ' .selectProjeksjoner');
+                    $.each(orderItemProjeksjoner, function (key, val) {
+                        orderItemSelectProjeksjoner.append($("<option />").val(key).text(val.name));
+                    });
+                } else {
+                    var formElement = $('#orderuuid' + val + ' .selectProjeksjoner').closest('.form-group');
+                    formElement.addClass('disabled');
+                }
 
                 // Populering av Filformatliste
-                var orderItemFormater = (JSON.parse(localStorage.getItem(val + '.codelists.format')));
-                var orderItemSelectFormater = $('#orderuuid' + val + ' .selectFormater');
-                $.each(orderItemFormater, function (key, val) {
-                    orderItemSelectFormater.append($("<option />").val(key).text(val.name));
-                });
+                if (supportsFormatSelection) {
+                    var orderItemFormater = (JSON.parse(localStorage.getItem(val + '.codelists.format')));
+                    var orderItemSelectFormater = $('#orderuuid' + val + ' .selectFormater');
+                    $.each(orderItemFormater, function (key, val) {
+                        orderItemSelectFormater.append($("<option />").val(key).text(val.name));
+                    });
+                } else {
+                    var formElement = $('#orderuuid' + val + ' .selectFormater').closest('.form-group');
+                    formElement.addClass('disabled');
+                }
 
                 // Populering av Områdeliste
-                var orderItemOmraader = (JSON.parse(localStorage.getItem(val + '.codelists.area')));
-                var orderItemSelectOmraader = $('#orderuuid' + val + ' .selectOmraader');
-                var orderItemSelectOmraaderFylker = $('#orderuuid' + val + ' .selectOmraader .selectOmraaderFylker');
-                var orderItemSelectOmraaderKommuner = $('#orderuuid' + val + ' .selectOmraader .selectOmraaderKommuner');
-                $.each(orderItemOmraader, function (key, val) {
-                    if (val.type == 'fylke') {
-                        orderItemSelectOmraaderFylker.append($(
-                            "<option />").val(key).text(val.name));
-                    }
-                    else if (val.type == 'kommune') {
-                        orderItemSelectOmraaderKommuner.append($("<option />").val(key).text(val.name));
-                    }
-                    else {
-                        orderItemSelectOmraader.append($("<option />").val(key).text(val.name));
-                    }
-                });
+                if (supportsAreaSelection) {
+                    var orderItemOmraader = (JSON.parse(localStorage.getItem(val + '.codelists.area')));
+                    var orderItemSelectOmraader = $('#orderuuid' + val + ' .selectOmraader');
+                    var orderItemSelectOmraaderFylker = $('#orderuuid' + val + ' .selectOmraader .selectOmraaderFylker');
+                    var orderItemSelectOmraaderKommuner = $('#orderuuid' + val + ' .selectOmraader .selectOmraaderKommuner');
+                    $.each(orderItemOmraader, function (key, val) {
+                        if (val.type == 'fylke') {
+                            orderItemSelectOmraaderFylker.append($(
+                                "<option />").val(key).text(val.name));
+                        }
+                        else if (val.type == 'kommune') {
+                            orderItemSelectOmraaderKommuner.append($("<option />").val(key).text(val.name));
+                        }
+                        else {
+                            orderItemSelectOmraader.append($("<option />").val(key).text(val.name));
+                        }
+                    });
+                } else {
+                    var formElement = $('#orderuuid' + val + ' .selectOmraader').closest('.form-group');
+                    formElement.addClass('disabled');
+                }
+
             });
         });
 
