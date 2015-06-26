@@ -260,13 +260,14 @@
                     $.each(orderItemOmraader, function (key, val) {
                         if (val.type == 'fylke') {
                             orderItemSelectOmraaderFylker.append($(
-                                "<option />").val(val.name).text(val.name));
+                                "<option />").val(val.type + '-' + val.name).text(val.name));
                         }
                         else if (val.type == 'kommune') {
-                            orderItemSelectOmraaderKommuner.append($("<option />").val(val.name).text(val.name));
+                            orderItemSelectOmraaderKommuner.append($("<option />").val(val.type + '-' + val.name).text(val.name));
                         }
+
                         else {
-                            orderItemSelectOmraader.append($("<option />").val(val.name).text(val.name));
+                            orderItemSelectOmraader.append($("<option />").val(val.type + '-' + val.name).text(val.name));
                         }
                     });
                 } else {
