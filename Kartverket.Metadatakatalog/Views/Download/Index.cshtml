@@ -14,12 +14,15 @@
         Laster datasett
     </div>
 </div>
+@using (Html.BeginForm("Order", "Download", FormMethod.Post))
+{
+   
 <div class="panel panel-default">
 
+
     <div class="list-group" id="orderlist">
-
-
     </div>
+
 </div>
 <div class="row">
     <div class="col-md-12">
@@ -52,8 +55,23 @@
         </div>
     </div>
 </div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="pull-right">
+                
+                <button id="btn-test" class="btn btn-success"><span class="glyphicon glyphicon-ok-circle"></span>Test</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" id="kartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -86,8 +104,9 @@
             </div>
         </div>
     </div>
+  
 </div>
-
+}
 @section scripts {
     <script src="~/Scripts/chosen.jquery.js"></script>
     <script>
@@ -191,6 +210,7 @@
             var content = '@Html.Raw(System.Text.RegularExpressions.Regex.Replace(Html.Partial("_OrderItem").ToString(), @"\r\n?|\n", ""))';
             orderItems = (JSON.parse(localStorage.getItem('orderItems')));
             $.each(orderItems, function (key, val) {
+                var uuid = val;
                 $("#orderlist").append('<div id="orderuuid' + val + '" class="order-item">' + content + '</div>');
                 $("#orderuuid" + val + " .uuid").append(val);
                 $("#orderuuid" + val + " .remove-item").attr('uuid', val);
@@ -204,8 +224,12 @@
                 if (supportsProjectionSelection) {
                     var orderItemProjeksjoner = (JSON.parse(localStorage.getItem(val + '.codelists.projection')));
                     var orderItemSelectProjeksjoner = $('#orderuuid' + val + ' .selectProjeksjoner');
+                    orderItemSelectProjeksjoner.attr('name', uuid + '-projection');
+                   // var selectedProjeksjoner = JSON.parse(localStorage['' + uuid + '.selected.projections']);
                     $.each(orderItemProjeksjoner, function (key, val) {
-                        orderItemSelectProjeksjoner.append($("<option />").val(key).text(val.name));
+
+                        orderItemSelectProjeksjoner.append($("<option />").val(val.name).text(val.name));
+                       // if (selectedProjeksjoner.)
                     });
                 } else {
                     var formElement = $('#orderuuid' + val + ' .selectProjeksjoner').closest('.form-group');
@@ -216,8 +240,9 @@
                 if (supportsFormatSelection) {
                     var orderItemFormater = (JSON.parse(localStorage.getItem(val + '.codelists.format')));
                     var orderItemSelectFormater = $('#orderuuid' + val + ' .selectFormater');
+                    orderItemSelectFormater.attr('name', uuid + '-formats');
                     $.each(orderItemFormater, function (key, val) {
-                        orderItemSelectFormater.append($("<option />").val(key).text(val.name));
+                        orderItemSelectFormater.append($("<option />").val(val.name).text(val.name));
                     });
                 } else {
                     var formElement = $('#orderuuid' + val + ' .selectFormater').closest('.form-group');
@@ -228,18 +253,20 @@
                 if (supportsAreaSelection) {
                     var orderItemOmraader = (JSON.parse(localStorage.getItem(val + '.codelists.area')));
                     var orderItemSelectOmraader = $('#orderuuid' + val + ' .selectOmraader');
+                    orderItemSelectOmraader.attr('name', uuid + '-areas');
+
                     var orderItemSelectOmraaderFylker = $('#orderuuid' + val + ' .selectOmraader .selectOmraaderFylker');
                     var orderItemSelectOmraaderKommuner = $('#orderuuid' + val + ' .selectOmraader .selectOmraaderKommuner');
                     $.each(orderItemOmraader, function (key, val) {
                         if (val.type == 'fylke') {
                             orderItemSelectOmraaderFylker.append($(
-                                "<option />").val(key).text(val.name));
+                                "<option />").val(val.name).text(val.name));
                         }
                         else if (val.type == 'kommune') {
-                            orderItemSelectOmraaderKommuner.append($("<option />").val(key).text(val.name));
+                            orderItemSelectOmraaderKommuner.append($("<option />").val(val.name).text(val.name));
                         }
                         else {
-                            orderItemSelectOmraader.append($("<option />").val(key).text(val.name));
+                            orderItemSelectOmraader.append($("<option />").val(val.name).text(val.name));
                         }
                     });
                 } else {
@@ -267,7 +294,6 @@
                     return value != uuid;
                 });
                 localStorage["orderItems"] = JSON.stringify(orderItems);
-
                 Object.keys(localStorage)
                       .forEach(function (key) {
                           if (key.substring(0, uuidLength) == uuid) {
@@ -295,6 +321,32 @@
                 $('#remove-all-items-modal').modal('hide')
                 $('.order-item').remove();
             });
+
+            function getSelectedValues(orderItems, selectClass, name) {
+                $.each(orderItems, function (key, val) {
+                    // var orderItemId = $(this).attr('id');
+                    var select = $('#orderuuid' + val).find('.' + selectClass);
+                    var uuid = val;
+                    $.each(select, function (key, val) {
+                        var selectedValues = [];
+                        var option = $(this).find('option:selected');
+                        option.each(function (i, selected) {
+                            selectedValues[i] = $(selected).text();
+                
+                        });
+                     //   console.log(uuid + '.selected.' + name + ' - ' + JSON.stringify(selectedValues));
+                        localStorage[uuid + '.selected.' + name] = JSON.stringify(selectedValues);
+                    });
+                });
+            }
+
+            $('.body-content').on('click', '#btn-test', (function (e) {
+                console.log('klikk');
+                var orderItems = JSON.parse(localStorage["orderItems"]);
+                getSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
+                getSelectedValues(orderItems, 'selectFormater', 'formats');
+                getSelectedValues(orderItems, 'selectOmraader', 'areas');
+            }));
 
 
         });
