@@ -18,17 +18,14 @@
 {
    
 <div class="panel panel-default">
-
-
     <div class="list-group" id="orderlist">
     </div>
-
 </div>
 <div class="row">
     <div class="col-md-12">
         <div class="form-group">
             <div class="pull-right">
-                <button class="btn btn-danger" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</button>
+                <a class="btn btn-danger" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -38,7 +35,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <div class="pull-right">
-                <button class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span> Handle mer</button>
+                <a class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span> Handle mer</a>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -48,7 +45,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <div class="pull-right">
-                <button class="btn btn-default">Avbryt</button>
+                <a class="btn btn-default">Avbryt</a>
                 <button class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Last ned</button>
             </div>
             <div class="clearfix"></div>
@@ -56,7 +53,7 @@
     </div>
 </div>
 
-
+    <!--
 <div class="row">
     <div class="col-md-12">
         <div class="form-group">
@@ -68,7 +65,7 @@
         </div>
     </div>
 </div>
-
+    -->
 
 <div class="modal fade" id="kartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -180,7 +177,7 @@
 
             // Midlertidig seeding av dataset i localStorage
             var orderItems = [];
-            orderItems.push("75461f65-eaea-4495-b2ab-3bc04d261669");
+            /*orderItems.push("75461f65-eaea-4495-b2ab-3bc04d261669");
             orderItems.push("aee42bb6-d0e9-4d70-86fe-6ea76c381055");
             orderItems.push("ea192681-d039-42ec-b1bc-f3ce04c189ac");
             orderItems.push("442cae64-b447-478d-b384-545bc1d9ab48");
@@ -192,7 +189,7 @@
             } else {
                 console.log('no native support for HTML5 storage :(');
             }
-
+            */
             var storedOrderItems = JSON.parse(localStorage["orderItems"]);
             objCount = storedOrderItems.length;
             $.each(storedOrderItems, function (key, val) {
@@ -219,6 +216,13 @@
                 var supportsFormatSelection = localStorage.getItem(val + '.capabilities.supportsFormatSelection');
                 var supportsPolygonSelection = localStorage.getItem(val + '.capabilities.supportsPolygonSelection');
                 var supportsAreaSelection = localStorage.getItem(val + '.capabilities.supportsAreaSelection');
+                var metadata = JSON.parse(localStorage.getItem(val + '.metadata'));
+
+                $("#orderuuid" + val + " .order-title").text(metadata.name);
+                $("#orderuuid" + val + " .order-title").attr('href', metadata.url);
+                $("#orderuuid" + val + " .order-img").attr('src', metadata.organizationLogoUrl);
+
+
 
                 // Populering av Projeksjonliste
                 if (supportsProjectionSelection) {
