@@ -15,7 +15,7 @@ namespace Kartverket.Metadatakatalog.Service
     public class DownloadService
     {
 
-        public OrderReceiptType Order()
+        public OrderReceiptType Order(OrderType o)
         {
 
 
@@ -24,20 +24,20 @@ namespace Kartverket.Metadatakatalog.Service
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                OrderType o = new OrderType();
-                o.email = "dagolav@arkitektum.no";
+                //OrderType o = new OrderType();
+                //o.email = "dagolav@arkitektum.no";
 
-                List<OrderLineType> orderLines = new List<OrderLineType>();
+                //List<OrderLineType> orderLines = new List<OrderLineType>();
 
-                OrderLineType oL1 = new OrderLineType();
-                oL1.metadataUuid = "58e0dbf8-0d47-47c8-8086-107a3fa2dfa4";
-                oL1.formats = new FormatType[] { new FormatType { name="SOSI", version="" } };
-                oL1.projections = new ProjectionType[] { new ProjectionType{ code = "UTM32" }};
-                oL1.areas = new AreaType[] { new AreaType { type="kommune",  name = "Oslo" } };
+                //OrderLineType oL1 = new OrderLineType();
+                //oL1.metadataUuid = "58e0dbf8-0d47-47c8-8086-107a3fa2dfa4";
+                //oL1.formats = new FormatType[] { new FormatType { name="SOSI", version="" } };
+                //oL1.projections = new ProjectionType[] { new ProjectionType{ code = "UTM32" }};
+                //oL1.areas = new AreaType[] { new AreaType { type="kommune",  name = "Oslo" } };
 
-                orderLines.Add(oL1);
+                //orderLines.Add(oL1);
 
-                o.orderLines = orderLines.ToArray();
+                //o.orderLines = orderLines.ToArray();
 
                 
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(o, 

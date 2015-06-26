@@ -19,17 +19,95 @@ namespace Kartverket.Metadatakatalog.Controllers
         public ActionResult Order(FormCollection order)
         {
 
-            foreach (var key in order.AllKeys)
-            {
-                var value = order[key];
-            }
+
+            OrderType o = GetOrderForm(order);
 
             DownloadService download = new DownloadService();
 
-            //send order model as input
-            var model = download.Order();
+            var model = download.Order(o);
 
             return View(model);
+        }
+
+        private OrderType GetOrderForm(FormCollection order)
+        {
+            OrderType o;
+            List<OrderLineType> orderLines;
+
+            List<string> uuids = new List<string>();
+
+            foreach (var key in order.AllKeys)
+            {
+                string uuid = key.Substring(0, 36);
+                if (!uuids.Contains(uuid))
+                {
+                    uuids.Add(uuid);
+                }
+
+            }
+
+
+            o = new OrderType();
+            o.email = "dagolav@arkitektum.no";
+
+            orderLines = new List<OrderLineType>();
+
+
+            foreach (var id in uuids)
+            {
+
+                OrderLineType oL = new OrderLineType();
+                oL.metadataUuid = id;
+
+                var projections = order[id + "-projection"];
+                string[] projectionsList;
+                if (projections != null)
+                {
+                    List<ProjectionType> projectionTypes = new List<ProjectionType>();
+                    projectionsList = projections.Split(',');
+                    foreach (var p in projectionsList)
+                    {
+                        projectionTypes.Add(new ProjectionType { code = p });
+                    }
+                    oL.projections = projectionTypes.ToArray();
+                }
+
+                var formats = order[id + "-formats"];
+                string[] formatList;
+                if (formats != null)
+                {
+                    List<FormatType> formatTypes = new List<FormatType>();
+                    formatList = formats.Split(',');
+                    foreach (var f in formatList)
+                    {
+                        formatTypes.Add(new FormatType { name = f });
+                    }
+                    oL.formats = formatTypes.ToArray();
+                }
+
+                var area = order[id + "-areas"];
+                List<AreaType> areaList = new List<AreaType>();
+                if (area != null)
+                {
+                    var areas = area.Split(',');
+
+                    for (int j = 0; j < areas.Length; j++)
+                    {
+                        var areaType = areas[j].Split('_');
+
+                        areaList.Add(new AreaType { type = areaType[0], name = areaType[1] });
+                    }
+                    oL.areas = areaList.ToArray();
+                }
+
+                orderLines.Add(oL);
+               
+
+            }
+
+            o.orderLines = orderLines.ToArray();
+
+            return o;
         }
     }
 }
