@@ -31,6 +31,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                 OrderLineType oL1 = new OrderLineType();
                 oL1.metadataUuid = "58e0dbf8-0d47-47c8-8086-107a3fa2dfa4";
+                oL1.formats = new FormatType[] { new FormatType { name="SOSI", version="" } };
                 oL1.projections = new ProjectionType[] { new ProjectionType{ code = "UTM32" }};
                 oL1.areas = new AreaType[] { new AreaType { type="kommune",  name = "Oslo" } };
 
