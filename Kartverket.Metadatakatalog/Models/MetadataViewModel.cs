@@ -175,6 +175,21 @@ namespace Kartverket.Metadatakatalog.Models
             if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains("WWW:DOWNLOAD") && (HierarchyLevel == "dataset" || HierarchyLevel == "series")) return true;
             else return false;
         }
+
+        public bool ShowDownloadService()
+        {
+            if (System.Web.Configuration.WebConfigurationManager.AppSettings["DownloadServiceEnabled"] == "true") 
+            {
+                //TEMPORARY FOR TEST
+                List<string> metadataUuidsActive = new List<string> { "75461f65-eaea-4495-b2ab-3bc04d261669", "aee42bb6-d0e9-4d70-86fe-6ea76c381055", "ea192681-d039-42ec-b1bc-f3ce04c189ac", "442cae64-b447-478d-b384-545bc1d9ab48", "58e0dbf8-0d47-47c8-8086-107a3fa2dfa4" };
+                var result = metadataUuidsActive.Where(i => Uuid.Contains(i)).ToList();
+                if (result != null && result.Count > 0)
+                    return true;
+            }
+
+            return false;
+        }
+
         public bool ShowMapLink()
         {
             if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("OGC:WMS") || DistributionDetails.Protocol.Contains("OGC:WFS") || DistributionDetails.Protocol.Contains("OGC:WCS")) && (HierarchyLevel == "service" || HierarchyLevel == "servicelayer")) return true;

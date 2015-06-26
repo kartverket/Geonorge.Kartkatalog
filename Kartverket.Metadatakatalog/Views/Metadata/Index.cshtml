@@ -112,6 +112,14 @@
                 <span class="glyphicon glyphicon-globe"></span> besøk nettside
             </a>
         }
+        
+        @if (Model.ShowDownloadService())
+        {
+            <a href="#" class="btn btn-default btn-primary">
+                <span class="glyphicon glyphicon-download-alt"></span> Legg i kurv
+            </a>
+
+        }
                 
         @if (Model.ShowDownloadLink())
         {
