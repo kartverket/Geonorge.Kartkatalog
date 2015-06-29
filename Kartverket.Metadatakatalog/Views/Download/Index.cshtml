@@ -16,93 +16,79 @@
 </div>
 @using (Html.BeginForm("Order", "Download", FormMethod.Post))
 {
-   
-<div class="panel panel-default">
-    <div class="list-group" id="orderlist">
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-            <div class="pull-right">
-                <a class="btn btn-danger" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-            <div class="pull-right">
-                <a class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span> Handle mer</a>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-            <div class="pull-right">
-                <a class="btn btn-default">Avbryt</a>
-                <button class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Last ned</button>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-    </div>
-</div>
 
-    <!--
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-            <div class="pull-right">
-                
-                <button id="btn-test" class="btn btn-success"><span class="glyphicon glyphicon-ok-circle"></span>Test</button>
-            </div>
-            <div class="clearfix"></div>
+    <div class="panel panel-default">
+        <div class="list-group" id="orderlist">
         </div>
     </div>
-</div>
-    -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="pull-right">
+                    <a class="btn btn-danger" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="pull-right">
+                    <a class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span> Handle mer</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="pull-right">
+                    <a class="btn btn-default">Avbryt</a>
+                    <button class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Last ned</button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
 
-<div class="modal fade" id="kartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Områdevelger</h4>
-            </div>
-            <div class="modal-body">
-                <iframe longdesc="" title="" src="http://www.norgeskart.no/dynamisk-med-navigasjon.html#6/166195/6636879/+embed.box" width="100%" height="424"></iframe>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
-                <button type="button" class="btn btn-primary">Legg til område</button>
+    <div class="modal fade" id="kartModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Områdevelger</h4>
+                </div>
+                <div class="modal-body">
+                    <iframe longdesc="" title="" src="http://www.norgeskart.no/dynamisk-med-navigasjon.html#6/166195/6636879/+embed.box" width="100%" height="424"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-primary">Legg til område</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Fjerning av datasett</h4>
-            </div>
-            <div class="modal-body">
-                Er du sikker på at du vil fjerne alle datasett fra handlekurven?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Nei</button>
-                <button type="button" id="remove-all-items-submit" class="btn btn-primary">Ja</button>
+    <div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Fjerning av datasett</h4>
+                </div>
+                <div class="modal-body">
+                    Er du sikker på at du vil fjerne alle datasett fra handlekurven?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Nei</button>
+                    <button type="button" id="remove-all-items-submit" class="btn btn-primary">Ja</button>
+                </div>
             </div>
         </div>
+
     </div>
-  
-</div>
 }
 @section scripts {
     <script src="~/Scripts/chosen.jquery.js"></script>
@@ -177,19 +163,6 @@
 
             // Midlertidig seeding av dataset i localStorage
             var orderItems = [];
-            /*orderItems.push("75461f65-eaea-4495-b2ab-3bc04d261669");
-            orderItems.push("aee42bb6-d0e9-4d70-86fe-6ea76c381055");
-            orderItems.push("ea192681-d039-42ec-b1bc-f3ce04c189ac");
-            orderItems.push("442cae64-b447-478d-b384-545bc1d9ab48");
-            orderItems.push("58e0dbf8-0d47-47c8-8086-107a3fa2dfa4");
-            if (Modernizr.localstorage) {
-                console.log('window.localStorage is available!');
-                localStorage["orderItems"] = JSON.stringify(orderItems);
-
-            } else {
-                console.log('no native support for HTML5 storage :(');
-            }
-            */
             var storedOrderItems = JSON.parse(localStorage["orderItems"]);
             objCount = storedOrderItems.length;
             $.each(storedOrderItems, function (key, val) {
@@ -224,16 +197,21 @@
 
 
 
+
+
+
+
+
                 // Populering av Projeksjonliste
                 if (supportsProjectionSelection) {
                     var orderItemProjeksjoner = (JSON.parse(localStorage.getItem(val + '.codelists.projection')));
                     var orderItemSelectProjeksjoner = $('#orderuuid' + val + ' .selectProjeksjoner');
                     orderItemSelectProjeksjoner.attr('name', uuid + '-projection');
-                   // var selectedProjeksjoner = JSON.parse(localStorage['' + uuid + '.selected.projections']);
+                    // var selectedProjeksjoner = JSON.parse(localStorage['' + uuid + '.selected.projections']);
                     $.each(orderItemProjeksjoner, function (key, val) {
 
                         orderItemSelectProjeksjoner.append($("<option />").val(val.name).text(val.name));
-                       // if (selectedProjeksjoner.)
+                        // if (selectedProjeksjoner.)
                     });
                 } else {
                     var formElement = $('#orderuuid' + val + ' .selectProjeksjoner').closest('.form-group');
@@ -279,6 +257,30 @@
                     formElement.addClass('disabled');
                 }
 
+
+                // Hent ut selected verdier fra localStorage
+                function getSelectedValues(orderItems, selectClass, name) {
+                    $.each(orderItems, function (key, val) {
+                        var select = $('#orderuuid' + val).find('.' + selectClass);
+                        var uuid = val;
+                        var selectedValues = JSON.parse(localStorage.getItem([uuid + '.selected.' + name]));
+                        console.log(selectedValues);
+                        $.each(select, function (key, val) {
+                            var option = $(this).find('option');
+                            option.each(function (i, selected) {
+                                if ($.inArray($(this).val(), selectedValues) > -1) {
+                                    $(this).attr('selected', 'selected');
+                                }
+                            });
+                        });
+                    });
+                }
+
+                var orderItems = JSON.parse(localStorage["orderItems"]);
+                getSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
+                getSelectedValues(orderItems, 'selectFormater', 'formats');
+                getSelectedValues(orderItems, 'selectOmraader', 'areas');
+
             });
         });
 
@@ -309,7 +311,6 @@
             }));
 
             // Fjerning av alle datasett fra handlekurv
-            //  $('#orderlist').on('click', '#remove-all-items', (function (e) {
             $('#remove-all-items').click(function () {
                 $('#remove-all-items-modal').modal('show')
             });
@@ -327,30 +328,29 @@
                 $('.order-item').remove();
             });
 
-            function getSelectedValues(orderItems, selectClass, name) {
+
+            // Lagre selected verdier i localStorage
+            function setSelectedValues(orderItems, selectClass, name) {
                 $.each(orderItems, function (key, val) {
-                    // var orderItemId = $(this).attr('id');
                     var select = $('#orderuuid' + val).find('.' + selectClass);
                     var uuid = val;
                     $.each(select, function (key, val) {
                         var selectedValues = [];
                         var option = $(this).find('option:selected');
                         option.each(function (i, selected) {
-                            selectedValues[i] = $(selected).text();
-                
+                            selectedValues[i] = $(selected).val();
+
                         });
-                     //   console.log(uuid + '.selected.' + name + ' - ' + JSON.stringify(selectedValues));
                         localStorage[uuid + '.selected.' + name] = JSON.stringify(selectedValues);
                     });
                 });
             }
 
-            $('.body-content').on('click', '#btn-test', (function (e) {
-                console.log('klikk');
+            $('.body-content').on('change', 'select', (function (e) {
                 var orderItems = JSON.parse(localStorage["orderItems"]);
-                getSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
-                getSelectedValues(orderItems, 'selectFormater', 'formats');
-                getSelectedValues(orderItems, 'selectOmraader', 'areas');
+                setSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
+                setSelectedValues(orderItems, 'selectFormater', 'formats');
+                setSelectedValues(orderItems, 'selectOmraader', 'areas');
             }));
 
 
