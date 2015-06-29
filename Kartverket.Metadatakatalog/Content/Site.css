@@ -748,4 +748,9 @@ body {
 .btn-handlekurv {
     font-size: 1.4em;
     margin-top: 60px;
+    padding: 0;
+}
+
+.btn-handlekurv #orderitem-count{
+    font-size: .8em;
 }

@@ -31,13 +31,13 @@
                     string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
 
                     <li class="filter-options @cssClass">
-                       
-                            <a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
-                                @*Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b style='font-weight: 800;'>" : "") @facetResult.LinkName() @Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b>" : "") (@facetResult.Count)
-                                *@
-                                @facetResult.LinkName()
-                                <span>(@facetResult.Count)</span>
-                            </a>                        
+
+                        <a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
+                            @*Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b style='font-weight: 800;'>" : "") @facetResult.LinkName() @Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b>" : "") (@facetResult.Count)
+                            *@
+                            @facetResult.LinkName()
+                            <span>(@facetResult.Count)</span>
+                        </a>
                     </li>
                 }
                 @if (Model.HasFilterForFacetField(facet.FacetField))
@@ -49,8 +49,8 @@
                         </button>
                     </li>
                 }
-                </ul>
-</div>
+            </ul>
+        </div>
     </div>
 }
 
@@ -229,6 +229,17 @@
                  }
              );
         });
+
+
+        $(document).ready(function () {
+            var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+            var orderitemCount = storedOrderItems.length;
+            if (orderitemCount > 0) {
+                $('#orderitem-count').text(' ' + orderitemCount + ' datasett');
+            } else {
+                $('#orderitem-count').text(' Handlekurven er tom');
+            }
+        });
     </script>
 }
 
@@ -249,7 +260,7 @@
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "DistributionProtocols"))                    
+                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "DistributionProtocols"))
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
 
                     @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))*@
