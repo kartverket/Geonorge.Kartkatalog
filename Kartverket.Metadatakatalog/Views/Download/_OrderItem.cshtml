@@ -10,7 +10,6 @@
                       
                     </a>
                     <a data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="list-btn-remove remove-item"><span class="glyphicon glyphicon-remove"></span></a>
-                    <p><small class="uuid"></small></p>
                 </div>
             </div>
             <div class="row">
@@ -18,28 +17,24 @@
                     <label for="">Projeksjon:</label>
                     <div class="form-group">
 
-                        <select data-placeholder="Klikk for å velge projeksjon" multiple class="chosen-select form-control selectProjeksjoner" tabindex="18" id="multiple-label-example">
-                     
-                        </select>
+                        <select data-placeholder="Klikk for å velge projeksjon" multiple class="chosen-select form-control selectProjeksjoner" tabindex="18" required></select>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label for="">Filformat:</label>
                     <div class="form-group">
-                        <select data-placeholder="Klikk for å velge filformat" multiple class="chosen-select form-control selectFormater" tabindex="18" id="multiple-label-example">
-                        </select>
+                        <select data-placeholder="Klikk for å velge filformat" multiple class="chosen-select form-control selectFormater" tabindex="18" required></select>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label for="">Område:</label>
                     <div class="form-group">
                         <div class="input-group chosen-input-group">
-                            <select data-placeholder="Klikk for å velge område" multiple class="chosen-select form-control selectOmraader" tabindex="18" id="multiple-label-example">
-                             
+                            <select data-placeholder="Klikk for å velge område" multiple class="chosen-select form-control selectOmraader" tabindex="18" required>
                                 <optgroup label="Fylker" class="selectOmraaderFylker"></optgroup>
                                 <optgroup label="Kommuner" class="selectOmraaderKommuner"></optgroup>
                             </select>
-                            <span class="input-group-btn" data-toggle="modal" data-target="#kartModal">
+                            <span class="input-group-btn selectPolygon" data-toggle="modal" data-target="#kartModal">
                                 <button data-placement="bottom" title="Velg fra kart" data-toggle="tooltip" class="btn btn-default btn-nodivider btn-fullheight" type="button"><span class="glyphicon glyphicon-globe"></span></button>
                             </span>
                         </div>
