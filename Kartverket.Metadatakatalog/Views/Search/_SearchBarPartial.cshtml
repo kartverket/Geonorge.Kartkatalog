@@ -21,17 +21,19 @@
 
         <div class="typeahead-query">
             <input name="text" type="search" class="form-control" title="Søketekst" value="@Model.Text" autocomplete="off" />
-            
+
         </div>
         <span class="input-group-btn typeahead-button">
             <button class="btn" type="submit">Søk</button>
         </span>
 
     </div>
-    
+
 </form>
 <div class="col-md-2 btn-handlekurv">
-    <a href="/Download"><span class="glyphicon glyphicon-shopping-cart"></span><span id="orderitem-count"> Handlekurven er tom</span></a>
+    <a data-toggle="tooltip" data-placement="bottom" title="Vis handlekurv for nedlastbare kartdata" href="/Download">
+        <span class="glyphicon glyphicon-shopping-cart"></span><span id="orderitem-count"></span><span id="orderitem-count-text">Handlekurven er tom</span>
+    </a>
 </div>
 
 <div id="autocomplete" class="col-md-12 auto-result-row">

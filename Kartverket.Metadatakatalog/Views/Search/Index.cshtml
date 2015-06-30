@@ -16,7 +16,7 @@
 
 <div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <span class="message">Datasett er lagt til i handlekurver</span>
+    <span class="message"></span>
 </div>
 
 @helper DisplayFacet(SearchResultFacetViewModel facet)
@@ -212,7 +212,7 @@
     <script>
         function showAlert(message, colorClass) {
             $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
-            $('#feedback-alert .message').text(message);
+            $('#feedback-alert .message').html(message);
             $('#feedback-alert').show();
         }
 
@@ -237,16 +237,25 @@
                      location.href = $(this).val();
                  }
              );
+
+            $('[data-toggle="tooltip"]').tooltip();
         });
 
 
         $(document).ready(function () {
-            var storedOrderItems = JSON.parse(localStorage["orderItems"]);
-            var orderitemCount = storedOrderItems.length;
-            if (orderitemCount > 0) {
-                $('#orderitem-count').text(' ' + orderitemCount + ' datasett');
+            if (localStorage.getItem("orderItems") != null) {
+                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+                var orderitemCount = storedOrderItems.length;
+                if (orderitemCount > 0) {
+                    $('#orderitem-count').text(orderitemCount);
+                    $('#orderitem-count-text').text(' datasett');
+                } else {
+                    $('#orderitem-count').text('');
+                    $('#orderitem-count-text').text('Handlekurven er tom');
+                }
             } else {
-                $('#orderitem-count').text(' Handlekurven er tom');
+                $('#orderitem-count').text('');
+                $('#orderitem-count-text').text('Handlekurven er tom');
             }
         });
 
@@ -278,14 +287,33 @@
                         var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl + itemuuid, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl };
                         localStorage["orderItems"] = JSON.stringify(orderItems);
                         localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
-                        showAlert(itemname + ' er lagt til i handlekurven', 'success');
+                        showAlert(itemname + ' er lagt til i <a href="/Download">handlekurven</a>', 'success');
+
+                        var orderItemCount = $('#orderitem-count').text();
+                        console.log(orderItemCount);
+                        if (orderItemCount == null || orderItemCount == '') {
+                            orderItemCount = 0;
+                            $('#orderitem-count-text').text(' datasett');
+                        } else {
+                            orderItemCount = parseInt($('#orderitem-count').text());
+                            console.log('else: ' + orderItemCount);
+                        }
+                        orderItemCount += 1;
+                        $('#orderitem-count').text(orderItemCount);
+                      
+
                     } else {
-                        showAlert(itemname + ' er allerede lagt til i handlekurven', 'warning');
+                        showAlert(itemname + ' er allerede lagt til i <a href="/Download">handlekurven</a>', 'warning');
                     }
                 });
             } else {
                 console.log('no native support for HTML5 storage :(');
             }
+
+
+
+
+
         });
 
     </script>
@@ -374,14 +402,16 @@
                             <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
                                 @if (item.ShowDownloadService())
                                 {
-                                    <a title="Legg til @item.Title i kurv"
+                                    <a data-toggle="tooltip"
+                                       data-placement="bottom"
+                                       title="Legg til @item.Title i kurv"
                                        class="btn btn-xs btn-bunnmarg btn-default add-to-cart-btn"
                                        itemname="@item.Title"
                                        itemuuid="@item.Uuid"
                                        itemurl="http://kartkatalogen.dev.geonorge.no/metadata/uuid/@item.Uuid"
                                        itemorglogo="@item.OrganizationLogoUrl"
                                        itemdisturl="@item.DownloadUrl">
-                                        <span class="glyphicon glyphicon-download-alt"></span>Legg til i handlekurv
+                                        <span class="glyphicon glyphicon-shopping-cart"></span>Legg i kurv
                                     </a>
                                 }
                                 else if (item.ShowDownloadLink())

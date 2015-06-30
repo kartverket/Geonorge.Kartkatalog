@@ -751,7 +751,11 @@ body {
     padding: 0;
 }
 
-.btn-handlekurv #orderitem-count{
+.btn-handlekurv .glyphicon{
+    margin-right: 5px;
+}
+
+.btn-handlekurv #orderitem-count, .btn-handlekurv #orderitem-count-text{
     font-size: .8em;
 }
 
