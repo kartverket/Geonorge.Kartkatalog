@@ -20,32 +20,24 @@
     <div class="panel panel-default">
         <div class="list-group" id="orderlist">
         </div>
+
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
                 <div class="pull-right">
-                    <a class="btn btn-danger" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
+                    <a class="btn btn-default" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
                 </div>
                 <div class="clearfix"></div>
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
                 <div class="pull-right">
-                    <a class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span> Handle mer</a>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <div class="pull-right">
-                    <a class="btn btn-default">Avbryt</a>
+                    <a class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> Handle mer</a>
                     <button class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Last ned</button>
                 </div>
                 <div class="clearfix"></div>
@@ -127,7 +119,7 @@
             }
         }
 
-        function getJsonData(baseuri, segments, uuid) {
+    /*    function getJsonData(baseuri, segments, uuid) {
             segmentUri = '';
             segmentString = '';
             $.each(segments, function (pos, segment) {
@@ -136,6 +128,7 @@
             });
 
             var jsonUri = 'http://download.dev.geonorge.no/' + baseuri + segmentUri + '/' + uuid + '?json=true';
+
             $.ajax({
                 url: jsonUri,
                 dataType: 'json',
@@ -157,6 +150,62 @@
                 }
             });
         }
+        */
+
+
+        function getJsonUrl(data, rel) {
+            var url = '';
+            $.each(data, function (key, val) {  
+                if (val.rel == rel) {
+                    url = val.href;
+                }
+            });
+            return url;
+        }
+
+
+        function getJsonData(url, segments, uuid) {
+            segmentUri = '';
+            segmentString = '';
+            $.each(segments, function (pos, segment) {
+                segmentUri += '/' + segment;
+                segmentString += '.' + segment;
+            });
+    
+            var jsonUri = url + '?json=true';
+            $.ajax({
+                url: jsonUri,
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    getJsonObjects(data, segmentString, uuid);
+                    if (data.supportsProjectionSelection) { 
+                        var rel = 'http://rel.geonorge.no/download/projection';
+                        var href = getJsonUrl(data._links, rel);
+                        getJsonData(href + '', ['codelists', 'projection'], uuid);
+                    }
+                    if (data.supportsFormatSelection) {
+                        var rel = 'http://rel.geonorge.no/download/format';
+                        var href = getJsonUrl(data._links, rel);      
+                        getJsonData(href, ['codelists', 'format'], uuid);
+                    }
+                   /* if (data.supportsPolygonSelection == 'true') {
+                        getJsonData('api', ['codelists', 'polygon'], uuid);
+                    }*/
+                    if (data.supportsAreaSelection) {
+                        var rel = 'http://rel.geonorge.no/download/area';
+                        var href = getJsonUrl(data._links, rel);
+                        getJsonData(href, ['codelists', 'area'], uuid);
+                    }
+                }
+            });
+        }
+
+
+
+
+
+
 
         $(document).ready(function () {
             $("select").chosen();
@@ -166,7 +215,11 @@
             var storedOrderItems = JSON.parse(localStorage["orderItems"]);
             objCount = storedOrderItems.length;
             $.each(storedOrderItems, function (key, val) {
-                getJsonData('api', ['capabilities'], val);
+                var uuid = val;
+                var metadata = JSON.parse(localStorage[uuid + '.metadata']);
+                var url = metadata.distributionUrl + uuid;
+
+                getJsonData(url, ['capabilities'], uuid);
                 objCountLoaded++;
                 var percentLoaded = (objCountLoaded / objCount) * 100;
                 $(".progress-bar").css('width', percentLoaded + '%');
@@ -182,7 +235,6 @@
             $.each(orderItems, function (key, val) {
                 var uuid = val;
                 $("#orderlist").append('<div id="orderuuid' + val + '" class="order-item">' + content + '</div>');
-                $("#orderuuid" + val + " .uuid").append(val);
                 $("#orderuuid" + val + " .remove-item").attr('uuid', val);
 
                 var supportsProjectionSelection = localStorage.getItem(val + '.capabilities.supportsProjectionSelection');
@@ -195,23 +247,14 @@
                 $("#orderuuid" + val + " .order-title").attr('href', metadata.url);
                 $("#orderuuid" + val + " .order-img").attr('src', metadata.organizationLogoUrl);
 
-
-
-
-
-
-
-
+                
                 // Populering av Projeksjonliste
                 if (supportsProjectionSelection) {
                     var orderItemProjeksjoner = (JSON.parse(localStorage.getItem(val + '.codelists.projection')));
                     var orderItemSelectProjeksjoner = $('#orderuuid' + val + ' .selectProjeksjoner');
                     orderItemSelectProjeksjoner.attr('name', uuid + '-projection');
-                    // var selectedProjeksjoner = JSON.parse(localStorage['' + uuid + '.selected.projections']);
                     $.each(orderItemProjeksjoner, function (key, val) {
-
                         orderItemSelectProjeksjoner.append($("<option />").val(val.name).text(val.name));
-                        // if (selectedProjeksjoner.)
                     });
                 } else {
                     var formElement = $('#orderuuid' + val + ' .selectProjeksjoner').closest('.form-group');
@@ -247,16 +290,19 @@
                         else if (val.type == 'kommune') {
                             orderItemSelectOmraaderKommuner.append($("<option />").val(val.type + '_' + val.name).text(val.name));
                         }
-
                         else {
                             orderItemSelectOmraader.append($("<option />").val(val.name).text(val.name));
                         }
                     });
                 } else {
-                    var formElement = $('#orderuuid' + val + ' .selectOmraader').closest('.form-group');
-                    formElement.addClass('disabled');
+                    var formElement = $('#orderuuid' + val + ' .selectOmraader');
+                    formElement.attr('disabled', 'disabled');
                 }
 
+                if (supportsPolygonSelection == 'false') {
+                    var formElement = $('#orderuuid' + val + ' .btn');
+                    formElement.addClass('disabled');
+                }
 
                 // Hent ut selected verdier fra localStorage
                 function getSelectedValues(orderItems, selectClass, name) {
@@ -264,7 +310,6 @@
                         var select = $('#orderuuid' + val).find('.' + selectClass);
                         var uuid = val;
                         var selectedValues = JSON.parse(localStorage.getItem([uuid + '.selected.' + name]));
-                        console.log(selectedValues);
                         $.each(select, function (key, val) {
                             var option = $(this).find('option');
                             option.each(function (i, selected) {
@@ -280,7 +325,6 @@
                 getSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
                 getSelectedValues(orderItems, 'selectFormater', 'formats');
                 getSelectedValues(orderItems, 'selectOmraader', 'areas');
-
             });
         });
 
