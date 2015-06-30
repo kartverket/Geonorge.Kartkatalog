@@ -37,7 +37,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <div class="pull-right">
-                    <a class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> Handle mer</a>
+                    <a href="/" class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> Handle mer</a>
                     <button class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Last ned</button>
                 </div>
                 <div class="clearfix"></div>
@@ -118,40 +118,6 @@
                 localStorage[localStorageKey] = JSON.stringify(items);
             }
         }
-
-    /*    function getJsonData(baseuri, segments, uuid) {
-            segmentUri = '';
-            segmentString = '';
-            $.each(segments, function (pos, segment) {
-                segmentUri += '/' + segment;
-                segmentString += '.' + segment;
-            });
-
-            var jsonUri = 'http://download.dev.geonorge.no/' + baseuri + segmentUri + '/' + uuid + '?json=true';
-
-            $.ajax({
-                url: jsonUri,
-                dataType: 'json',
-                async: false,
-                success: function (data) {
-                    getJsonObjects(data, segmentString, uuid);
-                    if (data.supportsProjectionSelection) {
-                        getJsonData('api', ['codelists', 'projection'], uuid);
-                    }
-                    if (data.supportsFormatSelection) {
-                        getJsonData('api', ['codelists', 'format'], uuid);
-                    }
-                    if (data.supportsPolygonSelection) {
-                        getJsonData('api', ['codelists', 'polygon'], uuid);
-                    }
-                    if (data.supportsAreaSelection) {
-                        getJsonData('api', ['codelists', 'area'], uuid);
-                    }
-                }
-            });
-        }
-        */
-
 
         function getJsonUrl(data, rel) {
             var url = '';

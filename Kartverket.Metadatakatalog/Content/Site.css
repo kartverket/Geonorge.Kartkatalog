@@ -757,4 +757,11 @@ body {
 
 #feedback-alert{
     display: none;
+    position: fixed;
+    z-index: 2;
+    bottom: 0px;
+    width: 100%;
+    left: 0px;
+    margin: 0px;
+    border-radius: 0px;
 }

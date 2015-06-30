@@ -14,7 +14,10 @@
     }
 }
 
-
+<div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <span class="message">Datasett er lagt til i handlekurver</span>
+</div>
 
 @helper DisplayFacet(SearchResultFacetViewModel facet)
 {
@@ -207,6 +210,12 @@
 
 @section scripts {
     <script>
+        function showAlert(message, colorClass) {
+            $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
+            $('#feedback-alert .message').text(message);
+            $('#feedback-alert').show();
+        }
+
         $('ul.facet').each(function () {
             var max = 15;
             if ($(this).find("li").length > max) {
@@ -240,6 +249,45 @@
                 $('#orderitem-count').text(' Handlekurven er tom');
             }
         });
+
+
+        $(window).load(function () {
+
+            if (Modernizr.localstorage) {
+
+                console.log('window.localStorage is available!');
+                var orderItems = [];
+                $('.add-to-cart-btn').click(function () {
+                    var added = false;
+                    var itemuuid = $(this).attr('itemuuid');
+                    var itemname = $(this).attr('itemname');
+                    var itemurl = $(this).attr('itemurl');
+                    var itemorglogo = $(this).attr('itemorglogo');
+                    var itemdisturl = $(this).attr('itemdisturl');
+                    if (localStorage.getItem('orderItems') != null) {
+                        orderItems = (JSON.parse(localStorage.getItem('orderItems')));
+                    }
+                    $.map(orderItems, function (elementOfArray, indexInArray) {
+                        if (elementOfArray == itemuuid) {
+                            orderItems.push(itemuuid);
+                            added = true;
+                        }
+                    });
+                    if (!added) {
+                        orderItems.push(itemuuid);
+                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl + itemuuid, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl };
+                        localStorage["orderItems"] = JSON.stringify(orderItems);
+                        localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
+                        showAlert(itemname + ' er lagt til i handlekurven', 'success');
+                    } else {
+                        showAlert(itemname + ' er allerede lagt til i handlekurven', 'warning');
+                    }
+                });
+            } else {
+                console.log('no native support for HTML5 storage :(');
+            }
+        });
+
     </script>
 }
 
@@ -263,8 +311,8 @@
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "DistributionProtocols"))
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
 
-                    @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))*@
-                    @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
+                    @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))@*
+                        @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
                 </div>
             </div>
         </div>
@@ -287,6 +335,8 @@
                                     <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
                                         <img src="@item.OrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
                                     </a>
+
+
                                 }
                             </div>
                             <div class="col-no-padding-xs col-xs-12 col-sm-5 col-md-5 col-lg-5 col-title">
@@ -324,7 +374,15 @@
                             <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
                                 @if (item.ShowDownloadService())
                                 {
-                                    <span>Last ned</span>
+                                    <a title="Legg til @item.Title i kurv"
+                                       class="btn btn-xs btn-bunnmarg btn-default add-to-cart-btn"
+                                       itemname="@item.Title"
+                                       itemuuid="@item.Uuid"
+                                       itemurl="http://kartkatalogen.dev.geonorge.no/metadata/uuid/@item.Uuid"
+                                       itemorglogo="@item.OrganizationLogoUrl"
+                                       itemdisturl="@item.DownloadUrl">
+                                        <span class="glyphicon glyphicon-download-alt"></span>Legg til i handlekurv
+                                    </a>
                                 }
                                 else if (item.ShowDownloadLink())
                                 {
