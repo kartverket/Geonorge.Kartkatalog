@@ -754,3 +754,7 @@ body {
 .btn-handlekurv #orderitem-count{
     font-size: .8em;
 }
+
+#feedback-alert{
+    display: none;
+}

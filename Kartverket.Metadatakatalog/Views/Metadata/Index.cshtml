@@ -39,6 +39,9 @@
     }
 }
 
+
+
+
 @section breadcrumb {
     <li class="active">@Model.Title</li>
 }
@@ -62,7 +65,13 @@
 }
 
 
+
 <p></p>
+
+<div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <span class="message">Datasett er lagt til i handlekurver</span>
+</div>
 
 <div class="page-header">
     <h1 class="h-md">@Model.Title</h1>
@@ -473,7 +482,7 @@
 {
     if (!string.IsNullOrWhiteSpace(value))
     {
-        <p><strong>@label:</strong> @value</p>
+        <p><strong>@label:</strong>@value</p>
     }
 }
 
@@ -493,8 +502,16 @@
     @section scripts {
         <script>
 
+            function showAlert(message, colorClass) {
+                $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
+                $('#feedback-alert .message').text(message);
+                $('#feedback-alert').show();
+            }
+
             $(document).ready(function () {
+
                 if (Modernizr.localstorage) {
+
                     console.log('window.localStorage is available!');
                     var orderItems = [];
                     $('#add-to-cart-btn').click(function () {
@@ -510,9 +527,12 @@
                         });
                         if (!added) {
                             orderItems.push("@Model.Uuid");
-                            var metadata = { 'name': '@Model.Title', 'uuid': '@Model.Uuid', 'url': 'http://kartkatalogen.dev.geonorge.no/metadata/uuid/' + '@Model.Uuid', 'organizationLogoUrl': '@Model.OrganizationLogoUrl' };
+                            var metadata = { 'name': '@Model.Title', 'uuid': '@Model.Uuid', 'url': 'http://kartkatalogen.dev.geonorge.no/metadata/uuid/' + '@Model.Uuid', 'organizationLogoUrl': '@Model.OrganizationLogoUrl', 'distributionUrl': '@Model.DistributionDetails.URL' };
                             localStorage["orderItems"] = JSON.stringify(orderItems);
                             localStorage["@Model.Uuid" + ".metadata"] = JSON.stringify(metadata);
+                            showAlert('@Model.Title er lagt til i handlekurven', 'success');
+                        } else {
+                            showAlert('@Model.Title er allerede lagt til i handlekurven', 'warning');
                         }
                     });
                 } else {
