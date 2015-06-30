@@ -322,7 +322,11 @@
 
                             </div>
                             <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
-                                @if (item.ShowDownloadLink())
+                                @if (item.ShowDownloadService())
+                                {
+                                    <span>Last ned</span>
+                                }
+                                else if (item.ShowDownloadLink())
                                 {
                                     <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
                                         <span class="glyphicon glyphicon-download-alt"></span>last ned

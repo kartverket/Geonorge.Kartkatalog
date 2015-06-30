@@ -49,6 +49,18 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             if (!string.IsNullOrWhiteSpace(DistributionProtocol) && DistributionProtocol.Contains("WWW:DOWNLOAD") && (Type == "dataset" || Type == "series") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
             else return false;
         }
+
+        public bool ShowDownloadService()
+        {
+            if (System.Web.Configuration.WebConfigurationManager.AppSettings["DownloadServiceEnabled"] == "true")
+            {
+                if (DistributionProtocol != null && DistributionProtocol.Contains("GEONORGE:DOWNLOAD"))
+                    return true;
+            }
+
+            return false;
+        }
+
         public bool ShowMapLink()
         {
             if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") || DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
