@@ -351,9 +351,15 @@
                 $.each(select, function (key, val) {
                     var selectedValues = [];
                     var option = $(this).find('option:selected');
+                    var selectedCount = $(this).find('option:selected').length;
+                    console.log(selectedCount);
+                    console.log($(this));
+                    if (selectedCount > 0) {
+                        var formgroup = $(this).parent('.form-group');
+                        formgroup.find('.chosen-choices').removeClass('has-error');
+                    }
                     option.each(function (i, selected) {
                         selectedValues[i] = $(selected).val();
-
                     });
                     localStorage[uuid + '.selected.' + name] = JSON.stringify(selectedValues);
                 });
@@ -372,7 +378,6 @@
             var hasErrors = false;
             $.each(formgroup, function () {
                 var selectedCount = $(this).find('option:selected').length;
-                console.log(selectedCount);
                 if (selectedCount < 1) {
                     $(this).find('.chosen-choices').addClass('has-error');
                     hasErrors = true;
