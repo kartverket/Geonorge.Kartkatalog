@@ -284,7 +284,7 @@
                     });
                     if (!added) {
                         orderItems.push(itemuuid);
-                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl + itemuuid, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl };
+                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl };
                         localStorage["orderItems"] = JSON.stringify(orderItems);
                         localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
                         showAlert(itemname + ' er lagt til i <a href="/Download">handlekurven</a>', 'success');
