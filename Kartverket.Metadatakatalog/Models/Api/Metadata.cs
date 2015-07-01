@@ -63,9 +63,17 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// True if one of the nationalinitiativs(Samarbeid og lover) is "Åpne data"
         /// </summary>
         public bool IsOpenData { get; set; }
-
+        /// <summary>
+        /// Url for legend/drawing rules
+        /// </summary>
         public string LegendDescriptionUrl { get; set; }
+        /// <summary>
+        /// Url for productsheet
+        /// </summary>
         public string ProductSheetUrl { get; set; }
+        /// <summary>
+        /// Url for detailed spesifications
+        /// </summary>
         public string ProductSpecificationUrl { get; set; }
 
         public Metadata() { 
