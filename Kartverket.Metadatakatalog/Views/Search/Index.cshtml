@@ -473,7 +473,46 @@
                                         <br /><br />
                                         <img src="~/Content/img/lock.png" class="opendata">
                                     }*@
-
+                                <br />  <br />                           
+                                @if (!string.IsNullOrWhiteSpace(item.ProductSheetUrl))
+                                {
+                                    <a href="@item.ProductSheetUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Produktark for @item.Title" target="_blank">
+                                        <span class="glyphicon glyphicon-info-sign"></span>vis produktark
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a  class="btn btn-xs btn-bunnmarg btn-default disabled" title="Produktark for @item.Title">
+                                        <span class="glyphicon glyphicon-info-sign"></span>vis produktark
+                                    </a>
+                                }
+                                
+                                @if (!string.IsNullOrWhiteSpace(item.ProductSpecificationUrl))
+                                {
+                                    <a href="@item.ProductSpecificationUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Produktspesifikasjon for @item.Title" target="_blank">
+                                        <span class="glyphicon glyphicon-list-alt"></span>vis produktspesifikasjon
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Produktspesifikasjon for @item.Title" >
+                                        <span class="glyphicon glyphicon-list-alt"></span>vis produktspesifikasjon
+                                    </a>
+                                }
+                                
+                                @if (!string.IsNullOrWhiteSpace(item.LegendDescriptionUrl))
+                                {
+                                    <a href="@item.LegendDescriptionUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Tegneregler for @item.Title" target="_blank">
+                                        <span class="glyphicon glyphicon-picture"></span>vis tegneregler
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Tegneregler for @item.Title">
+                                        <span class="glyphicon glyphicon-picture"></span>vis tegneregler
+                                    </a>
+                                }                                    
+                                
 
                             </div>
 

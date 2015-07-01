@@ -19,6 +19,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string ServiceUrl { get; set; }
         public string DistributionProtocol { get; set; }
         public bool IsOpendata { get; set; }
+        public string LegendDescriptionUrl { get; set; }
+        public string ProductSheetUrl { get; set; }
+        public string ProductSpecificationUrl { get; set; }
 
         public string GetInnholdstypeCSS()
         {
@@ -128,8 +131,10 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 }
             }
             else DownloadUrl = item.DistributionUrl;
-            
-            
+
+            LegendDescriptionUrl = item.LegendDescriptionUrl;
+            ProductSheetUrl = item.ProductSheetUrl;
+            ProductSpecificationUrl = item.ProductSpecificationUrl;
         }
 
         public static List<SearchResultItemViewModel> CreateFromList(IEnumerable<SearchResultItem> items)
