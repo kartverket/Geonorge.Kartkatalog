@@ -300,7 +300,7 @@
                         }
                         orderItemCount += 1;
                         $('#orderitem-count').text(orderItemCount);
-                      
+
 
                     } else {
                         showAlert(itemname + ' er allerede lagt til i <a href="/Download">handlekurven</a>', 'warning');
@@ -462,18 +462,8 @@
                                     </a>
                                 }
 
-                                @if (item.IsOpendata)
-                                {
-                                    <br /><br />
-                                    <img title="Åpne data" src="~/Content/img/unlock.png" class="bottom" alt="Åpne data" />
-                                }
 
-                                @*else
-                                    {
-                                        <br /><br />
-                                        <img src="~/Content/img/lock.png" class="opendata">
-                                    }*@
-                                <br />  <br />                           
+
                                 @if (!string.IsNullOrWhiteSpace(item.ProductSheetUrl))
                                 {
                                     <a href="@item.ProductSheetUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Produktark for @item.Title" target="_blank">
@@ -482,11 +472,11 @@
                                 }
                                 else
                                 {
-                                    <a  class="btn btn-xs btn-bunnmarg btn-default disabled" title="Produktark for @item.Title">
+                                    <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Produktark for @item.Title">
                                         <span class="glyphicon glyphicon-info-sign"></span>vis produktark
                                     </a>
                                 }
-                                
+
                                 @if (!string.IsNullOrWhiteSpace(item.ProductSpecificationUrl))
                                 {
                                     <a href="@item.ProductSpecificationUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Produktspesifikasjon for @item.Title" target="_blank">
@@ -495,11 +485,11 @@
                                 }
                                 else
                                 {
-                                    <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Produktspesifikasjon for @item.Title" >
+                                    <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Produktspesifikasjon for @item.Title">
                                         <span class="glyphicon glyphicon-list-alt"></span>vis produktspesifikasjon
                                     </a>
                                 }
-                                
+
                                 @if (!string.IsNullOrWhiteSpace(item.LegendDescriptionUrl))
                                 {
                                     <a href="@item.LegendDescriptionUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Tegneregler for @item.Title" target="_blank">
@@ -511,8 +501,17 @@
                                     <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Tegneregler for @item.Title">
                                         <span class="glyphicon glyphicon-picture"></span>vis tegneregler
                                     </a>
-                                }                                    
-                                
+                                }
+                                @if (item.IsOpendata)
+                                {
+                                    <img title="Åpne data" src="~/Content/img/unlock.png" class="bottom opendata" alt="Åpne data" />
+                                }
+
+                                @*else
+                                    {
+                                        <img src="~/Content/img/lock.png" class="opendata">
+                                    }
+                                *@
 
                             </div>
 
