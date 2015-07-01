@@ -63,6 +63,11 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// True if one of the nationalinitiativs(Samarbeid og lover) is "Åpne data"
         /// </summary>
         public bool IsOpenData { get; set; }
+
+        public string LegendDescriptionUrl { get; set; }
+        public string ProductSheetUrl { get; set; }
+        public string ProductSpecificationUrl { get; set; }
+
         public Metadata() { 
         }
         public Metadata(SearchResultItem item, UrlHelper urlHelper)
@@ -90,6 +95,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
             if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data"))
                 IsOpenData = true;
             else IsOpenData = false;
+
+            LegendDescriptionUrl = item.LegendDescriptionUrl;
+            ProductSheetUrl = item.ProductSheetUrl;
+            ProductSpecificationUrl = item.ProductSpecificationUrl;
         }
 
         public static List<Metadata> CreateFromList(IEnumerable<SearchResultItem> items, UrlHelper urlHelper)
