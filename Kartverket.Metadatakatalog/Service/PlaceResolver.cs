@@ -76,6 +76,39 @@ namespace Kartverket.Metadatakatalog.Service
 
             return placegroup;
         }
+
+        public List<string> ResolveArea(SimpleMetadata metadata)
+        {
+            List<string> placegroup = new List<string>();
+            
+            foreach (var keyword in metadata.Keywords)
+            {
+                string lowerCaseKeyword = keyword.Keyword.ToLower();
+                
+                if (lowerCaseKeyword.Contains("telemark"))
+                {
+                    placegroup.Add("0/08");
+                }
+                else
+                {
+                    placegroup.Add("0/07");
+                    placegroup.Add("0/02");
+                }
+                if (lowerCaseKeyword == "sauherad")
+                {
+                    placegroup.Add("0/08");
+                    placegroup.Add("0/08/0822");
+                }
+                if (lowerCaseKeyword == "kragerø")
+                {
+                    placegroup.Add("0/08");
+                    placegroup.Add("0/08/0815");
+                }
+                
+            }
+
+            return placegroup;
+        }
        
     }
 }

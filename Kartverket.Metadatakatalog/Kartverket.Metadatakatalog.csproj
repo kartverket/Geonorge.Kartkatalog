@@ -233,7 +233,7 @@
     <Compile Include="Models\FacetParameter.cs" />
     <Compile Include="Models\LoggingHandler.cs" />
     <Compile Include="Models\MetadataContext.cs" />
-    <Compile Include="Models\MetadataIndexDoc.cs" />
+    <Compile Include="Models\SearchIndex\MetadataIndexDoc.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />
     <Compile Include="Models\Api\SearchResult.cs" />
     <Compile Include="Models\SearchByOrganizationParameters.cs" />

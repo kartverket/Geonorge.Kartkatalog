@@ -89,6 +89,9 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("place")]
         public List<string> Place { get; set; }
 
+        [SolrField("area")]
+        public List<string> Area { get; set; }
+
         [SolrField("license")]
         public string license { get; set; }
 

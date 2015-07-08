@@ -120,6 +120,9 @@
   <data name="AppPageTitle" xml:space="preserve">
     <value>Kartkatalogen</value>
   </data>
+  <data name="Facet_area" xml:space="preserve">
+    <value>Område</value>
+  </data>
   <data name="Facet_DistributionProtocols" xml:space="preserve">
     <value>Distribusjonstype</value>
   </data>
