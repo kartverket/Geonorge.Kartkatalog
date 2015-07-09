@@ -34,12 +34,11 @@
                     string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
 
                     <li class="filter-options @cssClass">
-
                         <a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
                             @*Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b style='font-weight: 800;'>" : "") @facetResult.LinkName() @Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b>" : "") (@facetResult.Count)
                             *@
                             @facetResult.LinkName()
-                            <span>(@facetResult.Count)</span>
+                            <span class="text-muted">(@facetResult.Count)</span>
                         </a>
                     </li>
                 }
@@ -56,6 +55,76 @@
         </div>
     </div>
 }
+
+
+@helper DisplayFacetCheckbox(SearchResultFacetViewModel facet)
+{
+    <div class="facet-sok-emne">
+        <a data-toggle="collapse" class="facet-sok-tittel" href="#@facet.FacetField">
+            <h3 style="font-size:18px">@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h3><span class="indicator"></span>
+        </a>
+
+        <div class="facet-sok-undertitler collapse in" id="@facet.FacetField">
+            <ul class="nav nav-pills nav-stacked nav-pills-small">
+                @{
+                    string previousFacetLinkName = null;
+                    foreach (var facetResult in facet.FacetResults)
+                    {
+                        string checkboxChecked = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "checked" : "");
+                        string hideChildren = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "show-children" : "hide-children");
+                        double relativeHierarchyLevel = 0;
+
+                        if (previousFacetLinkName != null)
+                        {
+                            relativeHierarchyLevel = Model.GetRelativeHierarchyLevel(facetResult.LinkName(), previousFacetLinkName);
+                            if (relativeHierarchyLevel > 0)
+                            {
+                                <text>
+                                    <ul>
+                                        <li class="filter-options">
+                                </text>
+                            }
+                            else
+                            {
+                             @:</li>
+                            }
+                        }
+                        <text>
+                            <li class="filter-options @hideChildren ">
+                                <label>
+                                    <a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
+                                        <input type="checkbox" @checkboxChecked />@facetResult.LinkName() <span class="text-muted">(@facetResult.Count)</span>
+                                    </a>
+                                </label>
+                        </text>
+                        if (previousFacetLinkName != null)
+                        {
+                            relativeHierarchyLevel = Model.GetRelativeHierarchyLevel(facetResult.LinkName(), previousFacetLinkName);
+                            if (relativeHierarchyLevel < 0)
+                            {
+                                @:</li></ul>
+                            }
+                        }
+
+                        previousFacetLinkName = facetResult.LinkName().ToString();
+                    }
+                }
+                @if (Model.HasFilterForFacetField(facet.FacetField))
+                {
+                    <li class="filter-options">
+                        <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
+                            <span class="glyphicon glyphicon-remove"> </span>
+                            Vis alle
+                        </button>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+}
+
+
 
 @helper DisplayPagination()
 {
@@ -336,7 +405,7 @@
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "area"))
+                    @DisplayFacetCheckbox(Model.Result.Facets.First(f => f.FacetField == "area"))
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "DistributionProtocols"))
                     @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
 
