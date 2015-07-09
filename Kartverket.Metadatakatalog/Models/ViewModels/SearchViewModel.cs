@@ -80,7 +80,16 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             routeValues["Facets[" + index + "]" + ".name"] = name;
             routeValues["Facets[" + index++ + "]" + ".value"] = value;
             routeValues = CreateRoutesForFacetFieldsExcept(name, routeValues, index);
+            if (value.Split('/').Length - 1 > 1)
+            {
+                int lastSlash = value.LastIndexOf("/");
+                if (lastSlash > 0)
+                    value = value.Substring(0, lastSlash);
+                routeValues["Facets[" + index + "]" + ".name"] = name;
+                routeValues["Facets[" + index++ + "]" + ".value"] = value;
+            };
             return routeValues;
+
         }
 
         public RouteValueDictionary CreateRoutesForFacetFieldsExcept(string field, RouteValueDictionary routeValues, int index = 0)
@@ -117,6 +126,14 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public bool HasFacetFieldValue(string facetField, string facetValue)
         {
             return FacetParameters != null && FacetParameters.Any(f => f.Name == facetField && f.Value == facetValue);
+        }
+
+        public double GetRelativeHierarchyLevel(string facetField, string previousFacetField)
+        {
+            int previousFacetHierarchyLevel = previousFacetField.Split('/').Length - 1;
+            int facetHierarchyLevel = facetField.Split('/').Length - 1;
+            double relativeHierarchyLevel = facetHierarchyLevel - previousFacetHierarchyLevel;
+            return relativeHierarchyLevel;
         }
 
 

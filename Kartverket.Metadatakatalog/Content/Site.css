@@ -75,6 +75,30 @@
     border-bottom: 1px solid #eee;
 }
 
+    .facet-sok-emne label {
+        display: block;
+        margin-bottom: 0;
+    }
+
+
+        .facet-sok-emne label span {
+            font-weight: 400;
+        }
+
+    .facet-sok-emne input[type="radio"], .facet-sok-emne input[type="checkbox"] {
+        margin: 0;
+    }
+
+.nav li label  a {
+    display: block;
+    line-height: 21.15px;
+}
+
+.nav li label a:hover {
+    background-color: #EEE;
+}
+
+
 .facet-sok-tittel {
     display: block;
 }
@@ -106,6 +130,24 @@
 .facet-sok-undertitler {
     overflow: hidden;
     margin-top: 5px;
+}
+
+.nav-pills-small li ul {
+    padding: 0;
+    list-style: none;
+    margin: 0;
+}
+
+.nav-pills-small li ul a{
+    padding-left: 15px;
+}
+.nav-pills-small li.hide-children > ul > li.filter-options{
+    display: none;
+}
+
+
+.nav-pills-small .filter-options{
+    margin: 0;
 }
 
 .nav-pills-small > li {
@@ -642,31 +684,28 @@ body {
 
 /* Chosen select list */
 
-.chosen-container{
-    width: 100%!important;
+.chosen-container {
+    width: 100% !important;
 }
 
-.form-group.disabled, .form-group.disabled .btn:hover{
-     cursor: not-allowed!important;
-    
+.form-group.disabled, .form-group.disabled .btn:hover {
+    cursor: not-allowed !important;
 }
 
 .disabled .chosen-container {
-    pointer-events: none!important;
+    pointer-events: none !important;
 }
 
 .disabled .btn {
     opacity: 0.65;
-    pointer-events: none!important;
+    pointer-events: none !important;
 }
 
-.disabled .chosen-container:hover{
-    
+.disabled .chosen-container:hover {
 }
 
 .disabled .chosen-container .chosen-choices {
     background-color: #eee;
-    
 }
 
 .chosen-input-group {
@@ -718,13 +757,14 @@ body {
     background-image: none;
 }
 
-.list-icon{
+.list-icon {
     text-align: center;
 }
-.list-icon img {
-    max-height: 75px;
-    max-width: 100%;
-}
+
+    .list-icon img {
+        max-height: 75px;
+        max-width: 100%;
+    }
 
 .list-btn-remove {
     line-height: 1.4em;
@@ -759,15 +799,15 @@ body {
     padding: 0;
 }
 
-.btn-handlekurv .glyphicon{
-    margin-right: 5px;
-}
+    .btn-handlekurv .glyphicon {
+        margin-right: 5px;
+    }
 
-.btn-handlekurv #orderitem-count, .btn-handlekurv #orderitem-count-text{
-    font-size: .8em;
-}
+    .btn-handlekurv #orderitem-count, .btn-handlekurv #orderitem-count-text {
+        font-size: .8em;
+    }
 
-#feedback-alert{
+#feedback-alert {
     display: none;
     position: fixed;
     z-index: 2;
