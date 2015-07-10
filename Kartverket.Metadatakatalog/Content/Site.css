@@ -75,28 +75,33 @@
     border-bottom: 1px solid #eee;
 }
 
-    .facet-sok-emne label {
+    .facet-sok-emne li a {
         display: block;
         margin-bottom: 0;
+  
+    line-height: 21.15px;
     }
+
+    .facet-sok-emne li a:hover{
+         background-color: #EEE;
+    } 
 
 
         .facet-sok-emne label span {
             font-weight: 400;
         }
 
+        .facet-sok-emne li ul li a{
+            margin-left: 15px;
+        }
+
     .facet-sok-emne input[type="radio"], .facet-sok-emne input[type="checkbox"] {
         margin: 0;
     }
 
-.nav li label  a {
-    display: block;
-    line-height: 21.15px;
-}
 
-.nav li label a:hover {
-    background-color: #EEE;
-}
+
+
 
 
 .facet-sok-tittel {
@@ -160,7 +165,7 @@
     }
 
 
-    .nav-pills-small > li.active a {
+    .nav-pills-small > li a.active {
         background: none !important;
         color: #007294;
         background-color: #f8f8f8 !important;

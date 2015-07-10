@@ -33,8 +33,8 @@
                 {
                     string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
 
-                    <li class="filter-options @cssClass">
-                        <a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
+                    <li class="filter-options">
+                        <a class="btn-link @cssClass" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
                             @*Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b style='font-weight: 800;'>" : "") @facetResult.LinkName() @Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b>" : "") (@facetResult.Count)
                             *@
                             @facetResult.LinkName()
@@ -70,7 +70,8 @@
                     string previousFacetLinkName = null;
                     foreach (var facetResult in facet.FacetResults)
                     {
-                        string checkboxChecked = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "checked" : "");
+                        string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
+                      
                         string hideChildren = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "show-children" : "hide-children");
                         double relativeHierarchyLevel = 0;
 
@@ -95,11 +96,11 @@
                         }
                         <text>
                             <li class="filter-options @hideChildren ">
-                                <label>
-                                    <a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
-                                        <input type="checkbox" @checkboxChecked />@facetResult.LinkName() <span class="text-muted">(@facetResult.Count)</span>
+                           
+                                    <a class="btn-link @cssClass " href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
+                                        @facetResult.LinkName() <span class="text-muted">(@facetResult.Count)</span>
                                     </a>
-                                </label>
+                              
                         </text>
 
                         previousFacetLinkName = facetResult.LinkName().ToString();
