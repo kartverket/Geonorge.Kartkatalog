@@ -68,21 +68,23 @@
             <ul class="nav nav-pills nav-stacked nav-pills-small">
                 @{
                     string previousFacetLinkName = null;
+                    double hierarchyLevel = 0;
                     foreach (var facetResult in facet.FacetResults)
                     {
                         string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
-                      
+
                         string hideChildren = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "show-children" : "hide-children");
                         double relativeHierarchyLevel = 0;
+
 
                         if (previousFacetLinkName != null)
                         {
                             relativeHierarchyLevel = Model.GetRelativeHierarchyLevel(facetResult.LinkName(), previousFacetLinkName);
+                            hierarchyLevel += relativeHierarchyLevel;
                             if (relativeHierarchyLevel > 0)
                             {
                                 <text>
-                                    <ul>
-                                        <li class="filter-options">
+                                    <ul><li class="filter-options">
                                 </text>
                             }
                             else if (relativeHierarchyLevel < 0)
@@ -96,28 +98,33 @@
                         }
                         <text>
                             <li class="filter-options @hideChildren ">
-                           
-                                    <a class="btn-link @cssClass " href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
-                                        @facetResult.LinkName() <span class="text-muted">(@facetResult.Count)</span>
-                                    </a>
-                              
+
+                                <a class="btn-link @cssClass " href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
+                                    @facetResult.LinkName() <span class="text-muted">(@facetResult.Count)</span>
+                                </a>
+
                         </text>
 
                         previousFacetLinkName = facetResult.LinkName().ToString();
                     }
+                    for (int index = 0; index < hierarchyLevel; index++)
+                    {
+                        @:</li></ul>
+                    }
+
+                    if (Model.HasFilterForFacetField(facet.FacetField))
+                    {
+                        <li class="filter-options">
+                            <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
+                                <span class="glyphicon glyphicon-remove"> </span>
+                                Vis alle
+                            </button>
+                        </li>
+                    }
                 }
-                @if (Model.HasFilterForFacetField(facet.FacetField))
-                {
-                    <li class="filter-options">
-                        <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
-                            <span class="glyphicon glyphicon-remove"> </span>
-                            Vis alle
-                        </button>
-                    </li>
-                }
-            </ul>
+                </ul>
+            </div>
         </div>
-    </div>
 
 }
 
