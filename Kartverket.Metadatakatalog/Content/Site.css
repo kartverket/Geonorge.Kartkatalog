@@ -132,7 +132,7 @@
     margin-top: 5px;
 }
 
-.nav-pills-small li ul {
+.nav-pills-small li ul, .facet-sok-emne ul {
     padding: 0;
     list-style: none;
     margin: 0;

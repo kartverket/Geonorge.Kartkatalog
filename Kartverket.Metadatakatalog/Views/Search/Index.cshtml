@@ -84,9 +84,13 @@
                                         <li class="filter-options">
                                 </text>
                             }
+                            else if (relativeHierarchyLevel < 0)
+                            {
+                                @:</li></ul>
+                            }
                             else
                             {
-                             @:</li>
+                                @:</li>
                             }
                         }
                         <text>
@@ -97,14 +101,6 @@
                                     </a>
                                 </label>
                         </text>
-                        if (previousFacetLinkName != null)
-                        {
-                            relativeHierarchyLevel = Model.GetRelativeHierarchyLevel(facetResult.LinkName(), previousFacetLinkName);
-                            if (relativeHierarchyLevel < 0)
-                            {
-                                @:</li></ul>
-                            }
-                        }
 
                         previousFacetLinkName = facetResult.LinkName().ToString();
                     }
