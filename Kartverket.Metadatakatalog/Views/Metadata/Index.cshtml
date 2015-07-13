@@ -513,6 +513,21 @@
                 if (Modernizr.localstorage) {
 
                     console.log('window.localStorage is available!');
+
+
+                    @{
+                        string itemUuid = (Model.Uuid != null) ? Model.Uuid : "";
+                        string itemTitle = (Model.Title != null) ? Model.Title : "";
+                        string itemOrganizationLogoUrl = (Model.OrganizationLogoUrl != null) ? Model.OrganizationLogoUrl : "";
+                        string itemDistributionDetailsUrl = (@Model.DistributionDetails != null) ? @Model.DistributionDetails.URL : "";
+                        }
+
+                    var uuid = '@itemUuid';
+                    var title = '@itemTitle';
+                    var organizationLogoUrl = '@itemOrganizationLogoUrl';
+                    var distributionDetailsUrl = '@itemDistributionDetailsUrl';
+                    var rootUrl = '@Html.GeonorgeUrl()';
+
                     var orderItems = [];
                     $('#add-to-cart-btn').click(function () {
                         var added = false;
@@ -520,19 +535,19 @@
                             orderItems = (JSON.parse(localStorage.getItem('orderItems')));
                         }
                         $.map(orderItems, function (elementOfArray, indexInArray) {
-                            if (elementOfArray == '@Model.Uuid') {
-                                orderItems.push("@Model.Uuid");
+                            if (elementOfArray == uuid) {
+                                orderItems.push(uuid);
                                 added = true;
                             }
                         });
                         if (!added) {
-                            orderItems.push("@Model.Uuid");
-                            var metadata = { 'name': '@Model.Title', 'uuid': '@Model.Uuid', 'url': 'http://kartkatalogen.dev.geonorge.no/metadata/uuid/' + '@Model.Uuid', 'organizationLogoUrl': '@Model.OrganizationLogoUrl', 'distributionUrl': '@Model.DistributionDetails.URL' };
+                            orderItems.push(uuid);
+                            var metadata = { 'name': title, 'uuid': uuid, 'url': rootUrl + 'metadata/uuid/' + uuid, 'organizationLogoUrl': organizationLogoUrl, 'distributionUrl': distributionDetailsUrl };
                             localStorage["orderItems"] = JSON.stringify(orderItems);
-                            localStorage["@Model.Uuid" + ".metadata"] = JSON.stringify(metadata);
-                            showAlert('@Model.Title er lagt til i handlekurven', 'success');
+                            localStorage[uuid + ".metadata"] = JSON.stringify(metadata);
+                            showAlert(title + ' er lagt til i handlekurven', 'success');
                         } else {
-                            showAlert('@Model.Title er allerede lagt til i handlekurven', 'warning');
+                            showAlert(title + ' er allerede lagt til i handlekurven', 'warning');
                         }
                     });
                 } else {
