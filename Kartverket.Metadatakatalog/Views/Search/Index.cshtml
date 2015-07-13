@@ -100,7 +100,7 @@
                             <li class="filter-options @hideChildren ">
 
                                 <a class="btn-link @cssClass " href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
-                                    @facetResult.LinkName() <span class="text-muted">(@facetResult.Count)</span>
+                                    @facetResult.AreaLinkName(Model.areaDictionary)<span class="text-muted">(@facetResult.Count)</span>
                                 </a>
 
                         </text>

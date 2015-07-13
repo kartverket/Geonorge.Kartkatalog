@@ -17,6 +17,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public int page { get; set; }
         public int startPage { get; set; }
         public int endPage { get; set; }
+        public Dictionary<string, string> areaDictionary { get; set; }
 
         public SearchViewModel(SearchParameters parameters, SearchResult searchResult)
         {
@@ -28,6 +29,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             NumFound = searchResult.NumFound;
             orderby = (int)parameters.orderby;
             page = 1;
+            var placeResolver = new Service.PlaceResolver();
+            areaDictionary = placeResolver.GetAreas();
+
             if (Offset != 1)
             {
                 page = (Offset / Limit) + 1;

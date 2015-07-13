@@ -8,7 +8,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
     {
         public string Name { get; set; }
         public int Count { get; set; }
-        
+
         private SearchResultFacetValueViewModel(Facet.FacetValue facetValue)
         {
             Name = facetValue.Name;
@@ -25,6 +25,17 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             var translatedName = UI.ResourceManager.GetString("Facet_type_" + Name);
             string link = !string.IsNullOrWhiteSpace(translatedName) ? translatedName : Name;
             if (link.Length > 50) link = link.Substring(0, 50) + "...";
+            return link;
+        }
+
+        public string AreaLinkName(Dictionary<string, string> dictionary)
+        {
+            var translatedName = UI.ResourceManager.GetString("Facet_type_" + Name);
+            string link = !string.IsNullOrWhiteSpace(translatedName) ? translatedName : Name;
+            if (dictionary.ContainsKey(link))
+            {
+                link = dictionary[link];
+            }
             return link;
         }
     }
