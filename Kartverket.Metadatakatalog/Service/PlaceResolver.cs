@@ -61,6 +61,16 @@ namespace Kartverket.Metadatakatalog.Service
 
         private Dictionary<string, string> _areas;
 
+        /// <summary>
+        /// Gets fylke og kommuner fra register i et dictionary
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, string> GetAreas()
+        {
+            populateAreas();
+            return _areas;
+        }
+
         private void populateAreas() {
             if (_areas == null || _areas.Count == 0)
             {

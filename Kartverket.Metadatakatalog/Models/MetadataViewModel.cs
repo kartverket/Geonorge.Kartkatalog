@@ -180,7 +180,7 @@ namespace Kartverket.Metadatakatalog.Models
         {
             if (System.Web.Configuration.WebConfigurationManager.AppSettings["DownloadServiceEnabled"] == "true") 
             {
-                if (DistributionDetails.Protocol.Contains("GEONORGE:DOWNLOAD"))
+                if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains("GEONORGE:DOWNLOAD"))
                     return true;
             }
 
