@@ -178,7 +178,22 @@ namespace Kartverket.Metadatakatalog.Service
                 var myValue = _areas.FirstOrDefault(x => x.Value.ToLower() == keyword.Keyword.ToLower()).Key;
                 if (myValue != null) placegroup.Add(myValue);
             }
+            List<string> placegroup2 = new List<string>();
+            placegroup2.AddRange(placegroup);
 
+            //Må sjekke at kommuner som er lagt inn også har fylke
+            foreach (string placekey in placegroup2)
+            {
+                string[] parts = placekey.Split('/');
+                if (parts.Count() > 2)
+                {
+                    if (!placegroup.Contains(parts[0] + "/" + parts[1]))
+                    {
+                        //Om kommunen ikke har fylke, så fjernes kommunen
+                        placegroup.Remove(placekey);
+                    } 
+                }
+            }
             return placegroup;
         }
        

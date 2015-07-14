@@ -106,7 +106,7 @@ namespace Kartverket.Metadatakatalog.Service
                         }
                         catch (Exception ex)
                         {
-                            Log.Error("Exception while testing resurces for metadata: " + simpleMetadata.Uuid, ex);
+                            Log.Error("Exception while testing logo resurces for metadata: " + simpleMetadata.Uuid, ex);
                         }
 
 
@@ -154,12 +154,12 @@ namespace Kartverket.Metadatakatalog.Service
                 List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;
                 if (thumbnails != null && thumbnails.Count > 0)
                 {
-                    indexDoc.ThumbnailUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMetadata.Uuid,
-                        thumbnails[thumbnails.Count-1].URL);
-                    
-                    //teste om 404 evt timeout? - settes tom om krav ikke følges
                     try
                     {
+                        indexDoc.ThumbnailUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMetadata.Uuid, thumbnails[thumbnails.Count-1].URL);
+                    
+                         //teste om 404 evt timeout? - settes tom om krav ikke følges
+                    
                         using (var client = new HttpClient())
                         {
                             client.DefaultRequestHeaders.Accept.Clear();
@@ -172,7 +172,7 @@ namespace Kartverket.Metadatakatalog.Service
                         }
                     }
                     catch (Exception ex) {
-                        Log.Error("Exception while testing resurces for metadata: " + simpleMetadata.Uuid, ex);
+                        Log.Error("Exception while testing thumbnail resurces for metadata: " + simpleMetadata.Uuid, ex);
                     }
 
 
