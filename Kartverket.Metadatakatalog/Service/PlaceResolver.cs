@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System;
 using System.Net.Http.Headers;
+using System.Web.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -77,7 +78,7 @@ namespace Kartverket.Metadatakatalog.Service
                 _areas = new Dictionary<string, string>();
                 //call register fylker og kommuner
                 HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri("http://register.dev.geonorge.no/"); 
+                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]); 
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 var result = client.GetAsync("api/subregister/sosi-kodelister/kartverket/fylkesnummer").Result;

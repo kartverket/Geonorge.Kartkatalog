@@ -9,6 +9,7 @@ using System.Net.Http.Formatting;
 using System.Text;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -20,7 +21,7 @@ namespace Kartverket.Metadatakatalog.Service
 
 
                 var client = new HttpClient();
-                client.BaseAddress = new Uri("http://download.dev.geonorge.no/"); // http://localhost:61236/
+                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["DownloadUrl"]); // http://localhost:61236/
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 
