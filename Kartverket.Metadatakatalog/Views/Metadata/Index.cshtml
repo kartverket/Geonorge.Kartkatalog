@@ -469,6 +469,11 @@
             @DisplayKeywords("Inspire", Model.KeywordsInspire)
             @DisplayKeywords("Annet", Model.KeywordsOther)
 
+            @if (!string.IsNullOrWhiteSpace(Model.TopicCategory))
+            {
+                <p><strong>Tematisk hovedkategori:</strong> @Model.TopicCategory</p>
+            }
+
         </div>
     </div>
 
