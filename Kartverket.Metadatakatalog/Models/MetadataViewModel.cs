@@ -269,17 +269,17 @@ namespace Kartverket.Metadatakatalog.Models
 
             if (typeStr == "WMS")
             {
-                CoverageLink = "http://norgeskart.no/geoportal/#5/355422/6668909/l/wms/[" + pathStr + "]/+" + layerStr;
+                CoverageLink = "http://norgeskart.no/geoportal/#7/355422/6668909/l/wms/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
             }
 
             else if (typeStr == "WFS")
             {
-                CoverageLink = "http://norgeskart.no/geoportal/#11/255216/6653881/l/wfs/[" + pathStr + "]/+" + layerStr;
+                CoverageLink = "http://norgeskart.no/geoportal/#7/255216/6653881/l/wfs/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
             }
 
             else if (typeStr == "GeoJSON")
             {
-                CoverageLink = "http://norgeskart.no/geoportal/staging/#4/355422/6668909/l/geojson/[" + pathStr + "]/+" + layerStr;
+                CoverageLink = "http://norgeskart.no/geoportal/staging/#7/355422/6668909/l/geojson/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
             }
 
             return CoverageLink;
