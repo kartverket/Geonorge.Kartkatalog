@@ -316,6 +316,9 @@
 
 
         $(document).ready(function () {
+            @if(Html.DownloadServiceEnabled())
+            {
+            <text>
             if (localStorage.getItem("orderItems") != null) {
                 var storedOrderItems = JSON.parse(localStorage["orderItems"]);
                 var orderitemCount = storedOrderItems.length;
@@ -330,11 +333,15 @@
                 $('#orderitem-count').text('');
                 $('#orderitem-count-text').text('Handlekurven er tom');
             }
+            </text>
+            }
         });
 
 
         $(window).load(function () {
-
+         @if(Html.DownloadServiceEnabled())
+         {
+         <text>
             if (Modernizr.localstorage) {
 
                 console.log('window.localStorage is available!');
@@ -383,10 +390,9 @@
                 console.log('no native support for HTML5 storage :(');
             }
 
-
-
-
-
+        </text>
+        }
+                
         });
 
     </script>

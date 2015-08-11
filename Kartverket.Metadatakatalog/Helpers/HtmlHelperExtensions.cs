@@ -31,6 +31,10 @@ namespace Kartverket.Metadatakatalog.Helpers
         {
             return WebConfigurationManager.AppSettings["ObjektkatalogUrl"];
         }
+        public static bool DownloadServiceEnabled(this HtmlHelper helper)
+        {
+            return WebConfigurationManager.AppSettings["DownloadServiceEnabled"] == "false" ? false : true;
+        }
         
     }
 }
