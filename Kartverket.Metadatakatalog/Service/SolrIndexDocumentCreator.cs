@@ -73,15 +73,13 @@ namespace Kartverket.Metadatakatalog.Service
                     indexDoc.Organizationgroup = simpleMetadata.ContactOwner.Organization;
                     indexDoc.Organization = indexDoc.Organizationgroup;
                     indexDoc.OrganizationContactname = simpleMetadata.ContactOwner.Name;
-                    if (indexDoc.Organization != null) { 
-                        if (indexDoc.Organization.ToLower().Contains("fylkeskommune")) indexDoc.Organization = "Fylkeskommune";
-                        else
-                        {
-                            if (indexDoc.Organization.ToLower().Contains("fylke")) indexDoc.Organization = "Fylke";
-                            if (indexDoc.Organization.ToLower().Contains("kommune")) indexDoc.Organization = "Kommune";
-                            if (indexDoc.Organization.ToLower().Contains("regionråd")) indexDoc.Organization = "Kommune";
-                            if (indexDoc.Organization.ToLower().Contains("teknisk etat")) indexDoc.Organization = "Kommune";
-                        }
+                    if (indexDoc.Organization != null) {
+                        
+                        if (indexDoc.Organization.ToLower().Contains("fylke")) indexDoc.Organization = "Fylke";
+                        if (indexDoc.Organization.ToLower().Contains("kommune")) indexDoc.Organization = "Kommune";
+                        if (indexDoc.Organization.ToLower().Contains("regionråd")) indexDoc.Organization = "Kommune";
+                        if (indexDoc.Organization.ToLower().Contains("teknisk etat")) indexDoc.Organization = "Kommune";
+
                     }
                     indexDoc.OrganizationSeoName = new SeoUrl(indexDoc.Organizationgroup, null).Organization;
 
