@@ -80,6 +80,36 @@ namespace Kartverket.Metadatakatalog.Service
                         if (indexDoc.Organization.ToLower().Contains("regionråd")) indexDoc.Organization = "Kommune";
                         if (indexDoc.Organization.ToLower().Contains("teknisk etat")) indexDoc.Organization = "Kommune";
 
+                        if (indexDoc.Organization.ToLower().Contains("regionsrådet i bergen og omland")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("snr, samarbeidsrådet for nedre romerike")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("setesdal")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("turkart helgeland")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("ddv (det digitale vest-agder)")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("den digitale østregionen")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("fjordakart")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("fonnakart")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("gis i hallingdal")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("geodatasamarbeidet i nord-østerdal")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("indre namdal region")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("nordfjordnett")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("gjøvik-land-toten")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("glo-kart")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("gratangen-lavangen-salangen")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("hadeland")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("haram og sandøy")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("kartikus")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("knutepunkt sørlandet")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("listerkart")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("midtre namdalsregionen")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("midt-telemark")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("midt-troms")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("orkide")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("salten regionråd")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("vesterålskommunene")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("vest-finnmark regionråd")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("vest-telemarkrådet")) indexDoc.Organization = "Kommunesamarbeid";
+                        if (indexDoc.Organization.ToLower().Contains("værnesregionen")) indexDoc.Organization = "Kommunesamarbeid";
+
                     }
                     indexDoc.OrganizationSeoName = new SeoUrl(indexDoc.Organizationgroup, null).Organization;
 
