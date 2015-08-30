@@ -28,14 +28,22 @@ namespace Kartverket.Metadatakatalog.Service
 
         public void RunIndexingOn(string uuid)
         {
-            MD_Metadata_Type metadata = _geoNorge.GetRecordByUuid(uuid);
-            if (metadata == null)
+           
+            try
             {
-                _indexer.RemoveIndexDocument(uuid);
+                MD_Metadata_Type metadata = _geoNorge.GetRecordByUuid(uuid);
+                if (metadata == null)
+                {
+                    _indexer.RemoveIndexDocument(uuid);
+                }
+                else {
+                    MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge);
+                    _indexer.Index(metadataIndexDoc);
+                }
             }
-            else {
-                MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge);
-                _indexer.Index(metadataIndexDoc);
+         catch (Exception exception)
+            {
+                Log.Error("Error in UUID: " + uuid + "", exception);
             }
         }
 
@@ -58,10 +66,11 @@ namespace Kartverket.Metadatakatalog.Service
                 int count = 50;
                 for (int i = 1; i <= count; i++)
                 {
+                    SearchResultsType searchResult2 = null;
                     try
                     {
                         Log.Info("Running single index for start position: " + startPosition);
-                        SearchResultsType searchResult2 = _geoNorge.SearchIso("", startPosition, 1, true);
+                        searchResult2 = _geoNorge.SearchIso("", startPosition, 1, true);
                         
                         Log.Info("Next record: " + searchResult2.nextRecord + " " + searchResult2.numberOfRecordsMatched);
                         List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult2.Items, _geoNorge);
@@ -72,6 +81,8 @@ namespace Kartverket.Metadatakatalog.Service
                     catch (Exception exception2)
                     {
                         Log.Error("Error in ISO format from Geonetwork position: " + startPosition + ".", exception2);
+                        if (searchResult2 != null) Log.Info(searchResult2.Items[0]);
+
                         startPosition++;
                     }
 
