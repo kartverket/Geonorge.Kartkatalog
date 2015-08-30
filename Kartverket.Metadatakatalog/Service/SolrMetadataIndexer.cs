@@ -60,7 +60,10 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     try
                     {
+                        Log.Info("Running single index for start position: " + startPosition);
                         SearchResultsType searchResult2 = _geoNorge.SearchIso("", startPosition, 1, true);
+                        
+                        Log.Info("Next record: " + searchResult2.nextRecord + " " + searchResult2.numberOfRecordsMatched);
                         List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult2.Items, _geoNorge);
                         _indexer.Index(indexDocs);
                         startPosition++;
