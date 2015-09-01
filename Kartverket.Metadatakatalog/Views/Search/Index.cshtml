@@ -462,13 +462,15 @@
                                 </a>
 
                                 <p>
-                                    @if (item.Abstract.Length > 650)
-                                    {
-                                        @item.Abstract.Substring(0, 654)<text>...</text>
-                                    }
-                                    else
-                                    {
-                                        @item.Abstract
+                                    @if (item.Abstract != null) { 
+                                        if (item.Abstract.Length > 650)
+                                        {
+                                            @item.Abstract.Substring(0, 654)<text>...</text>
+                                        }
+                                        else
+                                        {
+                                            @item.Abstract
+                                        }
                                     }
 
                                 </p>
