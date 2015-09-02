@@ -54,7 +54,8 @@ namespace Kartverket.Metadatakatalog.Service
             bool runningSingle = false;
             try
             {
-                searchResult = _geoNorge.SearchIso("", startPosition, 50, true);
+                searchResult = _geoNorge.SearchIso("", startPosition, 50, false);
+                Log.Info("Next record: " + searchResult.nextRecord + " " + searchResult.numberOfRecordsReturned + " " + searchResult.numberOfRecordsMatched);
                 List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult.Items, _geoNorge);
                 _indexer.Index(indexDocs);
                 runningSingle = false;
@@ -70,7 +71,7 @@ namespace Kartverket.Metadatakatalog.Service
                     try
                     {
                         Log.Info("Running single index for start position: " + startPosition);
-                        searchResult2 = _geoNorge.SearchIso("", startPosition, 1, true);
+                        searchResult2 = _geoNorge.SearchIso("", startPosition, 1, false);
                         
                         Log.Info("Next record: " + searchResult2.nextRecord + " " + searchResult2.numberOfRecordsMatched);
                         List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult2.Items, _geoNorge);
