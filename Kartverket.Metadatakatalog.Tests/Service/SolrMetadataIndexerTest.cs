@@ -36,7 +36,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
                 nextRecord = "51",
             };
 
-            geoNorgeMock.Setup(g => g.SearchIso("", 1, 50, true)).Returns(searchResult);
+            geoNorgeMock.Setup(g => g.SearchIso("", 1, 50, false)).Returns(searchResult);
 
             var indexerMock = new Mock<Indexer>();
 
@@ -48,7 +48,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
             indexer.RunIndexing();
 
-            geoNorgeMock.Verify(g => g.SearchIso("", 1, 50, true));
+            geoNorgeMock.Verify(g => g.SearchIso("", 1, 50, false));
 
             indexerMock.Verify(i => i.Index(indexDocs));
         }
@@ -72,8 +72,8 @@ namespace Kartverket.Metadatakatalog.Tests.Service
                 nextRecord = "56",
             };
 
-            geoNorgeMock.Setup(g => g.SearchIso("", 1, 50, true)).Returns(firstSearchResult);
-            geoNorgeMock.Setup(g => g.SearchIso("", 51, 50, true)).Returns(secondSearchResult);
+            geoNorgeMock.Setup(g => g.SearchIso("", 1, 50, false)).Returns(firstSearchResult);
+            geoNorgeMock.Setup(g => g.SearchIso("", 51, 50, false)).Returns(secondSearchResult);
 
             var indexerMock = new Mock<Indexer>();
             var indexDocumentCreator = new Mock<IndexDocumentCreator>();
@@ -85,8 +85,8 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
             indexer.RunIndexing();
 
-            geoNorgeMock.Verify(g => g.SearchIso("", 1, 50, true));
-            geoNorgeMock.Verify(g => g.SearchIso("", 51, 50, true));
+            geoNorgeMock.Verify(g => g.SearchIso("", 1, 50, false));
+            geoNorgeMock.Verify(g => g.SearchIso("", 51, 50, false));
 
             indexerMock.Verify(i => i.Index(indexDocs));
             indexerMock.Verify(i => i.Index(indexDocs));
