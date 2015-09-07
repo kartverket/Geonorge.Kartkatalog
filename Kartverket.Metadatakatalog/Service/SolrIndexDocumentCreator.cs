@@ -253,7 +253,7 @@ namespace Kartverket.Metadatakatalog.Service
                         ItemsChoiceType23.PropertyIsLike, 
                     };
 
-                    var res = geoNorge.SearchWithFilters(filters, filterNames);
+                    var res = geoNorge.SearchWithFilters(filters, filterNames, 1, 200);
                     if (res.numberOfRecordsMatched != "0")
                     {
                         MD_Metadata_Type m = geoNorge.GetRecordByUuid(((www.opengis.net.DCMIRecordType)(res.Items[0])).Items[0].Text[0]);
@@ -265,6 +265,50 @@ namespace Kartverket.Metadatakatalog.Service
                             indexDoc.ServiceDistributionUrlForDataset = servicedistributionDetails.URL;
                             indexDoc.ServiceDistributionNameForDataset = servicedistributionDetails.Name;
                         }
+
+                        // Create bundle - services mapped to datasets
+
+                        List<MetaDataEntry> datasetServices = new List<MetaDataEntry>();
+
+                        for (int s = 0; s < res.Items.Length; s++)
+                        {
+                            string serviceId = ((www.opengis.net.DCMIRecordType)(res.Items[s])).Items[0].Text[0];
+                            MD_Metadata_Type md = geoNorge.GetRecordByUuid(serviceId);
+                            var simpleMd = new SimpleMetadata(md);
+                            datasetServices.Add(new MetaDataEntry 
+                            {
+                                Uuid = simpleMd.Uuid, Title= simpleMd.Title, ParentIdentifier = simpleMd.ParentIdentifier
+                            });
+                        }
+                        
+                        //Get Services
+                        List<MetaDataEntry> datasetServicesParents = new List<MetaDataEntry>();
+                        datasetServicesParents = datasetServices.Where(s => s.ParentIdentifier == null).Distinct().OrderBy(o => o.Title).ToList();
+
+                        List<MetaDataEntry> datasetServicesOrganizedList = new List<MetaDataEntry>();
+
+                        foreach (var parentDS in datasetServicesParents)
+                        {
+                            datasetServicesOrganizedList.Add(parentDS);
+                            List<MetaDataEntry> datasetServicesLayers = new List<MetaDataEntry>();
+                            //Get layers for service
+                            datasetServicesLayers = datasetServices.Where(s => s.ParentIdentifier == parentDS.Uuid).OrderBy(o => o.Title).ToList();
+
+                            foreach (var layerDS in datasetServicesLayers)
+                            {
+                                datasetServicesOrganizedList.Add(layerDS);
+                            }
+
+                        }
+
+                        List<string> datasetServicesNewList = new List<string>();
+                        foreach (var service in datasetServicesOrganizedList)
+                        {
+                            datasetServicesNewList.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier);
+                        }
+
+                        indexDoc.DatasetServices = datasetServicesNewList.ToList();
+
                     }
                
                 }
@@ -324,5 +368,12 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
+    }
+
+    class MetaDataEntry
+    {
+        public string Uuid { get; set; }
+        public string Title { get; set; }
+        public string ParentIdentifier { get; set; }
     }
 }

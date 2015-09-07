@@ -23,6 +23,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string LegendDescriptionUrl { get; set; }
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
+        public List<string> DatasetServices { get; set; }
         
     }
 }

@@ -288,6 +288,39 @@
         }
 
         </p>
+        @if (Model.IsDataset())
+        {
+            <p id="bundle">
+                <script>
+                    $.getJSON("/api/search?text=@Model.Uuid", function (result) {
+
+                        if (result.length != 0) {
+                            if (result.Results[0] != null) {
+                                if (result.Results[0].DatasetServices != null) {
+                                    for (s = 0; s < result.Results[0].DatasetServices.length; s++) {
+                                        var data = result.Results[0].DatasetServices[s];
+                                        var datas = data.split('|');
+                                        var uuid = datas[0];
+                                        var title = datas[1];
+                                        var parentIdentifier = datas[2];
+
+                                        if (parentIdentifier == "") {
+                                            $('#bundle').append('<b>Tjeneste(r) datasettet inngår i:</b></br><a href="/metadata/uuid/' + uuid + '" target="_blank">' + title + '</a>');
+                                            if(result.Results[0].DatasetServices.length > 1)
+                                                $('#bundle').append('</br><i>Tjenestelag som datsettet inngår i:</i></br>');
+                                        }
+                                        else
+                                        {
+                                            $('#bundle').append(' - <a href="/metadata/uuid/' + uuid + '" target="_blank">' + title + '</a></br>');
+                                        } 
+                                    }
+                                }
+                            }
+                        }
+                    });
+                </script>
+            </p>
+        }
 
         @if (!string.IsNullOrWhiteSpace(Model.Purpose))
         {

@@ -125,6 +125,9 @@ namespace Kartverket.Metadatakatalog.Models
 
         [SolrField("DistributionProtocols")]
         public List<string> DistributionProtocols { get; set; }
+
+        [SolrField("datasetservice")]
+        public List<string> DatasetServices { get; set; }
     }
 
 }
