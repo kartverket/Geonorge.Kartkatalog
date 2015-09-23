@@ -29,9 +29,8 @@ namespace Kartverket.Metadatakatalog.Service
                     new Newtonsoft.Json.JsonSerializerSettings 
                     { ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver() }
                     );
-
-                HttpResponseMessage response = client.PostAsJsonAsync("api/order", json).Result;
-
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = client.PostAsync("api/order", content).Result;
 
                 if (response.IsSuccessStatusCode)
                 {
