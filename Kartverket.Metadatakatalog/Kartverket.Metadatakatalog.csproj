@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -381,6 +382,7 @@
     <Content Include="Views\Download\Index.cshtml" />
     <Content Include="Views\Download\_OrderItem.cshtml" />
     <Content Include="Views\Download\Order.cshtml" />
+    <Content Include="Views\Download\_NorgesKart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Util\" />
