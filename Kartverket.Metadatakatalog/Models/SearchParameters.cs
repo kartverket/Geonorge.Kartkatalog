@@ -9,7 +9,8 @@ namespace Kartverket.Metadatakatalog.Models
         title,
         organization,
         newest,
-        updated
+        updated,
+        popularMetadata
     }
 
     public class SearchParameters

@@ -48,7 +48,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
             }
             else if (string.IsNullOrWhiteSpace(parameters.Text) && HasNoFacetvalue(parameters.Facets))
             {
-                order = new[] { new SortOrder("title", Order.ASC) };
+                order = new[] { new SortOrder("popularMetadata", Order.DESC) };
             }
             else if (parameters.orderby == OrderBy.score)
             {
@@ -56,11 +56,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
             }
             try
             {
-
-
                 SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
-                {
-
+                {                                     
                     //WMS lag skal få redusert sin boost
 
                     FilterQueries = BuildFilterQueries(parameters),
@@ -70,7 +67,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     Facet = BuildFacetParameters(parameters),
                     Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
                     "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
-                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice" }
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata" }
                     //ExtraParams = new Dictionary<string, string> {
                     //    {"q", ""}
 
