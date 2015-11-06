@@ -20,32 +20,55 @@ using System.Xml.Serialization;
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://skjema.geonorge.no/SOSI/download/0.5")]
-[System.Xml.Serialization.XmlRootAttribute("Area", Namespace="http://skjema.geonorge.no/SOSI/download/0.5", IsNullable=false)]
-public partial class AreaType {
-    
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://skjema.geonorge.no/SOSI/download/0.5")]
+[System.Xml.Serialization.XmlRootAttribute("Area", Namespace = "http://skjema.geonorge.no/SOSI/download/0.5", IsNullable = false)]
+public partial class AreaType
+{
+
+    private string codeField;
+
     private string typeField;
-    
+
     private string nameField;
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string type {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string type
+    {
+        get
+        {
             return this.typeField;
         }
-        set {
+        set
+        {
             this.typeField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string name {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string name
+    {
+        get
+        {
             return this.nameField;
         }
-        set {
+        set
+        {
             this.nameField = value;
         }
     }
@@ -56,103 +79,128 @@ public partial class AreaType {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.kxml.no/rest/1.0")]
-[System.Xml.Serialization.XmlRootAttribute("Link", Namespace="http://www.kxml.no/rest/1.0", IsNullable=false)]
-public partial class LinkType {
-    
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://www.kxml.no/rest/1.0")]
+[System.Xml.Serialization.XmlRootAttribute("Link", Namespace = "http://www.kxml.no/rest/1.0", IsNullable = false)]
+public partial class LinkType
+{
+
     private string hrefField;
-    
+
     private string relField;
-    
+
     private bool templatedField;
-    
+
     private bool templatedFieldSpecified;
-    
+
     private string typeField;
-    
+
     private string deprecationField;
-    
+
     private string nameField;
-    
+
     private string titleField;
-    
+
     /// <remarks/>
-    public string href {
-        get {
+    public string href
+    {
+        get
+        {
             return this.hrefField;
         }
-        set {
+        set
+        {
             this.hrefField = value;
         }
     }
-    
+
     /// <remarks/>
-    public string rel {
-        get {
+    public string rel
+    {
+        get
+        {
             return this.relField;
         }
-        set {
+        set
+        {
             this.relField = value;
         }
     }
-    
+
     /// <remarks/>
-    public bool templated {
-        get {
+    public bool templated
+    {
+        get
+        {
             return this.templatedField;
         }
-        set {
+        set
+        {
             this.templatedField = value;
         }
     }
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlIgnoreAttribute()]
-    public bool templatedSpecified {
-        get {
+    public bool templatedSpecified
+    {
+        get
+        {
             return this.templatedFieldSpecified;
         }
-        set {
+        set
+        {
             this.templatedFieldSpecified = value;
         }
     }
-    
+
     /// <remarks/>
-    public string type {
-        get {
+    public string type
+    {
+        get
+        {
             return this.typeField;
         }
-        set {
+        set
+        {
             this.typeField = value;
         }
     }
-    
+
     /// <remarks/>
-    public string deprecation {
-        get {
+    public string deprecation
+    {
+        get
+        {
             return this.deprecationField;
         }
-        set {
+        set
+        {
             this.deprecationField = value;
         }
     }
-    
+
     /// <remarks/>
-    public string name {
-        get {
+    public string name
+    {
+        get
+        {
             return this.nameField;
         }
-        set {
+        set
+        {
             this.nameField = value;
         }
     }
-    
+
     /// <remarks/>
-    public string title {
-        get {
+    public string title
+    {
+        get
+        {
             return this.titleField;
         }
-        set {
+        set
+        {
             this.titleField = value;
         }
     }
@@ -163,72 +211,88 @@ public partial class LinkType {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://skjema.geonorge.no/SOSI/download/0.5")]
-[System.Xml.Serialization.XmlRootAttribute("Capabilities", Namespace="http://skjema.geonorge.no/SOSI/download/0.5", IsNullable=false)]
-public partial class CapabilitiesType {
-    
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://skjema.geonorge.no/SOSI/download/0.5")]
+[System.Xml.Serialization.XmlRootAttribute("Capabilities", Namespace = "http://skjema.geonorge.no/SOSI/download/0.5", IsNullable = false)]
+public partial class CapabilitiesType
+{
+
     private System.Nullable<bool> supportsProjectionSelectionField;
-    
+
     private System.Nullable<bool> supportsFormatSelectionField;
-    
+
     private System.Nullable<bool> supportsPolygonSelectionField;
-    
+
     private System.Nullable<bool> supportsAreaSelectionField;
-    
+
     private LinkType[] _linksField;
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public System.Nullable<bool> supportsProjectionSelection {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public System.Nullable<bool> supportsProjectionSelection
+    {
+        get
+        {
             return this.supportsProjectionSelectionField;
         }
-        set {
+        set
+        {
             this.supportsProjectionSelectionField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public System.Nullable<bool> supportsFormatSelection {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public System.Nullable<bool> supportsFormatSelection
+    {
+        get
+        {
             return this.supportsFormatSelectionField;
         }
-        set {
+        set
+        {
             this.supportsFormatSelectionField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public System.Nullable<bool> supportsPolygonSelection {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public System.Nullable<bool> supportsPolygonSelection
+    {
+        get
+        {
             return this.supportsPolygonSelectionField;
         }
-        set {
+        set
+        {
             this.supportsPolygonSelectionField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public System.Nullable<bool> supportsAreaSelection {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public System.Nullable<bool> supportsAreaSelection
+    {
+        get
+        {
             return this.supportsAreaSelectionField;
         }
-        set {
+        set
+        {
             this.supportsAreaSelectionField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
-    [System.Xml.Serialization.XmlArrayItemAttribute("_links", Namespace="http://www.kxml.no/rest/1.0", IsNullable=false)]
-    public LinkType[] _links {
-        get {
+    [System.Xml.Serialization.XmlArrayAttribute(IsNullable = true)]
+    [System.Xml.Serialization.XmlArrayItemAttribute("_links", Namespace = "http://www.kxml.no/rest/1.0", IsNullable = false)]
+    public LinkType[] _links
+    {
+        get
+        {
             return this._linksField;
         }
-        set {
+        set
+        {
             this._linksField = value;
         }
     }
@@ -239,45 +303,55 @@ public partial class CapabilitiesType {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://skjema.geonorge.no/SOSI/download/0.5")]
-[System.Xml.Serialization.XmlRootAttribute("File", Namespace="http://skjema.geonorge.no/SOSI/download/0.5", IsNullable=false)]
-public partial class FileType {
-    
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://skjema.geonorge.no/SOSI/download/0.5")]
+[System.Xml.Serialization.XmlRootAttribute("File", Namespace = "http://skjema.geonorge.no/SOSI/download/0.5", IsNullable = false)]
+public partial class FileType
+{
+
     private string downloadUrlField;
-    
+
     private string fileSizeField;
-    
+
     private string nameField;
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string downloadUrl {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string downloadUrl
+    {
+        get
+        {
             return this.downloadUrlField;
         }
-        set {
+        set
+        {
             this.downloadUrlField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(DataType="integer", IsNullable=true)]
-    public string fileSize {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(DataType = "integer", IsNullable = true)]
+    public string fileSize
+    {
+        get
+        {
             return this.fileSizeField;
         }
-        set {
+        set
+        {
             this.fileSizeField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string name {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string name
+    {
+        get
+        {
             return this.nameField;
         }
-        set {
+        set
+        {
             this.nameField = value;
         }
     }
@@ -288,32 +362,39 @@ public partial class FileType {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://skjema.geonorge.no/SOSI/download/0.5")]
-[System.Xml.Serialization.XmlRootAttribute("Format", Namespace="http://skjema.geonorge.no/SOSI/download/0.5", IsNullable=false)]
-public partial class FormatType {
-    
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://skjema.geonorge.no/SOSI/download/0.5")]
+[System.Xml.Serialization.XmlRootAttribute("Format", Namespace = "http://skjema.geonorge.no/SOSI/download/0.5", IsNullable = false)]
+public partial class FormatType
+{
+
     private string nameField;
-    
+
     private string versionField;
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string name {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string name
+    {
+        get
+        {
             return this.nameField;
         }
-        set {
+        set
+        {
             this.nameField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string version {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string version
+    {
+        get
+        {
             return this.versionField;
         }
-        set {
+        set
+        {
             this.versionField = value;
         }
     }
@@ -324,32 +405,39 @@ public partial class FormatType {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://skjema.geonorge.no/SOSI/download/0.5")]
-[System.Xml.Serialization.XmlRootAttribute("Order", Namespace="http://skjema.geonorge.no/SOSI/download/0.5", IsNullable=false)]
-public partial class OrderType {
-    
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://skjema.geonorge.no/SOSI/download/0.5")]
+[System.Xml.Serialization.XmlRootAttribute("Order", Namespace = "http://skjema.geonorge.no/SOSI/download/0.5", IsNullable = false)]
+public partial class OrderType
+{
+
     private string emailField;
-    
+
     private OrderLineType[] orderLinesField;
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string email {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string email
+    {
+        get
+        {
             return this.emailField;
         }
-        set {
+        set
+        {
             this.emailField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public OrderLineType[] orderLines {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public OrderLineType[] orderLines
+    {
+        get
+        {
             return this.orderLinesField;
         }
-        set {
+        set
+        {
             this.orderLinesField = value;
         }
     }
@@ -360,61 +448,90 @@ public partial class OrderType {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://skjema.geonorge.no/SOSI/download/0.5")]
-[System.Xml.Serialization.XmlRootAttribute("OrderLine", Namespace="http://skjema.geonorge.no/SOSI/download/0.5", IsNullable=false)]
-public partial class OrderLineType {
-    
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://skjema.geonorge.no/SOSI/download/0.5")]
+[System.Xml.Serialization.XmlRootAttribute("OrderLine", Namespace = "http://skjema.geonorge.no/SOSI/download/0.5", IsNullable = false)]
+public partial class OrderLineType
+{
+
     private AreaType[] areasField;
-    
+
     private FormatType[] formatsField;
-    
+
     private string metadataUuidField;
-    
+
+    private string coordinatesField;
+
     private ProjectionType[] projectionsField;
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
-    [System.Xml.Serialization.XmlArrayItemAttribute("area", IsNullable=false)]
-    public AreaType[] areas {
-        get {
+    [System.Xml.Serialization.XmlArrayAttribute(IsNullable = true)]
+    [System.Xml.Serialization.XmlArrayItemAttribute("area", IsNullable = false)]
+    public AreaType[] areas
+    {
+        get
+        {
             return this.areasField;
         }
-        set {
+        set
+        {
             this.areasField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
-    [System.Xml.Serialization.XmlArrayItemAttribute("format", IsNullable=false)]
-    public FormatType[] formats {
-        get {
+    [System.Xml.Serialization.XmlArrayAttribute(IsNullable = true)]
+    [System.Xml.Serialization.XmlArrayItemAttribute("format", IsNullable = false)]
+    public FormatType[] formats
+    {
+        get
+        {
             return this.formatsField;
         }
-        set {
+        set
+        {
             this.formatsField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string metadataUuid {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string metadataUuid
+    {
+        get
+        {
             return this.metadataUuidField;
         }
-        set {
+        set
+        {
             this.metadataUuidField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
-    [System.Xml.Serialization.XmlArrayItemAttribute("projection", IsNullable=false)]
-    public ProjectionType[] projections {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string coordinates
+    {
+        get
+        {
+            return this.coordinatesField;
+        }
+        set
+        {
+            this.coordinatesField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlArrayAttribute(IsNullable = true)]
+    [System.Xml.Serialization.XmlArrayItemAttribute("projection", IsNullable = false)]
+    public ProjectionType[] projections
+    {
+        get
+        {
             return this.projectionsField;
         }
-        set {
+        set
+        {
             this.projectionsField = value;
         }
     }
@@ -425,45 +542,55 @@ public partial class OrderLineType {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://skjema.geonorge.no/SOSI/download/0.5")]
-[System.Xml.Serialization.XmlRootAttribute("Projection", Namespace="http://skjema.geonorge.no/SOSI/download/0.5", IsNullable=false)]
-public partial class ProjectionType {
-    
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://skjema.geonorge.no/SOSI/download/0.5")]
+[System.Xml.Serialization.XmlRootAttribute("Projection", Namespace = "http://skjema.geonorge.no/SOSI/download/0.5", IsNullable = false)]
+public partial class ProjectionType
+{
+
     private string codeField;
-    
+
     private string nameField;
-    
+
     private string codespaceField;
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string code {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string code
+    {
+        get
+        {
             return this.codeField;
         }
-        set {
+        set
+        {
             this.codeField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string name {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string name
+    {
+        get
+        {
             return this.nameField;
         }
-        set {
+        set
+        {
             this.nameField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string codespace {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string codespace
+    {
+        get
+        {
             return this.codespaceField;
         }
-        set {
+        set
+        {
             this.codespaceField = value;
         }
     }
@@ -474,33 +601,40 @@ public partial class ProjectionType {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://skjema.geonorge.no/SOSI/download/0.5")]
-[System.Xml.Serialization.XmlRootAttribute("OrderReceipt", Namespace="http://skjema.geonorge.no/SOSI/download/0.5", IsNullable=false)]
-public partial class OrderReceiptType {
-    
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://skjema.geonorge.no/SOSI/download/0.5")]
+[System.Xml.Serialization.XmlRootAttribute("OrderReceipt", Namespace = "http://skjema.geonorge.no/SOSI/download/0.5", IsNullable = false)]
+public partial class OrderReceiptType
+{
+
     private string referenceNumberField;
-    
+
     private FileType[] filesField;
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public string referenceNumber {
-        get {
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string referenceNumber
+    {
+        get
+        {
             return this.referenceNumberField;
         }
-        set {
+        set
+        {
             this.referenceNumberField = value;
         }
     }
-    
+
     /// <remarks/>
-    [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
-    [System.Xml.Serialization.XmlArrayItemAttribute("file", IsNullable=false)]
-    public FileType[] files {
-        get {
+    [System.Xml.Serialization.XmlArrayAttribute(IsNullable = true)]
+    [System.Xml.Serialization.XmlArrayItemAttribute("file", IsNullable = false)]
+    public FileType[] files
+    {
+        get
+        {
             return this.filesField;
         }
-        set {
+        set
+        {
             this.filesField = value;
         }
     }
@@ -511,19 +645,23 @@ public partial class OrderReceiptType {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.kxml.no/rest/1.0")]
-[System.Xml.Serialization.XmlRootAttribute("LinkListe", Namespace="http://www.kxml.no/rest/1.0", IsNullable=false)]
-public partial class LinkListeType {
-    
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://www.kxml.no/rest/1.0")]
+[System.Xml.Serialization.XmlRootAttribute("LinkListe", Namespace = "http://www.kxml.no/rest/1.0", IsNullable = false)]
+public partial class LinkListeType
+{
+
     private LinkType[] _linksField;
-    
+
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute("_links")]
-    public LinkType[] _links {
-        get {
+    public LinkType[] _links
+    {
+        get
+        {
             return this._linksField;
         }
-        set {
+        set
+        {
             this._linksField = value;
         }
     }
