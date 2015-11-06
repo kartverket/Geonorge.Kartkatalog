@@ -203,7 +203,7 @@
                 var orderItemSelectProjeksjoner = $('#orderuuid' + val + ' .selectProjeksjoner');
                 orderItemSelectProjeksjoner.attr('name', uuid + '-projection');
                 $.each(orderItemProjeksjoner, function (key, val) {
-                    orderItemSelectProjeksjoner.append($("<option />").val(val.name).text(val.name));
+                    orderItemSelectProjeksjoner.append($("<option />").val(val.code).text(val.name));
                 });
             } else {
                 var formElement = $('#orderuuid' + val + ' .selectProjeksjoner').closest('.form-group');
@@ -234,13 +234,13 @@
                 $.each(orderItemOmraader, function (key, val) {
                     if (val.type == 'fylke') {
                         orderItemSelectOmraaderFylker.append($(
-                            "<option />").val(val.type + '_' + val.name).text(val.name));
+                            "<option />").val(val.type + '_' + val.code).text(val.name));
                     }
                     else if (val.type == 'kommune') {
-                        orderItemSelectOmraaderKommuner.append($("<option />").val(val.type + '_' + val.name).text(val.name));
+                        orderItemSelectOmraaderKommuner.append($("<option />").val(val.type + '_' + val.code).text(val.name));
                     }
                     else {
-                        orderItemSelectOmraader.append($("<option />").val(val.name).text(val.name));
+                        orderItemSelectOmraader.append($("<option />").val(val.code).text(val.name));
                     }
                 });
             } else {

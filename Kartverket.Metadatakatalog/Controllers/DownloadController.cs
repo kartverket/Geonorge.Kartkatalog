@@ -95,7 +95,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                     {
                         var areaType = areas[j].Split('_');
 
-                        areaList.Add(new AreaType { type = areaType[0], name = areaType[1] });
+                        areaList.Add(new AreaType { type = areaType[0], code = areaType[1] });
                     }
                     oL.areas = areaList.ToArray();
                 }
