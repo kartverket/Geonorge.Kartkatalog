@@ -48,7 +48,9 @@ namespace Kartverket.Metadatakatalog.Controllers
 
 
             o = new OrderType();
-            o.email = "dagolav@arkitektum.no";
+
+            if (!string.IsNullOrWhiteSpace(order["email"]))
+                o.email = order["email"];
 
             orderLines = new List<OrderLineType>();
 
@@ -100,8 +102,11 @@ namespace Kartverket.Metadatakatalog.Controllers
                     oL.areas = areaList.ToArray();
                 }
 
-                orderLines.Add(oL);
-               
+                string coordinates = order[id + "-coordinates"];
+                if (!string.IsNullOrWhiteSpace(coordinates))
+                    oL.coordinates = coordinates;
+
+               orderLines.Add(oL);     
 
             }
 
