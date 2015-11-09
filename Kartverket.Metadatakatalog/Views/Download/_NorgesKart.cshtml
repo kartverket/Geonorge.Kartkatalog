@@ -15,78 +15,53 @@
     </div>
 </div>
 <script>
-
-                var BBWest;
-                var BBSouth;
-                var BBEast;
-                var BBNorth;
-
-                // by Kartverket/Thomas Hirsch 2012 / public domain.
-                var socket = new easyXDM.Socket({
-                    remote: "http://norgeskart.no/geoportal/staging/select-rect.html",
-                    onMessage: function (message, origin) {
-                        //var reslist = document.getElementById('result');
-                        //reslist.innerHTML = message + "<br/>" + reslist.innerHTML;
-                        var obj = $.parseJSON(message);
-                        if (obj.feature != null)
-                        {
-                        var coords = obj.feature.geometry.coordinates[0];
-                        var c1 = coords[0];
-                        var c2 = coords[1];
-                        var c3 = coords[2];
-                        var c4 = coords[3];
-
-                        var x1 = c1[0];
-                        var y1 = c1[1];
-                        var x2 = c2[0];
-                        var y2 = c3[1];
-
-
-                        $.getJSON('http://norgeskart.no/ws/trans.py?ost=' + x1 + '&nord=' + y1 + '&sosiKoordSys=23&resSosiKoordSys=84', function (result) {
-                            if (result.errKode == 0){
-                                BBWest = result.ost;
-                                BBSouth = result.nord
-                            }
-                        }
-                        );
-
-                        $.getJSON('http://norgeskart.no/ws/trans.py?ost=' + x2 + '&nord=' + y2 + '&sosiKoordSys=23&resSosiKoordSys=84', function (result) {
-                            if (result.errKode == 0) {
-                                BBEast = result.ost;
-                                BBNorth = result.nord
-                            }
-                        }
-                        );
-
-
-                        }
-
-                    },
-                    container: document.getElementById("container"),
-                    onReady: function () {
-                        this.container.getElementsByTagName("iframe")[0].style.height = "424px";
-                        this.container.getElementsByTagName("iframe")[0].style.width = "100%";
-                    }
-                });
-
-                function setBoundingBox()
-                {
-                    if (typeof BBWest != 'undefined')
+            var CLIPPERCOORDS;
+            var socket = new easyXDM.Socket({
+                remote: "http://norgeskart.no/geoportal/staging/select-rect.html",
+                onMessage: function (message, origin) {
+                    var reslist = document.getElementById('result');
+                    reslist.innerHTML = message + "<br/>" + reslist.innerHTML;
+                    var obj = $.parseJSON(message);
+                    if (obj.feature != null)
                     {
-                    BBWest = BBWest.toFixed(4);
-                    BBSouth = BBSouth.toFixed(4);
-                    BBEast = BBEast.toFixed(4);
-                    BBNorth = BBNorth.toFixed(4);
+                    var coords = obj.feature.geometry.coordinates[0];
+                    var c1 = coords[0];
+                    var c2 = coords[1];
+                    var c3 = coords[2];
+                    var c4 = coords[3];
+                    var c5 = coords[4];
 
-                    alert("BBWest: " + BBWest + "\n" + "BBSouth: " + BBSouth + "\n" + "BBEast: " + BBEast + "\n" + "BBNorth: " + BBNorth + "\n Todo: set values in form");
-                    
-                    //TODO: set values
-                    //document.getElementById('BoundingBoxWest').value = BBWest;
-                    //document.getElementById('BoundingBoxSouth').value = BBSouth;
-                    //document.getElementById('BoundingBoxEast').value = BBEast;
-                    //document.getElementById('BoundingBoxNorth').value = BBNorth;
+
+                    var x1 = c1[0];
+                    var y1 = c1[1];
+                    var x2 = c2[0];
+                    var y2 = c2[1];
+                    var x3 = c3[0];
+                    var y3 = c3[1];
+                    var x4 = c4[0];
+                    var y4 = c4[1];
+                    var x5 = c5[0];
+                    var y5 = c5[1];
+
+                    CLIPPERCOORDS = x1 + " " + y1 + " " + x2 + " " + y2 + " " + x3 + " " + y3 + " " + x4 + " " + y4 + " " + x5 + " " + y5 + " ";
+
                     }
+
+                },
+                container: document.getElementById("container"),
+                onReady: function () {
+                    this.container.getElementsByTagName("iframe")[0].style.height = "424px";
+                    this.container.getElementsByTagName("iframe")[0].style.width = "100%";
                 }
+            });
+
+            function setBoundingBox()
+            {
+
+                alert("CLIPPERCOORDS: " + CLIPPERCOORDS);
+                //TODO set value in form
+                    
+            }
 
 </script>
 
