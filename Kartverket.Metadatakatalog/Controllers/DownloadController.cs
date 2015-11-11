@@ -4,11 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Service;
+using Kartverket.Metadatakatalog.Models;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
     public class DownloadController : Controller
     {
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         // GET: Download
         public ActionResult Index()
         {
@@ -18,21 +21,47 @@ namespace Kartverket.Metadatakatalog.Controllers
         [HttpPost]
         public ActionResult Order(FormCollection order)
         {
-
-
-            OrderType o = GetOrderForm(order);
-
+            OrderTypeExt o = GetOrderForm(order);
+            List<OrderReceiptType> model = new List<OrderReceiptType>();
             DownloadService download = new DownloadService();
 
-            var model = download.Order(o);
+            var OrderUrls = o.OrderLinesExt.Select(oU => oU.OrderUrl).Distinct().ToList();
+
+            foreach (var orderUrl in OrderUrls)
+            {
+                List<OrderLineTypeExt> oLinesExt = o.OrderLinesExt.Where(l => l.OrderUrl == orderUrl).ToList();
+                OrderType orderInfo = new OrderType();
+                orderInfo.email = o.email;
+                List<OrderLineType> oLines = new List<OrderLineType>();
+                foreach (var line in oLinesExt)
+                {
+                    OrderLineType oLine = new OrderLineType();
+                    oLine.areas = line.areas;
+                    oLine.coordinates = line.coordinates;
+                    oLine.formats = line.formats;
+                    oLine.metadataUuid = line.metadataUuid;
+                    oLine.projections = line.projections;
+                    oLines.Add(oLine);
+                }
+                orderInfo.orderLines = oLines.ToArray();
+                try
+                {
+                    OrderReceiptType result = download.Order(orderInfo, orderUrl);
+                    model.Add (result);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
+                }
+            }
 
             return View(model);
         }
 
-        private OrderType GetOrderForm(FormCollection order)
+        private OrderTypeExt GetOrderForm(FormCollection order)
         {
-            OrderType o;
-            List<OrderLineType> orderLines;
+            OrderTypeExt o;
+            List<OrderLineTypeExt> orderLines;
 
             List<string> uuids = new List<string>();
 
@@ -47,19 +76,21 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
 
 
-            o = new OrderType();
+            o = new OrderTypeExt();
 
             if (!string.IsNullOrWhiteSpace(order["email"]))
                 o.email = order["email"];
 
-            orderLines = new List<OrderLineType>();
+            orderLines = new List<OrderLineTypeExt>();
 
 
             foreach (var id in uuids)
             {
 
-                OrderLineType oL = new OrderLineType();
+                OrderLineTypeExt oL = new OrderLineTypeExt();
                 oL.metadataUuid = id;
+
+                oL.OrderUrl = order[id + "-orderUrl"];
 
                 var projections = order[id + "-projection"];
                 string[] projectionsList;
@@ -111,6 +142,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
 
             o.orderLines = orderLines.ToArray();
+            o.OrderLinesExt = orderLines.ToArray();
 
             return o;
         }

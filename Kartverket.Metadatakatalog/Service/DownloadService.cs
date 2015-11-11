@@ -16,13 +16,13 @@ namespace Kartverket.Metadatakatalog.Service
     public class DownloadService
     {
 
-        public OrderReceiptType Order(OrderType o)
+        public OrderReceiptType Order(OrderType o, string orderUrl)
         {
-
+                if (string.IsNullOrEmpty(orderUrl))
+                orderUrl = WebConfigurationManager.AppSettings["DownloadUrl"];
 
                 var client = new HttpClient();
-                //Todo: add support for posting order to organizations outside geonorge
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["DownloadUrl"]); // http://localhost:61236/
+                client.BaseAddress = new Uri(orderUrl); 
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 
