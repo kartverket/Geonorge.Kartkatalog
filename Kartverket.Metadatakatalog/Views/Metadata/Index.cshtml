@@ -583,9 +583,9 @@
                             var metadata = { 'name': title, 'uuid': uuid, 'url': rootUrl + 'metadata/uuid/' + uuid, 'organizationLogoUrl': organizationLogoUrl, 'distributionUrl': distributionDetailsUrl };
                             localStorage["orderItems"] = JSON.stringify(orderItems);
                             localStorage[uuid + ".metadata"] = JSON.stringify(metadata);
-                            showAlert(title + ' er lagt til i handlekurven', 'success');
+                            showAlert(title + ' er lagt til i kurven', 'success');
                         } else {
-                            showAlert(title + ' er allerede lagt til i handlekurven', 'warning');
+                            showAlert(title + ' er allerede lagt til i kurven', 'warning');
                         }
                     });
                 } else {

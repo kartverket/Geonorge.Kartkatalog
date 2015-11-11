@@ -327,11 +327,11 @@
                     $('#orderitem-count-text').text(' datasett');
                 } else {
                     $('#orderitem-count').text('');
-                    $('#orderitem-count-text').text('Handlekurven er tom');
+                    $('#orderitem-count-text').text('Kurven er tom');
                 }
             } else {
                 $('#orderitem-count').text('');
-                $('#orderitem-count-text').text('Handlekurven er tom');
+                $('#orderitem-count-text').text('Kurven er tom');
             }
             </text>
             }
@@ -367,7 +367,7 @@
                         var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl };
                         localStorage["orderItems"] = JSON.stringify(orderItems);
                         localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
-                        showAlert(itemname + ' er lagt til i <a href="/Download">handlekurven</a>', 'success');
+                        showAlert(itemname + ' er lagt til i <a href="/Download">kurven</a>', 'success');
 
                         var orderItemCount = $('#orderitem-count').text();
                         console.log(orderItemCount);
@@ -383,7 +383,7 @@
 
 
                     } else {
-                        showAlert(itemname + ' er allerede lagt til i <a href="/Download">handlekurven</a>', 'warning');
+                        showAlert(itemname + ' er allerede lagt til i <a href="/Download">kurven</a>', 'warning');
                     }
                 });
             } else {
