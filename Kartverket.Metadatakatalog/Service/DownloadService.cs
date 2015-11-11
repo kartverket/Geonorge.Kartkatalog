@@ -21,6 +21,7 @@ namespace Kartverket.Metadatakatalog.Service
 
 
                 var client = new HttpClient();
+                //Todo: add support for posting order to organizations outside geonorge
                 client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["DownloadUrl"]); // http://localhost:61236/
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
