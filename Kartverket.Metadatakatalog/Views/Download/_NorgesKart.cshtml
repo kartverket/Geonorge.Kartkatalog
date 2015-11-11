@@ -21,7 +21,7 @@
                 remote: "@Html.NorgeskartUrl()select-rect.html",
                 onMessage: function (message, origin) {
                     var reslist = document.getElementById('result');
-                    reslist.innerHTML = message + "<br/>" + reslist.innerHTML;
+                   // reslist.innerHTML = message + "<br/>" + reslist.innerHTML;
                     var obj = $.parseJSON(message);
                     if (obj.feature != null)
                     {
@@ -59,9 +59,6 @@
             function setBoundingBox()
             {
 
-                alert("CLIPPERCOORDS: " + CLIPPERCOORDS);
-                //TODO set value in form
-                    
             }
 
 </script>
