@@ -19,10 +19,9 @@ namespace Kartverket.Metadatakatalog.Service
         public OrderReceiptType Order(OrderType o, string orderUrl)
         {
                 if (string.IsNullOrEmpty(orderUrl))
-                orderUrl = WebConfigurationManager.AppSettings["DownloadUrl"];
+                orderUrl = WebConfigurationManager.AppSettings["DownloadUrl"] + "api/order";
 
                 var client = new HttpClient();
-                client.BaseAddress = new Uri(orderUrl); 
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 
@@ -31,7 +30,7 @@ namespace Kartverket.Metadatakatalog.Service
                     { ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver() }
                     );
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = client.PostAsync("api/order", content).Result;
+                HttpResponseMessage response = client.PostAsync(orderUrl, content).Result;
 
                 if (response.IsSuccessStatusCode)
                 {
