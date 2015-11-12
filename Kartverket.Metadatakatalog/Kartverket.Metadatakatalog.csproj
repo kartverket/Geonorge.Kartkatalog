@@ -326,6 +326,47 @@
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="KartverketSharedMenu\Images\arrow_ffffff_13px-01.svg" />
+    <Content Include="KartverketSharedMenu\Images\geonorge_logo_350px.svg" />
+    <Content Include="KartverketSharedMenu\Images\gif_loading-01.gif" />
+    <Content Include="KartverketSharedMenu\Images\search_icon-01.svg" />
+    <Content Include="KartverketSharedMenu\Scripts\angular.js" />
+    <Content Include="KartverketSharedMenu\Scripts\angular.min.js" />
+    <Content Include="KartverketSharedMenu\Scripts\bootstrap.js" />
+    <Content Include="KartverketSharedMenu\Scripts\bootstrap.min.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-common\baseUrl.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-common\common.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\aggregatedController.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\aggregatedService.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\app.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\frontController.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\geonorgeHelpers.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_autoCompleteRow.html" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_filters.html" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_kartverket.html" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_loading.html" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_metadata.html" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_objektkatalog.html" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_storedSearches.html" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\proto1App.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\searchApp.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\searchController.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\searchOptions.dev.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\searchOptions.local.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\searchOptions.prod.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\searchOptions.test.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-top\menuTopController.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-top\searchOptions\searchOption.local.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-top\searchOptions\searchOption.prod.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-top\searchOptions\searchOption.test.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge-top\searchTopController.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge\app.js" />
+    <Content Include="KartverketSharedMenu\Scripts\geonorge\partials\_autoCompleteRow.html" />
+    <Content Include="KartverketSharedMenu\Scripts\jquery-1.11.3.min.js" />
+    <Content Include="KartverketSharedMenu\Scripts\ui-bootstrap-0.14.3.js" />
+    <Content Include="KartverketSharedMenu\Styles\bootstrap.css" />
+    <Content Include="KartverketSharedMenu\Styles\geonorge-top\menuTop.css" />
+    <Content Include="KartverketSharedMenu\Styles\geonorge-top\searchTop.css" />
     <Content Include="master.txt" />
     <Content Include="robots.txt" />
     <Content Include="Scripts\bootstrap.js" />
@@ -383,8 +424,10 @@
     <Content Include="Views\Download\_OrderItem.cshtml" />
     <Content Include="Views\Download\Order.cshtml" />
     <Content Include="Views\Download\_NorgesKart.cshtml" />
+    <Content Include="Views\Shared\_SharedMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="KartverketSharedMenu\Bundles\" />
     <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>

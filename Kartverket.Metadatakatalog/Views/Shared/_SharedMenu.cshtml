@@ -1,0 +1,102 @@
+﻿<div>
+    <header>
+        <div class="container">
+            <div class="row top-row">
+                <div class="logo-wrapper col-sm-12">
+                    <div class="geonorge-logo ">
+                        <a href="/">
+                            <img src="~/KartverketSharedMenu/Images/geonorge_logo_350px.svg" alt="Logo" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Kartverket shared menu -->
+        <div class="container-search">
+            <div class="container">
+                <div class="row" ng-controller="searchTopController">
+                    <div class="col-md-7 col-md-offset-2 search">
+                        <div class="row">
+                            <div class="col-md-12 input-group searchbar">
+                                <input autocomplete="off" ng-focus="setFocus($event)" ng-blur="" ng-keyup="autocomplete($event)" ng-keydown="preventDefault($event)" ng-model="$root.searchQuery" id="txtSearch" type="text" class="form-control search-main" placeholder="S&#248;k etter kartdata" />
+                                <div class="input-group-addon">
+                                    <div class="autocomplete-loader ng-cloak" ng-cloak ng-show="ajaxCallActive">
+                                        <div class="loader"></div>
+                                    </div>
+                                </div>
+                                <span class="input-group-btn">
+                                    <div class="search-button-wrapper {{selectedSearch.buttonCss}}" ng-submit="Search()">
+                                        <button class="btn btn-default" type="button" ng-click="onSearch()">
+                                            <img src="/KartverketSharedMenu/Images/search_icon-01.svg" alt="search" ng-click="onSearch()" />
+                                        </button>
+                                    </div>
+                                </span>
+                            </div>
+                            <div ng-show="autocompleteActive" ng-cloak class="col-md-12 auto-results-wrapper ng-cloak">
+                                <div class="auto-results row ng-cloak" ng-cloak ng-include="autoCompletePartial">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 acknowledgement-wrapper">
+                        <span class="acknowledgement">En l&#248;sning fra Kartverket</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container-top-menu">
+        <div class="container">
+
+
+            <div class="row">
+                <div class="col-sm-12 top-menu">
+                    <nav class="navbar navbar-top-menu" ng-controller="menuTopController" ng-init="getMenuData()">
+                        <div class="container">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-menu" aria-expanded="false" aria-controls="navbar">
+                                    <span class="sr-only">Veksle navigasjon</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div ng-if="!getMenuError" id="top-menu" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav ng-cloak row" ng-cloak>
+                                <li ng-repeat="item in menuItems" class="dropdown col-sm-3 menu-large">
+                                    <span ng-if="item.Url == ''">{{item.Name}}</span>
+                                    <a ng-if="item.HasChildren && item.Url != ''" href="{{item.Url}}" target="{{item.PropertyFrameName != '' ? item.PropertyFrameName : '_self'}}" class="dropdown-toggle" data-disabled="true" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        {{item.Name}}
+                                    </a>
+                                    <a ng-if="!item.HasChildren && item.Url != ''" href="{{item.Url}}" target="{{item.PropertyFrameName != '' ? item.PropertyFrameName : '_self'}}" role="button" aria-haspopup="true" aria-expanded="false">
+                                        {{item.Name}}
+                                        <b ng-if="item.HasChildren" class="caret"></b>
+                                    </a>
+                                    <ul ng-if="item.HasChildren" class="dropdown-menu megamenu row">
+                                        <li>
+                                            <ul ng-repeat="it in item.SubMenuItem">
+                                                <li ng-class="item.length === 1 ? 'col-sm-12' :
+                                    item.length === 2 ? 'col-sm-6' :
+                                    item.length === 3 ? 'col-sm-4' : 'col-sm-4'">
+
+                                                    <a href="{{it.Url}}">{{it.Name}}</a>
+                                                    <ul ng-if="it.HasChildren">
+                                                        <li ng-repeat="i in it.SubMenuItem">
+                                                            <a href="{{i.Url}}">{{i.Name}}</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

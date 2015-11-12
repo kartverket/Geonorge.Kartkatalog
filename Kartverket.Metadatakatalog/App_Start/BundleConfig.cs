@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Configuration;
+using System.Web;
 using System.Web.Optimization;
 
 namespace Kartverket.Metadatakatalog
@@ -8,6 +9,22 @@ namespace Kartverket.Metadatakatalog
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+
+            bundles.Add(new ScriptBundle("~/bundles/shared-menu-scripts").Include(
+            "~/KartverketSharedMenu/Scripts/angular.js",
+            "~/KartverketSharedMenu/Scripts/jquery-1.11.3.min.js",
+            "~/KartverketSharedMenu/Scripts/geonorge/app.js",
+            "~/KartverketSharedMenu/Scripts/geonorge-top/searchOptions/" + ConfigurationManager.AppSettings["SearchOptionsFile"],
+            "~/KartverketSharedMenu/Scripts/geonorge-top/menuTopController.js",
+            "~/KartverketSharedMenu/Scripts/geonorge-top/searchTopController.js",
+            "~/KartverketSharedMenu/Scripts/bootstrap.js",
+            "~/KartverketSharedMenu/Scripts/ui-bootstrap-0.14.3.js",
+            "~/KartverketSharedMenu/Scripts/geonorge-common/baseUrl.js",
+            "~/KartverketSharedMenu/Scripts/geonorge-common/common.js"
+
+            ));
+
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"
                         ));
@@ -24,6 +41,12 @@ namespace Kartverket.Metadatakatalog
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new StyleBundle("~/bundles/shared-menu-styles")
+           .Include("~/KartverketSharedMenu/Styles/bootstrap.css")
+           .Include("~/KartverketSharedMenu/Styles/geonorge-top/menuTop.css")
+           .Include("~/KartverketSharedMenu/Styles/geonorge-top/searchTop.css")
+           );
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/common.css",
@@ -31,7 +54,7 @@ namespace Kartverket.Metadatakatalog
                       "~/Content/searchbar.css",
                       "~/Content/chosen.css",
 
-                     
+
                       "~/Content/site.css"));
             // "~/Content/jquery.typeahead.css",
             //bundles.Add(new StyleBundle("~/Content/css").Include(
@@ -40,11 +63,11 @@ namespace Kartverket.Metadatakatalog
             //          "~/Content/site.css"));
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
-            
+
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
                "~/Scripts/visninger.js"));
 
-            BundleTable.EnableOptimizations = true;
+            BundleTable.EnableOptimizations = false;
         }
     }
 }

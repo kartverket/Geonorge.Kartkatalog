@@ -1,0 +1,16 @@
+﻿<div ng-repeat="group in FilterGroups"  ng-if="group.Filters.length > 0">
+    <div class="filter-title" ng-class="group.label">
+        <h3 class="h-sm"> {{group.Title}}</h3>
+    </div>
+
+    <div class="filter-options ng-cloak" ng-cloak ng-repeat="filter in group.Filters">
+        <button type="button" class="btn btn-link" ng-click="setFilterChecked(filter)">{{filter.Title}} ({{filter.Count}})</button>
+    </div>
+    <div class="filter-options" ng-if="group.ShowResetButton">
+        <button type="button" role="button" class="btn btn-default reset" ng-click="resetFilterGroup(group)">
+            <span class="glyphicon glyphicon-remove pull-left"></span>
+            Vis alle
+        </button>
+    </div>
+    <hr/>
+</div>

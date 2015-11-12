@@ -1,0 +1,18 @@
+﻿<a ng-href="{{result.SourceLink}}" id="{{$index}}_{{item.SectionName}}" class="row result-row geonorge add-animation" ng-repeat="result in item.Results">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pull-right">
+        <div class="col-xs-2 col-sm-2 col-md-1 date-tag">
+            <p class="small-text">{{result.Date}}</p>
+        </div>
+        <div class="col-xs-10 col-sm-10 col-md-11 pull-right">
+            <h4>
+                <span ng-bind-html="$root.trustHtml(result.Title)"></span>
+                <span class="label color black file-format" ng-if="result.FileFormat != 1">
+                    {{fileFormat[result.FileFormat].toUpperCase()}}
+                </span>
+            </h4>
+            <p ng-bind-html="trustHtml(result.Summary)">
+            </p>
+        </div>
+    </div>
+    <div ng-include="partials.loader" ng-if="$last && item.showLoader" class="col-md-12 loader"></div>
+</a>

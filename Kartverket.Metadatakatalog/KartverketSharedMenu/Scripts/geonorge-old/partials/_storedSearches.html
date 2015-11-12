@@ -1,0 +1,18 @@
+﻿<div class="panel-group">
+    <div class="col-xs-12 panel panel-default" style="padding:5px; margin:0; background:#fafafa;">
+        <div class="panel-heading" style="padding:0px 0px 0px 5px;">
+            Mine lagrede søk:
+        </div>
+        <div class="panel-body" style="padding:10px 5px;">
+            <div id="bokmerker">
+                
+                    <a ng-click="restoreSearch($index)" class="add-animation btn btn-sm" ng-class="item.class" href="#" ng-repeat="item in storedSearches" data-toggle="tooltip" data-placement="bottom" ng-attr-title="item.searchQuery">
+                        <span class="icon" ng-class="subItem" ng-repeat="subItem in item.iconClasses"></span>
+                        "{{item.searchQuery}}"
+                        <button ng-click="removeStoredSearch($index)" type="button" class="close" style="margin-left: 20px;"><span aria-hidden="true">&times;</span><span class="sr-only">lukk</span></button>
+                    </a>
+                <button ng-click="cleanStoredSearches()" type="button" class="btn btn-link" style="margin-left:10px;">tøm listen <span aria-hidden="true">&times;</span><span class="sr-only">slett søkelogg</span></button>
+            </div>
+        </div>
+    </div>
+</div>

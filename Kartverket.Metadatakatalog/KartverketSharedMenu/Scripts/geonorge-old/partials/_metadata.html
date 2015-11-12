@@ -1,0 +1,44 @@
+﻿<div id="{{$index}}_{{item.SectionName}}" class="row result-row metadata" ng-repeat="result in item.Results">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="hidden-xs col-sm-1 col-md-1 col-lg-1 top-padding  hide-overflow">
+            <a ng-href="{{result.OrganizationUrl}}" ng-hide="result.OrganizationLogo == null">
+                <img ng-src="{{result.OrganizationLogo}}" class="img-responsive center-block" alt="{{result.Organization}} logo">
+            </a>
+        </div>
+        <div class="col-no-padding-xs col-xs-12 col-sm-5 col-md-5 col-lg-5">
+            <a ng-href="{{result.ShowDetailsUrl}}">
+                <h4 class="role-button" role="button">
+                    {{result.Title}}
+                </h4>
+            </a>
+            <a ng-href="{{result.OrganizationUrl}}">
+            <h5>
+                {{result.Organization}}
+            </h5>
+                </a>
+                <p>
+                    {{result.Abstract}}
+                </p>
+</div>
+        <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 ">
+            <a type="button" ng-href="{{result.DistributionUrl}}" ng-class="result.DatasetButton ? 'btn-default' : 'btn-link'" class="btn btn-xs btn-bunnmarg" ng-disabled="{{!result.DatasetButton}}">
+                <span class="glyphicon glyphicon-download-alt pull-left"> </span>last ned
+            </a><br />
+            <a type="button" ng-href="{{result.DistributionUrl}}" ng-class="result.SoftwareButton ? 'btn-default' : 'btn-link'" class="btn btn-xs btn-bunnmarg" ng-disabled="{{!result.SoftwareButton}}">
+                <span class="glyphicon glyphicon-globe pull-left" disabled="disabled"></span> besøk nettside
+            </a>
+            <br />
+            <a type="button" ng-href="{{result.DistributionUrl}}" ng-class="result.MapsButton ? 'btn-default' : 'btn-link'" class="btn btn-xs btn-bunnmarg" ng-disabled="{{!result.MapsButton}}">
+                <span class="glyphicon glyphicon-map-marker pull-left"> </span> vis i kart
+            </a>
+        </div>
+        <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 pull-right">
+            <a ng-href="{{result.ShowDetailsUrl}}" ng-hide="result.ThumbnailUrl == null">
+                <img ng-src="{{result.ThumbnailUrl}}" class="img-responsive  pull-right" alt="{{result.Title}} illustrasjonsbilde">
+            </a>
+            <img ng-if="result.IsOpenData" src="/Content/Geonorge/Images/unlock.png" title="Åpne data" alt="Åpne data" class="margin-top-small width-small">
+
+</div>
+    </div>
+    <div ng-include="partials.loader" ng-if="$last && item.showLoader" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 loader"></div>
+</div>
