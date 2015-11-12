@@ -47,7 +47,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 try
                 {
                     OrderReceiptType result = download.Order(orderInfo, orderUrl);
-                    model.Add (result);
+                    model.Add(result);
                 }
                 catch (Exception ex)
                 {
@@ -67,12 +67,15 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             foreach (var key in order.AllKeys)
             {
-                string uuid = key.Substring(0, 36);
-                if (!uuids.Contains(uuid))
+                if (key.Length > 36)
                 {
-                    uuids.Add(uuid);
-                }
 
+                    string uuid = key.Substring(0, 36);
+                    if (!uuids.Contains(uuid))
+                    {
+                        uuids.Add(uuid);
+                    }
+                }
             }
 
 
@@ -118,26 +121,29 @@ namespace Kartverket.Metadatakatalog.Controllers
                     oL.formats = formatTypes.ToArray();
                 }
 
-                var area = order[id + "-areas"];
-                List<AreaType> areaList = new List<AreaType>();
-                if (area != null)
-                {
-                    var areas = area.Split(',');
-
-                    for (int j = 0; j < areas.Length; j++)
-                    {
-                        var areaType = areas[j].Split('_');
-
-                        areaList.Add(new AreaType { type = areaType[0], code = areaType[1] });
-                    }
-                    oL.areas = areaList.ToArray();
-                }
-
                 string coordinates = order[id + "-coordinates"];
                 if (!string.IsNullOrWhiteSpace(coordinates))
                     oL.coordinates = coordinates;
+                else
+                {
+                    var area = order[id + "-areas"];
+                    List<AreaType> areaList = new List<AreaType>();
+                    if (area != null)
+                    {
+                        var areas = area.Split(',');
 
-               orderLines.Add(oL);     
+                        for (int j = 0; j < areas.Length; j++)
+                        {
+                            var areaType = areas[j].Split('_');
+
+                            areaList.Add(new AreaType { type = areaType[0], code = areaType[1] });
+                        }
+                        oL.areas = areaList.ToArray();
+                    }
+
+                }
+
+                orderLines.Add(oL);
 
             }
 

@@ -19,21 +19,24 @@
 @using (Html.BeginForm("Order", "Download", FormMethod.Post))
 {
 
-<div class="panel panel-default">
-    <div class="list-group" id="orderlist">
-    </div>
+    <div class="panel panel-default">
+        <div class="list-group" id="orderlist">
+        </div>
 
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-            <div class="pull-right">
-                <a class="btn btn-default" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
+    </div>
+    <div class="row">
+        <div id="emailField" class="col-sm-8">
+            <label>E-post:<input type="text" name="email" class="form-control" /></label>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <div class="pull-right">
+                    <a class="btn btn-default" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
+                </div>
+                <div class="clearfix"></div>
             </div>
-            <div class="clearfix"></div>
         </div>
     </div>
-</div>
 
 
     <div class="row">
@@ -47,337 +50,38 @@
             </div>
         </div>
     </div>
+    <div id="kartModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
+        @Html.Partial("_Norgeskart")
+    </div>
 
-<div id="kartModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
-    @Html.Partial("_Norgeskart")
-</div>
-
-<div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Fjerning av datasett</h4>
-            </div>
-            <div class="modal-body">
-                Er du sikker på at du vil fjerne alle datasett fra handlekurven?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Nei</button>
-                <button type="button" id="remove-all-items-submit" class="btn btn-primary">Ja</button>
+    <div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Fjerning av datasett</h4>
+                </div>
+                <div class="modal-body">
+                    Er du sikker på at du vil fjerne alle datasett fra kurven?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Nei</button>
+                    <button type="button" id="remove-all-items-submit" class="btn btn-primary">Ja</button>
+                </div>
             </div>
         </div>
     </div>
-
-</div>
 }
 @section scripts {
-<script src="~/Scripts/chosen.jquery.js"></script>
-<script>
-    var objCount = 0;
-    var objCountLoaded = 0;
-
-    function getJsonObjects(data, segment, uuid) {
-        if (segment == null) segment = '';
-        var val;
-        var localStorageKey;
-        var items = [];
-        var parentObj = '';
-        $.each(data, function (key, val) {
-            if (segment != '' && segment != null) {
-                localStorageKey = uuid + segment + '.' + key;
-            } else {
-                localStorageKey = uuid + key;
-            }
-
-            if (typeof val == 'object') {
-                if (typeof key == 'string') {
-                    parentObj = '.' + key;
-                }
-                $.each($(this), function (key, val) {
-                    items.push(val);
-                });
-
-            } else {
-                localStorage[localStorageKey] = val;
-            }
-        });
-        if (items.length > 0) {
-            localStorageKey = uuid + segment + parentObj;
-            localStorage[localStorageKey] = JSON.stringify(items);
-        }
-    }
-
-    function getJsonUrl(data, rel) {
-        var url = '';
-        $.each(data, function (key, val) {
-            if (val.rel == rel) {
-                url = val.href;
-            }
-        });
-        return url;
-    }
-
-
-    function getJsonData(url, segments, uuid) {
-        segmentUri = '';
-        segmentString = '';
-        $.each(segments, function (pos, segment) {
-            segmentUri += '/' + segment;
-            segmentString += '.' + segment;
+    <script src="~/Scripts/chosen.jquery.js"></script>
+    <script src="~/Scripts/download.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Inkludering av OrderItem partial view
+            var template = '@Html.Raw(System.Text.RegularExpressions.Regex.Replace(Html.Partial("_OrderItem").ToString(), @"\r\n?|\n", ""))';
+            orderItems = (JSON.parse(localStorage.getItem('orderItems')));
+            generateView(template, orderItems);
         });
 
-        var jsonUri = url + '?json=true';
-        $.ajax({
-            url: jsonUri,
-            dataType: 'json',
-            async: false,
-            success: function (data) {
-                getJsonObjects(data, segmentString, uuid);
-                if (data.supportsProjectionSelection) {
-                    var rel = 'http://rel.geonorge.no/download/projection';
-                    var href = getJsonUrl(data._links, rel);
-                    getJsonData(href + '', ['codelists', 'projection'], uuid);
-                }
-                if (data.supportsFormatSelection) {
-                    var rel = 'http://rel.geonorge.no/download/format';
-                    var href = getJsonUrl(data._links, rel);
-                    getJsonData(href, ['codelists', 'format'], uuid);
-                }
-                /* if (data.supportsPolygonSelection == 'true') {
-                     getJsonData('api', ['codelists', 'polygon'], uuid);
-                 }*/
-                if (data.supportsAreaSelection) {
-                    var rel = 'http://rel.geonorge.no/download/area';
-                    var href = getJsonUrl(data._links, rel);
-                    getJsonData(href, ['codelists', 'area'], uuid);
-                }
-            }
-        });
-    }
-
-
-    $(document).ready(function () {
-        $("select").chosen();
-
-        // Midlertidig seeding av dataset i localStorage
-        var orderItems = [];
-        var storedOrderItems = JSON.parse(localStorage["orderItems"]);
-        objCount = storedOrderItems.length;
-        $.each(storedOrderItems, function (key, val) {
-            var uuid = val;
-            var metadata = JSON.parse(localStorage[uuid + '.metadata']);
-            var url = metadata.distributionUrl + uuid;
-
-            getJsonData(url, ['capabilities'], uuid);
-            objCountLoaded++;
-            var percentLoaded = (objCountLoaded / objCount) * 100;
-            $(".progress-bar").css('width', percentLoaded + '%');
-            $(".progress-bar").attr('aria-valuenow', percentLoaded);
-            $(".progress-bar").text(objCountLoaded + ' av ' + objCount + ' datasett er lastet');
-        });
-    });
-
-    $(document).ready(function () {
-        // Inkludering av OrderItem partial view
-        var content = '@Html.Raw(System.Text.RegularExpressions.Regex.Replace(Html.Partial("_OrderItem").ToString(), @"\r\n?|\n", ""))';
-        orderItems = (JSON.parse(localStorage.getItem('orderItems')));
-        $.each(orderItems, function (key, val) {
-            var uuid = val;
-            $("#orderlist").append('<div id="orderuuid' + val + '" class="order-item">' + content + '</div>');
-            $("#orderuuid" + val + " .remove-item").attr('uuid', val);
-
-            var supportsProjectionSelection = localStorage.getItem(val + '.capabilities.supportsProjectionSelection');
-            var supportsFormatSelection = localStorage.getItem(val + '.capabilities.supportsFormatSelection');
-            var supportsPolygonSelection = localStorage.getItem(val + '.capabilities.supportsPolygonSelection');
-            var supportsAreaSelection = localStorage.getItem(val + '.capabilities.supportsAreaSelection');
-            var metadata = JSON.parse(localStorage.getItem(val + '.metadata'));
-
-            $("#orderuuid" + val + " .order-title").text(metadata.name);
-            $("#orderuuid" + val + " .order-title").attr('href', metadata.url);
-            $("#orderuuid" + val + " .order-img").attr('src', metadata.organizationLogoUrl);
-
-
-            // Populering av Projeksjonliste
-            if (supportsProjectionSelection) {
-                var orderItemProjeksjoner = (JSON.parse(localStorage.getItem(val + '.codelists.projection')));
-                var orderItemSelectProjeksjoner = $('#orderuuid' + val + ' .selectProjeksjoner');
-                orderItemSelectProjeksjoner.attr('name', uuid + '-projection');
-                $.each(orderItemProjeksjoner, function (key, val) {
-                    orderItemSelectProjeksjoner.append($("<option />").val(val.code).text(val.name));
-                });
-            } else {
-                var formElement = $('#orderuuid' + val + ' .selectProjeksjoner').closest('.form-group');
-                formElement.addClass('disabled');
-            }
-
-            // Populering av Filformatliste
-            if (supportsFormatSelection) {
-                var orderItemFormater = (JSON.parse(localStorage.getItem(val + '.codelists.format')));
-                var orderItemSelectFormater = $('#orderuuid' + val + ' .selectFormater');
-                orderItemSelectFormater.attr('name', uuid + '-formats');
-                $.each(orderItemFormater, function (key, val) {
-                    orderItemSelectFormater.append($("<option />").val(val.name).text(val.name));
-                });
-            } else {
-                var formElement = $('#orderuuid' + val + ' .selectFormater').closest('.form-group');
-                formElement.addClass('disabled');
-            }
-
-            // Populering av Områdeliste
-            if (supportsAreaSelection) {
-                var orderItemOmraader = (JSON.parse(localStorage.getItem(val + '.codelists.area')));
-                var orderItemSelectOmraader = $('#orderuuid' + val + ' .selectOmraader');
-                orderItemSelectOmraader.attr('name', uuid + '-areas');
-
-                var orderItemSelectOmraaderFylker = $('#orderuuid' + val + ' .selectOmraader .selectOmraaderFylker');
-                var orderItemSelectOmraaderKommuner = $('#orderuuid' + val + ' .selectOmraader .selectOmraaderKommuner');
-                $.each(orderItemOmraader, function (key, val) {
-                    if (val.type == 'fylke') {
-                        orderItemSelectOmraaderFylker.append($(
-                            "<option />").val(val.type + '_' + val.code).text(val.name));
-                    }
-                    else if (val.type == 'kommune') {
-                        orderItemSelectOmraaderKommuner.append($("<option />").val(val.type + '_' + val.code).text(val.name));
-                    }
-                    else {
-                        orderItemSelectOmraader.append($("<option />").val(val.code).text(val.name));
-                    }
-                });
-            } else {
-                var formElement = $('#orderuuid' + val + ' .selectOmraader');
-                formElement.attr('disabled', 'disabled');
-            }
-
-            if (supportsPolygonSelection == 'false') {
-                var formElement = $('#orderuuid' + val + ' .btn');
-                formElement.addClass('disabled');
-            }
-
-            // Hent ut selected verdier fra localStorage
-            function getSelectedValues(orderItems, selectClass, name) {
-                $.each(orderItems, function (key, val) {
-                    var select = $('#orderuuid' + val).find('.' + selectClass);
-                    var uuid = val;
-                    var selectedValues = JSON.parse(localStorage.getItem([uuid + '.selected.' + name]));
-                    $.each(select, function (key, val) {
-                        var option = $(this).find('option');
-                        option.each(function (i, selected) {
-                            if ($.inArray($(this).val(), selectedValues) > -1) {
-                                $(this).attr('selected', 'selected');
-                            }
-                        });
-                    });
-                });
-            }
-
-            var orderItems = JSON.parse(localStorage["orderItems"]);
-            getSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
-            getSelectedValues(orderItems, 'selectFormater', 'formats');
-            getSelectedValues(orderItems, 'selectOmraader', 'areas');
-        });
-    });
-
-    $(document).ready(function () {
-        $(".chosen-select").chosen();
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-
-    $(window).load(function () {
-        $(".progress").fadeOut("slow");
-
-        function showAlert(message, colorClass) {
-            $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
-            $('#feedback-alert .message').text(message);
-            $('#feedback-alert').show();
-        }
-
-
-        // Fjerning av datasett fra handlekurv
-        $('#orderlist').on('click', '.remove-item', (function (e) {
-            var uuid = $(this).attr('uuid');
-            var uuidLength = uuid.length;
-            var orderItems = JSON.parse(localStorage["orderItems"]);
-            orderItems = $.grep(orderItems, function (value) {
-                return value != uuid;
-            });
-            localStorage["orderItems"] = JSON.stringify(orderItems);
-            Object.keys(localStorage)
-                  .forEach(function (key) {
-                      if (key.substring(0, uuidLength) == uuid) {
-                          localStorage.removeItem(key);
-                      }
-                  });
-            $(this).closest('.order-item').remove();
-        }));
-
-        // Fjerning av alle datasett fra handlekurv
-        $('#remove-all-items').click(function () {
-            $('#remove-all-items-modal').modal('show')
-        });
-
-
-        $('#remove-all-items-submit').click(function () {
-
-            Object.keys(localStorage)
-                  .forEach(function (key) {
-                      if (key != 'visningstype') {
-                          localStorage.removeItem(key);
-                      }
-                  });
-            $('#remove-all-items-modal').modal('hide')
-            $('.order-item').remove();
-        });
-
-
-        // Lagre selected verdier i localStorage
-        function setSelectedValues(orderItems, selectClass, name) {
-            $.each(orderItems, function (key, val) {
-                var select = $('#orderuuid' + val).find('.' + selectClass);
-                var uuid = val;
-                $.each(select, function (key, val) {
-                    var selectedValues = [];
-                    var option = $(this).find('option:selected');
-                    var selectedCount = $(this).find('option:selected').length;
-                    console.log(selectedCount);
-                    console.log($(this));
-                    if (selectedCount > 0) {
-                        var formgroup = $(this).parent('.form-group');
-                        formgroup.find('.chosen-choices').removeClass('has-error');
-                    }
-                    option.each(function (i, selected) {
-                        selectedValues[i] = $(selected).val();
-                    });
-                    localStorage[uuid + '.selected.' + name] = JSON.stringify(selectedValues);
-                });
-            });
-        }
-
-        $('.body-content').on('change', 'select', (function (e) {
-            var orderItems = JSON.parse(localStorage["orderItems"]);
-            setSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
-            setSelectedValues(orderItems, 'selectFormater', 'formats');
-            setSelectedValues(orderItems, 'selectOmraader', 'areas');
-        }));
-
-        $('.body-content').on('click', '#download-btn', (function (e) {
-            var formgroup = $('.body-content').find('.list-group-item .form-group');
-            var hasErrors = false;
-            $.each(formgroup, function () {
-                var selectedCount = $(this).find('option:selected').length;
-                if (selectedCount < 1) {
-                    $(this).find('.chosen-choices').addClass('has-error');
-                    hasErrors = true;
-                } else {
-                    $(this).find('.chosen-choices').removeClass('has-error');
-                }
-            });
-            if (hasErrors) {
-                showAlert('Ett eller flere felt er ikke korrekt utfylt', 'danger');
-            }
-        }));
-
-
-    });
-</script>
+    </script>
 }

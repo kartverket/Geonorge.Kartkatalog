@@ -1,11 +1,11 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
 <script type="text/javascript" src="~/Scripts/easyXDM.js"></script>
 
-<div class="modal-dialog" style="width: 75%;">
+<div class="modal-dialog" id="norgeskartmodal" style="width: 75%;">
     <div class="modal-content">
         <div class="modal-header">
             <h4>Norgeskart</h4>
-            <div style="right: 5px; top: 5px; position:absolute;"><button onclick="setBoundingBox();" type="button" class="btn btn-default" data-dismiss="modal">Legg til område</button> <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button></div>
+            <div style="right: 5px; top: 5px; position:absolute;"><button id="setcoordinates" onclick="setCoordinates();" type="button" class="btn btn-default" data-dismiss="modal">Legg til område</button> <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button></div>
         </div>
         <div class="modal-body">
             <div id="viewer" role="main" style="height:100%">
@@ -16,50 +16,33 @@
     </div>
 </div>
 <script>
-            var CLIPPERCOORDS;
-            var socket = new easyXDM.Socket({
-                remote: "@Html.NorgeskartUrl()select-rect.html",
-                onMessage: function (message, origin) {
-                    var reslist = document.getElementById('result');
-                   // reslist.innerHTML = message + "<br/>" + reslist.innerHTML;
-                    var obj = $.parseJSON(message);
-                    if (obj.feature != null)
-                    {
-                    var coords = obj.feature.geometry.coordinates[0];
-                    var c1 = coords[0];
-                    var c2 = coords[1];
-                    var c3 = coords[2];
-                    var c4 = coords[3];
-                    var c5 = coords[4];
-
-
-                    var x1 = c1[0];
-                    var y1 = c1[1];
-                    var x2 = c2[0];
-                    var y2 = c2[1];
-                    var x3 = c3[0];
-                    var y3 = c3[1];
-                    var x4 = c4[0];
-                    var y4 = c4[1];
-                    var x5 = c5[0];
-                    var y5 = c5[1];
-
-                    CLIPPERCOORDS = x1 + " " + y1 + " " + x2 + " " + y2 + " " + x3 + " " + y3 + " " + x4 + " " + y4 + " " + x5 + " " + y5 + " ";
-
-                    }
-
-                },
-                container: document.getElementById("container"),
-                onReady: function () {
-                    this.container.getElementsByTagName("iframe")[0].style.height = "424px";
-                    this.container.getElementsByTagName("iframe")[0].style.width = "100%";
+    var CLIPPERCOORDS;
+    $(document).ready(function () {
+        var socket = new easyXDM.Socket({
+            remote: "@Html.NorgeskartUrl()select.html",
+            onMessage: function (message, origin) {
+                var reslist = document.getElementById('result');
+                reslist.innerHTML = message + "<br/>" + reslist.innerHTML;
+                var obj = $.parseJSON(message);
+                if (obj.feature != null) {
+                    CLIPPERCOORDS = obj.feature.geometry.coordinates.toString();
+                    CLIPPERCOORDS = CLIPPERCOORDS.replace(/,/g, " ");
                 }
-            });
-
-            function setBoundingBox()
-            {
-
+            },
+            container: document.getElementById("container"),
+            onReady: function () {
+                this.container.getElementsByTagName("iframe")[0].style.height = "750px";
+                this.container.getElementsByTagName("iframe")[0].style.width = "100%";
             }
+        });
+    });
+
+    function setCoordinates() {
+        uuid = $('#setcoordinates').attr('uuid');
+        localStorage[uuid + '.selected.coordinates'] = CLIPPERCOORDS;
+        getSelectedCoordinates(uuid, 'coordinates', 'coordinates');
+        localStorage[uuid + '.selected.areas'] = '[]';
+    }
 
 </script>
 
