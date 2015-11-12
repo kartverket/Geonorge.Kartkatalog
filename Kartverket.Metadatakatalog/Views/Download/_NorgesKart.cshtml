@@ -22,7 +22,6 @@
             remote: "@Html.NorgeskartUrl()select.html",
             onMessage: function (message, origin) {
                 var reslist = document.getElementById('result');
-                reslist.innerHTML = message + "<br/>" + reslist.innerHTML;
                 var obj = $.parseJSON(message);
                 if (obj.feature != null) {
                     CLIPPERCOORDS = obj.feature.geometry.coordinates.toString();
