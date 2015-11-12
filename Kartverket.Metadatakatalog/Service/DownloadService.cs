@@ -16,13 +16,12 @@ namespace Kartverket.Metadatakatalog.Service
     public class DownloadService
     {
 
-        public OrderReceiptType Order(OrderType o)
+        public OrderReceiptType Order(OrderType o, string orderUrl)
         {
-
+                if (string.IsNullOrEmpty(orderUrl))
+                orderUrl = WebConfigurationManager.AppSettings["DownloadUrl"] + "api/order";
 
                 var client = new HttpClient();
-                //Todo: add support for posting order to organizations outside geonorge
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["DownloadUrl"]); // http://localhost:61236/
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 
@@ -31,7 +30,7 @@ namespace Kartverket.Metadatakatalog.Service
                     { ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver() }
                     );
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = client.PostAsync("api/order", content).Result;
+                HttpResponseMessage response = client.PostAsync(orderUrl, content).Result;
 
                 if (response.IsSuccessStatusCode)
                 {

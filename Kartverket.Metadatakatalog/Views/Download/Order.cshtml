@@ -1,19 +1,20 @@
-﻿@model OrderReceiptType
-@{
+﻿@model List<OrderReceiptType>
+    @{
     ViewBag.Title = "Nedlasting";
 }
 
-@*<h2>Takk for din bestilling</h2>
-Ditt referansenummer er: <b>@Model.referenceNumber</b>*@
 <h4>Filer for nedlasting:</h4>
-@foreach(var file in Model.files)
+@foreach (var receipt in Model)
 {
-    if (!string.IsNullOrEmpty(file.downloadUrl))
+    foreach (var file in receipt.files)
     {
-    <a href="@file.downloadUrl" target="_blank">@file.name</a><br />
-    }
-    else
-    {
+        if (!string.IsNullOrEmpty(file.downloadUrl))
+        {
+        <a href="@file.downloadUrl" target="_blank">@file.name</a><br />
+        }
+        else
+        {
         @file.name<br />
+        }
     }
 }
