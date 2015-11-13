@@ -365,17 +365,14 @@ function containsCoordinates() {
     var containsCoordinates = false
     $.each(coordinateFields, function () {
         if ($(this).val() != '') {
-            console.log($(this).val());
             containsCoordinates = true;
         }
     });
-    console.log('containsCoordinates: ' + containsCoordinates);
     return containsCoordinates;
 }
 
 function containsEmail() {
     var containsEmail = ($('#emailField input').val() != '') ? true : false;
-    console.log('containsEmail: ' + containsEmail);
     return containsEmail;
 }
 
