@@ -108,7 +108,7 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
                 orderItemSelectOmraaderKommuner.append($("<option />").val(val.type + '_' + val.code).text(val.name));
             }
             else if (val.type == 'landsdekkende') {
-                orderItemSelectOmraader.prepend($("<option />").val(val.type + '_' + val.code).text('Landsdekkende'));
+                orderItemSelectOmraader.prepend($("<option />").val(val.type + '_' + val.code).text('Hele landet'));
             }
             else {
                 orderItemSelectOmraader.append($("<option />").val(val.code).text(val.name));
