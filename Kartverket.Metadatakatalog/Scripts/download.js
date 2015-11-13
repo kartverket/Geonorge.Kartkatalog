@@ -335,6 +335,10 @@ $(window).load(function () {
         });
         if (hasErrors) {
             showAlert('Ett eller flere felt er ikke korrekt utfylt', 'danger');
+        }else if(!isValid()){
+            $('#emailField').addClass('has-error')
+            showAlert('E-post feltet må fylles ut om man har valgt koordinater fra kart', 'danger');
+            e.preventDefault();
         }
     }));
 });
@@ -349,4 +353,31 @@ function removeCoordinates(uuid) {
     localStorage.setItem(uuid + '.selected.coordinates', '');
     var orderItemInputCoordinates = $('#orderuuid' + uuid + ' .coordinates');
     orderItemInputCoordinates.val('');
+}
+
+
+
+function containsCoordinates() {
+    var coordinateFields = $('.coordinates');
+    var containsCoordinates = false
+    $.each(coordinateFields, function () {
+        if ($(this).val() != '') {
+            console.log($(this).val());
+            containsCoordinates = true;
+        }
+    });
+    console.log('containsCoordinates: ' + containsCoordinates);
+    return containsCoordinates;
+}
+
+function containsEmail() {
+    var containsEmail = ($('#emailField input').val() != '') ? true : false;
+    console.log('containsEmail: ' + containsEmail);
+    return containsEmail;
+}
+
+function isValid() {
+    var validWithCoordinates = (containsCoordinates() && containsEmail()) ? true : false;
+    var validWithoutCoordinates = (!containsCoordinates()) ? true : false;
+    return (validWithCoordinates || validWithoutCoordinates) ? true : false;
 }
