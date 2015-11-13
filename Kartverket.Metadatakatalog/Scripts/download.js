@@ -107,6 +107,9 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
             else if (val.type == 'kommune') {
                 orderItemSelectOmraaderKommuner.append($("<option />").val(val.type + '_' + val.code).text(val.name));
             }
+            else if (val.type == 'landsdekkende') {
+                orderItemSelectOmraader.prepend($("<option />").val(val.type + '_' + val.code).text('Landsdekkende'));
+            }
             else {
                 orderItemSelectOmraader.append($("<option />").val(val.code).text(val.name));
             }
@@ -335,7 +338,7 @@ $(window).load(function () {
         });
         if (hasErrors) {
             showAlert('Ett eller flere felt er ikke korrekt utfylt', 'danger');
-        }else if(!isValid()){
+        } else if (!isValid()) {
             $('#emailField').addClass('has-error')
             showAlert('E-post feltet må fylles ut om man har valgt koordinater fra kart', 'danger');
             e.preventDefault();
