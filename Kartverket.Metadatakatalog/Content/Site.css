@@ -78,22 +78,21 @@
     .facet-sok-emne li a {
         display: block;
         margin-bottom: 0;
-  
-    line-height: 21.15px;
+        line-height: 21.15px;
     }
 
-    .facet-sok-emne li a:hover{
-         background-color: #EEE;
-    } 
-
-
-        .facet-sok-emne label span {
-            font-weight: 400;
+        .facet-sok-emne li a:hover {
+            background-color: #EEE;
         }
 
-        .facet-sok-emne li ul li a{
-            margin-left: 15px;
-        }
+
+    .facet-sok-emne label span {
+        font-weight: 400;
+    }
+
+    .facet-sok-emne li ul li a {
+        margin-left: 15px;
+    }
 
     .facet-sok-emne input[type="radio"], .facet-sok-emne input[type="checkbox"] {
         margin: 0;
@@ -143,15 +142,16 @@
     margin: 0;
 }
 
-.nav-pills-small li ul a{
-    padding-left: 15px;
-}
-.nav-pills-small li.hide-children > ul > li.filter-options{
+    .nav-pills-small li ul a {
+        padding-left: 15px;
+    }
+
+.nav-pills-small li.hide-children > ul > li.filter-options {
     display: none;
 }
 
 
-.nav-pills-small .filter-options{
+.nav-pills-small .filter-options {
     margin: 0;
 }
 
