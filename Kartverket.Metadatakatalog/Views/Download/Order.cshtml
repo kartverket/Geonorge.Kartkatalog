@@ -1,20 +1,23 @@
 ﻿@model List<OrderReceiptType>
-    @{
+@{
     ViewBag.Title = "Nedlasting";
 }
 
+
 <h4>Filer for nedlasting:</h4>
-@foreach (var receipt in Model)
-{
-    foreach (var file in receipt.files)
+<ul class="list-unstyled">
+    @foreach (var receipt in Model)
     {
-        if (!string.IsNullOrEmpty(file.downloadUrl))
+        foreach (var file in receipt.files)
         {
-        <a href="@file.downloadUrl" target="_blank">@file.name</a><br />
-        }
-        else
-        {
-        @file.name<br />
+            if (!string.IsNullOrEmpty(file.downloadUrl))
+            {
+                <li><a href="@file.downloadUrl" target="_blank">@file.name</a></li>
+            }
+            else
+            {
+                <li>@file.name</li>
+            }
         }
     }
-}
+</ul>
