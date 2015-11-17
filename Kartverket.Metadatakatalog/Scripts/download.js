@@ -1,6 +1,13 @@
 ﻿var objCount = 0;
 var objCountLoaded = 0;
 
+function httpToHttps(links) {
+    $.each(links, function (key, val) {
+        val['href'] = val['href'].replace('http://', 'https://');
+        val['rel'] = val['rel'].replace('http://', 'https://');
+    });
+}
+
 function getJsonObjects(data, segment, uuid) {
     if (segment == null) segment = '';
     var localStorageKey;
@@ -14,6 +21,10 @@ function getJsonObjects(data, segment, uuid) {
         }
         if (typeof val == 'object') {
             if (typeof key == 'string') {
+                console.log(key);
+                if (key == '_links') {
+                    val = httpToHttps(val);
+                }
                 parentObj = '.' + key;
             }
             $.each($(this), function (key, val) {
@@ -76,18 +87,21 @@ function getJsonData(url, segments, uuid) {
 
 
 $(document).ready(function () {
-    var storedOrderItems = JSON.parse(localStorage["orderItems"]);
-    objCount = storedOrderItems.length;
-    $.each(storedOrderItems, function (key, uuid) {
-        var metadata = JSON.parse(localStorage[uuid + '.metadata']);
-        var url = metadata.distributionUrl + uuid;
-        getJsonData(url, ['capabilities'], uuid);
-        objCountLoaded++;
-        var percentLoaded = (objCountLoaded / objCount) * 100;
-        $(".progress-bar").css('width', percentLoaded + '%');
-        $(".progress-bar").attr('aria-valuenow', percentLoaded);
-        $(".progress-bar").text(objCountLoaded + ' av ' + objCount + ' datasett er lastet');
-    });
+    var orderItems = localStorage["orderItems"];
+    if (orderItems != null) {
+        var storedOrderItems = (orderItems != null) ? JSON.parse(orderItems) : '';
+        objCount = storedOrderItems.length;
+        $.each(storedOrderItems, function (key, uuid) {
+            var metadata = JSON.parse(localStorage[uuid + '.metadata']);
+            var url = metadata.distributionUrl + uuid;
+            getJsonData(url, ['capabilities'], uuid);
+            objCountLoaded++;
+            var percentLoaded = (objCountLoaded / objCount) * 100;
+            $(".progress-bar").css('width', percentLoaded + '%');
+            $(".progress-bar").attr('aria-valuenow', percentLoaded);
+            $(".progress-bar").text(objCountLoaded + ' av ' + objCount + ' datasett er lastet');
+        });
+    }
 });
 
 
