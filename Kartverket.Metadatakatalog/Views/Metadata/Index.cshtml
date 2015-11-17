@@ -564,7 +564,7 @@
                     var title = '@itemTitle';
                     var organizationLogoUrl = '@itemOrganizationLogoUrl.Replace("http://", "https://")';
                     var distributionDetailsUrl = '@itemDistributionDetailsUrl.Replace("http://", "https://")';
-                    var rootUrl = '/metadata/uuid/';
+                    var rootUrl = 'metadata/uuid/';
 
                     var orderItems = [];
                     $('#add-to-cart-btn').click(function () {
@@ -580,7 +580,7 @@
                         });
                         if (!added) {
                             orderItems.push(uuid);
-                            var metadata = { 'name': title, 'uuid': uuid, 'url': rootUrl + 'metadata/uuid/' + uuid, 'organizationLogoUrl': organizationLogoUrl, 'distributionUrl': distributionDetailsUrl };
+                            var metadata = { 'name': title, 'uuid': uuid, 'url': rootUrl + uuid, 'organizationLogoUrl': organizationLogoUrl, 'distributionUrl': distributionDetailsUrl };
                             localStorage["orderItems"] = JSON.stringify(orderItems);
                             localStorage[uuid + ".metadata"] = JSON.stringify(metadata);
                             showAlert(title + ' er lagt til i kurven', 'success');
