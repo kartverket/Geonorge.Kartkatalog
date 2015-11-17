@@ -21,7 +21,6 @@ function getJsonObjects(data, segment, uuid) {
         }
         if (typeof val == 'object') {
             if (typeof key == 'string') {
-                console.log(key);
                 if (key == '_links') {
                     val = httpToHttps(val);
                 }
@@ -67,17 +66,17 @@ function getJsonData(url, segments, uuid) {
         success: function (data) {
             getJsonObjects(data, segmentString, uuid);
             if (data.supportsProjectionSelection) {
-                var rel = 'http://rel.geonorge.no/download/projection';
+                var rel = 'https://rel.geonorge.no/download/projection';
                 var href = getJsonUrl(data._links, rel);
                 getJsonData(href + '', ['codelists', 'projection'], uuid);
             }
             if (data.supportsFormatSelection) {
-                var rel = 'http://rel.geonorge.no/download/format';
+                var rel = 'https://rel.geonorge.no/download/format';
                 var href = getJsonUrl(data._links, rel);
                 getJsonData(href, ['codelists', 'format'], uuid);
             }
             if (data.supportsAreaSelection) {
-                var rel = 'http://rel.geonorge.no/download/area';
+                var rel = 'https://rel.geonorge.no/download/area';
                 var href = getJsonUrl(data._links, rel);
                 getJsonData(href, ['codelists', 'area'], uuid);
             }
@@ -175,9 +174,10 @@ function getOrderUrl(uuid) {
     var orderItemInputOrderUrl = $('#orderuuid' + uuid + ' .order-url');
     orderItemInputOrderUrl.attr('name', uuid + '-orderUrl');
 
-    var orderRel = "http://rel.geonorge.no/download/order";
+    var orderRel = "https://rel.geonorge.no/download/order";
+
     $.each(orderItemLinks, function (key, link) {
-        if (link['rel'] == orderRel) {
+        if (link['rel'] == orderRel) {         
             orderItemInputOrderUrl.val(link['href']);
         }
     });

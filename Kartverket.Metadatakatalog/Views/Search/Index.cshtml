@@ -482,8 +482,11 @@
 
                             </div>
                             <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
-                                @if (item.ShowDownloadService())
+                                @if (item.ShowDownloadService())           
                                 {
+                                    String itemorglogo = (item.OrganizationLogoUrl != null) ? item.OrganizationLogoUrl.Replace("http://","https://") : "";
+                                    String itemdisturl = (item.DownloadUrl != null) ? item.DownloadUrl.Replace("http://","https://") : "";
+                                    
                                     <a data-toggle='tooltip'
                                        data-placement='bottom'
                                        title='Legg til @item.Title i kurv'
@@ -491,8 +494,8 @@
                                        itemname='@item.Title'
                                        itemuuid='@item.Uuid'
                                        itemurl='https://kartkatalogen.dev.geonorge.no/metadata/uuid/@item.Uuid'
-                                       itemorglogo='@if (item.OrganizationLogoUrl != null){item.OrganizationLogoUrl.Replace("http://","https://");}'
-                                       itemdisturl='@if (item.DownloadUrl != null) { item.DownloadUrl.Replace("http://", "https://"); }'>
+                                       itemorglogo='@itemorglogo'
+                                       itemdisturl='@itemdisturl'>
                                         <span class="glyphicon glyphicon-shopping-cart"></span>Legg i kurv
                                     </a>
                                 }
