@@ -484,14 +484,23 @@
 
                             </div>
                             <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
-                                @if (item.ShowDownloadService())           
+                                @if (item.ShowDownloadService())
                                 {
-                                    System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
-                                    System.Uri downloadUrl = new Uri(item.DownloadUrl);
-                                    string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                    string relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
-                                    
-                                    
+                                    string relativeOrganizationLogoUrl = "";
+                                    string relativeDowloadUrl = "";
+
+                                    if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
+                                    {
+                                        System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
+                                        relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
+                                    }
+
+                                    if (!string.IsNullOrWhiteSpace(item.DownloadUrl))
+                                    {
+                                        System.Uri downloadUrl = new Uri(item.DownloadUrl);
+                                        relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
+                                    }
+
                                     <a data-toggle='tooltip'
                                        data-placement='bottom'
                                        title='Legg til @item.Title i kurv'
