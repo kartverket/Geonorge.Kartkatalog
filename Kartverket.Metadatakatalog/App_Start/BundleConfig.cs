@@ -47,7 +47,7 @@ namespace Kartverket.Metadatakatalog
            .Include("~/KartverketSharedMenu/Styles/geonorge-top/searchTop.css")
            );
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
+            bundles.Add(new StyleBundle("~/Content/css_old").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/common.css",
                       "~/Content/navbar.css",
@@ -55,6 +55,9 @@ namespace Kartverket.Metadatakatalog
                       "~/Content/chosen.css",
 
 
+                      "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/site.css"));
             // "~/Content/jquery.typeahead.css",
             //bundles.Add(new StyleBundle("~/Content/css").Include(

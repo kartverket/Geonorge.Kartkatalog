@@ -72,46 +72,64 @@
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
 </div>
+<section class="heading">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>@Model.Title</h1>
+        </div>
+        <div class="col-sm-12">
+            <span class="separator-big"></span>
+        </div>
+    </div>
+</section>
 
-<div class="page-header">
-    <h1 class="h-md">@Model.Title</h1>
-    <hr>
+
+
+
+<div class="label @hierarchyLevelCssClass">@hierarchyLevelLabelText</div>
+<div class="row">
+    <article class="col-md-8">
+        <div class="row">
+            <div class="body-text col-sm-12">
+                <h3>Sammendrag</h3>
+                <p>@Model.Abstract</p>
+            </div>
+        </div>
+    </article>
+    <aside class="col-sm-4">
+
+        <div class="block listblock size-12 col-sm-12 ">
+            @if (Model.ContactOwner != null)
+            {
+                <h2>
+                    <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName() })" title="Vis alle geografiske tjenester og datasett fra @Model.ContactOwner.Organization">
+                        @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
+                        {
+                            <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactOwner.Organization" width="100" />
+                        }
+                        @Model.ContactOwner.Organization
+                    </a>
+                </h2>
+            }
+
+
+            <div class="clearfix">
+                @if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
+                {
+                    foreach (var thumb in Model.Thumbnails)
+                    {
+                        if (thumb.Type == "thumbnail" || thumb.Type == "miniatyrbilde")
+                        {
+                            <img src="@thumb.URL" width="300" class="thumbnail pull-right" alt="Forhåndsvisning av data." />
+                            break;
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </aside>
 </div>
-
-
-
-
-
-@if (Model.ContactOwner != null)
-{
-    <h2>
-        <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName() })" title="Vis alle geografiske tjenester og datasett fra @Model.ContactOwner.Organization">
-            @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
-            {
-                <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactOwner.Organization" width="100" />
-            }
-            @Model.ContactOwner.Organization
-        </a>
-    </h2>
-}
-
-
-<div class="clearfix">
-    @if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
-    {
-        foreach (var thumb in Model.Thumbnails)
-        {
-            if (thumb.Type == "thumbnail" || thumb.Type == "miniatyrbilde")
-            {
-                <img src="@thumb.URL" width="300" class="thumbnail pull-right" alt="Forhåndsvisning av data." />
-                break;
-            }
-        }
-    }
-    <div class="label @hierarchyLevelCssClass">@hierarchyLevelLabelText</div>
-    <h3>Sammendrag</h3>
-    @Model.Abstract
-
+<div>
     <h3>Tilgjengelige ressurser</h3>
     <p>
 
@@ -210,148 +228,151 @@
             }
 
         }
-        <script>
+   
 
-            function getMetadata(uuid) {
 
-                $.getJSON("/api/search?text=" + uuid, function (result) {
 
+    <script>
+
+        function getMetadata(uuid) {
+
+            $.getJSON("/api/search?text=" + uuid, function (result) {
+
+
+                if (result.length != 0) {
+
+                    if (result.Results[0] != null) {
+                        var title = result.Results[0].Title;
+                        $("#related-" + uuid).text(title);
+
+                    }
+                    else
+                        $("#related-" + uuid).text("Tittel mangler");
+                }
+
+                else {
+                    $("#related-" + uuid).text("Tittel mangler");
+                }
+
+            });
+        };
+    </script>
+
+
+
+    @if (!string.IsNullOrWhiteSpace(Model.ParentIdentifier))
+    {
+        <h4>Overordnet metadata</h4>
+        <script>getMetadata('@Model.ParentIdentifier');</script>
+        <a id="related-@Model.ParentIdentifier" href="/metadata/org/title/@Model.ParentIdentifier" title="Overordnet metadata for @Model.Title">
+        </a>
+    }
+    @if (Model.OperatesOn != null)
+    {
+        if (Model.OperatesOn.Count > 0)
+        {
+            <h4>Relaterte metadata</h4>
+            <div class="pre-scrollable" style="max-height: 100px; width: 400px;@(Model.OperatesOn.Count <= 2 ? "overflow-y: visible" : "")">
+                <ul id="relatedList">
+                    @foreach (var id in Model.OperatesOn)
+                    {
+                        <li>
+                            <a id="related-@id" href="/metadata/org/title/@id" class="" title="Relatert metadata for @Model.Title">
+
+                            </a>
+                        </li>
+                        <script>getMetadata('@id');</script>
+                    }
+                </ul>
+
+            </div>
+            <script>
+
+                $(function () {
+                    $.fn.sortList = function () {
+                        var mylist = $(this);
+                        var listitems = $('li', mylist).get();
+                        listitems.sort(function (a, b) {
+                            var compA = $(a).text().toUpperCase();
+                            var compB = $(b).text().toUpperCase();
+                            return (compA < compB) ? -1 : 1;
+                        });
+                        $.each(listitems, function (i, itm) {
+                            alert
+                            mylist.append(itm);
+                        });
+
+                    }
+                });
+                setTimeout('$("ul#relatedList").sortList()', 3000);
+            </script>
+        }
+    }
+
+    </p>
+    @if (Model.IsDataset())
+    {
+        <p id="bundle">
+            <script>
+                $.getJSON("/api/search?text=@Model.Uuid", function (result) {
 
                     if (result.length != 0) {
-
                         if (result.Results[0] != null) {
-                            var title = result.Results[0].Title;
-                            $("#related-" + uuid).text(title);
+                            if (result.Results[0].DatasetServices != null) {
+                                for (s = 0; s < result.Results[0].DatasetServices.length; s++) {
+                                    var data = result.Results[0].DatasetServices[s];
+                                    var datas = data.split('|');
+                                    var uuid = datas[0];
+                                    var title = datas[1];
+                                    var parentIdentifier = datas[2];
 
-                        }
-                        else
-                            $("#related-" + uuid).text("Tittel mangler");
-                    }
-
-                    else {
-                        $("#related-" + uuid).text("Tittel mangler");
-                    }
-
-                });
-            };
-        </script>
-
-
-
-        @if (!string.IsNullOrWhiteSpace(Model.ParentIdentifier))
-        {
-            <h4>Overordnet metadata</h4>
-            <script>getMetadata('@Model.ParentIdentifier');</script>
-            <a id="related-@Model.ParentIdentifier" href="/metadata/org/title/@Model.ParentIdentifier" title="Overordnet metadata for @Model.Title">
-            </a>
-        }
-        @if (Model.OperatesOn != null)
-        {
-            if (Model.OperatesOn.Count > 0)
-            {
-                <h4>Relaterte metadata</h4>
-                <div class="pre-scrollable" style="max-height: 100px; width: 400px;@(Model.OperatesOn.Count <= 2 ? "overflow-y: visible" : "")">
-                    <ul id="relatedList">
-                        @foreach (var id in Model.OperatesOn)
-                        {
-                            <li>
-                                <a id="related-@id" href="/metadata/org/title/@id" class="" title="Relatert metadata for @Model.Title">
-
-                                </a>
-                            </li>
-                            <script>getMetadata('@id');</script>
-                        }
-                    </ul>
-
-                </div>
-                <script>
-
-                    $(function () {
-                        $.fn.sortList = function () {
-                            var mylist = $(this);
-                            var listitems = $('li', mylist).get();
-                            listitems.sort(function (a, b) {
-                                var compA = $(a).text().toUpperCase();
-                                var compB = $(b).text().toUpperCase();
-                                return (compA < compB) ? -1 : 1;
-                            });
-                            $.each(listitems, function (i, itm) {
-                                alert
-                                mylist.append(itm);
-                            });
-
-                        }
-                    });
-                    setTimeout('$("ul#relatedList").sortList()', 3000);
-                </script>
-            }
-        }
-
-        </p>
-        @if (Model.IsDataset())
-        {
-            <p id="bundle">
-                <script>
-                    $.getJSON("/api/search?text=@Model.Uuid", function (result) {
-
-                        if (result.length != 0) {
-                            if (result.Results[0] != null) {
-                                if (result.Results[0].DatasetServices != null) {
-                                    for (s = 0; s < result.Results[0].DatasetServices.length; s++) {
-                                        var data = result.Results[0].DatasetServices[s];
-                                        var datas = data.split('|');
-                                        var uuid = datas[0];
-                                        var title = datas[1];
-                                        var parentIdentifier = datas[2];
-
-                                        if (parentIdentifier == "") {
-                                            $('#bundle').append('<b>Tjeneste(r) datasettet inngår i:</b></br><a href="/metadata/uuid/' + uuid + '" target="_blank">' + title + '</a>');
-                                            if(result.Results[0].DatasetServices.length > 1)
-                                                $('#bundle').append('</br><i>Tjenestelag som datsettet inngår i:</i></br>');
-                                        }
-                                        else
-                                        {
-                                            $('#bundle').append(' - <a href="/metadata/uuid/' + uuid + '" target="_blank">' + title + '</a></br>');
-                                        } 
+                                    if (parentIdentifier == "") {
+                                        $('#bundle').append('<b>Tjeneste(r) datasettet inngår i:</b></br><a href="/metadata/uuid/' + uuid + '" target="_blank">' + title + '</a>');
+                                        if (result.Results[0].DatasetServices.length > 1)
+                                            $('#bundle').append('</br><i>Tjenestelag som datsettet inngår i:</i></br>');
+                                    }
+                                    else {
+                                        $('#bundle').append(' - <a href="/metadata/uuid/' + uuid + '" target="_blank">' + title + '</a></br>');
                                     }
                                 }
                             }
                         }
-                    });
-                </script>
-            </p>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Model.Purpose))
-        {
-            <h3>Formål</h3>
-            <p>@Model.Purpose</p>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Model.SupplementalDescription))
-        {
-            <h3>Supplerende beskrivelse</h3>
-            <p>@Model.SupplementalDescription</p>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Model.SpecificUsage))
-        {
-            <h3>Bruksområde</h3>
-            <p>@Model.SpecificUsage</p>
-        }
-        <p>
-            @if (!string.IsNullOrWhiteSpace(Model.ResourceReferenceCode))
-            {
-                <span><b>Unik ressurs-id:</b></span>
-                <span>@Model.ResourceReferenceCode</span><span>.</span>
-            }
-
-            @if (!string.IsNullOrWhiteSpace(Model.ResourceReferenceCodespace))
-            {
-                <span><b>Navnerom:</b></span>
-                <span>@Model.ResourceReferenceCodespace</span><span>.</span>
-            }
+                    }
+                });
+            </script>
         </p>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.Purpose))
+    {
+        <h3>Formål</h3>
+        <p>@Model.Purpose</p>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.SupplementalDescription))
+    {
+        <h3>Supplerende beskrivelse</h3>
+        <p>@Model.SupplementalDescription</p>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.SpecificUsage))
+    {
+        <h3>Bruksområde</h3>
+        <p>@Model.SpecificUsage</p>
+    }
+    <p>
+        @if (!string.IsNullOrWhiteSpace(Model.ResourceReferenceCode))
+        {
+            <span><b>Unik ressurs-id:</b></span>
+            <span>@Model.ResourceReferenceCode</span><span>.</span>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Model.ResourceReferenceCodespace))
+        {
+            <span><b>Navnerom:</b></span>
+            <span>@Model.ResourceReferenceCodespace</span><span>.</span>
+        }
+    </p>
     </div>
 
     <div class="row">

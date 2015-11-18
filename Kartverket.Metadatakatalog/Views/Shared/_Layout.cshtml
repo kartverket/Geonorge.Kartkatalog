@@ -21,7 +21,7 @@
         }
         @Resources.UI.AppPageTitle
     </title>
-    @*@Styles.Render("~/bundles/shared-menu-styles")*@
+    @Styles.Render("~/bundles/shared-menu-styles")
     
     @Styles.Render("~/Content/css")
     
@@ -34,7 +34,7 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/js")
     @Scripts.Render("~/bundles/modernizr")
-   @* @Scripts.Render("~/bundles/shared-menu-scripts")*@
+    @Scripts.Render("~/bundles/shared-menu-scripts")
     <script>
         // by Kartverket/Thomas Hirsch 2012 / public domain.
         //var hash = 'http://norgeskart.no/geoportal/testing/dynamisk.html';
@@ -105,8 +105,8 @@
             <img src="/Content/img/kvlogo_col.png" alt="Kartverkets logo" />
         </div>*@
 
-    @Html.Partial("_NavbarPartial")
-    @*@Html.Partial("_SharedMenu")*@
+    @*@Html.Partial("_NavbarPartial")*@
+    @Html.Partial("_SharedMenu")
 
     <div class="navtab-container bottom-edge-kartkatalogen" id="navTabCont">
         <div class="container">
