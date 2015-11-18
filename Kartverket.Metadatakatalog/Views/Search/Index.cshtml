@@ -440,8 +440,10 @@
 
                                 @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
                                 {
+                                    System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
+                                    string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
                                     <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
-                                        <img src="@item.OrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
+                                        <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
                                     </a>
 
 
@@ -484,8 +486,11 @@
                             <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
                                 @if (item.ShowDownloadService())           
                                 {
-                                    String itemorglogo = (item.OrganizationLogoUrl != null) ? item.OrganizationLogoUrl.Replace("http://","https://") : "";
-                                    String itemdisturl = (item.DownloadUrl != null) ? item.DownloadUrl.Replace("http://","https://") : "";
+                                    System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
+                                    System.Uri downloadUrl = new Uri(item.DownloadUrl);
+                                    string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
+                                    string relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
+                                    
                                     
                                     <a data-toggle='tooltip'
                                        data-placement='bottom'
@@ -493,9 +498,9 @@
                                        class='btn btn-xs btn-bunnmarg btn-default add-to-cart-btn'
                                        itemname='@item.Title'
                                        itemuuid='@item.Uuid'
-                                       itemurl='https://kartkatalogen.dev.geonorge.no/metadata/uuid/@item.Uuid'
-                                       itemorglogo='@itemorglogo'
-                                       itemdisturl='@itemdisturl'>
+                                       itemurl='/metadata/uuid/@item.Uuid'
+                                       itemorglogo='@relativeOrganizationLogoUrl'
+                                       itemdisturl='@relativeDowloadUrl'>
                                         <span class="glyphicon glyphicon-shopping-cart"></span>Legg i kurv
                                     </a>
                                 }
@@ -604,8 +609,10 @@
 
                                 @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
                                 {
+                                    System.Uri thumbnailUrl = new Uri(item.ThumbnailUrl);
+                                    string relativeThunbnailUrl = "//" + thumbnailUrl.Host + thumbnailUrl.PathAndQuery;
                                     <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                        <img alt="@item.Title illustrasjonsbilde" src="@item.ThumbnailUrl" class="img-responsive pull-right">
+                                        <img alt="@item.Title illustrasjonsbilde" src="@relativeThunbnailUrl" class="img-responsive pull-right">
                                     </a>
                                 }
 
