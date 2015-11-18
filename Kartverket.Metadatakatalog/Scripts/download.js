@@ -3,7 +3,8 @@ var objCountLoaded = 0;
 
 function httpToHttps(links) {
     $.each(links, function (key, val) {
-        val['href'] = val['href'].replace(/^https?\:\/\//i, "http://");
+        var protocol = location.protocol + "//";
+        val['href'] = val['href'].replace(/^https?\:\/\//i, protocol);
     });
 }
 
