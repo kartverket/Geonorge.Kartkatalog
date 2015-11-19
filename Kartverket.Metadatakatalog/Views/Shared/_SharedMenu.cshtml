@@ -33,9 +33,9 @@
                 <div class="col-xs-11 col-md-7 col-md-offset-2 search">
                     <div class="row">
                         <div class="col-xs-12 input-group searchbar">
-                            <input autocomplete="off" data-ng-focus="setFocus($event)" data-ng-blur="" ng-keyup="autocomplete($event)" data-ng-keydown="preventDefault($event)" data-ng-model="$root.searchQuery" id="txtSearch" class="form-control search-main ng-pristine ng-untouched ng-valid" placeholder="Søk etter kartdata" type="text">
+                            <input style="" autocomplete="off" data-ng-focus="setFocus($event)" data-ng-blur="" ng-keyup="autocomplete($event)" data-ng-keydown="preventDefault($event)" data-ng-model="$root.searchQuery" id="txtSearch" class="form-control search-main ng-valid ng-dirty ng-valid-parse ng-touched" placeholder="Søk etter kartdata" type="text">
                             <div class="input-group-addon">
-                                <div class="autocomplete-loader ng-hide" ng-show="ajaxCallActive">
+                                <div style="" class="autocomplete-loader ng-hide" ng-show="ajaxCallActive">
                                     <div class="loader"></div>
                                 </div>
                             </div>
@@ -49,10 +49,10 @@
 
                         </div>
                         <div class="col-xs-12 auto-results-container">
-                            <div ng-show="autocompleteActive" class="col-xs-12 auto-results-wrapper ng-hide">
+                            <div style="" ng-show="autocompleteActive" class="col-xs-12 auto-results-wrapper ng-hide">
                                 <!-- ngInclude: autoCompletePartial --><div style="" class="auto-results row ng-scope" data-ng-include="autoCompletePartial">
                                     <!-- ngRepeat: result in autoCompleteResult -->
-                                    <div class="col-xs-12 auto-result-row ng-scope" data-ng-show="autoCompleteResult.length == 0 &amp;&amp; ajaxCallActive == false">
+                                    <div style="" class="col-xs-12 auto-result-row ng-scope" data-ng-show="autoCompleteResult.length == 0 &amp;&amp; ajaxCallActive == false">
                                         <div class="col-xs-12 auto-results-col">
                                             <div class="auto-results-inner">
                                                 <table>

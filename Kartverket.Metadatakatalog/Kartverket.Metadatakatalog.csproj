@@ -334,6 +334,7 @@
     <Content Include="KartverketSharedMenu\Images\geonorge_logo_350px.svg" />
     <Content Include="KartverketSharedMenu\Images\gif_loading-01.gif" />
     <Content Include="KartverketSharedMenu\Images\search_icon-01.svg" />
+    <Content Include="KartverketSharedMenu\Images\shopping_cart_968c83_ikon-01.svg" />
     <Content Include="KartverketSharedMenu\Scripts\angular.js" />
     <Content Include="KartverketSharedMenu\Scripts\angular.min.js" />
     <Content Include="KartverketSharedMenu\Scripts\bootstrap.js" />
