@@ -525,7 +525,7 @@ article .hexagon-wrapper { padding: 30px 0 0 0; }
 }
 
 .teaser-with-icon a:hover .hexagon-teaser-before {
-    border-bottom: 35.00px solid #7da1c4;
+    border-bottom: 35.00px solid #fe5000;
     bottom: 100%;
 }
 
@@ -533,10 +533,11 @@ article .hexagon-wrapper { padding: 30px 0 0 0; }
 .teaser-with-icon a:hover .hexagon-teaser {
     height: 70.00px;
     width: 121.244px;
+    background-color: #fe5000;
 }
 
 .teaser-with-icon a:hover .hexagon-teaser-after {
-    border-top: 35.00px solid #7da1c4;
+    border-top: 35.00px solid #fe5000;
     top: 100%;
     width: 0;
 }
@@ -548,8 +549,17 @@ article .hexagon-wrapper { padding: 30px 0 0 0; }
 }
 
 .teaser-with-icon .hexagon-teaser-wrapper .hexagon-teaser .teaser-icon {
-    height: 100%;
-    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    max-height: 47px;
+    max-width: 85px;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .teaser-with-icon * {
