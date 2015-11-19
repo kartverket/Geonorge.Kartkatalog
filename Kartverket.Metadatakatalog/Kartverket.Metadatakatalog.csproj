@@ -286,6 +286,8 @@
     <Content Include="Content\common.css" />
     <Content Include="Content\geonorge-default.css" />
     <Content Include="Content\img\favicon.ico" />
+    <Content Include="Content\img\geonorge.png" />
+    <Content Include="Content\img\kartverket.png" />
     <Content Include="Content\img\kvlogo_col.png" />
     <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\lock.png" />
