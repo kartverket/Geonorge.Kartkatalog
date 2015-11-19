@@ -1,101 +1,344 @@
-﻿<div>
-    <header>
-        <div class="container">
-            <div class="row top-row">
-                <div class="logo-wrapper col-sm-12">
-                    <div class="geonorge-logo ">
+﻿<header>
+    <div class="container">
+        <div class="row top-row">
+            <div class="col-xs-7">
+                <div class="logo-wrapper">
+                    <div class="geonorge-logo">
                         <a href="/">
-                            <img src="~/KartverketSharedMenu/Images/geonorge_logo_350px.svg" alt="Logo" />
+                            <img src="/KartverketSharedMenu/Images/geonorge_logo_350px.svg" alt="Logo">
                         </a>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Start Kartverket shared menu -->
-        <div class="container-search">
-            <div class="container">
-                <div class="row" ng-controller="searchTopController">
-                    <div class="col-md-7 col-md-offset-2 search">
-                        <div class="row">
-                            <div class="col-md-12 input-group searchbar">
-                                <input autocomplete="off" ng-focus="setFocus($event)" ng-blur="" ng-keyup="autocomplete($event)" ng-keydown="preventDefault($event)" ng-model="$root.searchQuery" id="txtSearch" type="text" class="form-control search-main" placeholder="S&#248;k etter kartdata" />
-                                <div class="input-group-addon">
-                                    <div class="autocomplete-loader ng-cloak" ng-cloak ng-show="ajaxCallActive">
-                                        <div class="loader"></div>
-                                    </div>
-                                </div>
-                                <span class="input-group-btn">
-                                    <div class="search-button-wrapper {{selectedSearch.buttonCss}}" ng-submit="Search()">
-                                        <button class="btn btn-default" type="button" ng-click="onSearch()">
-                                            <img src="/KartverketSharedMenu/Images/search_icon-01.svg" alt="search" ng-click="onSearch()" />
-                                        </button>
-                                    </div>
-                                </span>
-                            </div>
-                            <div ng-show="autocompleteActive" ng-cloak class="col-md-12 auto-results-wrapper ng-cloak">
-                                <div class="auto-results row ng-cloak" ng-cloak ng-include="autoCompletePartial">
-                                </div>
-                            </div>
-                        </div>
+            <div class="col-xs-5">
+                <div class="navbar-header">
+                    <div class="menu-title">
+                        <span class="navbar-toggle">Meny</span>
                     </div>
-                    <div class="col-md-3 acknowledgement-wrapper">
-                        <span class="acknowledgement">En l&#248;sning fra Kartverket</span>
+                    <div class="menu-toggle">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-menu" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Meny</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </header>
-    <div class="container-top-menu">
+    </div>
+    <div class="container-search">
         <div class="container">
+            <div class="row ng-scope" data-ng-controller="searchTopController">
+                <div class="col-xs-11 col-md-7 col-md-offset-2 search">
+                    <div class="row">
+                        <div class="col-xs-12 input-group searchbar">
+                            <input autocomplete="off" data-ng-focus="setFocus($event)" data-ng-blur="" ng-keyup="autocomplete($event)" data-ng-keydown="preventDefault($event)" data-ng-model="$root.searchQuery" id="txtSearch" class="form-control search-main ng-pristine ng-untouched ng-valid" placeholder="Søk etter kartdata" type="text">
+                            <div class="input-group-addon">
+                                <div class="autocomplete-loader ng-hide" ng-show="ajaxCallActive">
+                                    <div class="loader"></div>
+                                </div>
+                            </div>
+                            <span class="input-group-btn">
+                                <div class="search-button-wrapper edgesKartkatalogen" data-ng-submit="Search()">
+                                    <button class="btn btn-default" type="button" data-ng-click="onSearch()">
+                                        <img src="/KartverketSharedMenu/Images/search_icon-01.svg" alt="search" data-ng-click="onSearch()">
+                                    </button>
+                                </div>
+                            </span>
 
-
-            <div class="row">
-                <div class="col-sm-12 top-menu">
-                    <nav class="navbar navbar-top-menu" ng-controller="menuTopController" ng-init="getMenuData()">
-                        <div class="container">
-                            <div class="navbar-header">
-                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-menu" aria-expanded="false" aria-controls="navbar">
-                                    <span class="sr-only">Veksle navigasjon</span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                </button>
+                        </div>
+                        <div class="col-xs-12 auto-results-container">
+                            <div ng-show="autocompleteActive" class="col-xs-12 auto-results-wrapper ng-hide">
+                                <!-- ngInclude: autoCompletePartial --><div style="" class="auto-results row ng-scope" data-ng-include="autoCompletePartial">
+                                    <!-- ngRepeat: result in autoCompleteResult -->
+                                    <div class="col-xs-12 auto-result-row ng-scope" data-ng-show="autoCompleteResult.length == 0 &amp;&amp; ajaxCallActive == false">
+                                        <div class="col-xs-12 auto-results-col">
+                                            <div class="auto-results-inner">
+                                                <table>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Søket gir ingen treff</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div ng-if="!getMenuError" id="top-menu" class="navbar-collapse collapse">
-                            <ul class="nav navbar-nav ng-cloak row" ng-cloak>
-                                <li ng-repeat="item in menuItems" class="dropdown col-sm-3 menu-large">
-                                    <span ng-if="item.Url == ''">{{item.Name}}</span>
-                                    <a ng-if="item.HasChildren && item.Url != ''" href="{{item.Url}}" target="{{item.PropertyFrameName != '' ? item.PropertyFrameName : '_self'}}" class="dropdown-toggle" data-disabled="true" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        {{item.Name}}
-                                    </a>
-                                    <a ng-if="!item.HasChildren && item.Url != ''" href="{{item.Url}}" target="{{item.PropertyFrameName != '' ? item.PropertyFrameName : '_self'}}" role="button" aria-haspopup="true" aria-expanded="false">
-                                        {{item.Name}}
-                                        <b ng-if="item.HasChildren" class="caret"></b>
-                                    </a>
-                                    <ul ng-if="item.HasChildren" class="dropdown-menu megamenu row">
+                    </div>
+                </div>
+                <div class="col-xs-1 col-md-3 shopping-cart-container">
+                    <a class="shopping-cart" href="http://kartkatalog.dev.geonorge.no/Download">
+                        <img src="/KartverketSharedMenu/Images/shopping_cart_968c83_ikon-01.svg" alt="Handlekurv">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="container-top-menu">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 top-menu">
+                <nav class="navbar ng-scope" data-ng-controller="menuTopController" data-ng-init="getMenuData()">
+                    <!-- ngIf: !getMenuError --><div data-ng-if="!getMenuError" id="top-menu" class="navbar-collapse collapse ng-scope">
+                        <div class="navbar-nav-container">
+                            <ul class="nav navbar-nav row">
+                                <!-- ngRepeat: item in menuItems -->
+                                <li style="" data-ng-repeat="item in menuItems" class="dropdown col-sm-3 ng-scope">
+                                    <!-- ngIf: item.Url == '' -->
+                                    <!-- ngIf: item.HasChildren && item.Url != '' --><a data-ng-if="item.HasChildren &amp;&amp; item.Url != ''" href="http://www.test.geonorge.no/kartdata/" target="_self" class="dropdown-toggle ng-binding ng-scope" data-disabled="true" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        Kartdata
+                                    </a><!-- end ngIf: item.HasChildren && item.Url != '' -->
+                                    <!-- ngIf: item.HasChildren --><ul data-ng-if="item.HasChildren" class="dropdown-menu row ng-scope">
                                         <li>
-                                            <ul ng-repeat="it in item.SubMenuItem">
-                                                <li ng-class="item.length === 1 ? 'col-sm-12' :
+                                            <!-- ngRepeat: it in item.SubMenuItem --><ul class="ng-scope" data-ng-repeat="it in item.SubMenuItem">
+                                                <li class="col-sm-4" data-ng-class="item.length === 1 ? 'col-sm-12' :
                                     item.length === 2 ? 'col-sm-6' :
                                     item.length === 3 ? 'col-sm-4' : 'col-sm-4'">
 
-                                                    <a href="{{it.Url}}">{{it.Name}}</a>
-                                                    <ul ng-if="it.HasChildren">
-                                                        <li ng-repeat="i in it.SubMenuItem">
-                                                            <a href="{{i.Url}}">{{i.Name}}</a>
-                                                        </li>
-                                                    </ul>
+                                                    <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/kartdata/datapakker/">Datapakker</a>
+                                                    <!-- ngIf: it.HasChildren --><ul class="col-xs-12 ng-scope" ng-if="it.HasChildren">
+                                                        <!-- ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://kartkatalog.dev.geonorge.no/metadata/norges-geologiske-undersokelse/berggrunnn50wms/ded2bc25-e1b4-445e-ac18-755d5568d2df">Areal og Transportplanlegging</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://kartkatalog.dev.geonorge.no/metadata/norges-geologiske-undersokelse/berggrunnn50wms/ded2bc25-e1b4-445e-ac18-755d5568d2df">Beredskap</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://kartkatalog.dev.geonorge.no/metadata/norges-geologiske-undersokelse/berggrunnn50wms/ded2bc25-e1b4-445e-ac18-755d5568d2df">Verneplanlegging</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                    </ul><!-- end ngIf: it.HasChildren -->
                                                 </li>
-                                            </ul>
+                                            </ul><!-- end ngRepeat: it in item.SubMenuItem --><ul class="ng-scope" data-ng-repeat="it in item.SubMenuItem">
+                                                <li class="col-sm-4" data-ng-class="item.length === 1 ? 'col-sm-12' :
+                                    item.length === 2 ? 'col-sm-6' :
+                                    item.length === 3 ? 'col-sm-4' : 'col-sm-4'">
+
+                                                    <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/kartdata/temaer/">Temaer</a>
+                                                    <!-- ngIf: it.HasChildren --><ul class="col-xs-12 ng-scope" ng-if="it.HasChildren">
+                                                        <!-- ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://kartkatalog.dev.geonorge.no/search?Facets%5B0%5D.name=theme&amp;Facets%5B0%5D.value=Basis%20geodata">Basis kartdata</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="https://kartkatalog.geonorge.no/search?Facets%5B0%5D.name=theme&amp;Facets%5B0%5D.value=Energi">Energi</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="https://kartkatalog.geonorge.no/search?Facets%5B0%5D.name=theme&amp;Facets%5B0%5D.value=Forurensning">Forurensning</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://kartkatalog.dev.geonorge.no/search?Facets%5B0%5D.name=theme&amp;Facets%5B0%5D.value=Friluftsliv">Friluftsliv</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="https://kartkatalog.geonorge.no/search?Facets%5B0%5D.name=theme&amp;Facets%5B0%5D.value=Geologi">Geologi</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="https://kartkatalog.geonorge.no/search?Facets%5B0%5D.name=theme&amp;Facets%5B0%5D.value=Kulturminner">Kulturminner</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="https://kartkatalog.geonorge.no/search?Facets%5B0%5D.name=theme&amp;Facets%5B0%5D.value=Kyst%20/%20fiskeri">Kyst og fiskeri</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="https://kartkatalog.geonorge.no/search?Facets%5B0%5D.name=theme&amp;Facets%5B0%5D.value=Landbruk">Landbruk</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://kartkatalog.dev.geonorge.no/search?Facets%5B0%5D.name=theme&amp;Facets%5B0%5D.value=Natur&amp;Facets%5B1%5D.name">Natur</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="https://kartkatalog.geonorge.no/search?Facets%5B0%5D.name=theme&amp;Facets%5B0%5D.value=Plan">Plan</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="https://kartkatalog.geonorge.no/search?Facets%5B0%5D.name=theme&amp;Facets%5B0%5D.value=Samferdsel">Samferdsel</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="https://kartkatalog.geonorge.no/search?Facets%5B0%5D.name=theme&amp;Facets%5B0%5D.value=Samfunnssikkerhet">Samfunnssikkerhet</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                    </ul><!-- end ngIf: it.HasChildren -->
+                                                </li>
+                                            </ul><!-- end ngRepeat: it in item.SubMenuItem --><ul class="ng-scope" data-ng-repeat="it in item.SubMenuItem">
+                                                <li class="col-sm-4" data-ng-class="item.length === 1 ? 'col-sm-12' :
+                                    item.length === 2 ? 'col-sm-6' :
+                                    item.length === 3 ? 'col-sm-4' : 'col-sm-4'">
+
+                                                    <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/kartdata/oppslagsverk/">Oppslagsverk</a>
+                                                    <!-- ngIf: it.HasChildren --><ul class="col-xs-12 ng-scope" ng-if="it.HasChildren">
+                                                        <!-- ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="https://kartkatalog.geonorge.no/search">Kartkatalogen</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="https://register.geonorge.no/">Registrene</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://159.162.103.4/metadata/Flybildearkiv/index.jsp">Flybildearkivet</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://159.162.103.4/metadata/">FKB metadatakatalogen</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/kartdata/oppslagsverk/tilgang-til-kartdata/">Tilgang til kartdata</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/kartdata/oppslagsverk/Brukernavn-og-passord/">Brukernavn og passord</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                    </ul><!-- end ngIf: it.HasChildren -->
+                                                </li>
+                                            </ul><!-- end ngRepeat: it in item.SubMenuItem -->
                                         </li>
-                                    </ul>
-                                </li>
+                                    </ul><!-- end ngIf: item.HasChildren -->
+                                </li><!-- end ngRepeat: item in menuItems -->
+                                <li data-ng-repeat="item in menuItems" class="dropdown col-sm-3 ng-scope">
+                                    <!-- ngIf: item.Url == '' -->
+                                    <!-- ngIf: item.HasChildren && item.Url != '' --><a data-ng-if="item.HasChildren &amp;&amp; item.Url != ''" href="http://www.test.geonorge.no/informasjon/" target="_self" class="dropdown-toggle ng-binding ng-scope" data-disabled="true" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        Informasjon
+                                    </a><!-- end ngIf: item.HasChildren && item.Url != '' -->
+                                    <!-- ngIf: item.HasChildren --><ul data-ng-if="item.HasChildren" class="dropdown-menu row ng-scope">
+                                        <li>
+                                            <!-- ngRepeat: it in item.SubMenuItem --><ul class="ng-scope" data-ng-repeat="it in item.SubMenuItem">
+                                                <li class="col-sm-4" data-ng-class="item.length === 1 ? 'col-sm-12' :
+                                    item.length === 2 ? 'col-sm-6' :
+                                    item.length === 3 ? 'col-sm-4' : 'col-sm-4'">
+
+                                                    <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/informasjon/om-geonorge/">Om Geonorge</a>
+                                                    <!-- ngIf: it.HasChildren --><ul class="col-xs-12 ng-scope" ng-if="it.HasChildren">
+                                                        <!-- ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/informasjon/om-geonorge/Prosjekt-nasjonal-geoportal/">Nasjonal geoportal</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                    </ul><!-- end ngIf: it.HasChildren -->
+                                                </li>
+                                            </ul><!-- end ngRepeat: it in item.SubMenuItem --><ul class="ng-scope" data-ng-repeat="it in item.SubMenuItem">
+                                                <li class="col-sm-4" data-ng-class="item.length === 1 ? 'col-sm-12' :
+                                    item.length === 2 ? 'col-sm-6' :
+                                    item.length === 3 ? 'col-sm-4' : 'col-sm-4'">
+
+                                                    <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/informasjon/samarbeidsarenaer/">Samarbeidsarenaer</a>
+                                                    <!-- ngIf: it.HasChildren --><ul class="col-xs-12 ng-scope" ng-if="it.HasChildren">
+                                                        <!-- ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/informasjon/samarbeidsarenaer/Norge-digitalt/">Norge digitalt</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://kartverket.no/Kart/Geodatasamarbeid/Geovekst/">Geovekst</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://kartverket.no/Kart/Geodatasamarbeid/Inspire/">Inspire</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/informasjon/samarbeidsarenaer/Geodataloven/">Geodataloven</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/informasjon/samarbeidsarenaer/den-geografiske-infrastrukturen/">Den geografiske infrastrukturen</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                    </ul><!-- end ngIf: it.HasChildren -->
+                                                </li>
+                                            </ul><!-- end ngRepeat: it in item.SubMenuItem --><ul class="ng-scope" data-ng-repeat="it in item.SubMenuItem">
+                                                <li class="col-sm-4" data-ng-class="item.length === 1 ? 'col-sm-12' :
+                                    item.length === 2 ? 'col-sm-6' :
+                                    item.length === 3 ? 'col-sm-4' : 'col-sm-4'">
+
+                                                    <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/informasjon/aktuelt/">Aktuelt</a>
+                                                    <!-- ngIf: it.HasChildren --><ul class="col-xs-12 ng-scope" ng-if="it.HasChildren">
+                                                        <!-- ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/informasjon/aktuelt/nyheter/">Nyheter</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/informasjon/aktuelt/Tjenestevarsler/">Tjenestevarsler</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/informasjon/aktuelt/Driftsmeldinger-og-teknisk-support/">Driftsmeldinger og teknisk support</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                    </ul><!-- end ngIf: it.HasChildren -->
+                                                </li>
+                                            </ul><!-- end ngRepeat: it in item.SubMenuItem -->
+                                        </li>
+                                    </ul><!-- end ngIf: item.HasChildren -->
+                                </li><!-- end ngRepeat: item in menuItems -->
+                                <li data-ng-repeat="item in menuItems" class="dropdown col-sm-3 ng-scope">
+                                    <!-- ngIf: item.Url == '' -->
+                                    <!-- ngIf: item.HasChildren && item.Url != '' --><a data-ng-if="item.HasChildren &amp;&amp; item.Url != ''" href="http://www.test.geonorge.no/verktoy-for-dataeiere/" target="_self" class="dropdown-toggle ng-binding ng-scope" data-disabled="true" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        For dataeiere
+                                    </a><!-- end ngIf: item.HasChildren && item.Url != '' -->
+                                    <!-- ngIf: item.HasChildren --><ul data-ng-if="item.HasChildren" class="dropdown-menu row ng-scope">
+                                        <li>
+                                            <!-- ngRepeat: it in item.SubMenuItem --><ul class="ng-scope" data-ng-repeat="it in item.SubMenuItem">
+                                                <li class="col-sm-4" data-ng-class="item.length === 1 ? 'col-sm-12' :
+                                    item.length === 2 ? 'col-sm-6' :
+                                    item.length === 3 ? 'col-sm-4' : 'col-sm-4'">
+
+                                                    <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/verktoy-for-dataeiere/Levere-kartdata/">Levere kartdata</a>
+                                                    <!-- ngIf: it.HasChildren --><ul class="col-xs-12 ng-scope" ng-if="it.HasChildren">
+                                                        <!-- ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/verktoy-for-dataeiere/Levere-kartdata/veiledere/">Veiledere</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                    </ul><!-- end ngIf: it.HasChildren -->
+                                                </li>
+                                            </ul><!-- end ngRepeat: it in item.SubMenuItem --><ul class="ng-scope" data-ng-repeat="it in item.SubMenuItem">
+                                                <li class="col-sm-4" data-ng-class="item.length === 1 ? 'col-sm-12' :
+                                    item.length === 2 ? 'col-sm-6' :
+                                    item.length === 3 ? 'col-sm-4' : 'col-sm-4'">
+
+                                                    <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/verktoy-for-dataeiere/verktoy/">Verktøy</a>
+                                                    <!-- ngIf: it.HasChildren --><ul class="col-xs-12 ng-scope" ng-if="it.HasChildren">
+                                                        <!-- ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://produktark.geonorge.no/">Generere produktark</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="https://validering.geonorge.no/validator">Validere metadata</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://editor.geonorge.no/">Redigere metadata</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                    </ul><!-- end ngIf: it.HasChildren -->
+                                                </li>
+                                            </ul><!-- end ngRepeat: it in item.SubMenuItem -->
+                                        </li>
+                                    </ul><!-- end ngIf: item.HasChildren -->
+                                </li><!-- end ngRepeat: item in menuItems -->
+                                <li data-ng-repeat="item in menuItems" class="dropdown col-sm-3 ng-scope">
+                                    <!-- ngIf: item.Url == '' -->
+                                    <!-- ngIf: item.HasChildren && item.Url != '' --><a data-ng-if="item.HasChildren &amp;&amp; item.Url != ''" href="http://www.test.geonorge.no/for-utviklere/" target="_self" class="dropdown-toggle ng-binding ng-scope" data-disabled="true" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        For utviklere
+                                    </a><!-- end ngIf: item.HasChildren && item.Url != '' -->
+                                    <!-- ngIf: item.HasChildren --><ul data-ng-if="item.HasChildren" class="dropdown-menu row ng-scope">
+                                        <li>
+                                            <!-- ngRepeat: it in item.SubMenuItem --><ul class="ng-scope" data-ng-repeat="it in item.SubMenuItem">
+                                                <li class="col-sm-4" data-ng-class="item.length === 1 ? 'col-sm-12' :
+                                    item.length === 2 ? 'col-sm-6' :
+                                    item.length === 3 ? 'col-sm-4' : 'col-sm-4'">
+
+                                                    <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/for-utviklere/api-og-grensesnitt/">API og grensesnitt</a>
+                                                    <!-- ngIf: it.HasChildren -->
+                                                </li>
+                                            </ul><!-- end ngRepeat: it in item.SubMenuItem --><ul class="ng-scope" data-ng-repeat="it in item.SubMenuItem">
+                                                <li class="col-sm-4" data-ng-class="item.length === 1 ? 'col-sm-12' :
+                                    item.length === 2 ? 'col-sm-6' :
+                                    item.length === 3 ? 'col-sm-4' : 'col-sm-4'">
+
+                                                    <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/for-utviklere/verktoy/">Verktøy</a>
+                                                    <!-- ngIf: it.HasChildren --><ul class="col-xs-12 ng-scope" ng-if="it.HasChildren">
+                                                        <!-- ngRepeat: i in it.SubMenuItem -->
+                                                        <li class="ng-scope" data-ng-repeat="i in it.SubMenuItem">
+                                                            <a class="col-xs-12 ng-binding" href="http://www.test.geonorge.no/for-utviklere/verktoy/geonorge-open-source/">Geonorge Open source</a>
+                                                        </li><!-- end ngRepeat: i in it.SubMenuItem -->
+                                                    </ul><!-- end ngIf: it.HasChildren -->
+                                                </li>
+                                            </ul><!-- end ngRepeat: it in item.SubMenuItem -->
+                                        </li>
+                                    </ul><!-- end ngIf: item.HasChildren -->
+                                </li><!-- end ngRepeat: item in menuItems -->
                             </ul>
                         </div>
-                    </nav>
-                </div>
+                    </div><!-- end ngIf: !getMenuError -->
+                </nav>
             </div>
         </div>
     </div>
