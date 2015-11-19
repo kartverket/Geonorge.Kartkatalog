@@ -44,6 +44,7 @@ namespace Kartverket.Metadatakatalog
             bundles.Add(new StyleBundle("~/bundles/shared-menu-styles")
            .Include("~/KartverketSharedMenu/Styles/bootstrap.css")
            .Include("~/KartverketSharedMenu/Styles/geonorge-top/menuTop.css")
+           .Include("~/KartverketSharedMenu/Styles/geonorge-top/logoTop.css")
            .Include("~/KartverketSharedMenu/Styles/geonorge-top/searchTop.css")
            );
 
