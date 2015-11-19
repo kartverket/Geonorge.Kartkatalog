@@ -188,7 +188,7 @@
                         }
                         else if (relativeHierarchyLevel < 0)
                         {
-                            @: </li> </ul>
+                            @:</li></ul>
                                 }
                         else
                         {
@@ -208,7 +208,7 @@
                 }
                 for (int index = 0; index < hierarchyLevel; index++)
                 {
-                    @: </li> </ul>
+                    @:</li></ul>
                         }
 
                 if (Model.HasFilterForFacetField(facet.FacetField))
@@ -418,206 +418,232 @@
     <div class="col-sm-12 col-md-9 pull-right">
         @if (Model.Result != null)
         {
-
-
             <div class="search-results">
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-3">Tittel</div>
+                        <div class="col-sm-2">Type</div>
+                        <div class="col-sm-3">Eier</div>
+                        <div class="col-sm-1">Les mer</div>
+                        <div class="col-sm-1">Vis i kart</div>
+                        <div class="col-sm-1">Last ned</div>
+                    </div>
+                    <div class="menu-separator"></div>
                 @foreach (var item in Model.Result.Items)
                 {
                     <div class="row result-row metadata">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                           @* 
-                            <div class="hidden-xs col-sm-1 col-md-1 col-lg-1 top-padding hide-overflow col-logo">
-        @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
-        {
-            System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
-            string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
-                <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
-            </a>
+                   
+                            @*
+                                                        <div class="hidden-xs col-sm-1 col-md-1 col-lg-1 top-padding hide-overflow col-logo">
+                                    @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
+                                    {
+                                        System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
+                                        string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
+                                        <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
+                                            <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
+                                        </a>
 
 
-        }
-    </div>
-                        *@
-                            <div class="col-no-padding-xs col-xs-12 col-sm-5 col-md-5 col-lg-5 col-title">
+                                    }
+                                </div>
+                            *@
+                        <div class="col-sm-1">
+                            @if (item.IsOpendata)
+                            {
+                                <img title="Åpne data" src="~/Content/img/unlock.png" class="bottom opendata" alt="Åpne data" />
+                            }
+                        </div>
+                            <div class="col-sm-3 col-title">
                                 <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                    <h4 class="role-button" role="button">@item.Title</h4>
+                                    <p class="role-button" role="button">@item.Title</p>
                                 </a>
+                                
+                                @*
+                                    <p>
+                                        @if (item.Abstract != null)
+                                        {
+                                            if (item.Abstract.Length > 650)
+                                            {
+                                                @item.Abstract.Substring(0, 654)<text>...</text>
+                                            }
+                                            else
+                                            {
+                                                @item.Abstract
+                                            }
+                                        }
 
-
+                                    </p>
+                                    <p>
+                                        Tilgjengelig som:
+                                        <span title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
+                                    </p>
+                                *@
+                                
+                            </div>
+                            <div class="col-sm-2">
+                                <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
+                            </div>
+                            <div class="col-sm-3">
                                 <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">
                                     @if (item.Organization != null)
                                     {
-                                        <h5>@item.Organization</h5>
+                                        <p>  @item.Organization</p>
                                     }
 
                                 </a>
-                                @*
-    <p>
-        @if (item.Abstract != null)
-        {
-            if (item.Abstract.Length > 650)
+                            </div>
+                            
+                            <div class="col-sm-1 col-actions">
+                            @if (item.ShowWebsiteLink())
+                            {
+                                <a href="@item.DownloadUrl" title="Besøk nettsiden til @item.Title" target="_blank">
+                                    <span class="glyphicon glyphicon-globe"></span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@item.DownloadUrl" class="disabled" title="Besøk nettsiden til @item.Title" target="_blank">
+                                    <span class="glyphicon glyphicon-globe"></span>
+                                </a>
+                            }
+                            </div>
+
+
+                            <div class="col-sm-1 col-actions">
+                            @if (item.ShowMapLink())
+                            {
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank">
+                                    <span class="glyphicon glyphicon-map-marker"></span>
+                                </a>
+                            }
+                            else if (item.ShowServiceMapLink())
+                            {
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis @item.Title i kart" target="_blank">
+                                    <span class="glyphicon glyphicon-map-marker"></span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" class="disabled" target="_blank">
+                                    <span class="glyphicon glyphicon-map-marker"></span>
+                                </a>
+                            }
+
+                                </div>
+                        <div class="col-sm-1 col-actions">
+                            @if (item.ShowDownloadService())
+                            {
+                                string relativeOrganizationLogoUrl = "";
+                                string relativeDowloadUrl = "";
+
+                                if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
+                                {
+                                    System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
+                                    relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
+                                }
+
+                                if (!string.IsNullOrWhiteSpace(item.DownloadUrl))
+                                {
+                                    System.Uri downloadUrl = new Uri(item.DownloadUrl);
+                                    relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
+                                }
+
+                                <a data-toggle='tooltip'
+                                   data-placement='bottom'
+                                   title='Legg til @item.Title i kurv'
+                                   class='add-to-cart-btn'
+                                   itemname='@item.Title'
+                                   itemuuid='@item.Uuid'
+                                   itemurl='/metadata/uuid/@item.Uuid'
+                                   itemorglogo='@relativeOrganizationLogoUrl'
+                                   itemdisturl='@relativeDowloadUrl'>
+                                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                                </a>
+                            }
+                            else if (item.ShowDownloadLink())
+                            {
+                                <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" target="_blank">
+                                    <span class="glyphicon glyphicon-download-alt"></span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" class="disabled" target="_blank">
+                                    <span class="glyphicon glyphicon-download-alt"></span>
+                                </a>
+                            }
+
+                        </div>
+
+
+
+
+
+                            @*
+            @if (!string.IsNullOrWhiteSpace(item.ProductSheetUrl))
             {
-                @item.Abstract.Substring(0, 654)<text>...</text>
+                <a href="@item.ProductSheetUrl"  title="Produktark for @item.Title" target="_blank">
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                </a>
             }
             else
             {
-                @item.Abstract
+                <a class="disabled" title="Produktark for @item.Title">
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                </a>
             }
+                            *@
+                                @*
+    @if (!string.IsNullOrWhiteSpace(item.ProductSpecificationUrl))
+    {
+        <a href="@item.ProductSpecificationUrl" title="Produktspesifikasjon for @item.Title" target="_blank">
+            <span class="glyphicon glyphicon-list-alt"></span>
+        </a>
+    }
+    else
+    {
+        <a class="disabled" title="Produktspesifikasjon for @item.Title">
+            <span class="glyphicon glyphicon-list-alt"></span>
+        </a>
+    }
+                                *@
+                            @*
+            @if (!string.IsNullOrWhiteSpace(item.LegendDescriptionUrl))
+            {
+                <a href="@item.LegendDescriptionUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Tegneregler for @item.Title" target="_blank">
+                    <span class="glyphicon glyphicon-picture"></span>vis tegneregler
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Tegneregler for @item.Title">
+                    <span class="glyphicon glyphicon-picture"></span>vis tegneregler
+                </a>
+            }
+                            *@
+
+                            @*else
+            {
+                <img src="~/Content/img/lock.png" class="opendata">
+            }
+                            *@
+
+                    
+
+                        @*
+    <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 pull-right col-img">
+
+        @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
+        {
+            System.Uri thumbnailUrl = new Uri(item.ThumbnailUrl);
+            string relativeThunbnailUrl = "//" + thumbnailUrl.Host + thumbnailUrl.PathAndQuery;
+            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                <img alt="@item.Title illustrasjonsbilde" src="@relativeThunbnailUrl" class="img-responsive pull-right">
+            </a>
         }
 
-    </p>
-    <p>
-        Tilgjengelig som:
-        <span title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
-    </p>
-                                *@
-                                <span title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
-                            </div>
-                            <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
-                                @if (item.ShowDownloadService())
-                                {
-                                    string relativeOrganizationLogoUrl = "";
-                                    string relativeDowloadUrl = "";
-
-                                    if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
-                                    {
-                                        System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
-                                        relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                    }
-
-                                    if (!string.IsNullOrWhiteSpace(item.DownloadUrl))
-                                    {
-                                        System.Uri downloadUrl = new Uri(item.DownloadUrl);
-                                        relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
-                                    }
-
-                                    <a data-toggle='tooltip'
-                                       data-placement='bottom'
-                                       title='Legg til @item.Title i kurv'
-                                       class='btn btn-xs btn-bunnmarg btn-default add-to-cart-btn'
-                                       itemname='@item.Title'
-                                       itemuuid='@item.Uuid'
-                                       itemurl='/metadata/uuid/@item.Uuid'
-                                       itemorglogo='@relativeOrganizationLogoUrl'
-                                       itemdisturl='@relativeDowloadUrl'>
-                                        <span class="glyphicon glyphicon-shopping-cart"></span>Legg i kurv
-                                    </a>
-                                }
-                                else if (item.ShowDownloadLink())
-                                {
-                                    <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
-                                        <span class="glyphicon glyphicon-download-alt"></span>last ned
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" class="btn btn-xs btn-bunnmarg btn-default disabled" target="_blank">
-                                        <span class="glyphicon glyphicon-download-alt"></span>last ned
-                                    </a>
-                                }
-
-                                <br />
-                                @if (item.ShowWebsiteLink())
-                                {
-                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Besøk nettsiden til @item.Title" target="_blank">
-                                        <span class="glyphicon glyphicon-globe"></span>besøk nettside
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default disabled" title="Besøk nettsiden til @item.Title" target="_blank">
-                                        <span class="glyphicon glyphicon-globe"></span>besøk nettside
-                                    </a>
-                                }
-                                <br />
-
-
-                                @if (item.ShowMapLink())
-                                {
-                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
-                                        <span class="glyphicon glyphicon-map-marker"></span>vis i kart
-                                    </a>
-                                }
-                                else if (item.ShowServiceMapLink())
-                                {
-                                    <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis @item.Title i kart" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
-                                        <span class="glyphicon glyphicon-map-marker"></span>vis i kart
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" class="btn btn-xs btn-bunnmarg btn-default disabled" target="_blank">
-                                        <span class="glyphicon glyphicon-map-marker"></span>vis i kart
-                                    </a>
-                                }
-
-
-
-                                @if (!string.IsNullOrWhiteSpace(item.ProductSheetUrl))
-                                {
-                                    <a href="@item.ProductSheetUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Produktark for @item.Title" target="_blank">
-                                        <span class="glyphicon glyphicon-info-sign"></span>vis produktark
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Produktark for @item.Title">
-                                        <span class="glyphicon glyphicon-info-sign"></span>vis produktark
-                                    </a>
-                                }
-
-                                @if (!string.IsNullOrWhiteSpace(item.ProductSpecificationUrl))
-                                {
-                                    <a href="@item.ProductSpecificationUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Produktspesifikasjon for @item.Title" target="_blank">
-                                        <span class="glyphicon glyphicon-list-alt"></span>vis produktspesifikasjon
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Produktspesifikasjon for @item.Title">
-                                        <span class="glyphicon glyphicon-list-alt"></span>vis produktspesifikasjon
-                                    </a>
-                                }
-
-                                @if (!string.IsNullOrWhiteSpace(item.LegendDescriptionUrl))
-                                {
-                                    <a href="@item.LegendDescriptionUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Tegneregler for @item.Title" target="_blank">
-                                        <span class="glyphicon glyphicon-picture"></span>vis tegneregler
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Tegneregler for @item.Title">
-                                        <span class="glyphicon glyphicon-picture"></span>vis tegneregler
-                                    </a>
-                                }
-                                @if (item.IsOpendata)
-                                {
-                                    <img title="Åpne data" src="~/Content/img/unlock.png" class="bottom opendata" alt="Åpne data" />
-                                }
-
-                                @*else
-                                    {
-                                        <img src="~/Content/img/lock.png" class="opendata">
-                                    }
-                                *@
-
-                            </div>
-
-                            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 pull-right col-img">
-
-                                @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
-                                {
-                                    System.Uri thumbnailUrl = new Uri(item.ThumbnailUrl);
-                                    string relativeThunbnailUrl = "//" + thumbnailUrl.Host + thumbnailUrl.PathAndQuery;
-                                    <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                        <img alt="@item.Title illustrasjonsbilde" src="@relativeThunbnailUrl" class="img-responsive pull-right">
-                                    </a>
-                                }
-
-                            </div>
-                        </div>
+    </div>
+                        *@
                     </div>
                     <hr />
                 }
