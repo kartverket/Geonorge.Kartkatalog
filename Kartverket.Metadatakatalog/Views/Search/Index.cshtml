@@ -124,7 +124,7 @@
 {
 
     <a data-toggle="collapse" class="facet-sok-tittel collapsed" href="#@facet.FacetField" aria-expanded="false">
-        <h4>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h4><span class="indicator"></span>
+        <p>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</p><span class="indicator"></span>
     </a>
 
     <div class="facet-sok-undertitler collapse" id="@facet.FacetField" aria-expanded="false">
@@ -159,7 +159,7 @@
 @helper DisplayFacetCheckbox(SearchResultFacetViewModel facet)
 {
     <a data-toggle="collapse" class="facet-sok-tittel collapsed" href="#@facet.FacetField" aria-expanded="false">
-        <h4>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h4><span class="indicator"></span>
+        <p>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</p><span class="indicator"></span>
     </a>
 
     <div class="facet-sok-undertitler collapse" id="@facet.FacetField" aria-expanded="false">
@@ -644,8 +644,7 @@
 
     </div>
                         *@
-                    </div>
-                    <hr />
+                    </div>            
                 }
             </div>
 

@@ -15,23 +15,48 @@
 }
 
 
-    .facet-sok-tittel h4 {
+    .facet-sok-tittel p {
         display: inline;
-        font-size: 18px;
+        font-size: 16px;
+        line-height: 22pt;
     }
 
 
     .facet-sok-tittel .indicator {
         float: right;
-        font-family: 'Glyphicons Halflings';
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        background-image: url("/Content/img/chevron-up.svg");
+        width: 29px;
+        height: 29px;
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-position: center;
     }
 
         .facet-sok-tittel .indicator:before {
-            content: "\e113";
+            /* content: "\e113";*/
         }
 
-    .facet-sok-tittel.collapsed .indicator:before {
-        content: "\e114";
+    .facet-sok-tittel.collapsed .indicator {
+        background-image: url("/Content/img/chevron-down.svg");
+    }
+
+.facet-sok-undertitler {
+}
+
+    .facet-sok-undertitler li a {
+        font-size: 14px;
+        line-height: 16px;
+        font-style: normal;
+    }
+
+        .facet-sok-undertitler li a:hover {
+            font-size: 14px;
+            line-height: 16px;
+        }
+
+.facet-sok-emne {
+}
+
+    .facet-sok-emne .block {
+        padding-top: 0;
     }

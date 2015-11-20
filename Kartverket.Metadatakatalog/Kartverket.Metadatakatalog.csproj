@@ -287,6 +287,9 @@
     <Content Include="Content\download.css" />
     <Content Include="Content\common.css" />
     <Content Include="Content\geonorge-default.css" />
+    <Content Include="Content\geonorge-colors.css" />
+    <Content Include="Content\img\chevron-down.svg" />
+    <Content Include="Content\img\chevron-up.svg" />
     <Content Include="Content\img\favicon.ico" />
     <Content Include="Content\img\geonorge.png" />
     <Content Include="Content\img\kartverket.png" />
