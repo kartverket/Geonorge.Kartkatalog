@@ -51,7 +51,7 @@ namespace Kartverket.Metadatakatalog
 
             bundles.Add(new StyleBundle("~/Content/download").Include(
                 "~/Content/chosen.css",
-                "~/Content/chosen_custom.css",
+                "~/Content/download.css",
                 "~/Content/map-modal.css"));
 
             bundles.Add(new StyleBundle("~/Content/css_old").Include(
@@ -65,7 +65,8 @@ namespace Kartverket.Metadatakatalog
                       "~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/custom.css"));
             // "~/Content/jquery.typeahead.css",
             //bundles.Add(new StyleBundle("~/Content/css").Include(
             //          "~/Content/bootstrap.css",

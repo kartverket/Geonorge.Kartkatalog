@@ -101,6 +101,15 @@ $(document).ready(function () {
             $(".progress-bar").text(objCountLoaded + ' av ' + objCount + ' datasett er lastet');
         });
     }
+
+
+    // Legge til uuid i _NorgesKart
+    $('#orderlist').on('click', 'button.selectPolygon-button', (function (e) {
+
+        var uuid = $(this).attr('uuid');
+        console.log(uuid);
+        $('#norgeskartmodal #setcoordinates').attr('uuid', uuid);
+    }));
 });
 
 
@@ -134,6 +143,7 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
     if (supportsPolygonSelection == 'false') {
         var formElement = $('#orderuuid' + uuid + ' .btn');
         formElement.addClass('disabled');
+        formElement.attr('disabled', true);
     }
 }
 
@@ -266,11 +276,7 @@ $(window).load(function () {
     }
 
 
-    // Legge til uuid i _NorgesKart
-    $('#orderlist').on('click', '.selectPolygon button', (function (e) {
-        var uuid = $(this).attr('uuid');
-        $('#norgeskartmodal #setcoordinates').attr('uuid', uuid);
-    }));
+
 
 
     // Fjerning av datasett fra handlekurv
