@@ -8,3 +8,30 @@
     margin: 0px;
     border-radius: 0px;
 }
+
+
+.facet-sok-tittel {
+    display: block;
+}
+
+
+    .facet-sok-tittel h4 {
+        display: inline;
+        font-size: 18px;
+    }
+
+
+    .facet-sok-tittel .indicator {
+        float: right;
+        font-family: 'Glyphicons Halflings';
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+        .facet-sok-tittel .indicator:before {
+            content: "\e113";
+        }
+
+    .facet-sok-tittel.collapsed .indicator:before {
+        content: "\e114";
+    }

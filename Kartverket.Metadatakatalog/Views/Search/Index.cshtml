@@ -123,11 +123,11 @@
 @helper DisplayFacet(SearchResultFacetViewModel facet)
 {
 
-    <a data-toggle="collapse" class="facet-sok-tittel" href="#@facet.FacetField">
+    <a data-toggle="collapse" class="facet-sok-tittel collapsed" href="#@facet.FacetField" aria-expanded="false">
         <h4>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h4><span class="indicator"></span>
     </a>
 
-    <div class="facet-sok-undertitler collapse in" id="@facet.FacetField">
+    <div class="facet-sok-undertitler collapse" id="@facet.FacetField" aria-expanded="false">
         <ul>
             @foreach (var facetResult in facet.FacetResults)
             {
@@ -158,11 +158,11 @@
 
 @helper DisplayFacetCheckbox(SearchResultFacetViewModel facet)
 {
-    <a data-toggle="collapse" class="facet-sok-tittel" href="#@facet.FacetField">
+    <a data-toggle="collapse" class="facet-sok-tittel collapsed" href="#@facet.FacetField" aria-expanded="false">
         <h4>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h4><span class="indicator"></span>
     </a>
 
-    <div class="facet-sok-undertitler collapse in" id="@facet.FacetField">
+    <div class="facet-sok-undertitler collapse" id="@facet.FacetField" aria-expanded="false">
         <ul>
             @{
                 string previousFacetLinkName = null;
