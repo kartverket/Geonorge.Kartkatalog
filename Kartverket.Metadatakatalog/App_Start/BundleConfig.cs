@@ -17,7 +17,7 @@ namespace Kartverket.Metadatakatalog
             "~/KartverketSharedMenu/Scripts/geonorge-top/searchOptions/" + ConfigurationManager.AppSettings["SearchOptionsFile"],
             "~/KartverketSharedMenu/Scripts/geonorge-top/menuTopController.js",
             "~/KartverketSharedMenu/Scripts/geonorge-top/searchTopController.js",
-            "~/KartverketSharedMenu/Scripts/bootstrap.js",
+           // "~/KartverketSharedMenu/Scripts/bootstrap.js",
             "~/KartverketSharedMenu/Scripts/ui-bootstrap-0.14.3.js",
             "~/KartverketSharedMenu/Scripts/geonorge-common/baseUrl.js",
             "~/KartverketSharedMenu/Scripts/geonorge-common/common.js"
@@ -47,6 +47,12 @@ namespace Kartverket.Metadatakatalog
            .Include("~/KartverketSharedMenu/Styles/geonorge-top/logoTop.css")
            .Include("~/KartverketSharedMenu/Styles/geonorge-top/searchTop.css")
            );
+
+
+            bundles.Add(new StyleBundle("~/Content/download").Include(
+                "~/Content/chosen.css",
+                "~/Content/chosen_custom.css",
+                "~/Content/map-modal.css"));
 
             bundles.Add(new StyleBundle("~/Content/css_old").Include(
                       "~/Content/bootstrap.css",

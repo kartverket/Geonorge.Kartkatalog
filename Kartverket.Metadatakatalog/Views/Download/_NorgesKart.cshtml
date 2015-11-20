@@ -1,7 +1,7 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
 <script type="text/javascript" src="~/Scripts/easyXDM.js"></script>
 
-<div class="modal-dialog" id="norgeskartmodal" style="width: 85%;">
+<div class="modal-dialog" id="norgeskartmodal">
     <div class="modal-content">
         <div id="viewer" role="main" style="height:100%">
             <div id="container"></div>
@@ -45,7 +45,7 @@
         iframe.height(iframeHeight);
     }
 
-    $(window).load(function () {
+    /*$(window).load(function () {
         var iframe = $('#viewer iframe');
         resizeIframe(iframe);
         window.onresize = function (event) {
@@ -53,6 +53,6 @@
         };
     });
 
-
+*/
 </script>
 

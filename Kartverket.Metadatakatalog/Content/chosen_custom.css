@@ -1,0 +1,121 @@
+﻿
+/* Chosen select list */
+
+.chosen-container {
+    width: 100% !important;
+}
+
+.form-group.disabled, .form-group.disabled .btn:hover {
+    cursor: not-allowed !important;
+}
+
+.disabled .chosen-container {
+    pointer-events: none !important;
+}
+
+.disabled .btn {
+    opacity: 0.65;
+    pointer-events: none !important;
+}
+
+.disabled .chosen-container:hover {
+}
+
+.disabled .chosen-container .chosen-choices {
+    background-color: #eee;
+}
+
+.chosen-input-group {
+    width: calc(100% - 37px);
+}
+
+    .chosen-input-group button.btn {
+        border-top-right-radius: 4px !important;
+        border-bottom-right-radius: 4px !important;
+    }
+
+        .chosen-input-group button.btn:hover {
+            border-top-right-radius: 4px !important;
+            border-bottom-right-radius: 4px !important;
+        }
+
+.chosen-container-multi .chosen-choices {
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+    background-image: none;
+    border: 1px solid #CCC;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+
+    .chosen-container-multi .chosen-choices:focus {
+        border-color: #66AFE9;
+        outline: 0px none;
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(102, 175, 233, 0.6);
+    }
+
+    .chosen-container-multi .chosen-choices li.search-choice {
+        background: #FFF;
+        border: 1px solid #CCC;
+        padding: 3px 25px 3px 5px;
+        box-shadow: none;
+    }
+
+        .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+            background: none;
+            top: 3px;
+            font-size: 11px;
+            color: #777;
+            padding-left: 3px;
+            margin-right: 5px;
+            border-left: 1px solid #DDD;
+        }
+
+            .chosen-container-multi .chosen-choices li.search-choice .search-choice-close:hover {
+                text-decoration: none;
+                color: #333;
+            }
+
+            .chosen-container-multi .chosen-choices li.search-choice .search-choice-close:before {
+                font-family: "Glyphicons Halflings";
+                content: "\e014";
+            }
+
+.chosen-container .chosen-results li.highlighted {
+    background-color: #337AB7;
+    background-image: none;
+}
+
+
+.list-icon {
+    text-align: center;
+}
+
+    .list-icon img {
+        max-height: 75px;
+        max-width: 100%;
+    }
+
+.list-btn-remove {
+    line-height: 1.4em;
+    font-size: 13px;
+    border-left: 1px solid #CCC;
+    padding-left: 5px;
+    color: #777;
+}
+
+    .list-btn-remove:hover {
+        cursor: pointer;
+        color: #333;
+    }
+
+
+.btn-nodivider .glyphicon {
+    padding-right: 0;
+    margin-right: 0;
+    border-right: 0;
+}
+
+.input-group .btn.btn-fullheight {
+    height: 100%;
+    position: absolute;
+    top: 0;
+}
