@@ -1,7 +1,8 @@
 ﻿
+
 (function () {
     var app = angular.module("geonorge");
-
+    var baseurl = 'http://www.test.geonorge.no';
     app.controller('menuTopController', [
       '$scope', '$http',
       function ($scope, $http) {
@@ -20,8 +21,8 @@
                   method: 'GET',
                   url: menuService,
                   headers: {
-                      'Content-Type': 'application/json; charset=utf-8',
-                      'accept': '*/*'
+                      'Content-Type': 'application/json; charset=utf-8'
+                      
                   },
                   data: {}
               });

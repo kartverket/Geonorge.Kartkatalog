@@ -15,13 +15,11 @@ namespace Kartverket.Metadatakatalog
             "~/KartverketSharedMenu/Scripts/jquery-1.11.3.min.js",
             "~/KartverketSharedMenu/Scripts/geonorge/app.js",
             "~/KartverketSharedMenu/Scripts/geonorge-top/searchOptions/" + ConfigurationManager.AppSettings["SearchOptionsFile"],
-            "~/KartverketSharedMenu/Scripts/geonorge-top/menuTopController.js",
             "~/KartverketSharedMenu/Scripts/geonorge-top/searchTopController.js",
-           // "~/KartverketSharedMenu/Scripts/bootstrap.js",
             "~/KartverketSharedMenu/Scripts/ui-bootstrap-0.14.3.js",
             "~/KartverketSharedMenu/Scripts/geonorge-common/baseUrl.js",
-            "~/KartverketSharedMenu/Scripts/geonorge-common/common.js"
-
+            "~/KartverketSharedMenu/Scripts/geonorge-common/common.js",
+            "~/KartverketSharedMenu/Scripts/geonorge-top/menuTopController.js"
             ));
 
 
