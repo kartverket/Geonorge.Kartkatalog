@@ -62,10 +62,25 @@
     }
 
 
-label {
+.search-results .result-row {
+    padding: 5px 0 0;
+}
+
+.search-results hr {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.label {
     font-family: "Raleway",sans-serif;
     font-weight: normal;
-    font-size: 16px;
+    font-size: 12px;
+}
+
+h1 .label {
+    font-size: 20pt;
+    margin-left: 26px;
+    vertical-align: middle;
 }
 
 .btn {

@@ -1,9 +1,9 @@
 ﻿.label-success {
-    background-color: #a9c47f;
+    background-color: #fe5000;
 }
 
 .label-warning {
-    background-color: #f0b323;
+    background-color: #414042;
 }
 
 .label-danger {
@@ -11,7 +11,17 @@
 }
 
 .label-info {
-    background-color: #7da1c4;
+    background-color: #403a60;
 }
 
+.btn {
+    background-color: #7DA1C4;
+    transition: all 0.35s linear 0s;
+    color: #FFF;
+    border: none;
+}
 
+.btn:hover{
+    background-color: #FE5000;
+    color: #FFF;
+}
