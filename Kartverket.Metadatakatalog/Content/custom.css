@@ -23,13 +23,16 @@
 
 
     .facet-sok-tittel .indicator {
-        float: right;
-        background-image: url("/Content/img/chevron-up.svg");
-        width: 29px;
-        height: 29px;
+        
+        background-image: url("/Content/img/arrow-down.svg");
+        width: 11px;
+        height: 12px;
+        padding: 0;
         background-repeat: no-repeat;
         background-size: 100%;
         background-position: center;
+        display: inline-block;
+        margin-right: 7px;
     }
 
         .facet-sok-tittel .indicator:before {
@@ -37,7 +40,7 @@
         }
 
     .facet-sok-tittel.collapsed .indicator {
-        background-image: url("/Content/img/chevron-down.svg");
+        background-image: url("/Content/img/arrow-right.svg");
     }
 
 .facet-sok-undertitler {
@@ -63,7 +66,11 @@
 
 
 .search-results .result-row {
-    padding: 5px 0 0;
+    padding: 7px 0 0;
+}
+
+.search-results .result-row p{
+    margin: 0 0 7px;
 }
 
 .search-results hr {
@@ -74,7 +81,7 @@
 .label {
     font-family: "Raleway",sans-serif;
     font-weight: normal;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 h1 .label {

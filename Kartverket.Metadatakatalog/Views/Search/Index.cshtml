@@ -124,7 +124,7 @@
 {
 
     <a data-toggle="collapse" class="facet-sok-tittel collapsed" href="#@facet.FacetField" aria-expanded="false">
-        <p>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</p><span class="indicator"></span>
+        <span class="indicator"></span><p>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</p>
     </a>
 
     <div class="facet-sok-undertitler collapse" id="@facet.FacetField" aria-expanded="false">
@@ -159,7 +159,7 @@
 @helper DisplayFacetCheckbox(SearchResultFacetViewModel facet)
 {
     <a data-toggle="collapse" class="facet-sok-tittel collapsed" href="#@facet.FacetField" aria-expanded="false">
-        <p>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</p><span class="indicator"></span>
+        <span class="indicator"></span><p>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</p>
     </a>
 
     <div class="facet-sok-undertitler collapse" id="@facet.FacetField" aria-expanded="false">
@@ -395,8 +395,7 @@
     </article>
 *@
 <div class="row">
-    <div class="col-sm-12 col-md-3 pull-left">
-        <div class="hidden-sm hidden-xs">
+    <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs"> 
             <aside class="facet-sok-emne">
                 <div class="block listblock" id="filterInner">
                     <h3 class="">Søkefilter<span class="glyphicon glyphicon-filter pull-right"></span></h3>
@@ -413,9 +412,8 @@
                         @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
                 </div>
             </aside>
-        </div>
     </div>
-    <div class="col-sm-12 col-md-9 pull-right">
+    <div class="col-sm-12 col-md-9">
         @if (Model.Result != null)
         {
             <div class="search-results">

@@ -288,6 +288,8 @@
     <Content Include="Content\common.css" />
     <Content Include="Content\geonorge-default.css" />
     <Content Include="Content\geonorge-colors.css" />
+    <Content Include="Content\img\arrow-down.svg" />
+    <Content Include="Content\img\arrow-right.svg" />
     <Content Include="Content\img\chevron-down.svg" />
     <Content Include="Content\img\chevron-up.svg" />
     <Content Include="Content\img\favicon.ico" />
