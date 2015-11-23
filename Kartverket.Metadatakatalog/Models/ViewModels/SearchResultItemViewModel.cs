@@ -41,7 +41,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             if (Type=="dataset") t="Datasett";
             else if (Type=="software") t="Applikasjon";
             else if (Type=="service") t="Tjeneste";
-            else if (Type == "servicelayer") t = "WMS-lag (Tjenestelag)";
+            else if (Type == "servicelayer") t = "Tjenestelag";
             else if (Type=="series") t="Datasettserie";
 
             return t;
