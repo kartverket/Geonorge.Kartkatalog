@@ -1,4 +1,16 @@
-﻿
+﻿#orderlist h2 {
+    margin-top: 0;
+    display: inline-block;
+}
+
+#orderlist a {
+    text-decoration: none;
+}
+
+#orderlist ul li {
+    font-style: normal;
+}
+
 /* Chosen select list */
 
 .chosen-container {
@@ -25,9 +37,24 @@
     background-color: #eee;
 }
 
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+    color: #414042;
+    font-family: "Open Sans",sans-serif;
+    font-size: 14pt;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+}
+
 .chosen-input-group {
     width: calc(100% - 37px);
 }
+
+    .chosen-input-group .chosen-container .chosen-choices {
+        border-top-right-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+    }
+
 
     .chosen-input-group button.btn {
         border-top-right-radius: 4px !important;
@@ -40,16 +67,22 @@
         }
 
 .chosen-container-multi .chosen-choices {
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+    /*box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;*/
     background-image: none;
     border: 1px solid #CCC;
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    border: none;
+    border-bottom: 2.5px solid #FE5000;
+    border: 1px solid #DFDCDA;
+    border-radius: 3px;
 }
 
     .chosen-container-multi .chosen-choices:focus {
         border-color: #66AFE9;
         outline: 0px none;
         box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(102, 175, 233, 0.6);
+        border: none;
+        box-shadow: none;
     }
 
     .chosen-container-multi .chosen-choices li.search-choice {
@@ -57,12 +90,21 @@
         border: 1px solid #CCC;
         padding: 3px 25px 3px 5px;
         box-shadow: none;
+        font-size: 16px;
     }
+
+        .chosen-container-multi .chosen-choices li.search-choice:before,
+        .chosen-container-multi .chosen-choices li.search-field:before,
+        .chosen-container-multi .chosen-results li:before {
+            content: none;
+        }
+
 
         .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
             background: none;
-            top: 3px;
-            font-size: 11px;
+            top: 4px;
+            font-size: 12px;
+            line-height: 12px;
             color: #777;
             padding-left: 3px;
             margin-right: 5px;
@@ -79,9 +121,52 @@
                 content: "\e014";
             }
 
+.chosen-container .chosen-results li:first-child {
+    margin-top: 12px;
+}
+
+.chosen-container .chosen-results li {
+    font-size: 13pt;
+    line-height: 22pt;
+    font-family: "Open Sans",sans-serif;
+    color: #3867C8;
+    padding: 0;
+}
+
+    .chosen-container .chosen-results li.group-result {
+        color: #414041;
+        font-weight: 600;
+        margin-bottom: 5px;
+        margin-top: 17px;
+    }
+
+    .chosen-container .chosen-results li.group-option {
+        color: #3867C8;
+        font-weight: 400;
+    }
+
+.chosen-container-multi .chosen-drop .result-selected {
+    color: #968c83 !important;
+}
+
+/* .chosen-container-multi .chosen-drop .result-selected:before {
+        color: #FE5000;
+        content: "•";
+        font-size: 16pt;
+        font-style: normal;
+        padding-right: 10px;
+    }*/
+
+.chosen-container .chosen-results li.active-result {
+    color: #3867C8;
+}
+
+
+
 .chosen-container .chosen-results li.highlighted {
-    background-color: #337AB7;
+    background-color: inherit;
     background-image: none;
+    text-decoration: underline;
 }
 
 
@@ -95,16 +180,16 @@
     }
 
 .list-btn-remove {
-    line-height: 1.4em;
-    font-size: 13px;
     border-left: 1px solid #CCC;
     padding-left: 5px;
     color: #777;
+    font-size: 12pt;
 }
 
     .list-btn-remove:hover {
         cursor: pointer;
         color: #333;
+        font-size: 12pt;
     }
 
 
@@ -120,7 +205,21 @@
     top: 0;
 }
 
+.chosen-container-active .chosen-choices {
+    box-shadow: none;
+}
 
+.chosen-container .chosen-drop {
+    background-color: #FFF;
+    border-radius: 3px;
+    box-shadow: 0px 0px 10px #BCBEC0;
+    border: none;
+    padding-bottom: 12px;
+    padding-left: 34.6px;
+}
+
+.chosen-container .chosen-results {
+}
 
 .chosen-container-multi .chosen-choices.has-error {
     box-shadow: 0px 0px 4px -2px #A94442 inset;

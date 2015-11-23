@@ -60,3 +60,19 @@
     .facet-sok-emne .block {
         padding-top: 0;
     }
+
+
+label {
+    font-family: "Raleway",sans-serif;
+    font-weight: normal;
+    font-size: 16px;
+}
+
+.btn {
+    font-family: "Raleway",sans-serif;
+    font-weight: normal;
+}
+
+.tooltip-inner {
+    min-width: 100px;
+}

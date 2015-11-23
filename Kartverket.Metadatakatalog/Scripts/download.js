@@ -105,9 +105,7 @@ $(document).ready(function () {
 
     // Legge til uuid i _NorgesKart
     $('#orderlist').on('click', 'button.selectPolygon-button', (function (e) {
-
         var uuid = $(this).attr('uuid');
-        console.log(uuid);
         $('#norgeskartmodal #setcoordinates').attr('uuid', uuid);
     }));
 });
@@ -337,7 +335,7 @@ $(window).load(function () {
         });
     }
 
-    $('.body-content').on('change', 'select', (function (e) {
+    $('#orderlist').on('change', 'select', (function (e) {
         var orderItems = JSON.parse(localStorage["orderItems"]);
         setSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
         setSelectedValues(orderItems, 'selectFormater', 'formats');
