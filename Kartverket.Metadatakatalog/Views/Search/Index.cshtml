@@ -18,10 +18,21 @@
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
 </div>
-
+<section class="heading">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>
+                Kartkatalogen
+            </h1>
+        </div>
+        <div class="col-sm-12">
+            <span class="separator-lg"></span>
+        </div>
+    </div>
+</section>
 <div class="row">
-    <div class="col-md-4">
-        Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
+    <div class="col-md-3">
+        <p>Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:</p>
 
         <ul class="pagination pagination-sm btn-group">
             @if (Model.IsFirstButtonActive())
@@ -58,67 +69,68 @@
 
     </div>
     <div class="col-md-4 view-navigation">
-        Velg visningsform:
+        <p>Velg visningsform:</p>
         <ul class="nav nav-pills pull-left">
-            <li><a onclick="tableView()" id="button-tableView" class=""><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Tabell</a></li>
+            <li class=""><a onclick="tableView()" id="button-tableView" class=""><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Tabell</a></li>
             <li><a onclick="listView()" id="button-listView" class="active"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Liste</a></li>
             <li><a onclick="galleryView()" id="button-galleryView" class=""><span class="glyphicon glyphicon-th" aria-hidden="true"></span> Galleri</a></li>
         </ul>
     </div>
-    <div class="col-md-4">
-        @DisplayPagination()
-    </div>
+    @*  <div class="col-md-4">
+           @DisplayPagination()
+        </div>
+    *@
 </div>
 
-@helper DisplayPagination()
-{
+    @helper DisplayPagination()
+    {
 
-    <span>Sorter etter:</span>
-    <select id="orderby" class="form-control">
-        @if (Model.orderby == 0)
-        {
-            <option value="@Url.Action("Index", Model.ParamsForOrderByScoreLink())" selected="selected">Relevans</option>
-        }
-        else
-        {
-            <option value="@Url.Action("Index", Model.ParamsForOrderByScoreLink())">Relevans</option>
-        }
-        @if (Model.orderby == 1)
-        {
-            <option value="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" selected="selected">Navn</option>
-        }
-        else
-        {
-            <option value="@Url.Action("Index", Model.ParamsForOrderByTitleLink())">Navn</option>
-        }
-        @if (Model.orderby == 2)
-        {
-            <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" selected="selected">Organisasjon</option>
-        }
-        else
-        {
-            <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())">Organisasjon</option>
-        }
-        @if (Model.orderby == 3)
-        {
-            <option value="@Url.Action("Index", Model.ParamsForOrderByMetadataUpdateLink())" selected="selected">Dato oppdatert (metadata)</option>
-        }
-        else
-        {
-            <option value="@Url.Action("Index", Model.ParamsForOrderByMetadataUpdateLink())">Dato oppdatert (metadata)</option>
-        }
-        @if (Model.orderby == 4)
-        {
-            <option value="@Url.Action("Index", Model.ParamsForOrderByResourceUpdateLink())" selected="selected">Dato oppdatert (ressurs)</option>
-        }
-        else
-        {
-            <option value="@Url.Action("Index", Model.ParamsForOrderByResourceUpdateLink())">Dato oppdatert (ressurs)</option>
-        }
+        <span>Sorter etter:</span>
+        <select id="orderby" class="form-control">
+            @if (Model.orderby == 0)
+            {
+                <option value="@Url.Action("Index", Model.ParamsForOrderByScoreLink())" selected="selected">Relevans</option>
+            }
+            else
+            {
+                <option value="@Url.Action("Index", Model.ParamsForOrderByScoreLink())">Relevans</option>
+            }
+            @if (Model.orderby == 1)
+            {
+                <option value="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" selected="selected">Navn</option>
+            }
+            else
+            {
+                <option value="@Url.Action("Index", Model.ParamsForOrderByTitleLink())">Navn</option>
+            }
+            @if (Model.orderby == 2)
+            {
+                <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" selected="selected">Organisasjon</option>
+            }
+            else
+            {
+                <option value="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())">Organisasjon</option>
+            }
+            @if (Model.orderby == 3)
+            {
+                <option value="@Url.Action("Index", Model.ParamsForOrderByMetadataUpdateLink())" selected="selected">Dato oppdatert (metadata)</option>
+            }
+            else
+            {
+                <option value="@Url.Action("Index", Model.ParamsForOrderByMetadataUpdateLink())">Dato oppdatert (metadata)</option>
+            }
+            @if (Model.orderby == 4)
+            {
+                <option value="@Url.Action("Index", Model.ParamsForOrderByResourceUpdateLink())" selected="selected">Dato oppdatert (ressurs)</option>
+            }
+            else
+            {
+                <option value="@Url.Action("Index", Model.ParamsForOrderByResourceUpdateLink())">Dato oppdatert (ressurs)</option>
+            }
 
-    </select>
+        </select>
 
-}
+    }
 
 @helper DisplayFacet(SearchResultFacetViewModel facet)
 {
@@ -145,7 +157,7 @@
             {
                 <li class="filter-options">
                     <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
-                        <span class="glyphicon glyphicon-remove"> </span>
+                        <span class="glyphicon glyphicon-plus"> </span>
                         Vis alle
                     </button>
                 </li>
@@ -395,103 +407,103 @@
     </article>
 *@
 <div class="row">
-    <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs"> 
-            <aside class="facet-sok-emne">
-                <div class="block listblock" id="filterInner">
-                    <h3 class="">Søkefilter<span class="glyphicon glyphicon-filter pull-right"></span></h3>
-                    <span class="separator-small"></span>
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))
-                    @DisplayFacetCheckbox(Model.Result.Facets.First(f => f.FacetField == "area"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "DistributionProtocols"))
-                    @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
+    <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
+        <aside class="facet-sok-emne">
+            <div class="block listblock" id="filterInner">
+                <h3 class="">Søkefilter<span class="glyphicon glyphicon-filter pull-right"></span></h3>
+                <span class="separator-small"></span>
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))
+                @DisplayFacetCheckbox(Model.Result.Facets.First(f => f.FacetField == "area"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "DistributionProtocols"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
 
-                    @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))@*
-                        @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
-                </div>
-            </aside>
+                @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))@*
+                    @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
+            </div>
+        </aside>
     </div>
     <div class="col-sm-12 col-md-9">
         @if (Model.Result != null)
         {
             <div class="search-results">
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-3">Tittel</div>
-                        <div class="col-sm-2">Type</div>
-                        <div class="col-sm-3">Eier</div>
-                        <div class="col-sm-1">Les mer</div>
-                        <div class="col-sm-1">Vis i kart</div>
-                        <div class="col-sm-1">Last ned</div>
-                    </div>
-                    <div class="menu-separator"></div>
+                <div class="row">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-3">Tittel</div>
+                    <div class="col-sm-2">Type</div>
+                    <div class="col-sm-3">Eier</div>
+                    <div class="col-sm-1">Les mer</div>
+                    <div class="col-sm-1">Vis i kart</div>
+                    <div class="col-sm-1">Last ned</div>
+                </div>
+                <div class="menu-separator"></div>
                 @foreach (var item in Model.Result.Items)
                 {
                     <div class="row result-row metadata">
-                   
-                            @*
-                                                        <div class="hidden-xs col-sm-1 col-md-1 col-lg-1 top-padding hide-overflow col-logo">
-                                    @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
-                                    {
-                                        System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
-                                        string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                        <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
-                                            <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
-                                        </a>
+
+                        @*
+                                                    <div class="hidden-xs col-sm-1 col-md-1 col-lg-1 top-padding hide-overflow col-logo">
+                                @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
+                                {
+                                    System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
+                                    string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
+                                    <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
+                                        <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
+                                    </a>
 
 
-                                    }
-                                </div>
-                            *@
+                                }
+                            </div>
+                        *@
                         <div class="col-sm-1">
                             @if (item.IsOpendata)
                             {
                                 <img title="Åpne data" src="~/Content/img/unlock.png" class="bottom opendata" alt="Åpne data" />
                             }
                         </div>
-                            <div class="col-sm-3 col-title">
-                                <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                    <p class="role-button" role="button">@item.Title</p>
-                                </a>
-                                
-                                @*
-                                    <p>
-                                        @if (item.Abstract != null)
-                                        {
-                                            if (item.Abstract.Length > 650)
-                                            {
-                                                @item.Abstract.Substring(0, 654)<text>...</text>
-                                            }
-                                            else
-                                            {
-                                                @item.Abstract
-                                            }
-                                        }
+                        <div class="col-sm-3 col-title">
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                                <p class="role-button" role="button">@item.Title</p>
+                            </a>
 
-                                    </p>
-                                    <p>
-                                        Tilgjengelig som:
-                                        <span title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
-                                    </p>
-                                *@
-                                
-                            </div>
-                            <div class="col-sm-2">
-                                <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
-                            </div>
-                            <div class="col-sm-3">
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">
-                                    @if (item.Organization != null)
+                            @*
+                                <p>
+                                    @if (item.Abstract != null)
                                     {
-                                        <p>  @item.Organization</p>
+                                        if (item.Abstract.Length > 650)
+                                        {
+                                            @item.Abstract.Substring(0, 654)<text>...</text>
+                                        }
+                                        else
+                                        {
+                                            @item.Abstract
+                                        }
                                     }
 
-                                </a>
-                            </div>
-                            
-                            <div class="col-sm-1 col-actions">
+                                </p>
+                                <p>
+                                    Tilgjengelig som:
+                                    <span title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
+                                </p>
+                            *@
+
+                        </div>
+                        <div class="col-sm-2">
+                            <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">
+                                @if (item.Organization != null)
+                                {
+                                    <p>  @item.Organization</p>
+                                }
+
+                            </a>
+                        </div>
+
+                        <div class="col-sm-1 col-actions">
                             @if (item.ShowWebsiteLink())
                             {
                                 <a href="@item.DownloadUrl" title="Besøk nettsiden til @item.Title" target="_blank">
@@ -504,10 +516,10 @@
                                     <span class="glyphicon glyphicon-globe"></span>
                                 </a>
                             }
-                            </div>
+                        </div>
 
 
-                            <div class="col-sm-1 col-actions">
+                        <div class="col-sm-1 col-actions">
                             @if (item.ShowMapLink())
                             {
                                 <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank">
@@ -527,7 +539,7 @@
                                 </a>
                             }
 
-                                </div>
+                        </div>
                         <div class="col-sm-1 col-actions">
                             @if (item.ShowDownloadService())
                             {
@@ -577,73 +589,73 @@
 
 
 
-                            @*
-            @if (!string.IsNullOrWhiteSpace(item.ProductSheetUrl))
-            {
-                <a href="@item.ProductSheetUrl"  title="Produktark for @item.Title" target="_blank">
-                    <span class="glyphicon glyphicon-info-sign"></span>
-                </a>
-            }
-            else
-            {
-                <a class="disabled" title="Produktark for @item.Title">
-                    <span class="glyphicon glyphicon-info-sign"></span>
-                </a>
-            }
-                            *@
-                                @*
-    @if (!string.IsNullOrWhiteSpace(item.ProductSpecificationUrl))
-    {
-        <a href="@item.ProductSpecificationUrl" title="Produktspesifikasjon for @item.Title" target="_blank">
-            <span class="glyphicon glyphicon-list-alt"></span>
-        </a>
-    }
-    else
-    {
-        <a class="disabled" title="Produktspesifikasjon for @item.Title">
-            <span class="glyphicon glyphicon-list-alt"></span>
-        </a>
-    }
-                                *@
-                            @*
-            @if (!string.IsNullOrWhiteSpace(item.LegendDescriptionUrl))
-            {
-                <a href="@item.LegendDescriptionUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Tegneregler for @item.Title" target="_blank">
-                    <span class="glyphicon glyphicon-picture"></span>vis tegneregler
-                </a>
-            }
-            else
-            {
-                <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Tegneregler for @item.Title">
-                    <span class="glyphicon glyphicon-picture"></span>vis tegneregler
-                </a>
-            }
-                            *@
+                        @*
+                            @if (!string.IsNullOrWhiteSpace(item.ProductSheetUrl))
+                            {
+                                <a href="@item.ProductSheetUrl"  title="Produktark for @item.Title" target="_blank">
+                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="disabled" title="Produktark for @item.Title">
+                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                </a>
+                            }
+                        *@
+                        @*
+                            @if (!string.IsNullOrWhiteSpace(item.ProductSpecificationUrl))
+                            {
+                                <a href="@item.ProductSpecificationUrl" title="Produktspesifikasjon for @item.Title" target="_blank">
+                                    <span class="glyphicon glyphicon-list-alt"></span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="disabled" title="Produktspesifikasjon for @item.Title">
+                                    <span class="glyphicon glyphicon-list-alt"></span>
+                                </a>
+                            }
+                        *@
+                        @*
+                            @if (!string.IsNullOrWhiteSpace(item.LegendDescriptionUrl))
+                            {
+                                <a href="@item.LegendDescriptionUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Tegneregler for @item.Title" target="_blank">
+                                    <span class="glyphicon glyphicon-picture"></span>vis tegneregler
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Tegneregler for @item.Title">
+                                    <span class="glyphicon glyphicon-picture"></span>vis tegneregler
+                                </a>
+                            }
+                        *@
 
-                            @*else
-            {
-                <img src="~/Content/img/lock.png" class="opendata">
-            }
-                            *@
+                        @*else
+                            {
+                                <img src="~/Content/img/lock.png" class="opendata">
+                            }
+                        *@
 
-                    
+
 
                         @*
-    <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 pull-right col-img">
+                            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 pull-right col-img">
 
-        @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
-        {
-            System.Uri thumbnailUrl = new Uri(item.ThumbnailUrl);
-            string relativeThunbnailUrl = "//" + thumbnailUrl.Host + thumbnailUrl.PathAndQuery;
-            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                <img alt="@item.Title illustrasjonsbilde" src="@relativeThunbnailUrl" class="img-responsive pull-right">
-            </a>
-        }
+                                @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
+                                {
+                                    System.Uri thumbnailUrl = new Uri(item.ThumbnailUrl);
+                                    string relativeThunbnailUrl = "//" + thumbnailUrl.Host + thumbnailUrl.PathAndQuery;
+                                    <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                                        <img alt="@item.Title illustrasjonsbilde" src="@relativeThunbnailUrl" class="img-responsive pull-right">
+                                    </a>
+                                }
 
-    </div>
+                            </div>
                         *@
-                    </div>   
-                    <hr/>         
+                    </div>
+                    <hr />
                 }
             </div>
 

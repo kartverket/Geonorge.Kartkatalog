@@ -19,9 +19,20 @@
     transition: all 0.35s linear 0s;
     color: #FFF;
     border: none;
+    font-style: normal;
 }
 
 .btn:hover{
     background-color: #FE5000;
+    color: #FFF;
+    font-style: normal;
+}
+
+.pagination{
+    margin-top: 0;
+}
+
+.pagination > .active > a{
+    background-color: #7DA1C4;
     color: #FFF;
 }
