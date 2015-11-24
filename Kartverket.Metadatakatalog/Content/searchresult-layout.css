@@ -21,10 +21,6 @@
         display: none;
     }
 
-    #tableView .search-results-title {
-        /* border-right: 1px solid #cac5c1;*/
-    }
-
     #tableView .search-results-actions .btn {
         background: none;
         color: #3867C8;
@@ -33,6 +29,12 @@
 
         #tableView .search-results-actions .btn .button-text {
             display: none;
+        }
+
+        #tableView .search-results-actions .btn.disabled {
+            opacity: 1;
+            color: #968c83 !important;
+            background: none !important;
         }
 
     #tableView .search-results-list-image {
@@ -55,6 +57,7 @@
     }
 
 #galleryView {
+    margin: 0px -15px;
 }
 
     #galleryView .result-row {

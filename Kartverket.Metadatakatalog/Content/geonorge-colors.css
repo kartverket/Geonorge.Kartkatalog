@@ -33,15 +33,15 @@
         background-color: #5d4777;
     }
 
-    .btn:hover {
-        background-color: #FE5000;
-        color: #FFF;
+    .btn:hover, .btn:focus {
+        background-color: #FE5000!important;
+        color: #FFF!important;
+        border: none;
         font-style: normal;
     }
 
     .btn.disabled {
-        opacity: 1;
-        color: #968c83 !important;
+        background-color: #968c83 !important;
     }
 
 .pagination {

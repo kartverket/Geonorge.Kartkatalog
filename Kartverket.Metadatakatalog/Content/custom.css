@@ -126,7 +126,14 @@ h1 .label {
     margin-bottom: 7px;
 }
 
+.modal-footer .btn{
+    margin-bottom: 0;
+}
 
 .tooltip-inner {
     min-width: 100px;
+}
+
+.image-margin-bottom{
+    margin-bottom: 15px;
 }
