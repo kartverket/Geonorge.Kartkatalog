@@ -1,18 +1,25 @@
-﻿.label-success {
-    background-color: #fe5000;
+﻿.label-datasett {
+    border-color: #5d4777;
 }
 
-.label-warning {
-    background-color: #414042;
+.label-applikasjon {
+    border-color: #7da1c4;
 }
 
-.label-danger {
-    background-color: #fe5000;
+.label-tjeneste {
+    border-color: #a9c47f;
 }
 
-.label-info {
-    background-color: #403a60;
+.label-tjenestelag {
+    border-color: #f0b323;
 }
+
+.label-datasettserie {
+    border-color: #968c84;
+}
+
+
+
 
 .btn {
     background-color: #7DA1C4;
@@ -22,17 +29,26 @@
     font-style: normal;
 }
 
-.btn:hover{
-    background-color: #FE5000;
-    color: #FFF;
-    font-style: normal;
-}
+    .btn.btn-purple {
+        background-color: #5d4777;
+    }
 
-.pagination{
+    .btn:hover {
+        background-color: #FE5000;
+        color: #FFF;
+        font-style: normal;
+    }
+
+    .btn.disabled {
+        opacity: 1;
+        color: #968c83 !important;
+    }
+
+.pagination {
     margin-top: 0;
 }
 
-.pagination > .active > a{
-    background-color: #7DA1C4;
-    color: #FFF;
-}
+    .pagination > .active > a {
+        background-color: #7DA1C4;
+        color: #FFF;
+    }

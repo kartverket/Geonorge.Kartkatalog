@@ -8,27 +8,27 @@
     var hierarchyLevelLabelText = "";
     if (Model.IsDataset())
     {
-        hierarchyLevelCssClass = "label-success";
+        hierarchyLevelCssClass = "label-datasett";
         hierarchyLevelLabelText = "Datasett";
     }
     else if (Model.IsServiceLayer())
     {
-        hierarchyLevelCssClass = "label-info";
+        hierarchyLevelCssClass = "label-tjenestelag";
         hierarchyLevelLabelText = "Tjenestelag";
     }
     else if (Model.IsService())
     {
-        hierarchyLevelCssClass = "label-info";
+        hierarchyLevelCssClass = "label-tjeneste";
         hierarchyLevelLabelText = "Tjeneste";
     }
     else if (Model.IsApplication())
     {
-        hierarchyLevelCssClass = "label-warning";
+        hierarchyLevelCssClass = "label-applikasjon";
         hierarchyLevelLabelText = "Applikasjon";
     }
     else if (Model.IsDatasetSeries())
     {
-        hierarchyLevelCssClass = "label-primary";
+        hierarchyLevelCssClass = "label-datasettserie";
         hierarchyLevelLabelText = "Datasettserie";
     }
 
@@ -73,8 +73,8 @@
 <section class="heading">
     <div class="row">
         <div class="col-sm-12">
-            <h1>@Model.Title<span class="label @hierarchyLevelCssClass">@hierarchyLevelLabelText</span></h1>
-
+            <h1>@Model.Title</h1>
+            <span class="label @hierarchyLevelCssClass">@hierarchyLevelLabelText</span>
         </div>
         <div class="col-sm-12">
             <span class="separator-lg"></span>
@@ -83,12 +83,12 @@
 </section>
 
 <div>
-    <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-map-marker"></span> vis i kart</a>
-    <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> last ned</a>
-    <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-info-sign"></span> vis produktark</a>
-    <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-list-alt"></span> vis produktspesifikasjon</a>
-    <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-picture"></span> vis tegneregler</a>
-    <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-globe"></span> besøk nettside</a>
+    <a href="#" class="btn btn-purple"><span class="glyphicon glyphicon-map-marker"></span> vis i kart</a>
+    <a href="#" class="btn btn-purple"><span class="glyphicon glyphicon-download-alt"></span> last ned</a>
+    <a href="#" class="btn"><span class="glyphicon glyphicon-info-sign"></span> vis produktark</a>
+    <a href="#" class="btn"><span class="glyphicon glyphicon-list-alt"></span> vis produktspesifikasjon</a>
+    <a href="#" class="btn"><span class="glyphicon glyphicon-picture"></span> vis tegneregler</a>
+    <a href="#" class="btn"><span class="glyphicon glyphicon-globe"></span> besøk nettside</a>
 </div>
 
 

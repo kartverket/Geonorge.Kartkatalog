@@ -81,9 +81,18 @@ a {
 }
 
 .label {
-    font-family: "Raleway",sans-serif;
+    font-family: "Open Sans",sans-serif;
+    display: inline-block;
     font-weight: normal;
-    font-size: 14px;
+    font-size: 12pt;
+    text-align: left;
+    border: none;
+    border-radius: 0;
+    border-left: 4px solid #efeeed; 
+    background-color: #efeeed;
+    color: #414042;
+    height: 25px;
+    width: 100px;
 }
 
 h1 .label {
@@ -93,11 +102,12 @@ h1 .label {
 }
 
 .btn {
-    font-family: "Raleway",sans-serif;
+    font-family: "Open Sans",sans-serif;
     font-weight: normal;
-    font-size: 16pt;
+    font-size: 12pt;
     margin-bottom: 7px;
 }
+
 
 .tooltip-inner {
     min-width: 100px;
