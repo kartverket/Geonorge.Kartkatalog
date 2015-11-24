@@ -21,7 +21,7 @@
 <section class="heading">
     <div class="row">
         <div class="col-sm-12">
-            <h1>
+            <h1 class="small-h1">
                 Kartkatalogen
             </h1>
         </div>
@@ -31,7 +31,7 @@
     </div>
 </section>
 
- @*
+@*
     @helper DisplayPagination()
     {
 
@@ -362,39 +362,33 @@
         {
             <div class="search-results">
                 <div class="row search-results-table-heading">
+                    <div class="col-sm-3"><p>Tittel</p></div>
+                    <div class="col-sm-2"><p>Type</p></div>
+                    <div class="col-sm-3"><p>Eier</p></div>
                     <div class="col-sm-1"></div>
-                    <div class="col-sm-3">Tittel</div>
-                    <div class="col-sm-2">Type</div>
-                    <div class="col-sm-3">Eier</div>
-                    <div class="col-sm-1">Les mer</div>
-                    <div class="col-sm-1">Vis i kart</div>
-                    <div class="col-sm-1">Last ned</div>
+                    <div class="col-sm-1"><p>Les mer</p></div>
+                    <div class="col-sm-1"><p>Vis i kart</p></div>
+                    <div class="col-sm-1"><p>Last ned</p></div>
                 </div>
                 <div class="menu-separator search-results-table-heading"></div>
                 @foreach (var item in Model.Result.Items)
                 {
                     <div class="row result-row metadata">
-                        @*
-                                                    <div class="hidden-xs col-sm-1 col-md-1 col-lg-1 top-padding hide-overflow col-logo">
-                                @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
-                                {
-                                    System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
-                                    string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                    <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
-                                        <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
-                                    </a>
 
-
-                                }
-                            </div>
-                        *@
-                        <div class="col-sm-1 search-results-open-data">
-                            @if (item.IsOpendata)
+                        <div class="col-sm-1 search-results-logo">
+                            @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
                             {
-                                <img title="Åpne data" src="~/Content/img/unlock.png" class="bottom opendata" alt="Åpne data" />
+                                System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
+                                string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
+                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
+                                    <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
+                                </a>
+
+
                             }
                         </div>
-                        <div class="col-sm-3 col-title">
+
+                        <div class="col-sm-3 search-results-title">
                             <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
                                 <p class="role-button" role="button">@item.Title</p>
                             </a>
@@ -434,44 +428,51 @@
                             </a>
                         </div>
 
-                        <div class="col-sm-1 col-actions">
+                        <div class="col-sm-1 search-results-open-data">
+                            @if (item.IsOpendata)
+                            {
+                                <img title="Åpne data" src="~/Content/img/unlock.png" class="bottom opendata" alt="Åpne data" />
+                            }
+                        </div>
+
+                        <div class="col-sm-1 search-results-actions">
                             @if (item.ShowWebsiteLink())
                             {
-                                <a href="@item.DownloadUrl" title="Besøk nettsiden til @item.Title" target="_blank">
-                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                <a href="@item.DownloadUrl" title="Besøk nettsiden til @item.Title" target="_blank" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-info-sign"></span><span class="button-text">Les mer</span>
                                 </a>
                             }
                             else
                             {
-                                <a href="@item.DownloadUrl" class="disabled" title="Besøk nettsiden til @item.Title" target="_blank">
-                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                <a href="@item.DownloadUrl" class="disabled btn btn-default" title="Besøk nettsiden til @item.Title" target="_blank">
+                                    <span class="glyphicon glyphicon-info-sign"></span><span class="button-text">Les mer</span>
                                 </a>
                             }
                         </div>
 
 
-                        <div class="col-sm-1 col-actions">
+                        <div class="col-sm-1 search-results-actions action-show-map">
                             @if (item.ShowMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank">
-                                    <span class="glyphicon glyphicon-map-marker"></span>
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-map-marker"></span><span class="button-text">Vis i kart</span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis @item.Title i kart" target="_blank">
-                                    <span class="glyphicon glyphicon-map-marker"></span>
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-map-marker"></span><span class="button-text">Vis i kart</span>
                                 </a>
                             }
                             else
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" class="disabled" target="_blank">
-                                    <span class="glyphicon glyphicon-map-marker"></span>
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank" class="disabled btn btn-default">
+                                    <span class="glyphicon glyphicon-map-marker"></span><span class="button-text">Vis i kart</span>
                                 </a>
                             }
 
                         </div>
-                        <div class="col-sm-1 col-actions">
+                        <div class="col-sm-1 search-results-actions action-download">
                             @if (item.ShowDownloadService())
                             {
                                 string relativeOrganizationLogoUrl = "";
@@ -492,25 +493,25 @@
                                 <a data-toggle='tooltip'
                                    data-placement='bottom'
                                    title='Legg til @item.Title i kurv'
-                                   class='add-to-cart-btn'
+                                   class='add-to-cart-btn btn btn-default'
                                    itemname='@item.Title'
                                    itemuuid='@item.Uuid'
                                    itemurl='/metadata/uuid/@item.Uuid'
                                    itemorglogo='@relativeOrganizationLogoUrl'
                                    itemdisturl='@relativeDowloadUrl'>
-                                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                                    <span class="glyphicon glyphicon-shopping-cart"></span><span class="button-text">Legg i kurv</span>
                                 </a>
                             }
                             else if (item.ShowDownloadLink())
                             {
-                                <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" target="_blank">
-                                    <span class="glyphicon glyphicon-download-alt"></span>
+                                <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-download-alt"></span><span class="button-text">Last ned</span>
                                 </a>
                             }
                             else
                             {
-                                <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" class="disabled" target="_blank">
-                                    <span class="glyphicon glyphicon-download-alt"></span>
+                                <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" target="_blank" class="disabled btn btn-default">
+                                    <span class="glyphicon glyphicon-download-alt"></span><span class="button-text">Last ned</span>
                                 </a>
                             }
 
@@ -569,25 +570,45 @@
                             }
                         *@
 
+                        <div class="col-sm-2 search-results-list-image">
+                            @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
+                            {
+                                System.Uri thumbnailUrl = new Uri(item.ThumbnailUrl);
+                                string relativeThunbnailUrl = "//" + thumbnailUrl.Host + thumbnailUrl.PathAndQuery;
+                                <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                                    <img src="@relativeThunbnailUrl" />
+                                </a>
+                            }
 
-
-                        @*
-                            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 pull-right col-img">
-
-                                @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
-                                {
-                                    System.Uri thumbnailUrl = new Uri(item.ThumbnailUrl);
-                                    string relativeThunbnailUrl = "//" + thumbnailUrl.Host + thumbnailUrl.PathAndQuery;
-                                    <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                        <img alt="@item.Title illustrasjonsbilde" src="@relativeThunbnailUrl" class="img-responsive pull-right">
-                                    </a>
-                                }
-
-                            </div>
-                        *@
+                        </div>
                     </div>
+
+
+                    if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
+                    {
+                        System.Uri thumbnailUrl = new Uri(item.ThumbnailUrl);
+                        string relativeThunbnailUrl = "//" + thumbnailUrl.Host + thumbnailUrl.PathAndQuery;
+                        <div class="search-results-gallery-image layoutblock">
+                            <div class="block shortcutpageteaserblock size-4 col-sm-4">
+                                <div class="teaser-with-background-image">
+                                    <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                                        <div class="teaser-background-image" style="background: url(@relativeThunbnailUrl) no-repeat center;">
+                                            <div class="teaser-overlay">
+                                                <div class="teaser-caption">
+                                                    <div class="teaser-heading">@item.Title</div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    }
                     <hr />
                 }
+                <div class="clearfix"></div>
             </div>
 
             @DisplayPaginationBottom()
@@ -632,6 +653,7 @@
                 </ul>
             </div>
         </div>
+        <span class="separator-small separator-gray"></span>
         <div class="row view-navigation">
             <div class="col-sm-12">
                 <p>Velg visningsform:</p>
@@ -640,8 +662,10 @@
                     <option value="listView" id="button-listView" class="active">Liste</option>
                     <option value="galleryView" id="button-galleryView" class="">Galleri</option>
                 </select>
-            </div>
+            </div>   
         </div>
+        <span class="separator-small separator-gray"></span>
+        
         <aside class="facet-sok-emne">
             <div class="block listblock" id="filterInner">
                 <h3 class="">Søkefilter<span class="glyphicon glyphicon-filter pull-right"></span></h3>

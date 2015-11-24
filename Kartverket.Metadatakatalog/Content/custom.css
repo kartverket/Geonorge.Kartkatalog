@@ -1,10 +1,24 @@
 ﻿body{
     font-size: 16pt;
+    font-family: "Open Sans",sans-serif;
 }
 
 a {
     color: #3867c8;
 }
+
+img {
+    max-width: 100%;
+}
+
+h1.small-h1{
+    font-size: 48pt;
+}
+
+.separator-gray{
+    border-color: #988c83;
+}
+
 
 #feedback-alert {
     display: none;
@@ -17,6 +31,9 @@ a {
     border-radius: 0px;
 }
 
+.container-breadcrumbs .breadcrumbs{
+    font-size: 12pt;
+}
 
 .facet-sok-tittel {
     display: block;
@@ -68,11 +85,12 @@ a {
 
 
 .search-results .result-row {
-    padding: 7px 0 0;
+    padding: 0;
+    font-size: 14pt;
 }
 
-.search-results .result-row p{
-    margin: 0 0 7px;
+.search-results .result-row > *{
+    margin: 7px 0;
 }
 
 .search-results hr {
