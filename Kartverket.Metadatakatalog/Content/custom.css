@@ -1,4 +1,9 @@
-﻿#feedback-alert {
+﻿body{
+    font-size: 16pt;
+}
+
+
+#feedback-alert {
     display: none;
     position: fixed;
     z-index: 2;
@@ -17,7 +22,7 @@
 
     .facet-sok-tittel p {
         display: inline;
-        font-size: 16px;
+        font-size: 16pt;
         line-height: 22pt;
     }
 
@@ -47,8 +52,8 @@
 }
 
     .facet-sok-undertitler li a {
-        font-size: 14px;
-        line-height: 16px;
+        font-size: 14pt;
+        line-height: 16pt;
         font-style: normal;
     }
 
@@ -93,6 +98,8 @@ h1 .label {
 .btn {
     font-family: "Raleway",sans-serif;
     font-weight: normal;
+    font-size: 16pt;
+    margin-bottom: 7px;
 }
 
 .tooltip-inner {
