@@ -341,25 +341,14 @@
 
     <aside class="col-sm-4">
         <div class="block listblock size-12 col-sm-12 ">
-            @if (Model.ContactOwner != null)
-            {
-                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName() })" title="Vis alle geografiske tjenester og datasett fra @Model.ContactOwner.Organization" class="pull-right">
-                    @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
-                    {
-                        <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactOwner.Organization" width="100" />
-                    }
-                    <p>@Model.ContactOwner.Organization</p>
-                </a>
-                <div class="clearfix"> </div>
-            }
-
+            
             @if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
             {
                 foreach (var thumb in Model.Thumbnails)
                 {
                     if (thumb.Type == "thumbnail" || thumb.Type == "miniatyrbilde")
                     {
-                        <img src="@thumb.URL" width="300" class="thumbnail pull-right" alt="Forhåndsvisning av data." />
+                        <img src="@thumb.URL" width="300" class="pull-right" alt="Forhåndsvisning av data." />
                         break;
                     }
                 }
@@ -376,6 +365,16 @@
                 @ShowContact("Metadatakontakt", Model.ContactMetadata)
                 @ShowContact("Faglig kontakt", Model.ContactOwner)
                 @ShowContact("Teknisk kontakt", Model.ContactPublisher)
+                @if (Model.ContactOwner != null)
+                {
+                    <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName() })" title="Vis alle geografiske tjenester og datasett fra @Model.ContactOwner.Organization">
+                        @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
+                        {
+                            <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactOwner.Organization" width="100" />
+                        }
+                        <p>@Model.ContactOwner.Organization</p>
+                    </a>
+                }
             </div>
             <div class="col-sm-6">
                 <h2>Distribusjon</h2>
