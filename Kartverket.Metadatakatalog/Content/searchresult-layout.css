@@ -1,0 +1,16 @@
+﻿#tableView {
+}
+
+#listView {
+}
+
+    #listView .search-results-table-heading {
+        display: none;
+    }
+
+#galleryView {
+}
+
+    #galleryView .search-results-table-heading {
+        display: none;
+    }

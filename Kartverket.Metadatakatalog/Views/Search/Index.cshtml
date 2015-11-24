@@ -30,58 +30,8 @@
         </div>
     </div>
 </section>
-<div class="row">
-    <div class="col-md-3">
-        <p>Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:</p>
 
-        <ul class="pagination pagination-sm btn-group">
-            @if (Model.IsFirstButtonActive())
-            {
-                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
-            }
-
-            @if (Model.IsPreviousButtonActive())
-            {
-                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
-            }
-
-            @for (int i = Model.startPage; i <= Model.endPage; i++)
-            {
-                if (Model.IsActivePage(i))
-                {
-                    <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                }
-                else
-                {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                }
-            }
-
-            @if (Model.IsNextButtonActive())
-            {
-                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
-            }
-            @if (Model.IsLastButtonActive())
-            {
-                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
-            }
-        </ul>
-
-    </div>
-    <div class="col-md-4 view-navigation">
-        <p>Velg visningsform:</p>
-        <ul class="nav nav-pills pull-left">
-            <li class=""><a onclick="tableView()" id="button-tableView" class=""><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Tabell</a></li>
-            <li><a onclick="listView()" id="button-listView" class="active"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Liste</a></li>
-            <li><a onclick="galleryView()" id="button-galleryView" class=""><span class="glyphicon glyphicon-th" aria-hidden="true"></span> Galleri</a></li>
-        </ul>
-    </div>
-    @*  <div class="col-md-4">
-           @DisplayPagination()
-        </div>
-    *@
-</div>
-
+ @*
     @helper DisplayPagination()
     {
 
@@ -131,7 +81,7 @@
         </select>
 
     }
-
+*@
 @helper DisplayFacet(SearchResultFacetViewModel facet)
 {
 
@@ -407,29 +357,11 @@
     </article>
 *@
 <div class="row">
-    <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
-        <aside class="facet-sok-emne">
-            <div class="block listblock" id="filterInner">
-                <h3 class="">Søkefilter<span class="glyphicon glyphicon-filter pull-right"></span></h3>
-                <span class="separator-small"></span>
-                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
-                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
-                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
-                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))
-                @DisplayFacetCheckbox(Model.Result.Facets.First(f => f.FacetField == "area"))
-                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "DistributionProtocols"))
-                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
-
-                @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))@*
-                    @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
-            </div>
-        </aside>
-    </div>
     <div class="col-sm-12 col-md-9">
         @if (Model.Result != null)
         {
             <div class="search-results">
-                <div class="row">
+                <div class="row search-results-table-heading">
                     <div class="col-sm-1"></div>
                     <div class="col-sm-3">Tittel</div>
                     <div class="col-sm-2">Type</div>
@@ -438,11 +370,10 @@
                     <div class="col-sm-1">Vis i kart</div>
                     <div class="col-sm-1">Last ned</div>
                 </div>
-                <div class="menu-separator"></div>
+                <div class="menu-separator search-results-table-heading"></div>
                 @foreach (var item in Model.Result.Items)
                 {
                     <div class="row result-row metadata">
-
                         @*
                                                     <div class="hidden-xs col-sm-1 col-md-1 col-lg-1 top-padding hide-overflow col-logo">
                                 @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
@@ -457,7 +388,7 @@
                                 }
                             </div>
                         *@
-                        <div class="col-sm-1">
+                        <div class="col-sm-1 search-results-open-data">
                             @if (item.IsOpendata)
                             {
                                 <img title="Åpne data" src="~/Content/img/unlock.png" class="bottom opendata" alt="Åpne data" />
@@ -490,10 +421,10 @@
                             *@
 
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-2 search-results-type">
                             <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-3 search-result-organization">
                             <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">
                                 @if (item.Organization != null)
                                 {
@@ -507,13 +438,13 @@
                             @if (item.ShowWebsiteLink())
                             {
                                 <a href="@item.DownloadUrl" title="Besøk nettsiden til @item.Title" target="_blank">
-                                    <span class="glyphicon glyphicon-globe"></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span>
                                 </a>
                             }
                             else
                             {
                                 <a href="@item.DownloadUrl" class="disabled" title="Besøk nettsiden til @item.Title" target="_blank">
-                                    <span class="glyphicon glyphicon-globe"></span>
+                                    <span class="glyphicon glyphicon-info-sign"></span>
                                 </a>
                             }
                         </div>
@@ -662,5 +593,70 @@
             @DisplayPaginationBottom()
 
         }
+    </div>
+    <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
+        <div class="row">
+            <div class="col-sm-12">
+                <p>Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:</p>
+                <ul class="pagination pagination-sm btn-group">
+                    @if (Model.IsFirstButtonActive())
+                    {
+                        <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
+                    }
+
+                    @if (Model.IsPreviousButtonActive())
+                    {
+                        <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                    }
+
+                    @for (int i = Model.startPage; i <= Model.endPage; i++)
+                    {
+                        if (Model.IsActivePage(i))
+                        {
+                            <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        }
+                    }
+
+                    @if (Model.IsNextButtonActive())
+                    {
+                        <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                    }
+                    @if (Model.IsLastButtonActive())
+                    {
+                        <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="row view-navigation">
+            <div class="col-sm-12">
+                <p>Velg visningsform:</p>
+                <select onchange="changeLayout(this.value)" class="form-control">
+                    <option value="tableView" id="button-tableView" class="">Tabell</option>
+                    <option value="listView" id="button-listView" class="active">Liste</option>
+                    <option value="galleryView" id="button-galleryView" class="">Galleri</option>
+                </select>
+            </div>
+        </div>
+        <aside class="facet-sok-emne">
+            <div class="block listblock" id="filterInner">
+                <h3 class="">Søkefilter<span class="glyphicon glyphicon-filter pull-right"></span></h3>
+                <span class="separator-small"></span>
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))
+                @DisplayFacetCheckbox(Model.Result.Facets.First(f => f.FacetField == "area"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "DistributionProtocols"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
+
+                @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))@*
+                    @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
+            </div>
+        </aside>
     </div>
 </div>
