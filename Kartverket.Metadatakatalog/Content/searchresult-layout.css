@@ -1,4 +1,5 @@
-﻿#tableView {
+﻿/* Table view */
+#tableView {
 }
 
     #tableView .search-results-table-heading {
@@ -21,19 +22,31 @@
         display: none;
     }
 
-    #tableView .search-results-actions .btn {
-        background: none;
-        color: #3867C8;
-        padding: 0;
+    #tableView .search-results-description{
+        display: none;
     }
 
-        #tableView .search-results-actions .btn .button-text {
-            display: none;
-        }
+    #tableView .search-results-action-buttons {
+        display: none;
+    }
 
-        #tableView .search-results-actions .btn.disabled {
+    #tableView .search-results-action-icons .btn {
+        background: none;
+        color: #7DA1C4;
+        padding: 0;
+        font-size: 18pt;
+    }
+
+    #tableView .search-results-action-icons .btn:hover,
+    #tableView .search-results-action-icons .btn:focus {
+        background: none!important;
+        color: #FE5000 !important;
+    }
+
+        #tableView .search-results-action-icons .btn.disabled {
             opacity: 1;
-            color: #968c83 !important;
+            color: #cfcfcf !important;
+            border: none;
             background: none !important;
         }
 
@@ -45,6 +58,9 @@
         display: none;
     }
 
+
+
+/* List view */
 #listView {
 }
 
@@ -52,10 +68,28 @@
         display: none;
     }
 
+    #listView .search-results-title{
+        width: 50%;
+    }
+
+    #listView .search-results-type {
+        display: none;
+    }
+
+    #listView .search-result-organization{
+        display: none;
+    }
+
+    #listView .search-results-action-icons {
+        display: none;
+    }
+
     #listView .search-results-gallery-image {
         display: none;
     }
 
+
+/* Gallery view */
 #galleryView {
     margin: 0px -15px;
 }
@@ -80,6 +114,10 @@
         display: none;
     }
 
+    #galleryView .search-results-description{
+        display: none;
+    }
+
     #galleryView .search-results-open-data {
         display: none;
     }
@@ -92,7 +130,11 @@
         display: none;
     }
 
-    #galleryView .search-results-actions {
+    #galleryView .search-results-action-buttons {
+        display: none;
+    }
+
+    #galleryView .search-results-action-icons {
         display: none;
     }
 
@@ -102,4 +144,8 @@
 
     #galleryView .teaser-with-background-image {
         text-align: center;
+    }
+
+    #galleryView .teaser-with-background-image .teaser-heading{
+        font-size: 16pt;
     }
