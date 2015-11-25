@@ -34,15 +34,23 @@
     }
 
     .btn:hover, .btn:focus {
-        background-color: #FE5000!important;
-        color: #FFF!important;
+        background-color: #FE5000;
+        color: #FFF;
         border: none;
         font-style: normal;
     }
 
     .btn.disabled {
-        background-color: #968c83 !important;
+        background-color: #FFF !important;
+        color: #cfcfcf;
+        border: 1px solid #cfcfcf;
+        opacity: 1;
+        cursor: not-allowed;
     }
+
+        .btn.disabled:hover {
+            color: #cfcfcf;
+        }
 
 .pagination {
     margin-top: 0;
