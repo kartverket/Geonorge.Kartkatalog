@@ -72,6 +72,10 @@
         width: 50%;
     }
 
+    #listView .search-results-title .search-results-name{
+        font-size: 18pt;
+    }
+
     #listView .search-results-type {
         display: none;
     }
@@ -82,6 +86,10 @@
 
     #listView .search-results-action-icons {
         display: none;
+    }
+
+    #listView .search-results-action-buttons .btn{
+        width: 130px;
     }
 
     #listView .search-results-gallery-image {

@@ -388,7 +388,7 @@
 
                         <div class="col-sm-3 search-results-title">
                             <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                <p class="role-button" role="button">@item.Title</p>
+                                <p class="role-button search-results-name" role="button">@item.Title</p>
                             </a>
                             <div class="search-results-description">
                                 <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">

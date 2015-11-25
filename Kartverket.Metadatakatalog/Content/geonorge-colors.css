@@ -56,7 +56,29 @@
     margin-top: 0;
 }
 
-    .pagination > .active > a {
+    .pagination > li > a, .pagination > li > span {
         background-color: #7DA1C4;
+        border: 1px solid #cfcfcf;
+        border: 1px solid #FFF;
+        transition: all 0.35s linear 0s;
         color: #FFF;
+        border-radius: 0!important;
+        font-size: 12pt;
     }
+
+
+    .pagination > .active > a {
+        
+        background-color: #FE5000;
+        color: #FFF;
+        border: 1px solid #FFF;
+        transition: all 0.35s linear 0s;
+    }
+
+        .pagination > .active > a:hover,
+        .pagination > li > a:hover,
+        .pagination > li > span:hover {
+            background-color: #FE5000;
+            color: #FFF;
+            border: 1px solid #FFF;
+        }
