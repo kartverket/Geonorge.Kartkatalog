@@ -117,6 +117,9 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
         var orderItemOmraader = (JSON.parse(localStorage.getItem(uuid + '.codelists.area')));
         var orderItemSelectOmraader = $('#orderuuid' + uuid + ' .selectOmraader');
         orderItemSelectOmraader.attr('name', uuid + '-areas');
+        orderItemSelectOmraader.change(function () {           
+            populateProjectionAndFormatList(uuid, orderItemOmraader);
+        });
         var orderItemSelectOmraaderFylker = $('#orderuuid' + uuid + ' .selectOmraader .selectOmraaderFylker');
         var orderItemSelectOmraaderKommuner = $('#orderuuid' + uuid + ' .selectOmraader .selectOmraaderKommuner');
         $.each(orderItemOmraader, function (key, val) {
@@ -144,6 +147,45 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
         formElement.attr('disabled', true);
     }
 }
+
+// Populering av projeksjon- og format-liste
+function populateProjectionAndFormatList(uuid, orderItemOmraader) {
+    var selectedAreas = $('[name=\'' + uuid + "-areas']").val();
+
+    var orderItemSelectProjeksjoner = $('#orderuuid' + uuid + ' .selectProjeksjoner');
+    orderItemSelectProjeksjoner.attr('name', uuid + '-projection');
+    orderItemSelectProjeksjoner.empty();
+    orderItemSelectProjeksjoner.trigger("chosen:updated");
+
+    var orderItemSelectFormater = $('#orderuuid' + uuid + ' .selectFormater');
+    orderItemSelectFormater.attr('name', uuid + '-formats');
+    orderItemSelectFormater.empty();
+    orderItemSelectFormater.trigger("chosen:updated");
+
+    $.each(orderItemOmraader, function (key, val) {
+        if ($.inArray(val.type + "_" + val.code, selectedAreas) > -1){
+
+            $.each(val.projections, function (key, val) {
+                if (orderItemSelectProjeksjoner.find('option[value="' + val.code + '"]').length <= 0)
+                {
+                orderItemSelectProjeksjoner.append($("<option selected />").val(val.code).text(val.name));
+                orderItemSelectProjeksjoner.trigger("chosen:updated");
+                }
+
+            });
+            $.each(val.formats, function (key, val) {
+                console.log(val.name);
+                if (orderItemSelectFormater.find('option[value="' + val.name + '"]').length <= 0) {
+                    orderItemSelectFormater.append($("<option selected />").val(val.name).text(val.name));
+                    orderItemSelectFormater.trigger("chosen:updated");
+                }
+            });
+        }
+    });
+
+
+}
+
 
 // Populering av Projeksjonliste
 function populateProjectionList(uuid, supportsProjectionSelection) {
@@ -248,15 +290,17 @@ function generateView(template, orderItems) {
         $("#orderuuid" + uuid + " .order-title").attr('href', metadata.url);
         $("#orderuuid" + uuid + " .order-img").attr('src', metadata.organizationLogoUrl);
 
-        populateProjectionList(uuid, supportsProjectionSelection);
-        populateFormatList(uuid, supportsFormatSelection);
+        //populateProjectionList(uuid, supportsProjectionSelection);
+        //populateFormatList(uuid, supportsFormatSelection);
         populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection);
         getOrderUrl(uuid);
 
         var orderItems = JSON.parse(localStorage["orderItems"]);
-        getSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
-        getSelectedValues(orderItems, 'selectFormater', 'formats');
+        //getSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
+        //getSelectedValues(orderItems, 'selectFormater', 'formats');
         getSelectedValues(orderItems, 'selectOmraader', 'areas');
+        var orderItemOmraader = (JSON.parse(localStorage.getItem(uuid + '.codelists.area')));
+        populateProjectionAndFormatList(uuid, orderItemOmraader);
         getSelectedValues(uuid, 'coordinates', 'coordinates');
     });
 }
