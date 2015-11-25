@@ -114,6 +114,7 @@ $(document).ready(function () {
 // Populering av Områdeliste
 function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection) {
     if (supportsAreaSelection) {
+
         var orderItemOmraader = (JSON.parse(localStorage.getItem(uuid + '.codelists.area')));
         var orderItemSelectOmraader = $('#orderuuid' + uuid + ' .selectOmraader');
         orderItemSelectOmraader.attr('name', uuid + '-areas');
@@ -160,10 +161,20 @@ function populateProjectionAndFormatList(uuid, orderItemOmraader) {
     var orderItemSelectFormater = $('#orderuuid' + uuid + ' .selectFormater');
     orderItemSelectFormater.attr('name', uuid + '-formats');
     orderItemSelectFormater.empty();
+
+    orderItemSelectProjeksjoner.attr("disabled", true);
+
+    orderItemSelectProjeksjoner.trigger("chosen:updated");
+
+    orderItemSelectFormater.attr("disabled", true);
     orderItemSelectFormater.trigger("chosen:updated");
+
 
     $.each(orderItemOmraader, function (key, val) {
         if ($.inArray(val.type + "_" + val.code, selectedAreas) > -1){
+
+            orderItemSelectProjeksjoner.attr("disabled", false);
+            orderItemSelectFormater.attr("disabled", false);
 
             $.each(val.projections, function (key, val) {
                 if (orderItemSelectProjeksjoner.find('option[value="' + val.code + '"]').length <= 0)
