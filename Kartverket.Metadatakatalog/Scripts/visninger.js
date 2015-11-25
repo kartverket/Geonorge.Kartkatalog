@@ -1,5 +1,14 @@
 ﻿function changeLayout(layout) {
     $(".search-results").attr("id", layout);
+    var options = $("#layoutSelect option");
+    var selectedOption = $("#layoutSelect option[value='" + layout + "']");
+    $.each(options, function () {
+        if ($(this).attr("value") != layout) {
+            $(this).attr("selected", false);
+        } else {
+            $(this).attr("selected", true)
+        }
+    });
     localStorage.setItem("layout", layout);
 }
 
