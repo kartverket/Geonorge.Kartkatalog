@@ -37,6 +37,22 @@
         localStorage[uuid + '.selected.coordinates'] = CLIPPERCOORDS;
         getSelectedCoordinates(uuid, 'coordinates', 'coordinates');
         localStorage[uuid + '.selected.areas'] = '[]';
+
+        var orderItemSelectProjeksjoner = $('#orderuuid' + uuid + ' .selectProjeksjoner');
+        orderItemSelectProjeksjoner.attr('name', uuid + '-projection');
+        orderItemSelectProjeksjoner.empty();
+        populateProjectionList(uuid, true);
+
+        orderItemSelectProjeksjoner.trigger("chosen:updated");
+        var orderItemSelectFormater = $('#orderuuid' + uuid + ' .selectFormater');
+        orderItemSelectFormater.attr('name', uuid + '-formats');
+        orderItemSelectFormater.empty();
+        populateFormatList(uuid, true);
+        orderItemSelectProjeksjoner.attr("disabled", false);
+        orderItemSelectProjeksjoner.trigger("chosen:updated");
+        orderItemSelectFormater.attr("disabled", false);
+        orderItemSelectFormater.trigger("chosen:updated");
+
     }
 
     function resizeIframe(iframe) {
