@@ -739,11 +739,13 @@
         <div class="row view-navigation">
             <div class="col-sm-12">
                 <p>Velg visningsform:</p>
-                <select onchange="changeLayout(this.value)" class="form-control">
-                    <option value="tableView" id="button-tableView" class="">Tabell</option>
-                    <option value="listView" id="button-listView" class="active">Liste</option>
-                    <option value="galleryView" id="button-galleryView" class="">Galleri</option>
-                </select>
+                <div class="custom-select">
+                    <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
+                        <option value="tableView" id="button-tableView">Tabell</option>
+                        <option value="listView" id="button-listView">Liste</option>
+                        <option value="galleryView" id="button-galleryView">Galleri</option>
+                    </select>
+                </div>
             </div>
         </div>
         <span class="separator-small separator-gray"></span>

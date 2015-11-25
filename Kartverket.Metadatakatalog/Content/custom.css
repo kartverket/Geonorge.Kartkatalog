@@ -145,3 +145,42 @@ h1 .label {
 .image-margin-bottom {
     margin-bottom: 15px;
 }
+
+
+/* Forms */
+.custom-select {
+    background-color: #FFF;
+    background-image: url("/Content/img/arrow-select-blue.svg");
+    content: "";
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 35px 34px;
+    border-radius: 3px;
+    transition: all 0.35s linear 0s;
+}
+
+.custom-select:hover{
+    background-image: url("/Content/img/arrow-select-orange.svg");
+}
+
+.custom-select select, .custom-select select.form-control {
+    -webkit-appearance: none;
+       -moz-appearance: none;
+        -ms-appearance: none;
+         -o-appearance: none;
+            appearance: none;
+    border: none;
+    box-shadow: none;
+    font-family: "Open Sans",sans-serif;
+    background: none;
+    font-size: 14pt;
+    padding: 0 8px;
+    height: 32px;
+    border: 1px solid #CFCFCF;
+    border-radius: 3px;
+    margin-bottom: 10px;
+}
+
+.custom-select select::-ms-expand {
+    display: none;
+}
