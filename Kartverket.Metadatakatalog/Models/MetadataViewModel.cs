@@ -224,6 +224,11 @@ namespace Kartverket.Metadatakatalog.Models
             return HierarchyLevel == "software";
         }
 
+        public bool IsDatasetBundle()
+        {
+            return HierarchyLevel == "dimensionGroup";
+        }
+
         public string MaintenanceFrequencyTranslated()
         {
             if (MaintenanceFrequency == null)
