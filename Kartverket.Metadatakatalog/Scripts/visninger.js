@@ -13,7 +13,7 @@
 }
 
 $(document).ready(function () {
-    var layout = tableView;
+    var layout = "tableView";
     if (localStorage.getItem("layout") != null) {
         layout = localStorage.getItem("layout");
     };
