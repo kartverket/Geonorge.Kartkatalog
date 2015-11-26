@@ -175,7 +175,6 @@ h1 .label {
     background-position: right center;
     background-size: 35px 34px;
     border-radius: 3px;
-    transition: all 0.35s linear 0s;
 }
 
 .custom-select:hover{
