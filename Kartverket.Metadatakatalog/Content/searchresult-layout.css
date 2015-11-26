@@ -22,7 +22,7 @@
         display: none;
     }
 
-    #tableView .search-results-description{
+    #tableView .search-results-description {
         display: none;
     }
 
@@ -30,25 +30,31 @@
         display: none;
     }
 
-    #tableView .search-results-action-icons .btn {
-        background: none;
-        color: #7DA1C4;
-        padding: 0;
-        font-size: 18pt;
+    #tableView .search-results-action-icons {
+        text-align: center;
     }
 
-    #tableView .search-results-action-icons .btn:hover,
-    #tableView .search-results-action-icons .btn:focus {
-        background: none!important;
-        color: #FE5000 !important;
-    }
-
-        #tableView .search-results-action-icons .btn.disabled {
-            opacity: 1;
-            color: #cfcfcf !important;
-            border: none;
-            background: none !important;
+        #tableView .search-results-action-icons .btn {
+            background: none;
+            color: #7DA1C4;
+            padding: 0;
+            font-size: 18pt;
+            line-height: 1em;
         }
+
+            #tableView .search-results-action-icons .btn:hover,
+            #tableView .search-results-action-icons .btn:focus {
+                background: none !important;
+                color: #FE5000 !important;
+                line-height: 1em;
+            }
+
+            #tableView .search-results-action-icons .btn.disabled {
+                opacity: 1;
+                color: #cfcfcf !important;
+                border: none;
+                background: none !important;
+            }
 
     #tableView .search-results-list-image {
         display: none;
@@ -68,19 +74,19 @@
         display: none;
     }
 
-    #listView .search-results-title{
+    #listView .search-results-title {
         width: 50%;
     }
 
-    #listView .search-results-title .search-results-name{
-        font-size: 18pt;
-    }
+        #listView .search-results-title .search-results-name {
+            font-size: 18pt;
+        }
 
     #listView .search-results-type {
         display: none;
     }
 
-    #listView .search-result-organization{
+    #listView .search-results-organization {
         display: none;
     }
 
@@ -88,7 +94,7 @@
         display: none;
     }
 
-    #listView .search-results-action-buttons .btn{
+    #listView .search-results-action-buttons .btn {
         width: 130px;
     }
 
@@ -122,7 +128,7 @@
         display: none;
     }
 
-    #galleryView .search-results-description{
+    #galleryView .search-results-description {
         display: none;
     }
 
@@ -134,7 +140,7 @@
         display: none;
     }
 
-    #galleryView .search-result-organization {
+    #galleryView .search-results-organization {
         display: none;
     }
 
@@ -154,6 +160,6 @@
         text-align: center;
     }
 
-    #galleryView .teaser-with-background-image .teaser-heading{
-        font-size: 16pt;
-    }
+        #galleryView .teaser-with-background-image .teaser-heading {
+            font-size: 16pt;
+        }

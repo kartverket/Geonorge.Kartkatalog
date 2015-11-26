@@ -64,12 +64,12 @@
     }
 }
 
-<!--
+
 <div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
 </div>
-    -->
+
 <section class="heading">
     <div class="row">
         <div class="col-sm-12">
@@ -83,15 +83,85 @@
 </section>
 
 <div>
-    <a href="#" class="btn"><span class="glyphicon glyphicon-map-marker"></span> vis i kart</a>
-    <a href="#" class="btn"><span class="glyphicon glyphicon-download-alt"></span> last ned</a>
-    <a href="#" class="btn"><span class="glyphicon glyphicon-info-sign"></span> vis produktark</a>
-    <a href="#" class="btn"><span class="glyphicon glyphicon-list-alt"></span> vis produktspesifikasjon</a>
-    <a href="#" class="btn"><span class="glyphicon glyphicon-picture"></span> vis tegneregler</a>
-    <a href="#" class="btn"><span class="glyphicon glyphicon-globe"></span> besøk nettside</a>
+
+
+
+    @if (Model.ShowMapLink())
+    {
+        <a href="@Html.NorgeskartUrl()@Model.MapUrl()/" class="btn" target="_blank"><span class="glyphicon glyphicon-map-marker"></span> vis i kart</a>
+    }
+    else
+    {
+        <a href="#" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-map-marker"></span> vis i kart</a>
+    }
+
+
+
+    @if (Model.ShowDownloadService())
+    {
+        <a href="#" id="add-to-cart-btn" class="btn"><span class="glyphicon glyphicon-shopping-cart"></span> legg i kurv</a>
+    }
+    else if (Model.ShowDownloadLink())
+    {
+        <a href="@Model.DistributionDetails.URL" class="btn"><span class="glyphicon glyphicon-download-alt"></span> last ned</a>
+    }
+    else
+    {
+        <a href="" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-download-alt"></span> last ned</a>
+    }
+
+
+
+    @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
+    {
+        <a href="@Model.ProductSheetUrl" title="Vis produktark for @Model.Title" class="btn"><span class="glyphicon glyphicon-info-sign"></span> vis produktark</a>
+    }
+    else
+    {
+        <a href="#" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-info-sign"></span> vis produktark</a>
+    }
+
+
+    @if (!string.IsNullOrWhiteSpace(Model.ProductSpecificationUrl))
+    {
+        <a href="@Model.ProductSpecificationUrl" class="btn" title="Last ned produktspesifikasjon for @Model.Title"><span class="glyphicon glyphicon-list-alt"></span> vis produktspesifikasjon</a>
+    }
+    else
+    {
+        <a href="#" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-list-alt"></span> vis produktspesifikasjon</a>
+    }
+
+
+    @if (!string.IsNullOrWhiteSpace(Model.LegendDescriptionUrl))
+    {
+        <a href="@Model.LegendDescriptionUrl" class="btn" title="Vis tegneregler for @Model.Title"> <span class="glyphicon glyphicon-picture"></span> vis tegneregler</a>
+    }
+    else
+    {
+        <a href="#" class="btn disabled" disabled="disabled"> <span class="glyphicon glyphicon-picture"></span> vis tegneregler</a>
+    }
+
+
+    @if (Model.ShowWebsiteLink())
+    {
+        <a href="@Model.DistributionDetails.URL" class="btn"><span class="glyphicon glyphicon-globe"></span> besøk nettside</a>
+    }
+    else
+    {
+        <a href="" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-globe"></span> besøk nettside</a>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
+    {
+        <a href="@Model.ProductPageUrl" class="btn" title="Gå til produktsiden for @Model.Title"><span class="glyphicon glyphicon-info-sign"></span> Vis produktside</a>
+    }
+    else
+    {
+        <a href="#" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-info-sign"></span> vis produktside</a>
+    }
+
+
 </div>
-
-
 
 <div class="row">
     <article class="col-md-8">
@@ -102,63 +172,6 @@
             </div>
             <div class="col-sm-12">
                 <h2>Tilgjengelige ressurser</h2>
-
-                @if (Model.ShowWebsiteLink())
-                {
-                    <a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
-                        <span class="glyphicon glyphicon-globe"></span> besøk nettside
-                    </a>
-                }
-
-                @if (Model.ShowDownloadService())
-                {
-                    <a href="#" id="add-to-cart-btn" class="btn btn-default btn-primary">
-                        <span class="glyphicon glyphicon-shopping-cart"></span> Legg i kurv
-                    </a>
-
-                }
-
-                @if (Model.ShowDownloadLink())
-                {
-                    <a href="@Model.DistributionDetails.URL" class="btn btn-default btn-primary">
-                        <span class="glyphicon glyphicon-download-alt"></span> Last ned datasett
-                    </a>
-                }
-
-                @if (Model.ShowMapLink())
-                {
-                    <a href="@Html.NorgeskartUrl()@Model.MapUrl()/" class="btn btn-default btn-primary" target="_blank">
-                        <span class="glyphicon glyphicon-map-marker"></span> Vis tjenesten i kartet
-                    </a>
-                }
-
-                @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
-                {
-                    <a href="@Model.ProductPageUrl" class="btn btn-default" title="Gå til produktsiden for @Model.Title">
-                        <span class="glyphicon glyphicon-info-sign"></span> Produktside
-                    </a>
-                }
-
-                @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
-                {
-                    <a href="@Model.ProductSheetUrl" class="btn btn-default" title="Last ned produktark for @Model.Title">
-                        <span class="glyphicon glyphicon-globe"></span> Produktark
-                    </a>
-                }
-
-                @if (!string.IsNullOrWhiteSpace(Model.ProductSpecificationUrl))
-                {
-                    <a href="@Model.ProductSpecificationUrl" class="btn btn-default" title="Last ned produktspesifikasjon for @Model.Title">
-                        <span class="glyphicon glyphicon-list-alt"></span> Produktspesifikasjon
-                    </a>
-                }
-
-                @if (!string.IsNullOrWhiteSpace(Model.LegendDescriptionUrl))
-                {
-                    <a href="@Model.LegendDescriptionUrl" class="btn btn-default" title="Last ned kartografi for @Model.Title">
-                        <span class="glyphicon glyphicon-picture"></span> Kartografi
-                    </a>
-                }
 
 
                 @if (!string.IsNullOrEmpty(Model.CoverageUrl))
@@ -224,47 +237,7 @@
                     <a id="related-@Model.ParentIdentifier" href="/metadata/org/title/@Model.ParentIdentifier" title="Overordnet metadata for @Model.Title">
                     </a>
                 }
-                @if (Model.OperatesOn != null)
-                {
-                    if (Model.OperatesOn.Count > 0)
-                    {
-                        <h3>Relaterte metadata</h3>
-                        <div class="pre-scrollable" style="max-height: 100px; width: 400px;@(Model.OperatesOn.Count <= 2 ? "overflow-y: visible" : "")">
-                            <ul id="relatedList">
-                                @foreach (var id in Model.OperatesOn)
-                                {
-                                    <li>
-                                        <a id="related-@id" href="/metadata/org/title/@id" class="" title="Relatert metadata for @Model.Title">
 
-                                        </a>
-                                    </li>
-                                    <script>getMetadata('@id');</script>
-                                }
-                            </ul>
-
-                        </div>
-                        <script>
-
-                            $(function () {
-                                $.fn.sortList = function () {
-                                    var mylist = $(this);
-                                    var listitems = $('li', mylist).get();
-                                    listitems.sort(function (a, b) {
-                                        var compA = $(a).text().toUpperCase();
-                                        var compB = $(b).text().toUpperCase();
-                                        return (compA < compB) ? -1 : 1;
-                                    });
-                                    $.each(listitems, function (i, itm) {
-                                        alert
-                                        mylist.append(itm);
-                                    });
-
-                                }
-                            });
-                            setTimeout('$("ul#relatedList").sortList()', 3000);
-                        </script>
-                    }
-                }
 
 
                 @if (Model.IsDataset())
@@ -358,6 +331,145 @@
 
 
     <article class="col-md-12">
+        <div class="row">
+            <div class="col-sm-12">
+
+                @if (Model.OperatesOn != null)
+                {
+                    if (Model.OperatesOn.Count > 0)
+                    {
+                        <h3>Relaterte metadata</h3>
+                        <div id="tableView">
+                            <div id="relatedList">
+                                <div class="row search-results-table-heading">
+                                    <div class="col-sm-3"><p>Tittel</p></div>
+                                    <div class="col-sm-2"><p>Type</p></div>
+                                    <div class="col-sm-3"><p>Eier</p></div>
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-1"><p>Les mer</p></div>
+                                    <div class="col-sm-1"><p>Vis i kart</p></div>
+                                    <div class="col-sm-1"><p>Last ned</p></div>
+                                </div>
+                                <div class="menu-separator search-results-table-heading"></div>
+
+                                @foreach (var relatedContent in Model.Related)
+                                {
+
+                                    var relatedContentHierarchyLevelCssClass = "";
+                                    var relatedContentHierarchyLevelLabelText = "";
+                                    if (relatedContent.IsDataset())
+                                    {
+                                        relatedContentHierarchyLevelCssClass = "label-datasett";
+                                        relatedContentHierarchyLevelLabelText = "Datasett";
+                                    }
+                                    else if (Model.IsServiceLayer())
+                                    {
+                                        relatedContentHierarchyLevelCssClass = "label-tjenestelag";
+                                        relatedContentHierarchyLevelLabelText = "Tjenestelag";
+                                    }
+                                    else if (Model.IsService())
+                                    {
+                                        relatedContentHierarchyLevelCssClass = "label-tjeneste";
+                                        relatedContentHierarchyLevelLabelText = "Tjeneste";
+                                    }
+                                    else if (Model.IsApplication())
+                                    {
+                                        relatedContentHierarchyLevelCssClass = "label-applikasjon";
+                                        relatedContentHierarchyLevelLabelText = "Applikasjon";
+                                    }
+                                    else if (Model.IsDatasetSeries())
+                                    {
+                                        relatedContentHierarchyLevelCssClass = "label-datasettserie";
+                                        relatedContentHierarchyLevelLabelText = "Datasettserie";
+                                    }
+
+                                    else
+                                    {
+                                        relatedContentHierarchyLevelCssClass = "label-default";
+                                        relatedContentHierarchyLevelLabelText = relatedContent.HierarchyLevel;
+                                    }
+
+
+                                    <div class="row result-row">
+                                        <div class="col-sm-3 search-results-title">
+                                            <a id="related-@relatedContent.Uuid" href="/metadata/org/title/@relatedContent.Uuid" class="" title="Relatert metadata for @relatedContent.Title">
+                                                @relatedContent.Title
+                                            </a>
+                                        </div>
+                                        <div class="col-sm-2 search-results-type">
+                                            <span class="label @relatedContentHierarchyLevelCssClass">@relatedContentHierarchyLevelLabelText</span>
+                                        </div>
+                                        <div class="col-sm-3 search-results-organization">
+                                            @relatedContent.ContactOwner.Organization
+                                        </div>
+                                        <div class="col-sm-1 search-results-action-icons">
+                                            @*        @if (relatedContent.Keywords != null) {
+                                                    foreach (var keyword in relatedContent.Keywords) { keyword.KeywordValue.ToString(); }
+                                                }
+                                            *@
+                                        </div>
+                                        <div class="col-sm-1 search-results-action-icons">
+                                            <a href="/metadata/org/title/@relatedContent.Uuid" class="btn"><span class="glyphicon glyphicon-info-sign"></span></a>
+                                        </div>
+                                        <div class="col-sm-1 search-results-action-icons">
+                                            @if (relatedContent.ShowMapLink())
+                                            {
+                                                <a href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" class="btn"><span class="glyphicon glyphicon-map-marker"></span></a>
+                                            }
+                                            else
+                                            {
+                                                <a href="#" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-map-marker"></span></a>
+                                            }
+                                        </div>
+                                        <div class="col-sm-1 search-results-action-icons">
+                                            @if (relatedContent.ShowDownloadService())
+                                            {
+                                                <a href="#" id="add-to-cart-btn" class="btn"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                                            }
+                                            else if (relatedContent.ShowDownloadLink())
+                                            {
+                                                <a href="@relatedContent.DistributionDetails.URL" class="btn"><span class="glyphicon glyphicon-download-alt"></span></a>
+                                            }
+                                            else
+                                            {
+                                                <a href="" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-download-alt"></span></a>
+                                            }
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                }
+                            </div>
+
+                        </div>
+                        <script>
+
+                            $(function () {
+                                $.fn.sortList = function () {
+                                    var mylist = $(this);
+                                    var listitems = $('li', mylist).get();
+                                    listitems.sort(function (a, b) {
+                                        var compA = $(a).text().toUpperCase();
+                                        var compB = $(b).text().toUpperCase();
+                                        return (compA < compB) ? -1 : 1;
+                                    });
+                                    $.each(listitems, function (i, itm) {
+                                        alert
+                                        mylist.append(itm);
+                                    });
+
+                                }
+                            });
+                            setTimeout('$("ul#relatedList").sortList()', 3000);
+                        </script>
+                    }
+                }
+
+
+            </div>
+        </div>
+
+
         <div class="row">
             <div class="col-sm-6">
                 <h2>Kontaktinformasjon</h2>
@@ -571,7 +683,7 @@
 
         function showAlert(message, colorClass) {
             $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
-            $('#feedback-alert .message').text(message);
+            $('#feedback-alert .message').html(message);
             $('#feedback-alert').show();
         }
 
@@ -612,9 +724,9 @@
                         var metadata = { 'name': title, 'uuid': uuid, 'url': rootUrl + uuid, 'organizationLogoUrl': organizationLogoUrl, 'distributionUrl': distributionDetailsUrl };
                         localStorage["orderItems"] = JSON.stringify(orderItems);
                         localStorage[uuid + ".metadata"] = JSON.stringify(metadata);
-                        showAlert(title + ' er lagt til i kurven', 'success');
+                        showAlert(title + ' er lagt til i <a href="/Download">kurven</a>', 'success');
                     } else {
-                        showAlert(title + ' er allerede lagt til i kurven', 'warning');
+                        showAlert(title + ' er allerede lagt til i <a href="/Download">kurven</a>', 'warning');
                     }
                 });
             } else {
