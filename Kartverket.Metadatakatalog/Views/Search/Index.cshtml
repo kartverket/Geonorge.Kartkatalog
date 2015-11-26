@@ -177,7 +177,7 @@
                 {
                     <li class="filter-options">
                         <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
-                            <span class="glyphicon glyphicon-remove"> </span>
+                            <span class="glyphicon glyphicon-plus"> </span>
                             Vis alle
                         </button>
                     </li>
@@ -289,6 +289,38 @@
             }
             </text>
             }
+        });
+
+
+        /* Save enabled filter from facet-search */
+        $(document).ready(function () {
+            var activeFilters = {}
+            if (JSON.parse(localStorage.getItem("activeFilters")) != null) {
+                activeFilters = JSON.parse(localStorage.getItem("activeFilters"));
+            };
+            console.log(activeFilters);
+            $.each(activeFilters, function (name, active) {
+                var element = $("#filterInner .facet-sok-tittel[href='" + name + "']");
+                var subElement = $(name);
+                if (active) {
+                    element.removeClass("collapsed");
+                    element.attr("aria-expanded", "true");
+                    subElement.addClass("in")
+                    subElement.attr("aria-expanded", "true");
+                    subElement.css("height", "auto");
+                }
+            });
+
+            $("#filterInner").on("click", ".facet-sok-tittel", function () {
+                var name = ($(this).attr("href"));
+                if ($(this).attr("aria-expanded") == "true") {
+                    activeFilters[name] = false;
+                } else if ($(this).attr("aria-expanded") == "false") {
+                    activeFilters[name] = true;
+                }
+                var activeFiltersJSON = JSON.stringify(activeFilters);
+                localStorage.setItem("activeFilters", activeFiltersJSON);
+            });
         });
 
 

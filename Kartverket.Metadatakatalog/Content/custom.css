@@ -7,6 +7,10 @@ a {
     color: #3867c8;
 }
 
+a:hover {
+    color: #3867c8;
+}
+
 img {
     max-width: 100%;
 }
@@ -80,14 +84,27 @@ aside ul li, .container-footer ul li {
         font-size: 14pt;
         line-height: 16pt;
         font-style: normal;
+        color: #3867C8;
     }
 
         .facet-sok-undertitler li a:hover {
             font-size: 14pt;
             line-height: 16px;
+            color: #3867C8;
         }
 
+        .facet-sok-emne ul li{
+            background-image: none;
+            padding-left: 30px;
+        }
 
+        .facet-sok-emne ul li ul li {
+            padding-left: 15px;
+        }
+
+.facet-sok-undertitler  li.hide-children > ul > li.filter-options{
+    display: none;
+}
 
 .search-results .result-row {
     padding: 0;
