@@ -1,7 +1,7 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
 @model Kartverket.Metadatakatalog.Models.MetadataViewModel
 @{
-    ViewBag.Title = Model.Title + " - " + Model.ContactMetadata.Organization;
+    ViewBag.Title = Model.Title  + (Model.ContactMetadata != null ? " - " + Model.ContactMetadata.Organization :"");
     ViewBag.MetaDescription = Model.Abstract;
 
     var hierarchyLevelCssClass = "";
@@ -30,6 +30,11 @@
     {
         hierarchyLevelCssClass = "label-datasettserie";
         hierarchyLevelLabelText = "Datasettserie";
+    }
+    else if (Model.IsDatasetBundle())
+    {
+        hierarchyLevelCssClass = "label-datasett";
+        hierarchyLevelLabelText = "Datapakke";
     }
 
     else
