@@ -60,6 +60,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string MetadataStandard { get; set; }
         public string MetadataStandardVersion { get; set; }
         public List<string> OperatesOn { get; set; }
+        public List<MetadataViewModel> Related { get; set; }
         public string ProcessHistory { get; set; }
         public string ProductPageUrl { get; set; }
         public string ProductSheetUrl { get; set; }

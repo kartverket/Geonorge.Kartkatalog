@@ -109,6 +109,19 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
 
+            if(metadata.OperatesOn != null) {
+                metadata.Related = new List<MetadataViewModel>();
+                foreach (var rel in metadata.OperatesOn)
+                {
+                    try
+                    {
+                        metadata.Related.Add(GetMetadataByUuid(rel));
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+            }
 
             return metadata;
         }
