@@ -66,7 +66,8 @@ namespace Kartverket.Metadatakatalog
                       "~/Content/site.css",
                       "~/Content/custom.css",
                       "~/Content/geonorge-colors.css",
-                      "~/Content/searchresult-layout.css"));
+                      "~/Content/searchresult-layout.css",
+                      "~/Content/font-awesome.min.css"));
             // "~/Content/jquery.typeahead.css",
             //bundles.Add(new StyleBundle("~/Content/css").Include(
             //          "~/Content/bootstrap.css",

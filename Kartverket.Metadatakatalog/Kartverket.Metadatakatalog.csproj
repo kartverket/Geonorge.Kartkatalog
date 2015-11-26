@@ -286,6 +286,7 @@
     <Content Include="Content\custom.css" />
     <Content Include="Content\download.css" />
     <Content Include="Content\common.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\geonorge-default.css" />
     <Content Include="Content\geonorge-colors.css" />
     <Content Include="Content\img\arrow-down.svg" />
@@ -310,6 +311,7 @@
     <Content Include="Content\searchbar.css" />
     <Content Include="Content\searchresult-layout.css" />
     <Content Include="Content\site.css" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site_old.css" />
@@ -342,6 +344,11 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="KartverketSharedMenu\Images\arrow_ffffff_13px-01.svg" />
     <Content Include="KartverketSharedMenu\Images\geonorge_logo_350px.svg" />
