@@ -13,7 +13,10 @@
 }
 
 $(document).ready(function () {
-    var layout = localStorage.getItem("layout");
+    var layout = tableView;
+    if (localStorage.getItem("layout") != null) {
+        layout = localStorage.getItem("layout");
+    };
     changeLayout(layout);
 });
 
