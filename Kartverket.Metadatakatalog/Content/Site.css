@@ -1,5 +1,7 @@
 ﻿input::-ms-clear { display: none; }
 
+body { font-family: 'Open Sans', sans-serif; }
+
 .container-breadcrumbs { display: none; }
 
 .container-breadcrumbs .breadcrumbs {
@@ -14,13 +16,12 @@
     color: #414042;
     display: inline-block;
     font-family: 'Raleway', sans-serif;
-    font-size: 12pt;
+    font-size: 10.5pt;
     font-weight: 500;
 }
 
 .container-breadcrumbs .breadcrumbs > li > a {
     color: #3867c8;
-    text-decoration: none;
 }
 
 .container-breadcrumbs .breadcrumbs > li + li:before {
@@ -31,9 +32,9 @@
 }
 
 .container h1 {
-    color: #403a60;
+    color: #414042;
     font-family: 'Raleway', sans-serif;
-    font-size: 36pt;
+    font-size: 34pt;
     font-weight: 100;
     margin: 0;
     padding-top: 26px;
@@ -41,18 +42,18 @@
 }
 
 .container h2 {
-    color: #403a60;
+    color: #5d4777;
     font-family: 'Raleway', sans-serif;
-    font-size: 28pt;
+    font-size: 24pt;
     font-weight: 300;
-    margin-top: 50px;
+    margin-top: 40px;
     word-wrap: break-word;
 }
 
 .container h3 {
-    color: #403a60;
+    color: #5d4777;
     font-family: 'Raleway', sans-serif;
-    font-size: 20pt;
+    font-size: 18pt;
     font-weight: 300;
     margin-top: 50px;
     word-wrap: break-word;
@@ -69,8 +70,8 @@
 .separator-md {
     border-bottom: solid #fe5000 2px;
     display: inline-block;
-    margin-bottom: 20px;
-    padding-top: 20px;
+    margin-bottom: 5px;
+    padding-top: 10px;
     width: 50px;
 }
 
@@ -82,7 +83,7 @@
 .ingress {
     color: #000000;
     font-family: 'Open Sans', sans-serif;
-    font-size: 17pt;
+    font-size: 16pt;
     font-style: italic;
     font-weight: 500;
     line-height: 24pt;
@@ -98,9 +99,9 @@ article .body-text img {
 article p {
     color: #000000;
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
+    font-size: 12pt;
     font-weight: 500;
-    line-height: 24pt;
+    line-height: 22pt;
     word-wrap: break-word;
 }
 
@@ -132,8 +133,8 @@ article a,
 article a:hover {
     color: #3867c8;
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
-    line-height: 24pt;
+    font-size: 12pt;
+    line-height: 22pt;
     text-decoration: underline;
     word-wrap: break-word;
 }
@@ -166,18 +167,18 @@ aside ul li,
     background-repeat: no-repeat;
     background-size: 11px 12px;
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
+    font-size: 12pt;
     font-style: italic;
-    line-height: 24pt;
+    line-height: 22pt;
     padding-left: 18px;
 }
 
 article ul li:before {
     color: #fe5000;
     content: "•";
-    font-size: 16pt;
+    font-size: 12pt;
     font-style: normal;
-    line-height: 24pt;
+    line-height: 22pt;
     padding-right: 10px;
 }
 
@@ -192,11 +193,13 @@ aside ul li a:hover,
 .container-footer ul li a:hover {
     color: #3867c8;
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
+    font-size: 12pt;
     font-weight: 400;
-    line-height: 24pt;
+    line-height: 22pt;
     text-decoration: none;
 }
+
+aside ul li a p { margin: 0; }
 
 article ul li a:hover,
 article ol li a:hover,
@@ -204,7 +207,7 @@ aside ul li a:hover,
 .container-footer ul li a:hover { text-decoration: underline; }
 
 .container aside h3 {
-    color: #000000;
+    color: #414042;
     font-family: 'Open Sans', sans-serif;
     font-size: 16pt;
     font-weight: 400;
@@ -227,7 +230,7 @@ footer .container-footer { padding: 30px 0; }
 footer .container-footer h2 {
     color: #414042;
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
+    font-size: 14pt;
     font-weight: 600;
     margin-top: 0;
     text-transform: uppercase;
@@ -239,9 +242,9 @@ footer .container-footer h2 {
 .container-footer p {
     color: #414042;
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
+    font-size: 12pt;
     font-weight: 400;
-    line-height: 26pt;
+    line-height: 22pt;
 }
 
 .page-wizard {
@@ -377,9 +380,9 @@ form {
 .container .info-text {
     color: #FFFFFF;
     font-family: 'Raleway', sans-serif;
-    font-size: 16pt;
-    font-weight: 100;
-    height: 73.906px;
+    font-size: 14pt;
+    font-weight: 300;
+    height: 88.906px;
     line-height: 18pt;
     overflow: hidden;
     padding: 15px;
@@ -393,7 +396,7 @@ form {
     color: #968c83;
     display: block;
     font-family: 'Open Sans', sans-serif;
-    font-size: 14pt;
+    font-size: 12pt;
     font-weight: 400;
     padding-top: 20px;
 }
@@ -422,7 +425,7 @@ form {
 .start-page-container .start-page-ingress {
     color: #000000;
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
+    font-size: 14pt;
     font-weight: 400;
     line-height: 24pt;
 }
@@ -430,9 +433,9 @@ form {
 .start-page-container .start-page-read-more a {
     color: #3867c8;
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
+    font-size: 12pt;
     font-weight: 400;
-    line-height: 24pt;
+    line-height: 22pt;
     text-decoration: underline;
 }
 
@@ -444,11 +447,11 @@ form {
 .teaser { text-align: center; }
 
 .teaser h2 {
-    color: #403a60;
-    font-family: 'Raleway', sans-serif;
-    font-size: 30pt;
-    font-weight: 300;
+    font-size: 18pt;
+    font-weight: 400;
+    line-height: 20pt;
     margin: 0;
+    text-transform: uppercase;
 }
 
 .teaser .separator-teaser,
@@ -460,22 +463,14 @@ form {
     width: 50px;
 }
 
-.teaser p,
-.teaser p + div {
-    color: #000000;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
-    font-weight: 400;
-    line-height: 24pt;
-}
-
 .start-page-container .container-fluid { padding: 0; }
 
 .standard-page-main-content-area .listblock { text-align: left; }
 
 .start-page-main-content-area > div > :nth-child(even) { background-color: #e5e2e0; }
 
-.teaser-with-icon { padding: 55px 15px 80px 15px; }
+.teaser-with-icon,
+.teaser { padding: 30px 15px 50px 15px; }
 
 .teaser-with-icon .call-to-action {
     height: 140px;
@@ -572,9 +567,9 @@ form {
 }
 
 .teaser-with-icon .teaser-heading {
-    color: #403a60;
+    color: #5d4777;
     font-family: 'Raleway', sans-serif;
-    font-size: 16pt;
+    font-size: 18pt;
     font-weight: 400;
     height: 80px;
     line-height: 20pt;
@@ -599,8 +594,9 @@ form {
 }
 
 .teaser-with-icon .teaser-text {
-    font-size: 16pt;
-    line-height: 20pt;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14pt;
+    line-height: 22pt;
 }
 
 .teaser-with-background-image {
@@ -669,18 +665,18 @@ form {
 
 .teaser-with-background-image .teaser-heading {
     font-family: 'Raleway', sans-serif;
-    font-size: 22pt;
+    font-size: 16pt;
     font-weight: 600;
     text-transform: uppercase;
 }
 
 .teaser-with-background-image .teaser-text {
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
+    font-size: 13pt;
 }
 
 .teaser-as-list h1 {
-    color: #403a60;
+    color: #5d4777;
     font-family: 'Raleway', sans-serif;
     font-size: 36pt;
     font-weight: 100;
@@ -694,12 +690,15 @@ form {
 .teaser-as-list p {
     color: #000000;
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
+    font-size: 12pt;
     font-weight: 400;
-    line-height: 24pt;
+    line-height: 22pt;
 }
 
-.container .layout-block-toggle { padding: 30px 0 40px; }
+.container .layout-block-toggle {
+    padding: 10px 0 30px;
+    text-align: center;
+}
 
 .container .layout-block-toggle * {
     background-color: transparent;
@@ -726,7 +725,10 @@ form {
 
 .container-footer hr { border-top: 1.5px solid #968c83; }
 
-.container-footer .block { padding-bottom: 22px; }
+.container-footer .block {
+    padding-bottom: 22px;
+    padding-top: 10px;
+}
 
 .container-footer .block::after {
     border-bottom: solid #fe5000 2px;
@@ -752,27 +754,20 @@ form {
 
 .to-top-container { text-align: center; }
 
-.standard-page-main-content-area .listblock h2 {
-    color: #403a60;
-    font-family: 'Raleway', sans-serif;
-    font-size: 40pt;
-    font-weight: 300;
-}
-
 .standard-page-main-content-area .listblock .last-changed-date {
     color: #968c83;
     font-family: 'Open Sans', sans-serif;
-    font-size: 12pt;
+    font-size: 11pt;
     font-weight: 400;
-    padding: 0;
+    padding: 10px 0 0;
 }
 
 .standard-page-main-content-area p {
     color: #000000;
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
+    font-size: 14pt;
     font-weight: 400;
-    line-height: 22pt;
+    line-height: 24pt;
 }
 
 .standard-page-main-content-area .listblock ul {
@@ -781,9 +776,9 @@ form {
     padding: 0;
 }
 
-.standard-page-main-content-area .listblock ul * { display: inline-block; }
+/*.standard-page-main-content-area .listblock ul * { display: inline-block; }*/
 
-.standard-page-main-content-area .listblock li { margin: 0 0 30px 0; }
+.standard-page-main-content-area .listblock li { margin: 0 0 40px 0; }
 
 .standard-page-main-content-area .listblock a { display: block; }
 
@@ -791,9 +786,6 @@ form {
 .standard-page-main-content-area .listblock a {
     color: #3867c8;
     display: block;
-    font-family: 'Raleway', sans-serif;
-    font-size: 25pt;
-    font-weight: 300;
     margin: 0;
 }
 
@@ -821,7 +813,7 @@ form {
 
 .standard-page-main-content-area .formblock form tr {
     display: block;
-    margin-top: 45px;
+    margin-top: 15px;
 }
 
 .standard-page-main-content-area .formblock form tr.submit { margin-top: 30px; }
@@ -893,6 +885,15 @@ form {
     width: 190px;
 }
 
+.teaser p,
+.teaser p + div {
+    color: #000000;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14pt;
+    font-weight: 400;
+    line-height: 24pt;
+}
+
 iframe { width: 100% !important; }
 
 .page-not-found-container .illustration {
@@ -903,7 +904,7 @@ iframe { width: 100% !important; }
 }
 
 .page-not-found-container .illustration .illustration-text p {
-    color: #403a60;
+    color: #5d4777;
     font-family: 'Raleway', sans-serif;
     font-size: 14pt;
     font-weight: 300;
@@ -929,7 +930,7 @@ iframe { width: 100% !important; }
 .page-not-found-container .help-links .help-links-icon-container .icon-envelope { height: 23px; }
 
 .page-not-found-container .help-links a {
-    color: #403a60;
+    color: #5d4777;
     font-family: 'Raleway', sans-serif;
     font-size: 13pt;
     font-weight: 400;
@@ -942,24 +943,23 @@ iframe { width: 100% !important; }
 
 @media (min-width: 768px) {
     .container h1 {
-        font-size: 65pt;
-        padding-top: 56px;
-        word-wrap: normal;
+        font-size: 50pt;
+        padding-top: 28px;
     }
 
     .container h2 {
-        font-size: 40pt;
+        font-size: 34pt;
         word-wrap: normal;
     }
 
     .container h3 {
-        font-size: 30pt;
+        font-size: 24pt;
         word-wrap: normal;
     }
 
-    .start-page-container .start-page-ingress { font-size: 20pt; }
+    .start-page-container .start-page-ingress { font-size: 18pt; }
 
-    .start-page-container .start-page-read-more a { font-size: 20pt; }
+    .start-page-container .start-page-read-more a { font-size: 18pt; }
 
     .start-page-container .start-page-separator-lg {
         margin: 0 auto 30px auto;
@@ -970,7 +970,7 @@ iframe { width: 100% !important; }
     .start-page-heading { padding-top: 10px; }
 
     .start-page-head {
-        background-color: transparent;
+        background: none;
         padding: 0;
     }
 
@@ -978,6 +978,12 @@ iframe { width: 100% !important; }
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;
+        height: 350px;
+    }
+
+    .start-page-main-image > .container {
+        background-image: -webkit-linear-gradient(top, transparent 0, rgba(255, 255, 255, .8) 100%);
+        background-image: linear-gradient(to bottom, transparent 0, rgba(255, 255, 255, .8) 100%);
         height: 350px;
     }
 
@@ -990,9 +996,12 @@ iframe { width: 100% !important; }
         width: 100px;
     }
 
-    .ingress { font-size: 20pt; }
+    .ingress { font-size: 18pt; }
 
-    article p { line-height: 22pt; }
+    article p {
+        font-size: 14pt;
+        line-height: 24pt;
+    }
 
     article h2 { margin-bottom: 30px; }
 
@@ -1000,7 +1009,7 @@ iframe { width: 100% !important; }
 
     article h2:after {
         margin-bottom: 10px;
-        padding-top: 73.333px;
+        padding-top: 62px;
         width: 100px;
     }
 
@@ -1013,17 +1022,23 @@ iframe { width: 100% !important; }
     article ul li,
     article ol li,
     aside ul li,
-    .container-footer ul li { line-height: 22pt; }
+    .container-footer ul li {
+        font-size: 14pt;
+        line-height: 24pt;
+    }
 
     article .body-text { padding-top: 20px; }
 
     article a,
-    article a:hover { line-height: 22pt; }
+    article a:hover {
+        font-size: 14pt;
+        line-height: 24pt;
+    }
 
     aside { padding-top: 0; }
 
     aside ul li a,
-    aside ul li a:hover { line-height: 22pt; }
+    aside ul li a:hover { line-height: 24pt; }
 
     footer { border-top: solid 1px #968c83; }
 
@@ -1032,8 +1047,6 @@ iframe { width: 100% !important; }
     .block { padding: 60px 0; }
 
     .layoutblock .block { padding: 0 15px; }
-
-    .teaser h2 { font-size: 40pt; }
 
     .teaser .separator-teaser,
     .teaser-as-list .separator-teaser {
@@ -1050,7 +1063,7 @@ iframe { width: 100% !important; }
     }
 
     .teaser p,
-    .teaser p + div { font-size: 20pt; }
+    .teaser p + div { font-size: 14pt; }
 
     .layout .main-content-area { display: block; }
 
@@ -1084,6 +1097,30 @@ iframe { width: 100% !important; }
         right: 0;
         top: 610px;
     }
+
+    article ul li:before {
+        font-size: 14pt;
+        line-height: 24pt;
+    }
+
+    .container-footer ul li a,
+    .container-footer ul li a:hover { line-height: 24pt; }
+
+    aside ul li a,
+    aside ul li a:hover,
+    .container-footer ul li a,
+    .container-footer ul li a:hover { font-size: 14pt; }
+
+    .container-footer p {
+        font-size: 14pt;
+        line-height: 24pt;
+    }
+
+    .teaser h2 { font-size: 18pt; }
+
+    .standard-page-main-content-area .formblock form tr { margin-top: 45px; }
+
+    .start-page-heading h1 { font-weight: 200; }
 }
 
 @media (min-width: 992px) and (max-width: 1200px) {
@@ -1139,10 +1176,5 @@ iframe { width: 100% !important; }
 }
 
 @media (min-width: 992px) {
-    .teaser-with-icon .teaser-heading {
-        font-size: 20pt;
-        line-height: 25pt;
-    }
-
     aside .hexagonblock { display: block; }
 }

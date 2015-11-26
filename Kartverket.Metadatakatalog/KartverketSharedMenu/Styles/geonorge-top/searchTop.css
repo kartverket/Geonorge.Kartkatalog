@@ -137,9 +137,9 @@
 .auto-results-title {
     color: #414041;
     font-family: 'Open Sans', sans-serif;
-    font-size: 17pt;
+    font-size: 14pt;
     font-weight: 600;
-    line-height: 44pt;
+    line-height: 40pt;
     margin-bottom: 5px;
     margin-top: 17px;
 }
@@ -153,9 +153,9 @@
 .auto-results-inner:hover {
     color: #3867c8;
     font-family: 'Open Sans', sans-serif;
-    font-size: 17pt;
+    font-size: 14pt;
     font-weight: 400;
-    line-height: 44pt;
+    line-height: 40pt;
 }
 
 .autocomplete-loader { position: relative; }

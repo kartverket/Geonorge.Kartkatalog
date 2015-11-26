@@ -37,16 +37,16 @@
     color: #414042;
     display: none;
     font-family: 'Raleway', sans-serif;
-    font-size: 14pt;
+    font-size: 12pt;
     font-weight: 500;
-    padding: 0 4px;
+    padding: 2px 4px 0 4px;
     text-transform: uppercase;
     vertical-align: middle;
 }
 
 .menu-toggle button .icon-bar {
-    height: 6px;
-    width: 35px;
+    height: 5px;
+    width: 30px;
 }
 
 .menu-toggle button.collapsed .icon-bar { background-color: #968c83; }
