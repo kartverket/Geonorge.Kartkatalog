@@ -165,6 +165,9 @@ h1 .label {
     margin-bottom: 15px;
 }
 
+.pagination > .active > a{
+    z-index: 1;
+}
 
 /* Forms */
 .custom-select {
