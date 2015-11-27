@@ -328,6 +328,19 @@
             @if(Html.DownloadServiceEnabled())
          {
          <text>
+
+
+            $("#popoverExport").popover({
+                html: true,
+                content: function () {
+                    return $('#popoverExportContent').html();
+                },
+                title: function () {
+                    return $('#popoverExportTitle').html();
+                }
+            });
+
+
             if (Modernizr.localstorage) {
 
                 console.log('window.localStorage is available!');
@@ -767,9 +780,10 @@
                 </ul>
             </div>
         </div>
-        <span class="separator-small separator-gray"></span>
-        <div class="row view-navigation">
+       
+            <div class="row view-navigation">
             <div class="col-sm-12">
+             
                 <p>Velg visningsform:</p>
                 <div class="custom-select">
                     <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
@@ -779,7 +793,54 @@
                     </select>
                 </div>
             </div>
+                <div class="col-sm-12">
+                    <p>Lagre som:</p>
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="custom-select">
+                                <select id="" class="form-control">
+                                    <option value="">ATOM</option>
+                                    <option value="">RSS</option>
+                                    <option value="">CSV</option>
+                                    <option value="">GML</option>
+                                    <option value="">RDF</option>
+                                    <option value="">JSON</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <a href="#" class="btn">Lagre</a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            
+
+
+@*
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="popoverExportContent" style="display: none">
+                <div>
+                    <a href="/Help" class="btn btn-sm btn-default" title="Hjelp til API og formater(Beta)"><span class="fa fa-question"></span> API</a>
+                    <a href="#" class="btn" title="Vis Atom feed(Beta)"><span class="fa fa-rss"></span> ATOM</a>
+                    <a href="#" class="btn" title="Vis rss feed(Beta)"><span class="fa fa-rss"></span> RSS</a>
+                    <a href="#" class="btn" title="Vis CSV(Beta)"><span class="fa fa-file-excel-o"></span> CSV</a>
+                    <a href="#" class="btn" title="Vis GML Dictionary(Beta)"><span class="fa fa-file-code-o"></span> GML</a>
+                    <a href="#" class="btn" title="Vis SKOS/RDF(Beta)"><span class="fa fa-file-code-o"></span> RDF</a>
+                    <a href="#" class="btn" title="Vis JSON(Beta)"><span class="fa fa-file-code-o"></span> JSON</a>
+                </div>
+            </div>
+            <div id="popoverExportTitle" style="display: none">
+                <div>Eksporter</div>
+            </div>
+
+            <button id="popoverExport" class="btn" data-container="body" data-toggle="popover" data-placement="bottom" data-content="">Eksporter</button>
         </div>
+    </div>
+*@
+  
         <span class="separator-small separator-gray"></span>
 
         <aside class="facet-sok-emne">
