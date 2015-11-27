@@ -730,6 +730,7 @@
                         localStorage["orderItems"] = JSON.stringify(orderItems);
                         localStorage[uuid + ".metadata"] = JSON.stringify(metadata);
                         showAlert(title + ' er lagt til i <a href="/Download">kurven</a>', 'success');
+                        updateShoppingCart();
                     } else {
                         showAlert(title + ' er allerede lagt til i <a href="/Download">kurven</a>', 'warning');
                     }

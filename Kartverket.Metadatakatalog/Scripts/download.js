@@ -118,7 +118,7 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
         var orderItemOmraader = (JSON.parse(localStorage.getItem(uuid + '.codelists.area')));
         var orderItemSelectOmraader = $('#orderuuid' + uuid + ' .selectOmraader');
         orderItemSelectOmraader.attr('name', uuid + '-areas');
-        orderItemSelectOmraader.change(function () {           
+        orderItemSelectOmraader.change(function () {
             populateProjectionAndFormatList(uuid, orderItemOmraader);
         });
         var orderItemSelectOmraaderFylker = $('#orderuuid' + uuid + ' .selectOmraader .selectOmraaderFylker');
@@ -196,7 +196,7 @@ function populateProjectionAndFormatList(uuid, orderItemOmraader) {
             }
         });
     }
-    
+
 }
 
 
@@ -352,6 +352,7 @@ $(window).load(function () {
                   }
               });
         $(this).closest('.order-item').remove();
+        updateShoppingCart();
     }));
 
     // Fjerning av alle datasett fra handlekurv
@@ -370,6 +371,7 @@ $(window).load(function () {
               });
         $('#remove-all-items-modal').modal('hide')
         $('.order-item').remove();
+        updateShoppingCart();
     });
 
 

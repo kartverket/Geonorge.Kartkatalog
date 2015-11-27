@@ -1,34 +1,28 @@
-﻿function setCookieValue(cookieName, cookieValue, cookieDomain) {
-    var now = new Date();
-    var hour = 4;
-    now.setTime(now.getTime() + (hour * 60 * 60 * 1000));
-    var cookieExpireDate = "expires=" + now.toGMTString();
+﻿function updateShoppingCart() {
+    var shoppingCartElement = $('#orderitem-count');
+    var orderItems = "";
+    if (localStorage.getItem("orderItems") != null && localStorage.getItem("orderItems") != "[]") {
+        orderItems = localStorage.getItem("orderItems");
+    } else {
+        orderItems = "";
+    }
+    var orderItemsObj = {};
+    var cookieName = "orderitems";
+    var cookieValue = 0;
+    var cookieDomain = "geonorge.no";
 
-    console.log("cookieName: " + cookieName);
-    console.log("cookieValue: " + cookieValue);
-    console.log("cookieDomain: " + cookieDomain);
-    console.log("cookieExpireDate: " + cookieExpireDate);
-    document.cookie = "test=testverdi";
-    document.cookie = cookieName + "=" + cookieValue + "; " + cookieExpireDate + "; domain=." + cookieDomain + ";path=/";
+    if (orderItems == "") {
+        shoppingCartElement.css("display", "none");
+    } else {
+        shoppingCartElement.css("display", "block");
+        orderItemsObj = JSON.parse(orderItems);
+        cookieValue = orderItemsObj.length;
+        shoppingCartElement.html(cookieValue);
+    } 
+    $.cookie(cookieName, cookieValue, { expires: 7 });
 }
 
-function deleteCookieValue(cookieName) {
-    var d = new Date();
-    d.setTime(d.getTime());
-    var cookieExpireDate = "expires=" + d.toString();
-    document.cookie = cookieName + "=expired;" + cookieExpireDate;
-}
-
-var shoppingCartElement = $('.shopping-cart-container .shopping-cart #orderitem-count');
 
 $(window).load(function () {
-    var orderItems = JSON.parse(localStorage.getItem("orderItems"));
-    var cookieName = "orderitems";
-    var cookieValue = orderItems.length;
-    var cookieDomain = "geonorge.no";
-      
-    $.cookie(cookieName, cookieValue, { expires: 7 });
-
-    //deleteCookieValue(cookieName);
-   // setCookieValue(cookieName, cookieValue, cookieDomain);
+    updateShoppingCart();
 });
