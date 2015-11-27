@@ -3,6 +3,10 @@
     display: inline-block;
 }
 
+    #orderlist h2 a {
+        font-size: 24pt;
+    }
+
 #orderlist a {
     text-decoration: none;
 }
@@ -193,13 +197,13 @@
     border-left: 1px solid #CCC;
     padding-left: 5px;
     color: #777;
-    font-size: 12pt;
+    font-size: 16pt;
 }
 
     .list-btn-remove:hover {
         cursor: pointer;
         color: #333;
-        font-size: 12pt;
+        font-size: 16pt;
     }
 
 
