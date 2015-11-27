@@ -270,7 +270,7 @@
 
 
         $(document).ready(function () {
-            @if(Html.DownloadServiceEnabled())
+            @if (Html.DownloadServiceEnabled())
             {
             <text>
             if (localStorage.getItem("orderItems") != null) {
@@ -325,8 +325,8 @@
 
 
         $(window).load(function () {
-            @if(Html.DownloadServiceEnabled())
-         {
+            @if (Html.DownloadServiceEnabled())
+            {
          <text>
 
 
@@ -390,7 +390,7 @@
             }
 
             </text>
-        }
+            }
 
         });
     </script>
@@ -783,13 +783,13 @@
        
             <div class="row view-navigation">
             <div class="col-sm-12">
-             
                 <p>Velg visningsform:</p>
                 <div class="custom-select">
-                    <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
+                    <select id="layoutSelect" onchange="additionalView(this.value)" class="form-control">
                         <option value="tableView" id="button-tableView">Tabell</option>
                         <option value="listView" id="button-listView">Liste</option>
                         <option value="galleryView" id="button-galleryView">Galleri</option>
+                        <option value="csvView" id="button-csvView">Csv</option>
                     </select>
                 </div>
             </div>
