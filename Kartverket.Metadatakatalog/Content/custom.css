@@ -148,7 +148,11 @@ h1 .label {
     font-weight: normal;
     font-size: 12pt;
     margin-bottom: 7px;
-    border-radius: 3px;
+    border-radius: 0;
+}
+
+.pagination li a, .btn {
+    height: 34px;
 }
 
 
@@ -176,32 +180,32 @@ h1 .label {
     content: "";
     background-repeat: no-repeat;
     background-position: right center;
-    background-size: 35px 34px;
-    border-radius: 3px;
+    background-size: 40px 33px;
+    border-radius: 0;
 }
 
-.custom-select:hover{
-    background-image: url("/Content/img/arrow-select-orange.svg");
-}
+    .custom-select:hover {
+        background-image: url("/Content/img/arrow-select-orange.svg");
+    }
 
-.custom-select select, .custom-select select.form-control {
-    -webkit-appearance: none;
-       -moz-appearance: none;
+    .custom-select select, .custom-select select.form-control {
+        -webkit-appearance: none;
+        -moz-appearance: none;
         -ms-appearance: none;
-         -o-appearance: none;
-            appearance: none;
-    border: none;
-    box-shadow: none;
-    font-family: "Open Sans",sans-serif;
-    background: none;
-    font-size: 14pt;
-    padding: 0 8px;
-    height: 32px;
-    border: 1px solid #CFCFCF;
-    border-radius: 3px;
-    margin-bottom: 10px;
-}
+        -o-appearance: none;
+        appearance: none;
+        border: none;
+        box-shadow: none;
+        font-family: "Open Sans",sans-serif;
+        background: none;
+        font-size: 14pt;
+        padding: 0 8px;
+        height: 34px;
+        border: 1px solid #CFCFCF;
+        border-radius: 0;
+        margin-bottom: 10px;
+    }
 
-.custom-select select::-ms-expand {
-    display: none;
-}
+        .custom-select select::-ms-expand {
+            display: none;
+        }

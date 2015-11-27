@@ -57,24 +57,23 @@
 
 
     .chosen-input-group button.btn {
-        border-top-right-radius: 4px !important;
-        border-bottom-right-radius: 4px !important;
+        border-radius: 0;
     }
 
         .chosen-input-group button.btn:hover {
-            border-top-right-radius: 4px !important;
-            border-bottom-right-radius: 4px !important;
+            border-radius: 0;
         }
 
 .chosen-container-multi .chosen-choices {
     background-image: none;
+    background: none;
     border: 1px solid #CCC;
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
     border: none;
     border-bottom: 2.5px solid #FE5000;
     border: 1px solid #cfcfcf;
-    border-radius: 3px;
-    padding: 5px;
+    border-radius: 0;
+    padding: 0 5px;
 }
 
     .chosen-container-multi .chosen-choices:focus {

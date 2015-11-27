@@ -53,7 +53,7 @@
         }
 
 .pagination {
-    margin-top: 0;
+    margin: 0;
 }
 
     .pagination > li > a, .pagination > li > span {
@@ -62,13 +62,12 @@
         border: 1px solid #FFF;
         transition: all 0.35s linear 0s;
         color: #FFF;
-        border-radius: 0!important;
+        border-radius: 0 !important;
         font-size: 12pt;
     }
 
 
     .pagination > .active > a {
-        
         background-color: #FE5000;
         color: #FFF;
         border: 1px solid #FFF;
