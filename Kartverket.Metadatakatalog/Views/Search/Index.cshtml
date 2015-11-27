@@ -455,7 +455,7 @@
                         <div class="col-sm-2 search-results-type">
                             <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
                         </div>
-                        <div class="col-sm-3 search-result-organization">
+                        <div class="col-sm-3 search-results-organization">
                             <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">
                                 @if (item.Organization != null)
                                 {
