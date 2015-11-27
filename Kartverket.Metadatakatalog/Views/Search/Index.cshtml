@@ -298,7 +298,6 @@
             if (JSON.parse(localStorage.getItem("activeFilters")) != null) {
                 activeFilters = JSON.parse(localStorage.getItem("activeFilters"));
             };
-            console.log(activeFilters);
             $.each(activeFilters, function (name, active) {
                 var element = $("#filterInner .facet-sok-tittel[href='" + name + "']");
                 var subElement = $(name);
@@ -401,15 +400,94 @@
         @Html.Partial("_SearchBarPartial", Model)
     </article>
 *@
+
+@{
+    string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("search", "api/search");
+    var qs = HttpUtility.ParseQueryString(Request.QueryString.ToString());
+    qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
+    string query = qs.ToString(); string urlCSV = url + "?" + query;
+}
+
+
 <div class="row">
     <div class="col-sm-12 col-md-9">
+        <div class="row search-result-navigation">
+            <div class="col-sm-7">
+                <p>Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:</p>
+                <ul class="pagination pagination-sm btn-group inline-block">
+                    @if (Model.IsFirstButtonActive())
+                    {
+                        <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
+                    }
+
+                    @if (Model.IsPreviousButtonActive())
+                    {
+                        <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> Forrige</a></li>
+                    }
+
+                    @for (int i = Model.startPage; i <= Model.endPage; i++)
+                    {
+                        if (Model.IsActivePage(i))
+                        {
+                            <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        }
+                    }
+
+                    @if (Model.IsNextButtonActive())
+                    {
+                        <li><a href="@Url.Action("Index", Model.ParamsForNextLink())"> Neste <span class="fa fa-angle-right"></span></a></li>
+                    }
+                    @if (Model.IsLastButtonActive())
+                    {
+                        <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
+                    }
+                </ul>
+            </div>
+            <div class="col-sm-5">
+                
+                <div class="row">
+                    <div class="col-sm-4 text-right no-padding">
+                        <p>Lagre som:</p>
+                    </div>
+                    <div class="col-sm-5 no-padding-bottom">
+                        <div class="custom-select">
+                            <select onchange="additionalView(this.value)" class="form-control">
+                                <option disabled="disabled" value="atomUrl">ATOM</option>
+                                <option disabled="disabled" value="rssUrl">RSS</option>
+                                <option value="csvUrl" selected="selected">CSV</option>
+                                <option disabled="disabled" value="gmlUrl">GML</option>
+                                <option disabled="disabled" value="rdfUrl">RDF</option>
+                                <option disabled="disabled" value="jsonUrl">JSON</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="saveButtons" class="col-sm-3 no-padding-bottom">
+                        <a class="hidden" id="atomUrl" href="#">Lagre</a>
+                        <a class="hidden" id="rssUrl" href="#">Lagre</a>
+                        <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
+                        <a class="hidden" id="gmlUrl" href="#">Lagre</a>
+                        <a class="hidden" id="rdfUrl" href="#">Lagre</a>
+                        <a class="hidden" id="jsonUrl" href="#">Lagre</a>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            
+        </div>
+
+        <span class="separator-small separator-gray margin-bottom-10"></span>
+
         @if (Model.Result != null)
         {
             <div id="tableView" class="search-results">
                 <div class="row search-results-table-heading">
                     <div class="col-sm-3"><p>Tittel</p></div>
                     <div class="col-sm-2"><p>Type</p></div>
-                    <div class="col-sm-3"><p>Eier</p></div>
+                    <div class="col-sm-3"><p>Dataeier</p></div>
                     <div class="col-sm-1"></div>
                     <div class="col-sm-1"><p>Les mer</p></div>
                     <div class="col-sm-1"><p>Vis i kart</p></div>
@@ -743,104 +821,50 @@
         }
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
-        <div class="row">
-            <div class="col-sm-12">
-                <p>Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:</p>
-                <ul class="pagination pagination-sm btn-group">
-                    @if (Model.IsFirstButtonActive())
-                    {
-                        <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
-                    }
 
-                    @if (Model.IsPreviousButtonActive())
-                    {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
-                    }
 
-                    @for (int i = Model.startPage; i <= Model.endPage; i++)
-                    {
-                        if (Model.IsActivePage(i))
-                        {
-                            <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                        }
-                        else
-                        {
-                            <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                        }
-                    }
 
-                    @if (Model.IsNextButtonActive())
-                    {
-                        <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
-                    }
-                    @if (Model.IsLastButtonActive())
-                    {
-                        <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
-                    }
-                </ul>
-            </div>
-        </div>
-       
-            <div class="row view-navigation">
+
+        <div class="row view-navigation">
+
             <div class="col-sm-12">
                 <p>Velg visningsform:</p>
                 <div class="custom-select">
-                    <select id="layoutSelect" onchange="additionalView(this.value)" class="form-control">
+                    <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
                         <option value="tableView" id="button-tableView">Tabell</option>
                         <option value="listView" id="button-listView">Liste</option>
                         <option value="galleryView" id="button-galleryView">Galleri</option>
-                        <option value="csvView" id="button-csvView">Csv</option>
                     </select>
                 </div>
             </div>
+        </div>
+
+
+
+        @*
+            </div>
+            <div class="row">
                 <div class="col-sm-12">
-                    <p>Lagre som:</p>
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <div class="custom-select">
-                                <select id="" class="form-control">
-                                    <option value="">ATOM</option>
-                                    <option value="">RSS</option>
-                                    <option value="">CSV</option>
-                                    <option value="">GML</option>
-                                    <option value="">RDF</option>
-                                    <option value="">JSON</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <a href="#" class="btn">Lagre</a>
+                    <div id="popoverExportContent" style="display: none">
+                        <div>
+                            <a href="/Help" class="btn btn-sm btn-default" title="Hjelp til API og formater(Beta)"><span class="fa fa-question"></span> API</a>
+                            <a href="#" class="btn" title="Vis Atom feed(Beta)"><span class="fa fa-rss"></span> ATOM</a>
+                            <a href="#" class="btn" title="Vis rss feed(Beta)"><span class="fa fa-rss"></span> RSS</a>
+                            <a href="#" class="btn" title="Vis CSV(Beta)"><span class="fa fa-file-excel-o"></span> CSV</a>
+                            <a href="#" class="btn" title="Vis GML Dictionary(Beta)"><span class="fa fa-file-code-o"></span> GML</a>
+                            <a href="#" class="btn" title="Vis SKOS/RDF(Beta)"><span class="fa fa-file-code-o"></span> RDF</a>
+                            <a href="#" class="btn" title="Vis JSON(Beta)"><span class="fa fa-file-code-o"></span> JSON</a>
                         </div>
                     </div>
-                </div>
-                </div>
-            
+                    <div id="popoverExportTitle" style="display: none">
+                        <div>Eksporter</div>
+                    </div>
 
-
-@*
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div id="popoverExportContent" style="display: none">
-                <div>
-                    <a href="/Help" class="btn btn-sm btn-default" title="Hjelp til API og formater(Beta)"><span class="fa fa-question"></span> API</a>
-                    <a href="#" class="btn" title="Vis Atom feed(Beta)"><span class="fa fa-rss"></span> ATOM</a>
-                    <a href="#" class="btn" title="Vis rss feed(Beta)"><span class="fa fa-rss"></span> RSS</a>
-                    <a href="#" class="btn" title="Vis CSV(Beta)"><span class="fa fa-file-excel-o"></span> CSV</a>
-                    <a href="#" class="btn" title="Vis GML Dictionary(Beta)"><span class="fa fa-file-code-o"></span> GML</a>
-                    <a href="#" class="btn" title="Vis SKOS/RDF(Beta)"><span class="fa fa-file-code-o"></span> RDF</a>
-                    <a href="#" class="btn" title="Vis JSON(Beta)"><span class="fa fa-file-code-o"></span> JSON</a>
+                    <button id="popoverExport" class="btn" data-container="body" data-toggle="popover" data-placement="bottom" data-content="">Eksporter</button>
                 </div>
             </div>
-            <div id="popoverExportTitle" style="display: none">
-                <div>Eksporter</div>
-            </div>
+        *@
 
-            <button id="popoverExport" class="btn" data-container="body" data-toggle="popover" data-placement="bottom" data-content="">Eksporter</button>
-        </div>
-    </div>
-*@
-  
         <span class="separator-small separator-gray"></span>
 
         <aside class="facet-sok-emne">

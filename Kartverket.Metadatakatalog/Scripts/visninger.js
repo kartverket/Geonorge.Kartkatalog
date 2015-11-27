@@ -21,6 +21,12 @@ $(document).ready(function () {
 });
 
 
+function additionalView(buttonId) {
+    $("#saveButtons a").attr("class", "hidden");
+    $("#" + buttonId).attr("class", "btn");
+}
+
+
 function SortBy(sort) {
     var sort = document.getElementById("sorting");
     var selected = sort.options[sort.selectedIndex].text;
