@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using Kartverket.Metadatakatalog.Formatter;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -8,6 +9,8 @@ namespace Kartverket.Metadatakatalog
     {
         public static void Register(HttpConfiguration config)
         {
+            config.Formatters.Add(new CsvFormatter());
+
             config.MapHttpAttributeRoutes();
 
             config.EnableCors();
