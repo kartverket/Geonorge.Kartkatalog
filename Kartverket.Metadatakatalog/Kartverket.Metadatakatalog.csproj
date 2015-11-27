@@ -406,6 +406,7 @@
     <Content Include="Scripts\jquery-2.1.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.typeahead.js" />
     <Content Include="Scripts\jquery.typeahead.min.js" />
     <Content Include="Scripts\jquery.validate.js" />

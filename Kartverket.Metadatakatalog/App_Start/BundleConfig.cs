@@ -77,7 +77,9 @@ namespace Kartverket.Metadatakatalog
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
 
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
-               "~/Scripts/visninger.js"));
+               "~/Scripts/jquery.cookie.js",
+               "~/Scripts/visninger.js",
+               "~/Scripts/shopping-cart.js"));
 
             BundleTable.EnableOptimizations = false;
         }
