@@ -6,6 +6,7 @@
         font-size: 14pt;
         text-transform: uppercase;
         color: #414042;
+        line-height: 14pt;
     }
 
         #tableView .search-results-table-heading > div {
