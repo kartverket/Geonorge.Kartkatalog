@@ -164,3 +164,12 @@
         #galleryView .teaser-with-background-image .teaser-heading {
             font-size: 16pt;
         }
+
+
+.view-navigation {
+    margin-top: -41px;
+}
+
+.facet-sok-emne .block.listblock {
+    padding: 30px 0;
+}
