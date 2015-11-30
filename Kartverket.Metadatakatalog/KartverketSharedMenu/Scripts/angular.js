@@ -16544,6 +16544,7 @@ function $SceDelegateProvider() {
           }
         }
       }
+      console.log(url + ", allowed:" + allowed);
       return allowed;
     }
 
