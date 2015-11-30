@@ -394,8 +394,6 @@
                                 <option disabled="disabled" value="atomUrl">ATOM</option>
                                 <option disabled="disabled" value="rssUrl">RSS</option>
                                 <option value="csvUrl" selected="selected">CSV</option>
-                                <option disabled="disabled" value="gmlUrl">GML</option>
-                                <option disabled="disabled" value="rdfUrl">RDF</option>
                                 <option disabled="disabled" value="jsonUrl">JSON</option>
                             </select>
                         </div>
@@ -404,8 +402,6 @@
                         <a class="hidden" id="atomUrl" href="#">Lagre</a>
                         <a class="hidden" id="rssUrl" href="#">Lagre</a>
                         <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
-                        <a class="hidden" id="gmlUrl" href="#">Lagre</a>
-                        <a class="hidden" id="rdfUrl" href="#">Lagre</a>
                         <a class="hidden" id="jsonUrl" href="#">Lagre</a>
                     </div>
                 </div>
@@ -499,28 +495,21 @@
                         </div>
 
                         <div class="col-sm-2 search-results-action-buttons">
-                            @if (item.ShowWebsiteLink())
-                            {
-                                <a href="@item.DownloadUrl" title="Besøk nettsiden til @item.Title" target="_blank" class="btn btn-default">
-                                    <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a href="@item.DownloadUrl" class="disabled btn btn-default" title="Besøk nettsiden til @item.Title" target="_blank">
-                                    <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
-                                </a>
-                            }
+
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" title="Les mer om @item.Title" class="btn btn-default">
+                                <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
+                            </a>
+
 
                             @if (item.ShowMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
                                     <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
                                     <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
@@ -563,7 +552,7 @@
                             }
                             else if (item.ShowDownloadLink())
                             {
-                                <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
+                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
                                     <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
                                 </a>
                             }
@@ -577,31 +566,22 @@
                         </div>
 
                         <div class="col-sm-1 search-results-action-icons">
-                            @if (item.ShowWebsiteLink())
-                            {
-                                <a href="@item.DownloadUrl" title="Besøk nettsiden til @item.Title" target="_blank">
-                                    <span class="custom-icon custom-icon-info"></span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a href="@item.DownloadUrl" class="disabled" title="Besøk nettsiden til @item.Title" target="_blank">
-                                    <span class="custom-icon custom-icon-info"></span>
-                                </a>
-                            }
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" title="Les mer om @item.Title" class="">
+                                <span class="custom-icon custom-icon-info"></span>
+                            </a>
                         </div>
 
 
                         <div class="col-sm-1 search-results-action-icons action-show-map">
                             @if (item.ShowMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank">
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank">
                                     <span class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis @item.Title i kart" target="_blank">
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank">
                                     <span class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
@@ -645,7 +625,7 @@
                             }
                             else if (item.ShowDownloadLink())
                             {
-                                <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" target="_blank">
+                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" title="Last ned datasett for @item.Title" target="_blank">
                                     <span class="custom-icon custom-icon-lastned"></span>
                                 </a>
                             }
@@ -657,58 +637,6 @@
                             }
                         </div>
 
-
-
-
-
-                        @*
-                            @if (!string.IsNullOrWhiteSpace(item.ProductSheetUrl))
-                            {
-                                <a href="@item.ProductSheetUrl"  title="Produktark for @item.Title" target="_blank">
-                                    <span class="glyphicon glyphicon-info-sign"></span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a class="disabled" title="Produktark for @item.Title">
-                                    <span class="glyphicon glyphicon-info-sign"></span>
-                                </a>
-                            }
-                        *@
-                        @*
-                            @if (!string.IsNullOrWhiteSpace(item.ProductSpecificationUrl))
-                            {
-                                <a href="@item.ProductSpecificationUrl" title="Produktspesifikasjon for @item.Title" target="_blank">
-                                    <span class="glyphicon glyphicon-list-alt"></span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a class="disabled" title="Produktspesifikasjon for @item.Title">
-                                    <span class="glyphicon glyphicon-list-alt"></span>
-                                </a>
-                            }
-                        *@
-                        @*
-                            @if (!string.IsNullOrWhiteSpace(item.LegendDescriptionUrl))
-                            {
-                                <a href="@item.LegendDescriptionUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Tegneregler for @item.Title" target="_blank">
-                                    <span class="glyphicon glyphicon-picture"></span>vis tegneregler
-                                </a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-xs btn-bunnmarg btn-default disabled" title="Tegneregler for @item.Title">
-                                    <span class="glyphicon glyphicon-picture"></span>vis tegneregler
-                                </a>
-                            }
-                        *@
-
-                        @*else
-                            {
-                                <img src="~/Content/img/lock.png" class="opendata">
-                            }
-                        *@
 
                         <div class="col-sm-2 search-results-list-image">
                             @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
@@ -788,8 +716,6 @@
                 @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "DistributionProtocols"))
                 @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
 
-                @*@DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "license"))@*
-                    @*DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "keyword"))*@
             </div>
         </aside>
     </div>
