@@ -53,10 +53,14 @@ h1.small-h1 {
     border-radius: 0px;
 }
 
-.container-breadcrumbs .breadcrumbs {
-    font-size: 12pt;
+.container-breadcrumbs {
+    font-size: 14px;
+    line-height: 1.42857;
 }
 
+    .container-breadcrumbs ul > li {
+        background-image: url("img/breadcrumb-arrow.svg");
+    }
 
 aside ul li, .container-footer ul li {
     background-image: url("img/arrow-right.svg");

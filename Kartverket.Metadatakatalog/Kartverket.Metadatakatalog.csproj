@@ -295,6 +295,7 @@
     <Content Include="Content\img\arrow-right.svg" />
     <Content Include="Content\img\arrow-select-blue.svg" />
     <Content Include="Content\img\arrow-select-orange.svg" />
+    <Content Include="Content\img\breadcrumb-arrow.svg" />
     <Content Include="Content\img\chevron-down.svg" />
     <Content Include="Content\img\chevron-up.svg" />
     <Content Include="Content\img\ikoner\ekternlink-white.svg" />
