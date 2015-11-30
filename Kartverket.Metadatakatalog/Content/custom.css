@@ -143,7 +143,8 @@ aside ul li, .container-footer ul li {
     font-family: "Open Sans",sans-serif;
     display: inline-block;
     font-weight: normal;
-    font-size: 12pt;
+    font-size: 10pt;
+    line-height: 14pt;
     text-align: left;
     border: none;
     border-radius: 0;
@@ -152,7 +153,7 @@ aside ul li, .container-footer ul li {
     color: #414042;
     height: 25px;
     width: 100px;
-    padding-left: 4px;
+    padding-left: 5px;
 }
 
 h1 .label {
