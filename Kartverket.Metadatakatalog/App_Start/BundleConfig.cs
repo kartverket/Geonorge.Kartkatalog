@@ -52,15 +52,7 @@ namespace Kartverket.Metadatakatalog
                 "~/Content/download.css",
                 "~/Content/map-modal.css"));
 
-            bundles.Add(new StyleBundle("~/Content/css_old").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/common.css",
-                      "~/Content/navbar.css",
-                      "~/Content/searchbar.css",
-                      "~/Content/chosen.css",
 
-
-                      "~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/site.css",
