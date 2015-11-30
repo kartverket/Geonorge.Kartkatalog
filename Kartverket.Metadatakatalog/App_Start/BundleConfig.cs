@@ -81,7 +81,7 @@ namespace Kartverket.Metadatakatalog
                "~/Scripts/visninger.js",
                "~/Scripts/shopping-cart.js"));
 
-            BundleTable.EnableOptimizations = false;
+            BundleTable.EnableOptimizations = true;
         }
     }
 }
