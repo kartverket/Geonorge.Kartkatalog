@@ -16439,7 +16439,7 @@ function $SceDelegateProvider() {
   this.SCE_CONTEXTS = SCE_CONTEXTS;
 
   // Resource URLs can also be trusted by policy.
-  var resourceUrlWhitelist = ['self'],
+  var resourceUrlWhitelist = ['self', 'http://**.geonorge.no/**'],
       resourceUrlBlacklist = [];
 
   /**
