@@ -27,19 +27,14 @@
     box-shadow: none;
     color: #414042;
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
+    font-size: 14pt;
     font-style: normal;
     font-variant: normal;
     font-weight: 400;
     padding-left: 21px;
 }
 
-.container .searchbar input::-webkit-input-placeholder { color: #414042; }
-
-.container .searchbar input:-moz-placeholder {
-    color: #414042;
-    opacity: 1;
-}
+.container .searchbar input::-webkit-input-placeholder { color: #968c83; }
 
 .container .searchbar input::-moz-placeholder {
     color: #414042;

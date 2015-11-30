@@ -45,6 +45,9 @@
 .navbar-nav .dropdown > a,
 .navbar-nav .dropdown > a:hover,
 .navbar-nav .dropdown > a:focus {
+    -moz-transition: all 0.35s ease-in-out;
+    -o-transition: all 0.35s ease-in-out;
+    -webkit-transition: all 0.35s ease-in-out;
     background-color: #B6AFA8;
     background-image: url('../../Images/Arrow_414042_12px_mobile.svg');
     background-position: 11px center;
@@ -61,7 +64,7 @@
     padding: 0;
     padding-left: 33px;
     text-transform: uppercase;
-    /*transition: max-height 1s ease-in-out;*/
+    transition: all 0.35s ease-in-out;
 }
 
 .navbar-nav .dropdown .dropdown-menu {

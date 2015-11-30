@@ -4,7 +4,7 @@ body { font-family: 'Open Sans', sans-serif; }
 
 .container-breadcrumbs { display: none; }
 
-.container-breadcrumbs .breadcrumbs {
+.container-breadcrumbs ul {
     background-color: transparent;
     list-style: none;
     margin: 0;
@@ -12,24 +12,26 @@ body { font-family: 'Open Sans', sans-serif; }
     z-index: 1;
 }
 
-.container-breadcrumbs .breadcrumbs > li {
-    color: #414042;
+.container-breadcrumbs ul li:first-child {
+    background: none;
+    margin: 0;
+    padding: 0;
+}
+
+.container-breadcrumbs ul > li {
+    background-image: url('../img/arrow_414042_6px-01-01.svg');
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    background-size: 8px;
     display: inline-block;
     font-family: 'Raleway', sans-serif;
     font-size: 10.5pt;
     font-weight: 500;
+    margin-left: 4px;
+    padding-left: 14px;
 }
 
-.container-breadcrumbs .breadcrumbs > li > a {
-    color: #3867c8;
-}
-
-.container-breadcrumbs .breadcrumbs > li + li:before {
-    color: #414042;
-    content: "\25b6";
-    height: 9px;
-    padding: 0 5px;
-}
+.container-breadcrumbs ul > li > a { color: #3867c8; }
 
 .container h1 {
     color: #414042;
@@ -153,24 +155,25 @@ aside ul,
 
 article ol { padding-left: 30px; }
 
-aside ul li,
-.container-footer ul li {
-    background-image: url('../img/arrow_414042_9px.svg');
-    padding-left: 0;
-}
-
 article ul li,
 article ol li,
 aside ul li,
 .container-footer ul li {
     background-position: 0 center;
     background-repeat: no-repeat;
-    background-size: 11px 12px;
+    background-size: 10px;
     font-family: 'Open Sans', sans-serif;
     font-size: 12pt;
     font-style: italic;
     line-height: 22pt;
-    padding-left: 18px;
+    margin-left: 20px;
+}
+
+aside ul li,
+.container-footer ul li {
+    background-image: url('../img/arrow_414042_8px-01.svg');
+    margin-left: 0;
+    padding-left: 15px;
 }
 
 article ul li:before {
@@ -178,8 +181,10 @@ article ul li:before {
     content: "•";
     font-size: 12pt;
     font-style: normal;
+    left: 0;
     line-height: 22pt;
-    padding-right: 10px;
+    margin-left: 20px;
+    position: absolute;
 }
 
 article ul li,
@@ -436,7 +441,6 @@ form {
     font-size: 12pt;
     font-weight: 400;
     line-height: 22pt;
-    text-decoration: underline;
 }
 
 .start-page-head {
@@ -447,11 +451,9 @@ form {
 .teaser { text-align: center; }
 
 .teaser h2 {
-    font-size: 18pt;
-    font-weight: 400;
-    line-height: 20pt;
+    font-size: 24pt;
+    line-height: 28pt;
     margin: 0;
-    text-transform: uppercase;
 }
 
 .teaser .separator-teaser,
@@ -695,6 +697,14 @@ form {
     line-height: 22pt;
 }
 
+.teaser-as-list .read-more a {
+    color: #3867c8;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12pt;
+    font-weight: 400;
+    line-height: 22pt;
+}
+
 .container .layout-block-toggle {
     padding: 10px 0 30px;
     text-align: center;
@@ -852,20 +862,13 @@ form {
 }
 
 .standard-page-main-content-area .formblock form tr > td > fieldset > div > label > input[type="checkbox"] {
-    background-color: #fff;
-    border: 1px solid #000;
-    color: #fff;
+    border: none;
     cursor: pointer;
-    display: inline-block;
-    font-size: 20px;
-    height: 21px;
-    line-height: 19px;
-    padding-left: 30px;
+    height: 20px;
     position: relative;
-    text-align: center;
-    text-indent: -20px;
     top: 2px;
-    width: 21px;
+    width: 20px;
+    margin: 0;
 }
 
 .standard-page-main-content-area .formblock form tr > td > div > input[type="submit"] {
@@ -1055,7 +1058,10 @@ iframe { width: 100% !important; }
         width: 100px;
     }
 
-    .teaser-as-list p { font-size: 20pt; }
+    .teaser-as-list p {
+        font-size: 14pt;
+        line-height: 24pt;
+    }
 
     .teaser-as-list h1 {
         font-size: 65pt;
@@ -1072,6 +1078,11 @@ iframe { width: 100% !important; }
     .teaser-as-list h2 {
         font-size: 40pt;
         margin-top: 12.5px;
+    }
+
+    .teaser-as-list .read-more a {
+        font-size: 14pt;
+        line-height: 24pt;
     }
 
     .to-top-container { display: none; }
@@ -1115,8 +1126,6 @@ iframe { width: 100% !important; }
         font-size: 14pt;
         line-height: 24pt;
     }
-
-    .teaser h2 { font-size: 18pt; }
 
     .standard-page-main-content-area .formblock form tr { margin-top: 45px; }
 
