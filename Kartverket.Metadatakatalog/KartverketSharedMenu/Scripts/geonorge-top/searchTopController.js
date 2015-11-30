@@ -1,4 +1,5 @@
-﻿var baseurl_local = 'http://' + window.location.host;
+﻿//var baseurl_local = 'http://' + window.location.host;
+var baseurl_local = searchOption.baseUrl;
 
 (function () {
     var app = angular.module("geonorge");
