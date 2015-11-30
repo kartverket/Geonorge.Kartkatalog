@@ -6,11 +6,8 @@
     var cookieValue = 0;
     var cookieDomain = ".geonorge.no";
 
-
     if (localStorage.getItem("orderItems") != null && localStorage.getItem("orderItems") != "[]") {
         orderItems = localStorage.getItem("orderItems");
-    } else {
-        orderItems = "";
     }
 
     if (orderItems != "") {
@@ -18,8 +15,7 @@
         orderItemsObj = JSON.parse(orderItems);
         cookieValue = orderItemsObj.length;
         shoppingCartElement.html(cookieValue);
-
-    } else if ($.cookie(cookieName)) {
+    } else if ($.cookie(cookieName) != 0 && $.cookie(cookieName) != null) {
         cookieValue = $.cookie(cookieName);
         shoppingCartElement.css("display", "block");
         shoppingCartElement.html(cookieValue);
