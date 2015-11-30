@@ -366,6 +366,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\web.config" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="KartverketSharedMenu\Images\arrow_ffffff_13px-01.svg" />
     <Content Include="KartverketSharedMenu\Images\geonorge_logo_350px.svg" />
