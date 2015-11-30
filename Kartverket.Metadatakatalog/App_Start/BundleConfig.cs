@@ -67,14 +67,8 @@ namespace Kartverket.Metadatakatalog
                       "~/Content/custom.css",
                       "~/Content/geonorge-colors.css",
                       "~/Content/searchresult-layout.css",
+                      "~/Content/custom-icons.css",
                       "~/Content/font-awesome.min.css"));
-            // "~/Content/jquery.typeahead.css",
-            //bundles.Add(new StyleBundle("~/Content/css").Include(
-            //          "~/Content/bootstrap.css",
-            //          "~/Content/geonorge-default.css",
-            //          "~/Content/site.css"));
-            // Set EnableOptimizations to false for debugging. For more information,
-            // visit http://go.microsoft.com/fwlink/?LinkId=301862
 
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
                "~/Scripts/jquery.cookie.js",

@@ -502,32 +502,32 @@
                             @if (item.ShowWebsiteLink())
                             {
                                 <a href="@item.DownloadUrl" title="Besøk nettsiden til @item.Title" target="_blank" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-info-sign"></span><span class="button-text"> Les mer</span>
+                                    <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
                                 </a>
                             }
                             else
                             {
                                 <a href="@item.DownloadUrl" class="disabled btn btn-default" title="Besøk nettsiden til @item.Title" target="_blank">
-                                    <span class="glyphicon glyphicon-info-sign"></span><span class="button-text"> Les mer</span>
+                                    <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
                                 </a>
                             }
 
                             @if (item.ShowMapLink())
                             {
                                 <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-map-marker"></span><span class="button-text"> Vis i kart</span>
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
                                 <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-map-marker"></span><span class="button-text"> Vis i kart</span>
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
                             else
                             {
                                 <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank" class="disabled btn btn-default">
-                                    <span class="glyphicon glyphicon-map-marker"></span><span class="button-text"> Vis i kart</span>
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
 
@@ -558,19 +558,19 @@
                                    itemurl='/metadata/uuid/@item.Uuid'
                                    itemorglogo='@relativeOrganizationLogoUrl'
                                    itemdisturl='@relativeDowloadUrl'>
-                                    <span class="glyphicon glyphicon-shopping-cart"></span><span class="button-text"> Legg i kurv</span>
+                                    <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
                                 </a>
                             }
                             else if (item.ShowDownloadLink())
                             {
                                 <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-download-alt"></span><span class="button-text"> Last ned</span>
+                                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
                                 </a>
                             }
                             else
                             {
                                 <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" target="_blank" class="disabled btn btn-default">
-                                    <span class="glyphicon glyphicon-download-alt"></span><span class="button-text"> Last ned</span>
+                                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
                                 </a>
                             }
 
@@ -579,14 +579,14 @@
                         <div class="col-sm-1 search-results-action-icons">
                             @if (item.ShowWebsiteLink())
                             {
-                                <a href="@item.DownloadUrl" title="Besøk nettsiden til @item.Title" target="_blank" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                <a href="@item.DownloadUrl" title="Besøk nettsiden til @item.Title" target="_blank">
+                                    <span class="custom-icon custom-icon-info"></span>
                                 </a>
                             }
                             else
                             {
-                                <a href="@item.DownloadUrl" class="disabled btn btn-default" title="Besøk nettsiden til @item.Title" target="_blank">
-                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                <a href="@item.DownloadUrl" class="disabled" title="Besøk nettsiden til @item.Title" target="_blank">
+                                    <span class="custom-icon custom-icon-info"></span>
                                 </a>
                             }
                         </div>
@@ -595,20 +595,20 @@
                         <div class="col-sm-1 search-results-action-icons action-show-map">
                             @if (item.ShowMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-map-marker"></span>
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank">
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-map-marker"></span>
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis @item.Title i kart" target="_blank">
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
                             else
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank" class="disabled btn btn-default">
-                                    <span class="glyphicon glyphicon-map-marker"></span>
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" target="_blank" class="disabled">
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
 
@@ -634,25 +634,25 @@
                                 <a data-toggle='tooltip'
                                    data-placement='bottom'
                                    title='Legg til @item.Title i kurv'
-                                   class='add-to-cart-btn btn btn-default'
+                                   class='add-to-cart-btn'
                                    itemname='@item.Title'
                                    itemuuid='@item.Uuid'
                                    itemurl='/metadata/uuid/@item.Uuid'
                                    itemorglogo='@relativeOrganizationLogoUrl'
                                    itemdisturl='@relativeDowloadUrl'>
-                                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                                    <span class="custom-icon custom-icon-handlekurv"></span>
                                 </a>
                             }
                             else if (item.ShowDownloadLink())
                             {
-                                <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-download-alt"></span>
+                                <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" target="_blank">
+                                    <span class="custom-icon custom-icon-lastned"></span>
                                 </a>
                             }
                             else
                             {
-                                <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" target="_blank" class="disabled btn btn-default">
-                                    <span class="glyphicon glyphicon-download-alt"></span>
+                                <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" target="_blank" class="disabled">
+                                    <span class="custom-icon custom-icon-lastned"></span>
                                 </a>
                             }
                         </div>
