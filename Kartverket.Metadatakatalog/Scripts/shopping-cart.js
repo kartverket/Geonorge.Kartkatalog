@@ -9,7 +9,7 @@
     var orderItemsObj = {};
     var cookieName = "orderitems";
     var cookieValue = 0;
-    var cookieDomain = "geonorge.no";
+    var cookieDomain = ".geonorge.no";
 
     if (orderItems == "") {
         shoppingCartElement.css("display", "none");
@@ -19,7 +19,7 @@
         cookieValue = orderItemsObj.length;
         shoppingCartElement.html(cookieValue);
     } 
-    $.cookie(cookieName, cookieValue, { expires: 7 });
+    $.cookie(cookieName, cookieValue, { expires: 7, path: '/', domain: cookieDomain });
 }
 
 
