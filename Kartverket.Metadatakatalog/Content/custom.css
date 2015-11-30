@@ -201,6 +201,21 @@ h1 .label {
         bottom: -4px;
     }
 
+    .search-result-navigation .save-as-menu {
+    }
+
+        .search-result-navigation .save-as-menu .save-as-label {
+        }
+
+        .search-result-navigation .save-as-menu .save-as-dropdown {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .search-result-navigation .save-as-menu .save-as-buttons {
+            padding-left: 5px;
+            text-align: right;
+        }
 
 .margin-bottom-10 {
     margin-bottom: 10px;
