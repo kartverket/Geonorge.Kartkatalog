@@ -78,6 +78,8 @@ var baseurl_local = searchOption.baseUrl;
           $rootScope.selectedSearch = searchOption;
           $rootScope.searchQuery = '';
           $scope.autoCompleteResult = [];
+          $scope.loading = true;
+          $scope.url = $sce.trustAsResourceUrl(baseurl_local + '/KartverketSharedMenu/Scripts/geonorge/partials/_autoCompleteRow.html');
 
           $scope.autoCompletePartial = baseurl_local + '/KartverketSharedMenu/Scripts/geonorge/partials/_autoCompleteRow.html';
           $scope.focused = false;
