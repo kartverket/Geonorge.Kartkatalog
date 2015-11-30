@@ -449,11 +449,11 @@
             </div>
             <div class="col-sm-5">
                 
-                <div class="row">
-                    <div class="col-sm-4 text-right no-padding">
+                <div class="row save-as-menu">
+                    <div class="col-xs-4 text-right no-padding save-as-label">
                         <p>Lagre som:</p>
                     </div>
-                    <div class="col-sm-5 no-padding-bottom">
+                    <div class="col-xs-5 no-padding-bottom save-as-dropdown">
                         <div class="custom-select">
                             <select onchange="additionalView(this.value)" class="form-control">
                                 <option disabled="disabled" value="atomUrl">ATOM</option>
@@ -463,7 +463,7 @@
                             </select>
                         </div>
                     </div>
-                    <div id="saveButtons" class="col-sm-3 no-padding-bottom">
+                    <div id="saveButtons" class="col-xs-3 no-padding-bottom save-as-buttons">
                         <a class="hidden" id="atomUrl" href="#">Lagre</a>
                         <a class="hidden" id="rssUrl" href="#">Lagre</a>
                         <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
