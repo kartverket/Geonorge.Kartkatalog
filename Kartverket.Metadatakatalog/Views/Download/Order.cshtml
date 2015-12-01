@@ -12,7 +12,7 @@
         {
             if (!string.IsNullOrEmpty(file.downloadUrl))
             {
-                <a class="list-group-item" href="@file.downloadUrl " target=" _blank"><span class="glyphicon glyphicon-download-alt"></span> @file.name</a>
+                <a class="list-group-item" href="@file.downloadUrl " onclick="ga('send', 'event', 'Filnedlasting', 'lastetnedfil');" target=" _blank"><span class="glyphicon glyphicon-download-alt"></span> @file.name</a>
             }
             else
             {
