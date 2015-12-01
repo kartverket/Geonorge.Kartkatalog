@@ -557,7 +557,7 @@
                         string itemUuid = (Model.Uuid != null) ? Model.Uuid : "";
                         string itemTitle = (Model.Title != null) ? Model.Title : "";
                         string itemOrganizationLogoUrl = (Model.OrganizationLogoUrl != null) ? Model.OrganizationLogoUrl : "";
-                        string itemDistributionDetailsUrl = (@Model.DistributionDetails != null) ? @Model.DistributionDetails.URL : "";
+                        string itemDistributionDetailsUrl = (@Model.DistributionDetails != null && @Model.DistributionDetails.URL != null) ? @Model.DistributionDetails.URL : "";
                         }
 
                     var uuid = '@itemUuid';
