@@ -8,6 +8,10 @@
       function ($scope, $http) {
          
           function handleSuccess(respons) {
+
+              localStorage.setItem('menuItems', JSON.stringify(respons));
+              $.cookie('expire', 1); //expire when the browser is closed
+
               $scope.menuItems = respons.data;
           }
 
@@ -16,18 +20,32 @@
           }
 
           $scope.getMenuData = function getMenuData() {
-              var menuService = baseurl + '/api/menu';
-              var request = $http({
-                  method: 'GET',
-                  url: menuService,
-                  headers: {
-                      'Content-Type': 'application/json; charset=utf-8'
-                      
-                  },
-                  data: {}
-              });
 
-              return request.then(handleSuccess, handleError);
+              if (!$.cookie('expire') || !localStorage.getItem('menuItems')) {
+
+                  var menuService = baseurl + '/api/menu';
+                  var request = $http({
+                      method: 'GET',
+                      url: menuService,
+                      headers: {
+                          'Content-Type': 'application/json; charset=utf-8'
+
+                      },
+                      data: {}
+                  });
+
+                  console.log("Menu loaded from server");
+                  
+                  return request.then(handleSuccess, handleError);
+
+
+              }
+              else
+              {
+                  console.log("Menu loaded locally");
+                  response = JSON.parse(localStorage.getItem('menuItems'));
+                  $scope.menuItems = response.data;
+              }
           }
          
       }]);
