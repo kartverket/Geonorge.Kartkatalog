@@ -2,7 +2,7 @@
 
 (function () {
     var app = angular.module("geonorge");
-    var baseurl = searchOption.baseUrl;
+    var baseurl = searchOption.geonorgeUrl;
     app.controller('menuTopController', [
       '$scope', '$http',
       function ($scope, $http) {

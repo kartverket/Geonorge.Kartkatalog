@@ -8,5 +8,6 @@
     api: "//kartkatalog.geonorge.no/api/search",
     queryParameter: '?text=',
     localUrl: false,
-    autoComplete: true
+    autoComplete: true,
+    geonorgeUrl: "//www.geonorge.no"
 }
