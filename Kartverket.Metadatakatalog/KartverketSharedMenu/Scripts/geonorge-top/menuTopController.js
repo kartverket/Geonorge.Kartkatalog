@@ -10,7 +10,10 @@
           function handleSuccess(respons) {
 
               localStorage.setItem('menuItems', JSON.stringify(respons));
-              $.cookie('expire', 1); //expire when the browser is closed
+              var date = new Date();
+              var minutes = 20;
+              date.setTime(date.getTime() + (minutes * 60 * 1000));
+              $.cookie('expire', "menu", { expires: date });
 
               $scope.menuItems = respons.data;
           }
