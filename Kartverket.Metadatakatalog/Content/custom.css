@@ -273,3 +273,122 @@ h1 .label {
     line-height: 20pt;
     background-color: #FE5000;
 }
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+.tab-pane {margin-top: 20px;}
+
+p.keyword-header {
+    width: 60%;
+    border-bottom: solid 1px black;
+}
+
+.service-layer-info {
+    margin-bottom: 20px;
+    padding-left: 10px;
+    background-color: #fff;
+    border-width: 1px;
+    border-color: #ddd;
+    border-radius: 4px 4px 0 0;
+    border-style: solid;
+
+}
+
+.control-text {
+    padding-top: 7px;
+}
+
+.help-text {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+ul#thumbnails {
+    list-style-type: none;
+}
+ul#thumbnails > li.thumbnail > img {
+    width: 200px;
+    margin-right: 10px;
+    float: left;
+}
+
+ul#thumbnailsCoverage {
+    list-style-type: none;
+}
+ul#thumbnailsCoverage > li.thumbnail > img {
+    width: 200px;
+    margin-right: 10px;
+    float: left;
+}
+
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 999px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+input[readonly] {
+	cursor: default !important;
+}
+
+.menu { margin-bottom: 20px; }
+
+
+.form-group.required .control-label:after, .panel-heading.required:after { 
+   content: " *";
+   color: red;
+}
+
+.form-group.has-feedback .form-control-feedback { display: none; }
+.form-group.has-feedback.has-error .form-control-feedback { display: block; }
+
+.nav-tabs li.has-error > span.glyphicon-warning-sign {
+    position: absolute;
+    z-index: 2;
+    color: #a94442;
+}
+
+.nav-tabs > li > a {
+    font-size: 13px;
+
+}
+
