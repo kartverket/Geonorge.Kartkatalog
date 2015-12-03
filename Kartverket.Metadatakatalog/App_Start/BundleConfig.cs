@@ -62,6 +62,11 @@ namespace Kartverket.Metadatakatalog
                       "~/Content/custom-icons.css",
                       "~/Content/font-awesome.min.css"));
 
+            bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
+            "~/Content/themes/base/core.css",
+            "~/Content/themes/base/datepicker.css",
+            "~/Content/themes/base/theme.css"));
+
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
                "~/Scripts/jquery.cookie.js",
                "~/Scripts/visninger.js",
