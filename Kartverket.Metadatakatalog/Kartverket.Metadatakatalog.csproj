@@ -383,6 +383,7 @@
     <Content Include="fonts\web.config" />
     <Content Include="Images\Dot_ffffff_8px-01.png" />
     <Content Include="KartverketSharedMenu\web.config" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Images\arrow_ffffff_13px-01.svg" />
     <Content Include="Images\geonorge_logo_350px.svg" />
@@ -427,7 +428,6 @@
     <Content Include="KartverketSharedMenu\Styles\geonorge-top\logoTop.css" />
     <Content Include="KartverketSharedMenu\Styles\geonorge-top\menuTop.css" />
     <Content Include="KartverketSharedMenu\Styles\geonorge-top\searchTop.css" />
-    <Content Include="master.txt" />
     <Content Include="robots.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -479,7 +479,6 @@
     <Content Include="Web.Dev.config" />
     <Content Include="Web.Test.config" />
     <Content Include="Views\Index\ReIndex.cshtml" />
-    <Content Include="Views\Shared\_NavbarPartial.cshtml" />
     <Content Include="Views\Search\_SearchBarPartial.cshtml" />
     <Content Include="Views\Index\IndexSingle.cshtml" />
     <Content Include="Views\Shared\_Map.cshtml" />
@@ -490,7 +489,6 @@
     <Content Include="Views\Download\Order.cshtml" />
     <Content Include="Views\Download\_NorgesKart.cshtml" />
     <Content Include="Views\Shared\_SharedMenu.cshtml" />
-    <Content Include="Views\Search\Index_backup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
