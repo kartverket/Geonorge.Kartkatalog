@@ -381,6 +381,7 @@
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="fonts\web.config" />
+    <Content Include="Images\Dot_ffffff_8px-01.png" />
     <Content Include="KartverketSharedMenu\web.config" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Images\arrow_ffffff_13px-01.svg" />
