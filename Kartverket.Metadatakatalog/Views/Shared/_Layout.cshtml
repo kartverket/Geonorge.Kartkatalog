@@ -112,32 +112,11 @@
             <li><a href="/">Kartkatalogen</a></li>
             @RenderSection("breadcrumb", false)
         </ul>
-        @* <ul class="nav nav-tabs navbar-right" role="tablist" id="navTab">
-                        <li role="presentation" class="background-kartkatalogen active"><a class="background-kartkatalogen" href="#kartkatalog" aria-controls="kartkatalog" role="tab" data-toggle="tab">Kartkatalogen</a></li>
-                   <li role="presentation" class="background-kart"><a href="#kart" aria-controls="kart" role="tab" data-toggle="tab">Kartsøk</a></li>
-
-            </ul>*@
     </div>
 
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="kartkatalog">
-            <div class="body-content">
-                <div class="container">
-                    <!--
-                        <div id="loading">
-                            <img id="loading-image" src="/Content/img/loader.gif" alt="Laster..." />
-                        </div>
-                    -->
-                    @RenderBody()
-                </div>
-
-            </div>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="kart">
-
-            @*@Html.Partial("_Map")*@
-
-
+    <div class="body-content">
+        <div class="container">
+            @RenderBody()
         </div>
 
     </div>
