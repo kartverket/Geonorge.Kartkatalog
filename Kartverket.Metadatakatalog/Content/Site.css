@@ -97,7 +97,14 @@ article .body-text img {
     height: auto;
     max-width: 100%;
 }
-
+p {
+    color: #000000;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12pt;
+    font-weight: 500;
+    line-height: 22pt;
+    word-wrap: break-word;
+}
 article p {
     color: #000000;
     font-family: 'Open Sans', sans-serif;
