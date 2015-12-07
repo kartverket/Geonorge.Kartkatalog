@@ -69,8 +69,10 @@ namespace Kartverket.Metadatakatalog
 
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
                "~/Scripts/jquery.cookie.js",
-               "~/Scripts/visninger.js",
-               "~/Scripts/shopping-cart.js"));
+               "~/Scripts/visninger.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/shopping-cart").Include(
+                "~/Scripts/shopping-cart.js"));
 
             BundleTable.EnableOptimizations = true;
         }
