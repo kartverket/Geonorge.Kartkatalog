@@ -291,6 +291,7 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\geonorge-default.css" />
     <Content Include="Content\geonorge-colors.css" />
+    <Content Include="Content\img\arrow-up.svg" />
     <Content Include="Content\img\arrow-down.svg" />
     <Content Include="Content\img\arrow-right.svg" />
     <Content Include="Content\img\arrow-select-blue.svg" />
