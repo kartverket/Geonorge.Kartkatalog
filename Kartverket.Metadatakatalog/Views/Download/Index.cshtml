@@ -26,8 +26,7 @@
 @using (Html.BeginForm("Order", "Download", FormMethod.Post))
 {
 
-        <article id="orderlist">
-        </article>
+    <article id="orderlist"></article>
 
     <div class="row">
         <div id="emailField" class="col-sm-8">
@@ -85,7 +84,9 @@
             // Inkludering av OrderItem partial view
             var template = '@Html.Raw(System.Text.RegularExpressions.Regex.Replace(Html.Partial("_OrderItem").ToString(), @"\r\n?|\n", ""))';
             orderItems = (JSON.parse(localStorage.getItem('orderItems')));
-            generateView(template, orderItems);
+            if (orderItems != null) {
+                generateView(template, orderItems);
+            }
         });
 
     </script>
