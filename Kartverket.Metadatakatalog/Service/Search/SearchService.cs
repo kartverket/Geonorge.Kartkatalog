@@ -30,19 +30,27 @@ namespace Kartverket.Metadatakatalog.Service.Search
             //OrderBy score, tittel, dato(nyeste, oppdatert), organisasjon
             ISolrQuery query = BuildQuery(parameters);
             var order =new[] {new SortOrder("score", Order.DESC)};
-            if (parameters.orderby == OrderBy.title)
+            if (parameters.orderby == OrderBy.title.ToString())
             {
                 order = new[] { new SortOrder("title", Order.ASC) };
             }
-            else if (parameters.orderby == OrderBy.organization)
+            else if (parameters.orderby == OrderBy.title_desc.ToString())
+            {
+                order = new[] { new SortOrder("title", Order.DESC) };
+            }
+            else if (parameters.orderby == OrderBy.organization.ToString())
             {
                 order = new[] { new SortOrder("organization", Order.ASC) };
             }
-            else if (parameters.orderby == OrderBy.newest)
+            else if (parameters.orderby == OrderBy.organization_desc.ToString())
+            {
+                order = new[] { new SortOrder("organization", Order.DESC) };
+            }
+            else if (parameters.orderby == OrderBy.newest.ToString())
             {
                 order = new[] { new SortOrder("date_published", Order.DESC) };
             }
-            else if (parameters.orderby == OrderBy.updated)
+            else if (parameters.orderby == OrderBy.updated.ToString())
             {
                 order = new[] { new SortOrder("date_updated", Order.DESC) };
             }
@@ -50,7 +58,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
             {
                 order = new[] { new SortOrder("popularMetadata", Order.DESC) };
             }
-            else if (parameters.orderby == OrderBy.score)
+            else if (parameters.orderby == OrderBy.score.ToString())
             {
                 order = new[] { new SortOrder("score", Order.DESC) };
             }
@@ -105,11 +113,11 @@ namespace Kartverket.Metadatakatalog.Service.Search
             parameters.CreateFacetOfOrganizationSeoName();
             parameters.AddComplexFacetsIfMissing();
             var order = new[] { new SortOrder("score", Order.DESC) };
-            if (parameters.orderby == OrderBy.title)
+            if (parameters.orderby == OrderBy.title.ToString())
             {
                 order = new[] { new SortOrder("title", Order.ASC) };
             }
-            else if (parameters.orderby == OrderBy.newest)
+            else if (parameters.orderby == OrderBy.newest.ToString())
             {
                 order = new[] { new SortOrder("date_published", Order.DESC) };
             }
