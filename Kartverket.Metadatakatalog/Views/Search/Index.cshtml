@@ -631,14 +631,14 @@
 
                         </div>
 
-                        <div class="col-sm-1 search-results-action-icons">
+                        <div class="col-xs-1 search-results-action-icons">
                                 <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" title="Les mer om @item.Title" class="">
                                     <span class="custom-icon custom-icon-info"></span>
                                 </a>
                         </div>
 
 
-                        <div class="col-sm-1 search-results-action-icons action-show-map">
+                        <div class="col-xs-1 search-results-action-icons action-show-map">
                             @if (item.ShowMapLink())
                             {
                                 <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank">
@@ -659,7 +659,7 @@
                             }
 
                         </div>
-                        <div class="col-sm-1 search-results-action-icons action-download">
+                        <div class="col-xs-1 search-results-action-icons action-download">
                             @if (item.ShowDownloadService())
                             {
                                 string relativeOrganizationLogoUrl = "";
