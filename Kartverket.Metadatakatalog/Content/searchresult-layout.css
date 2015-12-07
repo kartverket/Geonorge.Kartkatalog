@@ -13,10 +13,30 @@
             height: 60px;
         }
 
-
             #tableView .search-results-table-heading > div > p {
                 position: absolute;
                 bottom: 0;
+                line-height: inherit;
+                margin-bottom: 4px;
+            }
+
+        #tableView .search-results-table-heading .sort-indicator {
+            width: 11px;
+            height: 12px;
+            padding: 0px;
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            background-position: center center;
+            display: inline-block;
+            margin-left: 7px;
+        }
+
+            #tableView .search-results-table-heading .sort-indicator.sort-asc {
+                background-image: url("/Content/img/arrow-up.svg");
+            }
+
+            #tableView .search-results-table-heading .sort-indicator.sort-desc {
+                background-image: url("/Content/img/arrow-down.svg");
             }
 
     #tableView .search-results-logo {

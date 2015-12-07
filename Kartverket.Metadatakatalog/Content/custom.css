@@ -9,6 +9,7 @@ a {
 
     a:hover {
         color: #3867c8;
+        cursor: pointer;
     }
 
 img {
@@ -74,7 +75,7 @@ aside ul li, .container-footer ul li {
 
     .facet-sok-tittel p {
         display: inline;
-        font-size: 16pt;
+        font-size: 14pt;
         line-height: 22pt;
     }
 
@@ -175,7 +176,8 @@ h1 .label {
 }
 
 .pagination li a, .btn {
-    height: 34px;
+    height: 30px;
+    line-height: 12pt;
 }
 
 
@@ -254,7 +256,7 @@ h1 .label {
         background: none;
         font-size: 14pt;
         padding: 0 8px;
-        height: 34px;
+        height: 30px;
         border: 1px solid #CFCFCF;
         border-radius: 0;
         margin-bottom: 10px;

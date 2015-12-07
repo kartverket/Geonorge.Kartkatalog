@@ -7,18 +7,23 @@
 }
 
 .btn .custom-icon {
+    vertical-align: middle;
     width: 12pt;
     height: 12pt;
-    vertical-align: middle;
 }
 
 /* Info */
 .custom-icon.custom-icon-info {
     background-image: url(img/ikoner/info.svg);
+    width: 20px;
+    height: 20px;
 }
 
 .btn .custom-icon.custom-icon-info {
     background-image: url(img/ikoner/info-white.svg);
+    width: 10pt;
+    height: 10pt;
+    margin-left: -3px;
 }
 
 .disabled .custom-icon.custom-icon-info {
