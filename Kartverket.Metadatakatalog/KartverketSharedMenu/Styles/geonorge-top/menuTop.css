@@ -17,18 +17,22 @@
 }
 
 .navbar-collapse {
+    -moz-box-shadow: 0 3px 8px rgba(128, 130, 133, 0.75);
+    -webkit-box-shadow: 0 3px 8px rgba(128, 130, 133, 0.75);
+    box-shadow: 0 3px 8px rgba(128, 130, 133, 0.75);
     margin: 15px 0 0 0;
     overflow: hidden;
-    padding: 0 2.5px 2.5px;
+    /*padding: 0 2.5px 2.5px;*/
+    padding: 0;
 }
 
 
 
-.navbar-nav-container {
+/*.navbar-nav-container {
     -moz-box-shadow: 0 0 2.5px 2.5px rgba(128, 130, 133, 0.75);
     -webkit-box-shadow: 0 0 2.5px 2.5px rgba(128, 130, 133, 0.75);
     box-shadow: 0 0 2.5px 2.5px rgba(128, 130, 133, 0.75);
-}
+}*/
 
 .navbar-nav {
     margin: 0;
@@ -36,6 +40,8 @@
 }
 
 .navbar-nav li:last-child > a { border-bottom: none; }
+
+
 
 .navbar-nav .dropdown {
     padding: 0;
@@ -120,6 +126,16 @@
 
 .navbar-nav .dropdown .dropdown-menu > li > ul > li ul > li > a { padding: 0; }
 
+.navbar-nav .dropdown .dropdown-menu > li > ul > li ul > li > a.external:after {
+    background: url('../../Images/external_link_ffffff_12px-01.svg');
+    background-size: 12px 11px;
+    content: "";
+    display: inline-block;
+    height: 11px;
+    margin: 0 auto 0 5px;
+    width: 12px;
+}
+
 .navbar-nav .open .dropdown-menu,
 .navbar-nav .open .dropdown-menu * {
     -moz-transition: max-height 3s ease-in-out;
@@ -156,6 +172,9 @@
     .menu-separator { height: 2px; }
 
     .navbar-collapse {
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
         margin: 0;
         padding: 0;
     }
