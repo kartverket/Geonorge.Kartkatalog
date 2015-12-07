@@ -71,6 +71,9 @@ namespace Kartverket.Metadatakatalog
                "~/Scripts/jquery.cookie.js",
                "~/Scripts/visninger.js"));
 
+            bundles.Add(new StyleBundle("~/Content/shopping-cart").Include(
+                "~/Content/shopping-cart.css"));
+
             bundles.Add(new ScriptBundle("~/bundles/shopping-cart").Include(
                 "~/Scripts/shopping-cart.js"));
 

@@ -329,6 +329,7 @@
     <Content Include="Content\kartverket_logo.png" />
     <Content Include="Content\logo_kartverket_norgedigitalt.png" />
     <Content Include="Content\searchresult-layout.css" />
+    <Content Include="Content\shopping-cart.css" />
     <Content Include="Content\site.css" />
     <Content Include="Content\themes\base\core.css" />
     <Content Include="Content\themes\base\datepicker.css" />
