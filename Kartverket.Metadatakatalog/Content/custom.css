@@ -20,20 +20,6 @@ img {
     padding: 0;
 }
 
-#orderitem-count {
-    position: absolute;
-    background-color: #FE5000;
-    border-radius: 50%;
-    height: 26px;
-    width: 26px;
-    top: -21px;
-    left: 19px;
-    text-align: center;
-    line-height: 20pt;
-    color: rgb(255, 255, 255);
-    font-size: 12pt;
-}
-
 h1.small-h1 {
     font-size: 48pt;
 }
