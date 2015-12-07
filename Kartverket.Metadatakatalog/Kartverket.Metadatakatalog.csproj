@@ -328,8 +328,6 @@
     <Content Include="Content\map-modal.css" />
     <Content Include="Content\kartverket_logo.png" />
     <Content Include="Content\logo_kartverket_norgedigitalt.png" />
-    <Content Include="Content\navbar.css" />
-    <Content Include="Content\searchbar.css" />
     <Content Include="Content\searchresult-layout.css" />
     <Content Include="Content\site.css" />
     <Content Include="Content\themes\base\core.css" />
