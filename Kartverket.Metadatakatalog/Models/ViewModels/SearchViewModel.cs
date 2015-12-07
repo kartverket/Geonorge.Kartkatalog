@@ -213,6 +213,15 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             routeValues["orderby"] = "title";
             return routeValues;
         }
+
+        public RouteValueDictionary ParamsForOrderByTitleDescLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["orderby"] = "title_desc";
+            return routeValues;
+        }
+
         public RouteValueDictionary ParamsForOrderByOrganizationLink()
         {
             var routeValues = new RouteValueDictionary();
@@ -220,6 +229,15 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             routeValues["orderby"] = "organization";
             return routeValues;
         }
+
+        public RouteValueDictionary ParamsForOrderByOrganizationDescLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["orderby"] = "organization_desc";
+            return routeValues;
+        }
+
         public RouteValueDictionary ParamsForOrderByMetadataUpdateLink()
         {
             var routeValues = new RouteValueDictionary();
