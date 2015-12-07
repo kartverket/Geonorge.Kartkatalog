@@ -307,6 +307,8 @@
     <Content Include="Content\img\ikoner\handlekurv-white.svg" />
     <Content Include="Content\img\ikoner\handlekurv-disabled.svg" />
     <Content Include="Content\img\ikoner\handlekurv.svg" />
+    <Content Include="Content\img\ikoner\hengelaas-white.svg" />
+    <Content Include="Content\img\ikoner\hengelaas.svg" />
     <Content Include="Content\img\ikoner\info-white.svg" />
     <Content Include="Content\img\ikoner\info-disabled.svg" />
     <Content Include="Content\img\ikoner\info.svg" />
