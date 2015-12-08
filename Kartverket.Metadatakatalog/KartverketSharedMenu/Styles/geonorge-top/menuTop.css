@@ -1,4 +1,12 @@
-﻿.container-top-menu {
+﻿
+.geonorge-aut a {
+    font-family: 'Raleway', sans-serif;
+    font-size: 10.5pt;
+    color: #968c83;
+    text-decoration: none;
+}
+
+.container-top-menu {
     background-color: #B6AFA8;
     height: 15px;
 }

@@ -3,12 +3,7 @@
 body { font-family: 'Open Sans', sans-serif; }
 
 .container-breadcrumbs { display: none; }
-.geonorge-aut a {
-    font-family: 'Raleway', sans-serif;
-    font-size: 10.5pt;
-    color: #968c83;
-    text-decoration: none;
-}
+
 .container-breadcrumbs ul {
     background-color: transparent;
     list-style: none;
