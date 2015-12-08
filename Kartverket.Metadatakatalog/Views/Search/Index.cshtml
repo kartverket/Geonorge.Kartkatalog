@@ -263,8 +263,6 @@
                      location.href = $(this).val();
                  }
              );
-
-            $('[data-toggle="tooltip"]').tooltip();
         });
 
 
@@ -327,16 +325,6 @@
             {
          <text>
 
-
-            $("#popoverExport").popover({
-                html: true,
-                content: function () {
-                    return $('#popoverExportContent').html();
-                },
-                title: function () {
-                    return $('#popoverExportTitle').html();
-                }
-            });
 
 
             if (Modernizr.localstorage) {

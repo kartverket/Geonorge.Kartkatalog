@@ -52,6 +52,8 @@ namespace Kartverket.Metadatakatalog
 
 
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
+               "~/Scripts/bootstrap.js",
+               "~/Scripts/site.js",
                "~/Scripts/jquery-ui-datepicker.js",
                "~/Scripts/respond.js",
                "~/Scripts/jquery.cookie.js",

@@ -204,7 +204,6 @@
                  }
              );
 
-            $('[data-toggle="tooltip"]').tooltip();
         });
 
 
@@ -266,17 +265,6 @@
             @if (Html.DownloadServiceEnabled())
             {
          <text>
-
-
-            $("#popoverExport").popover({
-                html: true,
-                content: function () {
-                    return $('#popoverExportContent').html();
-                },
-                title: function () {
-                    return $('#popoverExportTitle').html();
-                }
-            });
 
 
             if (Modernizr.localstorage) {
