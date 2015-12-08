@@ -55,9 +55,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Arkitektum.GIS.Lib.MetadataCSW, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Arkitektum.GIS.Lib.MetadataCSW.1.8.0.0\lib\net40\Arkitektum.GIS.Lib.MetadataCSW.dll</HintPath>
+    <Reference Include="Arkitektum.GIS.Lib.MetadataCSW, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arkitektum.GIS.Lib.MetadataCSW.1.9.0.0\lib\net40\Arkitektum.GIS.Lib.MetadataCSW.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Arkitektum.GIS.Lib.SerializeUtil, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -75,9 +75,9 @@
     <Reference Include="FluentAssertions.Core">
       <HintPath>..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
-    <Reference Include="GeoNorgeAPI, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\GeoNorgeAPI.3.0.1.0\lib\net40\GeoNorgeAPI.dll</HintPath>
+    <Reference Include="GeoNorgeAPI, Version=3.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GeoNorgeAPI.3.0.7.0\lib\net40\GeoNorgeAPI.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Kartverket.Geonorge.Utilities">
       <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.15\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
