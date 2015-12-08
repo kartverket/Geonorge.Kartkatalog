@@ -52,6 +52,11 @@
             color: #cfcfcf;
         }
 
+.input-group-btn > .btn {
+    padding: 12px 12px;
+    height: 40px;
+}
+
 .pagination {
     margin: 0;
 }
