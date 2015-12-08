@@ -326,6 +326,9 @@
     <Content Include="Content\img\logo-graphic-512.png" />
     <Content Include="Content\img\opendata.png" />
     <Content Include="Content\img\unlock.png" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.structure.css" />
+    <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\map-modal.css" />
     <Content Include="Content\kartverket_logo.png" />
     <Content Include="Content\logo_kartverket_norgedigitalt.png" />
@@ -441,6 +444,7 @@
     <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-datepicker.js" />
     <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.typeahead.js" />

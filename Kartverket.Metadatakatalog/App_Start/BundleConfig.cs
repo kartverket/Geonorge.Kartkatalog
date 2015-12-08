@@ -33,6 +33,9 @@ namespace Kartverket.Metadatakatalog
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/site.css",
+                      "~/Content/jquery-ui.css",
+                      "~/Content/jquery-ui.structure.css",
+                      "~/Content/jquery-ui.theme.css",
                       "~/Content/themes/base/core.css",
                       "~/Content/themes/base/datepicker.css",
                       "~/Content/themes/base/theme.css",
@@ -49,6 +52,7 @@ namespace Kartverket.Metadatakatalog
 
 
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
+               "~/Scripts/jquery-ui-datepicker.js",
                "~/Scripts/respond.js",
                "~/Scripts/jquery.cookie.js",
                "~/Scripts/jquery.validate*",
