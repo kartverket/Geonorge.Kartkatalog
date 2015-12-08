@@ -236,9 +236,9 @@
 
                 @if (!string.IsNullOrWhiteSpace(Model.ParentIdentifier))
                 {
-                    <h3>Overordnet metadata</h3>
+                    <h3>Overordnede metadata</h3>
                     <script>getMetadata('@Model.ParentIdentifier');</script>
-                    <a id="related-@Model.ParentIdentifier" href="/metadata/org/title/@Model.ParentIdentifier" title="Overordnet metadata for @Model.Title">
+                    <a id="related-@Model.ParentIdentifier" href="/metadata/org/title/@Model.ParentIdentifier" title="Overordnede metadata for @Model.Title">
                     </a>
                 }
 
@@ -342,7 +342,7 @@
                 {
                     if (Model.OperatesOn.Count > 0)
                     {
-                        <h3>Relaterte metadata</h3>
+                        <h3>Relaterte data</h3>
                         <div id="tableView">
                             <div id="relatedList">
                                 <div class="row search-results-table-heading">
