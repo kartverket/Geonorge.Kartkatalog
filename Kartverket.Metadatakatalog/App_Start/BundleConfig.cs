@@ -23,22 +23,6 @@ namespace Kartverket.Metadatakatalog
             ));
 
 
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"
-                        ));
-            //"~/Scripts/jquery.typeahead.js"
-
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
-
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"
-                        ));
-
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
-
             bundles.Add(new StyleBundle("~/bundles/shared-menu-styles")
            .Include("~/KartverketSharedMenu/Styles/bootstrap.css")
            .Include("~/KartverketSharedMenu/Styles/geonorge-top/menuTop.css")
@@ -47,29 +31,29 @@ namespace Kartverket.Metadatakatalog
            );
 
 
-            bundles.Add(new StyleBundle("~/Content/download").Include(
-                "~/Content/chosen.css",
-                "~/Content/download.css",
-                "~/Content/map-modal.css"));
-
-
-
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/site.css",
+                      "~/Content/themes/base/core.css",
+                      "~/Content/themes/base/datepicker.css",
+                      "~/Content/themes/base/theme.css",
                       "~/Content/custom.css",
                       "~/Content/geonorge-colors.css",
                       "~/Content/searchresult-layout.css",
                       "~/Content/custom-icons.css",
                       "~/Content/font-awesome.min.css",
-                      "~/Content/forms.css"));
+                      "~/Content/forms.css",
+                      "~/Content/chosen.css",
+                      "~/Content/download.css",
+                      "~/Content/map-modal.css"
+                      ));
 
-            bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
-            "~/Content/themes/base/core.css",
-            "~/Content/themes/base/datepicker.css",
-            "~/Content/themes/base/theme.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
+               "~/Scripts/respond.js",
                "~/Scripts/jquery.cookie.js",
+               "~/Scripts/jquery.validate*",
+               "~/Scripts/modernizr-*",
+               "~/Scripts/easyXDM.js",
                "~/Scripts/visninger.js"));
 
             bundles.Add(new StyleBundle("~/Content/shopping-cart").Include(
