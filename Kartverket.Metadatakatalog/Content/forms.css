@@ -5,9 +5,9 @@
     vertical-align: middle;
 }
 
-input,
+input[type="text"],
 textarea,
-.form-control {
+input.form-control {
     border-radius: 0;
     border-color: 1px solid #CFCFCF;
     box-shadow: none;
