@@ -732,7 +732,7 @@
             <li class="pull-right">
                 <label for="orderby">Sorter etter:</label>
                 <select id="orderby">
-                    @if (Model.orderby == 0)
+                    @if (Model.orderby == "score")
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByScoreLink())" selected="selected">Relevans</option>
                     }
@@ -740,7 +740,7 @@
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByScoreLink())">Relevans</option>
                     }
-                    @if (Model.orderby == 1)
+                    @if (Model.orderby == "title")
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByTitleLink())" selected="selected">Navn</option>
                     }
@@ -748,7 +748,7 @@
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByTitleLink())">Navn</option>
                     }
-                    @if (Model.orderby == 2)
+                    @if (Model.orderby == "organization")
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByOrganizationLink())" selected="selected">Organisasjon</option>
                     }
@@ -756,7 +756,7 @@
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByOrganizationLink())">Organisasjon</option>
                     }
-                    @if (Model.orderby == 3)
+                    @if (Model.orderby == "newest")
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByMetadataUpdateLink())" selected="selected">Dato oppdatert (metadata)</option>
                     }
@@ -764,7 +764,7 @@
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByMetadataUpdateLink())">Dato oppdatert (metadata)</option>
                     }
-                    @if (Model.orderby == 4)
+                    @if (Model.orderby == "updated")
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByResourceUpdateLink())" selected="selected">Dato oppdatert (ressurs)</option>
                     }
