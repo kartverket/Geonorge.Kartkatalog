@@ -1,5 +1,9 @@
 ﻿function getURLParameter(name) {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null
+    if (location.search != "" && location.search != null) {
+        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null
+    } else {
+        return "";
+    }
 }
 
 function changeLayout(layout) {
@@ -19,27 +23,31 @@ function changeLayout(layout) {
 
 function orderBy() {
     var orderbyArray = getURLParameter("orderby").split("_");
-    var orderby = orderbyArray[0];
-    var direction = "asc";
-    if (orderbyArray.length > 1) {
-        direction = orderbyArray[1];
-    }
     var orderHeaders = $("#tableView .search-results-table-heading .orderby");
-
-    $.each(orderHeaders, function () {
-        if ($(this).hasClass("orderby-" + orderby)) {
-            if ($(this).hasClass("orderby-" + direction)) {
-                $(this).hide();
-            } else {
-                $(this).show();
-                $(this).addClass("active-orderby");
-            }
-        } else if ($(this).hasClass("orderby-asc")) {
-            $(this).show();
-        } else {
-            $(this).hide();
+    if (orderbyArray != "") {
+        var orderby = orderbyArray[0];
+        var direction = "asc";
+        if (orderbyArray.length > 1) {
+            direction = orderbyArray[1];
         }
-    });
+
+        $.each(orderHeaders, function () {
+            if ($(this).hasClass("orderby-" + orderby)) {
+                if ($(this).hasClass("orderby-" + direction)) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                    $(this).addClass("active-orderby");
+                }
+            } else if ($(this).hasClass("orderby-asc")) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    } else {
+        $("#tableView .orderby-desc").hide();
+    }
 }
 
 
