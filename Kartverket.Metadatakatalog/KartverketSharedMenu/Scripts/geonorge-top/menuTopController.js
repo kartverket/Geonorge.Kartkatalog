@@ -11,7 +11,7 @@
 
               localStorage.setItem('menuItems', JSON.stringify(respons));
               var date = new Date();
-              var minutes = 20;
+              var minutes = 3;
               date.setTime(date.getTime() + (minutes * 60 * 1000));
               $.cookie('expire', "menu", { expires: date });
 
