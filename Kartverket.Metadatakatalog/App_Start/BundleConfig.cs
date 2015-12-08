@@ -53,6 +53,7 @@ namespace Kartverket.Metadatakatalog
                "~/Scripts/jquery.cookie.js",
                "~/Scripts/jquery.validate*",
                "~/Scripts/modernizr-*",
+               "~/Scripts/chosen.jquery.js",
                "~/Scripts/easyXDM.js",
                "~/Scripts/visninger.js"));
 
