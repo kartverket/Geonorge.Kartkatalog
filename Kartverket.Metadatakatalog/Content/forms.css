@@ -9,16 +9,16 @@ input[type="text"],
 textarea,
 input.form-control {
     border-radius: 0;
-    border-color: 1px solid #CFCFCF;
+    border: 1px solid #CFCFCF;
     box-shadow: none;
     font-family: "Open Sans",sans-serif;
     font-style: normal;
     font-variant: normal;
     color: #000000;
-    font-size: 16pt;
+    font-size: 12pt !important;
     font-weight: 400;
-    min-height: 60px;
-    padding: 15px 25px;
+    min-height: 40px;
+    padding: 7px 15px;
     width: 100%;
 }
 
@@ -34,9 +34,9 @@ input.form-control {
 textarea {
     border: 1px solid #968c83;
     font-family: 'Open Sans', sans-serif;
-    font-size: 16pt;
+    font-size: 12pt;
     min-height: 180px;
-    padding: 15px 25px;
+    padding: 15px 15px;
     width: 100%;
 }
 
