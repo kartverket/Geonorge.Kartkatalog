@@ -22,9 +22,10 @@ function changeLayout(layout) {
 
 
 function orderBy() {
-    var orderbyArray = getURLParameter("orderby").split("_");
+    var orderbyArray = getURLParameter("orderby");
     var orderHeaders = $("#tableView .search-results-table-heading .orderby");
-    if (orderbyArray != "") {
+    if (orderbyArray != "" && orderbyArray != null) {
+        orderbyArray = orderbyArray.split("_");
         var orderby = orderbyArray[0];
         var direction = "asc";
         if (orderbyArray.length > 1) {
