@@ -297,6 +297,8 @@
     <Content Include="Content\img\arrow-right.svg" />
     <Content Include="Content\img\arrow-select-blue.svg" />
     <Content Include="Content\img\arrow-select-orange.svg" />
+    <Content Include="Content\img\background-dev.png" />
+    <Content Include="Content\img\background-test.png" />
     <Content Include="Content\img\breadcrumb-arrow.svg" />
     <Content Include="Content\img\chevron-down.svg" />
     <Content Include="Content\img\chevron-up.svg" />

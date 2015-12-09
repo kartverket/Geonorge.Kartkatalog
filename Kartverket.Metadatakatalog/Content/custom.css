@@ -1,6 +1,19 @@
 ﻿body {
     font-size: 12pt;
     font-family: "Open Sans",sans-serif;
+    background-image: none;
+}
+
+body.dev{
+    background-image: url(img/background-dev.png);
+}
+
+body.test{
+    background-image: url(img/background-test.png);
+}
+
+body.prod{
+    background-image: none;
 }
 
 a {
