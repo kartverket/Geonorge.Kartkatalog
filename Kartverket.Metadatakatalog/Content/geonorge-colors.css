@@ -66,13 +66,19 @@
             color: #cfcfcf;
         }
 
+.btn-xs {
+    font-size: 10pt !important;
+    padding: 3px;
+    height: 22px !important;
+}
+
 .input-group-btn > .btn {
     padding: 12px 12px;
     height: 40px;
 }
 
-.btn-group > .btn{
-    float: none!important;
+.btn-group > .btn {
+    float: none !important;
 }
 
 .pagination {
