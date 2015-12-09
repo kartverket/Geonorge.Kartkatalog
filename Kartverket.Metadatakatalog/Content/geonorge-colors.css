@@ -35,7 +35,7 @@
 }
 
 
-.btn {
+.btn, .col-actions .btn {
     background-color: #7DA1C4;
     transition: all 0.35s linear 0s;
     color: #FFF;
