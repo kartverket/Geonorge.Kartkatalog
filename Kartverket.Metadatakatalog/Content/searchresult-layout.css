@@ -209,3 +209,26 @@
 .facet-sok-emne .block.listblock {
     padding: 30px 0;
 }
+
+
+/* Register */
+
+.table-heading .sorted-asc:after, .table-heading .sorted-desc:after {
+    content: "";
+    width: 10pt;
+    height: 10pt;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-position: center center;
+    display: inline-block;
+    margin-left: 7px;
+}
+
+.table-heading .sorted-asc:after {
+    background-image: url("/Content/img/arrow-up.svg");
+}
+
+.table-heading .sorted-desc:after {
+    background-image: url("/Content/img/arrow-down.svg");
+}
