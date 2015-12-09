@@ -57,6 +57,10 @@
     height: 40px;
 }
 
+.btn-group > .btn{
+    float: none!important;
+}
+
 .pagination {
     margin: 0;
 }
