@@ -323,7 +323,6 @@ function generateView(template, orderItems) {
 
 $(window).load(function () {
     $(".progress").fadeOut("slow");
-    $(".chosen-select").chosen();
 
     function showAlert(message, colorClass) {
         $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);

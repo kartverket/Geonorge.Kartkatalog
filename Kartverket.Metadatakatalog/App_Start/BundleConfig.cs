@@ -61,7 +61,8 @@ namespace Kartverket.Metadatakatalog
                "~/Scripts/modernizr-*",
                "~/Scripts/chosen.jquery.js",
                "~/Scripts/easyXDM.js",
-               "~/Scripts/visninger.js"));
+               "~/Scripts/visninger.js",
+               "~/Scripts/init.js"));
 
             bundles.Add(new StyleBundle("~/Content/shopping-cart").Include(
                 "~/Content/shopping-cart.css"));
