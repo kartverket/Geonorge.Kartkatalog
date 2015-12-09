@@ -31,6 +31,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             else if (Type=="service") t="label-tjeneste";
             else if (Type == "servicelayer") t = "label-tjenestelag";
             else if (Type=="series") t="label-datasettserie";
+            else if (Type == "dimensionGroup") t = "label-datasett";
 
             return t;
         }
@@ -43,6 +44,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             else if (Type=="service") t="Tjeneste";
             else if (Type == "servicelayer") t = "Tjenestelag";
             else if (Type=="series") t="Datasettserie";
+            else if (Type == "dimensionGroup") t = "Datapakke";
 
             return t;
         }

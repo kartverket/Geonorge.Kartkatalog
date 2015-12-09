@@ -366,22 +366,22 @@
                                         relatedContentHierarchyLevelCssClass = "label-datasett";
                                         relatedContentHierarchyLevelLabelText = "Datasett";
                                     }
-                                    else if (Model.IsServiceLayer())
+                                    else if (relatedContent.IsServiceLayer())
                                     {
                                         relatedContentHierarchyLevelCssClass = "label-tjenestelag";
                                         relatedContentHierarchyLevelLabelText = "Tjenestelag";
                                     }
-                                    else if (Model.IsService())
+                                    else if (relatedContent.IsService())
                                     {
                                         relatedContentHierarchyLevelCssClass = "label-tjeneste";
                                         relatedContentHierarchyLevelLabelText = "Tjeneste";
                                     }
-                                    else if (Model.IsApplication())
+                                    else if (relatedContent.IsApplication())
                                     {
                                         relatedContentHierarchyLevelCssClass = "label-applikasjon";
                                         relatedContentHierarchyLevelLabelText = "Applikasjon";
                                     }
-                                    else if (Model.IsDatasetSeries())
+                                    else if (relatedContent.IsDatasetSeries())
                                     {
                                         relatedContentHierarchyLevelCssClass = "label-datasettserie";
                                         relatedContentHierarchyLevelLabelText = "Datasettserie";
