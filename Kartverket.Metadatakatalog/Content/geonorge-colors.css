@@ -18,7 +18,21 @@
     border-color: #968c84;
 }
 
+.label-danger{
+    border-color: #fe5000;
+}
 
+.label-warning{
+    border-color: #f0b323;
+}
+
+.label-success{
+    border-color: #a9c47f;
+}
+
+.label-info{
+    border-color: #7da1c4;
+}
 
 
 .btn {
