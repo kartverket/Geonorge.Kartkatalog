@@ -115,21 +115,6 @@ aside ul li, .container-footer ul li {
     display: none;
 }
 
-.search-results .result-row {
-    padding: 0;
-    font-size: 14pt;
-    word-wrap: break-word;
-}
-
-    .search-results .result-row > * {
-        margin: 7px 0;
-    }
-
-.search-results hr {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
 .label {
     font-family: "Open Sans",sans-serif;
     display: inline-block;
