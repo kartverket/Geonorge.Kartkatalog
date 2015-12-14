@@ -277,7 +277,12 @@ namespace Kartverket.Metadatakatalog.Service
                             var simpleMd = new SimpleMetadata(md);
                             datasetServices.Add(new MetaDataEntry 
                             {
-                                Uuid = simpleMd.Uuid, Title= simpleMd.Title, ParentIdentifier = simpleMd.ParentIdentifier
+                                Uuid = simpleMd.Uuid, Title= simpleMd.Title, ParentIdentifier = simpleMd.ParentIdentifier,
+                                HierarchyLevel = simpleMd.HierarchyLevel,
+                                ContactOwnerOrganization = (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null) ? simpleMd.ContactOwner.Organization : "",
+                                DistributionDetailsName = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Name != null) ? simpleMd.DistributionDetails.Name : "",
+                                DistributionDetailsProtocol= (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
+                                DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
                             });
                         }
                         
@@ -304,7 +309,7 @@ namespace Kartverket.Metadatakatalog.Service
                         List<string> datasetServicesNewList = new List<string>();
                         foreach (var service in datasetServicesOrganizedList)
                         {
-                            datasetServicesNewList.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier);
+                            datasetServicesNewList.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl);
                         }
 
                         indexDoc.DatasetServices = datasetServicesNewList.ToList();
@@ -375,5 +380,10 @@ namespace Kartverket.Metadatakatalog.Service
         public string Uuid { get; set; }
         public string Title { get; set; }
         public string ParentIdentifier { get; set; }
+        public string HierarchyLevel { get; set; }
+        public string ContactOwnerOrganization { get; set; }
+        public string DistributionDetailsName { get; set; }
+        public string DistributionDetailsProtocol { get; set; }
+        public string DistributionDetailsUrl { get; set; }
     }
 }
