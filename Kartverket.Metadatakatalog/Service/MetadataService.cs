@@ -130,7 +130,7 @@ namespace Kartverket.Metadatakatalog.Service
             parameters.Text = simpleMetadata.Uuid;
             SearchResult searchResult = _searchService.Search(parameters);
 
-            if (searchResult.NumFound > 0)
+            if (searchResult != null && searchResult.NumFound > 0)
             {
                 var datasetServices = searchResult.Items[0].DatasetServices;
 
