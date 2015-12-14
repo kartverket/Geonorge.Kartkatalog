@@ -7,6 +7,10 @@
         font-size: 24pt;
     }
 
+    #orderlist h2:after{
+        z-index: -1;
+    }
+
 #orderlist a {
     text-decoration: none;
 }

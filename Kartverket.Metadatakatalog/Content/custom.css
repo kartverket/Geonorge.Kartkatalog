@@ -4,16 +4,24 @@
     background-image: none;
 }
 
-body.dev{
-    background-image: url(img/background-dev.png);
-}
+    body.dev {
+        background-image: url(img/background-dev.png);
+    }
 
-body.test{
-    background-image: url(img/background-test.png);
-}
+    body.test {
+        background-image: url(img/background-test.png);
+    }
 
-body.prod{
-    background-image: none;
+    body.prod {
+        background-image: none;
+    }
+
+p.article-p {
+    font-size: 14pt;
+    line-height: 24pt;
+    font-weight: 500;
+    font-family: "Open Sans",sans-serif;
+    color: #000;
 }
 
 a {
