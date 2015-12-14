@@ -181,14 +181,6 @@
     color: #968c83 !important;
 }
 
-/* .chosen-container-multi .chosen-drop .result-selected:before {
-        color: #FE5000;
-        content: "•";
-        font-size: 16pt;
-        font-style: normal;
-        padding-right: 10px;
-    }*/
-
 .chosen-container .chosen-results li.active-result {
     color: #3867C8;
 }
