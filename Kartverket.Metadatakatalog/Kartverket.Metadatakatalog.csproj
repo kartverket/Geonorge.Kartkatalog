@@ -292,6 +292,9 @@
     <Content Include="Content\forms.css" />
     <Content Include="Content\geonorge-default.css" />
     <Content Include="Content\geonorge-colors.css" />
+    <Content Include="Content\ie-10-only.css" />
+    <Content Include="Content\ie-11-only.css" />
+    <Content Include="Content\ie-only.css" />
     <Content Include="Content\img\arrow-up.svg" />
     <Content Include="Content\img\arrow-down.svg" />
     <Content Include="Content\img\arrow-right.svg" />

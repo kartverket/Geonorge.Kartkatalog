@@ -1,0 +1,12 @@
+﻿@media all and (-ms-high-contrast:none) {
+    *::-ms-backdrop, .chosen-input-group .input-group-btn {
+        display: table-row;
+    }
+
+    *::-ms-backdrop, .input-group .btn.btn-fullheight {
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: -39px;
+    }
+}

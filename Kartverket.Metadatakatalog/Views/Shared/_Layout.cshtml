@@ -27,6 +27,11 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/shopping-cart")
 
+    <!--[if IE]>
+        <link rel="stylesheet" type="text/css" href="/Content/ie-only.css" />
+    <![endif]-->
+
+
     @RenderSection("head", false)
 
     @Html.Partial("_Analytics")

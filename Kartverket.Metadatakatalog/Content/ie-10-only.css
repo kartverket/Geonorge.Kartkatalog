@@ -1,0 +1,10 @@
+﻿html[data-useragent*='MSIE 10.0'] .chosen-input-group .input-group-btn {
+    display: table-row;
+}
+
+html[data-useragent*='MSIE 10.0'] .input-group .btn.btn-fullheight {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: -39px;
+}

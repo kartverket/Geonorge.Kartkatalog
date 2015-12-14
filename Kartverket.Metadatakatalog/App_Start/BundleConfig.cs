@@ -40,6 +40,8 @@ namespace Kartverket.Metadatakatalog
                       "~/Content/themes/base/datepicker.css",
                       "~/Content/themes/base/theme.css",
                       "~/Content/custom.css",
+                      "~/Content/ie-10-only.css",
+                      "~/Content/ie-11-only.css",
                       "~/Content/geonorge-colors.css",
                       "~/Content/searchresult-layout.css",
                       "~/Content/custom-icons.css",

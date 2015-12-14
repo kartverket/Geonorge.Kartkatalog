@@ -5,4 +5,8 @@
     };
     $(".chosen-select").chosen(options);
     $('[data-toggle="tooltip"]').tooltip();
+
+    // Get useragent
+    var doc = document.documentElement;
+    doc.setAttribute('data-useragent', navigator.userAgent);
 });
