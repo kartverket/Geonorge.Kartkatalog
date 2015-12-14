@@ -310,7 +310,7 @@
                     {
                         <h3>Relaterte data</h3>
                         <div id="tableView">
-                            <div id="relatedList">
+                            <div id="relatedList" class="search-results">
                                 <div class="row search-results-table-heading">
                                     <div class="col-sm-3"><p>Tittel</p></div>
                                     <div class="col-sm-2"><p>Type</p></div>
@@ -379,30 +379,30 @@
                                             *@
                                         </div>
                                         <div class="col-sm-1 search-results-action-icons">
-                                            <a href="/metadata/org/title/@relatedContent.Uuid" class="btn"><span class="glyphicon glyphicon-info-sign"></span></a>
+                                            <a href="/metadata/org/title/@relatedContent.Uuid"><span class="custom-icon custom-icon-info"></span></a>
                                         </div>
                                         <div class="col-sm-1 search-results-action-icons">
                                             @if (relatedContent.ShowMapLink())
                                             {
-                                                <a href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" class="btn"><span class="glyphicon glyphicon-map-marker"></span></a>
+                                                <a href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
                                             }
                                             else
                                             {
-                                                <a href="#" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-map-marker"></span></a>
+                                                <a href="#" class="btn" disabled="disabled"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
                                             }
                                         </div>
                                         <div class="col-sm-1 search-results-action-icons">
                                             @if (relatedContent.ShowDownloadService())
                                             {
-                                                <a href="#" id="add-to-cart-btn" onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');" class="btn"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                                                <a href="#" id="add-to-cart-btn" onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"><span class="custom-icon custom-icon-handlekurv"></span></a>
                                             }
                                             else if (relatedContent.ShowDownloadLink())
                                             {
-                                                <a href="@relatedContent.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" class="btn"><span class="glyphicon glyphicon-download-alt"></span></a>
+                                                <a href="@relatedContent.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');"><span class="custom-icon custom-icon-lastned"></span></a>
                                             }
                                             else
                                             {
-                                                <a href="" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-download-alt"></span></a>
+                                                <a href="" class="disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span></a>
                                             }
                                         </div>
 
