@@ -178,43 +178,43 @@
                 @*<h2>Tilgjengelige ressurser</h2>
 
 
-                @if (!string.IsNullOrEmpty(Model.CoverageUrl))
-                {
-                    if (Model.CoverageUrl.IndexOf("TYPE:") != -1)
+                    @if (!string.IsNullOrEmpty(Model.CoverageUrl))
                     {
-                        <a href="#" class="btn btn-default" title="Gå til dekningskart for @Model.Title" onclick="window.open('@Model.GetCoverageLink()', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes');">
-                            <span class="glyphicon glyphicon-info-sign"></span> Vis dekningskart
-                        </a>
-
-                    }
-                    else
-                    {
-                        <p>
-                            <a href="#" class="btn btn-default" title="Gå til dekningskart for @Model.Title" onclick="window.open('@Model.CoverageUrl', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, top=100, left=50, width=800, height=600');">
+                        if (Model.CoverageUrl.IndexOf("TYPE:") != -1)
+                        {
+                            <a href="#" class="btn btn-default" title="Gå til dekningskart for @Model.Title" onclick="window.open('@Model.GetCoverageLink()', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes');">
                                 <span class="glyphicon glyphicon-info-sign"></span> Vis dekningskart
                             </a>
 
-                        </p>
-                    }
-                }
-                else
-                {
-                    if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
-                    {
-                        <p>
-                            @foreach (var thumb in Model.Thumbnails)
-                            {
-                                if (thumb.Type == "dekningsoversikt")
-                                {
-                                    <a href="#" class="btn btn-default" title="Gå til dekningskart for @Model.Title" onclick="window.open('@thumb.URL', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, top=100, left=50, width=400, height=400');">
-                                        <span class="glyphicon glyphicon-info-sign"></span> Vis dekningskart
-                                    </a>
-                                }
-                            }
-                        </p>
-                    }
+                        }
+                        else
+                        {
+                            <p>
+                                <a href="#" class="btn btn-default" title="Gå til dekningskart for @Model.Title" onclick="window.open('@Model.CoverageUrl', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, top=100, left=50, width=800, height=600');">
+                                    <span class="glyphicon glyphicon-info-sign"></span> Vis dekningskart
+                                </a>
 
-                }*@
+                            </p>
+                        }
+                    }
+                    else
+                    {
+                        if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
+                        {
+                            <p>
+                                @foreach (var thumb in Model.Thumbnails)
+                                {
+                                    if (thumb.Type == "dekningsoversikt")
+                                    {
+                                        <a href="#" class="btn btn-default" title="Gå til dekningskart for @Model.Title" onclick="window.open('@thumb.URL', '_blank', 'toolbar=yes, scrollbars=yes, resizable=yes, top=100, left=50, width=400, height=400');">
+                                            <span class="glyphicon glyphicon-info-sign"></span> Vis dekningskart
+                                        </a>
+                                    }
+                                }
+                            </p>
+                        }
+
+                    }*@
 
                 <script>
                     function getMetadata(uuid) {
@@ -309,8 +309,8 @@
                     if (Model.Related.Count > 0)
                     {
                         <h3>Relaterte data</h3>
-                        <div id="tableView">
-                            <div id="relatedList" class="search-results">
+                        <div id="tableView" class="search-results">
+                            <div id="relatedList">
                                 <div class="row search-results-table-heading">
                                     <div class="col-sm-3"><p>Tittel</p></div>
                                     <div class="col-sm-2"><p>Type</p></div>
@@ -658,6 +658,8 @@
         }
 
         $(document).ready(function () {
+
+            changeLayout("tableView");
 
             if (Modernizr.localstorage) {
 
