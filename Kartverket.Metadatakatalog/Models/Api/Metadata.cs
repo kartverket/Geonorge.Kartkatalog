@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace Kartverket.Metadatakatalog.Models.Api
@@ -99,9 +100,9 @@ namespace Kartverket.Metadatakatalog.Models.Api
             DistributionName = item.DistributionName;
             if (urlHelper != null)
             {
-                ShowDetailsUrl = urlHelper.Action("Index", "Metadata", new { uuid = item.Uuid }, urlHelper.RequestContext.HttpContext.Request.Url.Scheme);
+                ShowDetailsUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/uuid/" + item.Uuid;
                 string s = new SeoUrl(item.Organization, "").Organization;
-                OrganizationUrl = urlHelper.RequestContext.HttpContext.Request.Url.Scheme + "://" + urlHelper.RequestContext.HttpContext.Request.Url.Authority + "/metadata/" + s;
+                OrganizationUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/" + s;
             }
            
             if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data"))
