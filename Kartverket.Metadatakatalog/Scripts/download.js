@@ -218,6 +218,7 @@ function populateProjectionList(uuid, supportsProjectionSelection) {
 // Populering av Filformatliste
 function populateFormatList(uuid, supportsFormatSelection) {
     if (supportsFormatSelection) {
+        console.log(supportsFormatSelection);
         var orderItemFormater = (JSON.parse(localStorage.getItem(uuid + '.codelists.format')));
         var orderItemSelectFormater = $('#orderuuid' + uuid + ' .selectFormater');
         orderItemSelectFormater.attr('name', uuid + '-formats');
@@ -295,19 +296,20 @@ function generateView(template, orderItems) {
         $("#orderuuid" + uuid + " .remove-item").attr('uuid', uuid);
         $("#orderuuid" + uuid + " .selectPolygon button").attr('uuid', uuid);
 
-        var supportsProjectionSelection = localStorage.getItem(uuid + '.capabilities.supportsProjectionSelection');
-        var supportsFormatSelection = localStorage.getItem(uuid + '.capabilities.supportsFormatSelection');
-        var supportsPolygonSelection = localStorage.getItem(uuid + '.capabilities.supportsPolygonSelection');
-        var supportsAreaSelection = localStorage.getItem(uuid + '.capabilities.supportsAreaSelection');
+        var supportsProjectionSelection = (localStorage.getItem(uuid + '.capabilities.supportsProjectionSelection') === "true");
+        var supportsFormatSelection = (localStorage.getItem(uuid + '.capabilities.supportsFormatSelection') === "true");
+        var supportsPolygonSelection = (localStorage.getItem(uuid + '.capabilities.supportsPolygonSelection') === "true");
+        var supportsAreaSelection = (localStorage.getItem(uuid + '.capabilities.supportsAreaSelection') === "true");
         var metadata = JSON.parse(localStorage.getItem(uuid + '.metadata'));
 
         $("#orderuuid" + uuid + " .order-title").text(metadata.name);
         $("#orderuuid" + uuid + " .order-title").attr('href', metadata.url);
         $("#orderuuid" + uuid + " .order-img").attr('src', metadata.organizationLogoUrl);
 
+        populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection);
         populateProjectionList(uuid, supportsProjectionSelection);
         populateFormatList(uuid, supportsFormatSelection);
-        populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection);
+        
         getOrderUrl(uuid);
 
         var orderItems = JSON.parse(localStorage["orderItems"]);
