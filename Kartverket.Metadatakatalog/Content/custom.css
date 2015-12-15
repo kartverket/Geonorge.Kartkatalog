@@ -106,13 +106,14 @@ aside ul li, .container-footer ul li {
 
 .facet-sok-tittel {
     display: block;
+    margin-top: 6px;
 }
 
 
     .facet-sok-tittel p {
         display: inline;
-        font-size: 14pt;
-        line-height: 22pt;
+        font-size: 12pt;
+        line-height: 16pt;
     }
 
 
@@ -139,16 +140,21 @@ aside ul li, .container-footer ul li {
 .facet-sok-undertitler {
 }
 
+.facet-sok-undertitler li{
+    font-size: 12pt;
+    line-height: 18pt;
+}
+
     .facet-sok-undertitler li a {
-        font-size: 14pt;
-        line-height: 16pt;
+        font-size: 12pt;
+        line-height: 18pt;
         font-style: normal;
         color: #3867C8;
     }
 
         .facet-sok-undertitler li a:hover {
-            font-size: 14pt;
-            line-height: 16px;
+            font-size: 12pt;
+            line-height: 18pt;
             color: #3867C8;
         }
 

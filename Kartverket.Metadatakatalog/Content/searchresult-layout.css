@@ -8,6 +8,10 @@
         margin: 7px 0;
     }
 
+    .search-results .result-row p {
+        margin-bottom: 0;
+    }
+
 .search-results hr {
     margin-top: 0;
     margin-bottom: 0;
