@@ -392,7 +392,16 @@
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="fonts\web.config" />
+    <Content Include="Images\Arrow_414042_12px_mobile.svg" />
     <Content Include="Images\Dot_ffffff_8px-01.png" />
+    <Content Include="Images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Images\ui-icons_444444_256x240.png" />
+    <Content Include="Images\ui-icons_555555_256x240.png" />
+    <Content Include="Images\ui-icons_777620_256x240.png" />
+    <Content Include="Images\ui-icons_777777_256x240 %281%29.png" />
+    <Content Include="Images\ui-icons_777777_256x240.png" />
+    <Content Include="Images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Images\ui-icons_ffffff_256x240.png" />
     <Content Include="KartverketSharedMenu\web.config" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
