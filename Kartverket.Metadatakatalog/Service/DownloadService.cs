@@ -21,7 +21,16 @@ namespace Kartverket.Metadatakatalog.Service
                 if (string.IsNullOrEmpty(orderUrl))
                 orderUrl = WebConfigurationManager.AppSettings["DownloadUrl"] + "api/order";
 
-                var client = new HttpClient();
+            //Disable SSL sertificate errors
+            System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+            delegate (object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+                                    System.Security.Cryptography.X509Certificates.X509Chain chain,
+                                    System.Net.Security.SslPolicyErrors sslPolicyErrors)
+            {
+                return true; // **** Always accept
+                        };
+
+            var client = new HttpClient();
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 
