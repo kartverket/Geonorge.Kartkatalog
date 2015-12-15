@@ -1,7 +1,7 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
 @model Kartverket.Metadatakatalog.Models.MetadataViewModel
 @{
-    ViewBag.Title = Model.Title  + (Model.ContactMetadata != null ? " - " + Model.ContactMetadata.Organization :"");
+    ViewBag.Title = Model.Title + (Model.ContactMetadata != null ? " - " + Model.ContactMetadata.Organization : "");
     ViewBag.MetaDescription = Model.Abstract;
 
     var hierarchyLevelCssClass = "";
@@ -93,7 +93,7 @@
 
     @if (Model.ShowMapLink())
     {
-        <a href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');"  class="btn" target="_blank"><span class="custom-icon custom-icon-kartmarkoer"></span> vis i kart</a>
+        <a href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" class="btn" target="_blank"><span class="custom-icon custom-icon-kartmarkoer"></span> vis i kart</a>
     }
     else
     {
@@ -108,7 +108,7 @@
     }
     else if (Model.ShowDownloadLink())
     {
-        <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');"  class="btn"><span class="custom-icon custom-icon-lastned"></span> last ned</a>
+        <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" class="btn"><span class="custom-icon custom-icon-lastned"></span> last ned</a>
     }
     else
     {
@@ -119,7 +119,7 @@
 
     @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
     {
-        <a href="@Model.ProductSheetUrl" onclick="ga('send', 'event', 'MerInfo', 'produktark');"  title="Vis produktark for @Model.Title" class="btn"><span class="custom-icon custom-icon-info"></span> vis produktark</a>
+        <a href="@Model.ProductSheetUrl" onclick="ga('send', 'event', 'MerInfo', 'produktark');" title="Vis produktark for @Model.Title" class="btn"><span class="custom-icon custom-icon-info"></span> vis produktark</a>
     }
     else
     {
@@ -129,7 +129,7 @@
 
     @if (!string.IsNullOrWhiteSpace(Model.ProductSpecificationUrl))
     {
-        <a href="@Model.ProductSpecificationUrl" onclick="ga('send', 'event', 'MerInfo', 'produktspesifikasjon');"  class="btn" title="Last ned produktspesifikasjon for @Model.Title"><span class="glyphicon glyphicon-list-alt"></span> vis produktspesifikasjon</a>
+        <a href="@Model.ProductSpecificationUrl" onclick="ga('send', 'event', 'MerInfo', 'produktspesifikasjon');" class="btn" title="Last ned produktspesifikasjon for @Model.Title"><span class="glyphicon glyphicon-list-alt"></span> vis produktspesifikasjon</a>
     }
     else
     {
@@ -139,7 +139,7 @@
 
     @if (!string.IsNullOrWhiteSpace(Model.LegendDescriptionUrl))
     {
-        <a href="@Model.LegendDescriptionUrl" onclick="ga('send', 'event', 'MerInfo', 'tegneregler');"  class="btn" title="Vis tegneregler for @Model.Title"> <span class="glyphicon glyphicon-picture"></span> vis tegneregler</a>
+        <a href="@Model.LegendDescriptionUrl" onclick="ga('send', 'event', 'MerInfo', 'tegneregler');" class="btn" title="Vis tegneregler for @Model.Title"> <span class="glyphicon glyphicon-picture"></span> vis tegneregler</a>
     }
     else
     {
@@ -149,7 +149,7 @@
 
     @if (Model.ShowWebsiteLink())
     {
-        <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'MerInfo', 'nettside');"  class="btn"><span class="custom-icon custom-icon-eksternlink"></span> besøk nettside</a>
+        <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'MerInfo', 'nettside');" class="btn"><span class="custom-icon custom-icon-eksternlink"></span> besøk nettside</a>
     }
     else
     {
@@ -158,7 +158,7 @@
 
     @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
     {
-        <a href="@Model.ProductPageUrl" onclick="ga('send', 'event', 'MerInfo', 'produktside');"  class="btn" title="Gå til produktsiden for @Model.Title"><span class="custom-icon custom-icon-eksternlink"></span> Vis produktside</a>
+        <a href="@Model.ProductPageUrl" onclick="ga('send', 'event', 'MerInfo', 'produktside');" class="btn" title="Gå til produktsiden for @Model.Title"><span class="custom-icon custom-icon-eksternlink"></span> Vis produktside</a>
     }
     else
     {
@@ -388,7 +388,7 @@
                                             }
                                             else
                                             {
-                                                <a href="#" class="disabled" disabled="disabled"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
+                                                <a class="disabled" disabled="disabled"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
                                             }
                                         </div>
                                         <div class="col-sm-1 search-results-action-icons">
@@ -402,7 +402,7 @@
                                             }
                                             else
                                             {
-                                                <a href="" class="disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span></a>
+                                                <a class="disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span></a>
                                             }
                                         </div>
 
