@@ -1,0 +1,77 @@
+﻿label {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    text-indent: 10px;
+    vertical-align: middle;
+}
+
+input[type="text"],
+textarea,
+input.form-control {
+    border-radius: 0;
+    border: 1px solid #CFCFCF;
+    box-shadow: none;
+    font-family: "Open Sans",sans-serif;
+    font-style: normal;
+    font-variant: normal;
+    color: #000000;
+    font-size: 12pt !important;
+    font-weight: 400;
+    min-height: 40px;
+    padding: 7px 15px;
+    width: 100%;
+}
+
+    input:focus,
+    textarea:focus,
+    .form-control:focus {
+        border: 1px solid #CFCFCF;
+        outline: none;
+        box-shadow: none;
+    }
+
+
+textarea {
+    border: 1px solid #968c83;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12pt;
+    min-height: 180px;
+    padding: 15px 15px;
+    width: 100%;
+}
+
+.custom-select {
+    background-color: #FFF;
+    content: "";
+    background-repeat: no-repeat;
+    background-image: url("/Content/img/arrow-down.svg");
+    background-size: 16px 16px;
+    background-position: right 8px center;
+    border-radius: 0;
+}
+
+    .custom-select:hover {
+        background-image: url("/Content/img/arrow-down.svg");
+    }
+
+    .custom-select select, .custom-select select.form-control {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        -o-appearance: none;
+        appearance: none;
+        border: none;
+        box-shadow: none;
+        font-family: "Open Sans",sans-serif;
+        background: none;
+        font-size: 12pt;
+        padding: 0 8px;
+        height: 30px;
+        border: 1px solid #CFCFCF;
+        border-radius: 0;
+        margin-bottom: 10px;
+    }
+
+        .custom-select select::-ms-expand {
+            display: none;
+        }

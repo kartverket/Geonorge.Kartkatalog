@@ -3,14 +3,28 @@ using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Models
 {
-    public enum OrderBy
+    public struct OrderBy
     {
-        score,
-        title,
-        organization,
-        newest,
-        updated,
-        popularMetadata
+        private string value;
+        private OrderBy(string value)
+        {
+            this.value = value;
+        }
+
+        public static readonly OrderBy score = new OrderBy("score");
+        public static readonly OrderBy title = new OrderBy("title");
+        public static readonly OrderBy title_desc = new OrderBy("title_desc");
+        public static readonly OrderBy organization = new OrderBy("organization");
+        public static readonly OrderBy organization_desc = new OrderBy("organization_desc");
+        public static readonly OrderBy newest = new OrderBy("newest");
+        public static readonly OrderBy updated = new OrderBy("updated");
+        public static readonly OrderBy popularMetadata = new OrderBy("popularMetadata");
+
+        public override string ToString()
+        {
+            return this.value;
+        }
+
     }
 
     public class SearchParameters
@@ -20,13 +34,13 @@ namespace Kartverket.Metadatakatalog.Models
             Facets = new List<FacetParameter>();
             Offset = 1;
             Limit = 30;
-            orderby = OrderBy.score;
+            orderby = OrderBy.score.ToString();
         }
 
         public string Text { get; set; }
         public int Limit { get; set; }
         public int Offset { get; set; }
-        public OrderBy orderby { get; set; }
+        public string orderby { get; set; }
         public List<FacetParameter> Facets { get; set; }
 
 

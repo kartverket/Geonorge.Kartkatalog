@@ -1,0 +1,68 @@
+﻿.logo-wrapper {
+    background-color: #FFFFFF;
+    display: table;
+    height: 50px;
+}
+
+.geonorge-logo a img {
+    height: auto;
+    position: relative;
+    width: 200px;
+}
+
+.geonorge-logo {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.navbar-header {
+    display: table;
+    float: right;
+    height: 50px;
+}
+
+.menu-toggle {
+    display: table-cell;
+    padding: 0 4px;
+    vertical-align: middle;
+}
+
+.navbar-toggle {
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-title {
+    color: #414042;
+    display: none;
+    font-family: 'Raleway', sans-serif;
+    font-size: 12pt;
+    font-weight: 500;
+    padding: 2px 4px 0 4px;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
+.menu-toggle button .icon-bar {
+    height: 5px;
+    width: 30px;
+}
+
+.menu-toggle button.collapsed .icon-bar { background-color: #968c83; }
+
+.menu-toggle button:not(.collapsed) .icon-bar { background-color: #414042; }
+
+@media (min-width: 350px) {
+    .menu-title { display: table-cell; }
+}
+
+@media (min-width: 768px) {
+    .geonorge-logo a img {
+        bottom: 25px;
+        position: absolute;
+        width: 350px;
+    }
+
+    .logo-wrapper { height: 90px; }
+}

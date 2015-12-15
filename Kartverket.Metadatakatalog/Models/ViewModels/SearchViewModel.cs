@@ -10,7 +10,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public int Limit { get; set; }
         public int Offset { get; set; }
         public int NumFound { get; set; }
-        public int orderby { get; set; }
+        public string orderby { get; set; }
         public List<FacetParameter> FacetParameters { get; set; }
         public SearchResultViewModel Result { get; set; }
         public int pages { get; set; }
@@ -27,7 +27,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             Limit = searchResult.Limit;
             Offset = searchResult.Offset;
             NumFound = searchResult.NumFound;
-            orderby = (int)parameters.orderby;
+            orderby = parameters.orderby.ToString();
             page = 1;
             var placeResolver = new Service.PlaceResolver();
             areaDictionary = placeResolver.GetAreas();
@@ -47,7 +47,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             }
 
             //Hvilke sider som skal være synlige
-            if (pages > 5)
+            /*if (pages > 5)
             {
                 startPage = 1;
                 endPage = 5;
@@ -65,7 +65,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             else { 
                 startPage = 1;
                 endPage = pages;
-            }
+            }*/
+            startPage = page;
+            endPage = page;
         }
 
         public bool IsActivePage(int i) {
@@ -200,7 +202,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         {
             var routeValues = new RouteValueDictionary();
             routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
-            routeValues["orderby"] = 0;
+            routeValues["orderby"] = "score";
             return routeValues;
         }
 
@@ -208,28 +210,46 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         {
             var routeValues = new RouteValueDictionary();
             routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
-            routeValues["orderby"] = 1;
+            routeValues["orderby"] = "title";
             return routeValues;
         }
+
+        public RouteValueDictionary ParamsForOrderByTitleDescLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["orderby"] = "title_desc";
+            return routeValues;
+        }
+
         public RouteValueDictionary ParamsForOrderByOrganizationLink()
         {
             var routeValues = new RouteValueDictionary();
             routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
-            routeValues["orderby"] = 2;
+            routeValues["orderby"] = "organization";
             return routeValues;
         }
+
+        public RouteValueDictionary ParamsForOrderByOrganizationDescLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            routeValues["orderby"] = "organization_desc";
+            return routeValues;
+        }
+
         public RouteValueDictionary ParamsForOrderByMetadataUpdateLink()
         {
             var routeValues = new RouteValueDictionary();
             routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
-            routeValues["orderby"] = 3;
+            routeValues["orderby"] = "newest";
             return routeValues;
         }
         public RouteValueDictionary ParamsForOrderByResourceUpdateLink()
         {
             var routeValues = new RouteValueDictionary();
             routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
-            routeValues["orderby"] = 4;
+            routeValues["orderby"] = "updated";
             return routeValues;
         }
 

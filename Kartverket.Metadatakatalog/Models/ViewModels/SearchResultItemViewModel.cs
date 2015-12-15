@@ -26,11 +26,12 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string GetInnholdstypeCSS()
         {
             string t = "label-default";
-            if (Type=="dataset") t="label-success";
-            else if (Type=="software") t="label-warning";
-            else if (Type=="service") t="label-info";
-            else if (Type == "servicelayer") t = "label-info";
-            else if (Type=="series") t="label-primary";
+            if (Type=="dataset") t="label-datasett";
+            else if (Type=="software") t="label-applikasjon";
+            else if (Type=="service") t="label-tjeneste";
+            else if (Type == "servicelayer") t = "label-tjenestelag";
+            else if (Type=="series") t="label-datasettserie";
+            else if (Type == "dimensionGroup") t = "label-datasett";
 
             return t;
         }
@@ -41,8 +42,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             if (Type=="dataset") t="Datasett";
             else if (Type=="software") t="Applikasjon";
             else if (Type=="service") t="Tjeneste";
-            else if (Type == "servicelayer") t = "WMS-lag (Tjenestelag)";
+            else if (Type == "servicelayer") t = "Tjenestelag";
             else if (Type=="series") t="Datasettserie";
+            else if (Type == "dimensionGroup") t = "Datapakke";
 
             return t;
         }

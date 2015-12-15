@@ -1,49 +1,45 @@
-﻿<div class="list-group-item">
-    <div class="row">
-        <div class="col-md-1 list-icon">
-            <img class="order-img" src="" />
-        </div>
-        <div class="col-md-11">
-            <div class="row">
-                <div class="col-md-12">
-                    <a href="metadata/kartverket/norges-maritime-grenser/e106adf4-c9d8-4fce-a9b5-7886a4126d23" class="list-heading order-title">
-                      
-                    </a>
-                    <a data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="list-btn-remove remove-item"><span class="glyphicon glyphicon-remove"></span></a>
+﻿<div class="row">
+    <div class="col-md-11">
+        <h2><a href="" class="list-heading order-title"></a></h2>
+        <a data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="list-btn-remove remove-item"><span class="glyphicon glyphicon-remove"></span></a>
+    </div>
+    <div class="col-md-1 list-icon">
+        <img class="order-img" src="" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-4">
+                <p>Område:</p>
+                <div class="form-group">
+                    <div class="input-group chosen-input-group input-group-omraade">
+                        <select data-placeholder="Klikk for å velge område" multiple class="chosen-select form-control selectOmraader" tabindex="18" required>
+                            <optgroup label="Fylker" class="selectOmraaderFylker"></optgroup>
+                            <optgroup label="Kommuner" class="selectOmraaderKommuner"></optgroup>
+                        </select>
+                        <span class="input-group-btn selectPolygon" data-toggle="modal" data-target="#kartModal">
+                            <button data-placement="bottom" uuid="" title="Velg fra kart" data-toggle="tooltip" class="btn btn-default btn-nodivider btn-fullheight selectPolygon-button" type="button"><span class="glyphicon glyphicon-globe"></span></button>
+                        </span>
+                    </div>
+                    <input class="coordinates" type="hidden" />
+                    <input class="order-url" type="hidden" />
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <label for="">Projeksjon:</label>
-                    <div class="form-group">
+            <div class="col-md-4">
+                <p>Projeksjon:</p>
+                <div class="form-group custom-select">
 
-                        <select data-placeholder="Klikk for å velge projeksjon" multiple class="chosen-select form-control selectProjeksjoner" tabindex="18" required></select>
-                    </div>
+                    <select data-placeholder=" " multiple class="chosen-select form-control selectProjeksjoner" tabindex="18" required></select>
                 </div>
-                <div class="col-md-4">
-                    <label for="">Filformat:</label>
-                    <div class="form-group">
-                        <select data-placeholder="Klikk for å velge filformat" multiple class="chosen-select form-control selectFormater" tabindex="18" required></select>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <label for="">Område:</label>
-                    <div class="form-group">
-                        <div class="input-group chosen-input-group input-group-omraade">
-                            <select data-placeholder="Klikk for å velge område" multiple class="chosen-select form-control selectOmraader" tabindex="18" required>
-                                <optgroup label="Fylker" class="selectOmraaderFylker"></optgroup>
-                                <optgroup label="Kommuner" class="selectOmraaderKommuner"></optgroup>
-                            </select>
-                            <span class="input-group-btn selectPolygon" data-toggle="modal" data-target="#kartModal">
-                                <button data-placement="bottom" uuid="" title="Velg fra kart" data-toggle="tooltip" class="btn btn-default btn-nodivider btn-fullheight" type="button"><span class="glyphicon glyphicon-globe"></span></button>
-                            </span>
-                        </div>
-                        <input class="coordinates" type="hidden" />
-                        <input class="order-url" type="hidden" />
-                    </div>
+            </div>
+            <div class="col-md-4">
+                <p>Filformat:</p>
+                <div class="form-group custom-select">
+                    <select data-placeholder=" " multiple class="chosen-select form-control selectFormater" tabindex="18" required></select>
                 </div>
             </div>
         </div>
     </div>
-    <hr />
 </div>
+<hr />

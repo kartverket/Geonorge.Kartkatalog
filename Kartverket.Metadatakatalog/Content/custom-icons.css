@@ -1,0 +1,90 @@
+﻿.custom-icon {
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.btn .custom-icon {
+    vertical-align: middle;
+    width: 12pt;
+    height: 12pt;
+}
+
+
+.disabled .custom-icon {
+    cursor: not-allowed;
+}
+
+/* Info */
+.custom-icon.custom-icon-info {
+    background-image: url(img/ikoner/info.svg);
+    width: 20px;
+    height: 20px;
+    vertical-align: bottom;
+}
+
+.btn .custom-icon.custom-icon-info {
+    background-image: url(img/ikoner/info-white.svg);
+    width: 10pt;
+    height: 10pt;
+    margin-left: -3px;
+}
+
+.disabled .custom-icon.custom-icon-info {
+    background-image: url(img/ikoner/info-disabled.svg);
+}
+
+/* Kartmarkoer */
+.custom-icon.custom-icon-kartmarkoer {
+    background-image: url(img/ikoner/kartmarkoer.svg);
+}
+
+.btn .custom-icon.custom-icon-kartmarkoer {
+    background-image: url(img/ikoner/kartmarkoer-white.svg);
+}
+
+.disabled .custom-icon.custom-icon-kartmarkoer {
+    background-image: url(img/ikoner/kartmarkoer-disabled.svg);
+}
+
+/* Handlekurv*/
+.custom-icon.custom-icon-handlekurv {
+    background-image: url(img/ikoner/handlekurv.svg);
+}
+
+.btn .custom-icon.custom-icon-handlekurv {
+    background-image: url(img/ikoner/handlekurv-white.svg);
+}
+
+.disabled .custom-icon.custom-icon-handlekurv {
+    background-image: url(img/ikoner/handlekurv-disabled.svg);
+}
+
+/* Last ned */
+.custom-icon.custom-icon-lastned {
+    background-image: url(img/ikoner/lastned.svg);
+}
+
+.btn .custom-icon.custom-icon-lastned {
+    background-image: url(img/ikoner/lastned-white.svg);
+}
+
+.disabled .custom-icon.custom-icon-lastned {
+    background-image: url(img/ikoner/lastned-disabled.svg);
+}
+
+/* Last ned */
+.custom-icon.custom-icon-eksternlink {
+    background-image: url(img/ikoner/ekternlink.svg);
+}
+
+.btn .custom-icon.custom-icon-eksternlink {
+    background-image: url(img/ikoner/ekternlink-white.svg);
+}
+
+.disabled .custom-icon.custom-icon-eksternlink {
+    background-image: url(img/ikoner/ekternlink-disabled.svg);
+}

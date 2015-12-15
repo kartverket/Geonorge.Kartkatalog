@@ -127,7 +127,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 else
                 {
                     var area = order[id + "-areas"];
-                    List<AreaType> areaList = new List<AreaType>();
+                    List<OrderAreaType> areaList = new List<OrderAreaType>();
                     if (area != null)
                     {
                         var areas = area.Split(',');
@@ -136,7 +136,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                         {
                             var areaType = areas[j].Split('_');
 
-                            areaList.Add(new AreaType { type = areaType[0], code = areaType[1] });
+                            areaList.Add(new OrderAreaType { type = areaType[0], code = areaType[1] });
                         }
                         oL.areas = areaList.ToArray();
                     }

@@ -1,108 +1,82 @@
-﻿function listView() {
-    $(".table-heading").remove();
-
-    // Buttons   
-    $('#button-listView').addClass('active');
-    $('#button-galleryView').removeClass('active');
-    $('#button-tableView').removeClass('active');
-
-    $('.search-results').removeClass('table-view');
-    $('.search-results').removeClass('gallery-view');
-    $('.search-results').addClass('list-view');
-
-    localStorage.setItem("visningstype", "liste");
-
+﻿function getURLParameter(name) {
+    if (location.search != "" && location.search != null) {
+        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null
+    } else {
+        return "";
+    }
 }
 
-function galleryView() {
-    $(".table-heading").remove();
-
-    // Buttons
-    $('#button-listView').removeClass('active');
-    $('#button-galleryView').addClass('active');
-    $('#button-tableView').removeClass('active');
-
-    $('.search-results').removeClass('table-view');
-    $('.search-results').removeClass('list-view');
-    $('.search-results').addClass('gallery-view');
-
-    localStorage.setItem("visningstype", "galleri");
-
-}
-
-
-
-function tableView() {
-    $(".table-heading").remove();
-    $('.search-results').prepend("<div class='clearfix'></div><div class='col-xs-12 table-heading'><div class='col-xs-9'><div class='col-xs-4'><h4>Tittel</h4></div><div class='col-xs-4'><h4>Eier</h4></div><div class='col-xs-4'><h4>Type</h4></div></div><div class='col-xs-3'><div class='col-sm-3'><h4></h4></div><div class='col-xs-3'><h4></h4></div><div class='col-xs-3'><h4></h4></div><div class='col-xs-3'><h4></h4></div></div></div>");
-
-    // Buttons
-    $('#button-listView').removeClass('active');
-    $('#button-galleryView').removeClass('active');
-    $('#button-tableView').addClass('active');
-
-    $('.search-results').removeClass('gallery-view');
-    $('.search-results').removeClass('list-view');
-    $('.search-results').addClass('table-view');
-
-
-
-    $(window).scroll(function () {
-        if ($(window).width() >= 992) {
-            if ($(window).scrollTop() > 327) {
-                $(".table-heading").css({ "top": ($(window).scrollTop()) - 327 + "px" });
-                $(".table-heading").css("background-color", "white");
-                $(".table-heading").css("z-index", "400");
-            } else {
-                $(".table-heading").css("top", "0");
-            }
-        } else if ($(window).width() < 992 && $(window).width() >= 750) {
-            if ($(window).scrollTop() > 345) {
-                $(".table-heading").css({ "top": ($(window).scrollTop()) - 345 + "px" });
-                $(".table-heading").css("background-color", "white");
-                $(".table-heading").css("z-index", "400")
-            } else {
-                $(".table-heading").css("top", "0");
-            }
-        } else if ($(window).width() < 750) {
-            if ($(window).scrollTop() > 365) {
-                $(".table-heading").css({ "top": ($(window).scrollTop()) - 365 + "px" });
-                $(".table-heading").css("background-color", "white");
-                $(".table-heading").css("z-index", "400")
-            } else {
-                $(".table-heading").css("top", "0");
-            }
+function changeLayout(layout) {
+    $(".search-results").attr("id", layout);
+    var options = $("#layoutSelect option");
+    var selectedOption = $("#layoutSelect option[value='" + layout + "']");
+    $.each(options, function () {
+        if ($(this).attr("value") != layout) {
+            $(this).attr("selected", false);
         } else {
-            $(".table-heading").css("top", "0");
+            $(this).attr("selected", true)
         }
     });
-
-    localStorage.setItem("visningstype", "tabell");
-
+    localStorage.setItem("layout", layout);
 }
 
+
+function orderBy() {
+    var orderbyArray = getURLParameter("orderby");
+    var orderHeaders = $("#tableView .search-results-table-heading .orderby");
+    if (orderbyArray != "" && orderbyArray != null) {
+        orderbyArray = orderbyArray.split("_");
+        var orderby = orderbyArray[0];
+        var direction = "asc";
+        if (orderbyArray.length > 1) {
+            direction = orderbyArray[1];
+        }
+
+        $.each(orderHeaders, function () {
+            if ($(this).hasClass("orderby-" + orderby)) {
+                if ($(this).hasClass("orderby-" + direction)) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                    $(this).addClass("active-orderby");
+                }
+            } else if ($(this).hasClass("orderby-asc")) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    } else {
+        $("#tableView .orderby-desc").hide();
+    }
+}
+
+
+$(document).ready(function () {
+    var layout = "tableView";
+    if (localStorage.getItem("layout") != null) {
+        layout = localStorage.getItem("layout");
+    };
+    orderBy();
+    changeLayout(layout);
+});
+
+
+function additionalView(buttonId) {
+    $("#saveButtons a").attr("class", "hidden");
+    $("#" + buttonId).attr("class", "btn");
+}
+
+
+
+
+/*
 function SortBy(sort) {
     var sort = document.getElementById("sorting");
     var selected = sort.options[sort.selectedIndex].text;
     localStorage.setItem("sortering", selected);
     document.sortering.submit();
-
-}
-
-$(document).ready(function () {
-    var visningstype = localStorage.getItem("visningstype");
-
-    if (visningstype == "galleri") { galleryView() }
-    if (visningstype == "liste") { listView() }
-    if (visningstype == "tabell") {
-        // Listevisning ved liten skjerm
-        if ($(window).width() < 600) {
-            listView();
-        } else {
-            tableView()
-        }
-    }
-});
+}*/
 
 
 // Loading animation

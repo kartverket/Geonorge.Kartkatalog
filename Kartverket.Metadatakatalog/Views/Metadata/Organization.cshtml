@@ -8,238 +8,708 @@
 @section breadcrumb {
     <li class="active">@Model.OrganizationName</li>
 }
-<p></p>
 
 
-@*<div class="row">
-    <div class="page-header">
 
-        <h1 class="h-md">
-            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName })">
-
-                @Model.OrganizationName
-            </a>
-        </h1>
-        <hr>
-    </div>
+<div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <span class="message"></span>
 </div>
+<section class="heading">
     <div class="row">
-        <div class="col-sm-12 col-md-3">
-
-            @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
-            @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
+        <div class="col-sm-12">
+            <h1 class="small-h1">
+                    @Model.OrganizationName
+            </h1>
         </div>
-        <div class="col-sm-12 col-md-9">
-            <ul class="search-results">
-                @foreach (var item in Model.Result.Items)
+        <div class="col-sm-12">
+            <span class="separator-lg"></span>
+        </div>
+    </div>
+</section>
+
+
+@helper DisplayFacet(SearchResultFacetViewModel facet)
+{
+
+    <a data-toggle="collapse" class="facet-sok-tittel collapsed" href="#@facet.FacetField" aria-expanded="false">
+        <span class="indicator"></span><p>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</p>
+    </a>
+
+    <div class="facet-sok-undertitler collapse" id="@facet.FacetField" aria-expanded="false">
+        <ul>
+            @foreach (var facetResult in facet.FacetResults)
+            {
+                string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
+                <li class="filter-options">
+                    <a class="btn-link @cssClass" href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
+                        @*Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b style='font-weight: 800;'>" : "") @facetResult.LinkName() @Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b>" : "") (@facetResult.Count)
+                        *@
+                        @facetResult.LinkName()
+                        <span class="text-muted">(@facetResult.Count)</span>
+                    </a>
+                </li>
+            }
+            @if (Model.HasFilterForFacetField(facet.FacetField))
+            {
+                <li class="filter-options">
+                    <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
+                        <span class="glyphicon glyphicon-plus"> </span>
+                        Vis alle
+                    </button>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@helper DisplayFacetCheckbox(SearchResultFacetViewModel facet)
+{
+    <a data-toggle="collapse" class="facet-sok-tittel collapsed" href="#@facet.FacetField" aria-expanded="false">
+        <span class="indicator"></span><p>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</p>
+    </a>
+
+    <div class="facet-sok-undertitler collapse" id="@facet.FacetField" aria-expanded="false">
+        <ul>
+            @{
+                string previousFacetLinkName = null;
+                double hierarchyLevel = 0;
+                foreach (var facetResult in facet.FacetResults)
                 {
-                    <li style="border: 1px solid #ccc; border-radius: 4px; margin: 10px; padding: 10px; width: 180px; height:200px; float:left" class="text-center">
-                        <h4><a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">@item.Title</a></h4>
-                        @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
+                    string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
+
+                    string hideChildren = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "show-children" : "hide-children");
+                    double relativeHierarchyLevel = 0;
+
+
+                    if (previousFacetLinkName != null)
+                    {
+                        relativeHierarchyLevel = Model.GetRelativeHierarchyLevel(facetResult.LinkName(), previousFacetLinkName);
+                        hierarchyLevel += relativeHierarchyLevel;
+                        if (relativeHierarchyLevel > 0)
                         {
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                <img src="@item.ThumbnailUrl" height="100" style="max-height: 100px;">
-                            </a>
+                            <text>
+                                <ul>
+                                    <li class="filter-options">
+                            </text>
                         }
+                        else if (relativeHierarchyLevel < 0)
+                        {
+                            @:</li></ul>
+                                }
+                        else
+                        {
+                            @:</li>
+                            }
+                    }
+                    <text>
+                        <li class="filter-options @hideChildren ">
+
+                            <a class="btn-link @cssClass " href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
+                                @facetResult.AreaLinkName(Model.areaDictionary)<span class="text-muted">(@facetResult.Count)</span>
+                            </a>
+
+                    </text>
+
+                    previousFacetLinkName = facetResult.LinkName().ToString();
+                }
+                for (int index = 0; index < hierarchyLevel; index++)
+                {
+                    @:</li></ul>
+                        }
+
+                if (Model.HasFilterForFacetField(facet.FacetField))
+                {
+                    <li class="filter-options">
+                        <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
+                            <span class="glyphicon glyphicon-plus"> </span>
+                            Vis alle
+                        </button>
                     </li>
                 }
+            }
             </ul>
         </div>
-    </div>*@
-<div class="row">
-    <div class="page-header">
-        
-        <h1 class="h-md">
-            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = Model.OrganizationSeoName })">
-                @Model.OrganizationName
-            </a>
-            
-           
-        </h1>
-        <hr>
-       
-    </div>
-</div>
-<div class="row">
-       
-        <div class="col-sm-12 col-md-3 pull-left">
-            
-            
-            <div class="hidden-sm hidden-xs">
+}
+@helper DisplayPaginationBottom()
+{
+    <div class="search-filter-wrapper">
+        Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
+        <div class="col-md-12 view-navigation">
+            <div class="nav nav-tabs">
+                <ul class="pagination pagination-sm pull-right">
+                    @if (Model.IsFirstButtonActive())
+                    {
+                        <li><a aria-label="Første" title="Første" href="@Url.Action("Organization", Model.ParamsForFirstLink())">&laquo;</a></li>
+                    }
 
-                <div class="panel panel-info" id="filterInner">
-                    <div class="panel-heading">
-                        <h2 class="panel-title">Søkefilter<span class="glyphicon glyphicon-filter pull-right"></span></h2>
+                    @if (Model.IsPreviousButtonActive())
+                    {
+                        <li><a href="@Url.Action("Organization", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                    }
+
+                    @for (int i = Model.startPage; i <= Model.endPage; i++)
+                    {
+                        if (Model.IsActivePage(i))
+                        {
+                            <li class="active"><a href="@Url.Action("Organization", Model.ParamsForPageNumber(i))">@i</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action("Organization", Model.ParamsForPageNumber(i))">@i</a></li>
+                        }
+                    }
+
+                    @if (Model.IsNextButtonActive())
+                    {
+                        <li><a href="@Url.Action("Organization", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                    }
+                    @if (Model.IsLastButtonActive())
+                    {
+                        <li><a aria-label="Siste" title="Siste" href="@Url.Action("Organization", Model.ParamsForLastLink())"> &raquo;</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts {
+    <script>
+        function showAlert(message, colorClass) {
+            $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
+            $('#feedback-alert .message').html(message);
+            $('#feedback-alert').show();
+        }
+
+        $('ul.facet').each(function () {
+            var max = 15;
+            if ($(this).find("li").length > max) {
+                $(this)
+                  .find('li:gt(' + max + ')')
+                  .hide()
+                  .end()
+                  .append(
+                    $('<li/>').append('<a href="">Vis flere</a>').click(function (event) {
+                        event.preventDefault();
+                        $(this).siblings(':hidden').show().end().remove();
+                    })
+                );
+            }
+        });
+        $(document).ready(function () {
+            $("#orderby").change(
+                 function () {
+                     location.href = $(this).val();
+                 }
+             );
+
+        });
+
+
+        $(document).ready(function () {
+            @if (Html.DownloadServiceEnabled())
+            {
+            <text>
+            if (localStorage.getItem("orderItems") != null) {
+                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+                var orderitemCount = storedOrderItems.length;
+                if (orderitemCount > 0) {
+                    $('#orderitem-count').text(orderitemCount);
+                    $('#orderitem-count-text').text(' datasett');
+                } else {
+                    $('#orderitem-count').text('');
+                    $('#orderitem-count-text').text('Kurven er tom');
+                }
+            } else {
+                $('#orderitem-count').text('');
+                $('#orderitem-count-text').text('Kurven er tom');
+            }
+            </text>
+            }
+        });
+
+
+        /* Save enabled filter from facet-search */
+        $(document).ready(function () {
+            var activeFilters = {}
+            if (JSON.parse(localStorage.getItem("activeFilters")) != null) {
+                activeFilters = JSON.parse(localStorage.getItem("activeFilters"));
+            };
+            $.each(activeFilters, function (name, active) {
+                var element = $("#filterInner .facet-sok-tittel[href='" + name + "']");
+                var subElement = $(name);
+                if (active) {
+                    element.removeClass("collapsed");
+                    element.attr("aria-expanded", "true");
+                    subElement.addClass("in")
+                    subElement.attr("aria-expanded", "true");
+                    subElement.css("height", "auto");
+                }
+            });
+
+            $("#filterInner").on("click", ".facet-sok-tittel", function () {
+                var name = ($(this).attr("href"));
+                if ($(this).attr("aria-expanded") == "true") {
+                    activeFilters[name] = false;
+                } else if ($(this).attr("aria-expanded") == "false") {
+                    activeFilters[name] = true;
+                }
+                var activeFiltersJSON = JSON.stringify(activeFilters);
+                localStorage.setItem("activeFilters", activeFiltersJSON);
+            });
+        });
+
+
+        $(window).load(function () {
+            @if (Html.DownloadServiceEnabled())
+            {
+         <text>
+
+
+            if (Modernizr.localstorage) {
+
+                console.log('window.localStorage is available!');
+                var orderItems = [];
+                $('.add-to-cart-btn').click(function () {
+                    var added = false;
+                    var itemuuid = $(this).attr('itemuuid');
+                    var itemname = $(this).attr('itemname');
+                    var itemurl = $(this).attr('itemurl');
+                    var itemorglogo = $(this).attr('itemorglogo');
+                    var itemdisturl = $(this).attr('itemdisturl');
+                    if (localStorage.getItem('orderItems') != null) {
+                        orderItems = (JSON.parse(localStorage.getItem('orderItems')));
+                    }
+                    $.map(orderItems, function (elementOfArray, indexInArray) {
+                        if (elementOfArray == itemuuid) {
+                            orderItems.push(itemuuid);
+                            added = true;
+                        }
+                    });
+                    if (!added) {
+                        orderItems.push(itemuuid);
+                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl };
+                        localStorage["orderItems"] = JSON.stringify(orderItems);
+                        localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
+                        showAlert(itemname + ' er lagt til i <a href="/Download">kurven</a>', 'success');
+
+                        var orderItemCount = $('#orderitem-count').text();
+                        console.log(orderItemCount);
+                        if (orderItemCount == null || orderItemCount == '') {
+                            orderItemCount = 0;
+                            $('#orderitem-count-text').text(' datasett');
+                        } else {
+                            orderItemCount = parseInt($('#orderitem-count').text());
+                            console.log('else: ' + orderItemCount);
+                        }
+                        orderItemCount += 1;
+                        $('#orderitem-count').text(orderItemCount);
+                        updateShoppingCart();
+
+                    } else {
+                        showAlert(itemname + ' er allerede lagt til i <a href="/Download">kurven</a>', 'warning');
+                    }
+                });
+            } else {
+                console.log('no native support for HTML5 storage :(');
+            }
+
+            </text>
+            }
+
+        });
+    </script>
+}
+
+@{
+    string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("search", "api/search");
+    var qs = HttpUtility.ParseQueryString(Request.QueryString.ToString());
+    qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
+    string query = qs.ToString(); string urlCSV = url + "?" + query;
+}
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-9">
+        <div class="row search-result-navigation">
+            <div class="col-sm-7">
+                <p>Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:</p>
+                <ul class="pagination pagination-sm btn-group inline-block">
+                    @if (Model.IsFirstButtonActive())
+                    {
+                        <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
+                    }
+
+                    @if (Model.IsPreviousButtonActive())
+                    {
+                        <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> Forrige</a></li>
+                    }
+
+                    @for (int i = Model.startPage; i <= Model.endPage; i++)
+                    {
+                        if (Model.IsActivePage(i))
+                        {
+                            <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        }
+                    }
+
+                    @if (Model.IsNextButtonActive())
+                    {
+                        <li><a href="@Url.Action("Index", Model.ParamsForNextLink())"> Neste <span class="fa fa-angle-right"></span></a></li>
+                    }
+                    @if (Model.IsLastButtonActive())
+                    {
+                        <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
+                    }
+                </ul>
+            </div>
+            <div class="col-sm-5">
+
+                <div class="row">
+                    <div class="col-sm-4 text-right no-padding">
+                        <p>Lagre som:</p>
                     </div>
-                    <div class="panel-body">
-                        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
-                        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
-                        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
-                        @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))
+                    <div class="col-sm-5 no-padding-bottom">
+                        <div class="custom-select">
+                            <select onchange="additionalView(this.value)" class="form-control">
+                                <option disabled="disabled" value="atomUrl">ATOM</option>
+                                <option disabled="disabled" value="rssUrl">RSS</option>
+                                <option value="csvUrl" selected="selected">CSV</option>
+                                <option disabled="disabled" value="jsonUrl">JSON</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="saveButtons" class="col-sm-3 no-padding-bottom">
+                        <a class="hidden" id="atomUrl" href="#">Lagre</a>
+                        <a class="hidden" id="rssUrl" href="#">Lagre</a>
+                        <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
+                        <a class="hidden" id="jsonUrl" href="#">Lagre</a>
                     </div>
                 </div>
             </div>
+            <div class="clearfix"></div>
+
         </div>
-        <div class="col-sm-12 col-md-9 pull-right">
-            @if (Model.Result != null)
-            {
-                @DisplayPagination()
 
-                <div class="search-results">
-                    @foreach (var item in Model.Result.Items)
-                    {
-                        <div class="row result-row metadata">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="hidden-xs col-sm-1 col-md-1 col-lg-1 top-padding hide-overflow col-logo">
+        <span class="separator-small separator-gray margin-bottom-10"></span>
 
+        @if (Model.Result != null)
+        {
+            <div id="tableView" class="search-results">
+                <div class="row search-results-table-heading">
+                    <div class="col-sm-3"><p>Tittel</p></div>
+                    <div class="col-sm-2"><p>Type</p></div>
+                    <div class="col-sm-3"><p>Dataeier</p></div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-1"><p>Les mer</p></div>
+                    <div class="col-sm-1"><p>Vis i kart</p></div>
+                    <div class="col-sm-1"><p>Last ned</p></div>
+                </div>
+                <div class="menu-separator search-results-table-heading"></div>
+                @foreach (var item in Model.Result.Items)
+                {
+                    <div class="row result-row metadata">
 
-                                    @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
+                        <div class="col-sm-1 search-results-logo">
+                            @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
+                            {
+                                System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
+                                string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
+                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
+                                    <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
+                                </a>
+                            }
+                        </div>
+
+                        <div class="col-sm-3 search-results-title">
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                                <p class="role-button search-results-name" role="button">@item.Title</p>
+                            </a>
+                            <div class="search-results-description">
+                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">
+                                    @if (item.Organization != null)
                                     {
-                                        <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
-                                            <img src="@item.OrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
-                                        </a>
+                                        <p>  @item.Organization</p>
                                     }
-                                </div>
-                                <div class="col-no-padding-xs col-xs-12 col-sm-5 col-md-5 col-lg-5 col-title">
-                                    <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                        <h4 class="role-button" role="button">@item.Title</h4>
-                                    </a>
 
-
-                                    <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">
-                                        @if (item.Organization != null)
+                                </a>
+                                <p>
+                                    @if (item.Abstract != null)
+                                    {
+                                        if (item.Abstract.Length > 250)
                                         {
-                                            <h5>@item.Organization</h5>
-                                        }
-
-                                    </a>
-
-                                    <p>
-                                        @if (item.Abstract.Length > 650)
-                                        {
-                                            @item.Abstract.Substring(0, 654)<text>...</text>
+                                            @item.Abstract.Substring(0, 251)<text>...</text>
                                         }
                                         else
                                         {
                                             @item.Abstract
                                         }
+                                    }
 
-                                    </p>
-                                    <p>
-                                        Tilgjengelig som:
-                                        <span title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
-                                    </p>
+                                </p>
+                                <p>
+                                    Tilgjengelig som:
+                                    <span title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
+                                </p>
+                            </div>
 
 
+                        </div>
+                        <div class="col-sm-2 search-results-type">
+                            <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
+                        </div>
+                        <div class="col-sm-3 search-results-organization">
+                            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">
+                                @if (item.Organization != null)
+                                {
+                                    <p>  @item.Organization</p>
+                                }
+
+                            </a>
+                        </div>
+
+                        <div class="col-sm-1 search-results-open-data">
+                            @if (item.IsOpendata)
+                            {
+                                <img title="Åpne data" src="~/Content/img/unlock.png" class="bottom opendata" alt="Åpne data" />
+                            }
+                        </div>
+
+                        <div class="col-sm-2 search-results-action-buttons">
+
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" title="Les mer om @item.Title" class="btn btn-default">
+                                <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
+                            </a>
+
+
+                            @if (item.ShowMapLink())
+                            {
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
+                                </a>
+                            }
+                            else if (item.ShowServiceMapLink())
+                            {
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a title="Vis @item.Title i kart" class="disabled btn btn-default">
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
+                                </a>
+                            }
+
+
+                            @if (item.ShowDownloadService())
+                            {
+                                string relativeOrganizationLogoUrl = "";
+                                string relativeDowloadUrl = "";
+
+                                if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
+                                {
+                                    System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
+                                    relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
+                                }
+
+                                if (!string.IsNullOrWhiteSpace(item.DownloadUrl))
+                                {
+                                    System.Uri downloadUrl = new Uri(item.DownloadUrl);
+                                    relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
+                                }
+
+                                <a data-toggle='tooltip'
+                                   data-placement='bottom'
+                                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                                   title='Legg til @item.Title i kurv'
+                                   class='add-to-cart-btn btn btn-default'
+                                   itemname='@item.Title'
+                                   itemuuid='@item.Uuid'
+                                   itemurl='/metadata/uuid/@item.Uuid'
+                                   itemorglogo='@relativeOrganizationLogoUrl'
+                                   itemdisturl='@relativeDowloadUrl'>
+                                    <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
+                                </a>
+                            }
+                            else if (item.ShowDownloadLink())
+                            {
+                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
+                                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a title="Last ned datasett for @item.Title" class="disabled btn btn-default">
+                                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
+                                </a>
+                            }
+
+                        </div>
+
+                        <div class="col-sm-1 search-results-action-icons">
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" title="Les mer om @item.Title" class="">
+                                <span class="custom-icon custom-icon-info"></span>
+                            </a>
+                        </div>
+
+
+                        <div class="col-sm-1 search-results-action-icons action-show-map">
+                            @if (item.ShowMapLink())
+                            {
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank">
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span>
+                                </a>
+                            }
+                            else if (item.ShowServiceMapLink())
+                            {
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank">
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a title="Vis @item.Title i kart" class="disabled">
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span>
+                                </a>
+                            }
+
+                        </div>
+                        <div class="col-sm-1 search-results-action-icons action-download">
+                            @if (item.ShowDownloadService())
+                            {
+                                string relativeOrganizationLogoUrl = "";
+                                string relativeDowloadUrl = "";
+
+                                if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
+                                {
+                                    System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
+                                    relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
+                                }
+
+                                if (!string.IsNullOrWhiteSpace(item.DownloadUrl))
+                                {
+                                    System.Uri downloadUrl = new Uri(item.DownloadUrl);
+                                    relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
+                                }
+
+                                <a data-toggle='tooltip'
+                                   data-placement='bottom'
+                                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                                   title='Legg til @item.Title i kurv'
+                                   class='add-to-cart-btn'
+                                   itemname='@item.Title'
+                                   itemuuid='@item.Uuid'
+                                   itemurl='/metadata/uuid/@item.Uuid'
+                                   itemorglogo='@relativeOrganizationLogoUrl'
+                                   itemdisturl='@relativeDowloadUrl'>
+                                    <span class="custom-icon custom-icon-handlekurv"></span>
+                                </a>
+                            }
+                            else if (item.ShowDownloadLink())
+                            {
+                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" title="Last ned datasett for @item.Title" target="_blank">
+                                    <span class="custom-icon custom-icon-lastned"></span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a title="Last ned datasett for @item.Title" class="disabled">
+                                    <span class="custom-icon custom-icon-lastned"></span>
+                                </a>
+                            }
+                        </div>
+
+
+                        <div class="col-sm-2 search-results-list-image">
+                            @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
+                            {
+                                System.Uri thumbnailUrl = new Uri(item.ThumbnailUrl);
+                                string relativeThunbnailUrl = "//" + thumbnailUrl.Host + thumbnailUrl.PathAndQuery;
+                                <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                                    <img src="@relativeThunbnailUrl" />
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+
+
+                    if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
+                    {
+                        System.Uri thumbnailUrl = new Uri(item.ThumbnailUrl);
+                        string relativeThunbnailUrl = "//" + thumbnailUrl.Host + thumbnailUrl.PathAndQuery;
+                        <div class="search-results-gallery-image layoutblock">
+                            <div class="block shortcutpageteaserblock size-4 col-sm-4">
+                                <div class="teaser-with-background-image">
+                                    <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                                        <div class="teaser-background-image" style="background: url(@relativeThunbnailUrl) no-repeat center;">
+                                            <div class="teaser-overlay">
+                                                <div class="teaser-caption">
+                                                    <div class="teaser-heading">@item.Title</div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
-                                <div class="col-no-padding-xs col-xs-6 col-sm-3 col-md-3 col-lg-3 col-actions">
-                                    @if (item.ShowDownloadLink())
-                                    {
-                                        <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
-                                            <span class="glyphicon glyphicon-download-alt"></span>last ned
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a href="@item.DownloadUrl" title="Last ned datasett for @item.Title" class="btn btn-xs btn-bunnmarg btn-default disabled" target="_blank">
-                                            <span class="glyphicon glyphicon-download-alt"></span>last ned
-                                        </a>
-                                    }
-
-                                    <br />
-                                    @if (item.ShowWebsiteLink())
-                                    {
-                                        <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default" title="Besøk nettsiden til @item.Title" target="_blank">
-                                            <span class="glyphicon glyphicon-globe"></span>besøk nettside
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a href="@item.DownloadUrl" class="btn btn-xs btn-bunnmarg btn-default disabled" title="Besøk nettsiden til @item.Title" target="_blank">
-                                            <span class="glyphicon glyphicon-globe"></span>besøk nettside
-                                        </a>
-                                    }
-                                    <br />
-
-
-                                    @if (item.ShowMapLink())
-                                    {
-                                        <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
-                                            <span class="glyphicon glyphicon-map-marker"></span>vis i kart
-                                        </a>
-                                    }
-                                    else if (item.ShowServiceMapLink())
-                                    {
-                                        <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" title="Vis @item.Title i kart" class="btn btn-xs btn-bunnmarg btn-default" target="_blank">
-                                            <span class="glyphicon glyphicon-map-marker"></span>vis i kart
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" title="Vis @item.Title i kart" class="btn btn-xs btn-bunnmarg btn-default disabled" target="_blank">
-                                            <span class="glyphicon glyphicon-map-marker"></span>vis i kart
-                                        </a>
-                                    }
-
-                                    @if (item.IsOpendata)
-                                    {
-                                        <br /><br />
-                                        <img title="Åpne data" src="~/Content/img/unlock.png" class="bottom" alt="Åpne data" />
-                                    }
-
-                                    @*else
-                                        {
-                                            <br /><br />
-                                            <img src="~/Content/img/lock.png" class="opendata">
-                                        }*@
-
-
-                                </div>
-
-                                <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 pull-right col-img">
-
-                                    @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
-                                    {
-                                        <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                            <img alt="@item.Title illustrasjonsbilde" src="@item.ThumbnailUrl" class="img-responsive pull-right">
-                                        </a>
-                                    }
-
-                                </div>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
-                        <hr />
                     }
-                </div>
+                    <hr />
+                }
+                <div class="clearfix"></div>
+            </div>
 
-                @DisplayPaginationBottom()
+            @DisplayPaginationBottom()
 
-            }
-        </div>
+        }
     </div>
-
-
-    @helper DisplayFacet(SearchResultFacetViewModel facet)
-{
-    <h3 style="font-size:18px">@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</h3>
+    <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
 
 
 
-    foreach (var facetResult in facet.FacetResults)
-    {
-        <div class="filter-options"><a class="btn-link" href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b style='font-weight: 800;'>" : "") @facetResult.LinkName() @Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b>" : "") (@facetResult.Count)</a></div>
-    }
-    if (Model.HasFilterForFacetField(facet.FacetField))
-    {
-        <div class="filter-options">
-            <button type="button" role="button" class="btn btn-default reset" onclick="location.href = '@Url.Action("Organization", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
-                <span class="glyphicon glyphicon-remove pull-left"></span>
-                Vis alle
-            </button>
+
+        <div class="row view-navigation">
+
+            <div class="col-sm-12">
+                <p>Velg visningsform:</p>
+                <div class="custom-select">
+                    <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
+                        <option value="tableView" id="button-tableView">Tabell</option>
+                        <option value="listView" id="button-listView">Liste</option>
+                        <option value="galleryView" id="button-galleryView">Galleri</option>
+                    </select>
+                </div>
+            </div>
         </div>
-    }
 
-}
+        <span class="separator-small separator-gray"></span>
+
+        <aside class="facet-sok-emne">
+            <div class="block listblock" id="filterInner">
+                <h3 class="">Søkefilter<span class="glyphicon glyphicon-filter pull-right"></span></h3>
+                <span class="separator-small"></span>
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))
+                @DisplayFacetCheckbox(Model.Result.Facets.First(f => f.FacetField == "area"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "DistributionProtocols"))
+                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
+
+            </div>
+        </aside>
+    </div>
+</div>
+
+
 
 @helper DisplayPagination()
 {
@@ -250,7 +720,7 @@
             <li class="pull-right">
                 <label for="orderby">Sorter etter:</label>
                 <select id="orderby">
-                    @if (Model.orderby == 0)
+                    @if (Model.orderby == "score")
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByScoreLink())" selected="selected">Relevans</option>
                     }
@@ -258,7 +728,7 @@
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByScoreLink())">Relevans</option>
                     }
-                    @if (Model.orderby == 1)
+                    @if (Model.orderby == "title")
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByTitleLink())" selected="selected">Navn</option>
                     }
@@ -266,7 +736,7 @@
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByTitleLink())">Navn</option>
                     }
-                    @if (Model.orderby == 2)
+                    @if (Model.orderby == "organization")
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByOrganizationLink())" selected="selected">Organisasjon</option>
                     }
@@ -274,7 +744,7 @@
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByOrganizationLink())">Organisasjon</option>
                     }
-                    @if (Model.orderby == 3)
+                    @if (Model.orderby == "newest")
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByMetadataUpdateLink())" selected="selected">Dato oppdatert (metadata)</option>
                     }
@@ -282,7 +752,7 @@
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByMetadataUpdateLink())">Dato oppdatert (metadata)</option>
                     }
-                    @if (Model.orderby == 4)
+                    @if (Model.orderby == "updated")
                     {
                         <option value="@Url.Action("Organization", Model.ParamsForOrderByResourceUpdateLink())" selected="selected">Dato oppdatert (ressurs)</option>
                     }
@@ -309,54 +779,6 @@
                     {
                         <li><a aria-label="Første" href="@Url.Action("Organization", Model.ParamsForFirstLink())">&laquo;</a></li>
                     }
-                   
-                    @if (Model.IsPreviousButtonActive())
-                    {
-                        <li><a href="@Url.Action("Organization", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
-                    }
-
-                    @for (int i = Model.startPage; i <= Model.endPage; i++)
-                    {
-                        if (Model.IsActivePage(i))
-                        {
-                            <li class="active"><a href="@Url.Action("Organization", Model.ParamsForPageNumber(i))">@i</a></li>
-                        }
-                        else
-                        {
-                            <li><a href="@Url.Action("Organization", Model.ParamsForPageNumber(i))">@i</a></li>
-                        }
-                    }
-
-                    @if (Model.IsNextButtonActive())
-                    {
-                        <li><a href="@Url.Action("Organization", Model.ParamsForNextLink())">Neste &raquo;</a></li>
-                    }
-                    @if (Model.IsLastButtonActive())
-                    {
-                        <li><a aria-label="Siste" href="@Url.Action("Organization", Model.ParamsForLastLink())"> &raquo;</a></li>
-                    }
-                </ul>
-            </div>
-
-        </div>
-    </div>
-}
-
-@helper DisplayPaginationBottom()
-{
-    <div class="search-filter-wrapper">
-        <ul class="nav nav-tabs col-xs-12 col-sm-12 col-md-12 col-lg-12" role="tablist">
-            <li class="active"><span role="tab">Kartkatalogen viser @Model.ShowingFromAndTo() av @Model.NumFound treff.</span></li>
-        </ul>
-        <div class="col-md-12 view-navigation">
-            <div class="nav nav-tabs">
-
-                <ul class="pagination pagination-sm pull-right">
-
-                    @if (Model.IsFirstButtonActive())
-                    {
-                        <li><a aria-label="Første" href="@Url.Action("Organization", Model.ParamsForFirstLink())">&laquo;</a></li>
-                    }
 
                     @if (Model.IsPreviousButtonActive())
                     {
@@ -390,29 +812,3 @@
     </div>
 }
 
-@section scripts {
-    <script>
-        $('ul.facet').each(function () {
-            var max = 15;
-            if ($(this).find("li").length > max) {
-                $(this)
-                  .find('li:gt(' + max + ')')
-                  .hide()
-                  .end()
-                  .append(
-                    $('<li/>').append('<a href="">Vis flere</a>').click(function (event) {
-                        event.preventDefault();
-                        $(this).siblings(':hidden').show().end().remove();
-                    })
-                );
-            }
-        });
-        $(document).ready(function () {
-            $("#orderby").change(
-                 function () {
-                     location.href = $(this).val();
-                 }
-             );
-        });
-    </script>
-}

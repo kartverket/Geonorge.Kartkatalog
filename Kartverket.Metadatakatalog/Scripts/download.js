@@ -101,15 +101,26 @@ $(document).ready(function () {
             $(".progress-bar").text(objCountLoaded + ' av ' + objCount + ' datasett er lastet');
         });
     }
+
+
+    // Legge til uuid i _NorgesKart
+    $('#orderlist').on('click', 'button.selectPolygon-button', (function (e) {
+        var uuid = $(this).attr('uuid');
+        $('#norgeskartmodal #setcoordinates').attr('uuid', uuid);
+    }));
 });
 
 
 // Populering av Områdeliste
 function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection) {
     if (supportsAreaSelection) {
+
         var orderItemOmraader = (JSON.parse(localStorage.getItem(uuid + '.codelists.area')));
         var orderItemSelectOmraader = $('#orderuuid' + uuid + ' .selectOmraader');
         orderItemSelectOmraader.attr('name', uuid + '-areas');
+        orderItemSelectOmraader.change(function () {
+            populateProjectionAndFormatList(uuid, orderItemOmraader);
+        });
         var orderItemSelectOmraaderFylker = $('#orderuuid' + uuid + ' .selectOmraader .selectOmraaderFylker');
         var orderItemSelectOmraaderKommuner = $('#orderuuid' + uuid + ' .selectOmraader .selectOmraaderKommuner');
         $.each(orderItemOmraader, function (key, val) {
@@ -134,8 +145,60 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
     if (supportsPolygonSelection == 'false') {
         var formElement = $('#orderuuid' + uuid + ' .btn');
         formElement.addClass('disabled');
+        formElement.attr('disabled', true);
     }
 }
+
+// Populering av projeksjon- og format-liste
+function populateProjectionAndFormatList(uuid, orderItemOmraader) {
+
+    var coordinates = localStorage.getItem([uuid + '.selected.coordinates']);
+    if (coordinates == null || coordinates == '') {
+
+        var selectedAreas = $('[name=\'' + uuid + "-areas']").val();
+
+        var orderItemSelectProjeksjoner = $('#orderuuid' + uuid + ' .selectProjeksjoner');
+        orderItemSelectProjeksjoner.attr('name', uuid + '-projection');
+        orderItemSelectProjeksjoner.empty();
+        orderItemSelectProjeksjoner.trigger("chosen:updated");
+
+        var orderItemSelectFormater = $('#orderuuid' + uuid + ' .selectFormater');
+        orderItemSelectFormater.attr('name', uuid + '-formats');
+        orderItemSelectFormater.empty();
+
+        orderItemSelectProjeksjoner.attr("disabled", true);
+
+        orderItemSelectProjeksjoner.trigger("chosen:updated");
+
+        orderItemSelectFormater.attr("disabled", true);
+        orderItemSelectFormater.trigger("chosen:updated");
+
+
+        $.each(orderItemOmraader, function (key, val) {
+            if ($.inArray(val.type + "_" + val.code, selectedAreas) > -1) {
+
+                orderItemSelectProjeksjoner.attr("disabled", false);
+                orderItemSelectFormater.attr("disabled", false);
+
+                $.each(val.projections, function (key, val) {
+                    if (orderItemSelectProjeksjoner.find('option[value="' + val.code + '"]').length <= 0) {
+                        orderItemSelectProjeksjoner.append($("<option selected />").val(val.code).text(val.name));
+                        orderItemSelectProjeksjoner.trigger("chosen:updated");
+                    }
+
+                });
+                $.each(val.formats, function (key, val) {
+                    if (orderItemSelectFormater.find('option[value="' + val.name + '"]').length <= 0) {
+                        orderItemSelectFormater.append($("<option selected />").val(val.name).text(val.name));
+                        orderItemSelectFormater.trigger("chosen:updated");
+                    }
+                });
+            }
+        });
+    }
+
+}
+
 
 // Populering av Projeksjonliste
 function populateProjectionList(uuid, supportsProjectionSelection) {
@@ -199,6 +262,7 @@ function getSelectedCoordinates(uuid, selectClass, name) {
         $(window).load(function () {
             selectGroup.find('.search-choice-close').attr('onclick', 'removeCoordinates(\'' + uuid + '\')');
         });
+
     }
 }
 
@@ -206,6 +270,7 @@ function getSelectedCoordinates(uuid, selectClass, name) {
 function getSelectedValues(orderItems, selectClass, name) {
     if (name == 'coordinates') {
         getSelectedCoordinates(orderItems, selectClass, name);
+
     } else {
         $.each(orderItems, function (key, uuid) {
             var select = $('#orderuuid' + uuid).find('.' + selectClass);
@@ -249,6 +314,8 @@ function generateView(template, orderItems) {
         getSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
         getSelectedValues(orderItems, 'selectFormater', 'formats');
         getSelectedValues(orderItems, 'selectOmraader', 'areas');
+        var orderItemOmraader = (JSON.parse(localStorage.getItem(uuid + '.codelists.area')));
+        populateProjectionAndFormatList(uuid, orderItemOmraader);
         getSelectedValues(uuid, 'coordinates', 'coordinates');
     });
 }
@@ -256,8 +323,6 @@ function generateView(template, orderItems) {
 
 $(window).load(function () {
     $(".progress").fadeOut("slow");
-    $(".chosen-select").chosen();
-    $('[data-toggle="tooltip"]').tooltip();
 
     function showAlert(message, colorClass) {
         $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
@@ -266,11 +331,7 @@ $(window).load(function () {
     }
 
 
-    // Legge til uuid i _NorgesKart
-    $('#orderlist').on('click', '.selectPolygon button', (function (e) {
-        var uuid = $(this).attr('uuid');
-        $('#norgeskartmodal #setcoordinates').attr('uuid', uuid);
-    }));
+
 
 
     // Fjerning av datasett fra handlekurv
@@ -289,6 +350,7 @@ $(window).load(function () {
                   }
               });
         $(this).closest('.order-item').remove();
+        updateShoppingCart();
     }));
 
     // Fjerning av alle datasett fra handlekurv
@@ -307,6 +369,7 @@ $(window).load(function () {
               });
         $('#remove-all-items-modal').modal('hide')
         $('.order-item').remove();
+        updateShoppingCart();
     });
 
 
@@ -331,7 +394,7 @@ $(window).load(function () {
         });
     }
 
-    $('.body-content').on('change', 'select', (function (e) {
+    $('#orderlist').on('change', 'select', (function (e) {
         var orderItems = JSON.parse(localStorage["orderItems"]);
         setSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
         setSelectedValues(orderItems, 'selectFormater', 'formats');

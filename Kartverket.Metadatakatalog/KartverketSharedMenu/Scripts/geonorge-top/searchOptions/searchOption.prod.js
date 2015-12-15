@@ -3,9 +3,11 @@
     searchTitle: "Kartkatalogen",
     buttonCss: "edgesKartkatalogen",
     listCss: "left-edge-kartkatalogen",
-    url: "http://kartkatalog.geonorge.no/search",
-    api: "http://kartkatalog.geonorge.no/api/search",
+    baseUrl: "//kartkatalog.geonorge.no",
+    url: "//kartkatalog.geonorge.no/search",
+    api: "//kartkatalog.geonorge.no/api/search",
     queryParameter: '?text=',
     localUrl: false,
-    autoComplete: true
+    autoComplete: true,
+    geonorgeUrl: "//www.geonorge.no"
 }

@@ -1,8 +1,9 @@
-﻿var baseurl_local = 'http://' + window.location.host;
+﻿//var baseurl_local = 'http://' + window.location.host;
+var baseurl_local = searchOption.baseUrl;
 
 (function () {
     var app = angular.module("geonorge");
-    
+
     app.service('aggregatedService', ['$http', '$q', function ($http, $q) {
         var txtLang = document.getElementById('txtLang');
         var lang = '';
@@ -34,32 +35,32 @@
         function performSearch(query, filters, limit, section) {
 
             var menuService = searchOption.api + '?limit=5&facets[1]name=type&facets[1]value=dataset' + '&text=' + query;
-              var request = $http({
-                  method: 'GET',
-                  url: menuService,
-                  headers: {
-                      'Content-Type': 'application/json; charset=utf-8',
-                      'accept': '*/*'
-                  },
-                  data: {}
-              });
+            var request = $http({
+                method: 'GET',
+                url: menuService,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'accept': '*/*'
+                },
+                data: {}
+            });
 
 
-              var menuService1 = searchOption.api + '?limit=5&facets[1]name=type&facets[1]value=servicelayer' + '&text=' + query;
-              var request1 = $http({
-                  method: 'GET',
-                  url: menuService1,
-                  headers: {
-                      'Content-Type': 'application/json; charset=utf-8',
-                      'accept': '*/*'
-                  },
-                  data: {}
-              });
-
-             
+            var menuService1 = searchOption.api + '?limit=5&facets[1]name=type&facets[1]value=servicelayer' + '&text=' + query;
+            var request1 = $http({
+                method: 'GET',
+                url: menuService1,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'accept': '*/*'
+                },
+                data: {}
+            });
 
 
-              return $q.all([request, request1]);
+
+
+            return $q.all([request, request1]);
         }
 
     }]).controller('searchTopController', [
@@ -77,7 +78,7 @@
           $rootScope.selectedSearch = searchOption;
           $rootScope.searchQuery = '';
           $scope.autoCompleteResult = [];
-          
+
           $scope.autoCompletePartial = baseurl_local + '/KartverketSharedMenu/Scripts/geonorge/partials/_autoCompleteRow.html';
           $scope.focused = false;
           $scope.autocompleteActive = false;
@@ -111,7 +112,7 @@
                   //Enter on button is handeled fine by default
                   case 38: //Arrow up
                       e.target.blur();
-                       dropdown = angular.element(e.target).next();
+                      dropdown = angular.element(e.target).next();
                       dropdown.children()[dropdownOptions.length - 1].focus();
                       break;
                   case 40: //Arrow down
@@ -204,7 +205,7 @@
 
           var timer = null;
           $scope.autocomplete = function (ev) {
-              if ($scope.viewport.width <= $scope.breakpoints.small) return;
+              //if ($scope.viewport.width <= $scope.breakpoints.small) return;
 
               if ($scope.focused == false) return;
 
@@ -219,15 +220,15 @@
               switch (ev.keyCode) {
                   //enter                                                                                                                                                            
                   case 13:
-                          if (categoryCount == null) {
-                              $scope.resetAutocomplete();
-                              $scope.allowBlur = true;
-                              $scope.onSearch(ev);
+                      if (categoryCount == null) {
+                          $scope.resetAutocomplete();
+                          $scope.allowBlur = true;
+                          $scope.onSearch(ev);
 
-                          } else {
-                              $scope.allowBlur = false;
-                              window.location = $scope.autoCompleteResult[categoryCount - 1].list[resultCount - 1].url;
-                          }
+                      } else {
+                          $scope.allowBlur = false;
+                          window.location = $scope.autoCompleteResult[categoryCount - 1].list[resultCount - 1].url;
+                      }
                       break;
                   case 16:
                       shiftKey = false;
@@ -266,24 +267,24 @@
                           console.log('cancel timeout');
                       }
 
-                      timer = $timeout(function() {
+                      timer = $timeout(function () {
                           $scope.autocompleteActive = true;
                           console.log('calling WS');
                           if ($rootScope.searchQuery.length > 0) {
                               $scope.ajaxCallActive = true;
                               // TEST! aggregatedService.performSearch($rootScope.searchQuery, [], 5, $scope.selectedSearch.section).then(displayAutoCompleteData, errorHandler);
 
-                               aggregatedService.performSearch($rootScope.searchQuery, [], 5, 0).then(function (arrayOfResults) {
-                                   console.log(arrayOfResults);
+                              aggregatedService.performSearch($rootScope.searchQuery, [], 5, 0).then(function (arrayOfResults) {
+                                  console.log(arrayOfResults);
 
-                                   var response = {
-                                       d: {
-                                           Results: arrayOfResults
-                                       }
-                                   };
+                                  var response = {
+                                      d: {
+                                          Results: arrayOfResults
+                                      }
+                                  };
 
-                                   displayAutoCompleteData(response);
-                               });
+                                  displayAutoCompleteData(response);
+                              });
 
                           }
                       }, 300);
@@ -341,9 +342,9 @@
                       return "Datasett";
                   case "servicelayer":
                       return "WMS-lag (Tjenestelag)";
-              default:
+                  default:
               }
-              
+
           }
 
           var categoryCount = null;

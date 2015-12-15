@@ -47,9 +47,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Arkitektum.GIS.Lib.MetadataCSW, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Arkitektum.GIS.Lib.MetadataCSW.1.8.0.0\lib\net40\Arkitektum.GIS.Lib.MetadataCSW.dll</HintPath>
+    <Reference Include="Arkitektum.GIS.Lib.MetadataCSW, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arkitektum.GIS.Lib.MetadataCSW.1.9.0.0\lib\net40\Arkitektum.GIS.Lib.MetadataCSW.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Arkitektum.GIS.Lib.SerializeUtil, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -70,9 +70,9 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="GeoNorgeAPI, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\GeoNorgeAPI.3.0.1.0\lib\net40\GeoNorgeAPI.dll</HintPath>
+    <Reference Include="GeoNorgeAPI, Version=3.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GeoNorgeAPI.3.0.7.0\lib\net40\GeoNorgeAPI.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Kartverket.Geonorge.Utilities">
       <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.15\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
@@ -218,6 +218,7 @@
     <Compile Include="Controllers\MetadataController.cs" />
     <Compile Include="Controllers\ApiSearchController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Formatter\CsvFormatter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -282,23 +283,82 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\chosen-sprite.png" />
     <Content Include="Content\chosen.css" />
-    <Content Include="Content\common.css" />
+    <Content Include="Content\custom-icons.css" />
+    <Content Include="Content\custom.css" />
+    <Content Include="Content\download.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\forms.css" />
     <Content Include="Content\geonorge-default.css" />
+    <Content Include="Content\geonorge-colors.css" />
+    <Content Include="Content\ie-10-only.css" />
+    <Content Include="Content\ie-11-only.css" />
+    <Content Include="Content\ie-only.css" />
+    <Content Include="Content\img\arrow-up.svg" />
+    <Content Include="Content\img\arrow-down.svg" />
+    <Content Include="Content\img\arrow-right.svg" />
+    <Content Include="Content\img\arrow-select-blue.svg" />
+    <Content Include="Content\img\arrow-select-orange.svg" />
+    <Content Include="Content\img\background-dev.png" />
+    <Content Include="Content\img\background-test.png" />
+    <Content Include="Content\img\breadcrumb-arrow.svg" />
+    <Content Include="Content\img\chevron-down.svg" />
+    <Content Include="Content\img\chevron-up.svg" />
+    <Content Include="Content\img\ikoner\ekternlink-white.svg" />
+    <Content Include="Content\img\ikoner\ekternlink-disabled.svg" />
+    <Content Include="Content\img\ikoner\ekternlink.svg" />
     <Content Include="Content\img\favicon.ico" />
+    <Content Include="Content\img\geonorge.png" />
+    <Content Include="Content\img\ikoner\handlekurv-white.svg" />
+    <Content Include="Content\img\ikoner\handlekurv-disabled.svg" />
+    <Content Include="Content\img\ikoner\handlekurv.svg" />
+    <Content Include="Content\img\ikoner\hengelaas-white.svg" />
+    <Content Include="Content\img\ikoner\hengelaas.svg" />
+    <Content Include="Content\img\ikoner\info-white.svg" />
+    <Content Include="Content\img\ikoner\info-disabled.svg" />
+    <Content Include="Content\img\ikoner\info.svg" />
+    <Content Include="Content\img\ikoner\kartmarkoer-white.svg" />
+    <Content Include="Content\img\ikoner\kartmarkoer-disabled.svg" />
+    <Content Include="Content\img\ikoner\kartmarkoer.svg" />
+    <Content Include="Content\img\ikoner\lastned-white.svg" />
+    <Content Include="Content\img\ikoner\lastned-disabled.svg" />
+    <Content Include="Content\img\kartverket.png" />
     <Content Include="Content\img\kvlogo_col.png" />
+    <Content Include="Content\img\ikoner\lastned.svg" />
     <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\lock.png" />
     <Content Include="Content\img\logo-graphic-512.png" />
     <Content Include="Content\img\opendata.png" />
     <Content Include="Content\img\unlock.png" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.structure.css" />
+    <Content Include="Content\jquery-ui.theme.css" />
+    <Content Include="Content\map-modal.css" />
     <Content Include="Content\kartverket_logo.png" />
     <Content Include="Content\logo_kartverket_norgedigitalt.png" />
-    <Content Include="Content\navbar.css" />
-    <Content Include="Content\searchbar.css" />
+    <Content Include="Content\searchresult-layout.css" />
+    <Content Include="Content\shopping-cart.css" />
+    <Content Include="Content\site.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="Helpers\SearchHelpers.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -306,8 +366,6 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="fonts\MetaComp-Book.ttf" />
-    <Content Include="Content\fonts\MetaWeb-Book.eot" />
-    <Content Include="Content\fonts\MetaWeb-Book.woff" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\ResourceModel.cshtml" />
@@ -328,11 +386,21 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\web.config" />
+    <Content Include="Images\Dot_ffffff_8px-01.png" />
+    <Content Include="KartverketSharedMenu\web.config" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
-    <Content Include="KartverketSharedMenu\Images\arrow_ffffff_13px-01.svg" />
-    <Content Include="KartverketSharedMenu\Images\geonorge_logo_350px.svg" />
-    <Content Include="KartverketSharedMenu\Images\gif_loading-01.gif" />
-    <Content Include="KartverketSharedMenu\Images\search_icon-01.svg" />
+    <Content Include="Images\arrow_ffffff_13px-01.svg" />
+    <Content Include="Images\geonorge_logo_350px.svg" />
+    <Content Include="Images\gif_loading-01.gif" />
+    <Content Include="Images\search_icon-01.svg" />
+    <Content Include="Images\shopping_cart_968c83_ikon-01.svg" />
     <Content Include="KartverketSharedMenu\Scripts\angular.js" />
     <Content Include="KartverketSharedMenu\Scripts\angular.min.js" />
     <Content Include="KartverketSharedMenu\Scripts\bootstrap.js" />
@@ -368,20 +436,23 @@
     <Content Include="KartverketSharedMenu\Scripts\jquery-1.11.3.min.js" />
     <Content Include="KartverketSharedMenu\Scripts\ui-bootstrap-0.14.3.js" />
     <Content Include="KartverketSharedMenu\Styles\bootstrap.css" />
+    <Content Include="KartverketSharedMenu\Styles\geonorge-top\logoTop.css" />
     <Content Include="KartverketSharedMenu\Styles\geonorge-top\menuTop.css" />
     <Content Include="KartverketSharedMenu\Styles\geonorge-top\searchTop.css" />
-    <Content Include="master.txt" />
     <Content Include="robots.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\download.js" />
     <Content Include="Scripts\easyXDM.js" />
+    <Content Include="Scripts\init.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-datepicker.js" />
     <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.typeahead.js" />
     <Content Include="Scripts\jquery.typeahead.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -394,6 +465,8 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\shopping-cart.js" />
+    <Content Include="Scripts\site.js" />
     <Content Include="Scripts\visninger.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
@@ -419,7 +492,6 @@
     <Content Include="Web.Dev.config" />
     <Content Include="Web.Test.config" />
     <Content Include="Views\Index\ReIndex.cshtml" />
-    <Content Include="Views\Shared\_NavbarPartial.cshtml" />
     <Content Include="Views\Search\_SearchBarPartial.cshtml" />
     <Content Include="Views\Index\IndexSingle.cshtml" />
     <Content Include="Views\Shared\_Map.cshtml" />

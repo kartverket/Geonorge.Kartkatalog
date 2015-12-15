@@ -31,6 +31,98 @@ public partial class AreaType
 
     private string nameField;
 
+    private ProjectionType[] projectionsField;
+
+    private FormatType[] formatsField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string name
+    {
+        get
+        {
+            return this.nameField;
+        }
+        set
+        {
+            this.nameField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public ProjectionType[] projections
+    {
+        get
+        {
+            return this.projectionsField;
+        }
+        set
+        {
+            this.projectionsField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public FormatType[] formats
+    {
+        get
+        {
+            return this.formatsField;
+        }
+        set
+        {
+            this.formatsField = value;
+        }
+    }
+}
+
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://skjema.geonorge.no/SOSI/download/0.5")]
+[System.Xml.Serialization.XmlRootAttribute("Area", Namespace = "http://skjema.geonorge.no/SOSI/download/0.5", IsNullable = false)]
+public partial class OrderAreaType
+{
+
+    private string codeField;
+
+    private string typeField;
+
+    private string nameField;
+
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
     public string code
@@ -453,7 +545,7 @@ public partial class OrderType
 public partial class OrderLineType
 {
 
-    private AreaType[] areasField;
+    private OrderAreaType[] areasField;
 
     private FormatType[] formatsField;
 
@@ -461,12 +553,16 @@ public partial class OrderLineType
 
     private string coordinatesField;
 
+    private string coordinatesystemField;
+
     private ProjectionType[] projectionsField;
 
-    /// <remarks/>
+    /// <summary>
+    /// Set selected areas for download
+    /// </summary>
     [System.Xml.Serialization.XmlArrayAttribute(IsNullable = true)]
     [System.Xml.Serialization.XmlArrayItemAttribute("area", IsNullable = false)]
-    public AreaType[] areas
+    public OrderAreaType[] areas
     {
         get
         {
@@ -478,7 +574,9 @@ public partial class OrderLineType
         }
     }
 
-    /// <remarks/>
+    /// <summary>
+    /// Set selected formats to download
+    /// </summary>
     [System.Xml.Serialization.XmlArrayAttribute(IsNullable = true)]
     [System.Xml.Serialization.XmlArrayItemAttribute("format", IsNullable = false)]
     public FormatType[] formats
@@ -493,7 +591,9 @@ public partial class OrderLineType
         }
     }
 
-    /// <remarks/>
+    /// <summary>
+    /// A uniqe reference to datasett from kartkatalog.geonorge.no
+    /// </summary>
     [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
     public string metadataUuid
     {
@@ -507,7 +607,9 @@ public partial class OrderLineType
         }
     }
 
-    /// <remarks/>
+    /// <summary>
+    /// If polygon is selected this includes coordinates
+    /// </summary>
     [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
     public string coordinates
     {
@@ -521,7 +623,25 @@ public partial class OrderLineType
         }
     }
 
-    /// <remarks/>
+    /// <summary>
+    /// If polygon is selected this includes coordinate system
+    /// </summary>
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable = true)]
+    public string coordinatesystem
+    {
+        get
+        {
+            return this.coordinatesystemField;
+        }
+        set
+        {
+            this.coordinatesystemField = value;
+        }
+    }
+
+    /// <summary>
+    /// Selected projections to download
+    /// </summary>
     [System.Xml.Serialization.XmlArrayAttribute(IsNullable = true)]
     [System.Xml.Serialization.XmlArrayItemAttribute("projection", IsNullable = false)]
     public ProjectionType[] projections

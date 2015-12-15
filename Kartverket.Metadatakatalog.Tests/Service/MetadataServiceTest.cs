@@ -4,6 +4,7 @@ using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
+using Kartverket.Metadatakatalog.Service.Search;
 using Moq;
 using NUnit.Framework;
 using www.opengis.net;
@@ -20,7 +21,8 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             var geoNorgeMock = new Mock<IGeoNorge>();
             var geonorgeUrlResolverMock = new Mock<IGeonorgeUrlResolver>();
             var organizationServiceMock = new Mock<IOrganizationService>();
-            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"), geonorgeUrlResolverMock.Object, organizationServiceMock.Object);
+            var searchServiceMock = new Mock<ISearchService>();
+            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"), geonorgeUrlResolverMock.Object, organizationServiceMock.Object, searchServiceMock.Object);
 
             MetadataViewModel metadata = metadataService.GetMetadataByUuid(Uuid);
             
@@ -35,7 +37,8 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             geoNorgeMock.Setup(m => m.GetRecordByUuid(Uuid)).Returns(dummyMetadata);
             var geonorgeUrlResolverMock = new Mock<IGeonorgeUrlResolver>();
             var organizationServiceMock = new Mock<IOrganizationService>();
-            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"), geonorgeUrlResolverMock.Object, organizationServiceMock.Object);
+            var searchServiceMock = new Mock<ISearchService>();
+            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"), geonorgeUrlResolverMock.Object, organizationServiceMock.Object, searchServiceMock.Object);
             
             MetadataViewModel metadata = metadataService.GetMetadataByUuid(Uuid);
 
