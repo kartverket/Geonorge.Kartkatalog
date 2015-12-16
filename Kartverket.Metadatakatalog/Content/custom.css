@@ -103,6 +103,9 @@ aside ul li, .container-footer ul li {
     background-image: url("img/arrow-right.svg");
 }
 
+.search-filter-wrapper {
+    margin-top: 10px;
+}
 
 .facet-sok-tittel {
     display: block;
@@ -140,23 +143,23 @@ aside ul li, .container-footer ul li {
 .facet-sok-undertitler {
 }
 
-.facet-sok-undertitler li{
-    font-size: 12pt;
-    line-height: 18pt;
-}
-
-    .facet-sok-undertitler li a {
+    .facet-sok-undertitler li {
         font-size: 12pt;
         line-height: 18pt;
-        font-style: normal;
-        color: #3867C8;
     }
 
-        .facet-sok-undertitler li a:hover {
+        .facet-sok-undertitler li a {
             font-size: 12pt;
             line-height: 18pt;
+            font-style: normal;
             color: #3867C8;
         }
+
+            .facet-sok-undertitler li a:hover {
+                font-size: 12pt;
+                line-height: 18pt;
+                color: #3867C8;
+            }
 
 .facet-sok-emne ul li {
     background-image: none;

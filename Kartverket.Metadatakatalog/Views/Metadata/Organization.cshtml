@@ -135,8 +135,7 @@
 {
     <div class="search-filter-wrapper">
         Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
-        <div class="col-md-12 view-navigation">
-            <div class="nav nav-tabs">
+        <div class="pull-right">
                 <ul class="pagination pagination-sm pull-right">
                     @if (Model.IsFirstButtonActive())
                     {
@@ -169,7 +168,7 @@
                         <li><a aria-label="Siste" title="Siste" href="@Url.Action("Organization", Model.ParamsForLastLink())"> &raquo;</a></li>
                     }
                 </ul>
-            </div>
+
         </div>
     </div>
 }
