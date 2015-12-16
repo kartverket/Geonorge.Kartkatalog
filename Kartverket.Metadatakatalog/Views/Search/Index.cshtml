@@ -338,9 +338,12 @@
 
 @{
     string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("search", "api/search");
+    Uri uri = new Uri(url);
+    string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
+    Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
     var qs = HttpUtility.ParseQueryString(Request.QueryString.ToString());
     qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
-    string query = qs.ToString(); string urlCSV = url + "?" + query;
+    string query = qs.ToString(); string urlCSV = path + "?" + query;
 }
 
 
