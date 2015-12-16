@@ -236,7 +236,7 @@
 
                 @if (!string.IsNullOrWhiteSpace(Model.ParentIdentifier))
                 {
-                    <h3>Overordnede metadata</h3>
+                    <h3>Overordnede data</h3>
                     <script>getMetadata('@Model.ParentIdentifier');</script>
                     <a id="related-@Model.ParentIdentifier" href="/metadata/org/title/@Model.ParentIdentifier" title="Overordnede metadata for @Model.Title">
                     </a>
