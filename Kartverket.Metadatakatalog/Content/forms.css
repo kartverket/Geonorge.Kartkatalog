@@ -75,3 +75,12 @@ textarea {
         .custom-select select::-ms-expand {
             display: none;
         }
+
+.container .searchbar input {
+    border-radius: 0px !important;
+    font-size: 14pt !important;
+}
+
+    .container .searchbar input:focus {
+        border: none;
+    }
