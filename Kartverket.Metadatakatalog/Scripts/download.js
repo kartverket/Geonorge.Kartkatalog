@@ -13,6 +13,7 @@ function getJsonObjects(data, segment, uuid) {
     var localStorageKey;
     var items = [];
     var parentObj = '';
+
     $.each(data, function (key, val) {
         if (segment != '' && segment != null) {
             localStorageKey = uuid + segment + '.' + key;
@@ -64,21 +65,24 @@ function getJsonData(url, segments, uuid) {
         dataType: 'json',
         async: false,
         success: function (data) {
-            getJsonObjects(data, segmentString, uuid);
-            if (data.supportsProjectionSelection) {
-                var rel = 'http://rel.geonorge.no/download/projection';
-                var href = getJsonUrl(data._links, rel);
-                getJsonData(href + '', ['codelists', 'projection'], uuid);
-            }
-            if (data.supportsFormatSelection) {
-                var rel = 'http://rel.geonorge.no/download/format';
-                var href = getJsonUrl(data._links, rel);
-                getJsonData(href, ['codelists', 'format'], uuid);
-            }
-            if (data.supportsAreaSelection) {
-                var rel = 'http://rel.geonorge.no/download/area';
-                var href = getJsonUrl(data._links, rel);
-                getJsonData(href, ['codelists', 'area'], uuid);
+            if (data != null)
+            {
+                getJsonObjects(data, segmentString, uuid);
+                if (data.supportsProjectionSelection) {
+                    var rel = 'http://rel.geonorge.no/download/projection';
+                    var href = getJsonUrl(data._links, rel);
+                    getJsonData(href + '', ['codelists', 'projection'], uuid);
+                }
+                if (data.supportsFormatSelection) {
+                    var rel = 'http://rel.geonorge.no/download/format';
+                    var href = getJsonUrl(data._links, rel);
+                    getJsonData(href, ['codelists', 'format'], uuid);
+                }
+                if (data.supportsAreaSelection) {
+                    var rel = 'http://rel.geonorge.no/download/area';
+                    var href = getJsonUrl(data._links, rel);
+                    getJsonData(href, ['codelists', 'area'], uuid);
+                }
             }
         }
     });
@@ -142,7 +146,7 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
         var formElement = $('#orderuuid' + uuid + ' .selectOmraader');
         formElement.attr('disabled', 'disabled');
     }
-    if (supportsPolygonSelection == 'false') {
+    if (!supportsPolygonSelection) {
         var formElement = $('#orderuuid' + uuid + ' .btn');
         formElement.addClass('disabled');
         formElement.attr('disabled', true);
@@ -152,49 +156,52 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
 // Populering av projeksjon- og format-liste
 function populateProjectionAndFormatList(uuid, orderItemOmraader) {
 
-    var coordinates = localStorage.getItem([uuid + '.selected.coordinates']);
-    if (coordinates == null || coordinates == '') {
+    if(orderItemOmraader != null)
+    {
+        var coordinates = localStorage.getItem([uuid + '.selected.coordinates']);
+        if (coordinates == null || coordinates == '') {
 
-        var selectedAreas = $('[name=\'' + uuid + "-areas']").val();
+            var selectedAreas = $('[name=\'' + uuid + "-areas']").val();
 
-        var orderItemSelectProjeksjoner = $('#orderuuid' + uuid + ' .selectProjeksjoner');
-        orderItemSelectProjeksjoner.attr('name', uuid + '-projection');
-        orderItemSelectProjeksjoner.empty();
-        orderItemSelectProjeksjoner.trigger("chosen:updated");
+            var orderItemSelectProjeksjoner = $('#orderuuid' + uuid + ' .selectProjeksjoner');
+            orderItemSelectProjeksjoner.attr('name', uuid + '-projection');
+            orderItemSelectProjeksjoner.empty();
+            orderItemSelectProjeksjoner.trigger("chosen:updated");
 
-        var orderItemSelectFormater = $('#orderuuid' + uuid + ' .selectFormater');
-        orderItemSelectFormater.attr('name', uuid + '-formats');
-        orderItemSelectFormater.empty();
+            var orderItemSelectFormater = $('#orderuuid' + uuid + ' .selectFormater');
+            orderItemSelectFormater.attr('name', uuid + '-formats');
+            orderItemSelectFormater.empty();
 
-        orderItemSelectProjeksjoner.attr("disabled", true);
+            orderItemSelectProjeksjoner.attr("disabled", true);
 
-        orderItemSelectProjeksjoner.trigger("chosen:updated");
+            orderItemSelectProjeksjoner.trigger("chosen:updated");
 
-        orderItemSelectFormater.attr("disabled", true);
-        orderItemSelectFormater.trigger("chosen:updated");
+            orderItemSelectFormater.attr("disabled", true);
+            orderItemSelectFormater.trigger("chosen:updated");
 
 
-        $.each(orderItemOmraader, function (key, val) {
-            if ($.inArray(val.type + "_" + val.code, selectedAreas) > -1) {
+            $.each(orderItemOmraader, function (key, val) {
+                if ($.inArray(val.type + "_" + val.code, selectedAreas) > -1) {
 
-                orderItemSelectProjeksjoner.attr("disabled", false);
-                orderItemSelectFormater.attr("disabled", false);
+                    orderItemSelectProjeksjoner.attr("disabled", false);
+                    orderItemSelectFormater.attr("disabled", false);
 
-                $.each(val.projections, function (key, val) {
-                    if (orderItemSelectProjeksjoner.find('option[value="' + val.code + '"]').length <= 0) {
-                        orderItemSelectProjeksjoner.append($("<option selected />").val(val.code).text(val.name));
-                        orderItemSelectProjeksjoner.trigger("chosen:updated");
-                    }
+                    $.each(val.projections, function (key, val) {
+                        if (orderItemSelectProjeksjoner.find('option[value="' + val.code + '"]').length <= 0) {
+                            orderItemSelectProjeksjoner.append($("<option selected />").val(val.code).text(val.name));
+                            orderItemSelectProjeksjoner.trigger("chosen:updated");
+                        }
 
-                });
-                $.each(val.formats, function (key, val) {
-                    if (orderItemSelectFormater.find('option[value="' + val.name + '"]').length <= 0) {
-                        orderItemSelectFormater.append($("<option selected />").val(val.name).text(val.name));
-                        orderItemSelectFormater.trigger("chosen:updated");
-                    }
-                });
-            }
-        });
+                    });
+                    $.each(val.formats, function (key, val) {
+                        if (orderItemSelectFormater.find('option[value="' + val.name + '"]').length <= 0) {
+                            orderItemSelectFormater.append($("<option selected />").val(val.name).text(val.name));
+                            orderItemSelectFormater.trigger("chosen:updated");
+                        }
+                    });
+                }
+            });
+        }
     }
 
 }
@@ -218,7 +225,6 @@ function populateProjectionList(uuid, supportsProjectionSelection) {
 // Populering av Filformatliste
 function populateFormatList(uuid, supportsFormatSelection) {
     if (supportsFormatSelection) {
-        console.log(supportsFormatSelection);
         var orderItemFormater = (JSON.parse(localStorage.getItem(uuid + '.codelists.format')));
         var orderItemSelectFormater = $('#orderuuid' + uuid + ' .selectFormater');
         orderItemSelectFormater.attr('name', uuid + '-formats');
@@ -239,12 +245,14 @@ function getOrderUrl(uuid) {
     orderItemInputOrderUrl.attr('name', uuid + '-orderUrl');
 
     var orderRel = "http://rel.geonorge.no/download/order";
-
-    $.each(orderItemLinks, function (key, link) {
-        if (link['rel'] == orderRel) {
-            orderItemInputOrderUrl.val(link['href']);
-        }
-    });
+    if (orderItemLinks != null)
+    {
+        $.each(orderItemLinks, function (key, link) {
+            if (link['rel'] == orderRel) {
+                orderItemInputOrderUrl.val(link['href']);
+            }
+        });
+    }
 }
 
 

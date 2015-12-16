@@ -1,4 +1,5 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
+<script type="text/javascript" src="~/Scripts/easyXDM.js"></script>
 
 <div class="modal-dialog" id="norgeskartmodal">
     <div class="modal-content">
@@ -15,7 +16,7 @@
     var CLIPPERCOORDS;
     $(document).ready(function () {
         var socket = new easyXDM.Socket({
-            remote: "@Html.SecureNorgeskartUrl()select.html",
+            remote: "@Html.NorgeskartUrl()select.html",
             onMessage: function (message, origin) {
                 var reslist = document.getElementById('result');
                 var obj = $.parseJSON(message);
@@ -37,16 +38,19 @@
         getSelectedCoordinates(uuid, 'coordinates', 'coordinates');
         localStorage[uuid + '.selected.areas'] = '[]';
 
+        var supportsProjectionSelection = (localStorage.getItem(uuid + '.capabilities.supportsProjectionSelection') === "true");
+        var supportsFormatSelection = (localStorage.getItem(uuid + '.capabilities.supportsFormatSelection') === "true");
+
         var orderItemSelectProjeksjoner = $('#orderuuid' + uuid + ' .selectProjeksjoner');
         orderItemSelectProjeksjoner.attr('name', uuid + '-projection');
         orderItemSelectProjeksjoner.empty();
-        populateProjectionList(uuid, true);
+        populateProjectionList(uuid, supportsProjectionSelection);
 
         orderItemSelectProjeksjoner.trigger("chosen:updated");
         var orderItemSelectFormater = $('#orderuuid' + uuid + ' .selectFormater');
         orderItemSelectFormater.attr('name', uuid + '-formats');
         orderItemSelectFormater.empty();
-        populateFormatList(uuid, true);
+        populateFormatList(uuid, supportsFormatSelection);
         orderItemSelectProjeksjoner.attr("disabled", false);
         orderItemSelectProjeksjoner.trigger("chosen:updated");
         orderItemSelectFormater.attr("disabled", false);
