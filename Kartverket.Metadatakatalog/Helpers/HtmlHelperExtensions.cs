@@ -39,6 +39,10 @@ namespace Kartverket.Metadatakatalog.Helpers
         {
             return WebConfigurationManager.AppSettings["DownloadServiceEnabled"] == "false" ? false : true;
         }
-        
+        public static string WebmasterEmail(this HtmlHelper helper)
+        {
+            return WebConfigurationManager.AppSettings["WebmasterEmail"];
+        }
+
     }
 }
