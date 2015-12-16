@@ -352,7 +352,11 @@
                                         relatedContentHierarchyLevelCssClass = "label-datasettserie";
                                         relatedContentHierarchyLevelLabelText = "Datasettserie";
                                     }
-
+                                    else if (relatedContent.IsDatasetBundle())
+                                    {
+                                        relatedContentHierarchyLevelCssClass = "label-datasett";
+                                        relatedContentHierarchyLevelLabelText = "Datapakke";
+                                    }
                                     else
                                     {
                                         relatedContentHierarchyLevelCssClass = "label-default";
