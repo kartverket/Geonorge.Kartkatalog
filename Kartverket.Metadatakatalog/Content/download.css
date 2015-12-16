@@ -31,8 +31,9 @@
     width: 100% !important;
 }
 
-    .chosen-container.chosen-disabled {
+    .chosen-container.chosen-disabled, .custom-select.disabled .chosen-container {
         background-color: #cfcfcf;
+        opacity: 0.5;
     }
 
         .chosen-container.chosen-disabled .chosen-choices:hover {
