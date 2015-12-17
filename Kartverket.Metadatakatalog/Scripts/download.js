@@ -149,6 +149,7 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
     if (!supportsPolygonSelection) {
         var formElement = $('#orderuuid' + uuid + ' .btn');
         formElement.addClass('disabled');
+        formElement.parent(".selectPolygon").removeAttr('data-toggle');
         formElement.attr('disabled', true);
     }
 }
