@@ -26,6 +26,7 @@
 }
 
 function updateShoppingCartCookie() {
+    var shoppingCartElement = $('#orderitem-count');
     var cookieName = "orderitems";
     var cookieDomain = ".geonorge.no";
     var cookieValue = 0;
@@ -33,8 +34,10 @@ function updateShoppingCartCookie() {
         var orderItems = localStorage.getItem("orderItems");
         var orderItemsObj = JSON.parse(orderItems);
         cookieValue = orderItemsObj.length;
+        shoppingCartElement.html(cookieValue);
     } else {
         cookieValue = 0;
+        shoppingCartElement.css("display", "none");
     }
     $.cookie(cookieName, cookieValue, { expires: 7, path: '/', domain: cookieDomain });
 }
