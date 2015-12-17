@@ -26,11 +26,13 @@
 }
 
 function updateShoppingCartCookie() {
+    var cookieName = "orderitems";
+    var cookieDomain = ".geonorge.no";
     var cookieValue = 0;
     if (localStorage.getItem("orderItems") != null && localStorage.getItem("orderItems") != "[]") {
         var orderItems = localStorage.getItem("orderItems");
         var orderItemsObj = JSON.parse(orderItems);
-        var cookieValue = orderItemsObj.length;
+        cookieValue = orderItemsObj.length;
     } else {
         cookieValue = 0;
     }
