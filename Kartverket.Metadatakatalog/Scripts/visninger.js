@@ -20,6 +20,9 @@ function changeLayout(layout) {
     localStorage.setItem("layout", layout);
 }
 
+function changeLayoutWithoutLocalStorage(layout) {
+    $(".search-results").attr("id", layout);
+}
 
 function orderBy() {
     var orderbyArray = getURLParameter("orderby");
@@ -67,8 +70,19 @@ function additionalView(buttonId) {
     $("#" + buttonId).attr("class", "btn");
 }
 
+function triggerMobileLayout() {
+    var windowWidth = $(window).width();
+    if (windowWidth < 751) {
+        changeLayoutWithoutLocalStorage("listView");
+    } else {
+        var layout = localStorage.getItem("layout");
+        changeLayoutWithoutLocalStorage(layout);
+    }
+}
 
-
+window.onresize = function (event) {
+    triggerMobileLayout();
+}
 
 /*
 function SortBy(sort) {
