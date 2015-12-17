@@ -168,4 +168,7 @@
   <data name="Facet_type_software" xml:space="preserve">
     <value>Applikasjon</value>
   </data>
+  <data name="Facet_type_dimensionGroup" xml:space="preserve">
+    <value>Datapakke</value>
+  </data>
 </root>
