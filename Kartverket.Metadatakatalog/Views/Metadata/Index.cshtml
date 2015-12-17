@@ -383,12 +383,12 @@
                                             *@
                                         </div>
                                         <div class="col-sm-1 search-results-action-icons">
-                                            <a href="/metadata/org/title/@relatedContent.Uuid"><span class="custom-icon custom-icon-info"></span></a>
+                                            <a href="/metadata/org/title/@relatedContent.Uuid" data-toggle='tooltip' data-placement='bottom' title="Les mer om @relatedContent.Title"><span class="custom-icon custom-icon-info"></span></a>
                                         </div>
                                         <div class="col-sm-1 search-results-action-icons">
                                             @if (relatedContent.ShowMapLink())
                                             {
-                                                <a href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
+                                                <a href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @relatedContent.Title i kart" target="_blank"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
                                             }
                                             else
                                             {
@@ -398,11 +398,11 @@
                                         <div class="col-sm-1 search-results-action-icons">
                                             @if (relatedContent.ShowDownloadService())
                                             {
-                                                <a href="#" id="add-to-cart-btn" onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"><span class="custom-icon custom-icon-handlekurv"></span></a>
+                                                <a href="#" id="add-to-cart-btn" onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');" data-toggle='tooltip' data-placement='bottom' title="Legg til @relatedContent.Title i kurv"><span class="custom-icon custom-icon-handlekurv"></span></a>
                                             }
                                             else if (relatedContent.ShowDownloadLink())
                                             {
-                                                <a href="@relatedContent.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');"><span class="custom-icon custom-icon-lastned"></span></a>
+                                                <a href="@relatedContent.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @relatedContent.Title"><span class="custom-icon custom-icon-lastned"></span></a>
                                             }
                                             else
                                             {

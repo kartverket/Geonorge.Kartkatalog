@@ -130,8 +130,7 @@
                         </button>
                     </li>
                 }
-            }
-            </ul>
+            }</ul>
         </div>
 }
 
@@ -496,20 +495,20 @@
 
                         <div class="col-sm-2 search-results-action-buttons">
 
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" title="Les mer om @item.Title" class="btn btn-default">
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="btn btn-default">
                                 <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
                             </a>
 
 
                             @if (item.ShowMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
                                     <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
                                     <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
@@ -553,7 +552,7 @@
                             }
                             else if (item.ShowDownloadLink())
                             {
-                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
+                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
                                     <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
                                 </a>
                             }
@@ -567,7 +566,7 @@
                         </div>
 
                         <div class="col-xs-1 search-results-action-icons">
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" title="Les mer om @item.Title" class="">
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="">
                                 <span class="custom-icon custom-icon-info"></span>
                             </a>
                         </div>
@@ -576,13 +575,13 @@
                         <div class="col-xs-1 search-results-action-icons action-show-map">
                             @if (item.ShowMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank">
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @item.Title i kart" target="_blank">
                                     <span class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank">
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @item.Title i kart" target="_blank">
                                     <span class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
@@ -627,7 +626,7 @@
                             }
                             else if (item.ShowDownloadLink())
                             {
-                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" title="Last ned datasett for @item.Title" target="_blank">
+                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @item.Title" target="_blank">
                                     <span class="custom-icon custom-icon-lastned"></span>
                                 </a>
                             }

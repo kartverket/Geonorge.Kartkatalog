@@ -19,7 +19,7 @@
     <div class="row">
         <div class="col-sm-12">
             <h1 class="small-h1">
-                    @Model.OrganizationName
+                @Model.OrganizationName
             </h1>
         </div>
         <div class="col-sm-12">
@@ -136,38 +136,38 @@
     <div class="search-filter-wrapper">
         Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
         <div class="pull-right">
-                <ul class="pagination pagination-sm pull-right">
-                    @if (Model.IsFirstButtonActive())
-                    {
-                        <li><a aria-label="Første" title="Første" href="@Url.Action("Organization", Model.ParamsForFirstLink())">&laquo;</a></li>
-                    }
+            <ul class="pagination pagination-sm pull-right">
+                @if (Model.IsFirstButtonActive())
+                {
+                    <li><a aria-label="Første" title="Første" href="@Url.Action("Organization", Model.ParamsForFirstLink())">&laquo;</a></li>
+                }
 
-                    @if (Model.IsPreviousButtonActive())
-                    {
-                        <li><a href="@Url.Action("Organization", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
-                    }
+                @if (Model.IsPreviousButtonActive())
+                {
+                    <li><a href="@Url.Action("Organization", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                }
 
-                    @for (int i = Model.startPage; i <= Model.endPage; i++)
+                @for (int i = Model.startPage; i <= Model.endPage; i++)
+                {
+                    if (Model.IsActivePage(i))
                     {
-                        if (Model.IsActivePage(i))
-                        {
-                            <li class="active"><a href="@Url.Action("Organization", Model.ParamsForPageNumber(i))">@i</a></li>
-                        }
-                        else
-                        {
-                            <li><a href="@Url.Action("Organization", Model.ParamsForPageNumber(i))">@i</a></li>
-                        }
+                        <li class="active"><a href="@Url.Action("Organization", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
+                    else
+                    {
+                        <li><a href="@Url.Action("Organization", Model.ParamsForPageNumber(i))">@i</a></li>
+                    }
+                }
 
-                    @if (Model.IsNextButtonActive())
-                    {
-                        <li><a href="@Url.Action("Organization", Model.ParamsForNextLink())">Neste &raquo;</a></li>
-                    }
-                    @if (Model.IsLastButtonActive())
-                    {
-                        <li><a aria-label="Siste" title="Siste" href="@Url.Action("Organization", Model.ParamsForLastLink())"> &raquo;</a></li>
-                    }
-                </ul>
+                @if (Model.IsNextButtonActive())
+                {
+                    <li><a href="@Url.Action("Organization", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                }
+                @if (Model.IsLastButtonActive())
+                {
+                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Organization", Model.ParamsForLastLink())"> &raquo;</a></li>
+                }
+            </ul>
 
         </div>
     </div>
@@ -481,20 +481,20 @@
 
                         <div class="col-sm-2 search-results-action-buttons">
 
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" title="Les mer om @item.Title" class="btn btn-default">
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="btn btn-default">
                                 <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
                             </a>
 
 
                             @if (item.ShowMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
                                     <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
                                     <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
@@ -538,7 +538,7 @@
                             }
                             else if (item.ShowDownloadLink())
                             {
-                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
+                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
                                     <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
                                 </a>
                             }
@@ -552,7 +552,7 @@
                         </div>
 
                         <div class="col-sm-1 search-results-action-icons">
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" title="Les mer om @item.Title" class="">
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="">
                                 <span class="custom-icon custom-icon-info"></span>
                             </a>
                         </div>
@@ -561,13 +561,13 @@
                         <div class="col-sm-1 search-results-action-icons action-show-map">
                             @if (item.ShowMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank">
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @item.Title i kart" target="_blank">
                                     <span class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" title="Vis @item.Title i kart" target="_blank">
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @item.Title i kart" target="_blank">
                                     <span class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
@@ -612,7 +612,7 @@
                             }
                             else if (item.ShowDownloadLink())
                             {
-                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" title="Last ned datasett for @item.Title" target="_blank">
+                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @item.Title" target="_blank">
                                     <span class="custom-icon custom-icon-lastned"></span>
                                 </a>
                             }
