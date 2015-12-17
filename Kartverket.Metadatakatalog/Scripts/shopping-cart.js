@@ -25,6 +25,18 @@
     $.cookie(cookieName, cookieValue, { expires: 7, path: '/', domain: cookieDomain });
 }
 
+function updateShoppingCartCookie() {
+    var cookieValue = 0;
+    if (localStorage.getItem("orderItems") != null && localStorage.getItem("orderItems") != "[]") {
+        var orderItems = localStorage.getItem("orderItems");
+        var orderItemsObj = JSON.parse(orderItems);
+        var cookieValue = orderItemsObj.length;
+    } else {
+        cookieValue = 0;
+    }
+    $.cookie(cookieName, cookieValue, { expires: 7, path: '/', domain: cookieDomain });
+}
+
 
 $(window).load(function () {
     updateShoppingCart();

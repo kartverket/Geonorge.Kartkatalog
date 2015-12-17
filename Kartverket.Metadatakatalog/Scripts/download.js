@@ -361,13 +361,13 @@ $(window).load(function () {
               });
         $(this).closest('.order-item').remove();
         updateShoppingCart();
+        updateShoppingCartCookie();
     }));
 
     // Fjerning av alle datasett fra handlekurv
     $('#remove-all-items').click(function () {
         $('#remove-all-items-modal').modal('show')
     });
-
 
     $('#remove-all-items-submit').click(function () {
 
@@ -380,6 +380,7 @@ $(window).load(function () {
         $('#remove-all-items-modal').modal('hide')
         $('.order-item').remove();
         updateShoppingCart();
+        updateShoppingCartCookie();
     });
 
 
