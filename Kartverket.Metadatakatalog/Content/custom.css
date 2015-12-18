@@ -99,6 +99,14 @@ h1.small-h1 {
         background-image: url("img/breadcrumb-arrow.svg");
     }
 
+.panel {
+    border-radius: 0;
+}
+
+.panel-heading {
+    border-radius: 0;
+}
+
 aside ul li, .container-footer ul li {
     background-image: url("img/arrow-right.svg");
 }

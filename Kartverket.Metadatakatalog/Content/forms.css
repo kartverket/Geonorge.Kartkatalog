@@ -76,9 +76,9 @@ textarea {
             display: none;
         }
 
-.custom-select.input-group select{
-    margin-bottom: 0;
-}
+    .custom-select.input-group select {
+        margin-bottom: 0;
+    }
 
 .container .searchbar input {
     border-radius: 0px !important;
@@ -88,3 +88,8 @@ textarea {
     .container .searchbar input:focus {
         border: none;
     }
+
+
+.input-group-addon {
+    border-radius: 0;
+}
