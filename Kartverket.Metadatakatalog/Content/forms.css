@@ -32,12 +32,12 @@ input.form-control {
     }
 
 
-textarea {
+textarea, textarea.form-control {
     border: 1px solid #968c83;
     font-family: 'Open Sans', sans-serif;
     font-size: 12pt;
     min-height: 180px;
-    padding: 15px 15px;
+    padding: 6px 15px;
     width: 100%;
     border-radius: 0;
     box-shadow: none;

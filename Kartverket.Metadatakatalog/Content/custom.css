@@ -213,7 +213,7 @@ h1 .label {
     border-radius: 0;
 }
 
-.help-text{
+.help-text {
     border-radius: 0;
 }
 
@@ -409,3 +409,53 @@ input[readonly] {
 .nav-tabs > li > a {
     font-size: 13px;
 }
+
+.label-list {
+    padding: 0;
+    border: 1px solid #CFCFCF;
+    padding: 0 8px;
+    min-height: 60px;
+}
+
+    .label-list li {
+        background-color: #EFEEED;
+        line-height: 1;
+        font-family: "Open Sans",sans-serif;
+        font-size: 12pt;
+        color: #414042;
+        height: 25px;
+        padding: 0.2em 2em 0.3em 0.6em;
+        vertical-align: baseline;
+        font-style: normal;
+        display: inline-block;
+        position: relative;
+        margin: 3px 5px 3px 0px;
+    }
+
+        .label-list li .label-list-remove {
+            position: absolute;
+            top: 0;
+            right: 0;
+            text-decoration: none;
+            background-color: #7DA1C4;
+            line-height: 19pt;
+            color: #FFF;
+            font-size: 10pt;
+            padding: 0px 5px;
+            right: 0px;
+            height: 25px;
+            display: inline-block;
+            width: 23px;
+            transition: all 0.35s linear 0s;
+        }
+
+            .label-list li .label-list-remove:hover {
+                text-decoration: none;
+                color: #FFF;
+                background-color: #FE5000;
+            }
+
+            .label-list li .label-list-remove:before {
+                font-family: "Glyphicons Halflings";
+                content: "\e014";
+            }
