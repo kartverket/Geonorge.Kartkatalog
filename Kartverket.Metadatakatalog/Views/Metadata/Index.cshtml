@@ -479,7 +479,7 @@
                         </p>
                     }
                 }
-                @if (Model.DistributionDetails != null)
+                @if (Model.DistributionDetails != null && Model.DistributionDetails.Protocol != null && Model.DistributionDetails.Protocol != "GEONORGE:OFFLINE")
                 {
                     <text>@DisplayValue("Distribusjonstype", Model.DistributionDetails.Protocol)</text>
                     if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
