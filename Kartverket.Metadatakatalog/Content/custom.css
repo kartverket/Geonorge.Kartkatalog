@@ -213,9 +213,13 @@ h1 .label {
     border-radius: 0;
 }
 
+.help-text{
+    border-radius: 0;
+}
+
 .pagination li a, .btn {
-    height: 30px;
-    line-height: 12pt;
+    height: 34px;
+    line-height: 16pt;
 }
 
 
@@ -243,7 +247,8 @@ h1 .label {
         font-size: 12pt;
         display: inline;
         position: relative;
-        bottom: -4px;
+        bottom: -5px;
+        line-height: 25pt;
     }
 
     .search-result-navigation .save-as-menu {
