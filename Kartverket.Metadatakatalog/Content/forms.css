@@ -76,6 +76,10 @@ textarea {
             display: none;
         }
 
+.custom-select.input-group select{
+    margin-bottom: 0;
+}
+
 .container .searchbar input {
     border-radius: 0px !important;
     font-size: 14pt !important;
