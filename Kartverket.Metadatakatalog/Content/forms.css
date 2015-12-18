@@ -89,6 +89,9 @@ textarea {
         border: none;
     }
 
+.input-group {
+    margin-bottom: 10px;
+}
 
 .input-group-addon {
     border-radius: 0;
