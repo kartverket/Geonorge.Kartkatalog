@@ -311,7 +311,7 @@ function generateView(template, orderItems) {
         var supportsAreaSelection = (localStorage.getItem(uuid + '.capabilities.supportsAreaSelection') === "true");
         var metadata = JSON.parse(localStorage.getItem(uuid + '.metadata'));
 
-        $("#orderuuid" + uuid + " .order-title").text(metadata.name);
+        $("#orderuuid" + uuid + " .order-title").html(metadata.name);
         $("#orderuuid" + uuid + " .order-title").attr('href', metadata.url);
         $("#orderuuid" + uuid + " .order-img").attr('src', metadata.organizationLogoUrl);
 
