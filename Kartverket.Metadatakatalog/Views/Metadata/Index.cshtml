@@ -287,14 +287,7 @@
 
             @if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
             {
-                foreach (var thumb in Model.Thumbnails)
-                {
-                    if (thumb.Type == "thumbnail" || thumb.Type == "miniatyrbilde")
-                    {
-                        <img src="@thumb.URL" width="300" class="pull-right" alt="Forhåndsvisning av data." />
-                        break;
-                    }
-                }
+                <img src="@Url.Action("Index", "Thumbnail", new {uuid = Model.Uuid, type="small" })" width="300" class="pull-right" alt="Forhåndsvisning av data." />
             }
         </div>
     </aside>

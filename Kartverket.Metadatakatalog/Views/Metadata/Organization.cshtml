@@ -628,10 +628,8 @@
                         <div class="col-sm-2 search-results-list-image">
                             @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
                             {
-                                System.Uri thumbnailUrl = new Uri(item.ThumbnailUrl);
-                                string relativeThunbnailUrl = "//" + thumbnailUrl.Host + thumbnailUrl.PathAndQuery;
                                 <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                    <img src="@relativeThunbnailUrl" />
+                                    <img src="@Url.Action("Index", "Thumbnail", new {uuid = item.Uuid })" />
                                 </a>
                             }
 
@@ -641,13 +639,11 @@
 
                     if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
                     {
-                        System.Uri thumbnailUrl = new Uri(item.ThumbnailUrl);
-                        string relativeThunbnailUrl = "//" + thumbnailUrl.Host + thumbnailUrl.PathAndQuery;
                         <div class="search-results-gallery-image layoutblock">
                             <div class="block shortcutpageteaserblock size-4 col-sm-4">
                                 <div class="teaser-with-background-image">
                                     <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                        <div class="teaser-background-image" style="background: url(@relativeThunbnailUrl) no-repeat center;">
+                                        <div class="teaser-background-image" style="background: url(@Url.Action("Index", "Thumbnail", new {uuid = item.Uuid })) no-repeat center;">
                                             <div class="teaser-overlay">
                                                 <div class="teaser-caption">
                                                     <div class="teaser-heading">@item.Title</div>
