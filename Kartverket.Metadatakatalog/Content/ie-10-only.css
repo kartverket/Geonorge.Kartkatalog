@@ -8,3 +8,21 @@ html[data-useragent*='MSIE 10.0'] .input-group .btn.btn-fullheight {
     top: 0;
     right: -39px;
 }
+
+
+
+html[data-useragent*='MSIE 10.0'] .custom-select{
+    background-image: none;
+}
+
+html[data-useragent*='MSIE 10.0'] .custom-select select, html[data-useragent*='MSIE 10.0'] .custom-select select.form-control{
+    -moz-appearance: menulist!important;
+    -webkit-appearance: menulist!important;
+    appearance: menulist!important;
+    -ms-appearance: menulist!important;
+    -o-appearance: menulist!important;
+}
+
+html[data-useragent*='MSIE 10.0'] select::-ms-expand{
+    display: block;
+}
