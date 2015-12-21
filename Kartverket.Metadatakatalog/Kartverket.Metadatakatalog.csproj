@@ -408,11 +408,13 @@
     <Content Include="fonts\web.config" />
     <Content Include="Images\Arrow_414042_12px_mobile.svg" />
     <Content Include="Images\Dot_ffffff_8px-01.png" />
+    <Content Include="Images\geonorge_devlogo.svg" />
+    <Content Include="Images\geonorge_testlogo.svg" />
     <Content Include="KartverketSharedMenu\web.config" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Images\arrow_ffffff_13px-01.svg" />
-    <Content Include="Images\geonorge_logo_350px.svg" />
+    <Content Include="Images\geonorge_logo.svg" />
     <Content Include="Images\gif_loading-01.gif" />
     <Content Include="Images\search_icon-01.svg" />
     <Content Include="Images\shopping_cart_968c83_ikon-01.svg" />
