@@ -32,16 +32,16 @@ input.form-control {
     }
 
 
-textarea, textarea.form-control {
-    border: 1px solid #968c83;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 12pt;
-    min-height: 180px;
-    padding: 6px 15px;
-    width: 100%;
-    border-radius: 0;
-    box-shadow: none;
-}
+    textarea, textarea.form-control {
+        border: 1px solid #968c83;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 12pt;
+        min-height: 180px;
+        padding: 6px 15px;
+        width: 100%;
+        border-radius: 0;
+        box-shadow: none;
+    }
 
 .custom-select {
     background-color: #FFF;
@@ -98,4 +98,9 @@ textarea, textarea.form-control {
 
 .input-group-addon {
     border-radius: 0;
+}
+
+.form-horizontal .form-group {
+    margin-right: 0;
+    margin-left: 0;
 }
