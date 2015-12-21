@@ -324,6 +324,7 @@
 
                                 @foreach (var relatedContent in Model.Related)
                                 {
+                                    if(relatedContent != null) { 
 
                                     var relatedContentHierarchyLevelCssClass = "";
                                     var relatedContentHierarchyLevelLabelText = "";
@@ -412,6 +413,7 @@
 
                                     </div>
                                     <hr />
+                                    }
                                 }
                             </div>
 
