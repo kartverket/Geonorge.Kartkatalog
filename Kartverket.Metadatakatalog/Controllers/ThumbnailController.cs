@@ -19,7 +19,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             _metadataService = metadataService;
         }
 
-
+        [OutputCache(Duration = 86400)]
         public ActionResult Index(string uuid, string type="default")
         {
             try
