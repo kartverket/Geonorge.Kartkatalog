@@ -33,7 +33,7 @@ input.form-control {
 
 
     textarea, textarea.form-control {
-        border: 1px solid #968c83;
+        border: 1px solid #CFCFCF;
         font-family: 'Open Sans', sans-serif;
         font-size: 12pt;
         min-height: 180px;
@@ -103,4 +103,11 @@ input.form-control {
 .form-horizontal .form-group {
     margin-right: 0;
     margin-left: 0;
+}
+
+.required-indicator::after,
+.form-group.required .control-label::after,
+.panel-heading.required::after {
+    content: "*";
+    color: #ED1C24;
 }

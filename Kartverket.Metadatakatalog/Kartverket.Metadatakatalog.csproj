@@ -409,6 +409,7 @@
     <Content Include="Images\Arrow_414042_12px_mobile.svg" />
     <Content Include="Images\Dot_ffffff_8px-01.png" />
     <Content Include="Images\geonorge_devlogo.svg" />
+    <Content Include="Images\geonorge_logo_350px.svg" />
     <Content Include="Images\geonorge_testlogo.svg" />
     <Content Include="KartverketSharedMenu\web.config" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

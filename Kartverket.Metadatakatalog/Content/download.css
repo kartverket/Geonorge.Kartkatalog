@@ -81,6 +81,7 @@
 
     .chosen-input-group button.btn {
         border-radius: 0;
+        z-index: 1!important;
     }
 
         .chosen-input-group button.btn:hover {
