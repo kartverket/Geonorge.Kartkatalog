@@ -241,6 +241,7 @@ h1 .label {
 }
 
 .search-result-navigation {
+    min-height: 44px;
 }
 
     .search-result-navigation p {
