@@ -139,7 +139,7 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
                 orderItemSelectOmraader.prepend($("<option />").val(val.type + '_' + val.code).text('Hele landet'));
             }
             else {
-                orderItemSelectOmraader.append($("<option />").val(val.code).text(val.name));
+                orderItemSelectOmraader.prepend($("<option />").val(val.type + '_' + val.code).text(val.name));
             }
         });
     } else {
