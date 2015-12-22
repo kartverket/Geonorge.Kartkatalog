@@ -107,5 +107,5 @@ input.form-control {
 
 .required-indicator::after{
     content: "*";
-    color: #FE5000;
+    color: #ED1C24;
 }
