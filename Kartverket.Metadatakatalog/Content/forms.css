@@ -104,3 +104,8 @@ input.form-control {
     margin-right: 0;
     margin-left: 0;
 }
+
+.required-indicator::after{
+    content: "*";
+    color: #FE5000;
+}
