@@ -115,6 +115,10 @@ aside ul li, .container-footer ul li {
     margin-top: 10px;
 }
 
+.facet-sok-emne {
+    margin-top: 4px;
+}
+
 .facet-sok-tittel {
     display: block;
     margin-top: 6px;
