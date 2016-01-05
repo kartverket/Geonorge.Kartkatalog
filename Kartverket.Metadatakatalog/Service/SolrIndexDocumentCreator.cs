@@ -250,7 +250,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                     var filterNames = new ItemsChoiceType23[]
                     {
-                        ItemsChoiceType23.PropertyIsLike, 
+                        ItemsChoiceType23.PropertyIsLike,
                     };
 
                     var res = geoNorge.SearchWithFilters(filters, filterNames, 1, 200);
@@ -275,17 +275,19 @@ namespace Kartverket.Metadatakatalog.Service
                             string serviceId = ((www.opengis.net.DCMIRecordType)(res.Items[s])).Items[0].Text[0];
                             MD_Metadata_Type md = geoNorge.GetRecordByUuid(serviceId);
                             var simpleMd = new SimpleMetadata(md);
-                            datasetServices.Add(new MetaDataEntry 
+                            datasetServices.Add(new MetaDataEntry
                             {
-                                Uuid = simpleMd.Uuid, Title= simpleMd.Title, ParentIdentifier = simpleMd.ParentIdentifier,
+                                Uuid = simpleMd.Uuid,
+                                Title = simpleMd.Title,
+                                ParentIdentifier = simpleMd.ParentIdentifier,
                                 HierarchyLevel = simpleMd.HierarchyLevel,
                                 ContactOwnerOrganization = (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null) ? simpleMd.ContactOwner.Organization : "",
                                 DistributionDetailsName = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Name != null) ? simpleMd.DistributionDetails.Name : "",
-                                DistributionDetailsProtocol= (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
+                                DistributionDetailsProtocol = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
                                 DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
                             });
                         }
-                        
+
                         //Get Services
                         List<MetaDataEntry> datasetServicesParents = new List<MetaDataEntry>();
                         datasetServicesParents = datasetServices.Where(s => s.ParentIdentifier == null).Distinct().OrderBy(o => o.Title).ToList();
@@ -315,7 +317,48 @@ namespace Kartverket.Metadatakatalog.Service
                         indexDoc.DatasetServices = datasetServicesNewList.ToList();
 
                     }
-               
+
+                }
+
+                else if (indexDoc.Type == "dimensionGroup")
+                {
+                    if (simpleMetadata.OperatesOn != null)
+                    {
+
+                        List<MetaDataEntry> bundles = new List<MetaDataEntry>();
+
+                        foreach (var rel in simpleMetadata.OperatesOn)
+                        {
+                            try
+                            {
+                                MD_Metadata_Type md = geoNorge.GetRecordByUuid(rel);
+                                var simpleMd = new SimpleMetadata(md);
+                                bundles.Add(new MetaDataEntry
+                                {
+                                    Uuid = simpleMd.Uuid,
+                                    Title = simpleMd.Title,
+                                    ParentIdentifier = simpleMd.ParentIdentifier,
+                                    HierarchyLevel = simpleMd.HierarchyLevel,
+                                    ContactOwnerOrganization = (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null) ? simpleMd.ContactOwner.Organization : "",
+                                    DistributionDetailsName = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Name != null) ? simpleMd.DistributionDetails.Name : "",
+                                    DistributionDetailsProtocol = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
+                                    DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
+                                });                               
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        }
+
+                        List<string> bundlesNewList = new List<string>();
+                        foreach (var bundle in bundles)
+                        {
+                            bundlesNewList.Add(bundle.Uuid + "|" + bundle.Title + "|" + bundle.ParentIdentifier + "|" + bundle.HierarchyLevel + "|" + bundle.ContactOwnerOrganization + "|" + bundle.DistributionDetailsName + "|" + bundle.DistributionDetailsProtocol + "|" + bundle.DistributionDetailsUrl);
+                        }
+
+                        indexDoc.Bundles = bundlesNewList.ToList();
+
+                    }
                 }
 
                 //add DistributionProtocols

@@ -111,20 +111,6 @@ namespace Kartverket.Metadatakatalog.Service
                     metadata.OrganizationLogoUrl = organization.LogoUrl;
                 }
             }
-
-            if(metadata.OperatesOn != null) {
-                metadata.Related = new List<MetadataViewModel>();
-                foreach (var rel in metadata.OperatesOn)
-                {
-                    try
-                    {
-                        metadata.Related.Add(GetMetadataByUuid(rel));
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                }
-            }
             
             SearchParameters parameters = new SearchParameters();
             parameters.Text = simpleMetadata.Uuid;
@@ -159,6 +145,36 @@ namespace Kartverket.Metadatakatalog.Service
                         }
                     }
                 }
+
+
+                var bundles = searchResult.Items[0].Bundles;
+
+                if (bundles != null && bundles.Count > 0)
+                {
+                    metadata.Related = new List<MetadataViewModel>();
+
+                    foreach (var relatert in bundles)
+                    {
+                        var relData = relatert.Split('|');
+
+                        try
+                        {
+                            MetadataViewModel md = new MetadataViewModel();
+                            md.Uuid = relData[0] != null ? relData[0] : "";
+                            md.Title = relData[1] != null ? relData[1] : "";
+                            md.ParentIdentifier = relData[2] != null ? relData[2] : "";
+                            md.HierarchyLevel = relData[3] != null ? relData[3] : "";
+                            md.ContactOwner = relData[4] != null ? new Contact { Role = "owner", Organization = relData[4] } : new Contact { Role = "owner", Organization = "" };
+                            md.DistributionDetails = new DistributionDetails { Name = relData[5] != null ? relData[5] : "", Protocol = relData[6] != null ? relData[6] : "", URL = relData[7] != null ? relData[7] : "" };
+
+                            metadata.Related.Add(md);
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                }
+
             }
 
             return metadata;
