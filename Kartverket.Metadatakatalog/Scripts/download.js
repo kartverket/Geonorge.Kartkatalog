@@ -106,9 +106,13 @@ $(document).ready(function () {
         });
     }
 
+    var mapLoaded = false;
 
     // Legge til uuid i _NorgesKart
     $('#orderlist').on('click', 'button.selectPolygon-button', (function (e) {
+        if (!mapLoaded)
+            loadMap();
+        mapLoaded = true;
         var uuid = $(this).attr('uuid');
         $('#norgeskartmodal #setcoordinates').attr('uuid', uuid);
     }));

@@ -14,7 +14,7 @@
 </div>
 <script>
     var CLIPPERCOORDS;
-    $(document).ready(function () {
+    function loadMap () {
         var socket = new easyXDM.Socket({
             remote: "@Html.SecureNorgeskartUrl()select.html",
             onMessage: function (message, origin) {
@@ -30,7 +30,7 @@
                 this.container.getElementsByTagName("iframe")[0].style.width = "100%";
             }
         });
-    });
+    };
 
     function setCoordinates() {
         uuid = $('#setcoordinates').attr('uuid');
