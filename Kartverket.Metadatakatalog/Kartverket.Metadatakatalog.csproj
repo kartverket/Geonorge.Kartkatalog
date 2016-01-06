@@ -342,7 +342,6 @@
     <Content Include="Content\img\ikoner\lastned.svg" />
     <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\lock.png" />
-    <Content Include="Content\img\logo-graphic-512.png" />
     <Content Include="Content\img\opendata.png" />
     <Content Include="Content\img\unlock.png" />
     <Content Include="Content\jquery-ui.css" />
