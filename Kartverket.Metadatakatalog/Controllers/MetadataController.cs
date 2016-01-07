@@ -55,7 +55,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         private MetadataViewModel Sort(MetadataViewModel model, string orderby)
         {
             
-            if (model.Related != null)
+            if (model != null && model.Related != null)
             {
                 if (orderby == "title")
                     model.Related = model.Related.OrderBy(o => o.Title).ToList();
