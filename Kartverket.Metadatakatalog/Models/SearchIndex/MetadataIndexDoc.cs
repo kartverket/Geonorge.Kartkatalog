@@ -45,6 +45,9 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("organization_seo_lowercase")]
         public string OrganizationSeoName { get; set; }
 
+        [SolrField("organization_shortname")]
+        public string OrganizationShortName { get; set; }
+
         [SolrField("topic_category")]
         public string TopicCategory { get; set; }
 

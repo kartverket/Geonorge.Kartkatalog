@@ -118,6 +118,9 @@ namespace Kartverket.Metadatakatalog.Service
                     Organization organization = organizationTask.Result;
                     if (organization != null)
                     {
+                        if(!string.IsNullOrEmpty(organization.ShortName))
+                            indexDoc.OrganizationShortName = organization.ShortName;
+
                         indexDoc.OrganizationLogoUrl = organization.LogoUrl;
                         try
                         {
