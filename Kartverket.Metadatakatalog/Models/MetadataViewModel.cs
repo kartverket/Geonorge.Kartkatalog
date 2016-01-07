@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Routing;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -61,6 +62,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string MetadataStandardVersion { get; set; }
         public List<string> OperatesOn { get; set; }
         public List<MetadataViewModel> Related { get; set; }
+        public string orderby { get; set; }
         public string ProcessHistory { get; set; }
         public string ProductPageUrl { get; set; }
         public string ProductSheetUrl { get; set; }
@@ -357,6 +359,34 @@ namespace Kartverket.Metadatakatalog.Models
             zoomLevel = (zoom1 < zoom2) ? zoom1 : zoom2; 
 
             return Convert.ToInt16(zoomLevel);
+        }
+
+        public RouteValueDictionary ParamsForOrderByTitleLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues["orderby"] = "title";
+            return routeValues;
+        }
+
+        public RouteValueDictionary ParamsForOrderByTitleDescLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues["orderby"] = "title_desc";
+            return routeValues;
+        }
+
+        public RouteValueDictionary ParamsForOrderByOrganizationLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues["orderby"] = "organization";
+            return routeValues;
+        }
+
+        public RouteValueDictionary ParamsForOrderByOrganizationDescLink()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues["orderby"] = "organization_desc";
+            return routeValues;
         }
 
     }

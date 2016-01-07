@@ -4,6 +4,8 @@ using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Search;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -21,12 +23,13 @@ namespace Kartverket.Metadatakatalog.Controllers
             _searchService = searchService;
         }
 
-        public ActionResult Index(string uuid, string organization = null, string title = null)
+        public ActionResult Index(string uuid, string organization = null, string title = null, string orderby = "title")
         {
             MetadataViewModel model = null;
             try
             {
                 model = _metadataService.GetMetadataByUuid(uuid);
+                model = Sort(model, orderby);
             }
             catch (InvalidOperationException exception)
             {
@@ -47,6 +50,24 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View(model);
             
 
+        }
+
+        private MetadataViewModel Sort(MetadataViewModel model, string orderby)
+        {
+            
+            if (model.Related != null)
+            {
+                if (orderby == "title")
+                    model.Related = model.Related.OrderBy(o => o.Title).ToList();
+                else if(orderby == "title_desc")
+                    model.Related = model.Related.OrderByDescending(o => o.Title).ToList();
+                else if (orderby == "organization")
+                    model.Related = model.Related.OrderBy(o => o.ContactOwner.Organization).ToList();
+                else if (orderby == "organization_desc")
+                    model.Related = model.Related.OrderByDescending(o => o.ContactOwner.Organization).ToList();
+            }
+
+            return model;
         }
 
         public ActionResult Organization(SearchByOrganizationParameters parameters)

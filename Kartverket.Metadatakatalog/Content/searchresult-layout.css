@@ -44,6 +44,12 @@
                 margin-bottom: 4px;
             }
 
+                #tableView .search-results-table-heading > div > p a {
+                    font-size: 12pt;
+                    line-height: 14pt;
+                    text-decoration: none;
+                }
+
     #tableView .active-orderby .orderby-indicator {
         width: 10pt;
         height: 10pt;

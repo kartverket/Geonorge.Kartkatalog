@@ -305,9 +305,11 @@
                         <div id="tableView" class="search-results">
                             <div id="relatedList">
                                 <div class="row search-results-table-heading">
-                                    <div class="col-sm-3"><p>Tittel</p></div>
+                                    <div class="col-sm-3 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" class="table-ordering">Tittel<span class="orderby-indicator"></span></a></p></div>
+                                    <div class="col-sm-3 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleDescLink())" class="table-ordering">Tittel<span class="orderby-indicator"></span></a></p></div>
                                     <div class="col-sm-2"><p>Type</p></div>
-                                    <div class="col-sm-3"><p>Eier</p></div>
+                                    <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" class="table-ordering">Dataeier<span class="orderby-indicator"></span></a></p></div>
+                                    <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering">Dataeier<span class="orderby-indicator"></span></a></p></div>
                                     <div class="col-sm-1"></div>
                                     <div class="col-sm-1"><p>Les mer</p></div>
                                     <div class="col-sm-1"><p>Vis i kart</p></div>
@@ -411,26 +413,6 @@
                             </div>
 
                         </div>
-                        <script>
-
-                            $(function () {
-                                $.fn.sortList = function () {
-                                    var mylist = $(this);
-                                    var listitems = $('li', mylist).get();
-                                    listitems.sort(function (a, b) {
-                                        var compA = $(a).text().toUpperCase();
-                                        var compB = $(b).text().toUpperCase();
-                                        return (compA < compB) ? -1 : 1;
-                                    });
-                                    $.each(listitems, function (i, itm) {
-                                        alert
-                                        mylist.append(itm);
-                                    });
-
-                                }
-                            });
-                            setTimeout('$("ul#relatedList").sortList()', 3000);
-                        </script>
                     }
                 }
 
