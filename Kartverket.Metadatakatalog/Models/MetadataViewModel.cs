@@ -62,7 +62,6 @@ namespace Kartverket.Metadatakatalog.Models
         public string MetadataStandardVersion { get; set; }
         public List<string> OperatesOn { get; set; }
         public List<MetadataViewModel> Related { get; set; }
-        public string orderby { get; set; }
         public string ProcessHistory { get; set; }
         public string ProductPageUrl { get; set; }
         public string ProductSheetUrl { get; set; }
@@ -229,34 +228,6 @@ namespace Kartverket.Metadatakatalog.Models
         public bool IsDatasetBundle()
         {
             return HierarchyLevel == "dimensionGroup";
-        }
-
-        public string MaintenanceFrequencyTranslated()
-        {
-            if (MaintenanceFrequency == null)
-                return null;
-
-            string translated = GetListOfMaintenanceFrequencyValues()[MaintenanceFrequency];
-            return translated ?? MaintenanceFrequency;
-        }
-
-        private Dictionary<string, string> GetListOfMaintenanceFrequencyValues()
-        {
-            return new Dictionary<string, string>
-            {
-                {"continual", "Kontinuerlig"},
-                {"daily", "Daglig"},
-                {"weekly", "Ukentlig"},
-                {"fortnightly", "Annenhver uke"},
-                {"monthly", "Månedlig"},
-                {"quarterly", "Hvert kvartal"},
-                {"biannually", "Hvert halvår"},
-                {"annually", "Årlig"},
-                {"asNeeded", "Etter behov"},
-                {"irregular", "Ujevnt"},
-                {"notPlanned", "Ikke planlagt"},
-                {"unknown", "Ukjent"},
-            };
         }
 
 

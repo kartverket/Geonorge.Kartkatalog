@@ -17,6 +17,7 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly IGeonorgeUrlResolver _geonorgeUrlResolver;
         private readonly IOrganizationService _organizationService;
         private readonly ISearchService _searchService;
+        RegisterFetcher register;
 
         public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService)
         {
@@ -39,6 +40,9 @@ namespace Kartverket.Metadatakatalog.Service
 
         private MetadataViewModel CreateMetadataViewModel(SimpleMetadata simpleMetadata)
         {
+
+            register = new RegisterFetcher();
+
             var metadata = new MetadataViewModel
             {
                 
@@ -64,7 +68,7 @@ namespace Kartverket.Metadatakatalog.Service
                 KeywordsNationalTheme = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME)),
                 KeywordsOther = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, null)),
                 LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl,
-                MaintenanceFrequency = simpleMetadata.MaintenanceFrequency,
+                MaintenanceFrequency = register.GetMaintenanceFrequency(simpleMetadata.MaintenanceFrequency),
                 MetadataLanguage = simpleMetadata.MetadataLanguage,
                 MetadataStandard = simpleMetadata.MetadataStandard,
                 MetadataStandardVersion = simpleMetadata.MetadataStandardVersion,
@@ -78,13 +82,13 @@ namespace Kartverket.Metadatakatalog.Service
                 QualitySpecification = Convert(simpleMetadata.QualitySpecification),
                 ReferenceSystem = Convert(simpleMetadata.ReferenceSystem),
                 ResolutionScale = simpleMetadata.ResolutionScale,
-                SpatialRepresentation = simpleMetadata.SpatialRepresentation,
+                SpatialRepresentation = register.GetSpatialRepresentation(simpleMetadata.SpatialRepresentation),
                 SpecificUsage = simpleMetadata.SpecificUsage,
-                Status = simpleMetadata.Status,
+                Status = register.GetStatus(simpleMetadata.Status),
                 SupplementalDescription = simpleMetadata.SupplementalDescription,
                 Thumbnails = Convert(simpleMetadata.Thumbnails, simpleMetadata.Uuid),
                 Title = simpleMetadata.Title,
-                TopicCategory = simpleMetadata.TopicCategory,
+                TopicCategory = register.GetTopicCategory(simpleMetadata.TopicCategory),
                 Uuid = simpleMetadata.Uuid,
                 MetadataXmlUrl = _geoNetworkUtil.GetXmlDownloadUrl(simpleMetadata.Uuid),
                 MetadataEditUrl = _geonorgeUrlResolver.EditMetadata(simpleMetadata.Uuid),
@@ -299,9 +303,9 @@ namespace Kartverket.Metadatakatalog.Service
                     OtherConstraints = simpleConstraints.OtherConstraints,
                     OtherConstraintsLink = simpleConstraints.OtherConstraintsLink,
                     OtherConstraintsLinkText = simpleConstraints.OtherConstraintsLinkText,
-                    SecurityConstraints = simpleConstraints.SecurityConstraints,
+                    SecurityConstraints = register.GetClassification(simpleConstraints.SecurityConstraints),
                     SecurityConstraintsNote = simpleConstraints.SecurityConstraintsNote,
-                    UseConstraints = simpleConstraints.UseConstraints,
+                    UseConstraints = register.GetRestriction(simpleConstraints.UseConstraints),
                     UseLimitations = simpleConstraints.UseLimitations
                 };
             }

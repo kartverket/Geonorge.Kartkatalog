@@ -548,9 +548,9 @@
                 {
                     <p><strong>Gyldighetsperiode:</strong> @Html.DisplayFor(m => m.DateMetadataValidFrom) - @Html.DisplayFor(m => m.DateMetadataValidTo) </p>
                 }
-                @if (Model.MaintenanceFrequencyTranslated() != null)
+                @if (Model.MaintenanceFrequency != null)
                 {
-                    <p><strong>Oppdateringshyppighet:</strong> @Model.MaintenanceFrequencyTranslated()</p>
+                    <p><strong>Oppdateringshyppighet:</strong> @Model.MaintenanceFrequency</p>
                 }
                 @if (Model.KeywordsPlace != null && Model.KeywordsPlace.Count > 0)
                 {
