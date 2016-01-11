@@ -141,6 +141,15 @@ namespace Kartverket.Metadatakatalog.Service
                             md.HierarchyLevel = relData[3] != null ? relData[3] : "";
                             md.ContactOwner = relData[4] != null ? new Contact { Role = "owner", Organization = relData[4]} : new Contact { Role = "owner", Organization = "" };
                             md.DistributionDetails = new DistributionDetails { Name = relData[5] != null ? relData[5] : "" , Protocol = relData[6] != null ? relData[6] : "", URL = relData[7] != null ? relData[7] : "" };
+                            if(!string.IsNullOrEmpty(relData[8]))
+                                md.KeywordsNationalTheme = new List<Keyword> { new Keyword { KeywordValue = relData[8], Thesaurus = SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE } } ;
+                            md.OrganizationLogoUrl = relData[9];
+                            if (!string.IsNullOrEmpty(relData[10]))
+                            {
+                                md.Thumbnails = new List<Thumbnail>();
+                                md.Thumbnails.Add(new Thumbnail { Type = "miniatyrbilde", URL = relData[10] });
+                            }
+                                
 
                             metadata.Related.Add(md);
                         }
@@ -170,6 +179,14 @@ namespace Kartverket.Metadatakatalog.Service
                             md.HierarchyLevel = relData[3] != null ? relData[3] : "";
                             md.ContactOwner = relData[4] != null ? new Contact { Role = "owner", Organization = relData[4] } : new Contact { Role = "owner", Organization = "" };
                             md.DistributionDetails = new DistributionDetails { Name = relData[5] != null ? relData[5] : "", Protocol = relData[6] != null ? relData[6] : "", URL = relData[7] != null ? relData[7] : "" };
+                            if (!string.IsNullOrEmpty(relData[8]))
+                                md.KeywordsNationalTheme = new List<Keyword> { new Keyword { KeywordValue = relData[8], Thesaurus = SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE } };
+                            md.OrganizationLogoUrl = relData[9];
+                            if (!string.IsNullOrEmpty(relData[10]))
+                            {
+                                md.Thumbnails = new List<Thumbnail>();
+                                md.Thumbnails.Add(new Thumbnail { Type = "miniatyrbilde", URL = relData[10] });
+                            }
 
                             metadata.Related.Add(md);
                         }

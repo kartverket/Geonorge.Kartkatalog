@@ -278,6 +278,31 @@ namespace Kartverket.Metadatakatalog.Service
                             string serviceId = ((www.opengis.net.DCMIRecordType)(res.Items[s])).Items[0].Text[0];
                             MD_Metadata_Type md = geoNorge.GetRecordByUuid(serviceId);
                             var simpleMd = new SimpleMetadata(md);
+
+                            SimpleKeyword nationalTheme = SimpleKeyword.Filter(simpleMd.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME).FirstOrDefault();
+                            string keywordNationalTheme = "";
+                            if (nationalTheme != null)
+                                keywordNationalTheme = nationalTheme.Keyword;
+
+                            string OrganizationLogoUrl = "";
+                            if(simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
+                            { 
+                                Task<Organization> organizationTaskRel =
+                                _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
+                                Organization organizationRel = organizationTaskRel.Result;
+                                if (organizationRel != null)
+                                {
+                                    OrganizationLogoUrl = organizationRel.LogoUrl;
+                                }
+                            }
+
+                            string thumbnailsUrl = "";
+                            List<SimpleThumbnail> thumbnailsRel = simpleMd.Thumbnails;
+                            if (thumbnailsRel != null && thumbnailsRel.Count > 0)
+                            { 
+                            thumbnailsUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMd.Uuid, thumbnailsRel[thumbnailsRel.Count - 1].URL);
+                            }
+
                             datasetServices.Add(new MetaDataEntry
                             {
                                 Uuid = simpleMd.Uuid,
@@ -288,6 +313,9 @@ namespace Kartverket.Metadatakatalog.Service
                                 DistributionDetailsName = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Name != null) ? simpleMd.DistributionDetails.Name : "",
                                 DistributionDetailsProtocol = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
                                 DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
+                                KeywordNationalTheme = keywordNationalTheme,
+                                OrganizationLogoUrl = OrganizationLogoUrl,
+                                ThumbnailUrl = thumbnailsUrl
                             });
                         }
 
@@ -314,7 +342,7 @@ namespace Kartverket.Metadatakatalog.Service
                         List<string> datasetServicesNewList = new List<string>();
                         foreach (var service in datasetServicesOrganizedList)
                         {
-                            datasetServicesNewList.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl);
+                            datasetServicesNewList.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl + "|" + service.KeywordNationalTheme + "|" + service.OrganizationLogoUrl + "|" + service.ThumbnailUrl);
                         }
 
                         indexDoc.DatasetServices = datasetServicesNewList.ToList();
@@ -336,6 +364,31 @@ namespace Kartverket.Metadatakatalog.Service
                             {
                                 MD_Metadata_Type md = geoNorge.GetRecordByUuid(rel);
                                 var simpleMd = new SimpleMetadata(md);
+
+                                SimpleKeyword nationalTheme = SimpleKeyword.Filter(simpleMd.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME).FirstOrDefault();
+                                string keywordNationalTheme = "";
+                                if (nationalTheme != null)
+                                    keywordNationalTheme = nationalTheme.Keyword;
+
+                                string OrganizationLogoUrl = "";
+                                if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
+                                {
+                                    Task<Organization> organizationTaskRel =
+                                    _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
+                                    Organization organizationRel = organizationTaskRel.Result;
+                                    if (organizationRel != null)
+                                    {
+                                        OrganizationLogoUrl = organizationRel.LogoUrl;
+                                    }
+                                }
+
+                                string thumbnailsUrl = "";
+                                List<SimpleThumbnail> thumbnailsRel = simpleMd.Thumbnails;
+                                if (thumbnailsRel != null && thumbnailsRel.Count > 0)
+                                {
+                                    thumbnailsUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMd.Uuid, thumbnailsRel[thumbnailsRel.Count - 1].URL);
+                                }
+
                                 bundles.Add(new MetaDataEntry
                                 {
                                     Uuid = simpleMd.Uuid,
@@ -346,6 +399,9 @@ namespace Kartverket.Metadatakatalog.Service
                                     DistributionDetailsName = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Name != null) ? simpleMd.DistributionDetails.Name : "",
                                     DistributionDetailsProtocol = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
                                     DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
+                                    KeywordNationalTheme = keywordNationalTheme,
+                                    OrganizationLogoUrl = OrganizationLogoUrl,
+                                    ThumbnailUrl = thumbnailsUrl
                                 });                               
                             }
                             catch (Exception ex)
@@ -356,7 +412,7 @@ namespace Kartverket.Metadatakatalog.Service
                         List<string> bundlesNewList = new List<string>();
                         foreach (var bundle in bundles)
                         {
-                            bundlesNewList.Add(bundle.Uuid + "|" + bundle.Title + "|" + bundle.ParentIdentifier + "|" + bundle.HierarchyLevel + "|" + bundle.ContactOwnerOrganization + "|" + bundle.DistributionDetailsName + "|" + bundle.DistributionDetailsProtocol + "|" + bundle.DistributionDetailsUrl);
+                            bundlesNewList.Add(bundle.Uuid + "|" + bundle.Title + "|" + bundle.ParentIdentifier + "|" + bundle.HierarchyLevel + "|" + bundle.ContactOwnerOrganization + "|" + bundle.DistributionDetailsName + "|" + bundle.DistributionDetailsProtocol + "|" + bundle.DistributionDetailsUrl + "|" + bundle.KeywordNationalTheme + "|" + bundle.OrganizationLogoUrl + "|" + bundle.ThumbnailUrl);
                         }
 
                         indexDoc.Bundles = bundlesNewList.ToList();
@@ -431,5 +487,9 @@ namespace Kartverket.Metadatakatalog.Service
         public string DistributionDetailsName { get; set; }
         public string DistributionDetailsProtocol { get; set; }
         public string DistributionDetailsUrl { get; set; }
+
+        public string KeywordNationalTheme { get; set; }
+        public string OrganizationLogoUrl { get; set; }
+        public string ThumbnailUrl { get; set; }
     }
 }

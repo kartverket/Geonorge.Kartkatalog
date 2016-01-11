@@ -10,6 +10,8 @@ using Kartverket.Metadatakatalog.Models.Api;
 using SearchParameters = Kartverket.Metadatakatalog.Models.Api.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
 using System;
+using Kartverket.Metadatakatalog.Service;
+using System.Web.Configuration;
 
 
 // Metadata search api examples
@@ -41,9 +43,12 @@ namespace Kartverket.Metadatakatalog.Controllers
         private readonly ISearchService _searchService;
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public ApiSearchController(ISearchService searchService)
+        private readonly IMetadataService _metadataService;
+
+        public ApiSearchController(ISearchService searchService, IMetadataService metadataService)
         {
             _searchService = searchService;
+            _metadataService = metadataService;
         }
 
         /// <summary>
@@ -73,6 +78,54 @@ namespace Kartverket.Metadatakatalog.Controllers
                 return null;
             }
 
+        }
+
+        [System.Web.Http.Route("api/relateddata/{uuid}")]
+        [System.Web.Http.HttpGet]
+        public SearchResult GetRelated(string uuid)
+        {
+
+
+            Models.MetadataViewModel result = _metadataService.GetMetadataByUuid(uuid);
+
+            Models.SearchResult relatedResult = CreateRelated(result);
+                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+                return new SearchResult(relatedResult, urlHelper);
+           
+
+        }
+
+        private Models.SearchResult CreateRelated(MetadataViewModel result)
+        {
+            Models.SearchResult res = null;
+            if (result != null && result.Related != null)
+            {
+                res = new Models.SearchResult();
+                res.NumFound = result.Related.Count();
+                res.Offset = 1;
+                res.Limit = result.Related.Count();
+                res.Items = new List<SearchResultItem>();
+                res.Facets = new List<Models.Facet>();
+                res.Facets.Add(new Models.Facet { FacetField = "relateddata", FacetResults = new List<Models.Facet.FacetValue> { new Models.Facet.FacetValue { Count = result.Related.Count(), Name = "relateddata" } } });
+
+                foreach (var related in result.Related)
+                {
+                    SearchResultItem item = new SearchResultItem();
+                    item.Title = related.Title;
+                    item.Type = related.HierarchyLevel;
+                    item.Theme = related.KeywordsNationalTheme != null && related.KeywordsNationalTheme.Count > 0 ? related.KeywordsNationalTheme.FirstOrDefault().KeywordValue : "";
+                    item.Organization = related.ContactOwner != null && related.ContactOwner.Organization != null ? related.ContactOwner.Organization : "";
+                    item.OrganizationLogoUrl = related.OrganizationLogoUrl;
+                    item.ThumbnailUrl = related.Thumbnails != null && related.Thumbnails.Count > 0 ? related.Thumbnails[0].URL : "";
+                    item.DistributionUrl = related.DistributionDetails != null && related.DistributionDetails.URL != null ? related.DistributionDetails.URL : null;
+                    item.Uuid = related.Uuid;
+                    res.Items.Add(item);
+                }
+
+            }
+
+            return res;
         }
 
         private Models.SearchParameters CreateSearchParameters(SearchParameters parameters)

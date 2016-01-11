@@ -292,7 +292,9 @@
         </div>
     </aside>
 
-
+    @{     
+        string urlCSV = Html.KartkatalogenUrl() + "/api/relateddata/" + Model.Uuid + "?mediatype=csv";
+    }
     <article class="col-md-12">
         <div class="row">
             <div class="col-sm-12">
@@ -302,6 +304,25 @@
                     if (Model.Related.Count > 0)
                     {
                         <h3>Relaterte data</h3>
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-5">
+                            <div class="row save-as-menu">
+                                <div class="col-xs-4 text-right no-padding save-as-label">
+                                    <p>Lagre som:</p>
+                                </div>
+                                <div class="col-xs-5 no-padding-bottom save-as-dropdown">
+                                    <div class="custom-select">
+                                        <select onchange="additionalView(this.value)" class="form-control">
+                                            <option value="csvUrl" selected="selected">CSV</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="saveButtons" class="col-xs-3 no-padding-bottom save-as-buttons">
+                                    <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
                         <div id="tableView" class="search-results">
                             <div id="relatedList">
                                 <div class="row search-results-table-heading">
