@@ -63,23 +63,46 @@
     </div>
 }
 
-@helper DisplayFacetCheckbox(SearchResultFacetViewModel facet)
+@helper DisplayFacetCheckbox(SearchResultFacetViewModel placegroup, SearchResultFacetViewModel facet)
 {
+List<SearchResultFacetValueViewModel> orderedList = new List<SearchResultFacetValueViewModel>();
+var fylker = facet.FacetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.AreaLinkName(Model.areaDictionary)).ToList();
+foreach (var fylke in fylker) {
+    orderedList.Add(fylke);
+    var kommuner = facet.FacetResults.Where(k => k.Name.Length > 4 && k.Name.StartsWith(fylke.Name)).Select(ko => ko).OrderBy(ko => ko.AreaLinkName(Model.areaDictionary)).ToList();
+    foreach (var kommune in kommuner)
+    {
+        orderedList.Add(kommune);
+    }
+}
+
+facet.FacetResults = orderedList.ToList();
+
     <a data-toggle="collapse" class="facet-sok-tittel collapsed" href="#@facet.FacetField" aria-expanded="false">
         <span class="indicator"></span><p>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</p>
     </a>
 
     <div class="facet-sok-undertitler collapse" id="@facet.FacetField" aria-expanded="false">
         <ul>
-            @{
+            @{ 
+               foreach (var facetResult in placegroup.FacetResults)
+               {
+                    <text>
+                        <li class="filter-options">
+
+                            <a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))">@facetResult.Name.Trim()<span class="text-muted">(@facetResult.Count)</span>
+                            </a>
+                        </li>
+                    </text>
+                }
                 string previousFacetLinkName = null;
                 double hierarchyLevel = 0;
                 foreach (var facetResult in facet.FacetResults)
                 {
                     string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
 
-                    string hideChildren = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "show-children" : "hide-children");
-                    double relativeHierarchyLevel = 0;
+                string hideChildren = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "show-children" : "hide-children");
+                double relativeHierarchyLevel = 0;
 
 
                     if (previousFacetLinkName != null)
@@ -105,9 +128,7 @@
                     <text>
                         <li class="filter-options @hideChildren ">
 
-                            <a class="btn-link @cssClass " href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
-                                @facetResult.AreaLinkName(Model.areaDictionary)<span class="text-muted">(@facetResult.Count)</span>
-                            </a>
+                            <a class="btn-link @cssClass " href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.AreaLinkName(Model.areaDictionary).Trim()<span class="text-muted">(@facetResult.Count)</span></a>
 
                     </text>
 
@@ -117,19 +138,22 @@
                 {
                     @:</li></ul>
                         }
-
-                if (Model.HasFilterForFacetField(facet.FacetField))
-                {
-                    <li class="filter-options">
-                        <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
+                        bool hasAreaFilter = Model.HasFilterForFacetField(facet.FacetField);
+                        bool hasPlaceFilter = Model.HasFilterForFacetField(placegroup.FacetField);
+                        if (hasAreaFilter || hasPlaceFilter)
+                        {
+                         var facetField = hasAreaFilter ? facet.FacetField : placegroup.FacetField;
+                        <li class="filter-options">
+                        <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facetField))';">
                             <span class="glyphicon glyphicon-plus"> </span>
                             Vis alle
                         </button>
                     </li>
                 }
-            }
-            </ul>
+            }</ul>
         </div>
+
+
 }
 @helper DisplayPaginationBottom()
 {
@@ -691,8 +715,7 @@
                 @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
                 @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
                 @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
-                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "placegroups"))
-                @DisplayFacetCheckbox(Model.Result.Facets.First(f => f.FacetField == "area"))
+                @DisplayFacetCheckbox(Model.Result.Facets.First(f => f.FacetField == "placegroups"), Model.Result.Facets.First(f => f.FacetField == "area"))
                 @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "DistributionProtocols"))
                 @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
 
