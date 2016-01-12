@@ -24,6 +24,19 @@ p.article-p {
     color: #000;
 }
 
+h3.article-h3{
+
+}
+
+h3.article-h3:after{
+    padding-bottom: 50px;
+    width: 50px;
+    border-bottom: 2.5px solid #FE5000;
+    content: "";
+    left: 15px;
+    position: absolute;
+}
+
 a {
     color: #3867c8;
 }
