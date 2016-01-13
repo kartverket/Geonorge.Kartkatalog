@@ -53,7 +53,7 @@
             @if (Model.HasFilterForFacetField(facet.FacetField))
             {
                 <li class="filter-options">
-                    <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
+                    <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Organization", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
                         <span class="glyphicon glyphicon-plus"> </span>
                         Vis alle
                     </button>
