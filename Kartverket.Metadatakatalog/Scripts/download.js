@@ -59,14 +59,24 @@ function getJsonData(url, segments, uuid) {
         segmentUri += '/' + segment;
         segmentString += '.' + segment;
     });
+
     var jsonUri = url + '?json=true';
     $.ajax({
         url: jsonUri,
         dataType: 'json',
         async: false,
+        error: function (jqXHR, textStatus, errorThrown) {
+            var metadata = JSON.parse(localStorage.getItem(uuid + '.metadata'));
+            showAlert(metadata.name + ' feilet. Vennligst fjern datasettet fra kurv. Feilmelding: ' + errorThrown + '<br />', 'danger');
+            console.log('jqXHR:');
+            console.log(jqXHR);
+            console.log('textStatus:');
+            console.log(textStatus);
+            console.log('errorThrown:');
+            console.log(errorThrown);
+        },
         success: function (data) {
-            if (data != null)
-            {
+            if (data != null) {
                 getJsonObjects(data, segmentString, uuid);
                 if (data.supportsProjectionSelection) {
                     var rel = 'http://rel.geonorge.no/download/projection';
@@ -84,8 +94,19 @@ function getJsonData(url, segments, uuid) {
                     getJsonData(href, ['codelists', 'area'], uuid);
                 }
             }
+            else
+            {
+                var metadata = JSON.parse(localStorage.getItem(uuid + '.metadata'));
+                showAlert(metadata.name + " mangler data for å kunne lastes ned. Vennligst fjern datasettet fra kurv.<br />", 'danger');
+            }
         }
     });
+
+    function showAlert(message, colorClass) {
+        $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
+        $('#feedback-alert .message').html( $('#feedback-alert .message').html() + message);
+        $('#feedback-alert').show();
+    }
 }
 
 
