@@ -415,7 +415,33 @@
                                         <div class="col-sm-1 search-results-action-icons">
                                             @if (relatedContent.ShowDownloadService())
                                             {
-                                                <a href="#" id="add-to-cart-btn" onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');" data-toggle='tooltip' data-placement='bottom' title="Legg til @relatedContent.Title i kurv"><span class="custom-icon custom-icon-handlekurv"></span></a>
+                                                string relativeOrganizationLogoUrl = "";
+                                                string relativeDowloadUrl = "";
+
+                                                if (!string.IsNullOrWhiteSpace(relatedContent.OrganizationLogoUrl))
+                                                {
+                                                    System.Uri organizationLogoUrl = new Uri(relatedContent.OrganizationLogoUrl);
+                                                    relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
+                                                }
+
+                                                if (relatedContent.DistributionDetails != null && !string.IsNullOrWhiteSpace(relatedContent.DistributionDetails.URL))
+                                                {
+                                                    System.Uri downloadUrl = new Uri(relatedContent.DistributionDetails.URL);
+                                                    relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
+                                                }
+
+                                                <a data-toggle='tooltip'
+                                                   data-placement='bottom'
+                                                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                                                   title='Legg til @relatedContent.Title i kurv'
+                                                   class='add-to-cart-btn'
+                                                   itemname='@relatedContent.Title'
+                                                   itemuuid='@relatedContent.Uuid'
+                                                   itemurl='/metadata/uuid/@relatedContent.Uuid'
+                                                   itemorglogo='@relativeOrganizationLogoUrl'
+                                                   itemdisturl='@relativeDowloadUrl'>
+                                                    <span class="custom-icon custom-icon-handlekurv"></span>
+                                                </a>
                                             }
                                             else if (relatedContent.ShowDownloadLink())
                                             {
@@ -712,5 +738,67 @@
                 console.log('no native support for HTML5 storage :(');
             }
         });
+
+        $(window).load(function () {
+            @if (Html.DownloadServiceEnabled())
+            {
+                <text>
+
+
+
+                   if (Modernizr.localstorage) {
+
+                       console.log('window.localStorage is available!');
+                       var orderItems = [];
+                       $('.add-to-cart-btn').click(function () {
+                           var added = false;
+                           var itemuuid = $(this).attr('itemuuid');
+                           var itemname = $(this).attr('itemname');
+                           var itemurl = $(this).attr('itemurl');
+                           var itemorglogo = $(this).attr('itemorglogo');
+                           var itemdisturl = $(this).attr('itemdisturl');
+                           if (localStorage.getItem('orderItems') != null) {
+                               orderItems = (JSON.parse(localStorage.getItem('orderItems')));
+                           }
+                           $.map(orderItems, function (elementOfArray, indexInArray) {
+                               if (elementOfArray == itemuuid) {
+                                   orderItems.push(itemuuid);
+                                   added = true;
+                               }
+                           });
+                           if (!added) {
+                               orderItems.push(itemuuid);
+                               var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl };
+                               localStorage["orderItems"] = JSON.stringify(orderItems);
+                               localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
+                               showAlert(itemname + ' er lagt til i <a href="/Download">kurven</a>', 'success');
+
+                               var orderItemCount = $('#orderitem-count').text();
+                               console.log(orderItemCount);
+                               if (orderItemCount == null || orderItemCount == '') {
+                                   orderItemCount = 0;
+                                   $('#orderitem-count-text').text(' datasett');
+                               } else {
+                                   orderItemCount = parseInt($('#orderitem-count').text());
+                                   console.log('else: ' + orderItemCount);
+                               }
+                               orderItemCount += 1;
+                               $('#orderitem-count').text(orderItemCount);
+                               updateShoppingCart();
+
+                           } else {
+                               showAlert(itemname + ' er allerede lagt til i <a href="/Download">kurven</a>', 'warning');
+                           }
+                       });
+                   } else {
+                console.log('no native support for HTML5 storage :(');
+            }
+
+            </text>
+        }
+
+        });
+
+
     </script>
 }
