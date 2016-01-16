@@ -147,26 +147,39 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
         var orderItemOmraader = (JSON.parse(localStorage.getItem(uuid + '.codelists.area')));
         var orderItemSelectOmraader = $('#orderuuid' + uuid + ' .selectOmraader');
         orderItemSelectOmraader.attr('name', uuid + '-areas');
+
+        var omraadeTypes = [];
+        $.each(orderItemOmraader, function (key, val) {
+            if (omraadeTypes.indexOf(val.type) == -1) {
+                omraadeTypes.push(val.type);
+            }
+        });
+
+        var landsdekkendeAdded = false;
+        for (omraade in omraadeTypes) {
+            if (omraadeTypes[omraade] != "landsdekkende"){
+                orderItemSelectOmraader.append($('<optgroup label="' + omraadeTypes[omraade] + '" class="selectOmraader' + omraadeTypes[omraade] + '"  />'));
+            }
+
+            var orderItemSelectOmraaderType = $('#orderuuid' + uuid + ' .selectOmraader .selectOmraader' + omraadeTypes[omraade]);
+         
+            $.each(orderItemOmraader, function (key, val) {
+                if (val.type == 'landsdekkende') {
+                    if (!landsdekkendeAdded){
+                        orderItemSelectOmraader.prepend($("<option />").val(val.type + '_' + val.code).text('Hele landet'));
+                    }
+                    landsdekkendeAdded = true;
+                }
+                else if (val.type == omraadeTypes[omraade]) {
+                    orderItemSelectOmraaderType.append($("<option />").val(val.type + '_' + val.code).text(val.name));
+                }
+            });
+        }
+
         orderItemSelectOmraader.change(function () {
             populateProjectionAndFormatList(uuid, orderItemOmraader);
         });
-        var orderItemSelectOmraaderFylker = $('#orderuuid' + uuid + ' .selectOmraader .selectOmraaderFylker');
-        var orderItemSelectOmraaderKommuner = $('#orderuuid' + uuid + ' .selectOmraader .selectOmraaderKommuner');
-        $.each(orderItemOmraader, function (key, val) {
-            if (val.type == 'fylke') {
-                orderItemSelectOmraaderFylker.append($(
-                    "<option />").val(val.type + '_' + val.code).text(val.name));
-            }
-            else if (val.type == 'kommune') {
-                orderItemSelectOmraaderKommuner.append($("<option />").val(val.type + '_' + val.code).text(val.name));
-            }
-            else if (val.type == 'landsdekkende') {
-                orderItemSelectOmraader.prepend($("<option />").val(val.type + '_' + val.code).text('Hele landet'));
-            }
-            else {
-                orderItemSelectOmraader.prepend($("<option />").val(val.type + '_' + val.code).text(val.name));
-            }
-        });
+
     } else {
         var formElement = $('#orderuuid' + uuid + ' .selectOmraader');
         formElement.attr('disabled', 'disabled');
@@ -464,7 +477,7 @@ function removeCoordinates(uuid) {
     selectField = $('#orderuuid' + uuid + ' select.selectOmraader');
     var supportsPolygonSelection = localStorage.getItem(uuid + '.capabilities.supportsPolygonSelection');
     var supportsAreaSelection = localStorage.getItem(uuid + '.capabilities.supportsAreaSelection');
-    selectField.html('<optgroup label="Fylker" class="selectOmraaderFylker"></optgroup><optgroup label="Kommuner" class="selectOmraaderKommuner"></optgroup>');
+    selectField.children().remove("option[class='from-map']");
     populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection);
     selectField.trigger("chosen:updated");
     localStorage.setItem(uuid + '.selected.coordinates', '');
