@@ -259,6 +259,8 @@ facet.FacetResults = orderedList.ToList();
 
         /* Save enabled filter from facet-search */
         $(document).ready(function () {
+            getFacetFromUrl();
+
             var activeFilters = {}
             if (JSON.parse(localStorage.getItem("activeFilters")) != null) {
                 activeFilters = JSON.parse(localStorage.getItem("activeFilters"));

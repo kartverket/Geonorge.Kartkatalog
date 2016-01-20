@@ -54,6 +54,23 @@ function orderBy() {
     }
 }
 
+function getFacetFromUrl() {
+    var activeFilters = {}
+    if (JSON.parse(localStorage.getItem("activeFilters")) != null) {
+        activeFilters = JSON.parse(localStorage.getItem("activeFilters"));
+    };
+    var regExp = new RegExp(".*Facets\\[0\\]\.name=([a-z]*)&.*");
+    var facetName = regExp.exec(location.search);
+    if (facetName != null) {
+        $.each(facetName, function (key, value) {
+            if (value == 'theme') {
+                activeFilters['#theme'] = true;
+            }
+        });
+    }
+    var activeFiltersJSON = JSON.stringify(activeFilters);
+    localStorage.setItem("activeFilters", activeFiltersJSON);
+};
 
 $(document).ready(function () {
     var layout = "tableView";
