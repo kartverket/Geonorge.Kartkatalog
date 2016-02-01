@@ -211,19 +211,26 @@ function populateProjectionAndFormatList(uuid, orderItemOmraader) {
             orderItemSelectFormater.attr('name', uuid + '-formats');
             orderItemSelectFormater.empty();
 
-            orderItemSelectProjeksjoner.attr("disabled", true);
+            var supportsProjectionSelection = (localStorage.getItem(uuid + '.capabilities.supportsProjectionSelection') === "true");
+            if (supportsProjectionSelection)
+                orderItemSelectProjeksjoner.attr("disabled", false);
+            else
+                orderItemSelectProjeksjoner.attr("disabled", true);
 
             orderItemSelectProjeksjoner.trigger("chosen:updated");
 
-            orderItemSelectFormater.attr("disabled", true);
+            var supportsFormatSelection = (localStorage.getItem(uuid + '.capabilities.supportsFormatSelection') === "true");
+
+            if (supportsFormatSelection)
+                orderItemSelectFormater.attr("disabled", false);
+            else
+                orderItemSelectFormater.attr("disabled", true);
+
             orderItemSelectFormater.trigger("chosen:updated");
 
 
             $.each(orderItemOmraader, function (key, val) {
                 if ($.inArray(val.type + "_" + val.code, selectedAreas) > -1) {
-
-                    orderItemSelectProjeksjoner.attr("disabled", false);
-                    orderItemSelectFormater.attr("disabled", false);
 
                     $.each(val.projections, function (key, val) {
                         if (orderItemSelectProjeksjoner.find('option[value="' + val.code + '"]').length <= 0) {
@@ -256,8 +263,8 @@ function populateProjectionList(uuid, supportsProjectionSelection) {
             orderItemSelectProjeksjoner.append($("<option />").val(val.code).text(val.name));
         });
     } else {
-        var formElement = $('#orderuuid' + uuid + ' .selectProjeksjoner').closest('.form-group');
-        formElement.addClass('disabled');
+        var formElement = $('#orderuuid' + uuid + ' .selectProjeksjoner');
+        formElement.attr("disabled", true);
     }
 }
 
@@ -271,8 +278,8 @@ function populateFormatList(uuid, supportsFormatSelection) {
             orderItemSelectFormater.append($("<option />").val(val.name).text(val.name));
         });
     } else {
-        var formElement = $('#orderuuid' + uuid + ' .selectFormater').closest('.form-group');
-        formElement.addClass('disabled');
+        var formElement = $('#orderuuid' + uuid + ' .selectFormater');
+        formElement.attr("disabled", true);
     }
 }
 
@@ -348,7 +355,6 @@ function generateView(template, orderItems) {
         var supportsPolygonSelection = (localStorage.getItem(uuid + '.capabilities.supportsPolygonSelection') === "true");
         var supportsAreaSelection = (localStorage.getItem(uuid + '.capabilities.supportsAreaSelection') === "true");
         var metadata = JSON.parse(localStorage.getItem(uuid + '.metadata'));
-
         $("#orderuuid" + uuid + " .order-title").html(metadata.name);
         $("#orderuuid" + uuid + " .order-title").attr('href', metadata.url);
         $("#orderuuid" + uuid + " .order-img").attr('src', metadata.organizationLogoUrl);
@@ -475,8 +481,8 @@ $(window).load(function () {
 
 function removeCoordinates(uuid) {
     selectField = $('#orderuuid' + uuid + ' select.selectOmraader');
-    var supportsPolygonSelection = localStorage.getItem(uuid + '.capabilities.supportsPolygonSelection');
-    var supportsAreaSelection = localStorage.getItem(uuid + '.capabilities.supportsAreaSelection');
+    var supportsPolygonSelection = (localStorage.getItem(uuid + '.capabilities.supportsPolygonSelection') === "true");
+    var supportsAreaSelection = (localStorage.getItem(uuid + '.capabilities.supportsAreaSelection') === "true");
     selectField.children().remove("option[class='from-map']");
     populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection);
     selectField.trigger("chosen:updated");
