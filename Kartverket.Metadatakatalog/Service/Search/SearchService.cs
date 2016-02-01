@@ -277,7 +277,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                         new SolrQuery("titleText:"+ text + "~2^1.1"),
                         new SolrQuery("allText:" + text + "^1.2"),
                         new SolrQuery("allText:" + text + "*^1.1"),
-                        new SolrQuery("allText:" + text + "~1"),   //Fuzzy
+                        new SolrQuery("allText:\"" + text + "\"~1"),   //Fuzzy
                         new SolrQuery("allText2:" + text + ""), //Stemmer
                         new SolrQuery("!boost b=typenumber")
                         //new SolrQuery("allText3:" + text)        //Fonetisk
