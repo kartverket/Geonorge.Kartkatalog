@@ -6,6 +6,7 @@ using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Search;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -39,14 +40,16 @@ namespace Kartverket.Metadatakatalog.Controllers
             if (model == null)
             {
                 Log.Error("Metadata with uuid: " + uuid + " not found.");
-                return new HttpNotFoundResult("Metadata with uuid: " + uuid + " not found in Geonetwork.");
+                throw new HttpException(404, "Metadata with uuid: " + uuid + " not found in Geonetwork.");
             }
-                
-            
-            SeoUrl url = model.CreateSeoUrl();
-            if (!url.Matches(organization, title) && !string.IsNullOrWhiteSpace(organization))
-                return RedirectToActionPermanent("Index", new { organization = url.Organization, title = url.Title, uuid = uuid });
-           
+
+            if (model != null)
+            { 
+                SeoUrl url = model.CreateSeoUrl();
+                if (!url.Matches(organization, title) && !string.IsNullOrWhiteSpace(organization))
+                   return RedirectToActionPermanent("Index", new { organization = url.Organization, title = url.Title, uuid = uuid });
+            }
+
             return View(model);
             
 
