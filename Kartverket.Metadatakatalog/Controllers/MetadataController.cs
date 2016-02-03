@@ -40,15 +40,12 @@ namespace Kartverket.Metadatakatalog.Controllers
             if (model == null)
             {
                 Log.Error("Metadata with uuid: " + uuid + " not found.");
-                throw new HttpException(404, "Metadata with uuid: " + uuid + " not found in Geonetwork.");
+                return new HttpNotFoundResult("Metadata with uuid: " + uuid + " not found in Geonetwork.");
             }
 
-            if (model != null)
-            { 
-                SeoUrl url = model.CreateSeoUrl();
-                if (!url.Matches(organization, title) && !string.IsNullOrWhiteSpace(organization))
-                   return RedirectToActionPermanent("Index", new { organization = url.Organization, title = url.Title, uuid = uuid });
-            }
+            SeoUrl url = model.CreateSeoUrl();
+            if (!url.Matches(organization, title) && !string.IsNullOrWhiteSpace(organization))
+                return RedirectToActionPermanent("Index", new { organization = url.Organization, title = url.Title, uuid = uuid });
 
             return View(model);
             
