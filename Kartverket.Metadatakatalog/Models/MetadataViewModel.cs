@@ -268,6 +268,46 @@ namespace Kartverket.Metadatakatalog.Models
         }
 
 
+        public string GetCoverageParams()
+        {
+
+            string CoverageParams = "";
+            var coverageStr = CoverageUrl;
+            var startPos = 5;
+            if (!string.IsNullOrEmpty(coverageStr))
+            { 
+                var endPosType = coverageStr.IndexOf("@PATH");
+                var typeStr = coverageStr.Substring(startPos, endPosType - startPos);
+
+                var endPath = coverageStr.IndexOf("@LAYER");
+                var pathStr = coverageStr.Substring(endPosType + startPos + 1, endPath - (endPosType + startPos + 1));
+
+                var startLayer = endPath + 7;
+                var endLayer = coverageStr.Length - startLayer;
+                var layerStr = coverageStr.Substring(startLayer, endLayer);
+
+
+                if (typeStr == "WMS")
+                {
+                    CoverageParams = "#5/355422/6668909/l/wms/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                }
+
+                else if (typeStr == "WFS")
+                {
+                    CoverageParams = "#5/255216/6653881/l/wfs/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                }
+
+                else if (typeStr == "GeoJSON")
+                {
+                    CoverageParams = "#5/355422/6668909/l/geojson/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                }
+            }
+
+            return CoverageParams;
+
+        }
+
+
         public string ParentIdentifier { get; set; }
 
         public int ZoomLevel() 

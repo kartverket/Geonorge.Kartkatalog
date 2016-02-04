@@ -131,10 +131,10 @@ $(document).ready(function () {
 
     // Legge til uuid i _NorgesKart
     $('#orderlist').on('click', 'button.selectPolygon-button', (function (e) {
+    var uuid = $(this).attr('uuid');
         if (!mapLoaded)
-            loadMap();
-        mapLoaded = true;
-        var uuid = $(this).attr('uuid');
+            loadMap(uuid);
+        //mapLoaded = true; //Need to load each time to set coverageMap.
         $('#norgeskartmodal #setcoordinates').attr('uuid', uuid);
     }));
 });

@@ -14,9 +14,20 @@
 </div>
 <script>
     var CLIPPERCOORDS;
-    function loadMap () {
+    function loadMap(id) {
+        var coverageParams = "";
+        $.ajax({
+            url: '/api/getdata/' + id + '',
+            type: "GET",
+            async: false,
+            success: function (result) {
+                coverageParams = result.CoverageUrl;
+                if (typeof coverageParams == 'undefined')
+                    coverageParams = '';
+            }
+        });
         var socket = new easyXDM.Socket({
-            remote: "@Html.SecureNorgeskartUrl()select.html",
+            remote: "@Html.SecureNorgeskartUrl()select.html" + coverageParams,
             onMessage: function (message, origin) {
                 var reslist = document.getElementById('result');
                 var obj = $.parseJSON(message);

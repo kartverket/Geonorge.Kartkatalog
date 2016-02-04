@@ -80,6 +80,18 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         }
 
+        [System.Web.Http.Route("api/getdata/{uuid}")]
+        [System.Web.Http.HttpGet]
+        public Models.MetadataViewModel GetData(string uuid)
+        {
+            Models.MetadataViewModel model = _metadataService.GetMetadataByUuid(uuid);
+            model.CoverageUrl = model.GetCoverageParams();
+            //For testing use:
+            //model.CoverageUrl = "#5/378604/7226208/l/wms/[http://wms.geonorge.no/skwms1/wms.abas]/+ABAS_WMS";
+            return model;
+        }
+
+
         [System.Web.Http.Route("api/relateddata/{uuid}")]
         [System.Web.Http.HttpGet]
         public SearchResult GetRelated(string uuid)
