@@ -32,7 +32,8 @@ namespace Kartverket.Metadatakatalog
             "~/Scripts/easyXDM.js",
             "~/Scripts/visninger.js",
             "~/Scripts/init.js",
-            "~/Scripts/shopping-cart.js"
+            "~/Scripts/shopping-cart.js",
+            "~/Scripts/site.js"
             ));
 
 
