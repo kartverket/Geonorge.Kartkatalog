@@ -22,22 +22,17 @@
     </title>
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,700" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Raleway:400,100,300,500,600,700" rel="stylesheet" type="text/css">
-    @Styles.Render("~/bundles/shared-menu-styles")
-    @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/shopping-cart")
+    @Styles.Render("~/bundles/kartkatalog-styles")
 
     <!--[if IE]>
         <link rel="stylesheet" type="text/css" href="/Content/ie-only.css" />
     <![endif]-->
 
-
     @RenderSection("head", false)
 
     @Html.Partial("_Analytics")
 
-    @Scripts.Render("~/bundles/shared-menu-scripts")
-    @Scripts.Render("~/bundles/js")
-    @Scripts.Render("~/bundles/shopping-cart")
+    @Scripts.Render("~/bundles/kartkatalog-scripts")
 
     @RenderSection("scripts", false)
 </head>
