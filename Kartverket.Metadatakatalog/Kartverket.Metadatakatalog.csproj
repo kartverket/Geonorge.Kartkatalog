@@ -459,7 +459,6 @@
     <Content Include="KartverketSharedMenu\Scripts\geonorge\app.js" />
     <Content Include="KartverketSharedMenu\Scripts\geonorge\partials\_autoCompleteRow.html" />
     <Content Include="KartverketSharedMenu\Scripts\jquery-1.11.3.min.js" />
-    <Content Include="KartverketSharedMenu\Scripts\ui-bootstrap-0.14.3.js" />
     <Content Include="KartverketSharedMenu\Styles\bootstrap.css" />
     <Content Include="KartverketSharedMenu\Styles\geonorge-top\logoTop.css" />
     <Content Include="KartverketSharedMenu\Styles\geonorge-top\menuTop.css" />
