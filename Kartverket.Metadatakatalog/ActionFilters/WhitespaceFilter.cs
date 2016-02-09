@@ -10,17 +10,17 @@ namespace Kartverket.Metadatakatalog.ActionFilters
     public class WhitespaceFilter : ActionFilterAttribute
     {
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             bool whitespaceFilterEnabled;
             bool.TryParse(ConfigurationManager.AppSettings["WhitespaceFilterEnabled"], out whitespaceFilterEnabled);
             if (whitespaceFilterEnabled)
             {
                 var response = filterContext.HttpContext.Response;
-                // If it's a sitemap, just return.
-                if (filterContext.HttpContext.Request.RawUrl == "/sitemap.xml") return;
 
-                if (response.ContentType != "text/html" || response.Filter == null) return;
+                if (filterContext.HttpContext.Request.RawUrl == "/sitemap.xml") return;
+                if (filterContext.Result.GetType() == typeof (FileStreamResult)) return;
+                if (response.ContentType != "text/html" || response.Filter == null) return; // ContentType is not always correct...
 
                 response.Filter = new HelperClass(response.Filter);
             }
