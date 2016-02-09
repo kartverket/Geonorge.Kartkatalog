@@ -36,7 +36,7 @@ namespace Kartverket.Metadatakatalog
             ));
 
 
-            bundles.Add(new StyleBundle("~/bundles/kartkatalog-styles").Include(
+            bundles.Add(new StyleBundle("~/Content/kartkatalog-styles").Include(
                 "~/KartverketSharedMenu/Styles/bootstrap.css",
                 "~/KartverketSharedMenu/Styles/geonorge-top/menuTop.css",
                 "~/KartverketSharedMenu/Styles/geonorge-top/logoTop.css",
