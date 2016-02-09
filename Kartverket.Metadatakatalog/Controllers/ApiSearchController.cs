@@ -86,8 +86,6 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             Models.MetadataViewModel model = _metadataService.GetMetadataByUuid(uuid);
             model.CoverageUrl = model.GetCoverageParams();
-            //For testing use:
-            //model.CoverageUrl = "#5/378604/7226208/l/wms/[http://wms.geonorge.no/skwms1/wms.abas]/+ABAS_WMS";
             return model;
         }
 

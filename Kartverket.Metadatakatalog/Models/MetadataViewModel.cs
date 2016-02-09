@@ -289,7 +289,7 @@ namespace Kartverket.Metadatakatalog.Models
 
                 if (typeStr == "WMS")
                 {
-                    CoverageParams = "#5/355422/6668909/l/wms/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                    CoverageParams = "#4/355422/6668909/l/wms/[" + pathStr + "]/+" + layerStr;
                 }
 
                 else if (typeStr == "WFS")
