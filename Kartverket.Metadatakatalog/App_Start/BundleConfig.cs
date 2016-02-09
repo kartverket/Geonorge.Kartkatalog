@@ -11,12 +11,12 @@ namespace Kartverket.Metadatakatalog
         {
 
             bundles.Add(new ScriptBundle("~/bundles/shared-menu-scripts").Include(
-            "~/KartverketSharedMenu/Scripts/angular.js",
-            "~/KartverketSharedMenu/Scripts/jquery-1.11.3.min.js",
+            "~/KartverketSharedMenu/Scripts/angular-1.4.9.min.js",
+            "~/KartverketSharedMenu/Scripts/jquery-1.11.3.js",
             "~/KartverketSharedMenu/Scripts/geonorge/app.js",
             "~/KartverketSharedMenu/Scripts/geonorge-top/searchOptions/" + ConfigurationManager.AppSettings["SearchOptionsFile"],
             "~/KartverketSharedMenu/Scripts/geonorge-top/searchTopController.js",
-            "~/KartverketSharedMenu/Scripts/ui-bootstrap-0.14.3.js",
+            "~/KartverketSharedMenu/Scripts/ui-bootstrap-1.1.0.js",
             "~/KartverketSharedMenu/Scripts/geonorge-common/baseUrl.js",
             "~/KartverketSharedMenu/Scripts/geonorge-common/common.js",
             "~/KartverketSharedMenu/Scripts/geonorge-top/menuTopController.js"
