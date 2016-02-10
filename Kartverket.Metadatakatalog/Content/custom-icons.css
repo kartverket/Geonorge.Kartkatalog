@@ -87,7 +87,7 @@
 }
 
 /* Last ned */
-.custom-icon.custom-icon-eksternlink {
+.custom-icon.custom-icon-eksternlink, .custom-icon-sm.custom-icon-eksternlink {
     background-image: url(img/ikoner/ekternlink.svg);
 }
 
