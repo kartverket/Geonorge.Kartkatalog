@@ -21,7 +21,8 @@
 
 .container .searchbar button:hover { background-color: white; }
 
-.container .searchbar input {
+.container .input-group .form-control:not(:first-child):not(:last-child),
+.container .input-group input {
     border-bottom-left-radius: 6px;
     border-top-left-radius: 6px;
     box-shadow: none;
@@ -145,7 +146,8 @@
 }
 
 .auto-results-inner,
-.auto-results-inner:hover {
+.auto-results-inner:hover
+.auto-results-inner[data-ng-class="highlight"] {
     color: #3867c8;
     font-family: 'Open Sans', sans-serif;
     font-size: 14pt;
@@ -156,7 +158,7 @@
 .autocomplete-loader { position: relative; }
 
 .container .searchbar .input-group-addon .loader {
-    background-image: url('../../Images/gif_loading-01.gif');
+    background-image: url('/KartverketSharedMenu/Images/gif_loading-01.gif');
     background-repeat: no-repeat;
     background-size: 23px auto;
     height: 27.60px;
@@ -165,6 +167,10 @@
     position: absolute;
     right: 0;
     width: 23px;
+}
+
+a[data-ng-class="highlight"] {
+    text-decoration: underline;
 }
 
 @media (min-width: 768px) {
@@ -211,7 +217,8 @@
     }
 
     .auto-results-inner,
-    .auto-results-inner:hover {
+    .auto-results-inner:hover,
+    .auto-results-inner[data-ng-class="highlight"] {
         font-size: 13pt;
         line-height: 22pt;
     }
