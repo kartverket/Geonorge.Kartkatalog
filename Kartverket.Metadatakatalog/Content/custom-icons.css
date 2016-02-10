@@ -7,6 +7,16 @@
     vertical-align: middle;
 }
 
+.custom-icon-sm {
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px !important;
+}
+
 .btn .custom-icon {
     vertical-align: middle;
     width: 12pt;
