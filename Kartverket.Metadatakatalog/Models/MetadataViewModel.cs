@@ -35,7 +35,7 @@ namespace Kartverket.Metadatakatalog.Models
         public DistributionFormat DistributionFormat { get; set; }
         public List<SimpleDistributionFormat> DistributionFormats { get; set; }
         public string UnitsOfDistribution { get; set; }
-        public List<SimpleReferenceSystem> ReferenceSystems { get; set; }
+        public List<ReferenceSystem> ReferenceSystems { get; set; }
         public string EnglishAbstract { get; set; }
         public string EnglishTitle { get; set; }
         //
@@ -476,6 +476,7 @@ namespace Kartverket.Metadatakatalog.Models
     public class ReferenceSystem
     {
         public string CoordinateSystem { get; set; }
+        public string CoordinateSystemUrl { get; set; }
         public string Namespace { get; set; }
     }
 

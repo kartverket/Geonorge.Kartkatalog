@@ -97,7 +97,7 @@ namespace Kartverket.Metadatakatalog.Service
                 DateMetadataValidTo = string.IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidTo) ? (DateTime?)null : DateTime.Parse(simpleMetadata.ValidTimePeriod.ValidTo),
                 DistributionFormats = simpleMetadata.DistributionFormats,
                 UnitsOfDistribution = simpleMetadata.DistributionDetails != null ? simpleMetadata.DistributionDetails.UnitsOfDistribution : null,
-                ReferenceSystems = simpleMetadata.ReferenceSystems != null ? simpleMetadata.ReferenceSystems : null
+                ReferenceSystems = simpleMetadata.ReferenceSystems != null ? Convert(simpleMetadata.ReferenceSystems) : null
             };
 
             if (simpleMetadata.ResourceReference != null)
@@ -231,6 +231,16 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
+        private List<ReferenceSystem> Convert(List<SimpleReferenceSystem> simpleReferenceSystems)
+        {
+            var output = new List<ReferenceSystem>();
+            foreach (var tmp in simpleReferenceSystems)
+            {
+                output.Add(Convert(tmp));
+            }
+            return output;
+        }
+
         private ReferenceSystem Convert(SimpleReferenceSystem simpleReferenceSystem)
         {
             ReferenceSystem output = null;
@@ -238,7 +248,8 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 output = new ReferenceSystem
                 {
-                    CoordinateSystem = simpleReferenceSystem.CoordinateSystem,
+                    CoordinateSystem = register.GetCoordinatesystemName(simpleReferenceSystem.CoordinateSystem),
+                    CoordinateSystemUrl = simpleReferenceSystem.CoordinateSystem,
                     Namespace = simpleReferenceSystem.Namespace
                 };
             }

@@ -494,13 +494,18 @@
                 @DisplayValue("Representasjonsform", Model.SpatialRepresentation)
                 @if (Model.DistributionFormats != null)
                 {
-                    foreach (var format in Model.DistributionFormats)
+                    if (Model.DistributionFormats.Count > 0)
                     {
                         <p>
-                            <b>Format:</b> @format.Name
-                            @if (!string.IsNullOrWhiteSpace(format.Version))
+                            <b>Format:</b>
+                            @foreach (var format in Model.DistributionFormats)
                             {
-                                <b>Versjon:</b> @format.Version
+                                if (!string.IsNullOrWhiteSpace(format.Version))
+                                {
+                                    @format.Name @format.Version,
+                                }
+                                else
+                                { @format.Name,  }
                             }
                         </p>
                     }
@@ -518,9 +523,9 @@
                         }
                         else
                         {
-                            <p>
-                                <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
-                            </p>
+                            @*<p>
+                            <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
+                        </p>*@
                         }
 
                     }
@@ -534,7 +539,6 @@
                     {
                         <p>
                             <strong>Romlig referansesystem: </strong>@refsys.CoordinateSystem
-                            <br><strong>Koderom: </strong>@refsys.Namespace
                         </p>
                     }
                 }
@@ -662,7 +666,7 @@
 {
     if (!string.IsNullOrWhiteSpace(value))
     {
-        <p><strong>@label:</strong>@value</p>
+        <p><strong>@label: </strong>@value</p>
     }
 }
 
