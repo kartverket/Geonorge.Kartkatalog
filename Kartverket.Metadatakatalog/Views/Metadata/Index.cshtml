@@ -494,20 +494,22 @@
                 @DisplayValue("Representasjonsform", Model.SpatialRepresentation)
                 @if (Model.DistributionFormats != null)
                 {
-                    if (Model.DistributionFormats.Count > 0)
+                    if (Model.DistributionFormats.Any())
                     {
-                        <p>
-                            <b>Format:</b>
+                        <strong>Format: </strong>
+                        <ul>
                             @foreach (var format in Model.DistributionFormats)
                             {
                                 if (!string.IsNullOrWhiteSpace(format.Version))
                                 {
-                                    @format.Name @format.Version<text>, </text>
+                                    <li>@format.Name @format.Version</li>
                                 }
                                 else
-                                { @format.Name<text>, </text>  }
-}
-                        </p>
+                                {
+                                    <li>@format.Name</li>
+                                }
+                            }
+                        </ul>
                     }
                 }
                 @if (Model.DistributionDetails != null && Model.DistributionDetails.Protocol != null && Model.DistributionDetails.Protocol != "GEONORGE:OFFLINE")
@@ -535,12 +537,17 @@
 
                 @if (Model.ReferenceSystems != null)
                 {
-                    foreach (var refsys in Model.ReferenceSystems)
+                    @if (Model.ReferenceSystems.Any())
                     {
-                        <p>
-                            <strong>Romlig referansesystem: </strong>@refsys.CoordinateSystem
-                        </p>
+                        <strong>Romlig referansesystem: </strong>
+                        <ul>
+                            @foreach (var refsys in Model.ReferenceSystems)
+                            {
+                            <li>@refsys.CoordinateSystem</li>
+                            }
+                        </ul>
                     }
+                    
                 }
             </div>
 
