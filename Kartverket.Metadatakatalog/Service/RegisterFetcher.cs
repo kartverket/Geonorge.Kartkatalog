@@ -16,7 +16,7 @@ namespace Kartverket.Metadatakatalog.Service
         Dictionary<string, string> ListOfClassificationValues = new Dictionary<string, string>();
         Dictionary<string, string> ListOfRestrictionValues = new Dictionary<string, string>();
         Dictionary<string, string> ListOfCoordinatesystemNameValues = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfCoordinatesystemUrlValues = new Dictionary<string, string>();
+        Dictionary<string, string> ListOfDistributionTypes = new Dictionary<string, string>();
 
 
         public RegisterFetcher()
@@ -28,12 +28,21 @@ namespace Kartverket.Metadatakatalog.Service
             ListOfClassificationValues = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB145");
             ListOfRestrictionValues = GetCodeList("D23E9F2F-66AB-427D-8AE4-5B6FD3556B57");
             ListOfCoordinatesystemNameValues = GetEPSGCodeList("37B9DC41-D868-4CBC-84F9-39557041FB2C");
+            ListOfDistributionTypes = GetCodeList("94B5A165-7176-4F43-B6EC-1063F7ADE9EA");
 
         }
 
         public string GetCoordinatesystemName(string value)
         {
             KeyValuePair<string, string> dic = ListOfCoordinatesystemNameValues.Where(p => p.Key == value).FirstOrDefault();
+            if (!dic.Equals(default(KeyValuePair<String, String>)))
+                value = dic.Value;
+
+            return value;
+        }
+        public string GetDistributionType(string value)
+        {
+            KeyValuePair<string, string> dic = ListOfDistributionTypes.Where(p => p.Key == value).FirstOrDefault();
             if (!dic.Equals(default(KeyValuePair<String, String>)))
                 value = dic.Value;
 
