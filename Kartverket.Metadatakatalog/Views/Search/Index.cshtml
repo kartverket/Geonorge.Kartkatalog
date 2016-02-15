@@ -363,7 +363,15 @@ facet.FacetResults = orderedList.ToList();
     Uri uri = new Uri(url);
     string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
     Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
-    var qs = HttpUtility.ParseQueryString(Request.QueryString.ToString());
+    string querystring = Request.QueryString.ToString();
+    querystring = querystring.Replace(".name", "name"); querystring = querystring.Replace(".value", "value");
+    var qs = HttpUtility.ParseQueryString(querystring);
+    System.Collections.Specialized.NameValueCollection qsCol = new System.Collections.Specialized.NameValueCollection(qs);
+    qs.Clear();
+    foreach (string key in qsCol)
+    {
+        qs.Add(key.ToLower(), qsCol[key]);
+    }
     qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
     string query = qs.ToString(); string urlCSV = path + "?" + query;
 }
