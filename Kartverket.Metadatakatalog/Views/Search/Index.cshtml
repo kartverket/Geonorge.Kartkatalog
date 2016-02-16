@@ -70,7 +70,8 @@
 {
 List<SearchResultFacetValueViewModel> orderedList = new List<SearchResultFacetValueViewModel>();
 var fylker = facet.FacetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.AreaLinkName(Model.areaDictionary)).ToList();
-foreach (var fylke in fylker) {
+foreach (var fylke in fylker)
+{
     orderedList.Add(fylke);
     var kommuner = facet.FacetResults.Where(k => k.Name.Length > 4 && k.Name.StartsWith(fylke.Name)).Select(ko => ko).OrderBy(ko => ko.AreaLinkName(Model.areaDictionary)).ToList();
     foreach (var kommune in kommuner)
@@ -87,13 +88,14 @@ facet.FacetResults = orderedList.ToList();
 
     <div class="facet-sok-undertitler collapse" id="@facet.FacetField" aria-expanded="false">
         <ul>
-            @{ 
-               foreach (var facetResult in placegroup.FacetResults)
-               {
+            @{
+                foreach (var facetResult in placegroup.FacetResults)
+                {
                     <text>
                         <li class="filter-options">
 
-                            <a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))">@facetResult.Name.Trim()<span class="text-muted">(@facetResult.Count)</span>
+                            <a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))">
+                                @facetResult.Name.Trim()<span class="text-muted">(@facetResult.Count)</span>
                             </a>
                         </li>
                     </text>
@@ -104,8 +106,8 @@ facet.FacetResults = orderedList.ToList();
                 {
                     string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
 
-                string hideChildren = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "show-children" : "hide-children");
-                double relativeHierarchyLevel = 0;
+                    string hideChildren = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "show-children" : "hide-children");
+                    double relativeHierarchyLevel = 0;
 
 
                     if (previousFacetLinkName != null)
@@ -121,8 +123,8 @@ facet.FacetResults = orderedList.ToList();
                         }
                         else if (relativeHierarchyLevel < 0)
                         {
-                            @:</li></ul>
-                                }
+                            @: </li></ul>
+                        }
                         else
                         {
                             @:</li>
@@ -139,14 +141,14 @@ facet.FacetResults = orderedList.ToList();
                 }
                 for (int index = 0; index < hierarchyLevel; index++)
                 {
-                    @:</li></ul>
-                        }
-                        bool hasAreaFilter = Model.HasFilterForFacetField(facet.FacetField);
-                        bool hasPlaceFilter = Model.HasFilterForFacetField(placegroup.FacetField);
-                        if (hasAreaFilter || hasPlaceFilter)
-                        {
-                         var facetField = hasAreaFilter ? facet.FacetField : placegroup.FacetField;
-                        <li class="filter-options">
+                    @: </li> </ul>
+                }
+                bool hasAreaFilter = Model.HasFilterForFacetField(facet.FacetField);
+                bool hasPlaceFilter = Model.HasFilterForFacetField(placegroup.FacetField);
+                if (hasAreaFilter || hasPlaceFilter)
+                {
+                    var facetField = hasAreaFilter ? facet.FacetField : placegroup.FacetField;
+                    <li class="filter-options">
                         <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facetField))';">
                             <span class="glyphicon glyphicon-plus"> </span>
                             Vis alle
@@ -294,7 +296,6 @@ facet.FacetResults = orderedList.ToList();
             @if (Html.DownloadServiceEnabled())
             {
          <text>
-
             if (typeof Storage !== "undefined") {
 
                 console.log('window.localStorage is available!');
@@ -499,8 +500,6 @@ facet.FacetResults = orderedList.ToList();
                                     <span title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
                                 </p>
                             </div>
-
-
                         </div>
                         <div class="col-sm-2 search-results-type">
                             <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
@@ -679,7 +678,6 @@ facet.FacetResults = orderedList.ToList();
                         </div>
                     </div>
 
-
                     if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
                     {
                         <div class="search-results-gallery-image layoutblock">
@@ -710,10 +708,6 @@ facet.FacetResults = orderedList.ToList();
         }
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
-
-
-
-
         <div class="row view-navigation">
 
             <div class="col-sm-12">

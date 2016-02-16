@@ -100,20 +100,3 @@ function triggerMobileLayout() {
 window.onresize = function (event) {
     triggerMobileLayout();
 }
-
-/*
-function SortBy(sort) {
-    var sort = document.getElementById("sorting");
-    var selected = sort.options[sort.selectedIndex].text;
-    localStorage.setItem("sortering", selected);
-    document.sortering.submit();
-}*/
-
-
-// Loading animation
-/*
-$(window).load(function () {
-    $('#loading').hide();
-});
-*/
-
