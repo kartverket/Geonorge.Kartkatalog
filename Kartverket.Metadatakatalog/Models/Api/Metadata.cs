@@ -65,6 +65,11 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public bool IsOpenData { get; set; }
         /// <summary>
+        /// <summary>
+        /// True if one of the nationalinitiativs(Samarbeid og lover) is "Det offentlige kartgrunnlaget"
+        /// </summary>
+        public bool IsDokData { get; set; }
+        /// <summary>
         /// Url for legend/drawing rules
         /// </summary>
         public string LegendDescriptionUrl { get; set; }
@@ -112,6 +117,11 @@ namespace Kartverket.Metadatakatalog.Models.Api
             if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data"))
                 IsOpenData = true;
             else IsOpenData = false;
+
+            if (item.NationalInitiative != null && item.NationalInitiative.Contains("Det offentlige kartgrunnlaget"))
+                IsDokData = true;
+            else IsDokData = false;
+
 
             LegendDescriptionUrl = item.LegendDescriptionUrl;
             ProductSheetUrl = item.ProductSheetUrl;
