@@ -23,7 +23,7 @@ namespace Kartverket.Metadatakatalog
             "~/KartverketSharedMenu/Scripts/geonorge-top/menuTopController.js",
             "~/Scripts/bootstrap.js",
             "~/Scripts/site.js",
-            "~/Scripts/jquery-ui-datepicker.js",
+            "~/Scripts/jquery-ui.js",
             "~/Scripts/respond.js",
             "~/Scripts/jquery.cookie.js",
             "~/Scripts/jquery.validate*",
