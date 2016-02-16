@@ -703,7 +703,7 @@
 
             changeLayout("tableView");
 
-            if (Modernizr.localstorage) {
+            if (typeof Storage !== "undefined") {
 
                 console.log('window.localStorage is available!');
 
@@ -754,9 +754,7 @@
             {
                 <text>
 
-
-
-                   if (Modernizr.localstorage) {
+            if (typeof Storage !== "undefined") {
 
                        console.log('window.localStorage is available!');
                        var orderItems = [];
