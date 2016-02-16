@@ -75,7 +75,7 @@ namespace Kartverket.Metadatakatalog.Formatter
         // Helper methods for serializing SearchResult to CSV format. 
         private void Write(SearchResult data, StreamWriter writer)
         {
-            writer.WriteLine("Tittel;Type;Tema;Organisasjon;Organisasjonslogo;ThumbnailUrl;DistributionUrl;DetailsUrl;OrganizationUrl;Uuid");
+            writer.WriteLine("Tittel;Type;Tema;Organisasjon;Uuid");
             foreach(var meta in data.Results)
             {
                 writer.WriteLine(
@@ -83,11 +83,6 @@ namespace Kartverket.Metadatakatalog.Formatter
                     Escape(meta.Type) + ";" +
                     Escape(meta.Theme) + ";" +
                     Escape(meta.Organization) + ";" +
-                    Escape(meta.OrganizationLogo) + ";" +
-                    Escape(meta.ThumbnailUrl) + ";" +
-                    Escape(meta.DistributionUrl) + ";" +
-                    Escape(meta.ShowDetailsUrl) + ";" +
-                    Escape(meta.OrganizationUrl) + ";" +
                     Escape(meta.Uuid)
                 );
             }
