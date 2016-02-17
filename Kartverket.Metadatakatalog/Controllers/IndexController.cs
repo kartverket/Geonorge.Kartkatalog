@@ -10,12 +10,16 @@ namespace Kartverket.Metadatakatalog.Controllers
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        private readonly IErrorService _errorService;
+
         private readonly MetadataIndexer _indexer;
 
-        public IndexController(MetadataIndexer indexer)
+        public IndexController(MetadataIndexer indexer, IErrorService errorService)
         {
             _indexer = indexer;
+            _errorService = errorService;
         }
+
 
         //[Authorize]
         public ActionResult Index()
@@ -100,6 +104,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             catch (Exception e)
             {
                 Log.Error("Exception while indexing single metadata.", e);
+                _errorService.AddError(uuid, e);
                 statusCode = HttpStatusCode.BadRequest;
             }
             return new HttpStatusCodeResult(statusCode);

@@ -303,6 +303,8 @@
       <DependentUpon>UI.resx</DependentUpon>
     </Compile>
     <Compile Include="Service\DownloadService.cs" />
+    <Compile Include="Service\ErrorService.cs" />
+    <Compile Include="Service\IErrorService.cs" />
     <Compile Include="Service\IMetadataService.cs" />
     <Compile Include="Service\IndexDocumentCreator.cs" />
     <Compile Include="Service\Indexer.cs" />
@@ -570,6 +572,8 @@
     <Content Include="Views\Download\Order.cshtml" />
     <Content Include="Views\Download\_NorgesKart.cshtml" />
     <Content Include="Views\Shared\_SharedMenu.cshtml" />
+    <Content Include="settings.config" />
+    <Content Include="settings.default.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

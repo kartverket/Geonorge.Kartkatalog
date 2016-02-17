@@ -13,12 +13,14 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly IGeoNorge _geoNorge;
         private readonly Indexer _indexer;
         private readonly IndexDocumentCreator _indexDocumentCreator;
+        private readonly IErrorService _errorService;
 
-        public SolrMetadataIndexer(IGeoNorge geoNorge, Indexer indexer, IndexDocumentCreator indexDocumentCreator)
+        public SolrMetadataIndexer(IGeoNorge geoNorge, Indexer indexer, IndexDocumentCreator indexDocumentCreator, IErrorService errorService)
         {
             _geoNorge = geoNorge;
             _indexer = indexer;
             _indexDocumentCreator = indexDocumentCreator;
+            _errorService = errorService;
         }
 
         public void RunIndexing()
@@ -40,10 +42,12 @@ namespace Kartverket.Metadatakatalog.Service
                     MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge);
                     _indexer.Index(metadataIndexDoc);
                 }
+
             }
          catch (Exception exception)
             {
                 Log.Error("Error in UUID: " + uuid + "", exception);
+                _errorService.AddError(uuid, exception);
             }
         }
 
