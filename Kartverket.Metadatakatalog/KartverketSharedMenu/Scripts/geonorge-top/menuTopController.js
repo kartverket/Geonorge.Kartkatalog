@@ -13,7 +13,7 @@
               var date = new Date();
               var minutes = 3;
               date.setTime(date.getTime() + (minutes * 60 * 1000));
-              $.cookie('expire', "menu", { expires: date });
+              Cookies.set('expire', "menu", { expires: date });
 
               $scope.menuItems = respons.data;
           }
@@ -24,7 +24,7 @@
 
           $scope.getMenuData = function getMenuData() {
 
-              if (!$.cookie('expire') || !localStorage.getItem('menuItems')) {
+              if (!Cookies.get('expire') || !localStorage.getItem('menuItems')) {
 
                   var menuService = baseurl + '/api/menu';
                   var request = $http({

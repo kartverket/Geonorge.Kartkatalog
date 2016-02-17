@@ -25,13 +25,13 @@ namespace Kartverket.Metadatakatalog
             "~/Scripts/site.js",
             "~/Scripts/jquery-ui.js",
             "~/Scripts/respond.js",
-            "~/Scripts/jquery.cookie.js",
+            "~/Scripts/js.cookie.js",
             "~/Scripts/jquery.validate*",
             "~/Scripts/chosen.jquery.js",
             "~/Scripts/easyXDM.js",
             "~/Scripts/visninger.js",
             "~/Scripts/init.js",
-            "~/Scripts/shopping-cart.js",
+            "~/Scripts/shopping-cart-jscookie.js",
             "~/Scripts/site.js"
             ));
 
