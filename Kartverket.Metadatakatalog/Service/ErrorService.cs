@@ -22,10 +22,10 @@ namespace Kartverket.Metadatakatalog.Service
         }
 
 
-        public void AddError(string uuid, Exception error, string title = null)
+        public void AddError(string uuid, Exception error)
         {
             if(ServiceEnabled())
-                _keenIo.AddEvent(_collection, new { uuid = uuid, title = title, message = error.Message, stacktrace = error.StackTrace });
+                _keenIo.AddEvent(_collection, new { uuid = uuid, message = error.Message, stacktrace = error.StackTrace });
         }
 
         private bool ServiceEnabled()

@@ -4,6 +4,6 @@ namespace Kartverket.Metadatakatalog.Service
 {
     public interface IErrorService
     {
-        void AddError(string uuid, Exception error, string title = null);
+        void AddError(string uuid, Exception error);
     }
 }
