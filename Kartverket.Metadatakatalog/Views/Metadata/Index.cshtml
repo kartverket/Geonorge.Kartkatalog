@@ -514,7 +514,7 @@ if (contact != null)
                         @DisplayValue("Andre restriksjoner", Model.Constraints.OtherConstraints)
                         @if (Model.Constraints != null && Model.Constraints.OtherConstraintsLink != null)
                     {
-                            <p><strong>Lisens: </strong> <a href="@Model.Constraints.OtherConstraintsLink" target="_blank">@Model.Constraints.OtherConstraintsLinkText</a></p>
+                            <p><strong>Lisens: </strong> <a href="@Model.Constraints.OtherConstraintsLink" target="_blank">@Model.Constraints.OtherConstraintsLinkText</a><i class="custom-icon-sm custom-icon-eksternlink"></i></p>
                         }
                         @DisplayValue("Sikkerhetsnivå", Model.Constraints.SecurityConstraints)
                         @DisplayValue("Lovhenvisning", Model.Constraints.SecurityConstraintsNote)
