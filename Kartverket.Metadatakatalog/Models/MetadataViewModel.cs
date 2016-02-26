@@ -196,7 +196,7 @@ namespace Kartverket.Metadatakatalog.Models
         }
         public bool ShowWebsiteLink()
         {
-            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains("WWW:LINK") && HierarchyLevel == "software") return true;
+            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains("WWW:LINK") ) return true;
             else return false;
         }
 
