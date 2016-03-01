@@ -66,7 +66,6 @@ var baseurl_local = searchOption.baseUrl;
     }]).controller('searchTopController', [
       '$rootScope', '$scope', '$location', '$window', '$timeout', 'aggregatedService', '$sce',
       function ($rootScope, $scope, $location, $window, $timeout, aggregatedService, $sce) {
-
           $rootScope.trustHtml = function (html) {
               return $sce.trustAsHtml(html);
           };
@@ -76,7 +75,7 @@ var baseurl_local = searchOption.baseUrl;
           $scope.showFakeResults = false;
           $scope.searchString = "";
           $rootScope.selectedSearch = searchOption;
-          $rootScope.searchQuery = '';
+          $rootScope.searchQuery = parseLocation(window.location.search)['text'];
           $scope.autoCompleteResult = [];
 
           $scope.autoCompletePartial = baseurl_local + '/KartverketSharedMenu/Scripts/geonorge/partials/_autoCompleteRow.html';
@@ -456,3 +455,19 @@ var baseurl_local = searchOption.baseUrl;
           });
       }]);
 }());
+
+var parseLocation = function (location) {
+    var pairs = location.substring(1).split("&");
+    var obj = {};
+    var pair;
+    var i;
+
+    for (i in pairs) {
+        if (pairs[i] === "") continue;
+
+        pair = pairs[i].split("=");
+        obj[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+    }
+
+    return obj;
+};
