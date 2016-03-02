@@ -436,6 +436,7 @@ namespace Kartverket.Metadatakatalog.Models
     {
         public string Name { get; set; }
         public string Protocol { get; set; }
+        public string ProtocolName { get; set; }
         public string URL { get; set; }
 
         public bool IsWmsUrl()

@@ -297,6 +297,7 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     Name = simpleDistributionDetails.Name,
                     Protocol = simpleDistributionDetails.Protocol,
+                    ProtocolName = register.GetDistributionType(simpleDistributionDetails.Protocol),
                     URL = simpleDistributionDetails.URL
                 };
             }

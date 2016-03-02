@@ -467,7 +467,7 @@ if (contact != null)
                     }
                     @if (Model.DistributionDetails != null && Model.DistributionDetails.Protocol != null && Model.DistributionDetails.Protocol != "GEONORGE:OFFLINE")
                 {
-                        <text>@DisplayValue("Distribusjonstype", Model.DistributionDetails.Protocol)</text>
+                        <text>@DisplayValue("Distribusjonstype", Model.DistributionDetails.ProtocolName)</text>
                         if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
                         {
                             if (Model.IsService() || Model.IsServiceLayer())
