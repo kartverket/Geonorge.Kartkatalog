@@ -101,16 +101,16 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 if (!string.IsNullOrWhiteSpace(item.ServiceDistributionProtocolForDataset) && item.ServiceDistributionProtocolForDataset.Contains(("OGC:WMS")))
                 {
                     if (!string.IsNullOrWhiteSpace(item.ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(item.ServiceDistributionUrlForDataset))
-                        ServiceUrl = "#5/355422/6668909/*/l/wms/[" + item.ServiceDistributionUrlForDataset.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/+" + item.ServiceDistributionNameForDataset;
+                        ServiceUrl = "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]/+" + item.ServiceDistributionNameForDataset;
                     else if (!string.IsNullOrWhiteSpace(item.ServiceDistributionUrlForDataset))
-                        ServiceUrl = "#5/355422/6668909/l/wms/[" + item.ServiceDistributionUrlForDataset.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]";
+                        ServiceUrl = "#5/355422/6668909/l/wms/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]";
                 }
                 else if (!string.IsNullOrWhiteSpace(item.ServiceDistributionProtocolForDataset) && item.ServiceDistributionProtocolForDataset.Contains(("OGC:WFS")))
                 {
                     if (!string.IsNullOrWhiteSpace(item.ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(item.ServiceDistributionUrlForDataset))
-                        ServiceUrl = "#5/355422/6668909/*/l/wfs/[" + item.ServiceDistributionUrlForDataset.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/+" + item.ServiceDistributionNameForDataset;
+                        ServiceUrl = "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]/+" + item.ServiceDistributionNameForDataset;
                     else if (!string.IsNullOrWhiteSpace(item.DistributionUrl))
-                        ServiceUrl = "#5/355422/6668909/l/wfs/[" + item.ServiceDistributionUrlForDataset.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]";
+                        ServiceUrl = "#5/355422/6668909/l/wfs/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]";
                 }
                
             }
@@ -120,16 +120,16 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 if (!string.IsNullOrWhiteSpace(item.DistributionProtocol) && item.DistributionProtocol.Contains(("OGC:WMS")))
                 {
                     if (!string.IsNullOrWhiteSpace(item.DistributionName) && !string.IsNullOrWhiteSpace(item.DistributionUrl))
-                        DownloadUrl = "#5/355422/6668909/*/l/wms/[" + item.DistributionUrl.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/+" + item.DistributionName;
+                        DownloadUrl = "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(item.DistributionUrl) + "]/+" + item.DistributionName;
                     else if (!string.IsNullOrWhiteSpace(item.DistributionUrl))
-                        DownloadUrl =  "#5/355422/6668909/l/wms/[" + item.DistributionUrl.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]";
+                        DownloadUrl =  "#5/355422/6668909/l/wms/[" + RemoveQueryString(item.DistributionUrl) + "]";
                 }
                 else if (!string.IsNullOrWhiteSpace(item.DistributionProtocol) && item.DistributionProtocol.Contains(("OGC:WFS")))
                 {
                     if (!string.IsNullOrWhiteSpace(item.DistributionName) && !string.IsNullOrWhiteSpace(item.DistributionUrl))
-                        DownloadUrl = "#5/355422/6668909/*/l/wfs/[" + item.DistributionUrl.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]/+" + item.DistributionName;
+                        DownloadUrl = "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(item.DistributionUrl) + "]/+" + item.DistributionName;
                     else if (!string.IsNullOrWhiteSpace(item.DistributionUrl))
-                        DownloadUrl = "#5/355422/6668909/l/wfs/[" + item.DistributionUrl.Replace("request=GetCapabilities&service=WMS", "").Replace("service=WMS&request=GetCapabilities", "").Replace("request=getcapabilities&service=wms", "").Replace("service=wms&request=getcapabilities", "") + "]";
+                        DownloadUrl = "#5/355422/6668909/l/wfs/[" + RemoveQueryString(item.DistributionUrl) + "]";
                 }
             }
             else DownloadUrl = item.DistributionUrl;
@@ -163,8 +163,16 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return seoUrl.Organization;
         }
 
-        
+        string RemoveQueryString(string URL)
+        {
+            int startQueryString = URL.IndexOf("?");
 
-        
+            if (startQueryString != -1)
+                URL = URL.Substring(0, startQueryString);
+
+            return URL;
+        }
+
+
     }
 }
