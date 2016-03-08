@@ -255,7 +255,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 text = text.Replace("(", " ");
                 text = text.Replace(")", " ");
                 text = text.Replace("^", " ");
-                
+                text = text.Replace("-", "\\-");
+
                 if (text.Trim().Length == 0) query = SolrQuery.All;
                 else if (text.Trim().Length < 5)
                 {
