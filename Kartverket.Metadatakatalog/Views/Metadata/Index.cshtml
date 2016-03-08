@@ -93,67 +93,67 @@ if (contact != null)
 
     @if (Model.ShowMapLink())
     {
-        <a href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" class="btn" target="_blank"><span class="custom-icon custom-icon-kartmarkoer"></span> vis i kart</a>
+        <a href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" class="btn" target="_blank"><span class="custom-icon custom-icon-kartmarkoer"></span> Vis i kart</a>
     }
     else
     {
-        <a href="#" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-kartmarkoer"></span> vis i kart</a>
+        <a href="#" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-kartmarkoer"></span> Vis i kart</a>
     }
 
 
 
     @if (Model.ShowDownloadService())
     {
-        <a href="#" id="add-to-cart-btn" onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');" class="btn"><span class="custom-icon custom-icon-handlekurv"></span> legg i kurv</a>
+        <a href="#" id="add-to-cart-btn" onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');" class="btn"><span class="custom-icon custom-icon-handlekurv"></span> Legg i kurv</a>
     }
     else if (Model.ShowDownloadLink())
     {
-        <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" class="btn"><span class="custom-icon custom-icon-lastned"></span> last ned</a>
+        <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" class="btn"><span class="custom-icon custom-icon-lastned"></span> Last ned</a>
     }
     else
     {
-        <a href="" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span> last ned</a>
+        <a href="" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span> Last ned</a>
     }
 
 
 
     @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
     {
-        <a href="@Model.ProductSheetUrl" onclick="ga('send', 'event', 'MerInfo', 'produktark');" title="Vis produktark for @Model.Title" class="btn"><span class="custom-icon custom-icon-info"></span> vis produktark</a>
+        <a href="@Model.ProductSheetUrl" onclick="ga('send', 'event', 'MerInfo', 'produktark');" title="Vis produktark for @Model.Title" class="btn"><span class="custom-icon custom-icon-info"></span> Vis produktark</a>
     }
     else
     {
-        <a href="#" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-info"></span> vis produktark</a>
+        <a href="#" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-info"></span> Vis produktark</a>
     }
 
 
     @if (!string.IsNullOrWhiteSpace(Model.ProductSpecificationUrl))
     {
-        <a href="@Model.ProductSpecificationUrl" onclick="ga('send', 'event', 'MerInfo', 'produktspesifikasjon');" class="btn" title="Last ned produktspesifikasjon for @Model.Title"><span class="glyphicon glyphicon-list-alt"></span> vis produktspesifikasjon</a>
+        <a href="@Model.ProductSpecificationUrl" onclick="ga('send', 'event', 'MerInfo', 'produktspesifikasjon');" class="btn" title="Last ned produktspesifikasjon for @Model.Title"><span class="glyphicon glyphicon-list-alt"></span> Vis produktspesifikasjon</a>
     }
     else
     {
-        <a href="#" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-list-alt"></span> vis produktspesifikasjon</a>
+        <a href="#" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-list-alt"></span> Vis produktspesifikasjon</a>
     }
 
 
     @if (!string.IsNullOrWhiteSpace(Model.LegendDescriptionUrl))
     {
-        <a href="@Model.LegendDescriptionUrl" onclick="ga('send', 'event', 'MerInfo', 'tegneregler');" class="btn" title="Vis tegneregler for @Model.Title"> <span class="glyphicon glyphicon-picture"></span> vis tegneregler</a>
+        <a href="@Model.LegendDescriptionUrl" onclick="ga('send', 'event', 'MerInfo', 'tegneregler');" class="btn" title="Vis tegneregler for @Model.Title"> <span class="glyphicon glyphicon-picture"></span> Vis tegneregler</a>
     }
     else
     {
-        <a href="#" class="btn disabled" disabled="disabled"> <span class="glyphicon glyphicon-picture"></span> vis tegneregler</a>
+        <a href="#" class="btn disabled" disabled="disabled"> <span class="glyphicon glyphicon-picture"></span> Vis tegneregler</a>
     }
 
 
     @if (Model.ShowWebsiteLink())
     {
-        <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'MerInfo', 'nettside');" class="btn"><span class="custom-icon custom-icon-eksternlink"></span> besøk nettside</a>
+        <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'MerInfo', 'nettside');" class="btn"><span class="custom-icon custom-icon-eksternlink"></span> Besøk nettside</a>
     }
     else
     {
-        <a href="" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-eksternlink"></span> besøk nettside</a>
+        <a href="" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-eksternlink"></span> Besøk nettside</a>
     }
 
     @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
@@ -162,7 +162,7 @@ if (contact != null)
     }
     else
     {
-        <a href="#" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-eksternlink"></span> vis produktside</a>
+        <a href="#" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-eksternlink"></span> Vis produktside</a>
     }
 
 
