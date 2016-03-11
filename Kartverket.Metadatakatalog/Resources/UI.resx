@@ -124,7 +124,7 @@
     <value>Område</value>
   </data>
   <data name="Facet_DistributionProtocols" xml:space="preserve">
-    <value>Distribusjonstype</value>
+    <value>Distribusjonsform</value>
   </data>
   <data name="Facet_keyword" xml:space="preserve">
     <value>Nøkkelord</value>
