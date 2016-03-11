@@ -24,6 +24,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         {
             var translatedName = UI.ResourceManager.GetString("Facet_type_" + Name);
             string link = !string.IsNullOrWhiteSpace(translatedName) ? translatedName : Name;
+            if (link == "GEONORGE:OFFLINE")
+                link = "I prosess";
             if (link.Length > 50) link = link.Substring(0, 50) + "...";
             return link;
         }
