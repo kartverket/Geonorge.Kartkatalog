@@ -319,28 +319,8 @@ namespace Kartverket.Metadatakatalog.Service
                             });
                         }
 
-                        //Get Services
-                        List<MetaDataEntry> datasetServicesParents = new List<MetaDataEntry>();
-                        datasetServicesParents = datasetServices.Where(s => s.ParentIdentifier == null).Distinct().OrderBy(o => o.Title).ToList();
-
-                        List<MetaDataEntry> datasetServicesOrganizedList = new List<MetaDataEntry>();
-
-                        foreach (var parentDS in datasetServicesParents)
-                        {
-                            datasetServicesOrganizedList.Add(parentDS);
-                            List<MetaDataEntry> datasetServicesLayers = new List<MetaDataEntry>();
-                            //Get layers for service
-                            datasetServicesLayers = datasetServices.Where(s => s.ParentIdentifier == parentDS.Uuid).OrderBy(o => o.Title).ToList();
-
-                            foreach (var layerDS in datasetServicesLayers)
-                            {
-                                datasetServicesOrganizedList.Add(layerDS);
-                            }
-
-                        }
-
                         List<string> datasetServicesNewList = new List<string>();
-                        foreach (var service in datasetServicesOrganizedList)
+                        foreach (var service in datasetServices)
                         {
                             datasetServicesNewList.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl + "|" + service.KeywordNationalTheme + "|" + service.OrganizationLogoUrl + "|" + service.ThumbnailUrl);
                         }
