@@ -90,6 +90,10 @@ namespace Kartverket.Metadatakatalog.Models
         public string MetadataEditUrl { get; set; }
         public string OrganizationLogoUrl { get; set; }
 
+        public string ServiceDistributionNameForDataset { get; set; }
+        public string ServiceDistributionUrlForDataset { get; set; }
+        public string ServiceDistributionProtocolForDataset { get; set; }
+
         public SeoUrl CreateSeoUrl()
         {
             if (ContactOwner != null)
@@ -157,6 +161,32 @@ namespace Kartverket.Metadatakatalog.Models
             else return "";
         }
 
+        public string ServiceUrl()
+        {
+            string url = "";
+
+            if (HierarchyLevel == "dataset")
+            {
+                if (!string.IsNullOrWhiteSpace(ServiceDistributionProtocolForDataset) && ServiceDistributionProtocolForDataset.Contains(("OGC:WMS")))
+                {
+                    if (!string.IsNullOrWhiteSpace(ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
+                        url = "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(ServiceDistributionUrlForDataset) + "]/+" + ServiceDistributionNameForDataset;
+                    else if (!string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
+                        url = "#5/355422/6668909/l/wms/[" + RemoveQueryString(ServiceDistributionUrlForDataset) + "]";
+                }
+                else if (!string.IsNullOrWhiteSpace(ServiceDistributionProtocolForDataset) && ServiceDistributionProtocolForDataset.Contains(("OGC:WFS")))
+                {
+                    if (!string.IsNullOrWhiteSpace(ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
+                        url = "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(ServiceDistributionUrlForDataset) + "]/+" + ServiceDistributionNameForDataset;
+                    else if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL))
+                        url = "#5/355422/6668909/l/wfs/[" + RemoveQueryString(ServiceDistributionUrlForDataset) + "]";
+                }
+
+            }
+
+            return url;
+        }
+
         string RemoveQueryString(string URL) 
         {
             int startQueryString = URL.IndexOf("?");
@@ -194,6 +224,13 @@ namespace Kartverket.Metadatakatalog.Models
             if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("OGC:WMS") || DistributionDetails.Protocol.Contains("OGC:WFS") || DistributionDetails.Protocol.Contains("OGC:WCS")) && (HierarchyLevel == "service" || HierarchyLevel == "servicelayer")) return true;
             else return false;
         }
+
+        public bool ShowServiceMapLink()
+        {
+            if (!string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset)) return true;
+            else return false;
+        }
+
         public bool ShowWebsiteLink()
         {
             if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains("WWW:LINK") ) return true;

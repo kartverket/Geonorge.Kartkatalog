@@ -122,6 +122,10 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (searchResult != null && searchResult.NumFound > 0)
             {
+                metadata.ServiceDistributionProtocolForDataset = searchResult.Items[0].ServiceDistributionProtocolForDataset != null ? searchResult.Items[0].ServiceDistributionProtocolForDataset : null;
+                metadata.ServiceDistributionUrlForDataset = searchResult.Items[0].ServiceDistributionUrlForDataset != null ? searchResult.Items[0].ServiceDistributionUrlForDataset : null;
+                metadata.ServiceDistributionNameForDataset = searchResult.Items[0].ServiceDistributionNameForDataset != null ? searchResult.Items[0].ServiceDistributionNameForDataset : null;
+
                 var datasetServices = searchResult.Items[0].DatasetServices;
 
                 if (datasetServices != null && datasetServices.Count > 0)
