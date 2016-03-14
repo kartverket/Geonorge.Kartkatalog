@@ -134,6 +134,9 @@ namespace Kartverket.Metadatakatalog.Models
 
         [SolrField("bundle")]
         public List<string> Bundles { get; set; }
+
+        [SolrField("servicelayers")]
+        public List<string> ServiceLayers { get; set; }
     }
 
 }

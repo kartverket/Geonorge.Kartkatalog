@@ -89,6 +89,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// Bundles for dataset
         /// </summary>
         public List<string> Bundles { get; set; }
+        /// <summary>
+        /// ServiceLayers
+        /// </summary>
+        public List<string> ServiceLayers { get; set; }
 
         public Metadata() { 
         }
@@ -128,6 +132,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             ProductSpecificationUrl = item.ProductSpecificationUrl;
             DatasetServices = item.DatasetServices;
             Bundles = item.Bundles;
+            ServiceLayers = item.ServiceLayers;
         }
 
         public static List<Metadata> CreateFromList(IEnumerable<SearchResultItem> items, UrlHelper urlHelper)

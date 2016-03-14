@@ -400,6 +400,90 @@ namespace Kartverket.Metadatakatalog.Service
                     }
                 }
 
+                else if (indexDoc.Type == "service" && string.IsNullOrEmpty(simpleMetadata.ParentIdentifier))
+                {
+                    string searchString = simpleMetadata.Uuid;
+                    var filters = new object[]
+                    {
+                        new PropertyIsLikeType
+                            {
+                                escapeChar = "\\",
+                                singleChar = "_",
+                                wildCard = "%",
+                                PropertyName = new PropertyNameType {Text = new[] {"gmd:parentIdentifier"}},
+                                Literal = new LiteralType {Text = new[] {searchString}}
+                            }
+                    };
+
+                    var filterNames = new ItemsChoiceType23[]
+                    {
+                        ItemsChoiceType23.PropertyIsLike,
+                    };
+
+                    var res = geoNorge.SearchWithFilters(filters, filterNames, 1, 200);
+                    if (res.numberOfRecordsMatched != "0")
+                    {
+                        //Get serviceLayers
+                        List<MetaDataEntry> serviceLayers = new List<MetaDataEntry>();
+
+                        for (int s = 0; s < res.Items.Length; s++)
+                        {
+                            string serviceId = ((www.opengis.net.DCMIRecordType)(res.Items[s])).Items[0].Text[0];
+                            MD_Metadata_Type md = geoNorge.GetRecordByUuid(serviceId);
+                            var simpleMd = new SimpleMetadata(md);
+
+                            SimpleKeyword nationalTheme = SimpleKeyword.Filter(simpleMd.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME).FirstOrDefault();
+                            string keywordNationalTheme = "";
+                            if (nationalTheme != null)
+                                keywordNationalTheme = nationalTheme.Keyword;
+
+                            string OrganizationLogoUrl = "";
+                            if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
+                            {
+                                Task<Organization> organizationTaskRel =
+                                _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
+                                Organization organizationRel = organizationTaskRel.Result;
+                                if (organizationRel != null)
+                                {
+                                    OrganizationLogoUrl = organizationRel.LogoUrl;
+                                }
+                            }
+
+                            string thumbnailsUrl = "";
+                            List<SimpleThumbnail> thumbnailsRel = simpleMd.Thumbnails;
+                            if (thumbnailsRel != null && thumbnailsRel.Count > 0)
+                            {
+                                thumbnailsUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMd.Uuid, thumbnailsRel[thumbnailsRel.Count - 1].URL);
+                            }
+
+                            serviceLayers.Add(new MetaDataEntry
+                            {
+                                Uuid = simpleMd.Uuid,
+                                Title = simpleMd.Title,
+                                ParentIdentifier = simpleMd.ParentIdentifier,
+                                HierarchyLevel = simpleMd.HierarchyLevel,
+                                ContactOwnerOrganization = (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null) ? simpleMd.ContactOwner.Organization : "",
+                                DistributionDetailsName = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Name != null) ? simpleMd.DistributionDetails.Name : "",
+                                DistributionDetailsProtocol = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
+                                DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
+                                KeywordNationalTheme = keywordNationalTheme,
+                                OrganizationLogoUrl = OrganizationLogoUrl,
+                                ThumbnailUrl = thumbnailsUrl
+                            });
+                        }
+
+                        List<string> serviceLayersNewList = new List<string>();
+                        foreach (var service in serviceLayers)
+                        {
+                            serviceLayersNewList.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl + "|" + service.KeywordNationalTheme + "|" + service.OrganizationLogoUrl + "|" + service.ThumbnailUrl);
+                        }
+
+                        indexDoc.ServiceLayers = serviceLayersNewList.ToList();
+
+                    }
+
+                }
+
                 //add DistributionProtocols
                 indexDoc.DistributionProtocols = new List<string>();
                 if (!String.IsNullOrEmpty(indexDoc.DistributionProtocol))
