@@ -33,8 +33,9 @@ var baseurl_local = searchOption.baseUrl;
         }
 
         function performSearch(query, filters, limit, section) {
-
-            var menuService = searchOption.api + '?limit=5&facets[1]name=type&facets[1]value=dataset' + '&text=' + query;
+            console.log("Test encoding");
+            var menuService = encodeURI(searchOption.api + '?limit=5&facets[1]name=type&facets[1]value=dataset' + '&text=' + query);
+            console.log(menuService);
             var request = $http({
                 method: 'GET',
                 url: menuService,
@@ -46,7 +47,7 @@ var baseurl_local = searchOption.baseUrl;
             });
 
 
-            var menuService1 = searchOption.api + '?limit=5&facets[1]name=type&facets[1]value=servicelayer' + '&text=' + query;
+            var menuService1 = encodeURI(searchOption.api + '?limit=5&facets[1]name=type&facets[1]value=servicelayer' + '&text=' + query);
             var request1 = $http({
                 method: 'GET',
                 url: menuService1,
