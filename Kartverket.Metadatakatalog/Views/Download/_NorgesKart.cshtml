@@ -14,7 +14,19 @@
 </div>
 <script>
     var CLIPPERCOORDS;
-    function loadMap(id) {
+    var fixedCoordinates = false;
+    var areatype = "";
+
+    function loadMap(id, fixed, typeOfArea) {
+
+        if (fixed)
+        {
+            fixedCoordinates = true;
+            areatype = typeOfArea;
+            loadMapFixed(id);
+            return;
+        }
+
         var coverageParams = "";
         $.ajax({
             url: '/api/getdata/' + id + '',
@@ -43,8 +55,75 @@
         });
     };
 
+    var areas = {};
+
+    function loadMapFixed(metadataUuid) {
+
+        if (metadataUuid = "d2ae29bd-0692-40de-a173-833afcddfe22")
+            conf = { "service_name": "raster-n250", "center_longitude": "378604", "center_latitude": "7226208", "zoom_level": "3" }
+        else
+            return;
+
+        var socket = new easyXDM.Socket({
+            remote: "http://www.norgeskart.no/nedlasting.html#" + conf.zoom_level + "/" + conf.center_longitude + "/" + conf.center_latitude + "/+" + conf.service_name,
+            onMessage: function (message, origin) {
+                var reslist = document.getElementById('container');
+                var arealist = Array();
+                var data = JSON.parse(message);
+                if (data["type"] == "mapInitialized") return;
+
+                var name = data["attributes"]["n"];
+                var areaname;
+                areaname = name;
+
+                var path = areaname;
+
+                if (data["cmd"] == "featureSelected") {
+                    areas[path] = areaname;
+                }
+                if (data["cmd"] == "featureUnselected") {
+                    delete areas[path];
+                }
+
+
+            },
+            container: document.getElementById("container"),
+            onReady: function () {
+                this.container.getElementsByTagName("iframe")[0].style.width = "100%";
+            }
+        });
+    }
+
     function setCoordinates() {
+
         uuid = $('#setcoordinates').attr('uuid');
+
+        if (fixedCoordinates)
+        {
+            var orderItemSelectOmraader = $('#orderuuid' + uuid + ' .selectOmraader');
+
+            orderItemSelectOmraader.find("option").prop("selected", false)
+
+            orderItemSelectOmraader = $('#orderuuid' + uuid + ' .selectOmraader');
+
+            for (var key in areas) {
+                val = areatype + "_" + key;
+                orderItemSelectOmraader.find("option[value=" + val + "]").prop("selected", "selected");
+            }
+
+            orderItemSelectOmraader.trigger("chosen:updated");
+
+            var orderItems = JSON.parse(localStorage["orderItems"]);
+            setSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
+            setSelectedValues(orderItems, 'selectFormater', 'formats');
+            setSelectedValues(orderItems, 'selectOmraader', 'areas');
+
+            areas = {}
+
+        }
+        else
+        {
+
         localStorage[uuid + '.selected.coordinates'] = CLIPPERCOORDS;
         getSelectedCoordinates(uuid, 'coordinates', 'coordinates');
         localStorage[uuid + '.selected.areas'] = '[]';
@@ -67,12 +146,35 @@
         orderItemSelectFormater.attr("disabled", false);
         orderItemSelectFormater.trigger("chosen:updated");
 
+        }
+
     }
 
     function resizeIframe(iframe) {
         var windowHeight = $(window).height();
         var iframeHeight = windowHeight - 125;
         iframe.height(iframeHeight);
+    }
+
+    // Lagre selected verdier i localStorage
+    function setSelectedValues(orderItems, selectClass, name) {
+        $.each(orderItems, function (key, val) {
+            var select = $('#orderuuid' + val).find('.' + selectClass);
+            var uuid = val;
+            $.each(select, function (key, val) {
+                var selectedValues = [];
+                var option = $(this).find('option:selected');
+                var selectedCount = $(this).find('option:selected').length;
+                if (selectedCount > 0) {
+                    var formgroup = $(this).parent('.form-group');
+                    formgroup.find('.chosen-choices').removeClass('has-error');
+                }
+                option.each(function (i, selected) {
+                    selectedValues[i] = $(selected).val();
+                });
+                localStorage[uuid + '.selected.' + name] = JSON.stringify(selectedValues);
+            });
+        });
     }
 </script>
 

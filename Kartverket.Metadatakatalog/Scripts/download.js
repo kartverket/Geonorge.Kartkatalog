@@ -131,9 +131,12 @@ $(document).ready(function () {
 
     // Legge til uuid i _NorgesKart
     $('#orderlist').on('click', 'button.selectPolygon-button', (function (e) {
-    var uuid = $(this).attr('uuid');
-        if (!mapLoaded)
-            loadMap(uuid);
+        var uuid = $(this).attr('uuid');
+        var orderItemSelectOmraader = $('select[name=' + uuid + '-areas]');
+        var supportspolygonfixedselection = orderItemSelectOmraader.attr('supportspolygonfixedselection');
+        var areatype = orderItemSelectOmraader.attr('areatype');
+        //if (!mapLoaded)
+        loadMap(uuid, supportspolygonfixedselection, areatype);
         //mapLoaded = true; //Need to load each time to set coverageMap.
         $('#norgeskartmodal #setcoordinates').attr('uuid', uuid);
     }));
@@ -174,6 +177,12 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
                     orderItemSelectOmraaderType.append($("<option />").val(val.type + '_' + val.code).text(val.name));
                 }
             });
+
+            if (omraadeTypes[omraade] == "kartblad") {
+                supportsPolygonSelection = true;
+                orderItemSelectOmraader.attr('supportspolygonfixedselection', 'true');
+                orderItemSelectOmraader.attr('areatype', omraadeTypes[omraade]);
+            }
         }
 
         orderItemSelectOmraader.change(function () {
