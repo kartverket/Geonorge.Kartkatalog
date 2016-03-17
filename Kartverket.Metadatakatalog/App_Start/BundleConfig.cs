@@ -76,7 +76,7 @@ namespace Kartverket.Metadatakatalog
             bundles.Add(new ScriptBundle("~/bundles/local-scripts").Include(
                "~/Scripts/site.js",
                "~/Scripts/visninger.js",
-               "~/easyXDM.min.js",
+               "~/Scripts/easyXDM.min.js",
                "~/Scripts/download.js"
            ));
 
