@@ -59,11 +59,13 @@
 
     function loadMapFixed(metadataUuid) {
 
-        if (metadataUuid = "d2ae29bd-0692-40de-a173-833afcddfe22")
+        if (metadataUuid == "d2ae29bd-0692-40de-a173-833afcddfe22")
             conf = { "service_name": "raster-n250", "center_longitude": "378604", "center_latitude": "7226208", "zoom_level": "3" }
+        else if (metadataUuid == "39e022aa-c352-4351-b172-b980b03c578c")
+            conf = { "service_name": "dtm-sjo-25", "center_longitude": "378604", "center_latitude": "7226208", "zoom_level": "3" }
         else
             return;
-
+       
         var socket = new easyXDM.Socket({
             remote: "http://www.norgeskart.no/nedlasting.html#" + conf.zoom_level + "/" + conf.center_longitude + "/" + conf.center_latitude + "/+" + conf.service_name,
             onMessage: function (message, origin) {

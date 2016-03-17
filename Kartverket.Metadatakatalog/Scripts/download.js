@@ -178,7 +178,7 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
                 }
             });
 
-            if (omraadeTypes[omraade] == "kartblad") {
+            if (omraadeTypes[omraade] == "kartblad" || omraadeTypes[omraade] == "celle") {
                 supportsPolygonSelection = true;
                 orderItemSelectOmraader.attr('supportspolygonfixedselection', 'true');
                 orderItemSelectOmraader.attr('areatype', omraadeTypes[omraade]);
