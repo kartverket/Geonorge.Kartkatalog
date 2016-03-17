@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "kartverket-felleskomponenter": "0.0.16"
+  },
+  "license": "MIT",
+  "name": "Metadatakatalog",
+  "private": true,
+  "version": "0.0.0"
+}
