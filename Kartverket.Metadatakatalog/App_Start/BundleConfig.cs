@@ -63,10 +63,22 @@ namespace Kartverket.Metadatakatalog
            ));
 
 
-            
-            
+            bundles.Add(new StyleBundle("~/Content/bower-styles").Include(
+                "~/Content/bower_components/kartverket-felleskomponenter/assets/css/vendor.min.css",
+                "~/Content/bower_components/kartverket-felleskomponenter/assets/css/main.min.css"
+                ));
 
+            bundles.Add(new ScriptBundle("~/bundles/bower-scripts").Include(
+               "~/Content/bower_components/kartverket-felleskomponenter/assets/js/vendor.min.js",
+               "~/Content/bower_components/kartverket-felleskomponenter/assets/js/main.min.js"
+           ));
 
+            bundles.Add(new ScriptBundle("~/bundles/local-scripts").Include(
+               "~/Scripts/site.js",
+               "~/Scripts/visninger.js",
+               "~/easyXDM.min.js",
+               "~/Scripts/download.js"
+           ));
 
             //***************** separate bundles - used in other applications ****************//
 
