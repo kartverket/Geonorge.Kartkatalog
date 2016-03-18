@@ -135,8 +135,9 @@ $(document).ready(function () {
         var orderItemSelectOmraader = $('select[name=' + uuid + '-areas]');
         var supportspolygonfixedselection = orderItemSelectOmraader.attr('supportspolygonfixedselection');
         var areatype = orderItemSelectOmraader.attr('areatype');
+        var mapselectionlayer = orderItemSelectOmraader.attr('mapselectionlayer');
         //if (!mapLoaded)
-        loadMap(uuid, supportspolygonfixedselection, areatype);
+        loadMap(uuid, supportspolygonfixedselection, areatype, mapselectionlayer);
         //mapLoaded = true; //Need to load each time to set coverageMap.
         $('#norgeskartmodal #setcoordinates').attr('uuid', uuid);
     }));
@@ -182,6 +183,10 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
                 supportsPolygonSelection = true;
                 orderItemSelectOmraader.attr('supportspolygonfixedselection', 'true');
                 orderItemSelectOmraader.attr('areatype', omraadeTypes[omraade]);
+
+                var mapSelectionLayer = localStorage.getItem(uuid + '.capabilities.mapSelectionLayer');
+                orderItemSelectOmraader.attr('mapselectionlayer', mapSelectionLayer);
+
             }
         }
 

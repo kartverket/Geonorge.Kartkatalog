@@ -14,13 +14,15 @@
     var CLIPPERCOORDS;
     var fixedCoordinates = false;
     var areatype = "";
+    var mapSelectionLayer = "";
 
-    function loadMap(id, fixed, typeOfArea) {
+    function loadMap(id, fixed, typeOfArea, mapselectionlayer) {
 
         if (fixed)
         {
             fixedCoordinates = true;
             areatype = typeOfArea;
+            mapSelectionLayer = mapselectionlayer;
             loadMapFixed(id);
             return;
         }
@@ -56,31 +58,9 @@
     var areas = {};
 
     function loadMapFixed(metadataUuid) {
+        
+        conf = { "service_name": mapSelectionLayer, "center_longitude": "378604", "center_latitude": "7226208", "zoom_level": "3" }
 
-        if (metadataUuid == "d2ae29bd-0692-40de-a173-833afcddfe22")
-            //N250 Raster
-            conf = { "service_name": "raster-n250", "center_longitude": "378604", "center_latitude": "7226208", "zoom_level": "3" }
-        else if (metadataUuid == "39e022aa-c352-4351-b172-b980b03c578c")
-            //Sjø terrengmodeller
-            conf = { "service_name": "dtm-sjo-25", "center_longitude": "378604", "center_latitude": "7226208", "zoom_level": "3" }
-        else if (metadataUuid == "1a7d4919-fc5d-4278-9ae9-45ee23f26808")
-            //N50 Raster
-            conf = { "service_name": "raster-33", "center_longitude": "378604", "center_latitude": "7226208", "zoom_level": "3" }
-        else if (metadataUuid == "6a21de44-5a66-49b3-89e9-88c8bd0b948f")
-            //N1000 Raster
-            conf = { "service_name": "raster-n1000", "center_longitude": "378604", "center_latitude": "7226208", "zoom_level": "3" }
-        else if (metadataUuid == "b466d866-8e32-438b-bb58-80e52fe85ada")
-            //N500 Raster
-            conf = { "service_name": "raster-n500", "center_longitude": "378604", "center_latitude": "7226208", "zoom_level": "3" }
-        else if (metadataUuid == "dddbb667-1303-4ac5-8640-7ec04c0e3918")
-            //DTM 10
-            conf = { "service_name": "dtm-dekning-utm32", "center_longitude": "378604", "center_latitude": "7226208", "zoom_level": "3" }
-        else if (metadataUuid == "e25d0104-0858-4d06-bba8-d154514c11d2")
-            //DTM 50
-            conf = { "service_name": "dtm-dekning-utm33-100km", "center_longitude": "378604", "center_latitude": "7226208", "zoom_level": "3" }
-
-        else
-            return;
        
         var socket = new easyXDM.Socket({
             remote: "@Html.SecureNorgeskartUrl().Replace("norgeskart.no", "www.norgeskart.no").Replace("geoportal/staging/", "")nedlasting.html#" + conf.zoom_level + "/" + conf.center_longitude + "/" + conf.center_latitude + "/+" + conf.service_name,
