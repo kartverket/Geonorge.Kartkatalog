@@ -83,7 +83,7 @@
             return;
        
         var socket = new easyXDM.Socket({
-            remote: "http://www.norgeskart.no/nedlasting.html#" + conf.zoom_level + "/" + conf.center_longitude + "/" + conf.center_latitude + "/+" + conf.service_name,
+            remote: "@Html.SecureNorgeskartUrl().Replace("norgeskart.no", "www.norgeskart.no").Replace("geoportal/staging/", "")nedlasting.html#" + conf.zoom_level + "/" + conf.center_longitude + "/" + conf.center_latitude + "/+" + conf.service_name,
             onMessage: function (message, origin) {
                 var reslist = document.getElementById('container');
                 var arealist = Array();
