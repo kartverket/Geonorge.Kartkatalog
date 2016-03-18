@@ -121,6 +121,21 @@ if (contact != null)
         <a href="" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span> Last ned</a>
     }
 
+    @if (!string.IsNullOrEmpty(Model.CoverageUrl))
+    {
+        if (Model.CoverageUrl.IndexOf("TYPE:") != -1)
+        {
+            <a href="@Model.GetCoverageLink()" onclick="ga('send', 'event', 'Nedlasting', 'visdekningskart');" class="btn" target="_blank"><span class="custom-icon custom-icon-info"></span> Vis dekningskart</a>
+        }
+        else
+        {
+            <a href="@Model.CoverageUrl" onclick="ga('send', 'event', 'Nedlasting', 'visdekningskart');" class="btn" target="_blank"><span class="custom-icon custom-icon-info"></span> Vis dekningskart</a>
+        }
+    }
+    else
+    {
+        <a href = "" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-info"></span> Vis dekningskart</a>
+    }
 
 
     @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
