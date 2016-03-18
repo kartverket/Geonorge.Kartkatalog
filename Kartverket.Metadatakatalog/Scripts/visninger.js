@@ -60,7 +60,8 @@ function getFacetFromUrl() {
         activeFilters = JSON.parse(localStorage.getItem("activeFilters"));
     };
     var regExp = new RegExp(".*Facets\\[0\\]\.name=([a-z]*)&.*");
-    var facetName = regExp.exec(location.search);
+    var searchString = decodeURIComponent(location.search);
+    var facetName = regExp.exec(searchString);
     if (facetName != null) {
         $.each(facetName, function (key, value) {
             if (value == 'theme') {
