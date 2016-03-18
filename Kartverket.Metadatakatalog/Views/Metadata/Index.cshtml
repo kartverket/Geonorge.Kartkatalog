@@ -533,16 +533,23 @@ if (contact != null)
                     @DisplayValue("Status", Model.Status)
                     @DisplayValue("Prosesshistorie", Model.ProcessHistory)
 
-                    @if (Model.QualitySpecification != null)
-                {
+                    @if (Model.QualitySpecifications != null)
+                    {
                         <h3>Konformitet</h3>
-                        <p><strong>Standard: </strong>@Model.QualitySpecification.Title </p>
-                        <p> <strong>Dato: </strong>@Html.DisplayFor(m => m.QualitySpecification.Date) (@Model.QualitySpecification.DateType) </p>
-                        <p> <strong>Forklaring av resultat: </strong>@Model.QualitySpecification.Explanation </p>
-                        <p> @(Model.QualitySpecification.Result ? "Godkjent" : "Ikke godkjent")  </p>
+                        for(int s = 0; s < Model.QualitySpecifications.Count; s ++)
+                        {
+                        <p><strong>Standard: </strong>@Model.QualitySpecifications[s].Title </p>
+                        <p> <strong>Dato: </strong>@Html.DisplayFor(m => Model.QualitySpecifications[s].Date) (@Model.QualitySpecifications[s].DateType) </p>
+                        <p> <strong>Forklaring av resultat: </strong>@Model.QualitySpecifications[s].Explanation </p>
+                        <p> @(Model.QualitySpecifications[s].Result ? "Godkjent" : "Ikke godkjent")  </p>
+                            if(Model.QualitySpecifications.Count > 1 && s != Model.QualitySpecifications.Count - 1)
+                            {
+                            <hr />
+                            }
+                        }
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Purpose))
-                {
+                    {
 
                         <h2>Formål</h2>
                         <p>@Model.Purpose</p>

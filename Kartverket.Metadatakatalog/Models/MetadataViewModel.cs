@@ -68,7 +68,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string ProductSpecificationUrl { get; set; }
         public string CoverageUrl { get; set; }
         public string Purpose { get; set; }
-        public QualitySpecification QualitySpecification { get; set; }
+        public List<QualitySpecification> QualitySpecifications { get; set; }
         public ReferenceSystem ReferenceSystem { get; set; }
         public string ResolutionScale { get; set; }
         public string SpatialRepresentation { get; set; }

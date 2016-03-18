@@ -79,7 +79,7 @@ namespace Kartverket.Metadatakatalog.Service
                 ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl,
                 CoverageUrl = simpleMetadata.CoverageUrl,
                 Purpose = simpleMetadata.Purpose,
-                QualitySpecification = Convert(simpleMetadata.QualitySpecification),
+                QualitySpecifications = Convert(simpleMetadata.QualitySpecifications),
                 ReferenceSystem = Convert(simpleMetadata.ReferenceSystem),
                 ResolutionScale = simpleMetadata.ResolutionScale,
                 SpatialRepresentation = register.GetSpatialRepresentation(simpleMetadata.SpatialRepresentation),
@@ -296,20 +296,24 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
-        private QualitySpecification Convert(SimpleQualitySpecification simpleQualitySpecification)
+        private List<QualitySpecification> Convert(List<SimpleQualitySpecification> simpleQualitySpecifications)
         {
-            QualitySpecification output = null;
-            if (simpleQualitySpecification != null)
+            List<QualitySpecification> output = new List<QualitySpecification>();
+            if (simpleQualitySpecifications != null)
             {
-                output = new QualitySpecification
+                foreach (var spec in simpleQualitySpecifications)
                 {
-                    Title = simpleQualitySpecification.Title,
-                    Date= (simpleQualitySpecification.Date != null && !string.IsNullOrWhiteSpace(simpleQualitySpecification.Date)) ? DateTime.Parse(simpleQualitySpecification.Date) : (DateTime?)null,
-                    //Date = simpleQualitySpecification.Date,
-                    DateType = simpleQualitySpecification.DateType,
-                    Explanation = simpleQualitySpecification.Explanation,
-                    Result = simpleQualitySpecification.Result
-                };
+                    output.Add(new QualitySpecification
+                    {
+                        Title = spec.Title,
+                        Date = (spec.Date != null && !string.IsNullOrWhiteSpace(spec.Date)) ? DateTime.Parse(spec.Date) : (DateTime?)null,
+                        //Date = simpleQualitySpecification.Date,
+                        DateType = spec.DateType,
+                        Explanation = spec.Explanation,
+                        Result = spec.Result
+                    }
+                    );
+                }                
             }
             return output;
         }
