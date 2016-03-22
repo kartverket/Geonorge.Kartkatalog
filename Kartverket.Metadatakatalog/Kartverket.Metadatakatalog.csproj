@@ -344,6 +344,9 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\chevron-up.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\favicon.ico" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\geonorge.png" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\geonorge_devlogo.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\geonorge_logo.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\geonorge_testlogo.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\ikoner\ekternlink-disabled.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\ikoner\ekternlink-white.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\ikoner\ekternlink.svg" />
@@ -372,6 +375,7 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\js\vendor.js" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\js\vendor.min.js" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_autoCompleteRow.html" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_SharedMenu.html" />
     <Content Include="Content\chosen-sprite%402x.png" />
     <Content Include="Content\chosen-sprite.png" />
     <Content Include="Content\chosen.css" />
