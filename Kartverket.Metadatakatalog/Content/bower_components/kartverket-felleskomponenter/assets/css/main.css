@@ -2510,6 +2510,9 @@ ul#thumbnailsCoverage {
       .container-login ul li a {
         color: #968c83; }
 
+.search-button-wrapper .btn:focus, .search-button-wrapper .btn:hover {
+  background-color: #FFF; }
+
 @media (max-width: 767px) {
   .container-login {
     display: none; }

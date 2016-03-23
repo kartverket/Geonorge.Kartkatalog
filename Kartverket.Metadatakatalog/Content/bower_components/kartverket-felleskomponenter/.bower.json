@@ -27,8 +27,7 @@
     "/Gulpfile.js",
     "/package.json",
     "bower_components",
-    "/sass",
-    "/js",
+    "/src",
     "test",
     "tests"
   ],
@@ -42,14 +41,14 @@
     "angular-bootstrap": "^1.2.4",
     "js-cookie": "^2.1.0"
   },
-  "version": "0.0.21",
-  "_release": "0.0.21",
+  "version": "0.0.24",
+  "_release": "0.0.24",
   "_resolution": {
     "type": "version",
-    "tag": "v0.0.21",
-    "commit": "7e868a4c83c3eb4e6f14698127efc150a7154d04"
+    "tag": "v0.0.24",
+    "commit": "68c0df184a35d688f014ad660941c310ecbf5d92"
   },
   "_source": "git://github.com/kartverket/felleskomponenter.git",
-  "_target": "0.0.21",
+  "_target": "0.0.24",
   "_originalSource": "kartverket-felleskomponenter"
 }

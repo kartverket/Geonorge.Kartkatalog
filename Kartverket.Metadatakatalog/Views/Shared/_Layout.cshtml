@@ -34,13 +34,27 @@
 
     <script>
         var applicationEnvironment = '@Html.EnvironmentName()';
+        var authenticationData = {
+            supportsLogin: true,
+            isAuthenticated: @Request.IsAuthenticated.ToString().ToLower(),
+            urlActionSignOut: '@Url.Action("SignOut", "AuthServices")',
+            urlActionSignIn: '@Url.Action("SignIn", "AuthServices")'
+            @if (Request.IsAuthenticated)
+            {
+                foreach (var c in System.Security.Claims.ClaimsPrincipal.Current.Claims) {
+                    if (c.Type == "urn:oid:0.9.2342.19200300.100.1.1" || c.Type == "username") {
+                       <text>, userName: '@c.Value'</text>
+                    }
+                }
+            }
+        }
     </script>
     @Scripts.Render("~/bundles/bower-scripts")
     @Scripts.Render("~/bundles/local-scripts")
     @RenderSection("scripts", false)
 </head>
 <body class="geonorge-container prototype  geonorge ng-scope" ng-app="geonorge">
-    @Html.Partial("_SharedMenu")
+    @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_SharedMenu.min.cshtml")
 
     <div class="container container-breadcrumbs" id="navTabCont">
         <ul class="breadcrumbs col-md-12">
