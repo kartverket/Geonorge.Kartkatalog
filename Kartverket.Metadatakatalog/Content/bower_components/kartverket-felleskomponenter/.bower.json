@@ -8,10 +8,10 @@
   "main": [
     "assets/js/*.js",
     "assets/css/*.css",
-    "assets/images/*.png",
-    "assets/images/*.svg",
-    "assets/images/*.gif",
-    "assets/images/*.ico"
+    "assets/images/**/*.png",
+    "assets/images/**/*.svg",
+    "assets/images/**/*.gif",
+    "assets/images/**/*.ico"
   ],
   "moduleType": [],
   "keywords": [
@@ -41,14 +41,14 @@
     "angular-bootstrap": "^1.2.4",
     "js-cookie": "^2.1.0"
   },
-  "version": "0.0.24",
-  "_release": "0.0.24",
+  "version": "0.0.26",
+  "_release": "0.0.26",
   "_resolution": {
     "type": "version",
-    "tag": "v0.0.24",
-    "commit": "68c0df184a35d688f014ad660941c310ecbf5d92"
+    "tag": "v0.0.26",
+    "commit": "2ce80e4acc27534d303de37f5f323717ffe98bd9"
   },
   "_source": "git://github.com/kartverket/felleskomponenter.git",
-  "_target": "0.0.24",
+  "_target": "0.0.26",
   "_originalSource": "kartverket-felleskomponenter"
 }

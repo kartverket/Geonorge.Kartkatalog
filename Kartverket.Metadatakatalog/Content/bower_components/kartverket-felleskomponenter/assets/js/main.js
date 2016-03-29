@@ -29,7 +29,7 @@ $(window).load(function () {
 $("document").ready( function(){
 	if ($("#geonorge-logo").length){ 
 		$("#geonorge-logo a").prop("href", geonorgeUrl);
-		$("#geonorge-logo a img").prop("src", "/Content/bower_components/kartverket-felleskomponenter/assets/images/geonorge_" + applicationEnvironment + "logo.svg");
+		$("#geonorge-logo a img").prop("src", "/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/geonorge_" + applicationEnvironment + "logo.svg");
 	}
 	if (supportsLogin && $("#container-login").length){
 		$("#container-login").append("<ul></ul>");
@@ -580,7 +580,6 @@ $(document).ready(function () {
 
     $("<p>te</p>").appendTo($(liUl).find("ul"));
 });
-
 
 
 (function () {
