@@ -1834,6 +1834,34 @@ aside ul li, .container-footer ul li {
 .btn-group > .btn {
   float: none !important; }
 
+.btn-table-row-5 {
+  margin: -2px; }
+  .btn-table-row-5:after {
+    clear: both;
+    display: block;
+    content: "";
+    margin-bottom: 4px; }
+  .btn-table-row-5 .table-btn-container {
+    width: 20%;
+    float: left;
+    display: inline-block;
+    padding: 2px; }
+    .btn-table-row-5 .table-btn-container .btn {
+      width: 100%;
+      margin: 0; }
+    @media (max-width: 1199px) {
+      .btn-table-row-5 .table-btn-container {
+        width: 25%; } }
+    @media (max-width: 991px) {
+      .btn-table-row-5 .table-btn-container {
+        width: 33.333%; } }
+    @media (max-width: 720px) {
+      .btn-table-row-5 .table-btn-container {
+        width: 50%; } }
+    @media (max-width: 400px) {
+      .btn-table-row-5 .table-btn-container {
+        width: 100%; } }
+
 .search-filter-wrapper {
   margin-top: 10px; }
 
@@ -1873,7 +1901,7 @@ aside ul li, .container-footer ul li {
 .btn .custom-icon.custom-icon-info {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/info-white.svg");
   width: 10pt;
-  height: 10pt;
+  height: 16pt;
   margin-left: -3px; }
 
 .disabled .custom-icon.custom-icon-info {
@@ -2779,9 +2807,15 @@ input[type="checkbox"].input-validation-error {
 
 #galleryView .teaser-with-background-image {
   text-align: center; }
-
-#galleryView .teaser-with-background-image .teaser-heading {
-  font-size: 16pt; }
+  #galleryView .teaser-with-background-image a:hover {
+    text-decoration: none; }
+  #galleryView .teaser-with-background-image .teaser-caption {
+    position: relative; }
+    #galleryView .teaser-with-background-image .teaser-caption .teaser-heading {
+      font-size: 12pt; }
+      @media (min-width: 1200px) {
+        #galleryView .teaser-with-background-image .teaser-caption .teaser-heading {
+          font-size: 14pt; } }
 
 .view-navigation {
   margin-top: 38px; }
