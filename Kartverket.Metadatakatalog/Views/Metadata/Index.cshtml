@@ -138,8 +138,8 @@ if (contact != null)
         }
         </div>
 
-    <div class="table-btn-container">
-        <a href="" class="btn disabled" disabled="disabled"><span class="fa fa-rss"></span> Følg endringsvarsel</a>
+        <div class="table-btn-container">
+        <a id="servicefeed" href="" class="btn disabled" disabled="disabled" target="_blank"><span class="fa fa-rss"></span> Følg endringsvarsel</a>
         </div>
 
 
@@ -708,6 +708,18 @@ if (keywords != null && keywords.Any())
 
 @section scripts {
     <script>
+        @{
+            string itemUuid = (Model.Uuid != null) ? Model.Uuid : "";
+            string itemTitle = (Model.Title != null) ? Model.Title : "";
+            string itemOrganizationLogoUrl = (Model.OrganizationLogoUrl != null) ? Model.OrganizationLogoUrl : "";
+            string itemDistributionDetailsUrl = (@Model.DistributionDetails != null && @Model.DistributionDetails.URL != null) ? @Model.DistributionDetails.URL : "";
+        }
+
+        var uuid = '@itemUuid';
+        var title = '@itemTitle';
+        var organizationLogoUrl = '@itemOrganizationLogoUrl.Replace("http://", "https://")';
+        var distributionDetailsUrl = '@itemDistributionDetailsUrl.Replace("http://", "https://")';
+        var rootUrl = 'metadata/uuid/';
 
         function showAlert(message, colorClass) {
             $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
@@ -715,27 +727,39 @@ if (keywords != null && keywords.Any())
             $('#feedback-alert').show();
         }
 
+        function getServiceFeed() {
+            $.ajax({
+                type: "GET",
+                url: "https://nedlasting.geonorge.no/geonorge/Tjenestefeed.xml",
+                dataType: "xml",
+                success: getFeedLink
+            });
+        }
+
+        function getFeedLink(xml) {
+
+            $(xml).find("entry").each(function () {
+                var identifier_code = $(this).find("spatial_dataset_identifier_code").text();
+                if (uuid == identifier_code){
+                    var link = $(this).find("link").text();
+                    $("#servicefeed").removeClass("disabled");
+                    $("#servicefeed").removeAttr("disabled");
+                    $("#servicefeed").prop("href", link);
+                    return false;
+                }
+
+            });
+        }
+
         $(document).ready(function () {
 
             changeLayout("tableView");
 
+            getServiceFeed();
+
             if (typeof Storage !== "undefined") {
 
                 console.log('window.localStorage is available!');
-
-
-                @{
-                        string itemUuid = (Model.Uuid != null) ? Model.Uuid : "";
-                        string itemTitle = (Model.Title != null) ? Model.Title : "";
-                        string itemOrganizationLogoUrl = (Model.OrganizationLogoUrl != null) ? Model.OrganizationLogoUrl : "";
-                        string itemDistributionDetailsUrl = (@Model.DistributionDetails != null && @Model.DistributionDetails.URL != null) ? @Model.DistributionDetails.URL : "";
-                        }
-
-                var uuid = '@itemUuid';
-                var title = '@itemTitle';
-                var organizationLogoUrl = '@itemOrganizationLogoUrl.Replace("http://", "https://")';
-                var distributionDetailsUrl = '@itemDistributionDetailsUrl.Replace("http://", "https://")';
-                var rootUrl = 'metadata/uuid/';
 
                 var orderItems = [];
                 $('#add-to-cart-btn').click(function () {
