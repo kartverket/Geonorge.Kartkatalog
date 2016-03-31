@@ -19,6 +19,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// <summary>
         /// Limits the list to facets. Ex. <![CDATA[ &facets[0]name=organization&facets[0]value=Kartverket]]>. Facets result is grouped by  "theme" , "type", "organization".
         /// </summary>
+        /// <summary>
+        /// Field to order by, ex: orderby=title, default order is score desc.
+        /// </summary>
+        public string orderby { get; set; }
         public List<FacetInput> facets { get; set; }
 
         public SearchParameters()
