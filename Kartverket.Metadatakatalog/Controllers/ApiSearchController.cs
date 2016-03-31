@@ -145,7 +145,8 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Text = parameters.text,
                 Facets = CreateFacetParameters(parameters.facets),
                 Offset = parameters.offset,
-                Limit = parameters.limit
+                Limit = parameters.limit,
+                orderby = parameters.orderby
             };
         }
 
