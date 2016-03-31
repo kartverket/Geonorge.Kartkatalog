@@ -1737,6 +1737,16 @@ h3.article-h3:after {
 
 h1.small-h1 {
   font-size: 48pt; }
+  @media (max-width: 767px) {
+    h1.small-h1 {
+      font-size: 34pt;
+      padding-top: 26px;
+      word-wrap: break-word; } }
+
+@media (max-width: 767px) {
+  h2 {
+    font-size: 24pt;
+    word-wrap: break-word; } }
 
 p.article-p {
   font-size: 14pt;
@@ -2746,6 +2756,9 @@ input[type="checkbox"].input-validation-error {
 
 #listView .search-results-title {
   width: 50%; }
+  @media (max-width: 767px) {
+    #listView .search-results-title {
+      width: 100%; } }
 
 #listView .search-results-name {
   font-size: 18pt; }
@@ -2759,8 +2772,27 @@ input[type="checkbox"].input-validation-error {
 #listView .search-results-action-icons {
   display: none; }
 
+@media (max-width: 767px) {
+  #listView .search-results-list-image {
+    display: none; } }
+
 #listView .search-results-action-buttons .btn {
   width: 130px; }
+  @media (max-width: 1199px) {
+    #listView .search-results-action-buttons .btn {
+      width: 110px;
+      padding: 6px 4px; } }
+  @media (max-width: 767px) {
+    #listView .search-results-action-buttons .btn {
+      width: 130px;
+      padding: 6px 12px; } }
+  @media (max-width: 445px) {
+    #listView .search-results-action-buttons .btn {
+      width: 100%; } }
+
+@media (max-width: 767px) {
+  #listView .search-results-action-buttons {
+    margin-top: 20px; } }
 
 #listView .search-results-gallery-image {
   display: none; }
@@ -2844,6 +2876,8 @@ input[type="checkbox"].input-validation-error {
 .container .shopping-cart {
   top: initial;
   bottom: 0; }
+  .container .shopping-cart img {
+    max-width: none; }
 
 #orderitem-count {
   position: absolute;
