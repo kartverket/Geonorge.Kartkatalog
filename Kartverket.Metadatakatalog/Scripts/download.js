@@ -248,14 +248,14 @@ function populateProjectionAndFormatList(uuid, orderItemOmraader) {
 
                     $.each(val.projections, function (key, val) {
                         if (orderItemSelectProjeksjoner.find('option[value="' + val.code + '"]').length <= 0) {
-                            orderItemSelectProjeksjoner.append($("<option selected />").val(val.code).text(val.name));
+                            orderItemSelectProjeksjoner.append($("<option />").val(val.code).text(val.name));
                             orderItemSelectProjeksjoner.trigger("chosen:updated");
                         }
 
                     });
                     $.each(val.formats, function (key, val) {
                         if (orderItemSelectFormater.find('option[value="' + val.name + '"]').length <= 0) {
-                            orderItemSelectFormater.append($("<option selected />").val(val.name).text(val.name));
+                            orderItemSelectFormater.append($("<option />").val(val.name).text(val.name));
                             orderItemSelectFormater.trigger("chosen:updated");
                         }
                     });
