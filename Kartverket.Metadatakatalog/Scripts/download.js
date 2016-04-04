@@ -191,7 +191,7 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
         }
 
         orderItemSelectOmraader.change(function () {
-            //populateProjectionAndFormatList(uuid, orderItemOmraader);
+            populateProjectionAndFormatList(uuid, orderItemOmraader);
         });
 
     } else {
@@ -384,7 +384,7 @@ function generateView(template, orderItems) {
         getSelectedValues(orderItems, 'selectFormater', 'formats');
         getSelectedValues(orderItems, 'selectOmraader', 'areas');
         var orderItemOmraader = (JSON.parse(localStorage.getItem(uuid + '.codelists.area')));
-        //populateProjectionAndFormatList(uuid, orderItemOmraader);
+        populateProjectionAndFormatList(uuid, orderItemOmraader);
         getSelectedValues(uuid, 'coordinates', 'coordinates');
     });
 }
