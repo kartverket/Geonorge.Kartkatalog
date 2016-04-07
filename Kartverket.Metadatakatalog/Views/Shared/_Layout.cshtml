@@ -22,11 +22,7 @@
     </title>
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,700" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Raleway:400,100,300,500,600,700" rel="stylesheet" type="text/css">
-    @*@Styles.Render("~/Content/kartkatalog-styles")*@
-    @Styles.Render("~/Content/bower-styles")
-    <!--[if IE]>
-        <link rel="stylesheet" type="text/css" href="/Content/ie-only.css" />
-    <![endif]-->
+    @Styles.Render("~/Content/bower_components/kartverket-felleskomponenter/assets/css/styles")
 
     @RenderSection("head", false)
 
@@ -49,8 +45,7 @@
             }
         }
     </script>
-    @Scripts.Render("~/bundles/bower-scripts")
-    @Scripts.Render("~/bundles/local-scripts")
+    @Scripts.Render("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts")
     @RenderSection("scripts", false)
 </head>
 <body class="geonorge-container prototype  geonorge ng-scope" ng-app="geonorge">
