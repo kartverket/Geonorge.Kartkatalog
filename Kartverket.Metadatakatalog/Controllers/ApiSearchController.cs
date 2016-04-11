@@ -106,6 +106,16 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         }
 
+
+        [System.Web.Http.Route("api/dcat")]
+        [System.Web.Http.HttpGet]
+        public System.Net.Http.HttpResponseMessage GetDcat()
+        {
+            var dcat = new DcatService().GenerateDcat();
+            return new System.Net.Http.HttpResponseMessage()
+            { Content = new System.Net.Http.StringContent(dcat.OuterXml, System.Text.Encoding.UTF8, "application/xml") };
+        }
+
         private Models.SearchResult CreateRelated(MetadataViewModel result)
         {
             Models.SearchResult res = null;

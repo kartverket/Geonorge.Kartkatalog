@@ -302,6 +302,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UI.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\DcatService.cs" />
     <Compile Include="Service\DownloadService.cs" />
     <Compile Include="Service\ErrorService.cs" />
     <Compile Include="Service\IErrorService.cs" />
