@@ -1,9 +1,14 @@
-﻿using System;
+﻿using GeoNorgeAPI;
+using Kartverket.Geonorge.Utilities.Organization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Xml;
 using System.Xml.Schema;
+using www.opengis.net;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -25,69 +30,109 @@ namespace Kartverket.Metadatakatalog.Service
         const string xmlnsGmd = "http://www.isotc211.org/2005/gmd";
         const string xmlnsRdfs = "http://www.w3.org/2000/01/rdf-schema#";
 
+        string kartkatalogenUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"];
+
         XmlDocument doc;
+        SearchResultsType metadataSets;
+
+        GeoNorge geoNorge = new GeoNorge("", "", WebConfigurationManager.AppSettings["GeoNetworkUrl"]);
+
+        DateTime? catalogLastModified;
+
+        private readonly OrganizationService _organizationService = new OrganizationService(WebConfigurationManager.AppSettings["RegistryUrl"], new HttpClientFactory());
+
+        Dictionary<string, string> OrganizationsLink;
 
         public XmlDocument GenerateDcat()
         {
+            OrganizationsLink = GetOrganizationsLink();
+            metadataSets = GetDatasets();
+
             XmlElement root = Setup();
 
             XmlElement catalog = CreateCatalog(root);
 
             CreateDatasets(root, catalog);
 
+            Finalize(root, catalog);
+
+            doc.Save(System.Web.HttpContext.Current.Request.MapPath("~\\dcat\\geonorge_dcat.rdf"));
+
             return doc;
         }
+
 
         private void CreateDatasets(XmlElement root, XmlElement catalog)
         {
 
-            for (int identifier = 1; identifier < 3; identifier++)
+            for (int d = 0; d < metadataSets.Items.Length; d++)
             {
+                string uuid = ((www.opengis.net.DCMIRecordType)(metadataSets.Items[d])).Items[0].Text[0];
+                MD_Metadata_Type md = geoNorge.GetRecordByUuid(uuid);
+                var data = new SimpleMetadata(md);
 
                 //Map dataset to catalog
                 XmlElement catalogDataset = doc.CreateElement("dct", "dataset", xmlnsDct);
-                catalogDataset.SetAttribute("resource", xmlnsRdf, "http://www.geonorge.no/geonetwork/resource/" + identifier);
+                catalogDataset.SetAttribute("resource", xmlnsRdf, kartkatalogenUrl + "Metadata/uuid/" + data.Uuid);
                 catalog.AppendChild(catalogDataset);
 
                 XmlElement dataset = doc.CreateElement("dcat", "Dataset", xmlnsDcat);
-                dataset.SetAttribute("about", xmlnsRdf, "http://www.geonorge.no/geonetwork/resource/" + identifier);
+                dataset.SetAttribute("about", xmlnsRdf, kartkatalogenUrl + "Metadata/uuid/" + data.Uuid);
                 root.AppendChild(dataset);
 
                 XmlElement datasetIdentifier = doc.CreateElement("dct", "identifier", xmlnsDct);
-                datasetIdentifier.InnerText = identifier.ToString();
+                datasetIdentifier.InnerText = data.Uuid.ToString();
                 dataset.AppendChild(datasetIdentifier);
 
                 XmlElement datasetTitle = doc.CreateElement("dct", "title", xmlnsDct);
-                datasetTitle.InnerText = "Verdifulle kulturlandskap";
+                datasetTitle.InnerText = data.Title;
                 dataset.AppendChild(datasetTitle);
 
+
                 XmlElement datasetDescription = doc.CreateElement("dct", "description", xmlnsDct);
-                datasetDescription.InnerText = "Datasettet viser forvaltningsmessig høyt prioriterte kulturlandskapsområder med både biologiske og kulturhistoriske verdier. Datasettet omfatter blant annet de høgest prioriterte områdene i Nasjonal registrering av verdifulle kulturlandskap, og utgjør 10-30 områder i hvert fylke, totalt ca. 300 områder i landet. Datasettet er ajourført pr. september 2011, og vil bli fortløpende komplettert i Naturbase. Datasettet innholder utvalgte opplysninger fra et separat fagsystem for kulturlandskap som forvaltes av Fylkesmannen. Nærmere opplysninger kan fås derfra.";
+                if (!string.IsNullOrEmpty(data.Abstract))
+                    datasetDescription.InnerText = data.Abstract;
                 dataset.AppendChild(datasetDescription);
+                    
+                foreach(var keyword in data.Keywords) { 
 
                 XmlElement datasetKeyword = doc.CreateElement("dct", "keyword", xmlnsDct);
-                datasetKeyword.InnerText = "kulturlandskap";
+                datasetKeyword.InnerText = keyword.Keyword;
                 dataset.AppendChild(datasetKeyword);
 
-                XmlElement datasetKeyword2 = doc.CreateElement("dct", "keyword", xmlnsDct);
-                datasetKeyword2.InnerText = "biologiske og kulturhistoriske verdier";
-                dataset.AppendChild(datasetKeyword2);
+                }
 
-                //todo theme
+                //Todo theme
 
+                if (data.Thumbnails != null && data.Thumbnails.Count > 0) { 
+                    XmlElement datasetThumbnail = doc.CreateElement("foaf", "thumbnail", xmlnsFoaf);
+                    datasetThumbnail.SetAttribute("resource", xmlnsRdf, data.Thumbnails[0].URL);
+                    dataset.AppendChild(datasetThumbnail);
+                }
 
-                XmlElement datasetThumbnail = doc.CreateElement("foaf", "thumbnail", xmlnsFoaf);
-                datasetThumbnail.SetAttribute("resource", xmlnsRdf, "https://www.geonorge.no/geonetwork/srv/nor/resources.get?uuid=a6368bed-4896-41d3-92aa-cc2b4261adc3&amp;access=public&amp;fname=kulturlandskap_dn_s.png");
-                dataset.AppendChild(datasetThumbnail);
 
                 XmlElement datasetUpdated = doc.CreateElement("dct", "updated", xmlnsDct);
                 datasetUpdated.SetAttribute("datatype", xmlnsRdf, "http://www.w3.org/2001/XMLSchema#date");
-                datasetUpdated.InnerText = "2016-01-26";
+                if (data.DateUpdated.HasValue) { 
+                    datasetUpdated.InnerText = data.DateUpdated.Value.ToString("yyyy-MM-dd");
+                    if(!catalogLastModified.HasValue || data.DateUpdated > catalogLastModified)
+                        catalogLastModified = data.DateUpdated;
+                }
                 dataset.AppendChild(datasetUpdated);
 
+
                 XmlElement datasetPublisher = doc.CreateElement("dct", "publisher", xmlnsDct);
-                datasetPublisher.SetAttribute("resource", xmlnsRdf, "https://register.geonorge.no/register/organisasjoner/kartverket/miljodirektoratet");
+                if(data.ContactOwner != null && !string.IsNullOrEmpty(data.ContactOwner.Organization) && OrganizationsLink[data.ContactOwner.Organization] != null )
+                    datasetPublisher.SetAttribute("resource", xmlnsRdf, OrganizationsLink[data.ContactOwner.Organization]);
                 dataset.AppendChild(datasetPublisher);
+
+                Organization organization = null;
+
+                if (data.ContactOwner != null)
+                {
+                    Task<Organization> getOrganizationTask = _organizationService.GetOrganizationByName(data.ContactOwner.Organization);
+                    organization = getOrganizationTask.Result;
+                }
 
                 XmlElement datasetContactPoint = doc.CreateElement("dcat", "contactPoint", xmlnsDcat);
                 dataset.AppendChild(datasetContactPoint);
@@ -97,107 +142,107 @@ namespace Kartverket.Metadatakatalog.Service
 
                 XmlElement datasetOrganizationName = doc.CreateElement("vcard", "organization-name", xmlnsVcard);
                 datasetOrganizationName.SetAttribute("xml:lang", "");
-                datasetOrganizationName.InnerText = "Miljødirektoratet";
+                if(organization != null )
+                    datasetOrganizationName.InnerText = organization.Name;
                 datasetKind.AppendChild(datasetOrganizationName);
 
-                XmlElement datasetHasEmail = doc.CreateElement("vcard", "hasEmail", xmlnsVcard);
-                datasetHasEmail.SetAttribute("resource", xmlnsRdf, "mailto:post@mdir.no");
-                datasetKind.AppendChild(datasetHasEmail);
+                if (data.ContactOwner != null && !string.IsNullOrEmpty(data.ContactOwner.Email))
+                { 
+                    XmlElement datasetHasEmail = doc.CreateElement("vcard", "hasEmail", xmlnsVcard);
+                    datasetHasEmail.SetAttribute("resource", xmlnsRdf, "mailto:" + data.ContactOwner.Email);
+                    datasetKind.AppendChild(datasetHasEmail);
+                }
+
 
                 XmlElement datasetAccrualPeriodicity = doc.CreateElement("dct", "accrualPeriodicity", xmlnsDct);
-                datasetAccrualPeriodicity.InnerText = "notPlanned";
+                if (!string.IsNullOrEmpty(data.MaintenanceFrequency))
+                    datasetAccrualPeriodicity.InnerText = data.MaintenanceFrequency;
                 dataset.AppendChild(datasetAccrualPeriodicity);
-
+     
                 XmlElement datasetGranularity = doc.CreateElement("dcat", "granularity", xmlnsDcat);
-                datasetGranularity.InnerText = "25000";
+                if (!string.IsNullOrEmpty(data.ResolutionScale))
+                    datasetGranularity.InnerText = data.ResolutionScale;
                 dataset.AppendChild(datasetGranularity);
-
+                
                 XmlElement datasetLicense = doc.CreateElement("dct", "license", xmlnsDct);
-                datasetLicense.SetAttribute("resource", xmlnsRdf, "http://creativecommons.org/licenses/by/4.0/");
+                if(data.Constraints != null && !string.IsNullOrEmpty(data.Constraints.OtherConstraintsLink))
+                    datasetLicense.SetAttribute("resource", xmlnsRdf, data.Constraints.OtherConstraintsLink);
                 dataset.AppendChild(datasetLicense);
 
+
                 XmlElement datasetDataQuality = doc.CreateElement("dcat", "dataQuality", xmlnsDcat);
-                datasetDataQuality.InnerText = "Ingen prosseshistorie tilgjenglig.";
+                if (!string.IsNullOrEmpty(data.ProcessHistory))
+                    datasetDataQuality.InnerText = data.ProcessHistory;
                 dataset.AppendChild(datasetDataQuality);
 
                 //Distribution
+                if(data.DistributionFormats != null)
+                {                     
+                    foreach (var distro in data.DistributionFormats)
+                    {
+                        //Map distribution to dataset
+                        XmlElement distributionDataset = doc.CreateElement("dcat", "distribution", xmlnsDcat);
+                        distributionDataset.SetAttribute("resource", xmlnsRdf, kartkatalogenUrl + "/Metadata/uuid/" + data.Uuid + "/"+  distro.Name);
+                        dataset.AppendChild(distributionDataset);
 
-                for (int distributionFormats = 1; distributionFormats < 3; distributionFormats++)
-                {
-                    //Map distribution to dataset
-                    XmlElement distributionDataset = doc.CreateElement("dcat", "distribution", xmlnsDcat);
-                    distributionDataset.SetAttribute("resource", xmlnsRdf, "https://www.geonorge.no/geonetwork/srv/nor/xml_iso19139?uuid=d1422d17-6d95-4ef1-96ab-8af31744dd63" + identifier + distributionFormats);
-                    dataset.AppendChild(distributionDataset);
+                        XmlElement distribution = doc.CreateElement("dcat", "Distribution", xmlnsDcat);
+                        distribution.SetAttribute("about", xmlnsRdf, kartkatalogenUrl + "/Metadata/uuid/" + data.Uuid + "/" + distro.Name);
+                        root.AppendChild(distribution);
 
-                    XmlElement distribution = doc.CreateElement("dcat", "Distribution", xmlnsDcat);
-                    distribution.SetAttribute("about", xmlnsRdf, "https://www.geonorge.no/geonetwork/srv/nor/xml_iso19139?uuid=d1422d17-6d95-4ef1-96ab-8af31744dd63" + identifier + distributionFormats);
-                    root.AppendChild(distribution);
+                        XmlElement distributionTitle = doc.CreateElement("dct", "title", xmlnsDct);
+                        distributionTitle.SetAttribute("xml:lang", "no");
+                        if(data.DistributionDetails != null && !string.IsNullOrEmpty(data.DistributionDetails.Protocol))
+                            distributionTitle.InnerText = data.DistributionDetails.Protocol;
+                        distribution.AppendChild(distributionTitle);
 
-                    XmlElement distributionTitle = doc.CreateElement("dct", "title", xmlnsDct);
-                    distributionTitle.SetAttribute("xml:lang", "no");
-                    distributionTitle.InnerText = "Filnedlastning";
-                    distribution.AppendChild(distributionTitle);
+                        XmlElement distributionDescription = doc.CreateElement("dct", "description", xmlnsDct);
+                        if (data.DistributionDetails != null && !string.IsNullOrEmpty(data.DistributionDetails.Name))
+                            distributionDescription.InnerText = data.DistributionDetails.Name;
+                        distribution.AppendChild(distributionDescription);
 
-                    XmlElement distributionDescription = doc.CreateElement("dct", "description", xmlnsDct);
-                    distributionDescription.InnerText = "Nedlastning av Tur- og friluftsruter";
-                    distribution.AppendChild(distributionDescription);
+                        XmlElement distributionFormat = doc.CreateElement("dct", "format", xmlnsDct);
+                        distributionFormat.InnerText = distro.Name;
+                        distribution.AppendChild(distributionFormat);
 
-                    XmlElement distributionFormat = doc.CreateElement("dct", "format", xmlnsDct);
-                    distributionFormat.InnerText = "application/gml+xml";
-                    distribution.AppendChild(distributionFormat);
+                        XmlElement distributionAccessURL = doc.CreateElement("dcat", "accessURL", xmlnsDcat);
+                        distributionAccessURL.SetAttribute("resource", xmlnsRdf, kartkatalogenUrl + "metadata/uuid/" + uuid);
+                        distribution.AppendChild(distributionAccessURL);
 
-                    XmlElement distributionAccessURL = doc.CreateElement("dcat", "accessURL", xmlnsDcat);
-                    distributionAccessURL.SetAttribute("resource", xmlnsRdf, "https://kartkatalog.geonorge.no/metadata/uuid/d1422d17-6d95-4ef1-96ab-8af31744dd63");
-                    distribution.AppendChild(distributionAccessURL);
+                        XmlElement distributionLicense = doc.CreateElement("dct", "license", xmlnsDct);
+                        if (data.Constraints != null && !string.IsNullOrEmpty(data.Constraints.OtherConstraintsLink))
+                            distributionLicense.SetAttribute("resource", xmlnsRdf, data.Constraints.OtherConstraintsLink);
+                        distribution.AppendChild(distributionLicense);
 
-                    XmlElement distributionLicense = doc.CreateElement("dct", "license", xmlnsDct);
-                    distributionLicense.SetAttribute("resource", xmlnsRdf, "http://creativecommons.org/licenses/by/4.0/");
-                    distribution.AppendChild(distributionLicense);
+                        XmlElement distributionStatus = doc.CreateElement("adms", "status", xmlnsAdms);
+                        if (!string.IsNullOrEmpty(data.Status))
+                            distributionStatus.SetAttribute("resource", xmlnsRdf, "http://purl.org/adms/status/" + data.Status);
+                        distribution.AppendChild(distributionStatus);
 
-                    XmlElement distributionStatus = doc.CreateElement("adms", "status", xmlnsAdms);
-                    distributionStatus.SetAttribute("resource", xmlnsRdf, "http://purl.org/adms/status/Completed");
-                    distribution.AppendChild(distributionStatus);
+                    }
 
                 }
 
 
                 //Agent/publisher
 
-                if (identifier == 1)
+                XmlElement agent = doc.CreateElement("foaf", "Agent", xmlnsFoaf);
+                if (data.ContactOwner != null && !string.IsNullOrEmpty(data.ContactOwner.Organization) && OrganizationsLink[data.ContactOwner.Organization] != null)
+                    agent.SetAttribute("about", xmlnsRdf, OrganizationsLink[data.ContactOwner.Organization]);
+                root.AppendChild(agent);
+
+                XmlElement agentType = doc.CreateElement("dct", "type", xmlnsDct);
+                agentType.SetAttribute("resource", xmlnsRdf, "http://purl.org/adms/publishertype/NationalAuthority");
+                agent.AppendChild(agentType);
+
+                XmlElement agentName = doc.CreateElement("foaf", "name", xmlnsFoaf);
+                if (organization != null)
+                    agentName.InnerText = organization.Name;
+                agent.AppendChild(agentName);
+
+                if (data.ContactOwner != null && !string.IsNullOrEmpty(data.ContactOwner.Email))
                 {
-
-                    XmlElement agent = doc.CreateElement("foaf", "Agent", xmlnsFoaf);
-                    agent.SetAttribute("about", xmlnsRdf, "https://register.geonorge.no/register/organisasjoner/kartverket/miljodirektoratet");
-                    root.AppendChild(agent);
-
-                    XmlElement agentType = doc.CreateElement("dct", "type", xmlnsDct);
-                    agentType.SetAttribute("resource", xmlnsRdf, "http://purl.org/adms/publishertype/NationalAuthority");
-                    agent.AppendChild(agentType);
-
-                    XmlElement agentName = doc.CreateElement("foaf", "name", xmlnsFoaf);
-                    agentName.InnerText = "Miljødirektoratet";
-                    agent.AppendChild(agentName);
-
                     XmlElement agentMbox = doc.CreateElement("foaf", "mbox", xmlnsFoaf);
-                    agentMbox.InnerText = "post@miljodirektoratet.no";
-                    agent.AppendChild(agentMbox);
-                }
-                else if (identifier == 2)
-                {
-                    XmlElement agent = doc.CreateElement("foaf", "Agent", xmlnsFoaf);
-                    agent.SetAttribute("about", xmlnsRdf, "https://register.geonorge.no/register/organisasjoner/kartverket/kartverket");
-                    root.AppendChild(agent);
-
-                    XmlElement agentType = doc.CreateElement("dct", "type", xmlnsDct);
-                    agentType.SetAttribute("resource", xmlnsRdf, "http://purl.org/adms/publishertype/NationalAuthority");
-                    agent.AppendChild(agentType);
-
-                    XmlElement agentName = doc.CreateElement("foaf", "name", xmlnsFoaf);
-                    agentName.InnerText = "Kartverket";
-                    agent.AppendChild(agentName);
-
-                    XmlElement agentMbox = doc.CreateElement("foaf", "mbox", xmlnsFoaf);
-                    agentMbox.InnerText = "post@kartverket.no";
+                    agentMbox.InnerText = data.ContactOwner.Email;
                     agent.AppendChild(agentMbox);
                 }
 
@@ -225,10 +270,6 @@ namespace Kartverket.Metadatakatalog.Service
             catalogIssued.InnerText = DateTime.Now.ToString("yyyy-MM-dd");
             catalog.AppendChild(catalogIssued);
 
-            XmlElement catalogModified = doc.CreateElement("dct", "modified", xmlnsDct);
-            catalogModified.SetAttribute("datatype", xmlnsRdf, "http://www.w3.org/2001/XMLSchema#date");
-            catalogModified.InnerText = "2016-03-26";
-            catalog.AppendChild(catalogModified);
 
             XmlElement catalogLabel = doc.CreateElement("rdfs", "label", xmlnsRdfs);
             catalogLabel.SetAttribute("xml:lang", "no");
@@ -289,5 +330,78 @@ namespace Kartverket.Metadatakatalog.Service
             doc.AppendChild(root);
             return root;
         }
+
+        private void Finalize(XmlElement root, XmlElement catalog)
+        {
+            XmlElement catalogModified = doc.CreateElement("dct", "modified", xmlnsDct);
+            catalogModified.SetAttribute("datatype", xmlnsRdf, "http://www.w3.org/2001/XMLSchema#date");
+            if (catalogLastModified.HasValue)
+                catalogModified.InnerText = catalogLastModified.Value.ToString("yyyy-MM-dd");
+            catalog.AppendChild(catalogModified);
+        }
+
+
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        public SearchResultsType GetDatasets()
+        {
+            GeoNorge _geoNorge = new GeoNorge("", "", WebConfigurationManager.AppSettings["GeoNetworkUrl"] + "srv/nor/csw-dataset?");
+            _geoNorge.OnLogEventDebug += new GeoNorgeAPI.LogEventHandlerDebug(LogEventsDebug);
+            _geoNorge.OnLogEventError += new GeoNorgeAPI.LogEventHandlerError(LogEventsError);
+            var filters = new object[]
+            {
+                    new PropertyIsLikeType
+                        {
+                            escapeChar = "\\",
+                            singleChar = "_",
+                            wildCard = "%",
+                            PropertyName = new PropertyNameType {Text = new[] {"Subject"}},
+                            Literal = new LiteralType {Text = new[] {"åpne data"}}
+                        }
+            };
+
+            var filterNames = new ItemsChoiceType23[]
+            {
+                        ItemsChoiceType23.PropertyIsLike,
+            };
+
+            var result = _geoNorge.SearchWithFilters(filters, filterNames, 1, 1000, false);
+            return result;
+        }
+
+        private void LogEventsDebug(string log)
+        {
+
+            System.Diagnostics.Debug.Write(log);
+            Log.Debug(log);
+        }
+
+        private void LogEventsError(string log, Exception ex)
+        {
+            Log.Error(log, ex);
+        }
+
+        public Dictionary<string, string>GetOrganizationsLink()
+        {
+            Dictionary<string, string> Organizations = new Dictionary<string, string>();
+
+            System.Net.WebClient c = new System.Net.WebClient();
+            c.Encoding = System.Text.Encoding.UTF8;
+            var data = c.DownloadString(System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner");
+            var response = Newtonsoft.Json.Linq.JObject.Parse(data);
+
+            var orgs = response["containeditems"];
+
+            foreach (var org in orgs)
+            {
+                if (!Organizations.ContainsKey(org["label"].ToString()))
+                {
+                    Organizations.Add(org["label"].ToString(), org["id"].ToString());
+                }
+            }
+
+            return Organizations;
+        }
+
     }
 }
