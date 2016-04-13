@@ -180,43 +180,46 @@ namespace Kartverket.Metadatakatalog.Service
                 {                     
                     foreach (var distro in data.DistributionFormats)
                     {
-                        //Map distribution to dataset
-                        XmlElement distributionDataset = doc.CreateElement("dcat", "distribution", xmlnsDcat);
-                        distributionDataset.SetAttribute("resource", xmlnsRdf, kartkatalogenUrl + "/Metadata/uuid/" + data.Uuid + "/"+  distro.Name);
-                        dataset.AppendChild(distributionDataset);
+                        if (!string.IsNullOrEmpty(distro.Name))
+                        { 
+                            //Map distribution to dataset
+                            XmlElement distributionDataset = doc.CreateElement("dcat", "distribution", xmlnsDcat);
+                            distributionDataset.SetAttribute("resource", xmlnsRdf, kartkatalogenUrl + "Metadata/uuid/" + data.Uuid + "/"+ HttpUtility.UrlEncode(distro.Name));
+                            dataset.AppendChild(distributionDataset);
 
-                        XmlElement distribution = doc.CreateElement("dcat", "Distribution", xmlnsDcat);
-                        distribution.SetAttribute("about", xmlnsRdf, kartkatalogenUrl + "/Metadata/uuid/" + data.Uuid + "/" + distro.Name);
-                        root.AppendChild(distribution);
+                            XmlElement distribution = doc.CreateElement("dcat", "Distribution", xmlnsDcat);
+                            distribution.SetAttribute("about", xmlnsRdf, kartkatalogenUrl + "Metadata/uuid/" + data.Uuid + "/" + HttpUtility.UrlEncode(distro.Name));
+                            root.AppendChild(distribution);
 
-                        XmlElement distributionTitle = doc.CreateElement("dct", "title", xmlnsDct);
-                        distributionTitle.SetAttribute("xml:lang", "no");
-                        if(data.DistributionDetails != null && !string.IsNullOrEmpty(data.DistributionDetails.Protocol))
-                            distributionTitle.InnerText = data.DistributionDetails.Protocol;
-                        distribution.AppendChild(distributionTitle);
+                            XmlElement distributionTitle = doc.CreateElement("dct", "title", xmlnsDct);
+                            distributionTitle.SetAttribute("xml:lang", "no");
+                            if(data.DistributionDetails != null && !string.IsNullOrEmpty(data.DistributionDetails.Protocol))
+                                distributionTitle.InnerText = data.DistributionDetails.Protocol;
+                            distribution.AppendChild(distributionTitle);
 
-                        XmlElement distributionDescription = doc.CreateElement("dct", "description", xmlnsDct);
-                        if (data.DistributionDetails != null && !string.IsNullOrEmpty(data.DistributionDetails.Name))
-                            distributionDescription.InnerText = data.DistributionDetails.Name;
-                        distribution.AppendChild(distributionDescription);
+                            XmlElement distributionDescription = doc.CreateElement("dct", "description", xmlnsDct);
+                            if (data.DistributionDetails != null && !string.IsNullOrEmpty(data.DistributionDetails.Name))
+                                distributionDescription.InnerText = data.DistributionDetails.Name;
+                            distribution.AppendChild(distributionDescription);
 
-                        XmlElement distributionFormat = doc.CreateElement("dct", "format", xmlnsDct);
-                        distributionFormat.InnerText = distro.Name;
-                        distribution.AppendChild(distributionFormat);
+                            XmlElement distributionFormat = doc.CreateElement("dct", "format", xmlnsDct);
+                            distributionFormat.InnerText = distro.Name;
+                            distribution.AppendChild(distributionFormat);
 
-                        XmlElement distributionAccessURL = doc.CreateElement("dcat", "accessURL", xmlnsDcat);
-                        distributionAccessURL.SetAttribute("resource", xmlnsRdf, kartkatalogenUrl + "metadata/uuid/" + uuid);
-                        distribution.AppendChild(distributionAccessURL);
+                            XmlElement distributionAccessURL = doc.CreateElement("dcat", "accessURL", xmlnsDcat);
+                            distributionAccessURL.SetAttribute("resource", xmlnsRdf, kartkatalogenUrl + "metadata/uuid/" + uuid);
+                            distribution.AppendChild(distributionAccessURL);
 
-                        XmlElement distributionLicense = doc.CreateElement("dct", "license", xmlnsDct);
-                        if (data.Constraints != null && !string.IsNullOrEmpty(data.Constraints.OtherConstraintsLink))
-                            distributionLicense.SetAttribute("resource", xmlnsRdf, data.Constraints.OtherConstraintsLink);
-                        distribution.AppendChild(distributionLicense);
+                            XmlElement distributionLicense = doc.CreateElement("dct", "license", xmlnsDct);
+                            if (data.Constraints != null && !string.IsNullOrEmpty(data.Constraints.OtherConstraintsLink))
+                                distributionLicense.SetAttribute("resource", xmlnsRdf, data.Constraints.OtherConstraintsLink);
+                            distribution.AppendChild(distributionLicense);
 
-                        XmlElement distributionStatus = doc.CreateElement("adms", "status", xmlnsAdms);
-                        if (!string.IsNullOrEmpty(data.Status))
-                            distributionStatus.SetAttribute("resource", xmlnsRdf, "http://purl.org/adms/status/" + data.Status);
-                        distribution.AppendChild(distributionStatus);
+                            XmlElement distributionStatus = doc.CreateElement("adms", "status", xmlnsAdms);
+                            if (!string.IsNullOrEmpty(data.Status))
+                                distributionStatus.SetAttribute("resource", xmlnsRdf, "http://purl.org/adms/status/" + data.Status);
+                            distribution.AppendChild(distributionStatus);
+                        }
 
                     }
 
