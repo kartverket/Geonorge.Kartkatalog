@@ -107,29 +107,6 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         }
 
-        /// <summary>
-        /// Catalogue in dcat format
-        /// </summary>
-        [System.Web.Http.Route("api/dcat")]
-        [System.Web.Http.HttpGet]
-        public System.Net.Http.HttpResponseMessage GetDcat()
-        {
-            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc.Load(System.Web.HttpContext.Current.Request.MapPath("~\\dcat\\geonorge_dcat.rdf"));
-            return new System.Net.Http.HttpResponseMessage()
-            { Content = new System.Net.Http.StringContent(doc.OuterXml, System.Text.Encoding.UTF8, "application/xml") };
-        }
-
-        [System.Web.Http.Route("api/updatedcat")]
-        [System.Web.Http.HttpGet]
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public System.Net.Http.HttpResponseMessage UpdateDcat()
-        {
-            var dcat = new DcatService().GenerateDcat();
-            return new System.Net.Http.HttpResponseMessage()
-            { Content = new System.Net.Http.StringContent(dcat.OuterXml, System.Text.Encoding.UTF8, "application/xml") };
-        }
-
         private Models.SearchResult CreateRelated(MetadataViewModel result)
         {
             Models.SearchResult res = null;
