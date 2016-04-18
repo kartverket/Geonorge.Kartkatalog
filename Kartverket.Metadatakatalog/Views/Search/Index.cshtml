@@ -165,40 +165,41 @@ facet.FacetResults = orderedList.ToList();
 @helper DisplayPaginationBottom()
 {
     <div class="search-result-navigation">
-        <p>Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:</p>
-        <ul class="pagination pagination-sm btn-group inline-block">
-            @if (Model.IsFirstButtonActive())
-            {
-                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
-            }
-
-            @if (Model.IsPreviousButtonActive())
-            {
-                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
-            }
-
-            @for (int i = Model.startPage; i <= Model.endPage; i++)
-            {
-                if (Model.IsActivePage(i))
+        Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
+        <div class="pagination-container">
+            <ul class="pagination pagination-sm btn-group inline-block">
+                @if (Model.IsFirstButtonActive())
                 {
-                    <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
                 }
-                else
+
+                @if (Model.IsPreviousButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                 }
-            }
 
-            @if (Model.IsNextButtonActive())
-            {
-                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
-            }
-            @if (Model.IsLastButtonActive())
-            {
-                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
-            }
-        </ul>
+                @for (int i = Model.startPage; i <= Model.endPage; i++)
+                {
+                    if (Model.IsActivePage(i))
+                    {
+                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                    }
+                }
 
+                @if (Model.IsNextButtonActive())
+                {
+                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                }
+                @if (Model.IsLastButtonActive())
+                {
+                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
+                }
+            </ul>
+        </div>
     </div>
 }
 
@@ -376,67 +377,84 @@ facet.FacetResults = orderedList.ToList();
 }
 
 
-<div class="row">
-    <div class="col-sm-12 col-md-9">
-        <div class="row search-result-navigation">
-            <div class="col-sm-7">
-                <p>Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:</p>
-                <ul class="pagination pagination-sm btn-group inline-block">
-                    @if (Model.IsFirstButtonActive())
-                    {
-                        <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
-                    }
+<div class="row search-result-navigation">
+    <div class="col-md-5">
+        Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
+        <div class="pagination-container">
+            <ul class="pagination pagination-sm btn-group inline-block">
+                @if (Model.IsFirstButtonActive())
+            {
+                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
+                }
 
-                    @if (Model.IsPreviousButtonActive())
-                    {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
-                    }
+                @if (Model.IsPreviousButtonActive())
+            {
+                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
+                }
 
-                    @for (int i = Model.startPage; i <= Model.endPage; i++)
-                    {
-                        if (Model.IsActivePage(i))
-                        {
-                            <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                        }
-                        else
-                        {
-                            <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                        }
+                @for (int i = Model.startPage; i <= Model.endPage; i++)
+            {
+                if (Model.IsActivePage(i))
+                {
+                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
+                    else
+                    {
+                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                    }
+                }
 
-                    @if (Model.IsNextButtonActive())
-                    {
-                        <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
-                    }
-                    @if (Model.IsLastButtonActive())
-                    {
-                        <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
-                    }
-                </ul>
-            </div>
-            <div class="col-sm-5">
-
-                <div class="row save-as-menu">
-                    <div class="col-xs-4 text-right no-padding save-as-label">
-                        <p>Lagre som:</p>
-                    </div>
-                    <div class="col-xs-5 no-padding-bottom save-as-dropdown">
-                        <div class="custom-select">
-                            <select onchange="additionalView(this.value)" class="form-control">
-                                <option value="csvUrl" selected="selected">CSV</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div id="saveButtons" class="col-xs-3 no-padding-bottom save-as-buttons">
-                        <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
-                    </div>
+                @if (Model.IsNextButtonActive())
+            {
+                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
+                }
+                @if (Model.IsLastButtonActive())
+            {
+                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-4">
+        Lagre som:
+        <div class="row save-as-menu">
+            <div class="col-xs-5 no-padding-bottom save-as-dropdown">
+                <div class="custom-select">
+                    <select onchange="additionalView(this.value)" class="form-control">
+                        <option value="csvUrl" selected="selected">CSV</option>
+                    </select>
                 </div>
             </div>
-            <div class="clearfix"></div>
-
+            <div id="saveButtons" class="col-xs-3 no-padding-bottom save-as-buttons">
+                <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
+            </div>
         </div>
+    </div>
+    <div class="col-md-3">
+        Velg visningsform:
+        <div class="custom-select">
+            <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
+                <option value="tableView" id="button-tableView">Tabell</option>
+                <option value="listView" id="button-listView">Liste</option>
+                <option value="galleryView" id="button-galleryView">Galleri</option>
+            </select>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    
 
-        <span class="separator-small separator-gray margin-bottom-10"></span>
+</div>
+
+<span class="separator-small separator-gray margin-bottom-10"></span>
+
+
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-9">
+        
+
+        
 
         @if (Model.Result != null)
         {
@@ -514,7 +532,7 @@ facet.FacetResults = orderedList.ToList();
                             </a>
                         </div>
 
-                        <div class="col-sm-1 search-results-open-data">
+                        <div class="col-sm-1 search-results-action-icons search-results-open-data">
                             @if (item.IsOpendata)
                             {
                                 <img title="Åpne data" src="~/Content/img/ikoner/hengelaas.svg" class="bottom opendata custom-icon" alt="Åpne data" />
@@ -708,25 +726,13 @@ facet.FacetResults = orderedList.ToList();
         }
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
-        <div class="row view-navigation">
+       
 
-            <div class="col-sm-12">
-                <p>Velg visningsform:</p>
-                <div class="custom-select">
-                    <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
-                        <option value="tableView" id="button-tableView">Tabell</option>
-                        <option value="listView" id="button-listView">Liste</option>
-                        <option value="galleryView" id="button-galleryView">Galleri</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <span class="separator-small separator-gray"></span>
+   
 
         <aside class="facet-sok-emne">
             <div class="block listblock" id="filterInner">
-                <h3 class="">Søkefilter</h3>
+                <h3 class="">Filtrer søket på:</h3>
                 <span class="separator-small"></span>
                 @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
                 @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))

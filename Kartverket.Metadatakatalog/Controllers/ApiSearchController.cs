@@ -12,6 +12,7 @@ using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
 using System;
 using Kartverket.Metadatakatalog.Service;
 using System.Web.Configuration;
+using System.Web.Http.Description;
 
 
 // Metadata search api examples
