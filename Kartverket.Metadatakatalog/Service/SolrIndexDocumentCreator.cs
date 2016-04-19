@@ -177,6 +177,8 @@ namespace Kartverket.Metadatakatalog.Service
                 if (distributionDetails != null)
                 {
                     indexDoc.DistributionProtocol = distributionDetails.Protocol;
+                    if (!string.IsNullOrEmpty(distributionDetails.Protocol)  && distributionDetails.Protocol == "GEONORGE:OFFLINE")
+                        return null;
                     indexDoc.DistributionUrl = distributionDetails.URL;
                     indexDoc.DistributionName = distributionDetails.Name;
                     if (!string.IsNullOrEmpty(indexDoc.DistributionName) && !string.IsNullOrEmpty(indexDoc.DistributionProtocol) && indexDoc.DistributionProtocol.Contains("WMS")) indexDoc.Type = "servicelayer";
