@@ -22,9 +22,9 @@ function getJsonObjects(data, segment, uuid) {
         }
         if (typeof val == 'object') {
             if (typeof key == 'string') {
-                if (key == '_links') {
-                    val = httpToHttps(val);
-                }
+                //if (key == '_links') {
+                //    val = httpToHttps(val);
+                //}
                 parentObj = '.' + key;
             }
             $.each($(this), function (key, val) {
@@ -60,7 +60,7 @@ function getJsonData(url, segments, uuid) {
         segmentString += '.' + segment;
     });
 
-    var jsonUri = url + '?json=true';
+    var jsonUri = url; //+ '?json=true';
     $.ajax({
         url: jsonUri,
         dataType: 'json',
