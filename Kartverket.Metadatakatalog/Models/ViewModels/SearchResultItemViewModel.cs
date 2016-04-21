@@ -19,6 +19,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string ServiceUrl { get; set; }
         public string DistributionProtocol { get; set; }
         public bool IsOpendata { get; set; }
+        public bool IsRestricted { get; set; }
         public string LegendDescriptionUrl { get; set; }
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
@@ -96,6 +97,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             
             DistributionProtocol = item.DistributionProtocol;
             if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data")) IsOpendata = true;
+            if (item.AccessConstraint == "restricted") IsRestricted = true;
+
+
             if (Type == "dataset")
             {
                 if (!string.IsNullOrWhiteSpace(item.ServiceDistributionProtocolForDataset) && item.ServiceDistributionProtocolForDataset.Contains(("OGC:WMS")))

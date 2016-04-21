@@ -219,7 +219,10 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.NationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)).Select(k => k.KeywordValue).ToList();
                 indexDoc.Place = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)).Select(k => k.KeywordValue).ToList();
                 indexDoc.Placegroups = _placeResolver.Resolve(simpleMetadata);
-                
+                indexDoc.AccessConstraint = 
+                        simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.AccessConstraints) 
+                        ? simpleMetadata.Constraints.AccessConstraints : "";
+
                 //TODO tolke liste fra nøkkelord
                 indexDoc.Area = _placeResolver.ResolveArea(simpleMetadata);
 

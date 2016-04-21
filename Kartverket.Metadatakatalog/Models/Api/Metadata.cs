@@ -93,6 +93,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// ServiceLayers
         /// </summary>
         public List<string> ServiceLayers { get; set; }
+        /// <summary>
+        /// AccessConstraint
+        /// </summary>
+        public string AccessConstraint { get; set; }
 
         public Metadata() { 
         }
@@ -133,6 +137,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             DatasetServices = item.DatasetServices;
             Bundles = item.Bundles;
             ServiceLayers = item.ServiceLayers;
+            AccessConstraint = item.AccessConstraint;
         }
 
         public static List<Metadata> CreateFromList(IEnumerable<SearchResultItem> items, UrlHelper urlHelper)
