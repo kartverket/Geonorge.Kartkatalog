@@ -535,7 +535,15 @@ facet.FacetResults = orderedList.ToList();
                         <div class="col-sm-1 search-results-action-icons search-results-open-data">
                             @if (item.IsOpendata)
                             {
-                                <img title="Åpne data" src="~/Content/img/ikoner/hengelaas.svg" class="bottom opendata custom-icon" alt="Åpne data" />
+                                <span data-toggle='tooltip' data-placement='bottom' title="Åpne data" class="custom-icon custom-icon-hengelaas-open-green"></span>
+                            }
+                            else if (item.IsRestricted)
+                            {
+                                <span data-toggle='tooltip' data-placement='bottom' title="Skjermede data" class="custom-icon custom-icon-hengelaas-closed-yellow"></span>
+                            }
+                            else
+                            {
+                                <span data-toggle='tooltip' data-placement='bottom' title="Skjermede data" class="custom-icon custom-icon-hengelaas-closed-red"></span>
                             }
                         </div>
 
