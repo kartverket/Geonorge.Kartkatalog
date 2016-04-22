@@ -51,6 +51,11 @@ function getJsonUrl(data, rel) {
     return url;
 }
 
+function fixUrl(urlen)
+{
+    urlJson = urlen.replace("%3F", "?");
+    return urlJson;
+}
 
 function getJsonData(url, segments, uuid) {
     segmentUri = '';
@@ -60,7 +65,7 @@ function getJsonData(url, segments, uuid) {
         segmentString += '.' + segment;
     });
 
-    var jsonUri = url; //+ '?json=true';
+    var jsonUri = fixUrl(url);
     $.ajax({
         url: jsonUri,
         dataType: 'json',
