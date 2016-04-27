@@ -519,7 +519,7 @@ facet.FacetResults = orderedList.ToList();
                             {
                                 <span data-toggle='tooltip' data-placement='bottom' title="Tilgangsbegrensede data" class="custom-icon custom-icon-hengelaas-closed-yellow"></span>
                             }
-                            else
+                            else if (item.IsOffline)
                             {
                                 <span data-toggle='tooltip' data-placement='bottom' title="Skjermede data" class="custom-icon custom-icon-hengelaas-closed-red"></span>
                             }

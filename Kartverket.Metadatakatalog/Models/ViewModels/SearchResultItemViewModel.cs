@@ -20,6 +20,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string DistributionProtocol { get; set; }
         public bool IsOpendata { get; set; }
         public bool IsRestricted { get; set; }
+        public bool IsOffline { get; set; }
         public string LegendDescriptionUrl { get; set; }
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
@@ -98,6 +99,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             DistributionProtocol = item.DistributionProtocol;
             if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data")) IsOpendata = true;
             if (item.AccessConstraint == "restricted") IsRestricted = true;
+            if (item.AccessConstraint == "restricted" && (DistributionProtocol != null && DistributionProtocol.Contains("GEONORGE:OFFLINE"))) IsOffline = true; 
 
 
             if (Type == "dataset")
