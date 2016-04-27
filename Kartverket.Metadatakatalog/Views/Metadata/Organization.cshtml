@@ -41,6 +41,8 @@
             @foreach (var facetResult in facet.FacetResults)
             {
                 string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
+                if (!string.IsNullOrEmpty(facetResult.LinkName()))
+                {
                 <li class="filter-options">
                     <a class="btn-link @cssClass" href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
                         @*Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b style='font-weight: 800;'>" : "") @facetResult.LinkName() @Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b>" : "") (@facetResult.Count)
@@ -49,6 +51,7 @@
                         <span class="text-muted">(@facetResult.Count)</span>
                     </a>
                 </li>
+                }
             }
             @if (Model.HasFilterForFacetField(facet.FacetField))
             {

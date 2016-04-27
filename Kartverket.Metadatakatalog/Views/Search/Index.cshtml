@@ -43,6 +43,8 @@
         <ul>
             @foreach (var facetResult in facet.FacetResults)
             {
+                if(!string.IsNullOrEmpty(facetResult.LinkName()))
+                {
                 string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
                 <li class="filter-options">
                     <a class="btn-link @cssClass" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
@@ -50,6 +52,7 @@
                         <span class="text-muted">(@facetResult.Count)</span>
                     </a>
                 </li>
+                }
             }
             @if (Model.HasFilterForFacetField(facet.FacetField))
             {
