@@ -22,9 +22,9 @@ function getJsonObjects(data, segment, uuid) {
         }
         if (typeof val == 'object') {
             if (typeof key == 'string') {
-                if (key == '_links') {
-                    val = httpToHttps(val);
-                }
+                //if (key == '_links') {
+                //    val = httpToHttps(val);
+                //}
                 parentObj = '.' + key;
             }
             $.each($(this), function (key, val) {
@@ -51,6 +51,11 @@ function getJsonUrl(data, rel) {
     return url;
 }
 
+function fixUrl(urlen)
+{
+    urlJson = urlen.replace("%3F", "?");
+    return urlJson;
+}
 
 function getJsonData(url, segments, uuid) {
     segmentUri = '';
@@ -60,47 +65,50 @@ function getJsonData(url, segments, uuid) {
         segmentString += '.' + segment;
     });
 
-    var jsonUri = url + '?json=true';
-    $.ajax({
-        url: jsonUri,
-        dataType: 'json',
-        async: false,
-        error: function (jqXHR, textStatus, errorThrown) {
-            var metadata = JSON.parse(localStorage.getItem(uuid + '.metadata'));
-            showAlert(metadata.name + ' feilet. Vennligst fjern datasettet fra kurv. Feilmelding: ' + errorThrown + '<br />', 'danger');
-            console.log('jqXHR:');
-            console.log(jqXHR);
-            console.log('textStatus:');
-            console.log(textStatus);
-            console.log('errorThrown:');
-            console.log(errorThrown);
-        },
-        success: function (data) {
-            if (data != null) {
-                getJsonObjects(data, segmentString, uuid);
-                if (data.supportsProjectionSelection) {
-                    var rel = 'http://rel.geonorge.no/download/projection';
-                    var href = getJsonUrl(data._links, rel);
-                    getJsonData(href + '', ['codelists', 'projection'], uuid);
-                }
-                if (data.supportsFormatSelection) {
-                    var rel = 'http://rel.geonorge.no/download/format';
-                    var href = getJsonUrl(data._links, rel);
-                    getJsonData(href, ['codelists', 'format'], uuid);
-                }
-                if (data.supportsAreaSelection) {
-                    var rel = 'http://rel.geonorge.no/download/area';
-                    var href = getJsonUrl(data._links, rel);
-                    getJsonData(href, ['codelists', 'area'], uuid);
-                }
-            }
-            else
-            {
+    var jsonUri = fixUrl(url);
+    if (jsonUri != "")
+    {
+        $.ajax({
+            url: jsonUri,
+            dataType: 'json',
+            async: false,
+            error: function (jqXHR, textStatus, errorThrown) {
                 var metadata = JSON.parse(localStorage.getItem(uuid + '.metadata'));
-                showAlert(metadata.name + " mangler data for å kunne lastes ned. Vennligst fjern datasettet fra kurv.<br />", 'danger');
+                showAlert(metadata.name + ' feilet. Vennligst fjern datasettet fra kurv. Feilmelding: ' + errorThrown + '<br />', 'danger');
+                console.log('jqXHR:');
+                console.log(jqXHR);
+                console.log('textStatus:');
+                console.log(textStatus);
+                console.log('errorThrown:');
+                console.log(errorThrown);
+            },
+            success: function (data) {
+                if (data != null) {
+                    getJsonObjects(data, segmentString, uuid);
+                    if (data.supportsProjectionSelection) {
+                        var rel = 'http://rel.geonorge.no/download/projection';
+                        var href = getJsonUrl(data._links, rel);
+                        getJsonData(href + '', ['codelists', 'projection'], uuid);
+                    }
+                    if (data.supportsFormatSelection) {
+                        var rel = 'http://rel.geonorge.no/download/format';
+                        var href = getJsonUrl(data._links, rel);
+                        getJsonData(href, ['codelists', 'format'], uuid);
+                    }
+                    if (data.supportsAreaSelection) {
+                        var rel = 'http://rel.geonorge.no/download/area';
+                        var href = getJsonUrl(data._links, rel);
+                        getJsonData(href, ['codelists', 'area'], uuid);
+                    }
+                }
+                else
+                {
+                    var metadata = JSON.parse(localStorage.getItem(uuid + '.metadata'));
+                    showAlert(metadata.name + " mangler data for å kunne lastes ned. Vennligst fjern datasettet fra kurv.<br />", 'danger');
+                }
             }
-        }
-    });
+        });
+    }
 
     function showAlert(message, colorClass) {
         $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);

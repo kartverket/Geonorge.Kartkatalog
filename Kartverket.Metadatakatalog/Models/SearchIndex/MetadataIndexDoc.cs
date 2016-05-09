@@ -137,6 +137,9 @@ namespace Kartverket.Metadatakatalog.Models
 
         [SolrField("servicelayers")]
         public List<string> ServiceLayers { get; set; }
+
+        [SolrField("accessconstraint")]
+        public string AccessConstraint { get; set; }
     }
 
 }
