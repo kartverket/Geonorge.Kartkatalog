@@ -179,7 +179,7 @@ var baseurl_local = searchOption.baseUrl;
                 data: {}
             });
 
-            return $q.all([request, request1, request2]);
+            return $q.all([request, request2, request1]);
 
         }
 
