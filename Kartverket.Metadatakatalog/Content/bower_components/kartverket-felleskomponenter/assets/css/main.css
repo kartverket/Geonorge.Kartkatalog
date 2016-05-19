@@ -1798,7 +1798,8 @@ aside ul li, .container-footer ul li {
   margin-bottom: 7px;
   border-radius: 0;
   height: 34px;
-  line-height: 16pt; }
+  line-height: 16pt;
+  text-decoration: none; }
 
 .btn-file {
   position: relative;
@@ -1832,7 +1833,9 @@ aside ul li, .container-footer ul li {
   background-color: #FE5000;
   color: #FFFFFF !important;
   border: none;
-  font-style: normal; }
+  font-style: normal;
+  font-size: 12pt;
+  line-height: 16pt; }
 
 .btn:hover span, .btn span:hover {
   color: #FFFFFF !important; }
