@@ -19,7 +19,11 @@ $(window).load(function () {
         search_contains: true
     };
     $(".chosen-select").chosen(options);
-    $('[data-toggle="tooltip"]').tooltip();
+    $("[data-toggle='tooltip']").tooltip();
+    $("li.has-error[data-toggle='tooltip']").tooltip("option", "position", { my: "center", at: "center bottom+30" });
+    $("li[data-toggle='tooltip']").mouseleave(function () {
+        $(".ui-helper-hidden-accessible").remove();
+    });
 
     // Get useragent
     var doc = document.documentElement;
@@ -28,10 +32,10 @@ $(window).load(function () {
 
 $("document").ready( function(){
     // Geonorge logo
-	if ($("#geonorge-logo").length){ 
-		$("#geonorge-logo a").prop("href", geonorgeUrl);
-		$("#geonorge-logo a img").prop("src", "/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/geonorge_" + applicationEnvironment + "logo.svg");
-	}
+    if ($("#geonorge-logo").length){ 
+      $("#geonorge-logo a").prop("href", geonorgeUrl);
+      $("#geonorge-logo a img").prop("src", "/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/geonorge_" + applicationEnvironment + "logo.svg");
+  }
 
     // Shopping cart
     var downloadUrl = "https://kartkatalog.geonorge.no/Download";
@@ -41,15 +45,15 @@ $("document").ready( function(){
     $("#shopping-car-url").prop("href", downloadUrl);
 
     // Login
-	if (supportsLogin && $("#container-login").length){
-		$("#container-login").append("<ul></ul>");
-		$("#container-login ul").append("<li><a href='" + geonorgeUrl + "kartdata/oppslagsverk/Brukernavn-og-passord/'>Ny bruker</a></li>");
-		if (authenticationData.isAuthenticated){
-			$("#container-login ul").append("<li id='login'><a href='" + authenticationData.urlActionSignOut + "' class='geonorge-aut' title='Logg ut " + authenticationData.userName + "'> Logg ut</a></li>");
-		}else{
-			$("#container-login ul").append("<li id='login'><a href='" + authenticationData.urlActionSignIn + "' class='geonorge-aut'> Logg inn</a></li>");
-		}
-	}
+    if (supportsLogin && $("#container-login").length){
+      $("#container-login").append("<ul></ul>");
+      $("#container-login ul").append("<li><a href='" + geonorgeUrl + "kartdata/oppslagsverk/Brukernavn-og-passord/'>Ny bruker</a></li>");
+      if (authenticationData.isAuthenticated){
+       $("#container-login ul").append("<li id='login'><a href='" + authenticationData.urlActionSignOut + "' class='geonorge-aut' title='Logg ut " + authenticationData.userName + "'> Logg ut</a></li>");
+   }else{
+       $("#container-login ul").append("<li id='login'><a href='" + authenticationData.urlActionSignIn + "' class='geonorge-aut'> Logg inn</a></li>");
+   }
+}
 });
 
 
@@ -152,8 +156,13 @@ var baseurl_local = searchOption.baseUrl;
                 data: {}
             });
 
+            function getSearchParameters(facetValue, query){
+              var facetParameters = 'facets[1]name=type&facets[1]value=' + facetValue;
+              var queryParameters = 'text=' + query;
+              return '?limit=5&' + facetParameters + '&' + queryParameters;
+            }
 
-            var menuService1 = encodeURI(searchOption.api + '?limit=5&facets[1]name=type&facets[1]value=servicelayer' + '&text=' + query);
+            var menuService1 = encodeURI(searchOption.api + getSearchParameters('servicelayer', query));
             var request1 = $http({
                 method: 'GET',
                 url: menuService1,
@@ -164,10 +173,29 @@ var baseurl_local = searchOption.baseUrl;
                 data: {}
             });
 
+            var menuService2 = encodeURI(searchOption.api + getSearchParameters('service', query));
+            var request2 = $http({
+                method: 'GET',
+                url: menuService2,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'accept': '*/*'
+                },
+                data: {}
+            });
 
+            var menuService3 = encodeURI(searchOption.api + getSearchParameters('dimensionGroup', query));
+            var request3 = $http({
+                method: 'GET',
+                url: menuService3,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'accept': '*/*'
+                },
+                data: {}
+            });
 
-
-            return $q.all([request, request1]);
+            return $q.all([request3, request, request2, request1]);
         }
 
     }]).controller('searchTopController', [
@@ -443,15 +471,17 @@ var baseurl_local = searchOption.baseUrl;
           }
 
           function getType(type) {
-
               switch (type) {
                   case "dataset":
                       return "Datasett";
                   case "servicelayer":
                       return "WMS-lag (Tjenestelag)";
+                  case "service":
+                      return "WMS-tjeneste";
+                  case "dimensionGroup":
+                      return "Datapakke";
                   default:
               }
-
           }
 
           var categoryCount = null;
@@ -694,6 +724,21 @@ function updateShoppingCartCookie() {
 
 $(window).load(function () {
     updateShoppingCart();
+});
+$("document").ready( function(){
+    $("a.help-text-toggle").click(function (event) {
+        event.preventDefault();
+        var toggleButton = $(this);
+        var helpTextId = $(this).data("help-text-id");
+        $("#" + helpTextId).toggle();
+        if ($("#" + helpTextId).hasClass('active')) {
+            $("#" + helpTextId).removeClass('active');
+            toggleButton.removeClass('active');
+        } else {
+            $("#" + helpTextId).addClass('active');
+            toggleButton.addClass('active');
+        }
+    });
 });
 function activateTab(tab){
 	$(".link-tabs").ready(function () {
