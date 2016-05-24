@@ -2954,7 +2954,9 @@ input[type="checkbox"].input-validation-error {
       position: absolute;
       bottom: 0;
       line-height: inherit;
-      margin-bottom: 4px; }
+      margin-bottom: 4px;
+      font-size: 12pt;
+      line-height: 14pt; }
       #tableView .search-results-table-heading > div > p a, .table-view .search-results-table-heading > div > p a {
         font-size: 12pt;
         line-height: 14pt;
