@@ -89,14 +89,20 @@ if (contact != null)
 
 <div class="btn-table-row-5">
     <div class="table-btn-container">
+        @{
+            String kartmarkoerTitle = Model.AlertSize() ? "Vis " + @Model.Title + " i kart (tjenesten kan være treg å vise pga. svært mange kartlag)" : "Vis " + @Model.Title + " i kart";
+            String kartmarkoerCss = Model.AlertSize() ? "custom-icon-kartmarkoer-warning" : "custom-icon-kartmarkoer";
+        }
         @if (Model.ShowMapLink())
         {
-            <a href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" class="btn" target="_blank"><span class="custom-icon custom-icon-kartmarkoer"></span> Vis i kart</a>
+            <a href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle"target="_blank" class="btn">
+                <span class="custom-icon @kartmarkoerCss"></span> Vis i kart
+            </a>
         }
         else if (Model.ShowServiceMapLink())
         {
-            <a href="@Html.NorgeskartUrl()@Model.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @Model.Title i kart" target="_blank" class="btn btn-default">
-                <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
+            <a href="@Html.NorgeskartUrl()@Model.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle" target="_blank" class="btn">
+                <span class="custom-icon @kartmarkoerCss"></span><span class="button-text"> Vis i kart</span>
             </a>
         }
         else
