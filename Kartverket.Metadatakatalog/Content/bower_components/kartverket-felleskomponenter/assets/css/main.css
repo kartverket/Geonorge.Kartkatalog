@@ -1855,9 +1855,12 @@ aside ul li, .container-footer ul li {
 
 .btn-xs {
   font-size: 10pt !important;
-  padding: 3px;
+  padding: 3px 9px;
   height: 25px !important;
-  line-height: 19px; }
+  line-height: 14pt; }
+  .btn-xs:hover {
+    line-height: 14pt;
+    font-size: 10pt; }
 
 .input-group-btn > .btn {
   padding: 6px 12px;
@@ -1961,6 +1964,15 @@ aside ul li, .container-footer ul li {
 
 .disabled .custom-icon.custom-icon-kartmarkoer {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/kartmarkoer-disabled.svg"); }
+
+.custom-icon.custom-icon-kartmarkoer-warning {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/kartmarkoer-warning.svg"); }
+
+.btn .custom-icon.custom-icon-kartmarkoer-warning {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/kartmarkoer-warning-white.svg"); }
+
+.disabled .custom-icon.custom-icon-kartmarkoer-warning {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/kartmarkoer-warning-disabled.svg"); }
 
 /* Handlekurv*/
 .custom-icon.custom-icon-handlekurv {
