@@ -227,7 +227,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowServiceMapLink()
         {
-            if (!string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset)) return true;
+            if (!string.IsNullOrWhiteSpace(ServiceUrl())) return true;
             else return false;
         }
 
