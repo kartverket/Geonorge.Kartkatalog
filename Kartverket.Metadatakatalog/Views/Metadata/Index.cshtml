@@ -90,7 +90,7 @@ if (contact != null)
 <div class="btn-table-row-5">
     <div class="table-btn-container">
         @{
-            String kartmarkoerTitle = Model.AlertSize() ? "Vis " + @Model.Title + " i kart (tjenesten kan være treg å vise pga. svært mange kartlag)" : "Vis " + @Model.Title + " i kart";
+            String kartmarkoerTitle = Model.AlertSize() ? "Tjenesten kan være treg å vise pga. svært mange kartlag" : "Vis " + @Model.Title + " i kart";
             String kartmarkoerCss = Model.AlertSize() ? "custom-icon-kartmarkoer-warning" : "custom-icon-kartmarkoer";
         }
         @if (Model.ShowMapLink())
