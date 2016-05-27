@@ -311,6 +311,8 @@ facet.FacetResults = orderedList.ToList();
                     var itemurl = $(this).attr('itemurl');
                     var itemorglogo = $(this).attr('itemorglogo');
                     var itemdisturl = $(this).attr('itemdisturl');
+                    var itemtheme = $(this).attr('itemtheme');
+                    var itemorgname = $(this).attr('itemorgname');
                     if (localStorage.getItem('orderItems') != null) {
                         orderItems = (JSON.parse(localStorage.getItem('orderItems')));
                     }
@@ -322,7 +324,7 @@ facet.FacetResults = orderedList.ToList();
                     });
                     if (!added) {
                         orderItems.push(itemuuid);
-                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl };
+                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl, 'theme': itemtheme, 'organizationName': itemorgname };
                         localStorage["orderItems"] = JSON.stringify(orderItems);
                         localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
                         showAlert(itemname + ' er lagt til i <a href="/Download">kurven</a>', 'success');
@@ -608,7 +610,9 @@ facet.FacetResults = orderedList.ToList();
                                    itemuuid='@item.Uuid'
                                    itemurl='/metadata/uuid/@item.Uuid'
                                    itemorglogo='@relativeOrganizationLogoUrl'
-                                   itemdisturl='@relativeDowloadUrl'>
+                                   itemdisturl='@relativeDowloadUrl'
+                                   itemtheme='@item.Theme'
+                                   itemorgname='@item.Organization'>
                                     <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
                                 </a>
                             }
@@ -682,7 +686,9 @@ facet.FacetResults = orderedList.ToList();
                                    itemuuid='@item.Uuid'
                                    itemurl='/metadata/uuid/@item.Uuid'
                                    itemorglogo='@relativeOrganizationLogoUrl'
-                                   itemdisturl='@relativeDowloadUrl'>
+                                   itemdisturl='@relativeDowloadUrl'
+                                   itemtheme='@item.Theme'
+                                   itemorgname='@item.Organization'>
                                     <span class="custom-icon custom-icon-handlekurv"></span>
                                 </a>
                             }

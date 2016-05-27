@@ -380,6 +380,7 @@ function generateView(template, orderItems) {
         $("#orderuuid" + uuid + " .order-title").html(metadata.name);
         $("#orderuuid" + uuid + " .order-title").attr('href', metadata.url);
         $("#orderuuid" + uuid + " .order-img").attr('src', metadata.organizationLogoUrl);
+        $("#orderuuid" + uuid + " .order-img").attr('alt', metadata.organizationName);
 
         populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection);
         populateProjectionList(uuid, supportsProjectionSelection);

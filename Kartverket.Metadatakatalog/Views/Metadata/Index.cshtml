@@ -445,7 +445,10 @@ if (contact != null)
                                                        itemuuid='@relatedContent.Uuid'
                                                        itemurl='/metadata/uuid/@relatedContent.Uuid'
                                                        itemorglogo='@relativeOrganizationLogoUrl'
-                                                       itemdisturl='@relativeDowloadUrl'>
+                                                       itemdisturl='@relativeDowloadUrl'
+                                                       itemtheme='@(relatedContent.KeywordsNationalTheme != null && relatedContent.KeywordsNationalTheme.Count > 0 ? relatedContent.KeywordsNationalTheme[0].KeywordValue : "")'
+                                                       itemorgname='@(relatedContent.ContactOwner != null ? relatedContent.ContactOwner.Organization : "" )'
+                                                       >
                                                         <span class="custom-icon custom-icon-handlekurv"></span>
                                                     </a>
                                                 }
@@ -732,6 +735,8 @@ if (keywords != null && keywords.Any())
         var organizationLogoUrl = '@itemOrganizationLogoUrl.Replace("http://", "https://")';
         var distributionDetailsUrl = '@itemDistributionDetailsUrl.Replace("http://", "https://")';
         var rootUrl = 'metadata/uuid/';
+        var theme = '@(Model.KeywordsNationalTheme != null && Model.KeywordsNationalTheme.Count > 0 ? Model.KeywordsNationalTheme[0].KeywordValue : "")'
+        var orgname = '@(Model.ContactOwner != null ? Model.ContactOwner.Organization : "" )'
 
         function showAlert(message, colorClass) {
             $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
@@ -791,7 +796,7 @@ if (keywords != null && keywords.Any())
                     });
                     if (!added) {
                         orderItems.push(uuid);
-                        var metadata = { 'name': title, 'uuid': uuid, 'url': rootUrl + uuid, 'organizationLogoUrl': organizationLogoUrl, 'distributionUrl': distributionDetailsUrl };
+                        var metadata = { 'name': title, 'uuid': uuid, 'url': rootUrl + uuid, 'organizationLogoUrl': organizationLogoUrl, 'distributionUrl': distributionDetailsUrl, 'theme': theme, 'organizationName': orgname };
                         localStorage["orderItems"] = JSON.stringify(orderItems);
                         localStorage[uuid + ".metadata"] = JSON.stringify(metadata);
                         showAlert(title + ' er lagt til i <a href="/Download">kurven</a>', 'success');
@@ -820,6 +825,8 @@ if (keywords != null && keywords.Any())
                     var itemurl = $(this).attr('itemurl');
                     var itemorglogo = $(this).attr('itemorglogo');
                     var itemdisturl = $(this).attr('itemdisturl');
+                    var itemtheme = $(this).attr('itemtheme');
+                    var itemorgname = $(this).attr('itemorgname');
                     if (localStorage.getItem('orderItems') != null) {
                         orderItems = (JSON.parse(localStorage.getItem('orderItems')));
                     }
@@ -831,7 +838,7 @@ if (keywords != null && keywords.Any())
                     });
                     if (!added) {
                         orderItems.push(itemuuid);
-                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl };
+                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl, 'theme': itemtheme, 'organizationName': itemorgname };
                         localStorage["orderItems"] = JSON.stringify(orderItems);
                         localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
                         showAlert(itemname + ' er lagt til i <a href="/Download">kurven</a>', 'success');
