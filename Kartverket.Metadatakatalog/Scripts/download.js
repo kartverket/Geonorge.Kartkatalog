@@ -512,7 +512,7 @@ $(window).load(function () {
                     console.log("tracking: " + metadata.name);
                     ga('send', 'event', 'Nedlasting', 'lastned', 'name:"' + metadata.name + '", organization:"' + metadata.organizationName + '", theme:"' + metadata.theme + '", uuid:"' + metadata.uuid + '"');
                 });
-                setTimeout(function () { form.submit(); }, 200);
+                setTimeout(function () { document.getElementById("downloadform").submit(); }, 200);
             }
         }
 
