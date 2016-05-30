@@ -509,7 +509,7 @@ $(window).load(function () {
                 objCount = storedOrderItems.length;
                 $.each(storedOrderItems, function (key, uuid) {
                     var metadata = JSON.parse(localStorage[uuid + '.metadata']);
-                    console.log("tracking: " + metadata.name);
+                    console.log("tracking lastned: " + 'name:"' + metadata.name + '", organization:"' + metadata.organizationName + '", theme:"' + metadata.theme + '", uuid:"' + metadata.uuid + '"');
                     ga('send', 'event', 'Nedlasting', 'lastned', 'name:"' + metadata.name + '", organization:"' + metadata.organizationName + '", theme:"' + metadata.theme + '", uuid:"' + metadata.uuid + '"');
                 });
                 setTimeout(function () { document.getElementById("downloadform").submit(); }, 200);
