@@ -499,6 +499,23 @@ $(window).load(function () {
             showAlert('E-post feltet må fylles ut om man har valgt koordinater fra kart', 'danger');
             e.preventDefault();
         }
+
+        // ga track
+        if (!hasErrors && isValid)
+        {
+            var orderItems = localStorage["orderItems"];
+            if (orderItems != null) {
+                var storedOrderItems = (orderItems != null) ? JSON.parse(orderItems) : '';
+                objCount = storedOrderItems.length;
+                $.each(storedOrderItems, function (key, uuid) {
+                    var metadata = JSON.parse(localStorage[uuid + '.metadata']);
+                    console.log("tracking: " + metadata.name);
+                    ga('send', 'event', 'Nedlasting', 'lastned', 'name:"' + metadata.name + '", organization:"' + metadata.organizationName + '", theme:"' + metadata.theme + '", uuid:"' + metadata.uuid + '"');
+                });
+                setTimeout(function () { form.submit(); }, 200);
+            }
+        }
+
     }));
 });
 
