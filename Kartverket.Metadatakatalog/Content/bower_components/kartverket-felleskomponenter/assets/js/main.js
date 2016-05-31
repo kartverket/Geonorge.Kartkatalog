@@ -20,22 +20,16 @@ $(window).load(function () {
     };
     $(".chosen-select").chosen(options);
     $("[data-toggle='tooltip']").tooltip();
-<<<<<<< HEAD
-=======
     
->>>>>>> Development
     $("li.has-error[data-toggle='tooltip']").tooltip("option", "position", { my: "center", at: "center bottom+30" });
     $("li[data-toggle='tooltip']").mouseleave(function () {
         $(".ui-helper-hidden-accessible").remove();
     });
-<<<<<<< HEAD
-=======
 
     $(".ui-tooltip-element[data-toggle='tooltip']").tooltip("option", "position", { my: "center", at: "center bottom+25" });
     $(".ui-tooltip-element[data-toggle='tooltip']").mouseleave(function () {
         $(".ui-helper-hidden-accessible").remove();
     });
->>>>>>> Development
 
     // Get useragent
     var doc = document.documentElement;
@@ -487,19 +481,11 @@ var baseurl_local = searchOption.baseUrl;
                   case "dataset":
                       return "Datasett";
                   case "servicelayer":
-<<<<<<< HEAD
-                      return "WMS-lag (Tjenestelag)";
-                  case "service":
-                      return "WMS-tjeneste";
-                  case "dimensionGroup":
-                      return "Datapakke";
-=======
                       return "Tjenestelag";
                   case "service":
                       return "Tjenester";
                   case "dimensionGroup":
                       return "Datapakker";
->>>>>>> Development
                   default:
               }
           }
