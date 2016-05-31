@@ -31,7 +31,7 @@
     <script>
         var applicationEnvironment = '@Html.EnvironmentName()';
         var authenticationData = {
-            supportsLogin: true,
+            supportsLogin: false,
             isAuthenticated: @Request.IsAuthenticated.ToString().ToLower(),
             urlActionSignOut: '@Url.Action("SignOut", "AuthServices")',
             urlActionSignIn: '@Url.Action("SignIn", "AuthServices")'

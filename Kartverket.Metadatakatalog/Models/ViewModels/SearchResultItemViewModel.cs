@@ -24,6 +24,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string LegendDescriptionUrl { get; set; }
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
+        public bool AlertSize { get; set; }
 
         public string GetInnholdstypeCSS()
         {
@@ -143,6 +144,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             LegendDescriptionUrl = item.LegendDescriptionUrl;
             ProductSheetUrl = item.ProductSheetUrl;
             ProductSpecificationUrl = item.ProductSpecificationUrl;
+            AlertSize = item.Type == "service" && item.ServiceLayers != null && item.ServiceLayers.Count > 30;
         }
 
         public static List<SearchResultItemViewModel> CreateFromList(IEnumerable<SearchResultItem> items)

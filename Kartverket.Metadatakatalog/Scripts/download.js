@@ -380,6 +380,7 @@ function generateView(template, orderItems) {
         $("#orderuuid" + uuid + " .order-title").html(metadata.name);
         $("#orderuuid" + uuid + " .order-title").attr('href', metadata.url);
         $("#orderuuid" + uuid + " .order-img").attr('src', metadata.organizationLogoUrl);
+        $("#orderuuid" + uuid + " .order-img").attr('alt', metadata.organizationName);
 
         populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection);
         populateProjectionList(uuid, supportsProjectionSelection);
@@ -498,6 +499,22 @@ $(window).load(function () {
             showAlert('E-post feltet må fylles ut om man har valgt koordinater fra kart', 'danger');
             e.preventDefault();
         }
+
+        // ga track
+        if (!hasErrors && isValid)
+        {
+            var orderItems = localStorage["orderItems"];
+            if (orderItems != null) {
+                var storedOrderItems = (orderItems != null) ? JSON.parse(orderItems) : '';
+                objCount = storedOrderItems.length;
+                $.each(storedOrderItems, function (key, uuid) {
+                    var metadata = JSON.parse(localStorage[uuid + '.metadata']);
+                    ga('send', 'event', 'Nedlasting', 'Hent nedlastingslenke', metadata.name);
+                });
+                setTimeout(function () { document.getElementById("downloadform").submit(); }, 200);
+            }
+        }
+
     }));
 });
 

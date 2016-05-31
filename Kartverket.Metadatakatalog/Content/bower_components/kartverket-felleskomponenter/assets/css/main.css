@@ -1758,10 +1758,13 @@ p.keyword-header {
   width: 60%;
   border-bottom: solid 1px black; }
 
+p.panel-title {
+  font-weight: 700; }
+
 a {
-  color: #3867c8; }
+  color: #3867C8; }
   a:hover {
-    color: #3867c8;
+    color: #3867C8;
     cursor: pointer; }
 
 .control-text {
@@ -1820,7 +1823,7 @@ aside ul li, .container-footer ul li {
     display: block; }
 
 .btn, .col-actions .btn {
-  background-color: #7DA1C4;
+  background-color: #7da1c4;
   transition: all 0.35s linear 0s;
   color: #FFF;
   border: none;
@@ -1830,7 +1833,7 @@ aside ul li, .container-footer ul li {
   background-color: #5d4777; }
 
 .btn:hover, .btn:focus, a.btn:hover, a.btn:focus {
-  background-color: #FE5000;
+  background-color: #fe5000;
   color: #FFFFFF !important;
   border: none;
   font-style: normal;
@@ -1852,9 +1855,12 @@ aside ul li, .container-footer ul li {
 
 .btn-xs {
   font-size: 10pt !important;
-  padding: 3px;
+  padding: 3px 9px;
   height: 25px !important;
-  line-height: 19px; }
+  line-height: 14pt; }
+  .btn-xs:hover {
+    line-height: 14pt !important;
+    font-size: 10pt; }
 
 .input-group-btn > .btn {
   padding: 6px 12px;
@@ -1917,10 +1923,17 @@ aside ul li, .container-footer ul li {
   margin-left: 5px !important; }
 
 .status-icons .custom-icon, .status-icons .fa, .status-icons .glyphicon {
+<<<<<<< HEAD
   width: 16pt !important;
   height: 16pt;
   line-height: 15pt;
   font-size: 16pt;
+=======
+  width: 16px !important;
+  height: 16px;
+  line-height: 16px;
+  font-size: 16px;
+>>>>>>> Development
   margin: 2px 4px;
   text-align: center;
   vertical-align: bottom; }
@@ -1958,6 +1971,15 @@ aside ul li, .container-footer ul li {
 
 .disabled .custom-icon.custom-icon-kartmarkoer {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/kartmarkoer-disabled.svg"); }
+
+.custom-icon.custom-icon-kartmarkoer-warning {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/kartmarkoer-warning.svg"); }
+
+.btn .custom-icon.custom-icon-kartmarkoer-warning {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/kartmarkoer-warning-white.svg"); }
+
+.disabled .custom-icon.custom-icon-kartmarkoer-warning {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/kartmarkoer-warning-disabled.svg"); }
 
 /* Handlekurv*/
 .custom-icon.custom-icon-handlekurv {
@@ -2128,7 +2150,7 @@ aside ul li, .container-footer ul li {
   border: 1px solid #CCC;
   transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
   border: none;
-  border-bottom: 2.5px solid #FE5000;
+  border-bottom: 2.5px solid #fe5000;
   border: 1px solid #cfcfcf;
   border-radius: 0;
   padding: 2px 5px; }
@@ -2166,7 +2188,7 @@ aside ul li, .container-footer ul li {
   content: none; }
 
 .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
-  background: #7DA1C4;
+  background: #7da1c4;
   top: 0px;
   line-height: 19pt;
   color: #FFF;
@@ -2182,7 +2204,7 @@ aside ul li, .container-footer ul li {
 .chosen-container-multi .chosen-choices li.search-choice .search-choice-close:hover {
   text-decoration: none;
   color: #FFF;
-  background-color: #FE5000; }
+  background-color: #fe5000; }
 
 .chosen-container-multi .chosen-choices li.search-choice .search-choice-close:before {
   font-family: "Glyphicons Halflings";
@@ -2285,7 +2307,7 @@ aside ul li, .container-footer ul li {
 
 /* Nedlastingskvittering */
 .download-list a.list-group-item {
-  color: #337AB7; }
+  color: #3867C8; }
 
 .download-list .list-group-item span {
   padding-right: 10px;
@@ -2322,11 +2344,11 @@ aside ul li, .container-footer ul li {
     font-size: 12pt;
     line-height: 18pt;
     font-style: normal;
-    color: #3867c8; }
+    color: #3867C8; }
     .facet-sok-undertitler li a :hover {
       font-size: 12pt !important;
       line-height: 18pt !important;
-      color: #3867c8; }
+      color: #3867C8; }
 
 .facet-sok-emne {
   margin-top: 4px; }
@@ -2359,7 +2381,7 @@ input[readonly] {
 
 .form-group.required .control-label:after, .panel-heading.required:after, .panel-heading span.required:after {
   content: " *";
-  color: red; }
+  color: #EE382B; }
 
 .form-group.has-feedback .form-control-feedback {
   display: none; }
@@ -2473,13 +2495,13 @@ h1 .label {
   border-color: #968c84; }
 
 .label-danger {
-  border-color: #fe5000; }
+  border-color: #EE382B; }
 
 .label-warning {
-  border-color: #f0b323; }
+  border-color: #FFBA33; }
 
 .label-success {
-  border-color: #a9c47f; }
+  border-color: #26C045; }
 
 .label-info {
   border-color: #7da1c4; }
@@ -2583,7 +2605,7 @@ textarea, textarea.form-control {
 .form-group.required .control-label::after,
 .panel-heading.required::after {
   content: "*";
-  color: #ED1C24; }
+  color: #EE382B; }
 
 .pagination {
   margin: 0; }
@@ -2591,31 +2613,31 @@ textarea, textarea.form-control {
     height: 34px;
     line-height: 16pt; }
   .pagination > li > a, .pagination > li > span {
-    background-color: #7DA1C4;
+    background-color: #7da1c4;
     border: 1px solid #FFF;
     transition: all 0.35s linear 0s;
     color: #FFF;
     border-radius: 0px !important;
     font-size: 12pt; }
     .pagination > li > a:hover, .pagination > li > span:hover {
-      background-color: #FE5000;
+      background-color: #fe5000;
       color: #FFF;
       border: 1px solid #FFF; }
   .pagination > .active > a {
     z-index: 1;
-    background-color: #FE5000;
+    background-color: #fe5000;
     color: #FFF;
     border: 1px solid #FFF;
     transition: all 0.35s linear 0s; }
     .pagination > .active > a:hover {
-      background-color: #FE5000;
+      background-color: #fe5000;
       color: #FFF;
       border: 1px solid #FFF; }
 
 .nav > li > a {
   transition: all 0.35s linear 0s; }
   .nav > li > a:hover, .nav > li > a:focus {
-    background-color: #FE5000;
+    background-color: #fe5000;
     color: #FFF; }
 
 .nav-pill-active, .nav-pills > li > a:hover, .nav-pills > li.active > a, .nav-pills > li.active > a :hover, .nav-pills > li.active > a :focus {
@@ -2645,12 +2667,20 @@ textarea, textarea.form-control {
       line-height: 16pt;
       padding: 6px 12px; }
   .nav-tabs > li.active.has-error a {
+<<<<<<< HEAD
     color: #ED1C24;
+=======
+    color: #EE382B;
+>>>>>>> Development
     background-color: #FFF; }
   .nav-tabs li.has-error > span.glyphicon-warning-sign {
     position: absolute;
     z-index: 2;
+<<<<<<< HEAD
     color: #ED1C24; }
+=======
+    color: #EE382B; }
+>>>>>>> Development
   .nav-tabs li.has-error a {
     background-color: #C47D7D; }
 
@@ -2751,6 +2781,25 @@ ul#thumbnailsCoverage {
     margin-right: 10px;
     float: left; }
 
+/* Metadata lists */
+@media (max-width: 991px) {
+  .metadata-list {
+    box-shadow: none; }
+    .metadata-list .metadata-list-item {
+      border-left: none;
+      border-right: none; }
+      .metadata-list .metadata-list-item .metadata-list-item-title {
+        font-size: 1.2em; }
+        .metadata-list .metadata-list-item .metadata-list-item-title small {
+          font-size: .8em; }
+    .metadata-list .metadata-list-item-mobile-row {
+      margin-bottom: 6px; }
+      .metadata-list .metadata-list-item-mobile-row .btn, .metadata-list .metadata-list-item-mobile-row .btn-xs {
+        font-size: 12pt !important;
+        line-height: 16pt;
+        height: 34px !important;
+        padding: 6px 12px; } }
+
 .menu {
   margin-bottom: 20px; }
 
@@ -2849,13 +2898,21 @@ ul#thumbnailsCoverage {
 
 /* styles for validation helpers */
 .field-validation-error {
+<<<<<<< HEAD
   color: #ED1C24; }
+=======
+  color: #EE382B; }
+>>>>>>> Development
 
 .field-validation-valid {
   display: none; }
 
 input.input-validation-error {
+<<<<<<< HEAD
   border: 1px solid #ED1C24; }
+=======
+  border: 1px solid #EE382B; }
+>>>>>>> Development
 
 input[type="checkbox"].input-validation-error {
   border: 0 none; }
@@ -2863,7 +2920,11 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-errors {
   color: #333;
   border: none;
+<<<<<<< HEAD
   border-left: 8px solid #ED1C24;
+=======
+  border-left: 8px solid #EE382B;
+>>>>>>> Development
   border-radius: 0;
   background-color: #FFF; }
 
@@ -2880,7 +2941,11 @@ input[type="checkbox"].input-validation-error {
   border-style: solid; }
 
 .help-text.bg-success {
+<<<<<<< HEAD
   border-left: 8px solid #4EB365; }
+=======
+  border-left: 8px solid #26C045; }
+>>>>>>> Development
 
 .has-error.checkbox-inline label,
 .has-error.checkbox label,
@@ -2892,7 +2957,11 @@ input[type="checkbox"].input-validation-error {
 .has-error .radio,
 .has-error .radio-inline,
 .has-error .form-control-feedback {
+<<<<<<< HEAD
   color: #ED1C24; }
+=======
+  color: #EE382B; }
+>>>>>>> Development
 
 .modal-footer .btn {
   margin-bottom: 0; }
@@ -2939,7 +3008,9 @@ input[type="checkbox"].input-validation-error {
       position: absolute;
       bottom: 0;
       line-height: inherit;
-      margin-bottom: 4px; }
+      margin-bottom: 4px;
+      font-size: 12pt;
+      line-height: 14pt; }
       #tableView .search-results-table-heading > div > p a, .table-view .search-results-table-heading > div > p a {
         font-size: 12pt;
         line-height: 14pt;
@@ -2976,17 +3047,17 @@ input[type="checkbox"].input-validation-error {
   text-align: center; }
   #tableView .search-results-action-icons .btn, #tableView .search-results-action-icons .col-actions .btn, #tableView .col-actions .btn, #tableView .col-actions .col-actions .btn, .table-view .search-results-action-icons .btn, .table-view .search-results-action-icons .col-actions .btn, .table-view .col-actions .btn, .table-view .col-actions .col-actions .btn {
     background: none;
-    color: #7DA1C4;
+    color: #7da1c4;
     padding: 0;
     font-size: 18pt;
     line-height: 1em;
     text-decoration: none; }
     #tableView .search-results-action-icons .btn:hover, #tableView .search-results-action-icons .btn:focus, #tableView .search-results-action-icons .col-actions .btn:hover, #tableView .search-results-action-icons .col-actions .btn:focus, #tableView .col-actions .btn:hover, #tableView .col-actions .btn:focus, #tableView .col-actions .col-actions .btn:hover, #tableView .col-actions .col-actions .btn:focus, .table-view .search-results-action-icons .btn:hover, .table-view .search-results-action-icons .btn:focus, .table-view .search-results-action-icons .col-actions .btn:hover, .table-view .search-results-action-icons .col-actions .btn:focus, .table-view .col-actions .btn:hover, .table-view .col-actions .btn:focus, .table-view .col-actions .col-actions .btn:hover, .table-view .col-actions .col-actions .btn:focus {
       background: none !important;
-      color: #FE5000 !important;
+      color: #fe5000 !important;
       line-height: 1em; }
       #tableView .search-results-action-icons .btn:hover span, #tableView .search-results-action-icons .btn:hover span:hover, #tableView .search-results-action-icons .btn:focus span, #tableView .search-results-action-icons .btn:focus span:hover, #tableView .search-results-action-icons .col-actions .btn:hover span, #tableView .search-results-action-icons .col-actions .btn:hover span:hover, #tableView .search-results-action-icons .col-actions .btn:focus span, #tableView .search-results-action-icons .col-actions .btn:focus span:hover, #tableView .col-actions .btn:hover span, #tableView .col-actions .btn:hover span:hover, #tableView .col-actions .btn:focus span, #tableView .col-actions .btn:focus span:hover, #tableView .col-actions .col-actions .btn:hover span, #tableView .col-actions .col-actions .btn:hover span:hover, #tableView .col-actions .col-actions .btn:focus span, #tableView .col-actions .col-actions .btn:focus span:hover, .table-view .search-results-action-icons .btn:hover span, .table-view .search-results-action-icons .btn:hover span:hover, .table-view .search-results-action-icons .btn:focus span, .table-view .search-results-action-icons .btn:focus span:hover, .table-view .search-results-action-icons .col-actions .btn:hover span, .table-view .search-results-action-icons .col-actions .btn:hover span:hover, .table-view .search-results-action-icons .col-actions .btn:focus span, .table-view .search-results-action-icons .col-actions .btn:focus span:hover, .table-view .col-actions .btn:hover span, .table-view .col-actions .btn:hover span:hover, .table-view .col-actions .btn:focus span, .table-view .col-actions .btn:focus span:hover, .table-view .col-actions .col-actions .btn:hover span, .table-view .col-actions .col-actions .btn:hover span:hover, .table-view .col-actions .col-actions .btn:focus span, .table-view .col-actions .col-actions .btn:focus span:hover {
-        color: #FE5000 !important; }
+        color: #fe5000 !important; }
     #tableView .search-results-action-icons .btn.disabled, #tableView .search-results-action-icons .col-actions .btn.disabled, #tableView .col-actions .btn.disabled, #tableView .col-actions .col-actions .btn.disabled, .table-view .search-results-action-icons .btn.disabled, .table-view .search-results-action-icons .col-actions .btn.disabled, .table-view .col-actions .btn.disabled, .table-view .col-actions .col-actions .btn.disabled {
       opacity: 1;
       color: #cfcfcf !important;
@@ -3129,7 +3200,7 @@ input[type="checkbox"].input-validation-error {
 
 #orderitem-count {
   position: absolute;
-  background-color: #FE5000;
+  background-color: #fe5000;
   border-radius: 50%;
   height: 23px;
   width: 23px;
@@ -3151,6 +3222,83 @@ input[type="checkbox"].input-validation-error {
     left: 21px;
     top: 6px;
     line-height: 14pt; } }
+
+@font-face {
+  font-family: 'statusicon';
+  src: url("/Content/bower_components/kartverket-felleskomponenter/assets/fonts/statusicon.eot?pjbxg9");
+  src: url("/Content/bower_components/kartverket-felleskomponenter/assets/fonts/statusicon.eot?#iefixpjbxg9") format("embedded-opentype"), url("/Content/bower_components/kartverket-felleskomponenter/assets/fonts/statusicon.woff?pjbxg9") format("woff"), url("/Content/bower_components/kartverket-felleskomponenter/assets/fonts/statusicon.ttf?pjbxg9") format("truetype"), url("/Content/bower_components/kartverket-felleskomponenter/assets/fonts/statusicon.svg?pjbxg9#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+[class^="statusIcon-"],
+[class*=" statusIcon-"] {
+  font-family: 'statusicon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+[class^="statusIcon-"]:before,
+[class*=" statusIcon-"]:before {
+  content: "\e600";
+  color: #777; }
+
+.statusIcon-vedtatt:after, .statusIcon-Valid:after {
+  content: "\e600";
+  color: #26C045; }
+
+.statusIcon-vedtatt:before, .statusIcon-Valid:before {
+  content: ""; }
+
+.statusIcon-vedtatt:after, .statusIcon-Sosi-valid:after {
+  content: "\e600";
+  color: #26C045; }
+
+.statusIcon-vedtatt:before, .statusIcon-Sosi-valid:before {
+  content: ""; }
+
+.statusIcon-avvist:after {
+  content: "\e600";
+  color: #EE382B; }
+
+.statusIcon-avvist:before {
+  content: ""; }
+
+.statusIcon-underarbeid:after {
+  content: "\e602";
+  color: #FFBA33;
+  margin-left: -1em; }
+
+.statusIcon-InProgress:after {
+  content: "\e601";
+  color: #26C045;
+  margin-left: -1em; }
+
+.statusIcon-Superseded:after {
+  content: "\e600";
+  color: #FFBA33;
+  margin-left: -1em; }
+
+.statusIcon-Candidate:after, .statusIcon-Draft:after {
+  content: "\e602";
+  color: #26C045;
+  margin-left: -1em; }
+
+.statusIcon-Accepted:after {
+  content: "\e600";
+  color: #26C045; }
+
+.statusIcon-Accepted:before {
+  content: ""; }
+
+.statusIcon-Proposal:before {
+  content: "\e600";
+  color: #777; }
 
 .ui-datepicker {
   border-radius: 0;

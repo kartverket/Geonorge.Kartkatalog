@@ -23,7 +23,7 @@
         Laster datasett
     </div>
 </div>
-@using (Html.BeginForm("Order", "Download", FormMethod.Post))
+@using (Html.BeginForm("Order", "Download", FormMethod.Post, new { id = "downloadform"}))
 {
     <div class="download-form">
         <article id="orderlist"></article>

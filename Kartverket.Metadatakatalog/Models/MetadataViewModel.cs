@@ -227,7 +227,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowServiceMapLink()
         {
-            if (!string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset)) return true;
+            if (!string.IsNullOrWhiteSpace(ServiceUrl())) return true;
             else return false;
         }
 
@@ -265,6 +265,11 @@ namespace Kartverket.Metadatakatalog.Models
         public bool IsDatasetBundle()
         {
             return HierarchyLevel == "dimensionGroup";
+        }
+
+        public bool AlertSize()
+        {
+            return IsService() && Related != null && Related.Count > 30;
         }
 
 

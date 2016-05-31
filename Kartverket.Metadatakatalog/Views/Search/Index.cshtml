@@ -311,6 +311,8 @@ facet.FacetResults = orderedList.ToList();
                     var itemurl = $(this).attr('itemurl');
                     var itemorglogo = $(this).attr('itemorglogo');
                     var itemdisturl = $(this).attr('itemdisturl');
+                    var itemtheme = $(this).attr('itemtheme');
+                    var itemorgname = $(this).attr('itemorgname');
                     if (localStorage.getItem('orderItems') != null) {
                         orderItems = (JSON.parse(localStorage.getItem('orderItems')));
                     }
@@ -322,7 +324,7 @@ facet.FacetResults = orderedList.ToList();
                     });
                     if (!added) {
                         orderItems.push(itemuuid);
-                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl };
+                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl, 'theme': itemtheme, 'organizationName': itemorgname };
                         localStorage["orderItems"] = JSON.stringify(orderItems);
                         localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
                         showAlert(itemname + ' er lagt til i <a href="/Download">kurven</a>', 'success');
@@ -556,17 +558,22 @@ facet.FacetResults = orderedList.ToList();
                                 <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
                             </a>
 
+                            @{
+                                String kartmarkoerCss = item.AlertSize ? "custom-icon-kartmarkoer-warning" : "custom-icon-kartmarkoer";
+                                String kartmarkoerTitle = item.AlertSize ? "Tjenesten kan være treg å vise pga. svært mange kartlag" : "Vis " + @item.Title + " i kart";
+                             }
 
                             @if (item.ShowMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
-                                    <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
-                                </a>
+                                  <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle" target="_blank" class="btn btn-default">
+                                      <span class="custom-icon @kartmarkoerCss"></span><span class="button-text"> Vis i kart</span>
+                                    </a>
+   
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @item.Title i kart" target="_blank" class="btn btn-default">
-                                    <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle" target="_blank" class="btn btn-default">
+                                    <span class="custom-icon @kartmarkoerCss"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
                             else
@@ -603,7 +610,9 @@ facet.FacetResults = orderedList.ToList();
                                    itemuuid='@item.Uuid'
                                    itemurl='/metadata/uuid/@item.Uuid'
                                    itemorglogo='@relativeOrganizationLogoUrl'
-                                   itemdisturl='@relativeDowloadUrl'>
+                                   itemdisturl='@relativeDowloadUrl'
+                                   itemtheme='@item.Theme'
+                                   itemorgname='@item.Organization'>
                                     <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
                                 </a>
                             }
@@ -632,14 +641,14 @@ facet.FacetResults = orderedList.ToList();
                         <div class="col-xs-1 search-results-action-icons action-show-map">
                             @if (item.ShowMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @item.Title i kart" target="_blank">
-                                    <span class="custom-icon custom-icon-kartmarkoer"></span>
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle" target="_blank">
+                                    <span class="custom-icon @kartmarkoerCss"></span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @item.Title i kart" target="_blank">
-                                    <span class="custom-icon custom-icon-kartmarkoer"></span>
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle" target="_blank">
+                                    <span class="custom-icon @kartmarkoerCss"></span>
                                 </a>
                             }
                             else
@@ -677,7 +686,9 @@ facet.FacetResults = orderedList.ToList();
                                    itemuuid='@item.Uuid'
                                    itemurl='/metadata/uuid/@item.Uuid'
                                    itemorglogo='@relativeOrganizationLogoUrl'
-                                   itemdisturl='@relativeDowloadUrl'>
+                                   itemdisturl='@relativeDowloadUrl'
+                                   itemtheme='@item.Theme'
+                                   itemorgname='@item.Organization'>
                                     <span class="custom-icon custom-icon-handlekurv"></span>
                                 </a>
                             }
