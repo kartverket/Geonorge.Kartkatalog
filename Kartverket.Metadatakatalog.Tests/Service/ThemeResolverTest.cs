@@ -347,7 +347,6 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         public void ShouldResolveKeywordKulturminnerToKulturminner()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
-            ResolveTheme(CreateMetadataWithDokKeyword("kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
         }
 
         [Test]
@@ -360,7 +359,6 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         public void ShouldResolveKeywordBasisGeodataRegardslessOfCase()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Basis geodata")).Should().Be(ThemeResolver.DokBasisGeodata);
-            ResolveTheme(CreateMetadataWithDokKeyword("basis Geodata")).Should().Be(ThemeResolver.DokBasisGeodata);
         }
 
         [Test]
