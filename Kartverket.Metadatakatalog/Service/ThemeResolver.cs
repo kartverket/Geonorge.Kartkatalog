@@ -136,12 +136,13 @@ namespace Kartverket.Metadatakatalog.Service
             List<SimpleKeyword> keywordsDok = SimpleKeyword.Filter(metadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME);
             foreach (var keyword in keywordsDok)
             {
-                string lowerCaseKeyword = keyword.Keyword.ToLower();
-                string theme;
-                if (_dokCategoryToTheme.TryGetValue(lowerCaseKeyword, out theme))
-                {
-                    return theme;
-                }
+                //string lowerCaseKeyword = keyword.Keyword.ToLower();
+                //string theme;
+                //if (_dokCategoryToTheme.TryGetValue(lowerCaseKeyword, out theme))
+                //{
+                //return theme;
+                //}
+                return keyword.Keyword;
             }
             return null;
         }
