@@ -36,10 +36,6 @@
           "y": conf.center_latitude,
           "zoom": conf.zoom_level
         });
-        sendMessage({
-          "cmd": "setVisible",
-          "id": conf.service_name
-        });
     } else {
 
         if (msg.cmd === "setVisible") return;
