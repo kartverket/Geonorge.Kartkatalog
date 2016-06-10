@@ -28,7 +28,6 @@ namespace Kartverket.Metadatakatalog
             "~/Scripts/js.cookie.js",
             "~/Scripts/jquery.validate*",
             "~/Scripts/chosen.jquery.js",
-            "~/Scripts/easyXDM.js",
             "~/Scripts/visninger.js",
             "~/Scripts/init.js",
             "~/Scripts/shopping-cart-jscookie.js",
@@ -73,7 +72,6 @@ namespace Kartverket.Metadatakatalog
                "~/Content/bower_components/kartverket-felleskomponenter/assets/js/main.min.js",
                "~/Scripts/site.js",
                "~/Scripts/visninger.js",
-               "~/Scripts/easyXDM.min.js",
                "~/Scripts/download.js"
            ));
 
@@ -130,7 +128,6 @@ namespace Kartverket.Metadatakatalog
                "~/Scripts/jquery.cookie.js",
                "~/Scripts/jquery.validate*",
                "~/Scripts/chosen.jquery.js",
-               "~/Scripts/easyXDM.js",
                "~/Scripts/visninger.js",
                "~/Scripts/init.js"));
 

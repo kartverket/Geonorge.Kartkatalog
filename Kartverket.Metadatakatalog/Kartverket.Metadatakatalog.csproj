@@ -609,8 +609,6 @@
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\chosen.jquery.min.js" />
     <Content Include="Scripts\download.js" />
-    <Content Include="Scripts\easyXDM.js" />
-    <Content Include="Scripts\easyXDM.min.js" />
     <Content Include="Scripts\init.js" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
