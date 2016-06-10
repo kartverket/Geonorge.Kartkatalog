@@ -501,7 +501,7 @@ $(window).load(function () {
         }
 
         // ga track
-        if (!hasErrors && isValid)
+        if (!hasErrors && isValid())
         {
             var orderItems = localStorage["orderItems"];
             if (orderItems != null) {
