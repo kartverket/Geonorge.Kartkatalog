@@ -511,7 +511,6 @@ $(window).load(function () {
                     var metadata = JSON.parse(localStorage[uuid + '.metadata']);
                     ga('send', 'event', 'Nedlasting', 'Hent nedlastingslenke', metadata.name);
                 });
-                setTimeout(function () { document.getElementById("downloadform").submit(); }, 200);
             }
         }
 
