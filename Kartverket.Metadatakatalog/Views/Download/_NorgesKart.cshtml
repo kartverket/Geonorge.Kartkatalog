@@ -132,7 +132,7 @@
             console.log(e.data);
         }, false);
 
-        $("#container").html("<iframe src='@Html.SecureNorgeskartUrl().Replace("norgeskart.no", "www.norgeskart.no")nedlasting.html#" + conf.zoom_level + "/" + conf.center_longitude + "/" + conf.center_latitude + "/+" + conf.service_name + "' id='iframe' name='iframe'></iframe>");
+        $("#container").html("<iframe src='@Html.SecureNorgeskartUrl()nedlasting.html#" + conf.zoom_level + "/" + conf.center_longitude + "/" + conf.center_latitude + "/+" + conf.service_name + "' id='iframe' name='iframe'></iframe>");
 
     }
 
