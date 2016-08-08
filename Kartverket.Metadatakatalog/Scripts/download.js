@@ -332,14 +332,20 @@ function getSelectedCoordinates(uuid, selectClass, name) {
     if (coordinates != null && coordinates != '') {
         orderItemInputCoordinates.attr('name', uuid + '-' + name);
         orderItemInputCoordinates.val(coordinates);
-        selectField.html('<option class="from-map" selected="selected" value="0">Valgt fra kart</option>');
-        selectField.trigger("chosen:updated");
-        var selectGroup = $('#orderuuid' + uuid + ' .input-group-omraade');
-        selectGroup.find('.search-choice-close').attr('onclick', 'removeCoordinates(\'' + uuid + '\')');
-        $(window).load(function () {
+        if (coordinates == "undefined"){
+            showAlert('Feil: Koordinater kunne ikke bli valgt fra kartet', 'danger');
+            removeCoordinates(uuid)
+        }
+        else
+        {
+            selectField.html('<option class="from-map" selected="selected" value="0">Valgt fra kart</option>');
+            selectField.trigger("chosen:updated");
+            var selectGroup = $('#orderuuid' + uuid + ' .input-group-omraade');
             selectGroup.find('.search-choice-close').attr('onclick', 'removeCoordinates(\'' + uuid + '\')');
-        });
-
+            $(window).load(function () {
+                selectGroup.find('.search-choice-close').attr('onclick', 'removeCoordinates(\'' + uuid + '\')');
+            });
+        }
     }
 }
 
@@ -398,18 +404,14 @@ function generateView(template, orderItems) {
     });
 }
 
+function showAlert(message, colorClass) {
+    $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
+    $('#feedback-alert .message').text(message);
+    $('#feedback-alert').show();
+}
 
 $(window).load(function () {
     $(".progress").fadeOut("slow");
-
-    function showAlert(message, colorClass) {
-        $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
-        $('#feedback-alert .message').text(message);
-        $('#feedback-alert').show();
-    }
-
-
-
 
 
     // Fjerning av datasett fra handlekurv
