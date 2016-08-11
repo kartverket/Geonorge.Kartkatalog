@@ -493,10 +493,10 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.DistributionProtocol));
                 }
-                if (!String.IsNullOrEmpty(indexDoc.ServiceDistributionProtocolForDataset))
-                {
-                    indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.ServiceDistributionProtocolForDataset));
-                }
+                //if (!String.IsNullOrEmpty(indexDoc.ServiceDistributionProtocolForDataset))
+                //{
+                //    indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.ServiceDistributionProtocolForDataset));
+                //}
 
                 Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid,
                     indexDoc.Title));
