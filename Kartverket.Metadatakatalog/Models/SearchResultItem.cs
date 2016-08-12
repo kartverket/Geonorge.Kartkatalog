@@ -24,6 +24,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
         public List<string> DatasetServices { get; set; }
+        public List<string> ServiceDatasets { get; set; }
         public List<string> Bundles { get; set; }
         public List<string> ServiceLayers { get; set; }
         public string AccessConstraint { get; set; }

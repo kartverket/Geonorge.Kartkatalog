@@ -75,7 +75,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     Facet = BuildFacetParameters(parameters),
                     Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
                     "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
-                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint" }
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset" }
                     //ExtraParams = new Dictionary<string, string> {
                     //    {"q", ""}
 
@@ -213,6 +213,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                         ProductSheetUrl = doc.ProductSheetUrl,
                         ProductSpecificationUrl = doc.ProductSpecificationUrl,
                         DatasetServices = doc.DatasetServices,
+                        ServiceDatasets = doc.ServiceDatasets,
                         Bundles = doc.Bundles,
                         ServiceLayers = doc.ServiceLayers,
                         AccessConstraint = doc.AccessConstraint

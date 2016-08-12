@@ -86,6 +86,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public List<string> DatasetServices { get; set; }
         /// <summary>
+        ///  Datasets for service
+        /// </summary>
+        public List<string> ServiceDatasets { get; set; }
+        /// <summary>
         /// Bundles for dataset
         /// </summary>
         public List<string> Bundles { get; set; }
@@ -135,6 +139,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             ProductSheetUrl = item.ProductSheetUrl;
             ProductSpecificationUrl = item.ProductSpecificationUrl;
             DatasetServices = item.DatasetServices;
+            ServiceDatasets = item.ServiceDatasets;
             Bundles = item.Bundles;
             ServiceLayers = item.ServiceLayers;
             AccessConstraint = item.AccessConstraint;
