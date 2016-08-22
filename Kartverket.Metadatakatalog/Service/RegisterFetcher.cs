@@ -94,13 +94,18 @@ namespace Kartverket.Metadatakatalog.Service
             return value;
         }
 
-        public string GetRestriction(string value)
+        public string GetRestriction(string value, string OtherConstraintsAccess ="")
         {
             KeyValuePair<string, string> dic = ListOfRestrictionValues.Where(p => p.Key == value).FirstOrDefault();
             if (!dic.Equals(default(KeyValuePair<String, String>)))
                 value = dic.Value;
 
-            return value;
+            if (OtherConstraintsAccess == "No restrictions")
+                value = "Åpne data";
+            else if (OtherConstraintsAccess == "Norway Digital restricted")
+                value = "Norge digtalt beskyttelse";
+
+                return value;
         }
 
 

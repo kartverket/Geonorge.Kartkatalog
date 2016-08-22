@@ -463,6 +463,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string SecurityConstraintsNote { get; set; }
         public string UseConstraints { get; set; }
         public string UseLimitations { get; set; }
+        public string OtherConstraintsAccess { get; set; }
     }
 
     public class Contact

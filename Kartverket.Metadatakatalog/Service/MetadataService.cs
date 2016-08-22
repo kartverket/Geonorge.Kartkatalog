@@ -409,14 +409,15 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 output = new Constraints
                 {
-                    AccessConstraints = register.GetRestriction(simpleConstraints.AccessConstraints),
+                    AccessConstraints = register.GetRestriction(simpleConstraints.AccessConstraints, simpleConstraints.OtherConstraintsAccess),
                     OtherConstraints = simpleConstraints.OtherConstraints,
                     OtherConstraintsLink = simpleConstraints.OtherConstraintsLink,
                     OtherConstraintsLinkText = simpleConstraints.OtherConstraintsLinkText,
                     SecurityConstraints = register.GetClassification(simpleConstraints.SecurityConstraints),
                     SecurityConstraintsNote = simpleConstraints.SecurityConstraintsNote,
                     UseConstraints = register.GetRestriction(simpleConstraints.UseConstraints),
-                    UseLimitations = simpleConstraints.UseLimitations
+                    UseLimitations = simpleConstraints.UseLimitations,
+                    OtherConstraintsAccess = simpleConstraints.OtherConstraintsAccess
                 };
             }
             return output;
