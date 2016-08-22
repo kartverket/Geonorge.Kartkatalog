@@ -143,6 +143,10 @@ namespace Kartverket.Metadatakatalog.Models
 
         [SolrField("accessconstraint")]
         public string AccessConstraint { get; set; }
+
+        [SolrField("otherconstraintsaccess")]
+        public string OtherConstraintsAccess { get; set; }
+        
     }
 
 }

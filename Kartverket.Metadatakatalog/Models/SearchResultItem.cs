@@ -28,6 +28,7 @@ namespace Kartverket.Metadatakatalog.Models
         public List<string> Bundles { get; set; }
         public List<string> ServiceLayers { get; set; }
         public string AccessConstraint { get; set; }
+        public string OtherConstraintsAccess { get; set; }
 
     }
 }

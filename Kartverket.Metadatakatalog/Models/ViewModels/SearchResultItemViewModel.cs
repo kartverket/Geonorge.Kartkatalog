@@ -98,9 +98,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             MaintenanceFrequency = item.MaintenanceFrequency;
             
             DistributionProtocol = item.DistributionProtocol;
-            if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data")) IsOpendata = true;
-            if (item.AccessConstraint == "restricted") IsRestricted = true;
-            if (item.AccessConstraint == "restricted" && (DistributionProtocol != null && DistributionProtocol.Contains("GEONORGE:OFFLINE"))) IsOffline = true; 
+            if (item.OtherConstraintsAccess == "No restrictions") IsOpendata = true;
+            if (item.OtherConstraintsAccess == "Norway Digital restricted") IsRestricted = true;
+            if (item.AccessConstraint == "restricted") IsOffline = true; 
 
 
             if (Type == "dataset")

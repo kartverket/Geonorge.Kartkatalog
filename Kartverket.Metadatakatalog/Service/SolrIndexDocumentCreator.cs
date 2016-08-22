@@ -220,6 +220,9 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.AccessConstraint = 
                         simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.AccessConstraints) 
                         ? simpleMetadata.Constraints.AccessConstraints : "";
+                indexDoc.OtherConstraintsAccess =
+                        simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.OtherConstraintsAccess)
+                        ? simpleMetadata.Constraints.OtherConstraintsAccess : "";
 
                 //TODO tolke liste fra nøkkelord
                 indexDoc.Area = _placeResolver.ResolveArea(simpleMetadata);
