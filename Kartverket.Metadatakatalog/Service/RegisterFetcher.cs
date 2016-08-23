@@ -100,12 +100,14 @@ namespace Kartverket.Metadatakatalog.Service
             if (!dic.Equals(default(KeyValuePair<String, String>)))
                 value = dic.Value;
 
+            if (value == "restricted")
+                value = "Skjermede data";
             if (OtherConstraintsAccess == "No restrictions")
                 value = "Åpne data";
             else if (OtherConstraintsAccess == "Norway Digital restricted")
-                value = "Norge digtalt beskyttelse";
+                value = "Norge digitalt-begrenset";
 
-                return value;
+            return value;
         }
 
 
