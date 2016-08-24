@@ -731,21 +731,32 @@ function updateShoppingCartCookie() {
 $(window).load(function () {
     updateShoppingCart();
 });
+/* Content toggle */
+function updateToggleLinks(element) {
+	$(element).each(function () {
+		var linkText = $(this).data('link-text');
+		if ($(this).hasClass('show-content')) {
+			$(this).children('.link-text').text('Skjul ' + linkText);
+		} else {
+			$(this).children('.link-text').text('Vis ' + linkText);
+		}
+		$(this).toggleClass('show-content');
+	});
+}
 $("document").ready( function(){
-    $("a.help-text-toggle").click(function (event) {
-        event.preventDefault();
-        var toggleButton = $(this);
-        var helpTextId = $(this).data("help-text-id");
-        $("#" + helpTextId).toggle();
-        if ($("#" + helpTextId).hasClass('active')) {
-            $("#" + helpTextId).removeClass('active');
-            toggleButton.removeClass('active');
-        } else {
-            $("#" + helpTextId).addClass('active');
-            toggleButton.addClass('active');
-        }
-    });
+
+	updateToggleLinks($('.toggle-content'));
+
+	$(".toggle-content").click(function () {
+		var toggleClass = $(this).data('content-toggle');
+		updateToggleLinks($(this));
+		$("." + toggleClass).toggle();
+	});
+	
 });
+
+
+/* Tabs */
 function activateTab(tab){
 	$(".link-tabs").ready(function () {
 		tabLink = $(".link-tabs li a[data-tab='" + tab + "']");
@@ -760,5 +771,23 @@ $(".link-tabs").ready(function () {
 		activateTab($(this).data('tab'));
 		$("#tab-content").css('opacity', '.15');
 		window.location.href = $(this).prop('href');
+	});
+});
+
+
+/* Help texts */
+$("document").ready( function(){
+	$("a.help-text-toggle").click(function (event) {
+		event.preventDefault();
+		var toggleButton = $(this);
+		var helpTextId = $(this).data("help-text-id");
+		$("#" + helpTextId).toggle();
+		if ($("#" + helpTextId).hasClass('active')) {
+			$("#" + helpTextId).removeClass('active');
+			toggleButton.removeClass('active');
+		} else {
+			$("#" + helpTextId).addClass('active');
+			toggleButton.addClass('active');
+		}
 	});
 });

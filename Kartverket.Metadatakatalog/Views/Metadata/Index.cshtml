@@ -499,67 +499,7 @@ if (contact != null)
                     @ShowContact("Teknisk kontakt", Model.ContactPublisher)
 
                 </div>
-                <div class="col-sm-6">
-                    <h2>Distribusjon</h2>
-                    @DisplayValue("Representasjonsform", Model.SpatialRepresentation)
-                    @if (Model.DistributionFormats != null)
-                {
-                    if (Model.DistributionFormats.Any())
-                    {
-                            <strong>Format: </strong>
-                            <ul>
-                                @foreach (var format in Model.DistributionFormats)
-                                {
-                                    if (!string.IsNullOrWhiteSpace(format.Version))
-                                    {
-                                        <li>@format.Name @format.Version</li>
-                                    }
-                                    else
-                                    {
-                                        <li>@format.Name</li>
-                                    }
-                                }
-                            </ul>
-                        }
-                    }
-                    @if (Model.DistributionDetails != null && Model.DistributionDetails.Protocol != null && Model.DistributionDetails.Protocol != "GEONORGE:OFFLINE")
-                {
-                        <text>@DisplayValue("Distribusjonstype", Model.DistributionDetails.ProtocolName)</text>
-                        if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
-                        {
-                            if (Model.IsService() || Model.IsServiceLayer())
-                            {
-                                <p>
-                                    <strong>Get Capabilities Url:</strong> <a href="@Model.DistributionDetailsGetCapabilitiesUrl()">@Model.DistributionDetails.URL <i class="custom-icon-sm custom-icon-eksternlink"></i></a>
-                                </p>
-                            }
-                            else
-                            {
-                                @*<p>
-                                        <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
-                                    </p>*@
-                            }
-
-                        }
-                        <text>@DisplayValue("Geografisk distribusjonsinndeling", Model.UnitsOfDistribution)</text>
-                        <text>@DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
-                    }
-
-                    @if (Model.ReferenceSystems != null)
-                {
-                    if (Model.ReferenceSystems.Any())
-                    {
-                            <strong>Romlig referansesystem: </strong>
-                            <ul>
-                                @foreach (var refsys in Model.ReferenceSystems)
-                                {
-                                    <li>@refsys.CoordinateSystem</li>
-                                }
-                            </ul>
-                        }
-
-                    }
-                </div>
+                
 
                 @if (Model.Constraints != null)
                 {
@@ -577,15 +517,16 @@ if (contact != null)
                         @DisplayValue("Lovhenvisning", Model.Constraints.SecurityConstraintsNote)
                     </div>
                 }
+
+
                 <div class="col-sm-12">
-                    <p>
-                        <a href="#" id="details-button" class="btn"><span class="glyphicon glyphicon-list-alt"></span> Vis tekniske detaljer</a>
-                    </p>
+                    <h2>Detaljert informasjon</h2>
+                    <a href="#" data-content-toggle="detailed-info" data-link-text="" class="toggle-content"><span class="toggle-icon"></span><span class="link-text"></span></a>
                 </div>
                
-                <div id="metadata-text-details" style="display:none;">
+                <div id="metadata-text-details" class="detailed-info" style="display:none;">
                     <div class="col-sm-6">
-                        <h2>Kvalitet</h2>
+                        <h3>Kvalitet</h3>
                         @DisplayValue("Målestokkstall", Model.ResolutionScale)
                         @DisplayValue("Status", Model.Status)
                         @DisplayValue("Prosesshistorie", Model.ProcessHistory)
@@ -608,14 +549,78 @@ if (contact != null)
                         @if (!string.IsNullOrWhiteSpace(Model.Purpose))
                         {
 
-                            <h2>Formål</h2>
+                            <h3>Formål</h3>
                             <p>@Model.Purpose</p>
 
                         }
                     </div>
 
+
                     <div class="col-sm-6">
-                        <h2>Tid og rom</h2>
+                        <h3>Distribusjon</h3>
+                        @DisplayValue("Representasjonsform", Model.SpatialRepresentation)
+                        @if (Model.DistributionFormats != null)
+                {
+                    if (Model.DistributionFormats.Any())
+                    {
+                                <strong>Format: </strong>
+                                <ul>
+                                    @foreach (var format in Model.DistributionFormats)
+                                    {
+                                        if (!string.IsNullOrWhiteSpace(format.Version))
+                                        {
+                                            <li>@format.Name @format.Version</li>
+                                        }
+                                        else
+                                        {
+                                            <li>@format.Name</li>
+                                        }
+                                    }
+                                </ul>
+                            }
+                        }
+                        @if (Model.DistributionDetails != null && Model.DistributionDetails.Protocol != null && Model.DistributionDetails.Protocol != "GEONORGE:OFFLINE")
+                {
+                            <text>@DisplayValue("Distribusjonstype", Model.DistributionDetails.ProtocolName)</text>
+                            if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
+                            {
+                                if (Model.IsService() || Model.IsServiceLayer())
+                                {
+                                    <p>
+                                        <strong>Get Capabilities Url:</strong> <a href="@Model.DistributionDetailsGetCapabilitiesUrl()">@Model.DistributionDetails.URL <i class="custom-icon-sm custom-icon-eksternlink"></i></a>
+                                    </p>
+                                }
+                                else
+                                {
+                                    @*<p>
+                            <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
+                        </p>*@
+                                }
+
+                            }
+                            <text>@DisplayValue("Geografisk distribusjonsinndeling", Model.UnitsOfDistribution)</text>
+                            <text>@DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
+                        }
+
+                        @if (Model.ReferenceSystems != null)
+                {
+                    if (Model.ReferenceSystems.Any())
+                    {
+                                <strong>Romlig referansesystem: </strong>
+                                <ul>
+                                    @foreach (var refsys in Model.ReferenceSystems)
+                                    {
+                                        <li>@refsys.CoordinateSystem</li>
+                                    }
+                                </ul>
+                            }
+
+                        }
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <h3>Tid og rom</h3>
                         @if (Model.DateUpdated != null)
                     {
                             <p><strong>Oppdatert(Ressurs):</strong> @Html.DisplayFor(m => m.DateUpdated)</p>
@@ -664,7 +669,7 @@ if (contact != null)
 
                     <div class="col-sm-6">
 
-                        <h2>Nøkkelord</h2>
+                        <h3>Nøkkelord</h3>
                         @DisplayKeywords("Tema", Model.KeywordsTheme)
                         @DisplayKeywords("Nasjonal temakategori", Model.KeywordsNationalTheme)
                         @DisplayKeywords("Samarbeid og lover", Model.KeywordsNationalInitiative)
@@ -777,6 +782,7 @@ if (keywords != null && keywords.Any())
             $("#details-button").click(function () {
                 $("#metadata-text-details").toggle();
             });
+
 
             if (typeof Storage !== "undefined") {
 

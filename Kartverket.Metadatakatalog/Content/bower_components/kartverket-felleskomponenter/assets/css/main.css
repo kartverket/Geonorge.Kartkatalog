@@ -3076,6 +3076,17 @@ input[type="checkbox"].input-validation-error {
 .has-error .form-control-feedback {
   color: #EE382B; }
 
+.toggle-content .toggle-icon:before {
+  font-family: Glyphicons Halflings;
+  content: "−";
+  display: inline-block;
+  width: 22px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.toggle-content.show-content .toggle-icon:before {
+  content: "+"; }
+
 .modal-footer .btn {
   margin-bottom: 0; }
 
