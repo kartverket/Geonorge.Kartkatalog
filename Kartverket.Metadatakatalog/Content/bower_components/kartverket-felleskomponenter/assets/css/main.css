@@ -2060,17 +2060,17 @@ button.btn {
 .custom-icon.custom-icon-hengelaas-open-green {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/hengelaas-aapen-green.svg");
   width: 30px;
-  margin-right: -10px; }
+  margin-right: -8px; }
 
 .custom-icon.custom-icon-hengelaas-open-red {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/hengelaas-aapen-red.svg");
   width: 30px;
-  margin-right: -10px; }
+  margin-right: -8px; }
 
 .custom-icon.custom-icon-hengelaas-open-yellow {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/hengelaas-aapen-yellow.svg");
   width: 30px;
-  margin-right: -10px; }
+  margin-right: -8px; }
 
 .custom-icon.custom-icon-hengelaas-closed-green {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/hengelaas-lukket-green.svg"); }
@@ -3087,12 +3087,24 @@ input[type="checkbox"].input-validation-error {
     position: relative;
     bottom: -5px;
     line-height: 25pt; }
+  .search-result-navigation .save-as-menu label {
+    display: block;
+    font-weight: normal;
+    margin-bottom: 0; }
   .search-result-navigation .save-as-menu .save-as-dropdown {
-    padding-left: 15px;
-    padding-right: 0px; }
+    padding-left: 0;
+    display: inline-block; }
+    .search-result-navigation .save-as-menu .save-as-dropdown .custom-select {
+      width: 218px; }
   .search-result-navigation .save-as-menu .save-as-buttons {
     padding-left: 5px;
-    text-align: right; }
+    text-align: right;
+    display: inline-block;
+    vertical-align: top; }
+
+@media (max-width: 991px) {
+  .search-result-navigation .custom-select {
+    max-width: 218px; } }
 
 .search-results {
   margin-bottom: 10px; }
