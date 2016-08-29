@@ -367,9 +367,9 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\Arrow_968c83_12px_mobile.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\breadcrumb-arrow.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\dekningskart.svg" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\ekternlink-disabled.svg" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\ekternlink-white.svg" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\ekternlink.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\eksternlink-disabled.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\eksternlink-white.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\eksternlink.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\external_link_3867c8_12px-01.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\external_link_ffffff_12px-01.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\geonorge_devlogo.svg" />

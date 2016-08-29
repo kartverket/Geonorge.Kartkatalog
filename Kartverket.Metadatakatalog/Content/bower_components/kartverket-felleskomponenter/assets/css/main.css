@@ -2024,13 +2024,13 @@ button.btn {
 
 /* Ekstern link */
 .custom-icon.custom-icon-eksternlink, .custom-icon-sm.custom-icon-eksternlink {
-  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/ikoner/ekternlink.svg"); }
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/eksternlink.svg"); }
 
 .btn .custom-icon.custom-icon-eksternlink {
-  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/ekternlink-white.svg"); }
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/eksternlink-white.svg"); }
 
 .disabled .custom-icon.custom-icon-eksternlink {
-  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/ekternlink-disabled.svg"); }
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/eksternlink-disabled.svg"); }
 
 /* Smileys */
 .custom-icon.custom-icon-smile-green {
