@@ -102,9 +102,9 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (value == "restricted")
                 value = "Skjermede data";
-            if (OtherConstraintsAccess == "No restrictions")
+            if (OtherConstraintsAccess == "no restrictions")
                 value = "Åpne data";
-            else if (OtherConstraintsAccess == "Norway Digital restricted")
+            else if (OtherConstraintsAccess == "norway digital restricted")
                 value = "Norge digitalt-begrenset";
 
             return value;

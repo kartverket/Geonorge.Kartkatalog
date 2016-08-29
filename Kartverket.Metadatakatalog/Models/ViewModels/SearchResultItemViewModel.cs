@@ -98,8 +98,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             MaintenanceFrequency = item.MaintenanceFrequency;
             
             DistributionProtocol = item.DistributionProtocol;
-            if (item.OtherConstraintsAccess == "No restrictions") IsOpendata = true;
-            if (item.OtherConstraintsAccess == "Norway Digital restricted") IsRestricted = true;
+            if (!string.IsNullOrEmpty(item.OtherConstraintsAccess) && item.OtherConstraintsAccess.ToLower() == "no restrictions") IsOpendata = true;
+            if (!string.IsNullOrEmpty(item.OtherConstraintsAccess) && item.OtherConstraintsAccess.ToLower() == "norway digital restricted") IsRestricted = true;
             if (item.AccessConstraint == "restricted") IsOffline = true; 
 
 
