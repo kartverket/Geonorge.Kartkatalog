@@ -734,12 +734,6 @@ $(window).load(function () {
 /* Content toggle */
 function updateToggleLinks(element) {
 	$(element).each(function () {
-		var linkText = $(this).data('link-text');
-		if ($(this).hasClass('show-content')) {
-			$(this).children('.link-text').text('Skjul ' + linkText);
-		} else {
-			$(this).children('.link-text').text('Vis ' + linkText);
-		}
 		$(this).toggleClass('show-content');
 	});
 }

@@ -1727,7 +1727,6 @@ body {
   background-color: #FFF; }
 
 h3.article-h3:after {
-  padding-bottom: 50px;
   width: 50px;
   border-bottom: 2.5px solid #fe5000;
   content: "";
@@ -2060,17 +2059,17 @@ button.btn {
 .custom-icon.custom-icon-hengelaas-open-green {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/hengelaas-aapen-green.svg");
   width: 30px;
-  margin-right: -8px; }
+  margin-right: -10px; }
 
 .custom-icon.custom-icon-hengelaas-open-red {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/hengelaas-aapen-red.svg");
   width: 30px;
-  margin-right: -8px; }
+  margin-right: -10px; }
 
 .custom-icon.custom-icon-hengelaas-open-yellow {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/hengelaas-aapen-yellow.svg");
   width: 30px;
-  margin-right: -8px; }
+  margin-right: -10px; }
 
 .custom-icon.custom-icon-hengelaas-closed-green {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/hengelaas-lukket-green.svg"); }
@@ -3076,16 +3075,29 @@ input[type="checkbox"].input-validation-error {
 .has-error .form-control-feedback {
   color: #EE382B; }
 
-.toggle-content .toggle-icon:before {
-  font-family: Glyphicons Halflings;
-  content: "−";
-  display: inline-block;
-  width: 22px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; }
-
-.toggle-content.show-content .toggle-icon:before {
-  content: "+"; }
+.toggle-content {
+  text-decoration: none;
+  color: #3867c8; }
+  .toggle-content:hover, .toggle-content:focus {
+    text-decoration: none;
+    color: #3867c8; }
+  .toggle-content .toggle-icon:before {
+    font-family: Glyphicons Halflings;
+    content: "−";
+    display: inline-block;
+    font-size: .8em;
+    margin-right: .2em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale; }
+  .toggle-content.show-content .toggle-icon:before {
+    content: "+"; }
+  .toggle-content h2:after {
+    left: 40px; }
+  .toggle-content h2 .toggle-icon:before {
+    color: #3867c8;
+    font-size: .5em;
+    vertical-align: text-top;
+    line-height: 39pt; }
 
 .modal-footer .btn {
   margin-bottom: 0; }
