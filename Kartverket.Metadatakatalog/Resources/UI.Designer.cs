@@ -205,7 +205,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to WMS-lag (Tjenestelag).
+        ///   Looks up a localized string similar to Tjenestelag.
         /// </summary>
         public static string Facet_type_servicelayer {
             get {

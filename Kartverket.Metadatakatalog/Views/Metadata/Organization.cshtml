@@ -358,7 +358,7 @@ facet.FacetResults = orderedList.ToList();
     string query = qs.ToString(); string urlCSV = url + "?" + query;
 }
 <div class="row search-result-navigation">
-    <div class="col-md-5">
+    <div class="col-md-4">
         Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
         <div class="pagination-container">
             <ul class="pagination pagination-sm btn-group inline-block">
@@ -396,27 +396,21 @@ facet.FacetResults = orderedList.ToList();
         </div>
     </div>
     <div class="col-md-4">
-        Lagre som:
-        <div class="row save-as-menu">
-            <div class="col-sm-5 no-padding-bottom save-as-dropdown">
+        <div class="save-as-menu">
+            <label>Lagre som:</label>
+            <div class="no-padding-bottom save-as-dropdown">
                 <div class="custom-select">
                     <select onchange="additionalView(this.value)" class="form-control">
-                        <option disabled="disabled" value="atomUrl">ATOM</option>
-                        <option disabled="disabled" value="rssUrl">RSS</option>
                         <option value="csvUrl" selected="selected">CSV</option>
-                        <option disabled="disabled" value="jsonUrl">JSON</option>
                     </select>
                 </div>
             </div>
-            <div id="saveButtons" class="col-sm-3 no-padding-bottom">
-                <a class="hidden" id="atomUrl" href="#">Lagre</a>
-                <a class="hidden" id="rssUrl" href="#">Lagre</a>
+            <div id="saveButtons" class="no-padding-bottom save-as-buttons">
                 <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
-                <a class="hidden" id="jsonUrl" href="#">Lagre</a>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 col-md-offset-1">
         Velg visningsform:
         <div class="custom-select">
             <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">

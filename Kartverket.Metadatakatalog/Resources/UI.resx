@@ -163,7 +163,7 @@
     <value>Tjeneste</value>
   </data>
   <data name="Facet_type_servicelayer" xml:space="preserve">
-    <value>WMS-lag (Tjenestelag)</value>
+    <value>Tjenestelag</value>
   </data>
   <data name="Facet_type_software" xml:space="preserve">
     <value>Applikasjon</value>

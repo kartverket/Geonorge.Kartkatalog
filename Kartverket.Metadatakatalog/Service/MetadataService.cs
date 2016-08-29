@@ -236,6 +236,43 @@ namespace Kartverket.Metadatakatalog.Service
                     }
                 }
 
+                var serviceDatasets = searchResult.Items[0].ServiceDatasets;
+
+                if (serviceDatasets != null && serviceDatasets.Count > 0)
+                {
+                    if (metadata.Related == null)
+                        metadata.Related = new List<MetadataViewModel>();
+
+                    foreach (var relatert in serviceDatasets)
+                    {
+                        var relData = relatert.Split('|');
+
+                        try
+                        {
+                            MetadataViewModel md = new MetadataViewModel();
+                            md.Uuid = relData[0] != null ? relData[0] : "";
+                            md.Title = relData[1] != null ? relData[1] : "";
+                            md.ParentIdentifier = relData[2] != null ? relData[2] : "";
+                            md.HierarchyLevel = relData[3] != null ? relData[3] : "";
+                            md.ContactOwner = relData[4] != null ? new Contact { Role = "owner", Organization = relData[4] } : new Contact { Role = "owner", Organization = "" };
+                            md.DistributionDetails = new DistributionDetails { Name = relData[5] != null ? relData[5] : "", Protocol = relData[6] != null ? relData[6] : "", URL = relData[7] != null ? relData[7] : "" };
+                            if (!string.IsNullOrEmpty(relData[8]))
+                                md.KeywordsNationalTheme = new List<Keyword> { new Keyword { KeywordValue = relData[8], Thesaurus = SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE } };
+                            md.OrganizationLogoUrl = relData[9];
+                            if (!string.IsNullOrEmpty(relData[10]))
+                            {
+                                md.Thumbnails = new List<Thumbnail>();
+                                md.Thumbnails.Add(new Thumbnail { Type = "miniatyrbilde", URL = relData[10] });
+                            }
+
+                            metadata.Related.Add(md);
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                }
+
             }
 
             return metadata;
@@ -372,14 +409,15 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 output = new Constraints
                 {
-                    AccessConstraints = register.GetRestriction(simpleConstraints.AccessConstraints),
+                    AccessConstraints = register.GetRestriction(simpleConstraints.AccessConstraints, simpleConstraints.OtherConstraintsAccess),
                     OtherConstraints = simpleConstraints.OtherConstraints,
                     OtherConstraintsLink = simpleConstraints.OtherConstraintsLink,
                     OtherConstraintsLinkText = simpleConstraints.OtherConstraintsLinkText,
                     SecurityConstraints = register.GetClassification(simpleConstraints.SecurityConstraints),
                     SecurityConstraintsNote = simpleConstraints.SecurityConstraintsNote,
                     UseConstraints = register.GetRestriction(simpleConstraints.UseConstraints),
-                    UseLimitations = simpleConstraints.UseLimitations
+                    UseLimitations = simpleConstraints.UseLimitations,
+                    OtherConstraintsAccess = simpleConstraints.OtherConstraintsAccess
                 };
             }
             return output;

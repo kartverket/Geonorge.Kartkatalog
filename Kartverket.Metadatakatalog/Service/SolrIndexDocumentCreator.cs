@@ -220,6 +220,9 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.AccessConstraint = 
                         simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.AccessConstraints) 
                         ? simpleMetadata.Constraints.AccessConstraints : "";
+                indexDoc.OtherConstraintsAccess =
+                        simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.OtherConstraintsAccess)
+                        ? simpleMetadata.Constraints.OtherConstraintsAccess : "";
 
                 //TODO tolke liste fra nøkkelord
                 indexDoc.Area = _placeResolver.ResolveArea(simpleMetadata);
@@ -485,6 +488,73 @@ namespace Kartverket.Metadatakatalog.Service
 
                     }
 
+                    if (simpleMetadata.OperatesOn != null)
+                    {
+
+                        List<MetaDataEntry> serviceDatasets = new List<MetaDataEntry>();
+
+                        foreach (var rel in simpleMetadata.OperatesOn)
+                        {
+                            try
+                            {
+                                MD_Metadata_Type md = geoNorge.GetRecordByUuid(rel);
+                                var simpleMd = new SimpleMetadata(md);
+
+                                SimpleKeyword nationalTheme = SimpleKeyword.Filter(simpleMd.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME).FirstOrDefault();
+                                string keywordNationalTheme = "";
+                                if (nationalTheme != null)
+                                    keywordNationalTheme = nationalTheme.Keyword;
+
+                                string OrganizationLogoUrl = "";
+                                if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
+                                {
+                                    Task<Organization> organizationTaskRel =
+                                    _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
+                                    Organization organizationRel = organizationTaskRel.Result;
+                                    if (organizationRel != null)
+                                    {
+                                        OrganizationLogoUrl = organizationRel.LogoUrl;
+                                    }
+                                }
+
+                                string thumbnailsUrl = "";
+                                List<SimpleThumbnail> thumbnailsRel = simpleMd.Thumbnails;
+                                if (thumbnailsRel != null && thumbnailsRel.Count > 0)
+                                {
+                                    thumbnailsUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMd.Uuid, thumbnailsRel[thumbnailsRel.Count - 1].URL);
+                                }
+
+                                serviceDatasets.Add(new MetaDataEntry
+                                {
+                                    Uuid = simpleMd.Uuid,
+                                    Title = simpleMd.Title,
+                                    ParentIdentifier = simpleMd.ParentIdentifier,
+                                    HierarchyLevel = simpleMd.HierarchyLevel,
+                                    ContactOwnerOrganization = (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null) ? simpleMd.ContactOwner.Organization : "",
+                                    DistributionDetailsName = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Name != null) ? simpleMd.DistributionDetails.Name : "",
+                                    DistributionDetailsProtocol = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
+                                    DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
+                                    KeywordNationalTheme = keywordNationalTheme,
+                                    OrganizationLogoUrl = OrganizationLogoUrl,
+                                    ThumbnailUrl = thumbnailsUrl
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        }
+
+                        List<string> serviceDatasetsNewList = new List<string>();
+                        foreach (var serviceDataset in serviceDatasets)
+                        {
+                            serviceDatasetsNewList.Add(serviceDataset.Uuid + "|" + serviceDataset.Title + "|" + serviceDataset.ParentIdentifier + "|" + serviceDataset.HierarchyLevel + "|" + serviceDataset.ContactOwnerOrganization + "|" + serviceDataset.DistributionDetailsName + "|" + serviceDataset.DistributionDetailsProtocol + "|" + serviceDataset.DistributionDetailsUrl + "|" + serviceDataset.KeywordNationalTheme + "|" + serviceDataset.OrganizationLogoUrl + "|" + serviceDataset.ThumbnailUrl);
+                        }
+
+                        indexDoc.ServiceDatasets = serviceDatasetsNewList.ToList();
+
+                    }
+
+
                 }
 
                 //add DistributionProtocols
@@ -493,10 +563,10 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.DistributionProtocol));
                 }
-                if (!String.IsNullOrEmpty(indexDoc.ServiceDistributionProtocolForDataset))
-                {
-                    indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.ServiceDistributionProtocolForDataset));
-                }
+                //if (!String.IsNullOrEmpty(indexDoc.ServiceDistributionProtocolForDataset))
+                //{
+                //    indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.ServiceDistributionProtocolForDataset));
+                //}
 
                 Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid,
                     indexDoc.Title));

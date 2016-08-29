@@ -132,6 +132,9 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("datasetservice")]
         public List<string> DatasetServices { get; set; }
 
+        [SolrField("servicedataset")]
+        public List<string> ServiceDatasets { get; set; }
+
         [SolrField("bundle")]
         public List<string> Bundles { get; set; }
 
@@ -140,6 +143,10 @@ namespace Kartverket.Metadatakatalog.Models
 
         [SolrField("accessconstraint")]
         public string AccessConstraint { get; set; }
+
+        [SolrField("otherconstraintsaccess")]
+        public string OtherConstraintsAccess { get; set; }
+        
     }
 
 }
