@@ -72,8 +72,7 @@ namespace Kartverket.Metadatakatalog
                "~/Content/bower_components/kartverket-felleskomponenter/assets/js/vendor.min.js",
                "~/Content/bower_components/kartverket-felleskomponenter/assets/js/main.min.js",
                "~/Scripts/site.js",
-               "~/Scripts/visninger.js",
-               "~/Scripts/download.js"
+               "~/Scripts/visninger.js"
            ));
 
             //***************** separate bundles - used in other applications ****************//
