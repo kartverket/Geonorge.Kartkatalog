@@ -785,3 +785,36 @@ $("document").ready( function(){
 		}
 	});
 });
+
+
+/* Dynamic "add to cart" buttons*/
+function updateAllCartButtons(storedOrderItems) {
+	$('.add-to-cart-btn').each(function () {
+		var uuid = $(this).attr('itemuuid');
+		if ($.inArray(uuid, storedOrderItems) > -1) {
+			$(this).addClass('disabled');
+			$(this).attr('title', 'Allerede lagt til i kurv');
+			$(this).children('.button-text').text(' Lagt i kurv');
+		}
+	});
+}
+
+function updateCartButton(element) {
+	var uuid = $(element).attr('itemuuid');
+	$('.add-to-cart-btn[itemuuid="' + uuid + '"]').each(function () {
+		$(this).addClass('disabled');
+		$(this).attr('data-original-title', 'Allerede lagt til i kurv');
+		$(this).children('.button-text').text(' Lagt i kurv');
+	});
+}
+
+
+
+/* Loading animation */
+function addLoadingAnimation(element) {
+	element.addClass('loading');
+}
+
+function removeLoadingAnimation(element) {
+	element.removeClass('loading');
+}

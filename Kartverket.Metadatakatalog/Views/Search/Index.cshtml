@@ -250,6 +250,7 @@ facet.FacetResults = orderedList.ToList();
                 if (orderitemCount > 0) {
                     $('#orderitem-count').text(orderitemCount);
                     $('#orderitem-count-text').text(' datasett');
+                    updateAllCartButtons(storedOrderItems);
                 } else {
                     $('#orderitem-count').text('');
                     $('#orderitem-count-text').text('Kurven er tom');
@@ -313,6 +314,10 @@ facet.FacetResults = orderedList.ToList();
                     var itemdisturl = $(this).attr('itemdisturl');
                     var itemtheme = $(this).attr('itemtheme');
                     var itemorgname = $(this).attr('itemorgname');
+
+                    updateCartButton($(this));
+                    
+
                     if (localStorage.getItem('orderItems') != null) {
                         orderItems = (JSON.parse(localStorage.getItem('orderItems')));
                     }
@@ -336,7 +341,6 @@ facet.FacetResults = orderedList.ToList();
                             $('#orderitem-count-text').text(' datasett');
                         } else {
                             orderItemCount = parseInt($('#orderitem-count').text());
-                            console.log('else: ' + orderItemCount);
                         }
                         orderItemCount += 1;
                         $('#orderitem-count').text(orderItemCount);

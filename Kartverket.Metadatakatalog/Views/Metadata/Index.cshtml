@@ -114,7 +114,7 @@ if (contact != null)
     <div class="table-btn-container">
         @if (Model.ShowDownloadService())
         {
-            <a href="#" id="add-to-cart-btn" onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');" class="btn"><span class="custom-icon custom-icon-handlekurv"></span> Legg i kurv</a>
+            <a href="#" id="add-to-cart-btn" onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');" class="btn add-to-cart-btn" itemuuid="@Model.Uuid"><span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span></a>
         }
         else if (Model.ShowDownloadLink())
         {
@@ -788,14 +788,15 @@ if (keywords != null && keywords.Any())
 
             if (typeof Storage !== "undefined") {
 
-                console.log('window.localStorage is available!');
-
                 var orderItems = [];
+                if (localStorage.getItem('orderItems') != null) {
+                    orderItems = (JSON.parse(localStorage.getItem('orderItems')));
+                    updateAllCartButtons(orderItems)
+                }
                 $('#add-to-cart-btn').click(function () {
                     var added = false;
-                    if (localStorage.getItem('orderItems') != null) {
-                        orderItems = (JSON.parse(localStorage.getItem('orderItems')));
-                    }
+
+                    
                     $.map(orderItems, function (elementOfArray, indexInArray) {
                         if (elementOfArray == uuid) {
                             orderItems.push(uuid);
@@ -835,6 +836,9 @@ if (keywords != null && keywords.Any())
                     var itemdisturl = $(this).attr('itemdisturl');
                     var itemtheme = $(this).attr('itemtheme');
                     var itemorgname = $(this).attr('itemorgname');
+
+                    updateCartButton($(this));
+
                     if (localStorage.getItem('orderItems') != null) {
                         orderItems = (JSON.parse(localStorage.getItem('orderItems')));
                     }
