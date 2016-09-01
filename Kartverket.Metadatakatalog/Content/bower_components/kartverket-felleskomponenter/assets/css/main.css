@@ -1881,37 +1881,6 @@ button.btn {
     cursor: inherit;
     display: block; }
 
-.btn, .col-actions .btn {
-  background-color: #7da1c4;
-  transition: all 0.35s linear 0s;
-  color: #FFF;
-  border: none;
-  font-style: normal; }
-
-.btn.btn-purple {
-  background-color: #5d4777; }
-
-.btn:hover, .btn:focus, a.btn:hover, a.btn:focus {
-  background-color: #fe5000;
-  color: #FFFFFF !important;
-  border: none;
-  font-style: normal;
-  font-size: 12pt;
-  line-height: 16pt; }
-
-.btn:hover span, .btn span:hover {
-  color: #FFFFFF !important; }
-
-.btn.disabled {
-  background-color: #FFF !important;
-  color: #cfcfcf;
-  border: 1px solid #cfcfcf;
-  opacity: 1;
-  cursor: not-allowed; }
-
-.btn.disabled:hover {
-  color: #cfcfcf; }
-
 .btn-xs {
   font-size: 10pt !important;
   padding: 3px 9px;
@@ -2367,7 +2336,6 @@ button.btn {
   border-radius: 0;
   font-size: 14pt;
   padding: 0px 8px !important;
-  height: 30px;
   box-shadow: none !important; }
 
 .chosen-container-single.chosen-with-drop .chosen-single {
@@ -2503,93 +2471,6 @@ input[readonly] {
 
 input.form-control, input[type=text], textarea {
   padding: 0 10px; }
-
-.no-padding {
-  padding: 0; }
-
-.no-padding-bottom {
-  padding-bottom: 0 !important; }
-
-.no-margin-bottom {
-  margin-bottom: 0 !important; }
-
-.margin-bottom-10 {
-  margin-bottom: 10px; }
-
-.margin-top-10 {
-  margin-top: 10px; }
-
-.full-width {
-  width: 100% !important; }
-
-.no-border-radius, .help-text, .panel, .panel-heading,
-.no-border-radius input, .help-text input, .panel input, .panel-heading input {
-  border-radius: 0 !important; }
-
-.text-left {
-  text-align: left !important; }
-
-@media (max-width: 991px) {
-  span.hypernation {
-    display: none; } }
-
-img {
-  max-width: 100%; }
-
-.searchbar .search-button-wrapper img {
-  max-width: none; }
-
-.image-margin-bottom {
-  margin-bottom: 15px; }
-
-.label {
-  font-family: "Open Sans", sans-serif;
-  display: inline-block;
-  font-weight: 600;
-  font-size: 10pt;
-  line-height: 14pt;
-  text-align: left;
-  vertical-align: middle;
-  border: none;
-  border-radius: 0;
-  border-left: 4px solid #efeeed;
-  background-color: #efeeed;
-  color: #414042;
-  height: 25px;
-  width: 100px;
-  padding-left: 5px; }
-
-h1 .label {
-  font-size: 20pt;
-  margin-left: 26px;
-  vertical-align: middle; }
-
-.label-datasett {
-  border-color: #5d4777; }
-
-.label-applikasjon {
-  border-color: #7da1c4; }
-
-.label-tjeneste {
-  border-color: #a9c47f; }
-
-.label-tjenestelag {
-  border-color: #f0b323; }
-
-.label-datasettserie {
-  border-color: #968c84; }
-
-.label-danger {
-  border-color: #EE382B; }
-
-.label-warning {
-  border-color: #FFBA33; }
-
-.label-success {
-  border-color: #26C045; }
-
-.label-info {
-  border-color: #7da1c4; }
 
 input[type="text"],
 textarea,
@@ -3545,22 +3426,26 @@ a.status-icon-link:hover {
 .statusIcon-underarbeid:after {
   content: "\e602";
   color: #FFBA33;
-  margin-left: -1em; }
+  margin-left: -1em;
+  display: inline-block; }
 
 .statusIcon-InProgress:after {
   content: "\e601";
   color: #26C045;
-  margin-left: -1em; }
+  margin-left: -1em;
+  display: inline-block; }
 
 .statusIcon-Superseded:after {
   content: "\e600";
   color: #FFBA33;
-  margin-left: -1em; }
+  margin-left: -1em;
+  display: inline-block; }
 
 .statusIcon-Candidate:after, .statusIcon-Draft:after {
   content: "\e602";
   color: #26C045;
-  margin-left: -1em; }
+  margin-left: -1em;
+  display: inline-block; }
 
 .statusIcon-Accepted:after {
   content: "\e600";
