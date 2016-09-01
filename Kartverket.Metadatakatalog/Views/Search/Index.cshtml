@@ -718,17 +718,18 @@ facet.FacetResults = orderedList.ToList();
                         </div>
                     </div>
 
-                    if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
-                    {
+                    
                         <div class="search-results-gallery-image layoutblock">
                             <div class="block shortcutpageteaserblock size-4 col-sm-4">
                                 <div class="teaser-with-background-image">
                                     <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                        <div class="teaser-background-image" style="background: url(@Url.Action("Index", "Thumbnail", new {uuid = item.Uuid, type = "small" })) no-repeat center;">
+                                        @{
+                                            String thumbnailUrl = (!string.IsNullOrWhiteSpace(item.ThumbnailUrl)) ? Url.Action("Index", "Thumbnail", new { uuid = item.Uuid, type = "small" }) : "";
+                                        }
+                                        <div class="teaser-background-image" style="background: url(@thumbnailUrl) no-repeat center;">
                                             <div class="teaser-overlay">
                                                 <div class="teaser-caption">
                                                     <div class="teaser-heading">@item.Title</div>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -737,7 +738,7 @@ facet.FacetResults = orderedList.ToList();
                                 <div class="clearfix"></div>
                             </div>
                         </div>
-                    }
+                    
                     <hr />
                 }
                 <div class="clearfix"></div>
