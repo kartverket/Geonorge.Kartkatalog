@@ -221,7 +221,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowMapLink()
         {
-            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("OGC:WMS") || DistributionDetails.Protocol.Contains("OGC:WFS") || DistributionDetails.Protocol.Contains("OGC:WCS")) && (HierarchyLevel == "service" || HierarchyLevel == "servicelayer")) return true;
+            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("OGC:WMS") || DistributionDetails.Protocol.Contains("OGC:WFS")) && (HierarchyLevel == "service" || HierarchyLevel == "servicelayer")) return true;
             else return false;
         }
 
