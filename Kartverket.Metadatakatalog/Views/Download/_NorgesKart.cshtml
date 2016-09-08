@@ -176,7 +176,6 @@
         {
         localStorage[uuid + '.selected.coordinates'] = CLIPPERCOORDS;
         getSelectedCoordinates(uuid, 'coordinates', 'coordinates');
-        localStorage[uuid + '.selected.areas'] = '[]';
 
         var supportsProjectionSelection = (localStorage.getItem(uuid + '.capabilities.supportsProjectionSelection') === "true");
         var supportsFormatSelection = (localStorage.getItem(uuid + '.capabilities.supportsFormatSelection') === "true");

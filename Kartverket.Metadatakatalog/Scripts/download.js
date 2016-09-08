@@ -159,6 +159,8 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
         var orderItemOmraader = (JSON.parse(localStorage.getItem(uuid + '.codelists.area')));
         var orderItemSelectOmraader = $('#orderuuid' + uuid + ' .selectOmraader');
         orderItemSelectOmraader.attr('name', uuid + '-areas');
+        orderItemSelectOmraader.attr('id', uuid + '-areas');
+        orderItemSelectOmraader.attr('onchange', 'HandleChange(\'' + uuid + '\')');
 
         var omraadeTypes = [];
         $.each(orderItemOmraader, function (key, val) {
@@ -167,7 +169,6 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
             }
         });
 
-        var landsdekkendeAdded = false;
         for (omraade in omraadeTypes) {
             if (omraadeTypes[omraade] != "landsdekkende"){
                 orderItemSelectOmraader.append($('<optgroup label="' + omraadeTypes[omraade] + '" class="selectOmraader' + omraadeTypes[omraade] + '"  />'));
@@ -177,10 +178,9 @@ function populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection)
          
             $.each(orderItemOmraader, function (key, val) {
                 if (val.type == 'landsdekkende') {
-                    if (!landsdekkendeAdded){
+                    if (orderItemSelectOmraader.find('option[value="landsdekkende_0000"]').length == 0) {
                         orderItemSelectOmraader.prepend($("<option />").val(val.type + '_' + val.code).text('Hele landet'));
                     }
-                    landsdekkendeAdded = true;
                 }
                 else if (val.type == omraadeTypes[omraade]) {
                     orderItemSelectOmraaderType.append($("<option />").val(val.type + '_' + val.code).text(val.name));
@@ -338,13 +338,9 @@ function getSelectedCoordinates(uuid, selectClass, name) {
         }
         else
         {
-            selectField.html('<option class="from-map" selected="selected" value="0">Valgt fra kart</option>');
+            selectField.children().remove("option[class='from-map']");
+            selectField.append('<option class="from-map" selected="selected" value="0">Valgt fra kart</option>');
             selectField.trigger("chosen:updated");
-            var selectGroup = $('#orderuuid' + uuid + ' .input-group-omraade');
-            selectGroup.find('.search-choice-close').attr('onclick', 'removeCoordinates(\'' + uuid + '\')');
-            $(window).load(function () {
-                selectGroup.find('.search-choice-close').attr('onclick', 'removeCoordinates(\'' + uuid + '\')');
-            });
         }
     }
 }
@@ -521,16 +517,21 @@ $(window).load(function () {
 
 function removeCoordinates(uuid) {
     selectField = $('#orderuuid' + uuid + ' select.selectOmraader');
-    var supportsPolygonSelection = (localStorage.getItem(uuid + '.capabilities.supportsPolygonSelection') === "true");
-    var supportsAreaSelection = (localStorage.getItem(uuid + '.capabilities.supportsAreaSelection') === "true");
     selectField.children().remove("option[class='from-map']");
-    populateAreaList(uuid, supportsAreaSelection, supportsPolygonSelection);
     selectField.trigger("chosen:updated");
     localStorage.setItem(uuid + '.selected.coordinates', '');
     var orderItemInputCoordinates = $('#orderuuid' + uuid + ' .coordinates');
     orderItemInputCoordinates.val('');
 }
 
+
+function HandleChange(uuid) {
+    var selectedValues = $("#" + uuid + "-areas").val();
+    if ($.inArray("0", selectedValues) == -1)
+    {
+        removeCoordinates(uuid);
+    }
+}
 
 
 function containsCoordinates() {

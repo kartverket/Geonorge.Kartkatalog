@@ -124,24 +124,24 @@ namespace Kartverket.Metadatakatalog.Controllers
                 string coordinates = order[id + "-coordinates"];
                 if (!string.IsNullOrWhiteSpace(coordinates))
                     oL.coordinates = coordinates;
-                else
+
+
+                var area = order[id + "-areas"];
+                List<OrderAreaType> areaList = new List<OrderAreaType>();
+                if (area != null)
                 {
-                    var area = order[id + "-areas"];
-                    List<OrderAreaType> areaList = new List<OrderAreaType>();
-                    if (area != null)
+                    var areas = area.Split(',');
+
+                    for (int j = 0; j < areas.Length; j++)
                     {
-                        var areas = area.Split(',');
-
-                        for (int j = 0; j < areas.Length; j++)
-                        {
-                            var areaType = areas[j].Split('_');
-
+                        var areaType = areas[j].Split('_');
+                        if(areaType.Count() == 2)
                             areaList.Add(new OrderAreaType { type = areaType[0], code = areaType[1] });
-                        }
-                        oL.areas = areaList.ToArray();
                     }
-
+                    oL.areas = areaList.ToArray();
                 }
+
+
 
                 orderLines.Add(oL);
 
