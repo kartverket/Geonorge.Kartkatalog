@@ -3110,7 +3110,7 @@ input[type="checkbox"].input-validation-error {
     line-height: 39pt; }
 
 .loading-animation {
-  z-index: 2;
+  z-index: 10;
   position: fixed;
   background-repeat: no-repeat;
   background-position: 50% 15px;
