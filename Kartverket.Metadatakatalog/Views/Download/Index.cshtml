@@ -80,6 +80,7 @@
             var template = '@Html.Raw(System.Text.RegularExpressions.Regex.Replace(Html.Partial("_OrderItem").ToString(), @"\r\n?|\n", ""))';
             orderItems = (JSON.parse(localStorage.getItem('orderItems')));
             if (orderItems != null) {
+                console.log(orderItems);
                 generateView(template, orderItems);
             }
         });

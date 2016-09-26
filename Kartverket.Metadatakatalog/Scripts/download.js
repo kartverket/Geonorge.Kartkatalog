@@ -118,11 +118,14 @@ function getJsonData(url, segments, uuid) {
 }
 
 
-$(document).ready(function () {
+function loadData() {
     var orderItems = localStorage["orderItems"];
+    console.log("ready");
+    console.log(orderItems);
     if (orderItems != null) {
         var storedOrderItems = (orderItems != null) ? JSON.parse(orderItems) : '';
         objCount = storedOrderItems.length;
+        console.log(objCount);
         $.each(storedOrderItems, function (key, uuid) {
             var metadata = JSON.parse(localStorage[uuid + '.metadata']);
             var url = metadata.distributionUrl + uuid;
@@ -149,7 +152,7 @@ $(document).ready(function () {
         //mapLoaded = true; //Need to load each time to set coverageMap.
         $('#norgeskartmodal #setcoordinates').attr('uuid', uuid);
     }));
-});
+};
 
 
 // Populering av Områdeliste
@@ -369,12 +372,14 @@ function getSelectedValues(orderItems, selectClass, name) {
 
 
 function generateView(template, orderItems) {
+    loadData();
     $.each(orderItems, function (key, uuid) {
         $("#orderlist").append('<div id="orderuuid' + uuid + '" class="order-item">' + template + '</div>');
         $("#orderuuid" + uuid + " .remove-item").attr('uuid', uuid);
         $("#orderuuid" + uuid + " .selectPolygon button").attr('uuid', uuid);
 
         var supportsProjectionSelection = (localStorage.getItem(uuid + '.capabilities.supportsProjectionSelection') === "true");
+        console.log(supportsProjectionSelection);
         var supportsFormatSelection = (localStorage.getItem(uuid + '.capabilities.supportsFormatSelection') === "true");
         var supportsPolygonSelection = (localStorage.getItem(uuid + '.capabilities.supportsPolygonSelection') === "true");
         var supportsAreaSelection = (localStorage.getItem(uuid + '.capabilities.supportsAreaSelection') === "true");
