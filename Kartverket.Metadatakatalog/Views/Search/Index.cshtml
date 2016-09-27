@@ -47,17 +47,27 @@
                 {
                 string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
                 <li class="filter-options">
-                    <a class="btn-link @cssClass" href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
+                    @if (cssClass == "active")
+                    {
+                        <span class="btn-link @cssClass">
+                            @facetResult.LinkName()
+                            <span class="text-muted">(@facetResult.Count)</span>
+                        </span>
+                    }
+                    else
+                    {
+                    <a href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link show-loading-animation @cssClass" data-loading-message="Filtrerer søkeresultat">
                         @facetResult.LinkName()
                         <span class="text-muted">(@facetResult.Count)</span>
                     </a>
+                    }
                 </li>
                 }
             }
             @if (Model.HasFilterForFacetField(facet.FacetField))
             {
                 <li class="filter-options">
-                    <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
+                    <button type="button" class="btn btn-default list-btn reset show-loading-animation" data-loading-message="Fjerner filter" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
                         <span class="glyphicon glyphicon-plus"> </span>
                         Vis alle
                     </button>
@@ -94,20 +104,17 @@ facet.FacetResults = orderedList.ToList();
             @{
                 foreach (var facetResult in placegroup.FacetResults)
                 {
-                    <text>
-                        <li class="filter-options">
-
-                            <a class="btn-link" href="@Url.Action("Index", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))">
-                                @facetResult.Name.Trim()<span class="text-muted">(@facetResult.Count)</span>
-                            </a>
-                        </li>
-                    </text>
+                    <li class="filter-options"> 
+                        <a href="@Url.Action("Index", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))" class="btn-link">
+                            @facetResult.Name.Trim()
+                            <span class="text-muted">(@facetResult.Count)</span>
+                        </a>
+                    </li>
                 }
                 string previousFacetLinkName = null;
                 double hierarchyLevel = 0;
                 foreach (var facetResult in facet.FacetResults)
                 {
-                    string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
 
                     string hideChildren = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "show-children" : "hide-children");
                     double relativeHierarchyLevel = 0;
@@ -135,9 +142,20 @@ facet.FacetResults = orderedList.ToList();
                     }
                     <text>
                         <li class="filter-options @hideChildren ">
-
-                            <a class="btn-link @cssClass " href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.AreaLinkName(Model.areaDictionary).Trim()<span class="text-muted">(@facetResult.Count)</span></a>
-
+                            @if (@hideChildren == "show-children")
+                            {
+                                <span class="btn-link active">
+                                    @facetResult.AreaLinkName(Model.areaDictionary).Trim()
+                                    <span class="text-muted">(@facetResult.Count)</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link show-loading-animation" data-loading-message="Filtrerer søkeresultat">
+                                    @facetResult.AreaLinkName(Model.areaDictionary).Trim()
+                                    <span class="text-muted">(@facetResult.Count)</span>
+                                </a>
+                            }
                     </text>
 
                     previousFacetLinkName = facetResult.LinkName().ToString();
@@ -152,7 +170,7 @@ facet.FacetResults = orderedList.ToList();
                 {
                     var facetField = hasAreaFilter ? facet.FacetField : placegroup.FacetField;
                     <li class="filter-options">
-                        <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facetField))';">
+                        <button type="button" class="btn btn-default list-btn reset show-loading-animation" data-loading-message="Fjerner filter" onclick="location.href = '@Url.Action("Index", Model.CreateRoutesForFacetFieldsExcept(facetField))';">
                             <span class="glyphicon glyphicon-plus"> </span>
                             Vis alle
                         </button>
