@@ -242,7 +242,6 @@ namespace Kartverket.Metadatakatalog.Service
 
                 if (indexDoc.Type == "dataset")
                 {
-                    //TODO Må oppdatere datasett med services
                     string searchString = indexDoc.Uuid;
                     //Sjekk om denne er koblet til noen tjenester
                     var filters = new object[]
