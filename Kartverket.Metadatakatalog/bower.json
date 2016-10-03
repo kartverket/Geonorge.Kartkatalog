@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "kartverket-felleskomponenter": "5.4.9"
+    "kartverket-felleskomponenter": "5.4.15"
   },
   "license": "MIT",
   "name": "Metadatakatalog",
