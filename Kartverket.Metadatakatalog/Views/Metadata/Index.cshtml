@@ -42,10 +42,9 @@
         hierarchyLevelCssClass = "label-default";
         hierarchyLevelLabelText = Model.HierarchyLevel;
     }
+
+    string UuidService = Model.Uuid;
 }
-
-
-
 
 @section breadcrumb {
     <li class="active">@Model.Title</li>
@@ -89,20 +88,16 @@ if (contact != null)
 
 <div class="btn-table-row-5">
     <div class="table-btn-container">
-        @{
-            String kartmarkoerTitle = Model.AlertSize() ? "Tjenesten kan være treg å vise pga. svært mange kartlag" : "Vis " + @Model.Title + " i kart";
-            String kartmarkoerCss = Model.AlertSize() ? "custom-icon-kartmarkoer-warning" : "custom-icon-kartmarkoer";
-        }
         @if (Model.ShowMapLink())
         {
-            <a href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle"target="_blank" class="btn">
-                <span class="custom-icon @kartmarkoerCss"></span> Vis i kart
+            <a id="mapmacrolink" href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title=""target="_blank" class="btn">
+                <span id="mapmacro" class="custom-icon custom-icon-kartmarkoer"></span> Vis i kart
             </a>
         }
         else if (Model.ShowServiceMapLink())
         {
-            <a href="@Html.NorgeskartUrl()@Model.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle" target="_blank" class="btn">
-                <span class="custom-icon @kartmarkoerCss"></span><span class="button-text"> Vis i kart</span>
+            <a id="mapmacrolink" href="@Html.NorgeskartUrl()@Model.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn">
+                <span id="mapmacro" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
             </a>
         }
         else
@@ -342,12 +337,21 @@ if (contact != null)
                                     <div class="col-sm-1"><p>Last ned</p></div>
                                 </div>
                                 <div class="menu-separator search-results-table-heading"></div>
-
+                                @if (!Model.IsService())
+                                {
+                                    foreach (var relatedContent in Model.Related)
+                                    {
+                                        if (relatedContent != null && relatedContent.IsService())
+                                        {
+                                            UuidService = relatedContent.Uuid;
+                                            break;
+                                        }
+                                    }
+                                }
                                 @foreach (var relatedContent in Model.Related)
                                 {
                                     if (relatedContent != null)
                                     {
-
                                         var relatedContentHierarchyLevelCssClass = "";
                                         var relatedContentHierarchyLevelLabelText = "";
                                         if (relatedContent.IsDataset())
@@ -764,7 +768,7 @@ if (keywords != null && keywords.Any())
 
             $(xml).find("entry").each(function () {
                 var identifier_code = $(this).find("spatial_dataset_identifier_code").text();
-                if (uuid == identifier_code){
+                if (uuid == identifier_code) {
                     var link = $(this).find("link").text();
                     $("#servicefeed").removeClass("disabled");
                     $("#servicefeed").removeAttr("disabled");
@@ -796,7 +800,7 @@ if (keywords != null && keywords.Any())
                 $('#add-to-cart-btn').click(function () {
                     var added = false;
 
-                    
+
                     $.map(orderItems, function (elementOfArray, indexInArray) {
                         if (elementOfArray == uuid) {
                             orderItems.push(uuid);
@@ -879,5 +883,26 @@ if (keywords != null && keywords.Any())
         }
 
         });
+
+        function getServiceStatus(uuid) {
+            $.getJSON("https://status.geonorge.no/monitorApi/serviceDetail?uuid=" + uuid, function (result) {
+                console.log(result);
+                try {
+                    var numLayers = parseInt(result.details[12][1]);
+                    console.log("numLayers:" + numLayers);
+                    if (numLayers > 30) {
+                        $('#mapmacro').attr("class", "custom-icon custom-icon-kartmarkoer-warning");
+                        $('#mapmacrolink').attr("title", "Tjenesten kan være treg å vise");
+                    }
+                }
+                catch (err)
+                {
+                    console.log(err);
+                }
+            });
+        };
+        @if (Model.ShowMapLink() || Model.ShowServiceMapLink()) {
+            @:getServiceStatus("@UuidService");
+        }
     </script>
 }

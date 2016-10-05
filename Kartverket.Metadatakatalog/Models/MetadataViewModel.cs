@@ -267,12 +267,6 @@ namespace Kartverket.Metadatakatalog.Models
             return HierarchyLevel == "dimensionGroup";
         }
 
-        public bool AlertSize()
-        {
-            return IsService() && Related != null && Related.Count > 30;
-        }
-
-
         public string GetCoverageLink(){
 
             string CoverageLink = "";

@@ -579,23 +579,17 @@ facet.FacetResults = orderedList.ToList();
                             <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="btn btn-default show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
                                 <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
                             </a>
-
-                            @{
-                                String kartmarkoerCss = item.AlertSize ? "custom-icon-kartmarkoer-warning" : "custom-icon-kartmarkoer";
-                                String kartmarkoerTitle = item.AlertSize ? "Tjenesten kan være treg å vise pga. svært mange kartlag" : "Vis " + @item.Title + " i kart";
-                             }
-
                             @if (item.ShowMapLink())
                             {
-                                  <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle" target="_blank" class="btn btn-default">
-                                      <span class="custom-icon @kartmarkoerCss"></span><span class="button-text"> Vis i kart</span>
+                                  <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
+                                      <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                     </a>
    
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle" target="_blank" class="btn btn-default">
-                                    <span class="custom-icon @kartmarkoerCss"></span><span class="button-text"> Vis i kart</span>
+                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
                             else
@@ -663,14 +657,14 @@ facet.FacetResults = orderedList.ToList();
                         <div class="col-xs-1 search-results-action-icons action-show-map">
                             @if (item.ShowMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle" target="_blank">
-                                    <span class="custom-icon @kartmarkoerCss"></span>
+                                <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank">
+                                    <span id="mapmacro-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle" target="_blank">
-                                    <span class="custom-icon @kartmarkoerCss"></span>
+                                <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank">
+                                    <span id="mapmacro-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
                             else
@@ -790,3 +784,32 @@ facet.FacetResults = orderedList.ToList();
         </aside>
     </div>
 </div>
+<script>
+
+function getServiceStatus(uuid, serviceUuid) {
+    $.getJSON("https://status.geonorge.no/monitorApi/serviceDetail?uuid=" + serviceUuid, function (result) {
+        console.log("uuid:" + uuid);
+        console.log(result);
+        try {
+            var numLayers = parseInt(result.details[12][1]);
+            console.log("numLayers:" + numLayers);
+            if (numLayers > 30) {
+                $('#mapmacro-'+uuid).attr("class", "custom-icon custom-icon-kartmarkoer-warning");
+                $('#mapmacrolink-' + uuid).attr("title", "Tjenesten kan være treg å vise");
+            }
+        }
+        catch (err)
+        {
+            console.log(err);
+        }
+    });
+};
+
+@foreach (var item in Model.Result.Items)
+{
+   if (item.ShowMapLink() || item.ShowServiceMapLink())
+    {
+      @:getServiceStatus("@item.Uuid", "@item.ServiceUuid");
+      }
+}
+</script>
