@@ -600,18 +600,24 @@ namespace Kartverket.Metadatakatalog.Service
         private List<Keyword> Convert(IEnumerable<SimpleKeyword> simpleKeywords)
         {
             var output = new List<Keyword>();
+
             foreach (var keyword in simpleKeywords)
             {
-                output.Add(new Keyword
-                {
-                    EnglishKeyword = keyword.EnglishKeyword,
-                    KeywordValue = keyword.Keyword,
-                    Thesaurus = keyword.Thesaurus,
-                    Type = keyword.Type
-                });
+                if (!blackList.Contains(keyword.Keyword))
+                { 
+                    output.Add(new Keyword
+                    {
+                        EnglishKeyword = keyword.EnglishKeyword,
+                        KeywordValue = keyword.Keyword,
+                        Thesaurus = keyword.Thesaurus,
+                        Type = keyword.Type
+                    });
+                }
             }
             return output;
         }
+
+        private static List<string> blackList = new List<string> { "Arctic SDI", "Barentswatch"};
 
     }
 
