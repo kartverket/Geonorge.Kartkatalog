@@ -133,7 +133,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public string ResolveAccess(string AccessConstraint, string OtherConstraintsAccess)
         {
-            string dataaccess = AccessConstraint;
+            string dataaccess = null;
             if (AccessConstraint == "restricted")
                 dataaccess = "Skjermede data";
             else if (AccessConstraint == "otherRestrictions")
