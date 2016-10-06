@@ -617,7 +617,7 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
-        private static List<string> blackList = new List<string> { "Arctic SDI", "Barentswatch"};
+        private static List<string> blackList = new List<string> { "Arctic SDI", "Barentswatch", "Åpne data" };
 
     }
 
