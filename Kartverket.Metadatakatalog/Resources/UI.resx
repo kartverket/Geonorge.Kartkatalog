@@ -171,4 +171,7 @@
   <data name="Facet_type_dimensionGroup" xml:space="preserve">
     <value>Datapakke</value>
   </data>
+  <data name="Facet_dataaccess" xml:space="preserve">
+    <value>Tilgang til data</value>
+  </data>
 </root>

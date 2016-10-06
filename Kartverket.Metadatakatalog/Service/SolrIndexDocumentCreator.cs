@@ -224,6 +224,8 @@ namespace Kartverket.Metadatakatalog.Service
                         simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.OtherConstraintsAccess)
                         ? simpleMetadata.Constraints.OtherConstraintsAccess : "";
 
+                indexDoc.DataAccess = _themeResolver.ResolveAccess(indexDoc.AccessConstraint, indexDoc.OtherConstraintsAccess);
+
                 //TODO tolke liste fra nøkkelord
                 indexDoc.Area = _placeResolver.ResolveArea(simpleMetadata);
 
