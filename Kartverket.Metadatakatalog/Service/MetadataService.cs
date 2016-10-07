@@ -7,6 +7,7 @@ using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
 using System;
 using Kartverket.Metadatakatalog.Service.Search;
+using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -90,6 +91,7 @@ namespace Kartverket.Metadatakatalog.Service
                 Title = simpleMetadata.Title,
                 TopicCategory = register.GetTopicCategory(simpleMetadata.TopicCategory),
                 Uuid = simpleMetadata.Uuid,
+                ServiceUuid = simpleMetadata.Uuid,
                 MetadataXmlUrl = _geoNetworkUtil.GetXmlDownloadUrl(simpleMetadata.Uuid),
                 MetadataEditUrl = _geonorgeUrlResolver.EditMetadata(simpleMetadata.Uuid),
                 ParentIdentifier = simpleMetadata.ParentIdentifier,
@@ -131,6 +133,9 @@ namespace Kartverket.Metadatakatalog.Service
                 if (datasetServices != null && datasetServices.Count > 0)
                 {
                     metadata.Related = new List<MetadataViewModel>();
+
+                    if (metadata.IsDataset() && datasetServices[0] != null)
+                        metadata.ServiceUuid = datasetServices[0].Split('|').First();
 
                     foreach (var relatert in datasetServices)
                     {

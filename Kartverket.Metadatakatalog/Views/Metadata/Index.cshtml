@@ -42,8 +42,6 @@
         hierarchyLevelCssClass = "label-default";
         hierarchyLevelLabelText = Model.HierarchyLevel;
     }
-
-    string UuidService = Model.Uuid;
 }
 
 @section breadcrumb {
@@ -337,17 +335,6 @@ if (contact != null)
                                     <div class="col-sm-1"><p>Last ned</p></div>
                                 </div>
                                 <div class="menu-separator search-results-table-heading"></div>
-                                @if (!Model.IsService())
-                                {
-                                    foreach (var relatedContent in Model.Related)
-                                    {
-                                        if (relatedContent != null && relatedContent.IsService())
-                                        {
-                                            UuidService = relatedContent.Uuid;
-                                            break;
-                                        }
-                                    }
-                                }
                                 @foreach (var relatedContent in Model.Related)
                                 {
                                     if (relatedContent != null)
@@ -902,7 +889,7 @@ if (keywords != null && keywords.Any())
             });
         };
         @if (Model.ShowMapLink() || Model.ShowServiceMapLink()) {
-            @:getServiceStatus("@UuidService");
+            @:getServiceStatus("@Model.ServiceUuid");
         }
     </script>
 }
