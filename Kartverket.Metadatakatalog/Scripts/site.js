@@ -31,3 +31,20 @@
         });
     });
 });
+
+function getServiceStatus(uuid, id) {
+    $.getJSON("https://status.geonorge.no/monitorApi/serviceDetail?uuid=" + uuid, function (result) {
+        console.log(result);
+        try {
+            var numLayers = parseInt(result.details[12][1]);
+            console.log("numLayers:" + numLayers);
+            if (numLayers > 30) {
+                $('#mapmacro-' + id).attr("class", "custom-icon custom-icon-kartmarkoer-warning");
+                $('#mapmacrolink-' + id).attr("title", "Tjenesten kan være treg å vise");
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    });
+};

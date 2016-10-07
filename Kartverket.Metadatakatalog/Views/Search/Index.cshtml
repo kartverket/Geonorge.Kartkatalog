@@ -786,31 +786,11 @@ facet.FacetResults = orderedList.ToList();
     </div>
 </div>
 <script>
-
-function getServiceStatus(uuid, serviceUuid) {
-    $.getJSON("https://status.geonorge.no/monitorApi/serviceDetail?uuid=" + serviceUuid, function (result) {
-        console.log("uuid:" + uuid);
-        console.log(result);
-        try {
-            var numLayers = parseInt(result.details[12][1]);
-            console.log("numLayers:" + numLayers);
-            if (numLayers > 30) {
-                $('#mapmacro-'+uuid).attr("class", "custom-icon custom-icon-kartmarkoer-warning");
-                $('#mapmacrolink-' + uuid).attr("title", "Tjenesten kan være treg å vise");
-            }
-        }
-        catch (err)
-        {
-            console.log(err);
-        }
-    });
-};
-
 @foreach (var item in Model.Result.Items)
 {
    if (item.ShowMapLink() || item.ShowServiceMapLink())
     {
-      @:getServiceStatus("@item.Uuid", "@item.ServiceUuid");
+      @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
       }
 }
 </script>

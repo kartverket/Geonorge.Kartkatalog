@@ -88,14 +88,14 @@ if (contact != null)
     <div class="table-btn-container">
         @if (Model.ShowMapLink())
         {
-            <a id="mapmacrolink" href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title=""target="_blank" class="btn">
-                <span id="mapmacro" class="custom-icon custom-icon-kartmarkoer"></span> Vis i kart
+            <a id="mapmacrolink-@Model.Uuid" href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title=""target="_blank" class="btn">
+                <span id="mapmacro-@Model.Uuid" class="custom-icon custom-icon-kartmarkoer"></span> Vis i kart
             </a>
         }
         else if (Model.ShowServiceMapLink())
         {
-            <a id="mapmacrolink" href="@Html.NorgeskartUrl()@Model.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn">
-                <span id="mapmacro" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
+            <a id="mapmacrolink-@Model.Uuid" href="@Html.NorgeskartUrl()@Model.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn">
+                <span id="mapmacro-@Model.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
             </a>
         }
         else
@@ -402,7 +402,7 @@ if (contact != null)
                                             <div class="col-sm-1 search-results-action-icons">
                                                 @if (relatedContent.ShowMapLink())
                                                 {
-                                                    <a href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @relatedContent.Title i kart" target="_blank"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
+                                                    <a id="mapmacrolink-@relatedContent.Uuid" href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @relatedContent.Title i kart" target="_blank"><span id="mapmacro-@relatedContent.Uuid" class="custom-icon custom-icon-kartmarkoer"></span></a>
                                                 }
                                                 else
                                                 {
@@ -871,25 +871,18 @@ if (keywords != null && keywords.Any())
 
         });
 
-        function getServiceStatus(uuid) {
-            $.getJSON("https://status.geonorge.no/monitorApi/serviceDetail?uuid=" + uuid, function (result) {
-                console.log(result);
-                try {
-                    var numLayers = parseInt(result.details[12][1]);
-                    console.log("numLayers:" + numLayers);
-                    if (numLayers > 30) {
-                        $('#mapmacro').attr("class", "custom-icon custom-icon-kartmarkoer-warning");
-                        $('#mapmacrolink').attr("title", "Tjenesten kan være treg å vise");
-                    }
-                }
-                catch (err)
-                {
-                    console.log(err);
-                }
-            });
-        };
         @if (Model.ShowMapLink() || Model.ShowServiceMapLink()) {
-            @:getServiceStatus("@Model.ServiceUuid");
+            @:getServiceStatus("@Model.ServiceUuid", "@Model.Uuid");
+        }
+
+        @if(Model.Related != null)
+        {
+            foreach (var relatedContent in Model.Related)
+            {
+                if (relatedContent.ShowMapLink() || relatedContent.ShowServiceMapLink()) {
+                @:getServiceStatus("@relatedContent.ServiceUuid", "@relatedContent.Uuid");
+                }
+            }
         }
     </script>
 }

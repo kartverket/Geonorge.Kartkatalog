@@ -158,7 +158,24 @@ namespace Kartverket.Metadatakatalog.Service
                                 md.Thumbnails = new List<Thumbnail>();
                                 md.Thumbnails.Add(new Thumbnail { Type = "miniatyrbilde", URL = relData[10] });
                             }
-                                
+
+                            if(md.HierarchyLevel == "service")
+                                md.ServiceUuid = md.Uuid;
+
+                            SearchParameters parametersRelated = new SearchParameters();
+                            parametersRelated.Text = md.Uuid;
+                            SearchResult searchResultRelated = _searchService.Search(parametersRelated);
+
+                            if (searchResultRelated != null && searchResultRelated.NumFound > 0)
+                            {
+                                var datasetServicesRelated = searchResultRelated.Items[0].DatasetServices;
+
+                                if (datasetServicesRelated != null && datasetServicesRelated.Count > 0)
+                                {
+                                    if (md.HierarchyLevel == "dataset" && datasetServicesRelated[0] != null)
+                                        md.ServiceUuid = datasetServicesRelated[0].Split('|').First();
+                                }
+                            }
 
                             metadata.Related.Add(md);
                         }
