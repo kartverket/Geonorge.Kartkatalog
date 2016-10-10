@@ -53,6 +53,13 @@ namespace Kartverket.Metadatakatalog.Controllers
             return HttpNotFound();
         }
 
+        public ActionResult RemoveCache(string uuid)
+        {
+            var url = Url.Action("Index", "Thumbnail", new { uuid = uuid });
+            System.Web.HttpResponse.RemoveOutputCacheItem(url);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
         private string GetMimeTypeFromUrl(string url)
         {
             int lastIndexOfDot = url.LastIndexOf('.');
