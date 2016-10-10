@@ -131,6 +131,20 @@ namespace Kartverket.Metadatakatalog.Service
             return theme;
         }
 
+        public string ResolveAccess(string AccessConstraint, string OtherConstraintsAccess)
+        {
+            string dataaccess = null;
+            if (AccessConstraint == "restricted")
+                dataaccess = "Skjermede data";
+            else if (AccessConstraint == "otherRestrictions")
+                if (OtherConstraintsAccess == "norway digital restricted")
+                    dataaccess = "Norge digitalt-begrenset";
+                else if (OtherConstraintsAccess == "no restrictions")
+                    dataaccess = "Åpne data";
+
+            return dataaccess;
+        }
+
         private string ResolveThemeFromDokKeywords(SimpleMetadata metadata)
         {
             List<SimpleKeyword> keywordsDok = SimpleKeyword.Filter(metadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME);

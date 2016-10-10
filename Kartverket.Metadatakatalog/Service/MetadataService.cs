@@ -7,6 +7,7 @@ using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
 using System;
 using Kartverket.Metadatakatalog.Service.Search;
+using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -90,6 +91,7 @@ namespace Kartverket.Metadatakatalog.Service
                 Title = simpleMetadata.Title,
                 TopicCategory = register.GetTopicCategory(simpleMetadata.TopicCategory),
                 Uuid = simpleMetadata.Uuid,
+                ServiceUuid = simpleMetadata.Uuid,
                 MetadataXmlUrl = _geoNetworkUtil.GetXmlDownloadUrl(simpleMetadata.Uuid),
                 MetadataEditUrl = _geonorgeUrlResolver.EditMetadata(simpleMetadata.Uuid),
                 ParentIdentifier = simpleMetadata.ParentIdentifier,
@@ -132,6 +134,9 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     metadata.Related = new List<MetadataViewModel>();
 
+                    if (metadata.IsDataset() && datasetServices[0] != null)
+                        metadata.ServiceUuid = datasetServices[0].Split('|').First();
+
                     foreach (var relatert in datasetServices)
                     {
                         var relData = relatert.Split('|');
@@ -153,7 +158,24 @@ namespace Kartverket.Metadatakatalog.Service
                                 md.Thumbnails = new List<Thumbnail>();
                                 md.Thumbnails.Add(new Thumbnail { Type = "miniatyrbilde", URL = relData[10] });
                             }
-                                
+
+                            if(md.HierarchyLevel == "service")
+                                md.ServiceUuid = md.Uuid;
+
+                            SearchParameters parametersRelated = new SearchParameters();
+                            parametersRelated.Text = md.Uuid;
+                            SearchResult searchResultRelated = _searchService.Search(parametersRelated);
+
+                            if (searchResultRelated != null && searchResultRelated.NumFound > 0)
+                            {
+                                var datasetServicesRelated = searchResultRelated.Items[0].DatasetServices;
+
+                                if (datasetServicesRelated != null && datasetServicesRelated.Count > 0)
+                                {
+                                    if (md.HierarchyLevel == "dataset" && datasetServicesRelated[0] != null)
+                                        md.ServiceUuid = datasetServicesRelated[0].Split('|').First();
+                                }
+                            }
 
                             metadata.Related.Add(md);
                         }

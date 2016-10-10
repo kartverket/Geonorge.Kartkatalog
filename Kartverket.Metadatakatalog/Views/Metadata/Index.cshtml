@@ -95,14 +95,14 @@ if (contact != null)
         }
         @if (Model.ShowMapLink())
         {
-            <a href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle"target="_blank" class="btn">
-                <span class="custom-icon @kartmarkoerCss"></span> Vis i kart
+            <a id="mapmacrolink-@Model.Uuid" href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title=""target="_blank" class="btn">
+                <span id="mapmacro-@Model.Uuid" class="custom-icon custom-icon-kartmarkoer"></span> Vis i kart
             </a>
         }
         else if (Model.ShowServiceMapLink())
         {
-            <a href="@Html.NorgeskartUrl()@Model.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@kartmarkoerTitle" target="_blank" class="btn">
-                <span class="custom-icon @kartmarkoerCss"></span><span class="button-text"> Vis i kart</span>
+            <a id="mapmacrolink-@Model.Uuid" href="@Html.NorgeskartUrl()@Model.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn">
+                <span id="mapmacro-@Model.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
             </a>
         }
         else
@@ -438,7 +438,7 @@ if (contact != null)
                                             <div class="col-sm-1 search-results-action-icons">
                                                 @if (relatedContent.ShowMapLink())
                                                 {
-                                                    <a href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @relatedContent.Title i kart" target="_blank"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
+                                                    <a id="mapmacrolink-@relatedContent.Uuid" href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="Vis @relatedContent.Title i kart" target="_blank"><span id="mapmacro-@relatedContent.Uuid" class="custom-icon custom-icon-kartmarkoer"></span></a>
                                                 }
                                                 else
                                                 {
@@ -854,5 +854,79 @@ if (keywords != null && keywords.Any())
             }
         });
 
+        $(window).load(function () {
+            @if (Html.DownloadServiceEnabled())
+            {
+                <text>
+            if (typeof Storage !== "undefined") {
+
+                console.log('window.localStorage is available!');
+                var orderItems = [];
+                $('.add-to-cart-btn').click(function () {
+                    var added = false;
+                    var itemuuid = $(this).attr('itemuuid');
+                    var itemname = $(this).attr('itemname');
+                    var itemurl = $(this).attr('itemurl');
+                    var itemorglogo = $(this).attr('itemorglogo');
+                    var itemdisturl = $(this).attr('itemdisturl');
+                    var itemtheme = $(this).attr('itemtheme');
+                    var itemorgname = $(this).attr('itemorgname');
+
+                    updateCartButton($(this));
+
+                    if (localStorage.getItem('orderItems') != null) {
+                        orderItems = (JSON.parse(localStorage.getItem('orderItems')));
+                    }
+                    $.map(orderItems, function (elementOfArray, indexInArray) {
+                        if (elementOfArray == itemuuid) {
+                            orderItems.push(itemuuid);
+                            added = true;
+                        }
+                    });
+                    if (!added) {
+                        orderItems.push(itemuuid);
+                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl, 'theme': itemtheme, 'organizationName': itemorgname };
+                        localStorage["orderItems"] = JSON.stringify(orderItems);
+                        localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
+                        showAlert(itemname + ' er lagt til i <a href="/Download">kurven</a>', 'success');
+
+                        var orderItemCount = $('#orderitem-count').text();
+                        console.log(orderItemCount);
+                        if (orderItemCount == null || orderItemCount == '') {
+                            orderItemCount = 0;
+                            $('#orderitem-count-text').text(' datasett');
+                        } else {
+                            orderItemCount = parseInt($('#orderitem-count').text());
+                            console.log('else: ' + orderItemCount);
+                        }
+                        orderItemCount += 1;
+                        $('#orderitem-count').text(orderItemCount);
+                        updateShoppingCart();
+
+                    } else {
+                        showAlert(itemname + ' er allerede lagt til i <a href="/Download">kurven</a>', 'warning');
+                    }
+                });
+            } else {
+                console.log('no native support for HTML5 storage :(');
+            }
+            </text>
+        }
+
+        });
+
+        @if (Model.ShowMapLink() || Model.ShowServiceMapLink()) {
+            @:getServiceStatus("@Model.ServiceUuid", "@Model.Uuid");
+        }
+
+        @if(Model.Related != null)
+        {
+            foreach (var relatedContent in Model.Related)
+            {
+                if (relatedContent.ShowMapLink() || relatedContent.ShowServiceMapLink()) {
+                @:getServiceStatus("@relatedContent.ServiceUuid", "@relatedContent.Uuid");
+                }
+            }
+        }
     </script>
 }

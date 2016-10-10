@@ -179,7 +179,7 @@ namespace Kartverket.Metadatakatalog.Service
                     indexDoc.DistributionProtocol = distributionDetails.Protocol;
                     indexDoc.DistributionUrl = distributionDetails.URL;
                     indexDoc.DistributionName = distributionDetails.Name;
-                    if (!string.IsNullOrEmpty(indexDoc.DistributionName) && !string.IsNullOrEmpty(indexDoc.DistributionProtocol) && indexDoc.DistributionProtocol.Contains("WMS")) indexDoc.Type = "servicelayer";
+                    if (!string.IsNullOrEmpty(indexDoc.DistributionName)) indexDoc.Type = "servicelayer";
                 }
 
                 List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;
@@ -224,6 +224,8 @@ namespace Kartverket.Metadatakatalog.Service
                         simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.OtherConstraintsAccess)
                         ? simpleMetadata.Constraints.OtherConstraintsAccess : "";
 
+                indexDoc.DataAccess = _themeResolver.ResolveAccess(indexDoc.AccessConstraint, indexDoc.OtherConstraintsAccess);
+
                 //TODO tolke liste fra nøkkelord
                 indexDoc.Area = _placeResolver.ResolveArea(simpleMetadata);
 
@@ -242,7 +244,6 @@ namespace Kartverket.Metadatakatalog.Service
 
                 if (indexDoc.Type == "dataset")
                 {
-                    //TODO Må oppdatere datasett med services
                     string searchString = indexDoc.Uuid;
                     //Sjekk om denne er koblet til noen tjenester
                     var filters = new object[]
@@ -599,18 +600,24 @@ namespace Kartverket.Metadatakatalog.Service
         private List<Keyword> Convert(IEnumerable<SimpleKeyword> simpleKeywords)
         {
             var output = new List<Keyword>();
+
             foreach (var keyword in simpleKeywords)
             {
-                output.Add(new Keyword
-                {
-                    EnglishKeyword = keyword.EnglishKeyword,
-                    KeywordValue = keyword.Keyword,
-                    Thesaurus = keyword.Thesaurus,
-                    Type = keyword.Type
-                });
+                if (!blackList.Contains(keyword.Keyword))
+                { 
+                    output.Add(new Keyword
+                    {
+                        EnglishKeyword = keyword.EnglishKeyword,
+                        KeywordValue = keyword.Keyword,
+                        Thesaurus = keyword.Thesaurus,
+                        Type = keyword.Type
+                    });
+                }
             }
             return output;
         }
+
+        private static List<string> blackList = new List<string> { "Arctic SDI", "Barentswatch", "Åpne data" };
 
     }
 

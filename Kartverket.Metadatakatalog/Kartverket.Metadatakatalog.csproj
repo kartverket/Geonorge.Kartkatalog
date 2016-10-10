@@ -331,6 +331,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\chosen-sprite%402x.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\chosen-sprite.png" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\images\ui-icons_444444_256x240.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\images\ui-icons_555555_256x240.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\images\ui-icons_777620_256x240.png" />
@@ -351,6 +352,7 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\chevron-down.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\chevron-up.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\gif\gif_loading-01.gif" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\gif\loading.gif" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\kvlogo_col.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\loader.gif" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\lock.png" />
@@ -358,6 +360,7 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\png\Dot_ffffff_8px-01.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\png\geonorge.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\png\kartverket.png" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\png\norgeskart-marker.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\arrow-down.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\arrow-right.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\arrow-up.svg" />
@@ -375,6 +378,7 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\geonorge_devlogo.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\geonorge_logo.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\geonorge_testlogo.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\gml.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\handlekurv-disabled.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\handlekurv-gray.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\handlekurv-white.svg" />
@@ -409,6 +413,7 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\smile-red.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\smile-yellow.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\soek.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\sosi.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\tick_fe5000_16px.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\totop_3867c8_75px-01.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\wfs.svg" />

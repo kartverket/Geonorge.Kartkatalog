@@ -93,6 +93,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string ServiceDistributionNameForDataset { get; set; }
         public string ServiceDistributionUrlForDataset { get; set; }
         public string ServiceDistributionProtocolForDataset { get; set; }
+        public string ServiceUuid { get; set; }
 
         public SeoUrl CreateSeoUrl()
         {
@@ -266,12 +267,6 @@ namespace Kartverket.Metadatakatalog.Models
         {
             return HierarchyLevel == "dimensionGroup";
         }
-
-        public bool AlertSize()
-        {
-            return IsService() && Related != null && Related.Count > 30;
-        }
-
 
         public string GetCoverageLink(){
 

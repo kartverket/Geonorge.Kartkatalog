@@ -44,19 +44,27 @@
                 if (!string.IsNullOrEmpty(facetResult.LinkName()))
                 {
                 <li class="filter-options">
-                    <a class="btn-link @cssClass" href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">
-                        @*Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b style='font-weight: 800;'>" : "") @facetResult.LinkName() @Html.Raw(Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "<b>" : "") (@facetResult.Count)
-                        *@
-                        @facetResult.LinkName()
-                        <span class="text-muted">(@facetResult.Count)</span>
-                    </a>
+                    @if (cssClass == "active")
+                    {
+                        <span class="btn-link @cssClass">
+                            @facetResult.LinkName()
+                            <span class="text-muted">(@facetResult.Count)</span>
+                        </span>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link show-loading-animation @cssClass" data-loading-message="Filtrerer søkeresultat">
+                            @facetResult.LinkName()
+                            <span class="text-muted">(@facetResult.Count)</span>
+                        </a>
+                    }
                 </li>
                 }
             }
             @if (Model.HasFilterForFacetField(facet.FacetField))
             {
                 <li class="filter-options">
-                    <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Organization", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
+                    <button type="button" class="btn btn-default list-btn reset show-loading-animation" data-loading-message="Fjerner filter" onclick="location.href = '@Url.Action("Organization", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
                         <span class="glyphicon glyphicon-plus"> </span>
                         Vis alle
                     </button>
@@ -91,20 +99,17 @@ facet.FacetResults = orderedList.ToList();
             @{
                 foreach (var facetResult in placegroup.FacetResults)
                 {
-                    <text>
-                        <li class="filter-options">
-
-                            <a class="btn-link" href="@Url.Action("Organization", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))">
-                                @facetResult.Name.Trim()<span class="text-muted">(@facetResult.Count)</span>
-                            </a>
-                        </li>
-                    </text>
+                    <li class="filter-options">
+                        <a href="@Url.Action("Organization", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))" class="btn-link">
+                            @facetResult.Name.Trim()
+                            <span class="text-muted">(@facetResult.Count)</span>
+                        </a>
+                    </li>
                 }
                 string previousFacetLinkName = null;
                 double hierarchyLevel = 0;
                 foreach (var facetResult in facet.FacetResults)
                 {
-                    string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
 
                     string hideChildren = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "show-children" : "hide-children");
                     double relativeHierarchyLevel = 0;
@@ -132,9 +137,20 @@ facet.FacetResults = orderedList.ToList();
                     }
                     <text>
                         <li class="filter-options @hideChildren ">
-
-                            <a class="btn-link @cssClass " href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))">@facetResult.AreaLinkName(Model.areaDictionary).Trim()<span class="text-muted">(@facetResult.Count)</span></a>
-
+                            @if (@hideChildren == "show-children")
+                            {
+                                <span class="btn-link active">
+                                    @facetResult.AreaLinkName(Model.areaDictionary).Trim()
+                                    <span class="text-muted">(@facetResult.Count)</span>
+                                </span>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link show-loading-animation" data-loading-message="Filtrerer søkeresultat">
+                                    @facetResult.AreaLinkName(Model.areaDictionary).Trim()
+                                    <span class="text-muted">(@facetResult.Count)</span>
+                                </a>
+                            }
                     </text>
 
                     previousFacetLinkName = facetResult.LinkName().ToString();
@@ -149,7 +165,7 @@ facet.FacetResults = orderedList.ToList();
                 {
                     var facetField = hasAreaFilter ? facet.FacetField : placegroup.FacetField;
                     <li class="filter-options">
-                        <button type="button" class="btn btn-default list-btn reset" onclick="location.href = '@Url.Action("Organization", Model.CreateRoutesForFacetFieldsExcept(facetField))';">
+                        <button type="button" class="btn btn-default list-btn reset show-loading-animation" data-loading-message="Fjerner filter" onclick="location.href = '@Url.Action("Organization", Model.CreateRoutesForFacetFieldsExcept(facetField))';">
                             <span class="glyphicon glyphicon-plus"> </span>
                             Vis alle
                         </button>
@@ -437,12 +453,12 @@ facet.FacetResults = orderedList.ToList();
         {
             <div id="tableView" class="search-results">
                 <div class="row search-results-table-heading">
-                    <div class="col-sm-3 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByTitleLink())" class="table-ordering">Tittel<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-3 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByTitleDescLink())" class="table-ordering">Tittel<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-3 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByTitleLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-3 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByTitleDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
 
                     <div class="col-sm-2"><p>Type</p></div>
-                    <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByOrganizationLink())" class="table-ordering">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering">Dataeier<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByOrganizationLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-1"><p>Åpne data</p></div>
                     <div class="col-sm-1"><p>Les mer</p></div>
                     <div class="col-sm-1"><p>Vis i kart</p></div>
@@ -458,18 +474,18 @@ facet.FacetResults = orderedList.ToList();
                             {
                                 System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
                                 string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })">
+                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold">
                                     <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
                                 </a>
                             }
                         </div>
 
                         <div class="col-sm-3 search-results-title">
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" class="show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
                                 <p class="role-button search-results-name" role="button">@item.Title</p>
                             </a>
                             <div class="search-results-description">
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">
+                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
                                     @if (item.Organization != null)
                                     {
                                         <p>  @item.Organization</p>
@@ -502,7 +518,7 @@ facet.FacetResults = orderedList.ToList();
                             <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
                         </div>
                         <div class="col-sm-3 search-results-organization">
-                            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" title="Vis alle tjenester og datasett fra @item.Organization">
+                            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
                                 @if (item.Organization != null)
                                 {
                                     <p>  @item.Organization</p>
@@ -528,7 +544,7 @@ facet.FacetResults = orderedList.ToList();
 
                         <div class="col-sm-2 search-results-action-buttons">
 
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="btn btn-default">
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="btn btn-default show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
                                 <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
                             </a>
 

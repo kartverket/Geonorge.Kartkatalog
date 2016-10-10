@@ -1900,7 +1900,7 @@ button.btn {
   height: 25px !important;
   line-height: 14pt; }
   .btn-xs:hover {
-    line-height: 14pt !important;
+    line-height: 16pt !important;
     font-size: 10pt; }
 
 .input-group-btn > .btn {
@@ -1964,10 +1964,10 @@ button.btn {
   margin-left: 5px !important; }
 
 .status-icons .custom-icon, .status-icons .fa, .status-icons .glyphicon {
-  width: 16px !important;
-  height: 16px;
+  width: 18px !important;
+  height: 18px;
   line-height: 16px;
-  font-size: 16px;
+  font-size: 18px;
   margin: 2px 4px;
   text-align: center;
   vertical-align: bottom; }
@@ -2068,6 +2068,12 @@ button.btn {
 .custom-icon.custom-icon-seksjonstegn {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/seksjonstegn.svg"); }
 
+.custom-icon.custom-icon-sosi {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/sosi.svg"); }
+
+.custom-icon.custom-icon-gml {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/gml.svg"); }
+
 /* Open data */
 .custom-icon.custom-icon-hengelaas-open-green {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/hengelaas-aapen-green.svg");
@@ -2112,6 +2118,18 @@ button.btn {
 .disabled .custom-icon.custom-icon-hengelaas-closed-red,
 .disabled .custom-icon.custom-icon-hengelaas-closed-yellow {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/hengelaas-lukket-disabled.svg"); }
+
+/* Norgeskart legend */
+.norgeskart-legend .custom-icon {
+  width: 25px !important;
+  height: 25px; }
+
+.custom-icon.custom-icon-norgeskart-marker {
+  background-image: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/png/norgeskart-marker.png);
+  background-size: 100%; }
+
+.custom-icon.custom-icon-norgeskart-area {
+  background-color: #779cfd; }
 
 .download-form p {
   margin-bottom: 0; }
@@ -2415,6 +2433,12 @@ button.btn {
       font-size: 12pt !important;
       line-height: 18pt !important;
       color: #3867C8; }
+  .facet-sok-undertitler li .btn-link.active {
+    color: #414042;
+    font-style: normal; }
+    .facet-sok-undertitler li .btn-link.active:hover {
+      color: #414042;
+      text-decoration: none; }
 
 .facet-sok-emne {
   margin-top: 4px; }
@@ -2554,13 +2578,6 @@ textarea, textarea.form-control {
 
 .custom-select.input-group select {
   margin-bottom: 0; }
-
-.container .searchbar input {
-  border-radius: 0px !important;
-  font-size: 14pt !important; }
-
-.container .searchbar input:focus {
-  border: none; }
 
 .input-group {
   margin-bottom: 10px; }
@@ -2970,10 +2987,14 @@ ul#thumbnailsCoverage {
   background-color: #FFF; }
 
 .container .search .searchbar input {
-  -moz-border-radius: 6px !important;
-  -webkit-border-radius: 6px !important;
-  border-radius: 6px !important;
-  padding: 0 0 0 21px; }
+  -moz-border-radius: 6px 0 0 6px !important;
+  -webkit-border-radius: 6px 0 0 6px !important;
+  border-radius: 6px 0 0 6px !important;
+  border-radius: 6px 0 0 6px !important;
+  padding: 0 0 0 21px;
+  font-size: 14pt !important; }
+  .container .search .searchbar input:focus {
+    border: none; }
 
 @media (max-width: 767px) {
   .container-login {
@@ -3112,16 +3133,39 @@ input[type="checkbox"].input-validation-error {
     vertical-align: text-top;
     line-height: 39pt; }
 
-.loading-animation.loading {
-  background-image: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/gif/gif_loading-01.gif);
+.loading-animation {
+  z-index: 10;
+  position: fixed;
   background-repeat: no-repeat;
-  background-position: center; }
-  .loading-animation.loading > *,
-  .loading-animation.loading:hover > *,
-  .loading-animation.loading:active > * {
-    color: transparent !important; }
-  .loading-animation.loading.btn {
-    background-size: 20px; }
+  background-position: 50% 15px;
+  background-color: white;
+  top: 40%;
+  height: auto;
+  width: 200px;
+  border: 1px solid #ddd;
+  padding: 15px;
+  color: #666;
+  margin: auto;
+  display: block;
+  left: 40%;
+  left: calc(50% - 100px);
+  text-align: center;
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2); }
+  .loading-animation:before {
+    content: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/gif/loading.gif");
+    display: block; }
+
+header.main-header {
+  z-index: 5;
+  position: relative; }
+
+.container-top-menu {
+  z-index: 5;
+  position: static; }
+
+.menu-separator {
+  z-index: 1;
+  position: relative; }
 
 .modal-footer .btn {
   margin-bottom: 0; }
@@ -3557,7 +3601,8 @@ a.status-icon-link:hover {
   font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
   font-size: 12px;
   opacity: .9;
-  position: absolute; }
+  position: absolute;
+  z-index: 5; }
 
 .ui-tooltip:before {
   border-width: 0 5px 5px;
