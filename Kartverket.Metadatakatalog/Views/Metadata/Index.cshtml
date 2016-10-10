@@ -89,10 +89,6 @@ if (contact != null)
 
 <div class="btn-table-row-5">
     <div class="table-btn-container">
-        @{
-            String kartmarkoerTitle = Model.AlertSize() ? "Tjenesten kan være treg å vise pga. svært mange kartlag" : "Vis " + @Model.Title + " i kart";
-            String kartmarkoerCss = Model.AlertSize() ? "custom-icon-kartmarkoer-warning" : "custom-icon-kartmarkoer";
-        }
         @if (Model.ShowMapLink())
         {
             <a id="mapmacrolink-@Model.Uuid" href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title=""target="_blank" class="btn">
