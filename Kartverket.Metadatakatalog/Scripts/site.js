@@ -33,10 +33,10 @@
 });
 
 function getServiceStatus(uuid, id) {
-    $.getJSON("https://status.geonorge.no/monitorApi/serviceDetail?uuid=" + uuid, function (result) {
+    $.getJSON(statusApi + "monitorApi/serviceDetail?uuid=" + uuid, function (result) {
         console.log(result);
         try {
-            var numLayers = parseInt(result.details[12][1]);
+            var numLayers = parseInt(result.numLayers.svar);
             console.log("numLayers:" + numLayers);
             if (numLayers > 30) {
                 $('#mapmacro-' + id).attr("class", "custom-icon custom-icon-kartmarkoer-warning");
