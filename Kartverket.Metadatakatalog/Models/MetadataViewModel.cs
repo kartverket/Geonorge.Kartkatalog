@@ -268,6 +268,30 @@ namespace Kartverket.Metadatakatalog.Models
             return HierarchyLevel == "dimensionGroup";
         }
 
+        public bool IsOpendata()
+        {
+            if (Constraints != null && !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && Constraints.OtherConstraintsAccess.ToLower() == "no restrictions")
+                return true;
+            else
+                return false;
+        }
+
+        public bool IsRestricted()
+        {
+            if (Constraints != null &&  !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && Constraints.OtherConstraintsAccess.ToLower() == "norway digital restricted")
+            return true;
+            else
+                return false;
+        }
+
+        public bool IsOffline()
+        {
+            if (Constraints != null && Constraints.AccessConstraints == "restricted")
+                return true;
+            else
+                return false;
+        }
+
         public string GetCoverageLink(){
 
             string CoverageLink = "";

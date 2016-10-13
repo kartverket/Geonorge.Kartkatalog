@@ -159,7 +159,9 @@ namespace Kartverket.Metadatakatalog.Service
                                 md.Thumbnails.Add(new Thumbnail { Type = "miniatyrbilde", URL = relData[10] });
                             }
 
-                            if(md.HierarchyLevel == "service")
+                            md.Constraints = new Constraints { AccessConstraints = relData[11], OtherConstraintsAccess = relData[12] };
+
+                            if (md.HierarchyLevel == "service")
                                 md.ServiceUuid = md.Uuid;
 
                             SearchParameters parametersRelated = new SearchParameters();
@@ -213,6 +215,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 md.Thumbnails = new List<Thumbnail>();
                                 md.Thumbnails.Add(new Thumbnail { Type = "miniatyrbilde", URL = relData[10] });
                             }
+                            md.Constraints = new Constraints { AccessConstraints = relData[11], OtherConstraintsAccess = relData[12] };
 
                             metadata.Related.Add(md);
                         }
@@ -249,6 +252,8 @@ namespace Kartverket.Metadatakatalog.Service
                                 md.Thumbnails = new List<Thumbnail>();
                                 md.Thumbnails.Add(new Thumbnail { Type = "miniatyrbilde", URL = relData[10] });
                             }
+                            md.Constraints = new Constraints { AccessConstraints = relData[11], OtherConstraintsAccess = relData[12] };
+
 
                             metadata.Related.Add(md);
                         }
@@ -285,6 +290,10 @@ namespace Kartverket.Metadatakatalog.Service
                             {
                                 md.Thumbnails = new List<Thumbnail>();
                                 md.Thumbnails.Add(new Thumbnail { Type = "miniatyrbilde", URL = relData[10] });
+                            }
+                            if (!string.IsNullOrEmpty(relData[11]) && !string.IsNullOrEmpty(relData[12]))
+                            {
+                                md.Constraints = new Constraints { AccessConstraints = relData[11], OtherConstraintsAccess = relData[12] };
                             }
 
                             metadata.Related.Add(md);

@@ -359,7 +359,7 @@ if (contact != null)
                                     <div class="col-sm-2"><p>Type</p></div>
                                     <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" class="table-ordering">Dataeier<span class="orderby-indicator"></span></a></p></div>
                                     <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-1"><p>Åpne data</p></div>
                                     <div class="col-sm-1"><p>Les mer</p></div>
                                     <div class="col-sm-1"><p>Vis i kart</p></div>
                                     <div class="col-sm-1"><p>Last ned</p></div>
@@ -422,11 +422,19 @@ if (contact != null)
                                             <div class="col-sm-3 search-results-organization">
                                                 @relatedContent.ContactOwner.Organization
                                             </div>
-                                            <div class="col-sm-1 search-results-action-icons">
-                                                @*        @if (relatedContent.Keywords != null) {
-                                                        foreach (var keyword in relatedContent.Keywords) { keyword.KeywordValue.ToString(); }
-                                                    }
-                                                *@
+                                            <div class="col-sm-1 search-results-open-data">
+                                                @if (relatedContent.IsOpendata())
+                                                {
+                                                    <span data-toggle='tooltip' data-placement='bottom' title="Åpne data" class="custom-icon custom-icon-hengelaas-open-green"></span>
+                                                }
+                                                else if (relatedContent.IsOffline())
+                                                {
+                                                    <span data-toggle='tooltip' data-placement='bottom' title="Skjermede data" class="custom-icon custom-icon-hengelaas-closed-red"></span>
+                                                }
+                                                else if (relatedContent.IsRestricted())
+                                                {
+                                                    <span data-toggle='tooltip' data-placement='bottom' title="Tilgangsbegrensede data" class="custom-icon custom-icon-hengelaas-closed-yellow"></span>
+                                                }
                                             </div>
                                             <div class="col-sm-1 search-results-action-icons">
                                                 <a href="/metadata/org/title/@relatedContent.Uuid" data-toggle='tooltip' data-placement='bottom' title="Les mer om @relatedContent.Title"><span class="custom-icon custom-icon-info"></span></a>
