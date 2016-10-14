@@ -266,14 +266,45 @@ namespace Kartverket.Metadatakatalog.Service
                     var res = geoNorge.SearchWithFilters(filters, filterNames, 1, 200);
                     if (res.numberOfRecordsMatched != "0")
                     {
-                        MD_Metadata_Type m = geoNorge.GetRecordByUuid(((www.opengis.net.DCMIRecordType)(res.Items[0])).Items[0].Text[0]);
-                        SimpleMetadata sm = new SimpleMetadata(m);
-                        var servicedistributionDetails = sm.DistributionDetails;
-                        if (servicedistributionDetails != null)
+                        string uuid = null;
+                        string uriProtocol = null;
+
+                        foreach (var item in res.Items)
                         {
-                            indexDoc.ServiceDistributionProtocolForDataset = servicedistributionDetails.Protocol;
-                            indexDoc.ServiceDistributionUrlForDataset = servicedistributionDetails.URL;
-                            indexDoc.ServiceDistributionNameForDataset = servicedistributionDetails.Name;
+                            RecordType record = (RecordType)item;
+
+                            for (int i = 0; i < record.ItemsElementName.Length; i++)
+                            {
+                                var name = record.ItemsElementName[i];
+                                var value = record.Items[i].Text != null ? record.Items[i].Text[0] : null;
+
+                                if (name == ItemsChoiceType24.identifier)
+                                    uuid = value;
+                                else if (name == ItemsChoiceType24.URI)
+                                {
+                                    var uriAttributes = (SimpleUriLiteral)record.Items[i];
+                                    if (uriAttributes != null)
+                                    {
+                                        if (!string.IsNullOrEmpty(uriAttributes.protocol))
+                                            uriProtocol = uriAttributes.protocol;
+                                    }
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS")
+                                break;
+                        }
+
+                        if (!string.IsNullOrEmpty(uuid))
+                        { 
+                            MD_Metadata_Type m = geoNorge.GetRecordByUuid(uuid);
+                            SimpleMetadata sm = new SimpleMetadata(m);
+                            var servicedistributionDetails = sm.DistributionDetails;
+                            if (servicedistributionDetails != null)
+                            {
+                                indexDoc.ServiceDistributionProtocolForDataset = servicedistributionDetails.Protocol;
+                                indexDoc.ServiceDistributionUrlForDataset = servicedistributionDetails.URL;
+                                indexDoc.ServiceDistributionNameForDataset = servicedistributionDetails.Name;
+                            }
                         }
 
                         // Create bundle - services mapped to datasets
