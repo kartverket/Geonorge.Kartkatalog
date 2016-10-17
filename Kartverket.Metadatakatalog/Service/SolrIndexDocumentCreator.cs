@@ -294,14 +294,14 @@ namespace Kartverket.Metadatakatalog.Service
                                     }
                                 }
                             }
-                            if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS" && !string.IsNullOrEmpty(uriName))
+                            if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS" && string.IsNullOrEmpty(uriName))
                             {
                                 uuidFound = uuid;
                                 break;
                             }
-                            else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS")
+                            else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS" && !string.IsNullOrEmpty(uriName))
                             {
-                                uuidFound = uuid;
+                                uuidFound = uuid;                                
                             }
                                 
                         }
