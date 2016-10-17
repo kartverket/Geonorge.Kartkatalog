@@ -308,7 +308,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                         if (!string.IsNullOrEmpty(uuidFound))
                         { 
-                            MD_Metadata_Type m = geoNorge.GetRecordByUuid(uuid);
+                            MD_Metadata_Type m = geoNorge.GetRecordByUuid(uuidFound);
                             SimpleMetadata sm = new SimpleMetadata(m);
                             var servicedistributionDetails = sm.DistributionDetails;
                             if (servicedistributionDetails != null)
