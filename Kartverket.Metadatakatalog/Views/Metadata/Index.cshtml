@@ -359,10 +359,10 @@ if (contact != null)
                                     <div class="col-sm-2"><p>Type</p></div>
                                     <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" class="table-ordering">Dataeier<span class="orderby-indicator"></span></a></p></div>
                                     <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                                    <div class="col-sm-1"><p>Åpne data</p></div>
-                                    <div class="col-sm-1"><p>Les mer</p></div>
-                                    <div class="col-sm-1"><p>Vis i kart</p></div>
-                                    <div class="col-sm-1"><p>Last ned</p></div>
+                                    <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
+                                    <div class="col-sm-1 no-padding text-center"><p>Les mer</p></div>
+                                    <div class="col-sm-1 no-padding text-center"><p>Vis i kart</p></div>
+                                    <div class="col-sm-1 no-padding text-center"><p>Last ned</p></div>
                                 </div>
                                 <div class="menu-separator search-results-table-heading"></div>
 
@@ -422,7 +422,7 @@ if (contact != null)
                                             <div class="col-sm-3 search-results-organization">
                                                 @relatedContent.ContactOwner.Organization
                                             </div>
-                                            <div class="col-sm-1 search-results-open-data">
+                                            <div class="col-sm-1 search-results-open-data search-results-action-icons">
                                                 @if (relatedContent.IsOpendata())
                                                 {
                                                     <span data-toggle='tooltip' data-placement='bottom' title="Åpne data" class="custom-icon custom-icon-hengelaas-open-green"></span>
