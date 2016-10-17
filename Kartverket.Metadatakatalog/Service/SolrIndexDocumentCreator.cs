@@ -267,7 +267,9 @@ namespace Kartverket.Metadatakatalog.Service
                     if (res.numberOfRecordsMatched != "0")
                     {
                         string uuid = null;
+                        string uuidFound = null;
                         string uriProtocol = null;
+                        string uriName = null;
 
                         foreach (var item in res.Items)
                         {
@@ -287,14 +289,24 @@ namespace Kartverket.Metadatakatalog.Service
                                     {
                                         if (!string.IsNullOrEmpty(uriAttributes.protocol))
                                             uriProtocol = uriAttributes.protocol;
+                                        if (!string.IsNullOrEmpty(uriAttributes.name))
+                                            uriName = uriAttributes.name;
                                     }
                                 }
                             }
-                            if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS")
+                            if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS" && !string.IsNullOrEmpty(uriName))
+                            {
+                                uuidFound = uuid;
                                 break;
+                            }
+                            else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS")
+                            {
+                                uuidFound = uuid;
+                            }
+                                
                         }
 
-                        if (!string.IsNullOrEmpty(uuid))
+                        if (!string.IsNullOrEmpty(uuidFound))
                         { 
                             MD_Metadata_Type m = geoNorge.GetRecordByUuid(uuid);
                             SimpleMetadata sm = new SimpleMetadata(m);
