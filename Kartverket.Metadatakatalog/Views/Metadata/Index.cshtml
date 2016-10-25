@@ -141,7 +141,7 @@ if (contact != null)
         }
         else if (Model.ShowDownloadLink())
         {
-                <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" class="btn"><span class="custom-icon custom-icon-lastned"></span> Last ned</a>
+                <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" class="btn show-loading-animation" data-loading-message="Henter innhold"><span class="custom-icon custom-icon-lastned"></span> Last ned</a>
                 }
                 else
                 {
@@ -190,7 +190,7 @@ if (contact != null)
         <div class="table-btn-container">
             @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
             {
-                <a href="@Model.ProductSheetUrl" onclick="ga('send', 'event', 'MerInfo', 'produktark');" title="Vis produktark for @Model.Title" class="btn"><span class="custom-icon custom-icon-info"></span> Vis produktark</a>
+                <a href="@Model.ProductSheetUrl" onclick="ga('send', 'event', 'MerInfo', 'produktark');" title="Vis produktark for @Model.Title" class="btn show-loading-animation" data-loading-message="Henter produktark"><span class="custom-icon custom-icon-info"></span> Vis produktark</a>
             }
             else
             {
@@ -201,7 +201,7 @@ if (contact != null)
         <div class="table-btn-container">
             @if (!string.IsNullOrWhiteSpace(Model.ProductSpecificationUrl))
             {
-                <a href="@Model.ProductSpecificationUrl" onclick="ga('send', 'event', 'MerInfo', 'produktspesifikasjon');" class="btn" title="Last ned produktspesifikasjon for @Model.Title"><span class="glyphicon glyphicon-list-alt"></span> Vis produktspesifikasjon</a>
+                <a href="@Model.ProductSpecificationUrl" onclick="ga('send', 'event', 'MerInfo', 'produktspesifikasjon');" class="btn show-loading-animation" data-loading-message="Henter produktspesifikasjon" title="Last ned produktspesifikasjon for @Model.Title"><span class="glyphicon glyphicon-list-alt"></span> Vis produktspesifikasjon</a>
             }
             else
             {
@@ -212,7 +212,7 @@ if (contact != null)
         <div class="table-btn-container">
             @if (!string.IsNullOrWhiteSpace(Model.LegendDescriptionUrl))
             {
-                <a href="@Model.LegendDescriptionUrl" onclick="ga('send', 'event', 'MerInfo', 'tegneregler');" class="btn" title="Vis tegneregler for @Model.Title"> <span class="glyphicon glyphicon-picture"></span> Vis tegneregler</a>
+                <a href="@Model.LegendDescriptionUrl" onclick="ga('send', 'event', 'MerInfo', 'tegneregler');" class="btn show-loading-animation" data-loading-message="Henter tegneregler" title="Vis tegneregler for @Model.Title"> <span class="glyphicon glyphicon-picture"></span> Vis tegneregler</a>
             }
             else
             {
@@ -223,7 +223,7 @@ if (contact != null)
         <div class="table-btn-container">
             @if (Model.ShowWebsiteLink())
             {
-                <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'MerInfo', 'nettside');" class="btn"><span class="custom-icon custom-icon-eksternlink"></span> Besøk nettside</a>
+                <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'MerInfo', 'nettside');" class="btn show-loading-animation" data-loading-message="Henter nettside"><span class="custom-icon custom-icon-eksternlink"></span> Besøk nettside</a>
             }
             else
             {
@@ -234,7 +234,7 @@ if (contact != null)
         <div class="table-btn-container">
             @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
             {
-                <a href="@Model.ProductPageUrl" onclick="ga('send', 'event', 'MerInfo', 'produktside');" class="btn" title="Gå til produktsiden for @Model.Title"><span class="custom-icon custom-icon-eksternlink"></span> Vis produktside</a>
+                <a href="@Model.ProductPageUrl" onclick="ga('send', 'event', 'MerInfo', 'produktside');" class="btn show-loading-animation" data-loading-message="Henter produktside" title="Gå til produktsiden for @Model.Title"><span class="custom-icon custom-icon-eksternlink"></span> Vis produktside</a>
             }
             else
             {
@@ -412,7 +412,7 @@ if (contact != null)
 
                                         <div class="row result-row">
                                             <div class="col-sm-3 search-results-title">
-                                                <a id="related-@relatedContent.Uuid" href="/metadata/org/title/@relatedContent.Uuid" class="" title="Relatert metadata for @relatedContent.Title">
+                                                <a id="related-@relatedContent.Uuid" href="/metadata/org/title/@relatedContent.Uuid" class="show-loading-animation" data-loading-message="Henter @relatedContentHierarchyLevelLabelText.ToLower()" title="Relatert metadata for @relatedContent.Title">
                                                     @relatedContent.Title
                                                 </a>
                                             </div>
@@ -437,7 +437,7 @@ if (contact != null)
                                                 }
                                             </div>
                                             <div class="col-sm-1 search-results-action-icons">
-                                                <a href="/metadata/org/title/@relatedContent.Uuid" data-toggle='tooltip' data-placement='bottom' title="Les mer om @relatedContent.Title"><span class="custom-icon custom-icon-info"></span></a>
+                                                <a href="/metadata/org/title/@relatedContent.Uuid" data-toggle='tooltip' data-placement='bottom' title="Les mer om @relatedContent.Title" class="show-loading-animation" data-loading-message="Henter @relatedContentHierarchyLevelLabelText.ToLower()"><span class="custom-icon custom-icon-info"></span></a>
                                             </div>
                                             <div class="col-sm-1 search-results-action-icons">
                                                 @if (relatedContent.ShowMapLink())
@@ -729,8 +729,8 @@ if (contact != null)
 <div class="row">
     <div class="col-md-12">
         <div>
-            <a href="@Model.MetadataXmlUrl" class="btn"><span class="glyphicon glyphicon-file"></span> Last ned metadata XML</a>
-            <a href="@Model.MetadataEditUrl" class="btn"><span class="glyphicon glyphicon-pencil"></span> Rediger metadata</a>
+            <a href="@Model.MetadataXmlUrl" class="btn show-loading-animation" data-loading-message="Henter XML data"><span class="glyphicon glyphicon-file"></span> Last ned metadata XML</a>
+            <a href="@Model.MetadataEditUrl" class="btn show-loading-animation" data-loading-message="Henter metadata"><span class="glyphicon glyphicon-pencil"></span> Rediger metadata</a>
         </div>
     </div>
 </div>
