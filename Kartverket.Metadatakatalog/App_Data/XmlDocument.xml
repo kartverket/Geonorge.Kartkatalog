@@ -254,6 +254,31 @@
             Initializes a new instance of the <see cref="T:Kartverket.Metadatakatalog.Areas.HelpPage.HelpPageSampleGenerator"/> class.
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Areas.HelpPage.HelpPageSampleGenerator.ActualHttpMessageTypes">
+            <summary>
+            Gets CLR types that are used as the content of <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples">
+            <summary>
+            Gets the objects that are used directly as samples for certain actions.
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects">
+            <summary>
+            Gets the objects that are serialized as samples by the supported formatters.
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories">
+            <summary>
+            Gets factories for the objects that the supported formatters will serialize as samples. Processed in order,
+            stopping when the factory successfully returns a non-<see langref="null"/> object.
+            </summary>
+            <remarks>
+            Collection includes just <see cref="M:Kartverket.Metadatakatalog.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)"/> initially. Use
+            <code>SampleObjectFactories.Insert(0, func)</code> to provide an override and
+            <code>SampleObjectFactories.Add(func)</code> to provide a fallback.</remarks>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Areas.HelpPage.HelpPageSampleGenerator.GetSampleRequests(System.Web.Http.Description.ApiDescription)">
             <summary>
             Gets the request body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
@@ -326,31 +351,6 @@
             <param name="type">The type.</param>
             <param name="mediaType">Type of the media.</param>
             <returns></returns>
-        </member>
-        <member name="P:Kartverket.Metadatakatalog.Areas.HelpPage.HelpPageSampleGenerator.ActualHttpMessageTypes">
-            <summary>
-            Gets CLR types that are used as the content of <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/>.
-            </summary>
-        </member>
-        <member name="P:Kartverket.Metadatakatalog.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples">
-            <summary>
-            Gets the objects that are used directly as samples for certain actions.
-            </summary>
-        </member>
-        <member name="P:Kartverket.Metadatakatalog.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects">
-            <summary>
-            Gets the objects that are serialized as samples by the supported formatters.
-            </summary>
-        </member>
-        <member name="P:Kartverket.Metadatakatalog.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories">
-            <summary>
-            Gets factories for the objects that the supported formatters will serialize as samples. Processed in order,
-            stopping when the factory successfully returns a non-<see langref="null"/> object.
-            </summary>
-            <remarks>
-            Collection includes just <see cref="M:Kartverket.Metadatakatalog.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)"/> initially. Use
-            <code>SampleObjectFactories.Insert(0, func)</code> to provide an override and
-            <code>SampleObjectFactories.Add(func)</code> to provide a fallback.</remarks>
         </member>
         <member name="T:Kartverket.Metadatakatalog.Areas.HelpPage.HelpPageSampleKey">
             <summary>
@@ -486,6 +486,16 @@
             Catalogue search
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetData(System.String)">
+            <summary>
+            Get metadata for uuid
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetRelated(System.String)">
+            <summary>
+            Get related services, datasets and bundles for uuid
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Facet.FacetField">
             <summary>
             The name of the facet field
@@ -586,6 +596,57 @@
             True if one of the nationalinitiativs(Samarbeid og lover) is "Åpne data"
             </summary>
         </member>
+        <!-- Badly formed XML comment ignored for member "P:Kartverket.Metadatakatalog.Models.Api.Metadata.IsDokData" -->
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.LegendDescriptionUrl">
+            <summary>
+            Url for legend/drawing rules
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.ProductSheetUrl">
+            <summary>
+            Url for productsheet
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.ProductSpecificationUrl">
+            <summary>
+            Url for detailed spesifications
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.DatasetServices">
+            <summary>
+            Services for dataset
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.ServiceDatasets">
+            <summary>
+             Datasets for service
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.Bundles">
+            <summary>
+            Bundles for dataset
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.ServiceLayers">
+            <summary>
+            ServiceLayers
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.AccessConstraint">
+            <summary>
+            AccessConstraint
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.OtherConstraintsAccess">
+            <summary>
+            OtherConstraintsAccess
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.DataAccess">
+            <summary>
+            DataAccess
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.text">
             <summary>
             The text to search for
@@ -601,9 +662,12 @@
             This param indicates the maximum number of constraint counts that should be returned. Default is 10.
             </summary>
         </member>
-        <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.facets">
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.orderby">
             <summary>
             Limits the list to facets. Ex. <![CDATA[ &facets[0]name=organization&facets[0]value=Kartverket]]>. Facets result is grouped by  "theme" , "type", "organization".
+            </summary>
+            <summary>
+            Field to order by, ex: orderby=title, default order is score desc.
             </summary>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchResult.NumFound">
@@ -631,6 +695,177 @@
             Result grouped by facets
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Service.PlaceResolver.GetAreas">
+            <summary>
+            Gets fylke og kommuner fra register i et dictionary
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:AreaType">
+            <remarks/>
+        </member>
+        <member name="P:AreaType.code">
+            <remarks/>
+        </member>
+        <member name="P:AreaType.type">
+            <remarks/>
+        </member>
+        <member name="P:AreaType.name">
+            <remarks/>
+        </member>
+        <member name="P:AreaType.projections">
+            <remarks/>
+        </member>
+        <member name="P:AreaType.formats">
+            <remarks/>
+        </member>
+        <member name="T:OrderAreaType">
+            <remarks/>
+        </member>
+        <member name="P:OrderAreaType.code">
+            <remarks/>
+        </member>
+        <member name="P:OrderAreaType.type">
+            <remarks/>
+        </member>
+        <member name="P:OrderAreaType.name">
+            <remarks/>
+        </member>
+        <member name="T:LinkType">
+            <remarks/>
+        </member>
+        <member name="P:LinkType.href">
+            <remarks/>
+        </member>
+        <member name="P:LinkType.rel">
+            <remarks/>
+        </member>
+        <member name="P:LinkType.templated">
+            <remarks/>
+        </member>
+        <member name="P:LinkType.templatedSpecified">
+            <remarks/>
+        </member>
+        <member name="P:LinkType.type">
+            <remarks/>
+        </member>
+        <member name="P:LinkType.deprecation">
+            <remarks/>
+        </member>
+        <member name="P:LinkType.name">
+            <remarks/>
+        </member>
+        <member name="P:LinkType.title">
+            <remarks/>
+        </member>
+        <member name="T:CapabilitiesType">
+            <remarks/>
+        </member>
+        <member name="P:CapabilitiesType.supportsProjectionSelection">
+            <remarks/>
+        </member>
+        <member name="P:CapabilitiesType.supportsFormatSelection">
+            <remarks/>
+        </member>
+        <member name="P:CapabilitiesType.supportsPolygonSelection">
+            <remarks/>
+        </member>
+        <member name="P:CapabilitiesType.supportsAreaSelection">
+            <remarks/>
+        </member>
+        <member name="P:CapabilitiesType._links">
+            <remarks/>
+        </member>
+        <member name="T:FileType">
+            <remarks/>
+        </member>
+        <member name="P:FileType.downloadUrl">
+            <remarks/>
+        </member>
+        <member name="P:FileType.fileSize">
+            <remarks/>
+        </member>
+        <member name="P:FileType.name">
+            <remarks/>
+        </member>
+        <member name="T:FormatType">
+            <remarks/>
+        </member>
+        <member name="P:FormatType.name">
+            <remarks/>
+        </member>
+        <member name="P:FormatType.version">
+            <remarks/>
+        </member>
+        <member name="T:OrderType">
+            <remarks/>
+        </member>
+        <member name="P:OrderType.email">
+            <remarks/>
+        </member>
+        <member name="P:OrderType.orderLines">
+            <remarks/>
+        </member>
+        <member name="T:OrderLineType">
+            <remarks/>
+        </member>
+        <member name="P:OrderLineType.areas">
+            <summary>
+            Set selected areas for download
+            </summary>
+        </member>
+        <member name="P:OrderLineType.formats">
+            <summary>
+            Set selected formats to download
+            </summary>
+        </member>
+        <member name="P:OrderLineType.metadataUuid">
+            <summary>
+            A uniqe reference to datasett from kartkatalog.geonorge.no
+            </summary>
+        </member>
+        <member name="P:OrderLineType.coordinates">
+            <summary>
+            If polygon is selected this includes coordinates
+            </summary>
+        </member>
+        <member name="P:OrderLineType.coordinatesystem">
+            <summary>
+            If polygon is selected this includes coordinate system
+            </summary>
+        </member>
+        <member name="P:OrderLineType.projections">
+            <summary>
+            Selected projections to download
+            </summary>
+        </member>
+        <member name="T:ProjectionType">
+            <remarks/>
+        </member>
+        <member name="P:ProjectionType.code">
+            <remarks/>
+        </member>
+        <member name="P:ProjectionType.name">
+            <remarks/>
+        </member>
+        <member name="P:ProjectionType.codespace">
+            <remarks/>
+        </member>
+        <member name="T:OrderReceiptType">
+            <remarks/>
+        </member>
+        <member name="P:OrderReceiptType.referenceNumber">
+            <remarks/>
+        </member>
+        <member name="P:OrderReceiptType.files">
+            <remarks/>
+        </member>
+        <member name="T:LinkListeType">
+            <remarks/>
+        </member>
+        <member name="P:LinkListeType._links">
+            <remarks/>
+        </member>
         <member name="T:Resources.UI">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.
@@ -652,9 +887,19 @@
               Looks up a localized string similar to Kartkatalogen.
             </summary>
         </member>
+        <member name="P:Resources.UI.Facet_area">
+            <summary>
+              Looks up a localized string similar to Område.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Facet_dataaccess">
+            <summary>
+              Looks up a localized string similar to Tilgang til data.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Facet_DistributionProtocols">
             <summary>
-              Looks up a localized string similar to Distribusjonsprotokoll.
+              Looks up a localized string similar to Distribusjonsform.
             </summary>
         </member>
         <member name="P:Resources.UI.Facet_keyword">
@@ -707,6 +952,11 @@
               Looks up a localized string similar to Datasett.
             </summary>
         </member>
+        <member name="P:Resources.UI.Facet_type_dimensionGroup">
+            <summary>
+              Looks up a localized string similar to Datapakke.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Facet_type_series">
             <summary>
               Looks up a localized string similar to Datasettserie.
@@ -719,7 +969,7 @@
         </member>
         <member name="P:Resources.UI.Facet_type_servicelayer">
             <summary>
-              Looks up a localized string similar to WMS-lag (Tjenestelag).
+              Looks up a localized string similar to Tjenestelag.
             </summary>
         </member>
         <member name="P:Resources.UI.Facet_type_software">

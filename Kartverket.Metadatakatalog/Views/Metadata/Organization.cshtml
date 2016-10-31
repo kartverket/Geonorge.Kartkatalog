@@ -9,8 +9,6 @@
     <li class="active">@Model.OrganizationName</li>
 }
 
-
-
 <div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
@@ -459,10 +457,10 @@ facet.FacetResults = orderedList.ToList();
                     <div class="col-sm-2"><p>Type</p></div>
                     <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByOrganizationLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-1"><p>Åpne data</p></div>
-                    <div class="col-sm-1"><p>Les mer</p></div>
-                    <div class="col-sm-1"><p>Vis i kart</p></div>
-                    <div class="col-sm-1"><p>Last ned</p></div>
+                    <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
+                    <div class="col-sm-1 no-padding text-center"><p>Les mer</p></div>
+                    <div class="col-sm-1 no-padding text-center"><p>Vis i kart</p></div>
+                    <div class="col-sm-1 no-padding text-center"><p>Last ned</p></div>
                 </div>
                 <div class="menu-separator search-results-table-heading"></div>
                 @foreach (var item in Model.Result.Items)
@@ -615,7 +613,7 @@ facet.FacetResults = orderedList.ToList();
                         </div>
 
                         <div class="col-sm-1 search-results-action-icons">
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="">
+                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
                                 <span class="custom-icon custom-icon-info"></span>
                             </a>
                         </div>

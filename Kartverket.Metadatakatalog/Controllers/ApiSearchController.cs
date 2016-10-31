@@ -81,6 +81,9 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         }
 
+        /// <summary>
+        /// Get metadata for uuid
+        /// </summary>
         [System.Web.Http.Route("api/getdata/{uuid}")]
         [System.Web.Http.HttpGet]
         public Models.MetadataViewModel GetData(string uuid)
@@ -90,7 +93,9 @@ namespace Kartverket.Metadatakatalog.Controllers
             return model;
         }
 
-
+        /// <summary>
+        /// Get related services, datasets and bundles for uuid
+        /// </summary>
         [System.Web.Http.Route("api/relateddata/{uuid}")]
         [System.Web.Http.HttpGet]
         public SearchResult GetRelated(string uuid)

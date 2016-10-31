@@ -75,12 +75,6 @@ function getJsonData(url, segments, uuid) {
             error: function (jqXHR, textStatus, errorThrown) {
                 var metadata = JSON.parse(localStorage.getItem(uuid + '.metadata'));
                 showAlert(metadata.name + ' feilet. Vennligst fjern datasettet fra kurv. Feilmelding: ' + errorThrown + '<br />', 'danger');
-                console.log('jqXHR:');
-                console.log(jqXHR);
-                console.log('textStatus:');
-                console.log(textStatus);
-                console.log('errorThrown:');
-                console.log(errorThrown);
             },
             success: function (data) {
                 if (data != null) {
@@ -120,12 +114,9 @@ function getJsonData(url, segments, uuid) {
 
 function loadData() {
     var orderItems = localStorage["orderItems"];
-    console.log("ready");
-    console.log(orderItems);
     if (orderItems != null) {
         var storedOrderItems = (orderItems != null) ? JSON.parse(orderItems) : '';
         objCount = storedOrderItems.length;
-        console.log(objCount);
         $.each(storedOrderItems, function (key, uuid) {
             var metadata = JSON.parse(localStorage[uuid + '.metadata']);
             var url = metadata.distributionUrl + uuid;
@@ -379,7 +370,6 @@ function generateView(template, orderItems) {
         $("#orderuuid" + uuid + " .selectPolygon button").attr('uuid', uuid);
 
         var supportsProjectionSelection = (localStorage.getItem(uuid + '.capabilities.supportsProjectionSelection') === "true");
-        console.log(supportsProjectionSelection);
         var supportsFormatSelection = (localStorage.getItem(uuid + '.capabilities.supportsFormatSelection') === "true");
         var supportsPolygonSelection = (localStorage.getItem(uuid + '.capabilities.supportsPolygonSelection') === "true");
         var supportsAreaSelection = (localStorage.getItem(uuid + '.capabilities.supportsAreaSelection') === "true");

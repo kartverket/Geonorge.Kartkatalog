@@ -3,6 +3,9 @@
 @{
     ViewBag.Title = "Nedlasting - Min kurv";
 }
+@section breadcrumb {
+    <li class="active">Min kurv</li>
+}
 <div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
@@ -40,9 +43,9 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <div class="pull-right">
-                        <a class="btn btn-default" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
-                        <a href="/" class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> Bestill mer</a>
-                        <button id="download-btn" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Last ned</button>
+                        <a class="btn" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
+                        <a href="/" class="btn"><span class="glyphicon glyphicon-shopping-cart"></span> Bestill mer</a>
+                        <button id="download-btn" class="btn"><span class="glyphicon glyphicon-save"></span> Last ned</button>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -63,8 +66,8 @@
                         Er du sikker på at du vil fjerne alle datasett fra kurven?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Nei</button>
-                        <button type="button" id="remove-all-items-submit" class="btn btn-primary">Ja</button>
+                        <button type="button" class="btn" data-dismiss="modal">Nei</button>
+                        <button type="button" id="remove-all-items-submit" class="btn">Ja</button>
                     </div>
                 </div>
             </div>
@@ -80,7 +83,6 @@
             var template = '@Html.Raw(System.Text.RegularExpressions.Regex.Replace(Html.Partial("_OrderItem").ToString(), @"\r\n?|\n", ""))';
             orderItems = (JSON.parse(localStorage.getItem('orderItems')));
             if (orderItems != null) {
-                console.log(orderItems);
                 generateView(template, orderItems);
             }
         });

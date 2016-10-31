@@ -365,14 +365,16 @@ namespace Kartverket.Metadatakatalog.Service
                                 DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
                                 KeywordNationalTheme = keywordNationalTheme,
                                 OrganizationLogoUrl = OrganizationLogoUrl,
-                                ThumbnailUrl = thumbnailsUrl
+                                ThumbnailUrl = thumbnailsUrl,
+                                AccessConstraints = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.AccessConstraints) ? simpleMd.Constraints.AccessConstraints : ""),
+                                OtherConstraintsAccess = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.OtherConstraintsAccess) ? simpleMd.Constraints.OtherConstraintsAccess : "")
                             });
                         }
 
                         List<string> datasetServicesNewList = new List<string>();
                         foreach (var service in datasetServices)
                         {
-                            datasetServicesNewList.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl + "|" + service.KeywordNationalTheme + "|" + service.OrganizationLogoUrl + "|" + service.ThumbnailUrl);
+                            datasetServicesNewList.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl + "|" + service.KeywordNationalTheme + "|" + service.OrganizationLogoUrl + "|" + service.ThumbnailUrl + "|" + service.AccessConstraints + "|" + service.OtherConstraintsAccess);
                         }
 
                         indexDoc.DatasetServices = datasetServicesNewList.ToList();
@@ -431,7 +433,9 @@ namespace Kartverket.Metadatakatalog.Service
                                     DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
                                     KeywordNationalTheme = keywordNationalTheme,
                                     OrganizationLogoUrl = OrganizationLogoUrl,
-                                    ThumbnailUrl = thumbnailsUrl
+                                    ThumbnailUrl = thumbnailsUrl,
+                                    AccessConstraints = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.AccessConstraints) ? simpleMd.Constraints.AccessConstraints : ""),
+                                    OtherConstraintsAccess = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.OtherConstraintsAccess) ? simpleMd.Constraints.OtherConstraintsAccess : "")
                                 });                               
                             }
                             catch (Exception ex)
@@ -442,7 +446,7 @@ namespace Kartverket.Metadatakatalog.Service
                         List<string> bundlesNewList = new List<string>();
                         foreach (var bundle in bundles)
                         {
-                            bundlesNewList.Add(bundle.Uuid + "|" + bundle.Title + "|" + bundle.ParentIdentifier + "|" + bundle.HierarchyLevel + "|" + bundle.ContactOwnerOrganization + "|" + bundle.DistributionDetailsName + "|" + bundle.DistributionDetailsProtocol + "|" + bundle.DistributionDetailsUrl + "|" + bundle.KeywordNationalTheme + "|" + bundle.OrganizationLogoUrl + "|" + bundle.ThumbnailUrl);
+                            bundlesNewList.Add(bundle.Uuid + "|" + bundle.Title + "|" + bundle.ParentIdentifier + "|" + bundle.HierarchyLevel + "|" + bundle.ContactOwnerOrganization + "|" + bundle.DistributionDetailsName + "|" + bundle.DistributionDetailsProtocol + "|" + bundle.DistributionDetailsUrl + "|" + bundle.KeywordNationalTheme + "|" + bundle.OrganizationLogoUrl + "|" + bundle.ThumbnailUrl + "|" + bundle.AccessConstraints + "|" + bundle.OtherConstraintsAccess);
                         }
 
                         indexDoc.Bundles = bundlesNewList.ToList();
@@ -518,14 +522,16 @@ namespace Kartverket.Metadatakatalog.Service
                                 DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
                                 KeywordNationalTheme = keywordNationalTheme,
                                 OrganizationLogoUrl = OrganizationLogoUrl,
-                                ThumbnailUrl = thumbnailsUrl
+                                ThumbnailUrl = thumbnailsUrl,
+                                AccessConstraints = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.AccessConstraints) ? simpleMd.Constraints.AccessConstraints : ""),
+                                OtherConstraintsAccess = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.OtherConstraintsAccess) ? simpleMd.Constraints.OtherConstraintsAccess : "")
                             });
                         }
 
                         List<string> serviceLayersNewList = new List<string>();
                         foreach (var service in serviceLayers)
                         {
-                            serviceLayersNewList.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl + "|" + service.KeywordNationalTheme + "|" + service.OrganizationLogoUrl + "|" + service.ThumbnailUrl);
+                            serviceLayersNewList.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl + "|" + service.KeywordNationalTheme + "|" + service.OrganizationLogoUrl + "|" + service.ThumbnailUrl + "|" + service.AccessConstraints + "|" + service.OtherConstraintsAccess);
                         }
 
                         indexDoc.ServiceLayers = serviceLayersNewList.ToList();
@@ -678,5 +684,8 @@ namespace Kartverket.Metadatakatalog.Service
         public string KeywordNationalTheme { get; set; }
         public string OrganizationLogoUrl { get; set; }
         public string ThumbnailUrl { get; set; }
+
+        public string AccessConstraints { get; set; }
+        public string OtherConstraintsAccess { get; set; }
     }
 }

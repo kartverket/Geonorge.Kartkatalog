@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Routing;
 
 namespace Kartverket.Metadatakatalog.Models
@@ -268,6 +269,30 @@ namespace Kartverket.Metadatakatalog.Models
             return HierarchyLevel == "dimensionGroup";
         }
 
+        public bool IsOpendata()
+        {
+            if (Constraints != null && !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && Constraints.OtherConstraintsAccess.ToLower() == "no restrictions")
+                return true;
+            else
+                return false;
+        }
+
+        public bool IsRestricted()
+        {
+            if (Constraints != null &&  !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && Constraints.OtherConstraintsAccess.ToLower() == "norway digital restricted")
+            return true;
+            else
+                return false;
+        }
+
+        public bool IsOffline()
+        {
+            if (Constraints != null && Constraints.AccessConstraints == "restricted")
+                return true;
+            else
+                return false;
+        }
+
         public string GetCoverageLink(){
 
             string CoverageLink = "";
@@ -287,17 +312,17 @@ namespace Kartverket.Metadatakatalog.Models
 
             if (typeStr == "WMS")
             {
-                CoverageLink = "http://norgeskart.no/geoportal/#" + zoomLevel + "/355422/6668909/l/wms/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel + "/269663/6802350/l/wms/[" + pathStr + "]/+" + layerStr;
             }
 
             else if (typeStr == "WFS")
             {
-                CoverageLink = "http://norgeskart.no/geoportal/#" + zoomLevel + "/255216/6653881/l/wfs/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel + "/255216/6653881/l/wfs/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
             }
 
             else if (typeStr == "GeoJSON")
             {
-                CoverageLink = "http://norgeskart.no/geoportal/staging/#" + zoomLevel + "/355422/6668909/l/geojson/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel + "/355422/6668909/l/geojson/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
             }
 
             return CoverageLink;
