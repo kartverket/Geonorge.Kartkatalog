@@ -794,7 +794,7 @@ if (keywords != null && keywords.Any())
         function getFeedLink(xml) {
 
             $(xml).find("entry").each(function () {
-                var identifier_code = $(this).find("spatial_dataset_identifier_code").text();
+                var identifier_code = $(this).find("inspire_dls\\:spatial_dataset_identifier_code, spatial_dataset_identifier_code").text();
                 if (uuid == identifier_code){
                     var link = $(this).find("link").text();
                     $("#servicefeed").removeClass("disabled");
