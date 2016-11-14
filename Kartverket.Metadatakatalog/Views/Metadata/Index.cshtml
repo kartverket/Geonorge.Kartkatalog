@@ -173,9 +173,9 @@ if (contact != null)
 
 
         <div class="table-btn-container">
-            @if (Model.ContactMetadata != null && !string.IsNullOrEmpty(Model.ContactMetadata.Email))
+            @if (Model.ContactOwner != null && !string.IsNullOrEmpty(Model.ContactOwner.Email))
             {
-                <a href="mailto:@Model.ContactMetadata.Email" onclick="ga('send', 'event', 'Nedlasting', 'kontaktdataeier');" class="btn" target="_blank"><span class="fa fa-envelope"></span> Kontakt dataeier</a>
+                <a href="mailto:@Model.ContactOwner.Email" onclick="ga('send', 'event', 'Nedlasting', 'kontaktdataeier');" class="btn" target="_blank"><span class="fa fa-envelope"></span> Kontakt dataeier</a>
             }
             else
             {
