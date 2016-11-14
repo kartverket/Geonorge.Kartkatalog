@@ -708,6 +708,7 @@ if (contact != null)
                         @DisplayKeywords("Samarbeid og lover", Model.KeywordsNationalInitiative)
                         @DisplayKeywords("Inspire", Model.KeywordsInspire)
                         @DisplayKeywords("Annet", Model.KeywordsOther)
+                        @DisplayKeywords("Begreper", Model.KeywordsConcept)
 
                         @if (!string.IsNullOrWhiteSpace(Model.TopicCategory))
                     {
@@ -753,7 +754,14 @@ if (keywords != null && keywords.Any())
         <ul>
             @foreach (var keyword in keywords)
             {
+                if (!string.IsNullOrEmpty(keyword.KeywordLink))
+                {
+                    <li><a href="@keyword.KeywordLink" target="_blank">@keyword.KeywordValue</a></li>
+                }
+                else
+                {
                 <li>@keyword.KeywordValue</li>
+                }
             }
         </ul>
 }
