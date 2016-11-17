@@ -21,71 +21,137 @@
         </div>
     </div>
 </section>
-<div class="progress">
-    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 8em; width: 2%;">
-        Laster datasett
-    </div>
-</div>
-@using (Html.BeginForm("Order", "Download", FormMethod.Post, new { id = "downloadform"}))
-{
-    <div class="download-form">
-        <article id="orderlist"></article>
 
-        <div class="row margin-bottom-10">
-            <div id="emailField" class="col-sm-6 margin-bottom-10">
-                <p class="article-p">E-post: <span class="required-indicator"></span></p>
-                <input type="text" name="email" class="form-control" />
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <div class="pull-right">
-                        <a class="btn" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
-                        <a href="/" class="btn"><span class="glyphicon glyphicon-shopping-cart"></span> Bestill mer</a>
-                        <button id="download-btn" class="btn"><span class="glyphicon glyphicon-save"></span> Last ned</button>
-                    </div>
-                    <div class="clearfix"></div>
+<article id="orderlist">
+    <div id="downloadformVue" class="download-form">
+        <div v-for="orderItem in orderItems">
+            <div class="row">
+                <div class="col-md-11">
+                    <h2><a v-bind:href="orderItem.metadata.url" class="list-heading order-title">{{ orderItem.metadata.name }}</a></h2>
+                    <a data-toggle="tooltip" data-placement="bottom" title="Slett datasett" v-on:click="removeOrderItem(orderItem)" class="list-btn-remove remove-item"><span class="glyphicon glyphicon-remove"></span></a>
+                </div>
+                <div class="col-md-1 list-icon">
+                    <img class="order-img" v-bind:src="orderItem.metadata.organizationLogoUrl" />
                 </div>
             </div>
-        </div>
-        <div id="kartModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
-            @Html.Partial("_Norgeskart")
-        </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <p>Område:</p>
+                    <div class="input-group chosen-input-group custom-select input-group-omraade">
+                        <select class="chosen-select" v-chosen="orderItem.codelists.areas" v-bind:parent="orderItem" v-bind:uuid="orderItem.metadata.uuid" v-bind:name="orderItem.metadata.uuid + 'areas'" data-placeholder="Klikk for å velge område" multiple>
+                            <option></option>
 
-        <div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Fjerning av datasett</h4>
+                            <optgroup v-for="areaType in orderItem.codelists.areaTypes" v-bind:label="capitalize(areaType)">
+                                <option v-if="area.type == areaType" is="areaoption" v-for="(area, index) in orderItem.codelists.areas" v-bind:selected="area.selected" v-bind:data-index="index" v-bind:area="area"></option>
+                            </optgroup>
+                        </select>
+                        <span v-if="orderItem.capabilities.supportsPolygonSelection" class="input-group-btn selectPolygon" data-toggle="modal" data-target="#kartModal">
+                            <button data-placement="bottom" v-on:click="selectFromMap(orderItem)" v-bind:uuid="orderItem.uuid" title="Velg fra kart" data-toggle="tooltip" class="btn btn-nodivider btn-fullheight selectPolygon-button" type="button"><span class="glyphicon glyphicon-globe"></span></button>
+                        </span>
+                        <span v-if="orderItem.capabilities.supportsGridSelection" class="input-group-btn selectPolygon" data-toggle="modal" data-target="#kartModal">
+                            <button data-placement="bottom" v-on:click="selectFromMap(orderItem)" v-bind:uuid="orderItem.uuid" title="Velg fra kart" data-toggle="tooltip" class="btn btn-nodivider btn-fullheight selectPolygon-button" type="button"><span class="glyphicon glyphicon-globe"></span></button>
+                        </span>
                     </div>
-                    <div class="modal-body">
-                        Er du sikker på at du vil fjerne alle datasett fra kurven?
+                    <input type="checkbox" v-model="orderItem.capabilities.supportsPolygonSelection" />
+                    <input class="coordinates" type="hidden" />
+                    <input class="order-url" type="hidden" />
+                </div>
+
+                <div class="col-md-4">
+                    <p>Projeksjon:</p>
+                    <div class="help-text form-element-help-text bg-info" v-if="orderItem.capabilities.supportsProjectionSelection == false">
+                        <span>Valg av projeksjon støttes ikke</span>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal">Nei</button>
-                        <button type="button" id="remove-all-items-submit" class="btn">Ja</button>
+                    <div v-else>
+                        <div v-show="notSelected(orderItem.codelists.areas)" class="help-text form-element-help-text bg-info"><span>Område må velges</span></div>
+                        <div v-show="notSelected(orderItem.codelists.areas) == false" class="form-group custom-select" v-bind:class="{disabled: notSelected(orderItem.codelists.areas)}">
+                            <select v-show class="chosen-select" v-chosen="orderItem.codelists.projections" v-bind:uuid="orderItem.metadata.uuid" data-placeholder="Klikk for å velge projeksjon" tabindex="-1" multiple>
+                                <option value=""></option>
+
+                                <option is="projectionoption" v-for="(projection, index) in orderItem.codelists.availableProjections" v-bind:data-index="index" v-bind:projection="projection"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <p>Filformat:</p>
+                    <div class="help-text form-element-help-text bg-info" v-if="orderItem.capabilities.supportsFormatSelection == false">
+                        <span>Valg av filformat støttes ikke</span>
+                    </div>
+                    <div v-else>
+                        <div v-show="notSelected(orderItem.codelists.projections) || notSelected(orderItem.codelists.areas)" class="help-text form-element-help-text bg-info"><span>Område og projeksjon må velges først</span></div>
+                        <div v-show="notSelected(orderItem.codelists.areas) == false && notSelected(orderItem.codelists.projections) == false" class="form-group custom-select" v-bind:class="{disabled: notSelected(orderItem.codelists.projections)}">
+                            <select class="chosen-select" v-chosen="orderItem.codelists.formats" v-bind:uuid="orderItem.metadata.uuid" data-placeholder="Klikk for å velge filformat" tabindex="-1" multiple>
+                                <option></option>
+                                <option is="formatoption" v-for="(format, index) in orderItem.codelists.availableFormats" v-bind:data-index="index" v-bind:format="format"></option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
+            <hr />
+        </div>
+
+     
+
+            <div class="download-form">
+                <article id="orderlist"></article>
+
+                <div class="row margin-bottom-10">
+                    <div id="emailField" class="col-sm-6 margin-bottom-10">
+                        <p class="article-p">E-post: <span class="required-indicator"></span></p>
+                        <input type="text" v-model="email" name="email" class="form-control" />
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="pull-right">
+                                <a class="btn" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
+                                <a href="/" class="btn"><span class="glyphicon glyphicon-shopping-cart"></span> Bestill mer</a>
+                                <button v-on:click="sendRequests()" class="btn"><span class="glyphicon glyphicon-save"></span> Last ned</button>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="kartModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
+                    @Html.Partial("_Norgeskart")
+                </div>
+
+                <div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Fjerning av datasett</h4>
+                            </div>
+                            <div class="modal-body">
+                                Er du sikker på at du vil fjerne alle datasett fra kurven?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn" data-dismiss="modal">Nei</button>
+                                <button type="button" id="remove-all-items-submit" class="btn">Ja</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+
+        <div v-for="orderRequest in orderRequests">
+            <p>Url: {{ orderRequest.distributionUrl }}</p>
+            <pre>
+                {{ orderRequest.order | json }}
+            </pre>
         </div>
     </div>
-}
-<script type="text/javascript" src="~/Scripts/download.js"></script>
-@section scripts {
+</article>
 
-    <script>
-        $(document).ready(function () {
-            // Inkludering av OrderItem partial view
-            var template = '@Html.Raw(System.Text.RegularExpressions.Regex.Replace(Html.Partial("_OrderItem").ToString(), @"\r\n?|\n", ""))';
-            orderItems = (JSON.parse(localStorage.getItem('orderItems')));
-            if (orderItems != null) {
-                generateView(template, orderItems);
-            }
-        });
 
-    </script>
-}
+
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>-->
+<script type="text/javascript" src="~/Scripts/vue-download.js"></script>
