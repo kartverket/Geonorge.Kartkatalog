@@ -93,67 +93,71 @@
             <hr />
         </div>
 
-     
 
-            <div class="download-form">
-                <article id="orderlist"></article>
 
-                <div class="row margin-bottom-10">
-                    <div id="emailField" class="col-sm-6 margin-bottom-10">
-                        <p class="article-p">E-post: <span class="required-indicator"></span></p>
-                        <input type="text" v-model="email" name="email" class="form-control" />
-                    </div>
+        <div class="download-form">
+            <article id="orderlist"></article>
+
+            <div class="row margin-bottom-10">
+                <div id="emailField" class="col-sm-6 margin-bottom-10">
+                    <p class="article-p">E-post: <span class="required-indicator"></span></p>
+                    <input type="text" v-model="email" name="email" class="form-control" />
                 </div>
+            </div>
 
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <div class="pull-right">
-                                <a class="btn" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
-                                <a href="/" class="btn"><span class="glyphicon glyphicon-shopping-cart"></span> Bestill mer</a>
-                                <button v-on:click="sendRequests()" class="btn"><span class="glyphicon glyphicon-save"></span> Last ned</button>
-                            </div>
-                            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="pull-right">
+                            <a class="btn" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
+                            <a href="/" class="btn"><span class="glyphicon glyphicon-shopping-cart"></span> Bestill mer</a>
+                            <button v-on:click="sendRequests()" class="btn"><span class="glyphicon glyphicon-save"></span> Last ned</button>
                         </div>
+                        <div class="clearfix"></div>
                     </div>
                 </div>
-                <div id="kartModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
-                    @Html.Partial("_Norgeskart")
-                </div>
+            </div>
+            <div id="kartModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
+                @Html.Partial("_Norgeskart")
+            </div>
 
-                <div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Fjerning av datasett</h4>
-                            </div>
-                            <div class="modal-body">
-                                Er du sikker på at du vil fjerne alle datasett fra kurven?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn" data-dismiss="modal">Nei</button>
-                                <button type="button" id="remove-all-items-submit" class="btn">Ja</button>
-                            </div>
+            <div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Fjerning av datasett</h4>
+                        </div>
+                        <div class="modal-body">
+                            Er du sikker på at du vil fjerne alle datasett fra kurven?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn" data-dismiss="modal">Nei</button>
+                            <button type="button" id="remove-all-items-submit" class="btn">Ja</button>
                         </div>
                     </div>
                 </div>
             </div>
-        <div >
-            <div v-for="responseItem in orderResponse" >
-                <p>{{ responseItem.distribtionUrl }}</p>
-                <p>{{ responseItem.data.email}}</p>
-                <p>{{ responseItem.data.orderDate }}</p>
-                <p>{{ responseItem.data.referenceNumber }}</p>
+        </div>
+        <div>
+            <div v-for="responseItem in orderResponse">
+                <p>Ordre URL: {{ responseItem.distributionUrl }}</p>
+                <p>Epost: {{ responseItem.data.email}}</p>
+                <p>Dato: {{ responseItem.data.orderDate }}</p>
+                <p>Referansenummer: {{ responseItem.data.referenceNumber }}</p>
                 <div class="list-group download-list">
+                    <p class="list-group-item list-group-item-heading" style="border-bottom: none;">Filer klare for nedlasting</p>
                     <a v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" v-bind:href="file.downloadUrl" class="list-group-item">
-                        <span class="glyphicon glyphicon-download-alt"></span>{{ file.name }}
+                        <span class="custom-icon custom-icon-lastned"></span>{{ file.name }}
+                        <span class="pull-right label label-info">{{file.format}}</span>
                     </a>
-                    <a v-if="file.status == 'WaitingForProcessing'" v-bind:class="" v-for="file in responseItem.data.files" v-bind:href="file.downloadUrl" class="list-group-item">
-                        {{ file.fileId }}
-                    </a>
+                    <p v-if="file.status == 'WaitingForProcessing'" v-bind:class="" v-for="file in responseItem.data.files" v-bind:href="file.downloadUrl" class="list-group-item">
+                        {{ file.fileId }} (Under behandling)
+                        <span class="pull-right label label-info">{{file.format}}</span>
+                    </p>
                 </div>
+                
             </div>
         </div>
     </div>
