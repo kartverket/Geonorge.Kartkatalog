@@ -153,6 +153,7 @@ var app = new Vue({
     data: {
         orderItems: [],
         email: "",
+        orderResponse: {}
     },
     computed: {
         orderRequests: function () {
@@ -285,8 +286,7 @@ var app = new Vue({
                     });
                 }
                 return this.orderResponse = responseData;
-
-            })
+            }.bind(this))
         },
         populateProjectionsAndFormats: function (orderItem) {
             var selectedAreas = [];
