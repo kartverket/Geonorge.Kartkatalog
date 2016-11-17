@@ -140,13 +140,21 @@
                     </div>
                 </div>
             </div>
-        
-
-        <div v-for="orderRequest in orderRequests">
-            <p>Url: {{ orderRequest.distributionUrl }}</p>
-            <pre>
-                {{ orderRequest.order | json }}
-            </pre>
+        <div >
+            <div v-for="responseItem in orderResponse" >
+                <p>{{ responseItem.distribtionUrl }}</p>
+                <p>{{ responseItem.data.email}}</p>
+                <p>{{ responseItem.data.orderDate }}</p>
+                <p>{{ responseItem.data.referenceNumber }}</p>
+                <div class="list-group download-list">
+                    <a v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" v-bind:href="file.downloadUrl" class="list-group-item">
+                        <span class="glyphicon glyphicon-download-alt"></span>{{ file.name }}
+                    </a>
+                    <a v-if="file.status == 'WaitingForProcessing'" v-bind:class="" v-for="file in responseItem.data.files" v-bind:href="file.downloadUrl" class="list-group-item">
+                        {{ file.fileId }}
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </article>
