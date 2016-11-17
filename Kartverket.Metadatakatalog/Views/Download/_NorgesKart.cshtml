@@ -15,6 +15,7 @@
     var fixedCoordinates = false;
     var areatype = "";
     var mapSelectionLayer = "";
+    var canDownload = true;
 
 
     function sendMessage(msg) {
@@ -76,35 +77,69 @@
                     CLIPPERCOORDS = obj.feature.geometry.coordinates.toString();
                     CLIPPERCOORDS = CLIPPERCOORDS.replace(/,/g, " ");
 
-                    var polygonArea = {
-                        "name": "Valgt fra kart",
-                        "type": "polygon",
-                        "code": "0000",
-                        "selected": true,
-                        "formats": vueObject.codelists.formats,
-                        "projections": vueObject.codelists.projections
-                    }
-                    var test = true;
+                    var canDownload = {
+                        "metadataUuid": vueObject.metadata.uuid,
+                        "coordinates": CLIPPERCOORDS,
+                        "coordinateSystem": conf.koordinatsystem
+                    };
 
-                    var containsPolygonArea = false;
-                    vueObject.codelists.areas.forEach(function (area, val) {
-                        if (area.type == "polygon") {
-                            area = polygonArea;
-                            containsPolygonArea = true;
+                    $("#setcoordinates").attr("disabled", false);
+
+                    var urlCanDownload = vueObject.metadata.distributionUrl;
+                    urlCanDownload = urlCanDownload.replace('capabilities/', 'v2/can-download');
+                    $.ajax({
+                        url: urlCanDownload,
+                        type: "POST",
+                        dataType: 'json',
+                        data: JSON.stringify(canDownload),
+                        contentType: "application/json",
+                        async: false,
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            //Ignore error
+                        },
+                        success: function (data) {
+                            if (data !== null) {
+                                if (!data.canDownload) {
+                                    canDownload = false;
+                                    showAlert("Området er for stort til å laste ned, vennligst velg mindre område", "danger");
+                                    $("#setcoordinates").attr("disabled", true);
+                                }
+                            }
                         }
                     });
-                    setAvailableProjections(polygonArea.projections, vueObject.codelists.availableProjections);
-                    setAvailableFormats(polygonArea.formats, vueObject.codelists.availableFormats);
-                    if (!containsPolygonArea) {
-                        vueObject.codelists.areas.push(polygonArea);
+
+                    if (canDownload)
+                    {
+                        var polygonArea = {
+                            "name": "Valgt fra kart",
+                            "type": "polygon",
+                            "code": "0000",
+                            "selected": true,
+                            "formats": vueObject.codelists.formats,
+                            "projections": vueObject.codelists.projections
+                        }
+                        var test = true;
+
+                        var containsPolygonArea = false;
+                        vueObject.codelists.areas.forEach(function (area, val) {
+                            if (area.type == "polygon") {
+                                area = polygonArea;
+                                containsPolygonArea = true;
+                            }
+                        });
+                        setAvailableProjections(polygonArea.projections, vueObject.codelists.availableProjections);
+                        setAvailableFormats(polygonArea.formats, vueObject.codelists.availableFormats);
+                        if (!containsPolygonArea) {
+                            vueObject.codelists.areas.push(polygonArea);
+                        }
+                        console.log(vueObject.codelists.areaTypes);
+                        if ($.inArray("polygon", vueObject.codelists.areaTypes) == -1) {
+                            vueObject.codelists.areaTypes.push("polygon");
+                        }
+                        vueObject.codelists.coordinates = CLIPPERCOORDS;
+                        vueObject.codelists.coordinatesystem = conf.koordinatsystem;
+                        console.log(CLIPPERCOORDS);
                     }
-                    console.log(vueObject.codelists.areaTypes);
-                    if ($.inArray("polygon", vueObject.codelists.areaTypes) == -1) {
-                        vueObject.codelists.areaTypes.push("polygon");
-                    }
-                    vueObject.codelists.coordinates = CLIPPERCOORDS;
-                    vueObject.codelists.coordinatesystem = conf.koordinatsystem;
-                    console.log(CLIPPERCOORDS);
                 }
             }
         }, false);
