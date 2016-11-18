@@ -124,10 +124,35 @@ if (contact != null)
                 System.Uri downloadUrl = new Uri(Model.DistributionDetails.URL);
                 DowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
             }
-            <a href="#" 
-               id="add-to-cart-btn" 
+
+            string addToCartUrl = "";
+            string addToCartClass = "add-to-cart-btn";
+
+            if (Model.IsRestricted() || Model.IsOffline())
+            {
+                string addToCartEventParamater = "?addtocart_event_id=addToCart-" + Model.Uuid;
+                if (Request.Url.AbsoluteUri.Contains("?"))
+                {
+                    addToCartEventParamater = "&addtocart_event_id=addToCart-" + Model.Uuid;
+                }
+
+                string downloadSignInUrl = Html.DownloadUrl()
+                                         + "AuthServices/SignIn?ReturnUrl="
+                                         + Url.Encode(Request.Url.AbsoluteUri)
+                                         + Url.Encode(addToCartEventParamater);
+
+                addToCartUrl = Html.KartkatalogenUrl()
+                             + "AuthServices/SignIn?ReturnUrl="
+                             + Url.Encode(downloadSignInUrl);
+
+
+                addToCartClass = "add-to-cart-btn prevent-action";
+            }
+
+            <a id='addToCart-@Model.Uuid'
+               href='@addToCartUrl'
                onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');" 
-               class="btn add-to-cart-btn" 
+               class="btn @addToCartClass" 
                itemuuid="@Model.Uuid"
                itemname="@Model.Title"
                itemurl="/metadata/uuid/@Model.Uuid"
@@ -467,11 +492,38 @@ if (contact != null)
                                                         relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
                                                     }
 
-                                                    <a data-toggle='tooltip'
+                                                    string addToCartUrl = "";
+                                                    string addToCartClass = "add-to-cart-btn";
+                                                    if (relatedContent.IsRestricted() || relatedContent.IsOffline())
+                                                    {
+                                                        string addToCartEventParamater = "?addtocart_event_id=addToCart-" + relatedContent.Uuid;
+                                                        if (Request.Url.AbsoluteUri.Contains("?"))
+                                                        {
+                                                            addToCartEventParamater = "&addtocart_event_id=addToCart-" + relatedContent.Uuid;
+                                                        }
+
+                                                        string downloadSignInUrl = Html.DownloadUrl()
+                                                                                 + "AuthServices/SignIn?ReturnUrl="
+                                                                                 + Url.Encode(Request.Url.AbsoluteUri)
+                                                                                 + Url.Encode(addToCartEventParamater);
+
+                                                        addToCartUrl = Html.KartkatalogenUrl()
+                                                                     + "AuthServices/SignIn?ReturnUrl="
+                                                                     + Url.Encode(downloadSignInUrl);
+
+
+                                                        addToCartClass = "add-to-cart-btn prevent-action";
+
+
+                                                    }
+
+                                                    <a id='addToCart-@relatedContent.Uuid'
+                                                       href='@addToCartUrl'
+                                                       data-toggle='tooltip'
                                                        data-placement='bottom'
                                                        onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                                                        title='Legg til @relatedContent.Title i kurv'
-                                                       class='add-to-cart-btn'
+                                                       class='@addToCartClass'
                                                        itemname='@relatedContent.Title'
                                                        itemuuid='@relatedContent.Uuid'
                                                        itemurl='/metadata/uuid/@relatedContent.Uuid'
