@@ -267,6 +267,7 @@ var app = new Vue({
                         dataType: 'json',
                         data: JSON.stringify(orderRequest.order),
                         contentType: "application/json",
+                        xhrFields: { withCredentials: true },
                         async: true,
                         error: function (jqXHR, textStatus, errorThrown) {
                             showAlert(errorThrown, "danger");
