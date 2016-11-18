@@ -310,13 +310,15 @@ var app = new Vue({
         },
         getSelectedAreas: function (areas) {
             var selectedAreas = [];
-            areas.forEach(function (area) {
-                if (area.selected == true) selectedAreas.push({
-                    "code": area.code,
-                    "name": area.name,
-                    "type": area.type
+            if (areas !== undefined && areas !== "") {
+                areas.forEach(function (area) {
+                    if (area.selected == true) selectedAreas.push({
+                        "code": area.code,
+                        "name": area.name,
+                        "type": area.type
+                    });
                 });
-            });
+            }
             return selectedAreas;
         },
         getOrderDistributionUrl: function (distributionUrl) {
@@ -324,31 +326,35 @@ var app = new Vue({
         },
         getSelectedProjections: function (projections) {
             var selectedProjections = [];
-            projections.forEach(function (projection) {
-                if (projection.selected == true) selectedProjections.push({
-                    "code": projection.code,
-                    "name": projection.name,
-                    "codespace": projection.codespace
+            if (projections !== undefined && projections !== "") {
+                projections.forEach(function (projection) {
+                    if (projection.selected == true) selectedProjections.push({
+                        "code": projection.code,
+                        "name": projection.name,
+                        "codespace": projection.codespace
+                    });
                 });
-            });
+            }
             return selectedProjections;
         },
         getSelectedFormats: function (formats) {
             var selectedFormats = [];
-            formats.forEach(function (format) {
-                if (format.selected == true && format.version !== undefined) {
-                    selectedFormats.push({
-                        "name": format.name,
-                        "version": format.version
-                    });
-                }
-                else if (format.selected == true) {
-                    selectedFormats.push({
-                        "name": format.name
-                    });
-                }
+            if (formats !== undefined && formats !== "") {
+                formats.forEach(function (format) {
+                    if (format.selected == true && format.version !== undefined) {
+                        selectedFormats.push({
+                            "name": format.name,
+                            "version": format.version
+                        });
+                    }
+                    else if (format.selected == true) {
+                        selectedFormats.push({
+                            "name": format.name
+                        });
+                    }
 
-            });
+                });
+            }
             return selectedFormats;
         },
         groupBy: function (array, groupByFunction) {
