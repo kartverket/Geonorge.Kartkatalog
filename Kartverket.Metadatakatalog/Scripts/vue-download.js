@@ -86,7 +86,13 @@ $(document).on("click", ".custom-select", function () {
     updateChosen();
 });
 
+
+
+    showLoadingAnimation("Laster inn kurv");
+
+
 $(window).load(function () {
+    hideLoadingAnimation();
     updateChosen();
 });
 
@@ -149,7 +155,7 @@ Vue.component('formatoption', {
 
 
 var app = new Vue({
-    el: '#downloadformVue',
+    el: '#vueContainer',
     data: {
         orderItems: [],
         email: "",
