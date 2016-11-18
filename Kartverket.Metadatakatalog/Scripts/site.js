@@ -47,7 +47,20 @@ function getServiceStatus(uuid, id) {
             console.log(err);
         }
     });
-};function addToCartButtonClick(addToCartButton) {
+};
+
+
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+
+
+function addToCartButtonClick(addToCartButton) {
     var added = false;
     var itemuuid = addToCartButton.attr('itemuuid');
     var itemname = addToCartButton.attr('itemname');
@@ -91,3 +104,11 @@ function getServiceStatus(uuid, id) {
         showAlert(itemname + ' er allerede lagt til i <a href="/Download">kurven</a>', 'warning');
     }
 }
+
+$(document).ready(function () {
+    var addToCartId = getParameterByName('addtocart_event_id');
+    if (addToCartId) {
+        var addToCartButton = $("#" + addToCartId);
+        addToCartButtonClick(addToCartButton);
+    }
+})
