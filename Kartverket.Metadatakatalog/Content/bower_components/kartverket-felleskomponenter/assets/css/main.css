@@ -2014,11 +2014,21 @@ button.btn {
 .custom-icon.custom-icon-handlekurv {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/handlekurv.svg"); }
 
+.added .custom-icon.custom-icon-handlekurv {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/handlekurv-added.svg"); }
+
 .btn .custom-icon.custom-icon-handlekurv {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/handlekurv-white.svg"); }
 
+.btn.added .custom-icon.custom-icon-handlekurv {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/handlekurv-white-added.svg"); }
+
 .disabled .custom-icon.custom-icon-handlekurv {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/handlekurv-disabled.svg"); }
+
+.disabled.added .custom-icon.custom-icon-handlekurv,
+.btn.disabled.added .custom-icon.custom-icon-handlekurv {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/handlekurv-disabled-added.svg"); }
 
 /* Last ned */
 .custom-icon.custom-icon-lastned {
