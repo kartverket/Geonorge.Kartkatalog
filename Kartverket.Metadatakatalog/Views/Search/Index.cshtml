@@ -43,25 +43,25 @@
         <ul>
             @foreach (var facetResult in facet.FacetResults)
             {
-                if(!string.IsNullOrEmpty(facetResult.LinkName()))
+                if (!string.IsNullOrEmpty(facetResult.LinkName()))
                 {
-                string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
-                <li class="filter-options">
-                    @if (cssClass == "active")
-                    {
-                        <span class="btn-link @cssClass">
-                            @facetResult.LinkName()
-                            <span class="text-muted">(@facetResult.Count)</span>
-                        </span>
-                    }
-                    else
-                    {
-                    <a href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link show-loading-animation @cssClass" data-loading-message="Filtrerer søkeresultat">
-                        @facetResult.LinkName()
-                        <span class="text-muted">(@facetResult.Count)</span>
-                    </a>
-                    }
-                </li>
+                    string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
+                    <li class="filter-options">
+                        @if (cssClass == "active")
+                        {
+                            <span class="btn-link @cssClass">
+                                @facetResult.LinkName()
+                                <span class="text-muted">(@facetResult.Count)</span>
+                            </span>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link show-loading-animation @cssClass" data-loading-message="Filtrerer søkeresultat">
+                                @facetResult.LinkName()
+                                <span class="text-muted">(@facetResult.Count)</span>
+                            </a>
+                        }
+                    </li>
                 }
             }
             @if (Model.HasFilterForFacetField(facet.FacetField))
@@ -104,7 +104,7 @@ facet.FacetResults = orderedList.ToList();
             @{
                 foreach (var facetResult in placegroup.FacetResults)
                 {
-                    <li class="filter-options"> 
+                    <li class="filter-options">
                         <a href="@Url.Action("Index", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))" class="btn-link">
                             @facetResult.Name.Trim()
                             <span class="text-muted">(@facetResult.Count)</span>
@@ -133,7 +133,7 @@ facet.FacetResults = orderedList.ToList();
                         }
                         else if (relativeHierarchyLevel < 0)
                         {
-                            @: </li></ul>
+                            @: </li>  </ul>
                         }
                         else
                         {
@@ -162,7 +162,7 @@ facet.FacetResults = orderedList.ToList();
                 }
                 for (int index = 0; index < hierarchyLevel; index++)
                 {
-                    @: </li> </ul>
+                    @:  </li>  </ul>
                 }
                 bool hasAreaFilter = Model.HasFilterForFacetField(facet.FacetField);
                 bool hasPlaceFilter = Model.HasFilterForFacetField(placegroup.FacetField);
@@ -323,50 +323,8 @@ facet.FacetResults = orderedList.ToList();
 
                 console.log('window.localStorage is available!');
                 var orderItems = [];
-                $('.add-to-cart-btn').click(function () {
-                    var added = false;
-                    var itemuuid = $(this).attr('itemuuid');
-                    var itemname = $(this).attr('itemname');
-                    var itemurl = $(this).attr('itemurl');
-                    var itemorglogo = $(this).attr('itemorglogo');
-                    var itemdisturl = $(this).attr('itemdisturl');
-                    var itemtheme = $(this).attr('itemtheme');
-                    var itemorgname = $(this).attr('itemorgname');
-
-                    updateCartButton($(this));
-                    
-
-                    if (localStorage.getItem('orderItems') != null) {
-                        orderItems = (JSON.parse(localStorage.getItem('orderItems')));
-                    }
-                    $.map(orderItems, function (elementOfArray, indexInArray) {
-                        if (elementOfArray == itemuuid) {
-                            orderItems.push(itemuuid);
-                            added = true;
-                        }
-                    });
-                    if (!added) {
-                        orderItems.push(itemuuid);
-                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl, 'theme': itemtheme, 'organizationName': itemorgname };
-                        localStorage["orderItems"] = JSON.stringify(orderItems);
-                        localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
-                        showAlert(itemname + ' er lagt til i <a href="/Download">kurven</a>', 'success');
-
-                        var orderItemCount = $('#orderitem-count').text();
-                        console.log(orderItemCount);
-                        if (orderItemCount == null || orderItemCount == '') {
-                            orderItemCount = 0;
-                            $('#orderitem-count-text').text(' datasett');
-                        } else {
-                            orderItemCount = parseInt($('#orderitem-count').text());
-                        }
-                        orderItemCount += 1;
-                        $('#orderitem-count').text(orderItemCount);
-                        updateShoppingCart();
-
-                    } else {
-                        showAlert(itemname + ' er allerede lagt til i <a href="/Download">kurven</a>', 'warning');
-                    }
+                $('.add-to-cart-btn:not(.prevent-action)').click(function () {
+                    addToCartButtonClick($(this));
                 });
             } else {
                 console.log('no native support for HTML5 storage :(');
@@ -468,7 +426,7 @@ facet.FacetResults = orderedList.ToList();
         </div>
     </div>
     <div class="clearfix"></div>
-    
+
 
 </div>
 
@@ -479,9 +437,6 @@ facet.FacetResults = orderedList.ToList();
 
 <div class="row">
     <div class="col-sm-12 col-md-9">
-        
-
-        
 
         @if (Model.Result != null)
         {
@@ -501,6 +456,34 @@ facet.FacetResults = orderedList.ToList();
                 <div class="menu-separator search-results-table-heading"></div>
                 @foreach (var item in Model.Result.Items)
                 {
+
+                    string addToCartUrl = "";
+                    string addToCartClass = "add-to-cart-btn";
+                    if (item.ShowDownloadService())
+                    {
+                        if (item.IsRestricted || item.IsOffline)
+                        {
+                            string addToCartEventParamater = "?addtocart_event_id=addToCart-" + item.Uuid;
+                            if (Request.Url.AbsoluteUri.Contains("?"))
+                            {
+                                addToCartEventParamater = "&addtocart_event_id=addToCart-" + item.Uuid;
+                            }
+
+                            string downloadSignInUrl = Html.DownloadUrl()
+                                                     + "AuthServices/SignIn?ReturnUrl="
+                                                     + Url.Encode(Request.Url.AbsoluteUri)
+                                                     + Url.Encode(addToCartEventParamater);
+
+                            addToCartUrl = Html.KartkatalogenUrl()
+                                         + "AuthServices/SignIn?ReturnUrl="
+                                         + Url.Encode(downloadSignInUrl);
+
+
+                            addToCartClass = "add-to-cart-btn prevent-action";
+
+
+                        }
+                    }
                     <div class="row result-row metadata">
 
                         <div class="col-sm-1 search-results-logo">
@@ -581,10 +564,10 @@ facet.FacetResults = orderedList.ToList();
                             </a>
                             @if (item.ShowMapLink())
                             {
-                                  <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
-                                      <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
-                                    </a>
-   
+                                <a href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
+                                </a>
+
                             }
                             else if (item.ShowServiceMapLink())
                             {
@@ -617,11 +600,13 @@ facet.FacetResults = orderedList.ToList();
                                     relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
                                 }
 
-                                <a data-toggle='tooltip'
+                                <a id='addToCart-@item.Uuid'
+                                   href='@addToCartUrl'
+                                   data-toggle='tooltip'
                                    data-placement='bottom'
                                    onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                                    title='Legg til @item.Title i kurv'
-                                   class='add-to-cart-btn btn btn-default'
+                                   class='@addToCartClass btn btn-default'
                                    itemname='@item.Title'
                                    itemuuid='@item.Uuid'
                                    itemurl='/metadata/uuid/@item.Uuid'
@@ -693,11 +678,13 @@ facet.FacetResults = orderedList.ToList();
                                     relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
                                 }
 
-                                <a data-toggle='tooltip'
+                                <a id='addToCart-@item.Uuid'
+                                   href='@addToCartUrl'
+                                   data-toggle='tooltip'
                                    data-placement='bottom'
                                    onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                                    title='Legg til @item.Title i kurv'
-                                   class='add-to-cart-btn'
+                                   class='@addToCartClass'
                                    itemname='@item.Title'
                                    itemuuid='@item.Uuid'
                                    itemurl='/metadata/uuid/@item.Uuid'
@@ -734,40 +721,40 @@ facet.FacetResults = orderedList.ToList();
                         </div>
                     </div>
 
-                    
-                        <div class="search-results-gallery-image layoutblock">
-                            <div class="block shortcutpageteaserblock size-4 col-sm-4">
-                                <div class="teaser-with-background-image">
-                                    <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                        @{
-                                            String thumbnailUrl = (!string.IsNullOrWhiteSpace(item.ThumbnailUrl)) ? Url.Action("Index", "Thumbnail", new { uuid = item.Uuid, type = "small" }) : "";
-                                        }
-                                        <div class="teaser-background-image" style="background: url(@thumbnailUrl) no-repeat center;">
-                                            <div class="teaser-overlay">
-                                                <div class="teaser-caption">
-                                                    <div class="teaser-heading">@item.Title</div>
-                                                </div>
+
+                    <div class="search-results-gallery-image layoutblock">
+                        <div class="block shortcutpageteaserblock size-4 col-sm-4">
+                            <div class="teaser-with-background-image">
+                                <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
+                                    @{
+                                        String thumbnailUrl = (!string.IsNullOrWhiteSpace(item.ThumbnailUrl)) ? Url.Action("Index", "Thumbnail", new { uuid = item.Uuid, type = "small" }) : "";
+                                    }
+                                    <div class="teaser-background-image" style="background: url(@thumbnailUrl) no-repeat center;">
+                                        <div class="teaser-overlay">
+                                            <div class="teaser-caption">
+                                                <div class="teaser-heading">@item.Title</div>
                                             </div>
                                         </div>
-                                    </a>
-                                </div>
-                                <div class="clearfix"></div>
+                                    </div>
+                                </a>
                             </div>
+                            <div class="clearfix"></div>
                         </div>
-                    
+                    </div>
+
                     <hr />
-                }
+                                        }
                 <div class="clearfix"></div>
             </div>
 
             @DisplayPaginationBottom()
 
-        }
+                                        }
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
-       
 
-   
+
+
 
         <aside class="facet-sok-emne">
             <div class="block listblock" id="filterInner">
@@ -791,6 +778,6 @@ facet.FacetResults = orderedList.ToList();
    if (item.ShowMapLink() || item.ShowServiceMapLink())
     {
       @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-      }
+                  }
 }
 </script>
