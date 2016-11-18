@@ -288,7 +288,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsOffline()
         {
-            if (Constraints != null && Constraints.AccessConstraints == "restricted")
+            if (Constraints != null && Constraints.AccessConstraints == "Beskyttet")
                 return true;
             else
                 return false;
