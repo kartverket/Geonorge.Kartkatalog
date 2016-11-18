@@ -138,7 +138,7 @@ namespace Kartverket.Metadatakatalog
             bundles.Add(new ScriptBundle("~/bundles/shopping-cart").Include(
                 "~/Scripts/shopping-cart.js"));
 
-            BundleTable.EnableOptimizations = false;
+            BundleTable.EnableOptimizations = true;
         }
     }
 }
