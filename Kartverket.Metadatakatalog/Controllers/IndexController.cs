@@ -21,7 +21,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
 
-        //[Authorize]
+        [Authorize]
         public ActionResult Index()
         {
             Log.Info("Run indexing of entire metadata catalogue.");
