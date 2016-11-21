@@ -64,7 +64,7 @@
                             <span>Valg av projeksjon støttes ikke</span>
                         </div>
                         <div v-else>
-                            <div v-show="notSelected(orderItem.codelists.areas)" class="help-text form-element-help-text bg-info"><span>Område må velges</span></div>
+                            <div v-show="notSelected(orderItem.codelists.areas)" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                             <div v-show="notSelected(orderItem.codelists.areas) == false" class="form-group custom-select" v-bind:class="{disabled: notSelected(orderItem.codelists.areas)}">
                                 <select v-show class="chosen-select" v-chosen="orderItem.codelists.projections" v-bind:uuid="orderItem.metadata.uuid" data-placeholder="Klikk for å velge projeksjon" tabindex="-1" multiple>
                                     <option value=""></option>
@@ -81,7 +81,8 @@
                             <span>Valg av filformat støttes ikke</span>
                         </div>
                         <div v-else>
-                            <div v-show="notSelected(orderItem.codelists.projections) || notSelected(orderItem.codelists.areas)" class="help-text form-element-help-text bg-info"><span>Område og projeksjon må velges først</span></div>
+                            <div v-show="notSelected(orderItem.codelists.projections) && notSelected(orderItem.codelists.areas)" class="help-text form-element-help-text bg-info"><span>Område og projeksjon må velges først</span></div>
+                            <div v-show="notSelected(orderItem.codelists.projections) && notSelected(orderItem.codelists.areas) ==  false" class="help-text form-element-help-text bg-info"><span>Projeksjon må velges først</span></div>
                             <div v-show="notSelected(orderItem.codelists.areas) == false && notSelected(orderItem.codelists.projections) == false" class="form-group custom-select" v-bind:class="{disabled: notSelected(orderItem.codelists.projections)}">
                                 <select class="chosen-select" v-chosen="orderItem.codelists.formats" v-bind:uuid="orderItem.metadata.uuid" data-placeholder="Klikk for å velge filformat" tabindex="-1" multiple>
                                     <option></option>
