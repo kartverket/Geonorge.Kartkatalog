@@ -219,7 +219,6 @@ var app = new Vue({
                 }
 
                 var distributionUrl = (orderItems[key].metadata.distributionUrl !== undefined) ? orderItems[key].metadata.distributionUrl : "";
-                orderItems[key].metadata.orderDistributionUrl = this.getOrderDistributionUrl(distributionUrl);
 
                 if (orderItems[key].capabilities._links) {
                     $(orderItems[key].capabilities._links).each(function (index, link) {
@@ -231,6 +230,9 @@ var app = new Vue({
                         }
                         if (link.rel == "http://rel.geonorge.no/download/format") {
                             orderItems[key].codelists.formats = getJsonData(link.href);
+                        }
+                        if (link.rel == "http://rel.geonorge.no/download/order") {
+                            orderItems[key].metadata.orderDistributionUrl = link.href;
                         }
                     });
                 }
@@ -320,9 +322,6 @@ var app = new Vue({
                 });
             }
             return selectedAreas;
-        },
-        getOrderDistributionUrl: function (distributionUrl) {
-            return distributionUrl.replace("capabilities/", "v2/order");
         },
         getSelectedProjections: function (projections) {
             var selectedProjections = [];
