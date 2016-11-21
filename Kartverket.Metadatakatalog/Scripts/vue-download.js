@@ -4,6 +4,11 @@
     $('#feedback-alert').show();
 }
 
+$(document).on("click", "#remove-all-items", function () {
+    $('#remove-all-items-modal').modal('show')
+});
+
+
 function fixUrl(urlen) {
     urlJson = urlen.replace("%3F", "?");
     return urlJson;
@@ -88,7 +93,7 @@ $(document).on("click", ".custom-select", function () {
 
 
 
-    showLoadingAnimation("Laster inn kurv");
+showLoadingAnimation("Laster inn kurv");
 
 
 $(window).load(function () {
@@ -189,7 +194,7 @@ var app = new Vue({
                     );
                 }.bind(this));
                 orderRequests.push(orderRequest);
-                
+
             }.bind(this));
             return orderRequests;
         },
@@ -395,6 +400,12 @@ var app = new Vue({
             });
             this.removeFromLocalStorage(uuid);
         },
+        removeAllOrderItems: function () {
+            this.orderItems.forEach(function (orderItem) {
+                this.removeOrderItem(orderItem);
+            }.bind(this));
+            $('#remove-all-items-modal').modal('hide');
+        },
         capitalize: function (string) {
             return string[0].toUpperCase() + string.slice(1);
         },
@@ -411,5 +422,22 @@ var app = new Vue({
         }
     }
 }).$mount('#downloadformVue');
+
+
+
+
+$('#remove-all-items-submit').click(function () {
+
+    /* Object.keys(localStorage)
+           .forEach(function (key) {
+               if (key != 'visningstype') {
+                   localStorage.removeItem(key);
+               }
+           });
+     $('#remove-all-items-modal').modal('hide')
+     $('.order-item').remove();
+     updateShoppingCart();
+     updateShoppingCartCookie();*/
+});
 
 
