@@ -2400,7 +2400,6 @@ button.btn {
 
 .download-list .list-group-item span {
   padding-right: 10px;
-  border-right: 1px solid #ccc;
   margin-right: 5px; }
 
 .facet-sok-tittel {
@@ -2556,6 +2555,8 @@ textarea, textarea.form-control {
   background-size: 16px 16px;
   background-position: right 8px center;
   border-radius: 0; }
+  .custom-select .input-group-btn {
+    width: 0; }
 
 .custom-select:hover {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/arrow-down.svg"); }
