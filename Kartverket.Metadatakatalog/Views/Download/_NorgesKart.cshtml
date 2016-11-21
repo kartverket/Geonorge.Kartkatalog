@@ -85,31 +85,31 @@
 
                     $("#setcoordinates").attr("disabled", false);
 
-                    var urlCanDownload = vueObject.metadata.distributionUrl;
-                    urlCanDownload = urlCanDownload.replace('capabilities/', 'v2/can-download');
-                    $.ajax({
-                        url: urlCanDownload,
-                        type: "POST",
-                        dataType: 'json',
-                        data: JSON.stringify(canDownload),
-                        contentType: "application/json",
-                        async: false,
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            //Ignore error
-                        },
-                        success: function (data) {
-                            if (data !== null) {
-                                if (!data.canDownload) {
-                                    canDownload = false;
-                                    showAlert("Området er for stort til å laste ned, vennligst velg mindre område", "danger");
-                                    $("#setcoordinates").attr("disabled", true);
+                    var urlCanDownload = (vueObject.metadata.canDownloadUrl !== undefined) ? vueObject.metadata.canDownloadUrl : false;
+                    if (urlCanDownload) {
+                        $.ajax({
+                            url: urlCanDownload,
+                            type: "POST",
+                            dataType: 'json',
+                            data: JSON.stringify(canDownload),
+                            contentType: "application/json",
+                            async: false,
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                //Ignore error
+                            },
+                            success: function (data) {
+                                if (data !== null) {
+                                    if (!data.canDownload) {
+                                        canDownload = false;
+                                        showAlert("Området er for stort til å laste ned, vennligst velg mindre område", "danger");
+                                        $("#setcoordinates").attr("disabled", true);
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
 
-                    if (canDownload)
-                    {
+                    if (canDownload) {
                         var polygonArea = {
                             "name": "Valgt fra kart",
                             "type": "polygon",

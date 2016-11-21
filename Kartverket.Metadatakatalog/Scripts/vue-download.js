@@ -239,6 +239,9 @@ var app = new Vue({
                         if (link.rel == "http://rel.geonorge.no/download/order") {
                             orderItems[key].metadata.orderDistributionUrl = link.href;
                         }
+                        if (link.rel == "http://rel.geonorge.no/download/can-download") {
+                            orderItems[key].metadata.canDownloadUrl = link.href;
+                        }
                     });
                 }
                 orderItems[key].capabilities.supportsGridSelection = (orderItems[key].capabilities.mapSelectionLayer !== undefined && orderItems[key].capabilities.mapSelectionLayer !== "") ? true : false;
