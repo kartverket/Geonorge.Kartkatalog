@@ -1048,7 +1048,6 @@
     <Content Include="Views\Shared\_Analytics.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Download\Index.cshtml" />
-    <Content Include="Views\Download\_OrderItem.cshtml" />
     <Content Include="Views\Download\Order.cshtml" />
     <Content Include="Views\Download\_NorgesKart.cshtml" />
     <Content Include="Views\Shared\_SharedMenu.cshtml" />

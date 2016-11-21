@@ -423,21 +423,3 @@ var app = new Vue({
     }
 }).$mount('#downloadformVue');
 
-
-
-
-$('#remove-all-items-submit').click(function () {
-
-    /* Object.keys(localStorage)
-           .forEach(function (key) {
-               if (key != 'visningstype') {
-                   localStorage.removeItem(key);
-               }
-           });
-     $('#remove-all-items-modal').modal('hide')
-     $('.order-item').remove();
-     updateShoppingCart();
-     updateShoppingCartCookie();*/
-});
-
-
