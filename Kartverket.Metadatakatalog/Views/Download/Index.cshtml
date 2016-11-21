@@ -156,14 +156,16 @@
                     <p>Dato: {{ responseItem.data.orderDate }}</p>
                     <p>Referansenummer: {{ responseItem.data.referenceNumber }}</p>
                     <div class="list-group download-list">
-                        <a v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" v-bind:href="file.downloadUrl" class="list-group-item">
-                            <span class="custom-icon custom-icon-lastned"></span>{{ file.name }}
+                        <div v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" class="list-group-item">
+                            <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
+                                <span class="custom-icon custom-icon-lastned"></span>{{ file.metadataName }}
+                                <span class="pull-right label label-info">{{file.format}}</span>
+                            </a>
+                        </div>
+                        <div v-if="file.status == 'WaitingForProcessing'" v-for="file in responseItem.data.files" class="list-group-item">
+                            {{ file.metadataName }} (Under behandling)
                             <span class="pull-right label label-info">{{file.format}}</span>
-                        </a>
-                        <p v-if="file.status == 'WaitingForProcessing'" v-bind:class="" v-for="file in responseItem.data.files" v-bind:href="file.downloadUrl" class="list-group-item">
-                            {{ file.fileId }} (Under behandling)
-                            <span class="pull-right label label-info">{{file.format}}</span>
-                        </p>
+                        </div>
                     </div>
                 </div>
             </div>

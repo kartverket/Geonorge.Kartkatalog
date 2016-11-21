@@ -295,6 +295,7 @@ var app = new Vue({
                                         "distributionUrl": orderRequest.distributionUrl,
                                         "data": data
                                     });
+                                $("[data-toggle='tooltip']").tooltip();
                             }
                             else {
                                 showAlert("Feil", "danger");
