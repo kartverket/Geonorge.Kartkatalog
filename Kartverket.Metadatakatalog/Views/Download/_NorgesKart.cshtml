@@ -76,11 +76,11 @@
                 if (obj.feature != null) {
                     CLIPPERCOORDS = obj.feature.geometry.coordinates.toString();
                     CLIPPERCOORDS = CLIPPERCOORDS.replace(/,/g, " ");
-
+                    var defaultCoordinatesystem = "32633";
                     var canDownload = {
                         "metadataUuid": vueObject.metadata.uuid,
                         "coordinates": CLIPPERCOORDS,
-                        "coordinateSystem": conf.koordinatsystem
+                        "coordinateSystem": defaultCoordinatesystem
                     };
 
                     $("#setcoordinates").attr("disabled", false);
@@ -137,8 +137,7 @@
                             vueObject.codelists.areaTypes.push("polygon");
                         }
                         vueObject.codelists.coordinates = CLIPPERCOORDS;
-                        vueObject.codelists.coordinatesystem = conf.koordinatsystem;
-                        console.log(CLIPPERCOORDS);
+                        vueObject.codelists.coordinatesystem = defaultCoordinatesystem;
                     }
                 }
             }
