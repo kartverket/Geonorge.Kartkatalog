@@ -2395,12 +2395,20 @@ button.btn {
       background-position: 100% -36px; }
 
 /* Nedlastingskvittering */
-.download-list a.list-group-item {
-  color: #3867C8; }
+.download-list .list-group-item a {
+  color: #3867C8;
+  text-decoration: none; }
 
 .download-list .list-group-item span {
   padding-right: 10px;
   margin-right: 5px; }
+  .download-list .list-group-item span.download-list-item-name {
+    display: inline-block;
+    vertical-align: middle; }
+    .download-list .list-group-item span.download-list-item-name small {
+      display: block;
+      margin: 0;
+      line-height: 1; }
 
 .facet-sok-tittel {
   display: block;

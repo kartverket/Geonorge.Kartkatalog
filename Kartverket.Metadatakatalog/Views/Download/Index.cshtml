@@ -158,7 +158,11 @@
                     <div class="list-group download-list">
                         <div v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" class="list-group-item">
                             <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
-                                <span class="custom-icon custom-icon-lastned"></span>{{ file.metadataName }}
+                                <span class="custom-icon custom-icon-lastned"></span>
+                                <span class="download-list-item-name">
+                                    {{ file.metadataName }}
+                                    <small>{{ file.area }} ({{ file.projection }})</small>
+                                </span>
                                 <span class="pull-right label label-info">{{file.format}}</span>
                             </a>
                         </div>
