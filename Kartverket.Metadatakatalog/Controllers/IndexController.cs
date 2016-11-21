@@ -85,7 +85,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             HttpStatusCode statusCode;
             try
             {
-                Log.Info("Received notification of updated metadata: " + Request.HttpMethod + ", " + action + ", " + uuid);
+                Log.Info("Received notification of updated metadata: " + Request.HttpMethod + ", " + action + ", " + uuid + ", XMLFile: "+ XMLFile + ", httpHeader: " + Request.ServerVariables["ALL_RAW"]);
 
                 if (!string.IsNullOrWhiteSpace(uuid))
                 {
