@@ -68,6 +68,7 @@ namespace Kartverket.Metadatakatalog.Service
                 KeywordsNationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)),
                 KeywordsNationalTheme = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME)),
                 KeywordsOther = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, null)),
+                KeywordsConcept = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_CONCEPT)),
                 LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl,
                 MaintenanceFrequency = register.GetMaintenanceFrequency(simpleMetadata.MaintenanceFrequency),
                 MetadataLanguage = simpleMetadata.MetadataLanguage,
@@ -319,7 +320,8 @@ namespace Kartverket.Metadatakatalog.Service
                     EnglishKeyword = keyword.EnglishKeyword,
                     KeywordValue = keyword.Keyword,
                     Thesaurus = keyword.Thesaurus,
-                    Type = keyword.Type
+                    Type = keyword.Type,
+                    KeywordLink = keyword.KeywordLink
                 });
             }
             return output;

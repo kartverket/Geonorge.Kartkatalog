@@ -124,10 +124,35 @@ if (contact != null)
                 System.Uri downloadUrl = new Uri(Model.DistributionDetails.URL);
                 DowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
             }
-            <a href="#" 
-               id="add-to-cart-btn" 
+
+            string addToCartUrl = "";
+            string addToCartClass = "add-to-cart-btn";
+
+            if (Model.IsRestricted() || Model.IsOffline())
+            {
+                string addToCartEventParamater = "?addtocart_event_id=addToCart-" + Model.Uuid;
+                if (Request.Url.AbsoluteUri.Contains("?"))
+                {
+                    addToCartEventParamater = "&addtocart_event_id=addToCart-" + Model.Uuid;
+                }
+
+                string downloadSignInUrl = Html.DownloadUrl()
+                                         + "AuthServices/SignIn?ReturnUrl="
+                                         + Url.Encode(Request.Url.AbsoluteUri)
+                                         + Url.Encode(addToCartEventParamater);
+
+                addToCartUrl = Html.KartkatalogenUrl()
+                             + "AuthServices/SignIn?ReturnUrl="
+                             + Url.Encode(downloadSignInUrl);
+
+
+                addToCartClass = "add-to-cart-btn prevent-action";
+            }
+
+            <a id='addToCart-@Model.Uuid'
+               href='@addToCartUrl'
                onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');" 
-               class="btn add-to-cart-btn" 
+               class="btn @addToCartClass" 
                itemuuid="@Model.Uuid"
                itemname="@Model.Title"
                itemurl="/metadata/uuid/@Model.Uuid"
@@ -173,9 +198,9 @@ if (contact != null)
 
 
         <div class="table-btn-container">
-            @if (Model.ContactMetadata != null && !string.IsNullOrEmpty(Model.ContactMetadata.Email))
+            @if (Model.ContactOwner != null && !string.IsNullOrEmpty(Model.ContactOwner.Email))
             {
-                <a href="mailto:@Model.ContactMetadata.Email" onclick="ga('send', 'event', 'Nedlasting', 'kontaktdataeier');" class="btn" target="_blank"><span class="fa fa-envelope"></span> Kontakt dataeier</a>
+                <a href="mailto:@Model.ContactOwner.Email" onclick="ga('send', 'event', 'Nedlasting', 'kontaktdataeier');" class="btn" target="_blank"><span class="fa fa-envelope"></span> Kontakt dataeier</a>
             }
             else
             {
@@ -467,11 +492,38 @@ if (contact != null)
                                                         relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
                                                     }
 
-                                                    <a data-toggle='tooltip'
+                                                    string addToCartUrl = "";
+                                                    string addToCartClass = "add-to-cart-btn";
+                                                    if (relatedContent.IsRestricted() || relatedContent.IsOffline())
+                                                    {
+                                                        string addToCartEventParamater = "?addtocart_event_id=addToCart-" + relatedContent.Uuid;
+                                                        if (Request.Url.AbsoluteUri.Contains("?"))
+                                                        {
+                                                            addToCartEventParamater = "&addtocart_event_id=addToCart-" + relatedContent.Uuid;
+                                                        }
+
+                                                        string downloadSignInUrl = Html.DownloadUrl()
+                                                                                 + "AuthServices/SignIn?ReturnUrl="
+                                                                                 + Url.Encode(Request.Url.AbsoluteUri)
+                                                                                 + Url.Encode(addToCartEventParamater);
+
+                                                        addToCartUrl = Html.KartkatalogenUrl()
+                                                                     + "AuthServices/SignIn?ReturnUrl="
+                                                                     + Url.Encode(downloadSignInUrl);
+
+
+                                                        addToCartClass = "add-to-cart-btn prevent-action";
+
+
+                                                    }
+
+                                                    <a id='addToCart-@relatedContent.Uuid'
+                                                       href='@addToCartUrl'
+                                                       data-toggle='tooltip'
                                                        data-placement='bottom'
                                                        onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                                                        title='Legg til @relatedContent.Title i kurv'
-                                                       class='add-to-cart-btn'
+                                                       class='@addToCartClass'
                                                        itemname='@relatedContent.Title'
                                                        itemuuid='@relatedContent.Uuid'
                                                        itemurl='/metadata/uuid/@relatedContent.Uuid'
@@ -708,6 +760,7 @@ if (contact != null)
                         @DisplayKeywords("Samarbeid og lover", Model.KeywordsNationalInitiative)
                         @DisplayKeywords("Inspire", Model.KeywordsInspire)
                         @DisplayKeywords("Annet", Model.KeywordsOther)
+                        @DisplayKeywords("Begreper", Model.KeywordsConcept)
 
                         @if (!string.IsNullOrWhiteSpace(Model.TopicCategory))
                     {
@@ -753,7 +806,14 @@ if (keywords != null && keywords.Any())
         <ul>
             @foreach (var keyword in keywords)
             {
+                if (!string.IsNullOrEmpty(keyword.KeywordLink))
+                {
+                    <li><a href="@keyword.KeywordLink" target="_blank">@keyword.KeywordValue</a></li>
+                }
+                else
+                {
                 <li>@keyword.KeywordValue</li>
+                }
             }
         </ul>
 }
@@ -794,7 +854,7 @@ if (keywords != null && keywords.Any())
         function getFeedLink(xml) {
 
             $(xml).find("entry").each(function () {
-                var identifier_code = $(this).find("spatial_dataset_identifier_code").text();
+                var identifier_code = $(this).find("inspire_dls\\:spatial_dataset_identifier_code, spatial_dataset_identifier_code").text();
                 if (uuid == identifier_code){
                     var link = $(this).find("link").text();
                     $("#servicefeed").removeClass("disabled");
@@ -824,35 +884,6 @@ if (keywords != null && keywords.Any())
                     orderItems = (JSON.parse(localStorage.getItem('orderItems')));
                     updateAllCartButtons(orderItems)
                 }
-                $('.add-to-cart-btn').click(function () {
-                    var added = false;
-                    uuid = $(this).attr('itemuuid');
-                    title = $(this).attr('itemname');
-                    rootUrl = $(this).attr('itemurl');
-                    organizationLogoUrl = $(this).attr('itemorglogo');
-                    distributionDetailsUrl = $(this).attr('itemdisturl');
-                    theme = $(this).attr('itemtheme');
-                    orgname = $(this).attr('itemorgname');
-
-                    updateCartButton($(this));
-                    
-                    $.map(orderItems, function (elementOfArray, indexInArray) {
-                        if (elementOfArray == uuid) {
-                            orderItems.push(uuid);
-                            added = true;
-                        }
-                    });
-                    if (!added) {
-                        orderItems.push(uuid);
-                        var metadata = { 'name': title, 'uuid': uuid, 'url': rootUrl, 'organizationLogoUrl': organizationLogoUrl, 'distributionUrl': distributionDetailsUrl, 'theme': theme, 'organizationName': orgname };
-                        localStorage["orderItems"] = JSON.stringify(orderItems);
-                        localStorage[uuid + ".metadata"] = JSON.stringify(metadata);
-                        showAlert(title + ' er lagt til i <a href="/Download">kurven</a>', 'success');
-                        updateShoppingCart();
-                    } else {
-                        showAlert(title + ' er allerede lagt til i <a href="/Download">kurven</a>', 'warning');
-                    }
-                });
             } else {
                 console.log('no native support for HTML5 storage :(');
             }
@@ -866,50 +897,8 @@ if (keywords != null && keywords.Any())
 
                 console.log('window.localStorage is available!');
                 var orderItems = [];
-                $('.add-to-cart-btn').click(function () {
-                    var added = false;
-                    var itemuuid = $(this).attr('itemuuid');
-                    var itemname = $(this).attr('itemname');
-                    var itemurl = $(this).attr('itemurl');
-                    var itemorglogo = $(this).attr('itemorglogo');
-                    var itemdisturl = $(this).attr('itemdisturl');
-                    var itemtheme = $(this).attr('itemtheme');
-                    var itemorgname = $(this).attr('itemorgname');
-
-                    updateCartButton($(this));
-
-                    if (localStorage.getItem('orderItems') != null) {
-                        orderItems = (JSON.parse(localStorage.getItem('orderItems')));
-                    }
-                    $.map(orderItems, function (elementOfArray, indexInArray) {
-                        if (elementOfArray == itemuuid) {
-                            orderItems.push(itemuuid);
-                            added = true;
-                        }
-                    });
-                    if (!added) {
-                        orderItems.push(itemuuid);
-                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl, 'theme': itemtheme, 'organizationName': itemorgname };
-                        localStorage["orderItems"] = JSON.stringify(orderItems);
-                        localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
-                        showAlert(itemname + ' er lagt til i <a href="/Download">kurven</a>', 'success');
-
-                        var orderItemCount = $('#orderitem-count').text();
-                        console.log(orderItemCount);
-                        if (orderItemCount == null || orderItemCount == '') {
-                            orderItemCount = 0;
-                            $('#orderitem-count-text').text(' datasett');
-                        } else {
-                            orderItemCount = parseInt($('#orderitem-count').text());
-                            console.log('else: ' + orderItemCount);
-                        }
-                        orderItemCount += 1;
-                        $('#orderitem-count').text(orderItemCount);
-                        updateShoppingCart();
-
-                    } else {
-                        showAlert(itemname + ' er allerede lagt til i <a href="/Download">kurven</a>', 'warning');
-                    }
+                $('.add-to-cart-btn:not(.prevent-action)').click(function () {
+                    addToCartButtonClick($(this));
                 });
             } else {
                 console.log('no native support for HTML5 storage :(');

@@ -53,6 +53,11 @@ namespace Kartverket.Metadatakatalog.Helpers
             return WebConfigurationManager.AppSettings["KartkatalogenUrl"];
         }
 
+        public static string DownloadUrl(this HtmlHelper helper)
+        {
+            return WebConfigurationManager.AppSettings["DownloadUrl"];
+        }
+
         public static string StatusApiUrl(this HtmlHelper helper)
         {
             return WebConfigurationManager.AppSettings["StatusApiUrl"];

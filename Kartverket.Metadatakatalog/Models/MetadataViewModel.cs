@@ -52,6 +52,7 @@ namespace Kartverket.Metadatakatalog.Models
         public List<Keyword> KeywordsNationalInitiative { get; set; }
         public List<Keyword> KeywordsNationalTheme { get; set; }
         public List<Keyword> KeywordsOther { get; set; }
+        public List<Keyword> KeywordsConcept { get; set; }
 
         public string LegendDescriptionUrl { get; set; }
         //
@@ -287,7 +288,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsOffline()
         {
-            if (Constraints != null && Constraints.AccessConstraints == "restricted")
+            if (Constraints != null && Constraints.AccessConstraints == "Beskyttet")
                 return true;
             else
                 return false;
@@ -525,7 +526,8 @@ namespace Kartverket.Metadatakatalog.Models
         public string KeywordValue { get; set; }
         public string Thesaurus { get; set; }
         public string Type { get; set; }
-    }
+        public string KeywordLink { get; set; }
+}
 
     public class QualitySpecification
     {

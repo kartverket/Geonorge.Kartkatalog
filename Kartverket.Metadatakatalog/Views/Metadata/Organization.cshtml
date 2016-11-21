@@ -41,22 +41,22 @@
                 string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
                 if (!string.IsNullOrEmpty(facetResult.LinkName()))
                 {
-                <li class="filter-options">
-                    @if (cssClass == "active")
-                    {
-                        <span class="btn-link @cssClass">
-                            @facetResult.LinkName()
-                            <span class="text-muted">(@facetResult.Count)</span>
-                        </span>
-                    }
-                    else
-                    {
-                        <a href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link show-loading-animation @cssClass" data-loading-message="Filtrerer søkeresultat">
-                            @facetResult.LinkName()
-                            <span class="text-muted">(@facetResult.Count)</span>
-                        </a>
-                    }
-                </li>
+                    <li class="filter-options">
+                        @if (cssClass == "active")
+                        {
+                            <span class="btn-link @cssClass">
+                                @facetResult.LinkName()
+                                <span class="text-muted">(@facetResult.Count)</span>
+                            </span>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link show-loading-animation @cssClass" data-loading-message="Filtrerer søkeresultat">
+                                @facetResult.LinkName()
+                                <span class="text-muted">(@facetResult.Count)</span>
+                            </a>
+                        }
+                    </li>
                 }
             }
             @if (Model.HasFilterForFacetField(facet.FacetField))
@@ -126,7 +126,7 @@ facet.FacetResults = orderedList.ToList();
                         }
                         else if (relativeHierarchyLevel < 0)
                         {
-                            @:</li></ul>
+                            @: </li></ul>
                                 }
                         else
                         {
@@ -155,7 +155,7 @@ facet.FacetResults = orderedList.ToList();
                 }
                 for (int index = 0; index < hierarchyLevel; index++)
                 {
-                    @: </li></ul>
+                    @: </li> </ul>
                         }
                 bool hasAreaFilter = Model.HasFilterForFacetField(facet.FacetField);
                 bool hasPlaceFilter = Model.HasFilterForFacetField(placegroup.FacetField);
@@ -315,48 +315,8 @@ facet.FacetResults = orderedList.ToList();
 
                 console.log('window.localStorage is available!');
                 var orderItems = [];
-                $('.add-to-cart-btn').click(function () {
-                    var added = false;
-                    var itemuuid = $(this).attr('itemuuid');
-                    var itemname = $(this).attr('itemname');
-                    var itemurl = $(this).attr('itemurl');
-                    var itemorglogo = $(this).attr('itemorglogo');
-                    var itemdisturl = $(this).attr('itemdisturl');
-
-                    updateCartButton($(this));
-
-
-                    if (localStorage.getItem('orderItems') != null) {
-                        orderItems = (JSON.parse(localStorage.getItem('orderItems')));
-                    }
-                    $.map(orderItems, function (elementOfArray, indexInArray) {
-                        if (elementOfArray == itemuuid) {
-                            orderItems.push(itemuuid);
-                            added = true;
-                        }
-                    });
-                    if (!added) {
-                        orderItems.push(itemuuid);
-                        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl };
-                        localStorage["orderItems"] = JSON.stringify(orderItems);
-                        localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
-                        showAlert(itemname + ' er lagt til i <a href="/Download">kurven</a>', 'success');
-
-                        var orderItemCount = $('#orderitem-count').text();
-                        console.log(orderItemCount);
-                        if (orderItemCount == null || orderItemCount == '') {
-                            orderItemCount = 0;
-                            $('#orderitem-count-text').text(' datasett');
-                        } else {
-                            orderItemCount = parseInt($('#orderitem-count').text());
-                        }
-                        orderItemCount += 1;
-                        $('#orderitem-count').text(orderItemCount);
-                        updateShoppingCart();
-
-                    } else {
-                        showAlert(itemname + ' er allerede lagt til i <a href="/Download">kurven</a>', 'warning');
-                    }
+                $('.add-to-cart-btn:not(.prevent-action)').click(function () {
+                    addToCartButtonClick($(this));
                 });
             } else {
                 console.log('no native support for HTML5 storage :(');
@@ -370,10 +330,20 @@ facet.FacetResults = orderedList.ToList();
 }
 
 @{
-    string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("search", "api/search");
-    var qs = HttpUtility.ParseQueryString(Request.QueryString.ToString());
+    string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("metadata/" + Model.OrganizationSeoName, "api/search");
+    Uri uri = new Uri(url);
+    string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
+    Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
+    string querystring = Request.QueryString.ToString();
+    querystring = querystring.Replace(".name", "name"); querystring = querystring.Replace(".value", "value");
+    var qs = HttpUtility.ParseQueryString(querystring);
+    System.Collections.Specialized.NameValueCollection qsCol = new System.Collections.Specialized.NameValueCollection(qs);
+    qs.Clear();
+    qs.Add("facets[0]name", "organization");
+    qs.Add("facets[0]value", Model.OrganizationName);
+
     qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
-    string query = qs.ToString(); string urlCSV = url + "?" + query;
+    string query = qs.ToString(); string urlCSV = path + "?" + query;
 }
 <div class="row search-result-navigation">
     <div class="col-md-4">
@@ -465,6 +435,34 @@ facet.FacetResults = orderedList.ToList();
                 <div class="menu-separator search-results-table-heading"></div>
                 @foreach (var item in Model.Result.Items)
                 {
+                    string addToCartUrl = "";
+                    string addToCartClass = "add-to-cart-btn";
+                    if (item.ShowDownloadService())
+                    {
+                        if (item.IsRestricted || item.IsOffline)
+                        {
+                            string addToCartEventParamater = "?addtocart_event_id=addToCart-" + item.Uuid;
+                            if (Request.Url.AbsoluteUri.Contains("?"))
+                            {
+                                addToCartEventParamater = "&addtocart_event_id=addToCart-" + item.Uuid;
+                            }
+
+                            string downloadSignInUrl = Html.DownloadUrl()
+                                                     + "AuthServices/SignIn?ReturnUrl="
+                                                     + Url.Encode(Request.Url.AbsoluteUri)
+                                                     + Url.Encode(addToCartEventParamater);
+
+                            addToCartUrl = Html.KartkatalogenUrl()
+                                         + "AuthServices/SignIn?ReturnUrl="
+                                         + Url.Encode(downloadSignInUrl);
+
+
+                            addToCartClass = "add-to-cart-btn prevent-action";
+
+
+                        }
+                    }
+
                     <div class="row result-row metadata">
 
                         <div class="col-sm-1 search-results-logo">
@@ -584,11 +582,13 @@ facet.FacetResults = orderedList.ToList();
                                     relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
                                 }
 
-                                <a data-toggle='tooltip'
+                                <a id='addToCart-@item.Uuid'
+                                   href='@addToCartUrl'
+                                   data-toggle='tooltip'
                                    data-placement='bottom'
                                    onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                                    title='Legg til @item.Title i kurv'
-                                   class='add-to-cart-btn btn btn-default'
+                                   class='@addToCartClass btn btn-default'
                                    itemname='@item.Title'
                                    itemuuid='@item.Uuid'
                                    itemurl='/metadata/uuid/@item.Uuid'
@@ -622,7 +622,7 @@ facet.FacetResults = orderedList.ToList();
                         <div class="col-sm-1 search-results-action-icons action-show-map">
                             @if (item.ShowMapLink())
                             {
-                                <a  id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank">
+                                <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank">
                                     <span id="mapmacro-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
@@ -658,11 +658,13 @@ facet.FacetResults = orderedList.ToList();
                                     relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
                                 }
 
-                                <a data-toggle='tooltip'
+                                <a id='addToCart-@item.Uuid'
+                                   href='@addToCartUrl'
+                                   data-toggle='tooltip'
                                    data-placement='bottom'
                                    onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                                    title='Legg til @item.Title i kurv'
-                                   class='add-to-cart-btn'
+                                   class='@addToCartClass'
                                    itemname='@item.Title'
                                    itemuuid='@item.Uuid'
                                    itemurl='/metadata/uuid/@item.Uuid'
@@ -749,8 +751,6 @@ facet.FacetResults = orderedList.ToList();
     if (item.ShowMapLink() || item.ShowServiceMapLink())
     {
         @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-      }
+          }
 }
 </script>
-
-

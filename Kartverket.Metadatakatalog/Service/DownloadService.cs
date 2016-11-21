@@ -15,6 +15,7 @@ namespace Kartverket.Metadatakatalog.Service
 {
     public class DownloadService
     {
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public OrderReceiptType Order(OrderType o, string orderUrl)
         {
@@ -41,13 +42,19 @@ namespace Kartverket.Metadatakatalog.Service
                     { ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver() }
                     );
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                Log.Info($"Sending request to download api: {orderUrl}\r\n{content}");
+
                 HttpResponseMessage response = client.PostAsync(orderUrl, content).Result;
+                Log.Info($"Response code: " + response.StatusCode);
 
                 if (response.IsSuccessStatusCode)
                 {
 
                     var result = response.Content.ReadAsAsync<object>().Result;
-                    var order = Newtonsoft.Json.JsonConvert.DeserializeObject<OrderReceiptType>(result.ToString());
+                    var resultAsString = result.ToString();
+                    Log.Info($"Response:\r\n{resultAsString}");
+                    var order = Newtonsoft.Json.JsonConvert.DeserializeObject<OrderReceiptType>(resultAsString);
 
                 return order;
                 }
