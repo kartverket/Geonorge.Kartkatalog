@@ -2726,6 +2726,12 @@ textarea, textarea.form-control {
 .no-border-radius input, .help-text input, .panel input, .panel-heading input {
   border-radius: 0 !important; }
 
+.inline-block {
+  display: inline-block !important; }
+
+.auto-width {
+  width: auto !important; }
+
 .text-left {
   text-align: left !important; }
 

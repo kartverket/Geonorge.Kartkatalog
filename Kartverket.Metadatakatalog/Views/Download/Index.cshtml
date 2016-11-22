@@ -157,21 +157,42 @@
                     <p>Referansenummer: {{ responseItem.data.referenceNumber }}</p>
                     <div class="list-group download-list">
                         <div v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" class="list-group-item">
-                            <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
-                                <span class="custom-icon custom-icon-lastned"></span>
-                                <span class="download-list-item-name">
-                                    {{ file.metadataName }}
-                                    <small>{{ file.areaName }} ({{ file.projectionName }})</small>
-                                </span>
-                                <span class="pull-right label label-info">{{file.format}}</span>
-                            </a>
+                            <div class="row">
+                                <div class="col-sm-1 col-md-1">
+                                    <span class="custom-icon custom-icon-lastned"></span>
+                                </div>
+                                <div class="col-sm-5 col-md-6">
+                                    <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
+                                        <span class="download-list-item-name">
+                                            {{ file.metadataName }}, <span class="inline-block">{{ file.areaName }}</span>
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="col-sm-4 col-md-3">
+                                    <span class="label label-success auto-width">{{file.projectionName}}</span>
+                                </div>
+                                <div class="col-sm-2 col-md-2">
+                                    <span class="label label-info">{{file.format}}</span>
+                                </div>
+                            </div>
                         </div>
                         <div v-if="file.status == 'WaitingForProcessing'" v-for="file in responseItem.data.files" class="list-group-item">
-                            <span class="download-list-item-name">
-                                {{ file.metadataName }} (Under behandling)
-                                <small>Valgt fra kart ({{ file.projectionName }})</small>
-                            </span>
-                            <span class="pull-right label label-info">{{file.format}}</span>
+                            <div class="row">
+                                <div class="col-sm-1 col-md-1">
+                                    <span class="custom-icon custom-icon-info"></span>
+                                </div>
+                                <div class="col-sm-5 col-md-6">
+                                    <span class="download-list-item-name">
+                                        {{ file.metadataName }}, <span class="inline-block">Valgt fra kart</span> <span class="inline-block">(Under behandling)</span>
+                                    </span>
+                                </div>
+                                <div class="col-sm-4 col-md-3">
+                                    <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                </div>
+                                <div class="col-sm-2 col-md-2">
+                                    <span class="label label-info">{{file.format}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
