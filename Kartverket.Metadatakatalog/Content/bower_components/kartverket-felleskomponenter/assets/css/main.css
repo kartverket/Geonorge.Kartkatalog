@@ -2402,9 +2402,15 @@ button.btn {
 .download-list .list-group-item span {
   padding-right: 10px;
   margin-right: 5px; }
+  .download-list .list-group-item span.custom-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px; }
   .download-list .list-group-item span.download-list-item-name {
     display: inline-block;
-    vertical-align: middle; }
+    vertical-align: middle;
+    font-size: 14pt;
+    line-height: 16pt; }
     .download-list .list-group-item span.download-list-item-name small {
       display: block;
       margin: 0;
