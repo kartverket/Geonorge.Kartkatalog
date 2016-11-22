@@ -167,7 +167,10 @@
                             </a>
                         </div>
                         <div v-if="file.status == 'WaitingForProcessing'" v-for="file in responseItem.data.files" class="list-group-item">
-                            {{ file.metadataName }} (Under behandling)
+                            <span class="download-list-item-name">
+                                {{ file.metadataName }} (Under behandling)
+                                <small>Valgt fra kart ({{ file.projectionName }})</small>
+                            </span>
                             <span class="pull-right label label-info">{{file.format}}</span>
                         </div>
                     </div>
