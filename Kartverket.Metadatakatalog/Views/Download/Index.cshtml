@@ -40,11 +40,22 @@
                     <div class="col-md-4">
                         <p>Område:</p>
                         <div class="input-group chosen-input-group custom-select input-group-omraade">
-                            <select class="chosen-select" v-chosen="orderItem.codelists.areas" v-bind:parent="orderItem" v-bind:uuid="orderItem.metadata.uuid" v-bind:name="orderItem.metadata.uuid + 'areas'" data-placeholder="Klikk for å velge område" multiple>
-                                <option></option>
-
+                            <select class="chosen-select area-list"
+                                    v-chosen="orderItem.codelists.areas"
+                                    v-bind:parent="orderItem"
+                                    v-bind:uuid="orderItem.metadata.uuid"
+                                    v-bind:name="orderItem.metadata.uuid + 'areas'"
+                                    v-bind:id="orderItem.metadata.uuid + 'areas'"
+                                    listname="area"
+                                    data-placeholder="Klikk for å velge område"
+                                    multiple>
+                                <option value=""></option>
                                 <optgroup v-for="areaType in orderItem.codelists.areaTypes" v-bind:label="capitalize(areaType)">
-                                    <option v-if="area.type == areaType" is="areaoption" v-for="(area, index) in orderItem.codelists.areas" v-bind:selected="area.selected" v-bind:data-index="index" v-bind:area="area"></option>
+                                    <option v-if="area.type == areaType"
+                                            is="areaoption"
+                                            v-for="(area, index) in orderItem.codelists.areas"
+                                            v-bind:data-index="index"
+                                            v-bind:area="area"></option>
                                 </optgroup>
                             </select>
                             <span v-if="orderItem.capabilities.supportsPolygonSelection" class="input-group-btn selectPolygon" data-toggle="modal" data-target="#kartModal">
@@ -66,10 +77,20 @@
                         <div v-else>
                             <div v-show="notSelected(orderItem.codelists.areas)" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                             <div v-show="notSelected(orderItem.codelists.areas) == false" class="form-group custom-select" v-bind:class="{disabled: notSelected(orderItem.codelists.areas)}">
-                                <select v-show class="chosen-select" v-chosen="orderItem.codelists.projections" v-bind:uuid="orderItem.metadata.uuid" data-placeholder="Klikk for å velge projeksjon" tabindex="-1" multiple>
+                                <select class="chosen-select projection-list"
+                                        v-chosen="orderItem.codelists.projections"
+                                        v-bind:parent="orderItem"
+                                        v-bind:uuid="orderItem.metadata.uuid"
+                                        listname="projection"
+                                        data-placeholder="Klikk for å velge projeksjon"
+                                        tabindex="-1"
+                                        multiple>
                                     <option value=""></option>
-
-                                    <option is="projectionoption" v-for="(projection, index) in orderItem.codelists.availableProjections" v-bind:data-index="index" v-bind:projection="projection"></option>
+                                    <option is="projectionoption"
+                                            v-for="(projection, index) in orderItem.codelists.projections"
+                                            v-bind:disabled="!projection.available"
+                                            v-bind:data-index="index"
+                                            v-bind:projection="projection"></option>
                                 </select>
                             </div>
                         </div>
@@ -84,9 +105,20 @@
                             <div v-show="notSelected(orderItem.codelists.projections) && notSelected(orderItem.codelists.areas)" class="help-text form-element-help-text bg-info"><span>Område og projeksjon må velges først</span></div>
                             <div v-show="notSelected(orderItem.codelists.projections) && notSelected(orderItem.codelists.areas) ==  false" class="help-text form-element-help-text bg-info"><span>Projeksjon må velges først</span></div>
                             <div v-show="notSelected(orderItem.codelists.areas) == false && notSelected(orderItem.codelists.projections) == false" class="form-group custom-select" v-bind:class="{disabled: notSelected(orderItem.codelists.projections)}">
-                                <select class="chosen-select" v-chosen="orderItem.codelists.formats" v-bind:uuid="orderItem.metadata.uuid" data-placeholder="Klikk for å velge filformat" tabindex="-1" multiple>
-                                    <option></option>
-                                    <option is="formatoption" v-for="(format, index) in orderItem.codelists.availableFormats" v-bind:data-index="index" v-bind:format="format"></option>
+                                <select class="chosen-select format-list"
+                                        v-chosen="orderItem.codelists.formats"
+                                        v-bind:parent="orderItem"
+                                        v-bind:uuid="orderItem.metadata.uuid"
+                                        listname="format"
+                                        data-placeholder="Klikk for å velge filformat"
+                                        tabindex="-1"
+                                        multiple>
+                                    <option value=""></option>
+                                    <option is="formatoption"
+                                            v-for="(format, index) in orderItem.codelists.formats"
+                                            v-bind:disabled="!format.available"
+                                            v-bind:data-index="index"
+                                            v-bind:format="format"></option>
                                 </select>
                             </div>
                         </div>
@@ -98,7 +130,6 @@
 
 
             <div class="download-form">
-                <article id="orderlist"></article>
 
                 <div class="row margin-bottom-10">
                     <div id="emailField" class="col-sm-6 margin-bottom-10">
@@ -121,6 +152,17 @@
                     </div>
                 </div>
                 <div id="kartModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
+                    <div class="modal-dialog" id="norgeskartmodal">
+                        <div class="modal-content">
+                            <div id="viewer" role="main" style="height:100%">
+                                <div id="container"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button><button id="setcoordinates" onclick="updateChosen();" type="button" class="btn btn-default" data-dismiss="modal">Legg til område</button>
+                            </div>
+
+                        </div>
+                    </div>
                     @Html.Partial("_Norgeskart")
                 </div>
 

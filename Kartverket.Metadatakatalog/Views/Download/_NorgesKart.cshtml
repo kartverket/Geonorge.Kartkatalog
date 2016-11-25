@@ -1,15 +1,5 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
-<div class="modal-dialog" id="norgeskartmodal">
-    <div class="modal-content">
-        <div id="viewer" role="main" style="height:100%">
-            <div id="container"></div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button><button id="setcoordinates" onclick="updateChosen();" type="button" class="btn btn-default" data-dismiss="modal">Legg til område</button>
-        </div>
 
-    </div>
-</div>
 <script>
     var CLIPPERCOORDS;
     var fixedCoordinates = false;
@@ -24,8 +14,11 @@
     }
 
 
-    function loadMap(id, fixed, typeOfArea, mapselectionlayer, vueObject) {
-
+    function loadMap(vueObject) {
+        var id = vueObject.metadata.uuid;
+        var fixed = vueObject.capabilities.supportsGridSelection;
+        var typeOfArea = vueObject.codelists.areaTypes[0];
+        var mapselectionlayer = vueObject.capabilities.mapSelectionLayer;
         if (fixed) {
             fixedCoordinates = true;
             areatype = typeOfArea;
@@ -60,7 +53,7 @@
 
         window.addEventListener('message', function (e) {
             var msg = JSON.parse(e.data);
-            console.log(msg);
+
             if (msg.type === "mapInitialized") {
                 sendMessage({
                     "cmd": "setCenter",
@@ -69,8 +62,9 @@
                     "zoom": conf.zoom_level
                 });
             } else {
-
+                showLoadingAnimation("test");
                 if (msg.cmd === "setVisible") return;
+
                 var obj = msg;
                 var reslist = document.getElementById('result');
                 if (obj.feature != null) {
@@ -87,6 +81,7 @@
 
                     var urlCanDownload = (vueObject.metadata.canDownloadUrl !== undefined) ? vueObject.metadata.canDownloadUrl : false;
                     if (urlCanDownload) {
+
                         $.ajax({
                             url: urlCanDownload,
                             type: "POST",
@@ -105,39 +100,56 @@
                                         $("#setcoordinates").attr("disabled", true);
                                     }
                                 }
-                            }
+                                hideLoadingAnimation();
+                            },
                         });
                     }
 
                     if (canDownload) {
-                        var polygonArea = {
-                            "name": "Valgt fra kart",
-                            "type": "polygon",
-                            "code": "0000",
-                            "selected": true,
-                            "formats": vueObject.codelists.formats,
-                            "projections": vueObject.codelists.projections
-                        }
-                        var test = true;
 
-                        var containsPolygonArea = false;
-                        vueObject.codelists.areas.forEach(function (area, val) {
-                            if (area.type == "polygon") {
-                                area = polygonArea;
-                                containsPolygonArea = true;
+
+                        $("#setcoordinates").click(function () {
+                            mainVueModel.resetProjectionSelections(vueObject);
+                            mainVueModel.resetFormatSelections(vueObject);
+
+                            vueObject.availableProjections = vueObject.codelists.projections;
+                            vueObject.availableFormats = vueObject.codelists.formats;
+
+                            vueObject.codelists.projections.forEach(function (projection) {
+                                mainVueModel.setAvailableProjection(projection, vueObject.availableProjections)
+                            });
+                            vueObject.codelists.formats.forEach(function (format) {
+                                mainVueModel.setAvailableFormat(format, vueObject.availableFormats)
+                            });
+
+                            var containsPolygonArea = false;
+                            vueObject.codelists.areas.forEach(function (area, val) {
+                                if (area.type == "polygon") {
+                                    area.selected = true;
+                                    containsPolygonArea = true;
+                                }
+                            });
+
+                            if (!containsPolygonArea) {
+                                if ($.inArray("polygon", vueObject.codelists.areaTypes) == -1) {
+                                    vueObject.codelists.areaTypes.push("polygon");
+                                }
                             }
+
+                            vueObject.codelists.coordinates = CLIPPERCOORDS;
+                            vueObject.codelists.coordinatesystem = defaultCoordinatesystem;
+
+                            var arealist = $("select#" + vueObject.metadata.uuid + "areas");
+                            if (arealist.val() == null) {
+                                arealist.val(["Kart"]);
+                            }
+                            else {
+                                arealistValues = arealist.val();
+                                arealistValues.push("Kart");
+                                arealist.val(arealistValues);
+                            }
+                            updateChosen();
                         });
-                        setAvailableProjections(polygonArea.projections, vueObject.codelists.availableProjections);
-                        setAvailableFormats(polygonArea.formats, vueObject.codelists.availableFormats);
-                        if (!containsPolygonArea) {
-                            vueObject.codelists.areas.push(polygonArea);
-                        }
-                        console.log(vueObject.codelists.areaTypes);
-                        if ($.inArray("polygon", vueObject.codelists.areaTypes) == -1) {
-                            vueObject.codelists.areaTypes.push("polygon");
-                        }
-                        vueObject.codelists.coordinates = CLIPPERCOORDS;
-                        vueObject.codelists.coordinatesystem = defaultCoordinatesystem;
                     }
                 }
             }
@@ -196,12 +208,11 @@
             vueObject.codelists.areas.forEach(function (area, val) {
                 if ($.inArray(area.code, selectedAreas) !== -1) {
                     area.selected = true;
-                    console.log(area.projections);
                     if (area.projections !== undefined) {
-                        availableProjections = setAvailableProjections(area.projections, availableProjections);
+                        availableProjections = getAvailableProjections(area.projections, availableProjections);
                     }
                     if (area.formats !== undefined) {
-                        availableFormats = setAvailableProjections(area.formats, availableFormats);
+                        availableFormats = getAvailableProjections(area.formats, availableFormats);
                     }
                 } else {
                     area.selected = false;
@@ -282,26 +293,5 @@
         var iframeHeight = windowHeight - 125;
         iframe.height(iframeHeight);
     }
-
-    // Lagre selected verdier i localStorage
-    /*function setSelectedValues(orderItems, selectClass, name) {
-        $.each(orderItems, function (key, val) {
-            var select = $('#orderuuid' + val).find('.' + selectClass);
-            var uuid = val;
-            $.each(select, function (key, val) {
-                var selectedValues = [];
-                var option = $(this).find('option:selected');
-                var selectedCount = $(this).find('option:selected').length;
-                if (selectedCount > 0) {
-                    var formgroup = $(this).parent('.form-group');
-                    formgroup.find('.chosen-choices').removeClass('has-error');
-                }
-                option.each(function (i, selected) {
-                    selectedValues[i] = $(selected).val();
-                });
-                localStorage[uuid + '.selected.' + name] = JSON.stringify(selectedValues);
-            });
-        });
-    }*/
 </script>
 
