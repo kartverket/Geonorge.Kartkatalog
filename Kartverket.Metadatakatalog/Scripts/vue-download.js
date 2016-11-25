@@ -1,6 +1,10 @@
-﻿function showAlert(message, colorClass) {
+﻿function clearAlertMessage() {
+    $('#feedback-alert .message').html("");
+}
+
+function showAlert(message, colorClass) {
     $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
-    $('#feedback-alert .message').html($('#feedback-alert .message').html() + message);
+    $('#feedback-alert .message').html($('#feedback-alert .message').html() + message + "<br/>");
     $('#feedback-alert').show();
 }
 

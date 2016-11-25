@@ -52,8 +52,8 @@
         };
 
         window.addEventListener('message', function (e) {
+            $("#setcoordinates").attr("disabled", true);
             var msg = JSON.parse(e.data);
-
             if (msg.type === "mapInitialized") {
                 sendMessage({
                     "cmd": "setCenter",
@@ -62,7 +62,8 @@
                     "zoom": conf.zoom_level
                 });
             } else {
-                showLoadingAnimation("test");
+      
+               
                 if (msg.cmd === "setVisible") return;
 
                 var obj = msg;
@@ -77,7 +78,7 @@
                         "coordinateSystem": defaultCoordinatesystem
                     };
 
-                    $("#setcoordinates").attr("disabled", false);
+                  
 
                     var urlCanDownload = (vueObject.metadata.canDownloadUrl !== undefined) ? vueObject.metadata.canDownloadUrl : false;
                     if (urlCanDownload) {
@@ -88,16 +89,21 @@
                             dataType: 'json',
                             data: JSON.stringify(canDownload),
                             contentType: "application/json",
-                            async: false,
+                            async: true,
                             error: function (jqXHR, textStatus, errorThrown) {
                                 //Ignore error
+                            },
+                            beforeSend: function(){
+                                showLoadingAnimation("Regner ut størrelse for valgt område");
                             },
                             success: function (data) {
                                 if (data !== null) {
                                     if (!data.canDownload) {
                                         canDownload = false;
+                                        clearAlertMessage();
                                         showAlert("Området er for stort til å laste ned, vennligst velg mindre område", "danger");
-                                        $("#setcoordinates").attr("disabled", true);
+                                    } else {
+                                        $("#setcoordinates").attr("disabled", false);
                                     }
                                 }
                                 hideLoadingAnimation();
