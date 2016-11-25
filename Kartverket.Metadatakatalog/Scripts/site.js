@@ -72,6 +72,7 @@ function addToCartButtonClick(addToCartButton) {
 
     updateCartButton(addToCartButton);
 
+    var orderItems = [];
 
     if (localStorage.getItem('orderItems') != null) {
         orderItems = (JSON.parse(localStorage.getItem('orderItems')));
