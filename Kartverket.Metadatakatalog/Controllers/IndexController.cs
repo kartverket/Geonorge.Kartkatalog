@@ -36,6 +36,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View();
         }
 
+        [Authorize]
         [Route("IndexSingle/{uuid}")]
         public ActionResult IndexSingle(string uuid)
         {
@@ -78,37 +79,37 @@ namespace Kartverket.Metadatakatalog.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
         }
 
-        [HttpPost]
-        [ValidateInput(false)] // allow posting of XML to go through
-        public ActionResult MetadataUpdated(string action, string uuid, string XMLFile)
-        {
-            HttpStatusCode statusCode;
-            try
-            {
-                Log.Info("Received notification of updated metadata: " + Request.HttpMethod + ", " + action + ", " + uuid + ", AUTH_USER: " + Request.ServerVariables["AUTH_USER"] + ", httpHeader: " + Request.ServerVariables["ALL_RAW"]);
+        //[HttpPost]
+        //[ValidateInput(false)] // allow posting of XML to go through
+        //public ActionResult MetadataUpdated(string action, string uuid, string XMLFile)
+        //{
+        //    HttpStatusCode statusCode;
+        //    try
+        //    {
+        //        Log.Info("Received notification of updated metadata: " + Request.HttpMethod + ", " + action + ", " + uuid + ", AUTH_USER: " + Request.ServerVariables["AUTH_USER"] + ", httpHeader: " + Request.ServerVariables["ALL_RAW"]);
 
-                if (!string.IsNullOrWhiteSpace(uuid))
-                {
-                    Log.Info("Running single indexing of metadata with uuid=" + uuid);
+        //        if (!string.IsNullOrWhiteSpace(uuid))
+        //        {
+        //            Log.Info("Running single indexing of metadata with uuid=" + uuid);
 
-                    _indexer.RunIndexingOn(uuid);
+        //            _indexer.RunIndexingOn(uuid);
 
-                    statusCode = HttpStatusCode.Accepted;
-                }
-                else
-                {
-                    Log.Warn("Not indexing metadata - uuid was empty");
-                    statusCode = HttpStatusCode.BadRequest;
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Error("Exception while indexing single metadata.", e);
-                _errorService.AddError(uuid, e);
-                statusCode = HttpStatusCode.BadRequest;
-            }
-            return new HttpStatusCodeResult(statusCode);
-        }
+        //            statusCode = HttpStatusCode.Accepted;
+        //        }
+        //        else
+        //        {
+        //            Log.Warn("Not indexing metadata - uuid was empty");
+        //            statusCode = HttpStatusCode.BadRequest;
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Log.Error("Exception while indexing single metadata.", e);
+        //        _errorService.AddError(uuid, e);
+        //        statusCode = HttpStatusCode.BadRequest;
+        //    }
+        //    return new HttpStatusCodeResult(statusCode);
+        //}
         protected override void OnException(ExceptionContext filterContext)
         {
             Log.Error("Error", filterContext.Exception);

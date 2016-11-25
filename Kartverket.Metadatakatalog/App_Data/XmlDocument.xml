@@ -486,6 +486,11 @@
             Catalogue search
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.MetadataUpdated(System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            Metadata updated
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetData(System.String)">
             <summary>
             Get metadata for uuid

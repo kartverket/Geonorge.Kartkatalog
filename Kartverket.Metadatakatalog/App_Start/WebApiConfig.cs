@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using Kartverket.Metadatakatalog.Formatter;
+using WebApi.BasicAuth;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -14,6 +15,8 @@ namespace Kartverket.Metadatakatalog
             config.MapHttpAttributeRoutes();
 
             config.EnableCors();
+
+            config.EnableBasicAuth();
 
             config.Routes.MapHttpRoute(
                 name: "SearchApi",
