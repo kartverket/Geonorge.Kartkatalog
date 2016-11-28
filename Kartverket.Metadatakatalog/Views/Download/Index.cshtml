@@ -189,13 +189,9 @@
     </article>
 
     <article id="responseList" v-show="orderResponse.length">
-        {{ orderResponse.length }}
         <div class="row">
             <div class="col-md-12">
                 <div v-for="responseItem in orderResponse">
-                    <p>Ordre URL: {{ responseItem.distributionUrl }}</p>
-                    <p>Epost: {{ responseItem.data.email}}</p>
-                    <p>Dato: {{ responseItem.data.orderDate }}</p>
                     <p>Referansenummer: {{ responseItem.data.referenceNumber }}</p>
                     <div class="list-group download-list">
                         <div v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" class="list-group-item">
