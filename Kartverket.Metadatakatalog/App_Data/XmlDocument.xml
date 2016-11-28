@@ -481,14 +481,14 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.MetadataUpdated(System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            Metadata updated
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Get(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
             <summary>
             Catalogue search
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.MetadataUpdated(System.Net.Http.Formatting.FormDataCollection)">
-            <summary>
-            Metadata updated
             </summary>
         </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetData(System.String)">

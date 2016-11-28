@@ -48,16 +48,11 @@ namespace Kartverket.Metadatakatalog.Controllers
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IMetadataService _metadataService;
-        private readonly MetadataIndexer _indexer;
-        MetadataIndexer indexer;
-        private readonly IErrorService _errorService;
 
-        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, MetadataIndexer indexer, IErrorService errorService)
+        public ApiSearchController(ISearchService searchService, IMetadataService metadataService)
         {
             _searchService = searchService;
             _metadataService = metadataService;
-            _indexer = indexer;
-            _errorService = errorService;
         }
 
         /// <summary>
@@ -87,47 +82,6 @@ namespace Kartverket.Metadatakatalog.Controllers
                 return null;
             }
 
-        }
-
-        /// <summary>
-        /// Metadata updated
-        /// </summary>
-        [System.Web.Http.Authorize(Users = "test")]
-        [System.Web.Http.Route("api/metadataupdated")]
-        [System.Web.Http.HttpPost]
-        public IHttpActionResult MetadataUpdated(FormDataCollection metadata)
-        {
-            HttpStatusCode statusCode;
-
-            string action = metadata.Get("action");
-            string uuid = metadata.Get("uuid");
-            string XMLFile = metadata.Get("XMLFile");
-
-            try
-            {
-                Log.Info("Received notification of updated metadata: " + action + ", " + uuid);
-
-                if (!string.IsNullOrWhiteSpace(uuid))
-                {
-                    Log.Info("Running single indexing of metadata with uuid=" + uuid);
-
-                    _indexer.RunIndexingOn(uuid);
-
-                    statusCode = HttpStatusCode.OK;
-                }
-                else
-                {
-                    Log.Warn("Not indexing metadata - uuid was empty");
-                    statusCode = HttpStatusCode.BadRequest;
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Error("Exception while indexing single metadata.", e);
-                _errorService.AddError(uuid, e);
-                statusCode = HttpStatusCode.BadRequest;
-            }
-            return StatusCode(statusCode);
         }
 
         /// <summary>
