@@ -36,9 +36,15 @@ function getServiceStatus(uuid, id) {
     $.getJSON(statusApi + "monitorApi/serviceDetail?uuid=" + uuid, function (result) {
         console.log(result);
         try {
+            var statusOK = result.status;
             var numLayers = parseInt(result.numLayers.svar);
             console.log("numLayers:" + numLayers);
-            if (numLayers > 30) {
+            if (!statusOK)
+            {
+                $('#mapmacro-' + id).attr("class", "custom-icon custom-icon-kartmarkoer-warning");
+                $('#mapmacrolink-' + id).attr("title", "Tjenesten er utilgjengelig for øyeblikket");
+            }
+            else if (numLayers > 30) {
                 $('#mapmacro-' + id).attr("class", "custom-icon custom-icon-kartmarkoer-warning");
                 $('#mapmacrolink-' + id).attr("title", "Tjenesten kan være treg å vise");
             }
