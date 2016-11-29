@@ -245,62 +245,9 @@
         return true;
     }
 
-    function setCoordinates() {
-
-        uuid = $('#setcoordinates').attr('uuid');
-
-        if (fixedCoordinates) {
-            var orderItemSelectOmraader = $('#orderuuid' + uuid + ' .selectOmraader');
-
-            orderItemSelectOmraader.find("option").prop("selected", false)
-
-            orderItemSelectOmraader = $('#orderuuid' + uuid + ' .selectOmraader');
-
-            for (var key in areas) {
-                val = areatype + "_" + key;
-                orderItemSelectOmraader.find("option[value=" + val + "]").prop("selected", "selected");
-            }
-
-            orderItemSelectOmraader.trigger("chosen:updated");
-
-            var orderItems = JSON.parse(localStorage["orderItems"]);
-            setSelectedValues(orderItems, 'selectProjeksjoner', 'projections');
-            setSelectedValues(orderItems, 'selectFormater', 'formats');
-            setSelectedValues(orderItems, 'selectOmraader', 'areas');
-
-            areas = {}
-
-        }
-        else {
-            localStorage[uuid + '.selected.coordinates'] = CLIPPERCOORDS;
-            getSelectedCoordinates(uuid, 'coordinates', 'coordinates');
-
-            var supportsProjectionSelection = (localStorage.getItem(uuid + '.capabilities.supportsProjectionSelection') === "true");
-            var supportsFormatSelection = (localStorage.getItem(uuid + '.capabilities.supportsFormatSelection') === "true");
-
-            var orderItemSelectProjeksjoner = $('#orderuuid' + uuid + ' .selectProjeksjoner');
-            orderItemSelectProjeksjoner.attr('name', uuid + '-projection');
-            orderItemSelectProjeksjoner.empty();
-            populateProjectionList(uuid, supportsProjectionSelection);
-
-            orderItemSelectProjeksjoner.trigger("chosen:updated");
-            var orderItemSelectFormater = $('#orderuuid' + uuid + ' .selectFormater');
-            orderItemSelectFormater.attr('name', uuid + '-formats');
-            orderItemSelectFormater.empty();
-            populateFormatList(uuid, supportsFormatSelection);
-            orderItemSelectProjeksjoner.attr("disabled", false);
-            orderItemSelectProjeksjoner.trigger("chosen:updated");
-            orderItemSelectFormater.attr("disabled", false);
-            orderItemSelectFormater.trigger("chosen:updated");
-
-        }
-
-    }
-
     function resizeIframe(iframe) {
         var windowHeight = $(window).height();
         var iframeHeight = windowHeight - 125;
         iframe.height(iframeHeight);
     }
 </script>
-
