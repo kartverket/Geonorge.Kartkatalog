@@ -3650,6 +3650,77 @@ a.status-icon-link:hover {
   top: -5px;
   color: transparent; }
 
+.custom-select .v-select .open-indicator {
+  display: none; }
+
+.custom-select .v-select .selected-tag {
+  background: #efeeed !important;
+  border: none;
+  border-radius: 0;
+  line-height: 18px;
+  box-shadow: none;
+  font-family: Open Sans,sans-serif;
+  font-size: 12pt;
+  color: #414042;
+  height: 25px;
+  padding: .2em 2em .3em .6em;
+  vertical-align: baseline;
+  position: relative;
+  margin: 3px 5px 3px 0;
+  cursor: default; }
+  .custom-select .v-select .selected-tag .close {
+    background: #7da1c4;
+    position: absolute;
+    top: 0;
+    line-height: 19pt;
+    color: #fff;
+    font-size: 10pt;
+    padding: 0 5px;
+    display: table !important;
+    opacity: 1;
+    right: 0;
+    height: 25px;
+    display: inline-block;
+    width: 23px;
+    transition: all .35s linear 0s; }
+    .custom-select .v-select .selected-tag .close:hover {
+      background-color: #fe5000; }
+    .custom-select .v-select .selected-tag .close span {
+      font-size: 18pt;
+      line-height: 18pt; }
+
+.custom-select .v-select .dropdown-toggle {
+  border: 1px solid #cfcfcf !important;
+  border-radius: 0;
+  padding: 0 8px; }
+
+.custom-select .v-select ul.dropdown-menu {
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+  padding-left: 34.6px; }
+  .custom-select .v-select ul.dropdown-menu > li:before {
+    content: none; }
+  .custom-select .v-select ul.dropdown-menu > li.area-list-heading {
+    color: #414041;
+    font-weight: 600;
+    text-transform: capitalize;
+    margin-bottom: 5px;
+    margin-top: 17px; }
+  .custom-select .v-select ul.dropdown-menu > li.highlight > a, .custom-select .v-select ul.dropdown-menu > li:hover > a {
+    background: none;
+    text-decoration: underline !important; }
+  .custom-select .v-select ul.dropdown-menu > li.active, .custom-select .v-select ul.dropdown-menu > li.active > a {
+    background: none;
+    color: #968c83 !important; }
+  .custom-select .v-select ul.dropdown-menu > a {
+    padding-left: 15px; }
+  .custom-select .v-select ul.dropdown-menu > li, .custom-select .v-select ul.dropdown-menu > a {
+    font-size: 13pt;
+    line-height: 22pt;
+    color: #3867c8;
+    font-weight: 400;
+    padding: 0;
+    margin-left: 0; }
+
 html[data-useragent*='MSIE 10.0'] .chosen-input-group .input-group-btn {
   display: table-row; }
 

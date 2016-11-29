@@ -696,6 +696,10 @@
     <Content Include="PostDeploy.ps1" />
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
+    <Content Include="Content\bower_components\vue\.bower.json" />
+    <Content Include="Content\bower_components\vue\bower.json" />
+    <Content Include="Content\bower_components\vue\dist\vue.min.js.map" />
+    <Content Include="Content\bower_components\vue\LICENSE" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\.bower.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\702ZOKiLJc3WVjuplzInF5uFdDttMLvmWuJdhhgs.ttf" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.eot" />
@@ -725,10 +729,6 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_SharedMenu.min.cshtml" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\bower.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\README.md" />
-    <Content Include="Content\bower_components\vue\.bower.json" />
-    <Content Include="Content\bower_components\vue\bower.json" />
-    <Content Include="Content\bower_components\vue\dist\vue.min.js.map" />
-    <Content Include="Content\bower_components\vue\LICENSE" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
