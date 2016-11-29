@@ -337,7 +337,7 @@ namespace Kartverket.Metadatakatalog.Models
             string CoverageParams = "";
             var coverageStr = CoverageUrl;
             var startPos = 5;
-            if (!string.IsNullOrEmpty(coverageStr))
+            if (!string.IsNullOrEmpty(coverageStr) && coverageStr.IndexOf("@PATH") > -1)
             { 
                 var endPosType = coverageStr.IndexOf("@PATH");
                 var typeStr = coverageStr.Substring(startPos, endPosType - startPos);
