@@ -377,7 +377,7 @@ var mainVueModel = new Vue({
         capitalize: function (string) {
             return string[0].toUpperCase() + string.slice(1);
         },
-        addAreaOptionGroups(orderItems) {
+        addAreaOptionGroups: function (orderItems) {
                 orderItems.forEach(function (orderItem) {
                     var orderItemId = orderItem.metadata.uuid;
                     document.addEventListener("DOMNodeInserted", function (event) {
