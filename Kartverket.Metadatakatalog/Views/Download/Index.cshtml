@@ -15,7 +15,7 @@
     <section class="heading">
         <div class="row">
             <div class="col-sm-12">
-                <h1 v-show="orderItems.length && !orderResponse.length">Min kurv</h1>
+                <h1 v-show="!orderResponse.length">Min kurv</h1>
                 <h1 v-show="orderResponse.length"></h1>
             </div>
             <div class="col-sm-12">
@@ -40,7 +40,7 @@
                     <div class="col-md-4">
                         <p>Område:</p>
                         <div class="input-group chosen-input-group custom-select input-group-omraade">
-                            <v-select v-bind:id="'arealist-' + orderItem.metadata.uuid" v-bind:on-change="changeArea(orderItem)" v-bind:data-type="type" label="name"  v-bind:value="orderItem.codelists.selectedAreas" v-bind:options="orderItem.codelists.areas" multiple></v-select>
+                            <v-select v-bind:id="'arealist-' + orderItem.metadata.uuid" v-bind:on-change="changeArea(orderItem)" v-bind:data-type="type" label="name" v-bind:value="orderItem.codelists.selectedAreas" v-bind:options="orderItem.codelists.areas" multiple></v-select>
                             <span v-if="orderItem.capabilities.supportsPolygonSelection" class="input-group-btn selectPolygon" data-toggle="modal" data-target="#kartModal">
                                 <button data-placement="bottom" v-on:click="selectFromMap(orderItem)" v-bind:uuid="orderItem.uuid" title="Velg fra kart" data-toggle="tooltip" class="btn btn-nodivider btn-fullheight selectPolygon-button" type="button"><span class="glyphicon glyphicon-globe"></span></button>
                             </span>
@@ -137,6 +137,16 @@
                 </div>
             </div>
 
+        </div>
+
+    </article>
+
+
+    <article v-show="!orderItems.length && !orderResponse.length">
+        <div class="row">
+            <div class="col-md-12">
+                <p>Du har ingen elementer i kurven</p>
+            </div>
         </div>
     </article>
 
