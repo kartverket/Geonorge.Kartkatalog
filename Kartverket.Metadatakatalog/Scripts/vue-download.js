@@ -227,6 +227,7 @@ var mainVueModel = new Vue({
                                         "distributionUrl": orderRequest.distributionUrl,
                                         "data": data
                                     });
+                                this.removeAllOrderItems();
                             }
                             else {
                                 showAlert("Feil", "danger");
