@@ -380,21 +380,21 @@ var mainVueModel = new Vue({
         addAreaOptionGroups: function (orderItems) {
                 orderItems.forEach(function (orderItem) {
                     var orderItemId = orderItem.metadata.uuid;
+                    var domNodeInserted = false;
                     document.addEventListener("DOMNodeInserted", function (event) {
                         var target = event.srcElement || event.target;
                         var elements = $(target).find("#arealist-" + orderItemId);
-                        if (elements.length > 0) {
+                        
+                        if (elements.length > 0 && !domNodeInserted) {
                             var areaList = $(elements[0]).find("ul.dropdown-menu");
                             var areaListItems = areaList.children("li");
                             areaTypes = orderItem.codelists.areaTypes;
                             var indexCount = 0;
                             areaTypes.forEach(function (areaType) {
-                                var listheading = document.createElement("li");
-                                listheading.innerHTML = areaType.name;
-                                listheading.className = "area-list-heading";
-                                areaListItems[indexCount].before(listheading);
+                                $(areaListItems[indexCount]).prepend("<span class='area-list-heading'>" + areaType.name + "</span>");
                                 indexCount += areaType.numberOfItems;
                             })
+                            domNodeInserted = true;
                         }
                     });
                 })
