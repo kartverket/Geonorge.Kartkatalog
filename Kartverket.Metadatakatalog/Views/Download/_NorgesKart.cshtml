@@ -22,7 +22,7 @@
             fixedCoordinates = true;
             areatype = typeOfArea;
             mapSelectionLayer = mapselectionlayer;
-            loadMapFixed(id);
+            loadMapFixed(id, orderItem);
             return;
         }
 
@@ -169,8 +169,16 @@
     };
 
 
-    function loadMapFixed(metadataUuid) {
-        var areas = {};
+    function alreadySelectedArea(area, selectedAreas) {
+        var alreadySelected = false;
+        selectedAreas.forEach(function (selectedArea) {
+            if (area.code == selectedArea.code) alreadySelected = true;
+        });
+        return alreadySelected;
+    }
+
+    function loadMapFixed(metadataUuid, orderItem) {
+        var selectedAreas = {};
         conf = { "service_name": mapSelectionLayer, "center_longitude": "378604", "center_latitude": "7226208", "zoom_level": "3" }
 
         window.addEventListener('message', function (e) {
@@ -201,32 +209,22 @@
                     var path = areaname;
 
                     if (data["cmd"] == "featureSelected") {
-                        areas[path] = areaname;
+                        selectedAreas[path] = areaname;
                     }
                     if (data["cmd"] == "featureUnselected") {
-                        delete areas[path];
+                        delete selectedAreas[path];
                     }
                 }
             }
-            var selectedAreas = [];
-            for (area in areas) {
-                selectedAreas.push(area);
+            for (selectedArea in selectedAreas) {
+                orderItem.codelists.areas.forEach(function (area, val) {
+                    if (selectedArea == area.code && !alreadySelectedArea(area, orderItem.codelists.selectedAreas)) {
+                        orderItem.codelists.selectedAreas.push(area);
+                    }
+                });
             };
-            var availableProjections = [];
-            var availableFormats = [];
-            orderItem.codelists.areas.forEach(function (area, val) {
-                if ($.inArray(area.code, selectedAreas) !== -1) {
-                    area.selected = true;
-                    if (area.projections !== undefined) {
-                        availableProjections = getAvailableProjections(area.projections, availableProjections);
-                    }
-                    if (area.formats !== undefined) {
-                        availableFormats = getAvailableProjections(area.formats, availableFormats);
-                    }
-                } else {
-                    area.selected = false;
-                }
-            });
+
+
             orderItem.codelists.availableProjections = availableProjections;
             orderItem.codelists.availableFormats = availableFormats;
         }, false);
