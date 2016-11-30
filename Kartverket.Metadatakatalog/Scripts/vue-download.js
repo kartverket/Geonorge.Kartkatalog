@@ -232,7 +232,7 @@ var mainVueModel = new Vue({
                                         "distributionUrl": orderRequest.distributionUrl,
                                         "data": data
                                     });
-                                this.removeAllOrderItems();
+                                mainVueModel.removeAllOrderItems();
                             }
                             else {
                                 showAlert("Feil", "danger");
