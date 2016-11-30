@@ -40,27 +40,7 @@
                     <div class="col-md-4">
                         <p>Område:</p>
                         <div class="input-group chosen-input-group custom-select input-group-omraade">
-                            <v-select v-bind:id="'arealist-' + orderItem.metadata.uuid" v-bind:on-change="changeArea(orderItem)" v-bind:data-type="type" label="name"  v-bind:value="orderItem.codelists.selectedAreas" v-bind:options="orderItem.codelists.areas" multiple>
-                                
-                            </v-select>
-                            @*<select class="area-list" style="height: 400px;"
-                                    v-model="orderItem.codelists.selectedAreas"
-                                    v-on:change="changeArea(orderItem)"
-                                    v-bind:uuid="orderItem.metadata.uuid"
-                                    v-bind:name="orderItem.metadata.uuid + 'areas'"
-                                    v-bind:id="orderItem.metadata.uuid + 'areas'"
-                                    listname="area"
-                                    data-placeholder="Klikk for å velge område"
-                                    multiple>
-                                <option value=""></option>
-                                <optgroup v-for="areaType in orderItem.codelists.areaTypes" v-bind:label="capitalize(areaType)">
-                                    <option v-if="area.type == areaType"
-                                            is="areaoption"
-                                            v-for="(area, index) in orderItem.codelists.areas"
-                                            v-bind:data-index="index"
-                                            v-bind:area="area"></option>
-                                </optgroup>
-                            </select>*@
+                            <v-select v-bind:id="'arealist-' + orderItem.metadata.uuid" v-bind:on-change="changeArea(orderItem)" v-bind:data-type="type" label="name"  v-bind:value="orderItem.codelists.selectedAreas" v-bind:options="orderItem.codelists.areas" multiple></v-select>
                             <span v-if="orderItem.capabilities.supportsPolygonSelection" class="input-group-btn selectPolygon" data-toggle="modal" data-target="#kartModal">
                                 <button data-placement="bottom" v-on:click="selectFromMap(orderItem)" v-bind:uuid="orderItem.uuid" title="Velg fra kart" data-toggle="tooltip" class="btn btn-nodivider btn-fullheight selectPolygon-button" type="button"><span class="glyphicon glyphicon-globe"></span></button>
                             </span>
@@ -81,20 +61,6 @@
                             <div v-show="!orderItem.codelists.selectedAreas.length" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                             <div v-show="orderItem.codelists.selectedAreas.length" class="form-group custom-select">
                                 <v-select label="name" v-bind:value="orderItem.codelists.selectedProjections" v-bind:options="orderItem.codelists.availableProjections" multiple></v-select>
-                                @*<select class="projection-list" :options="orderItem.codelists.projections" style="height: 400px;"
-                                        v-model="orderItem.codelists.selectedProjections"
-                                        v-bind:uuid="orderItem.metadata.uuid"
-                                        listname="projection"
-                                        data-placeholder="Klikk for å velge projeksjon"
-                                        tabindex="-1"
-                                        multiple>
-                                    <option value=""></option>
-                                    <option is="projectionoption"
-                                            v-for="(projection, index) in orderItem.codelists.projections"
-                                            v-bind:disabled="!projection.available"
-                                            v-bind:data-index="index"
-                                            v-bind:projection="projection"></option>
-                                </select>*@
                             </div>
                         </div>
                     </div>
@@ -109,21 +75,6 @@
                             <div v-show="!orderItem.codelists.selectedProjections.length && orderItem.codelists.selectedAreas.length" class="help-text form-element-help-text bg-info"><span>Projeksjon må velges først</span></div>
                             <div v-show="orderItem.codelists.selectedProjections.length && orderItem.codelists.selectedAreas.length" class="form-group custom-select">
                                 <v-select label="name" v-bind:value="orderItem.codelists.selectedFormats" v-bind:options="orderItem.codelists.availableFormats" multiple></v-select>
-                               
-                                 @*<select class="format-list" style="height: 400px;"
-                                        v-model="orderItem.codelists.selectedFormats"
-                                        v-bind:uuid="orderItem.metadata.uuid"
-                                        listname="format"
-                                        data-placeholder="Klikk for å velge filformat"
-                                        tabindex="-1"
-                                        multiple>
-                                    <option value=""></option>
-                                    <option is="formatoption"
-                                            v-for="(format, index) in orderItem.codelists.formats"
-                                            v-bind:disabled="!format.available"
-                                            v-bind:data-index="index"
-                                            v-bind:format="format"></option>
-                                </select>*@
                             </div>
                         </div>
                     </div>
@@ -132,9 +83,7 @@
             </div>
 
 
-
             <div class="download-form">
-
                 <div class="row margin-bottom-10">
                     <div id="emailField" class="col-sm-6 margin-bottom-10">
                         <p class="article-p">E-post: <span class="required-indicator"></span></p>
