@@ -184,6 +184,7 @@
         window.addEventListener('message', function (e) {
             var msg = JSON.parse(e.data);
             console.log("Event");
+            $("#setcoordinates").attr("disabled", false);
             if (msg.type === "mapInitialized") {
                 sendMessage({
                     "cmd": "setCenter",
