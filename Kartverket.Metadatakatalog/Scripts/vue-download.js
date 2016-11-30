@@ -99,16 +99,21 @@ var mainVueModel = new Vue({
                 };
                 var orderLines = [];
                 orderItemGroup.forEach(function (orderItem) {
-                    orderRequest.order.orderLines.push(
-                            {
-                                "metadataUuid": orderItem.metadata.uuid,
-                                "coordinates": orderItem.codelists.coordinates,
-                                "coordinatesystem": orderItem.codelists.coordinatesystem,
-                                "areas": this.getSelectedAreas(orderItem.codelists.selectedAreas),
-                                "projections": this.getSelectedProjections(orderItem.codelists.selectedProjections),
-                                "formats": this.getSelectedFormats(orderItem.codelists.selectedFormats)
-                            }
-                    );
+                    var orderLine = {
+                        "metadataUuid": orderItem.metadata.uuid,
+                        "coordinates": orderItem.codelists.coordinates,
+                        "coordinatesystem": orderItem.codelists.coordinatesystem,
+                    };
+                    if (this.getSelectedAreas(orderItem.codelists.selectedAreas).length) {
+                        orderLine.areas = this.getSelectedAreas(orderItem.codelists.selectedAreas);
+                    }
+                    if (this.getSelectedProjections(orderItem.codelists.selectedProjections).length) {
+                        orderLine.projections = this.getSelectedProjections(orderItem.codelists.selectedProjections);
+                    }
+                    if (this.getSelectedFormats(orderItem.codelists.selectedFormats).length) {
+                        orderLine.formats = this.getSelectedFormats(orderItem.codelists.selectedFormats);
+                    }
+                    orderRequest.order.orderLines.push(orderLine);
                 }.bind(this));
                 orderRequests.push(orderRequest);
 
@@ -379,26 +384,26 @@ var mainVueModel = new Vue({
             return string[0].toUpperCase() + string.slice(1);
         },
         addAreaOptionGroups: function (orderItems) {
-                orderItems.forEach(function (orderItem) {
-                    var orderItemId = orderItem.metadata.uuid;
-                    var domNodeInserted = false;
-                    document.addEventListener("DOMNodeInserted", function (event) {
-                        var target = event.srcElement || event.target;
-                        var elements = $(target).find("#arealist-" + orderItemId);
-                        
-                        if (elements.length > 0 && !domNodeInserted) {
-                            var areaList = $(elements[0]).find("ul.dropdown-menu");
-                            var areaListItems = areaList.children("li");
-                            areaTypes = orderItem.codelists.areaTypes;
-                            var indexCount = 0;
-                            areaTypes.forEach(function (areaType) {
-                                $(areaListItems[indexCount]).prepend("<span class='area-list-heading'>" + areaType.name + "</span>");
-                                indexCount += areaType.numberOfItems;
-                            })
-                            domNodeInserted = true;
-                        }
-                    });
-                })
+            orderItems.forEach(function (orderItem) {
+                var orderItemId = orderItem.metadata.uuid;
+                var domNodeInserted = false;
+                document.addEventListener("DOMNodeInserted", function (event) {
+                    var target = event.srcElement || event.target;
+                    var elements = $(target).find("#arealist-" + orderItemId);
+
+                    if (elements.length > 0 && !domNodeInserted) {
+                        var areaList = $(elements[0]).find("ul.dropdown-menu");
+                        var areaListItems = areaList.children("li");
+                        areaTypes = orderItem.codelists.areaTypes;
+                        var indexCount = 0;
+                        areaTypes.forEach(function (areaType) {
+                            $(areaListItems[indexCount]).prepend("<span class='area-list-heading'>" + areaType.name + "</span>");
+                            indexCount += areaType.numberOfItems;
+                        })
+                        domNodeInserted = true;
+                    }
+                });
+            })
         },
         selectFromMap: function (orderItem) {
             loadMap(orderItem);
