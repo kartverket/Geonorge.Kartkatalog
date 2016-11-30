@@ -41,7 +41,7 @@ function getServiceStatus(uuid, id) {
             console.log("numLayers:" + numLayers);
             if (!statusOK)
             {
-                $('#mapmacro-' + id).attr("class", "custom-icon custom-icon-kartmarkoer-warning");
+                $('#mapmacro-' + id).attr("class", "custom-icon custom-icon-kartmarkoer-unavailable");
                 $('#mapmacrolink-' + id).attr("title", "Tjenesten er utilgjengelig for øyeblikket");
             }
             else if (numLayers > 30) {
