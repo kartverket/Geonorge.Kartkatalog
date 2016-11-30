@@ -2010,6 +2010,12 @@ button.btn {
 .disabled .custom-icon.custom-icon-kartmarkoer-warning {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/kartmarkoer-warning-disabled.svg"); }
 
+.custom-icon.custom-icon-kartmarkoer-unavailable {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/kartmarkoer-unavailable.svg"); }
+
+.btn .custom-icon.custom-icon-kartmarkoer-unavailable {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/kartmarkoer-unavailable-white.svg"); }
+
 /* Handlekurv*/
 .custom-icon.custom-icon-handlekurv {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/handlekurv.svg"); }
