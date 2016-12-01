@@ -81,7 +81,8 @@ var mainVueModel = new Vue({
     data: {
         orderItems: [],
         email: "",
-        orderResponse: {}
+        orderResponse: {},
+        emailRequired: false
     },
     computed: {
         orderRequests: function () {
@@ -280,6 +281,7 @@ var mainVueModel = new Vue({
             orderItem.codelists.availableProjections = availableProjections;
             orderItem.codelists.selectedFormats = [];
             orderItem.codelists.availableFormats = availableFormats;
+            this.emailRequired = this.orderHasCoordinates();
         },
 
         notSelected: function (elements) {
@@ -420,6 +422,22 @@ var mainVueModel = new Vue({
         selectFromMap: function (orderItem) {
             loadMap(orderItem);
             $('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
+        },
+        orderItemHasCoordinates(orderItem) {
+            return (orderItem.codelists.coordinates !== undefined) ? true : false;
+        },
+        orderHasCoordinates: function () {
+            var hasCoordinates = false;
+            this.orderItems.forEach(function (orderItem) {
+                if (this.orderItemHasCoordinates(orderItem)) hasCoordinates = true;
+            }.bind(this));
+            return hasCoordinates;
+        },
+        formIsValid: function (orderItem) {
+            var emailFieldNotEmpty = (this.email !== "") ? true : false;
+            var emailRequired = this.emailRequired;
+            var formIsValid = ((emailFieldNotEmpty && emailRequired) || (!emailRequired)) ? true : false;
+            return formIsValid;
         }
     }
 });
