@@ -433,10 +433,15 @@ var mainVueModel = new Vue({
             }.bind(this));
             return hasCoordinates;
         },
+        emailAddressIsValid: function(email){
+            var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return regex.test(email);
+        },
         formIsValid: function (orderItem) {
             var emailFieldNotEmpty = (this.email !== "") ? true : false;
+            var emailAddressIsValid = this.emailAddressIsValid(this.email);
             var emailRequired = this.emailRequired;
-            var formIsValid = ((emailFieldNotEmpty && emailRequired) || (!emailRequired)) ? true : false;
+            var formIsValid = ((emailFieldNotEmpty && emailRequired && emailAddressIsValid) || (!emailRequired)) ? true : false;
             return formIsValid;
         }
     }
