@@ -3702,7 +3702,8 @@ a.status-icon-link:hover {
 
 .custom-select .v-select ul.dropdown-menu {
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
-  padding-left: 34.6px; }
+  padding-left: 16px;
+  overflow-x: hidden; }
   .custom-select .v-select ul.dropdown-menu > li:before {
     content: none; }
   .custom-select .v-select ul.dropdown-menu > li.highlight > a, .custom-select .v-select ul.dropdown-menu > li:hover > a {
