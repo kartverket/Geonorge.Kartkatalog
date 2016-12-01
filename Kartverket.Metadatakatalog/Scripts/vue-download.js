@@ -423,7 +423,7 @@ var mainVueModel = new Vue({
             loadMap(orderItem);
             $('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
         },
-        orderItemHasCoordinates(orderItem) {
+        orderItemHasCoordinates: function (orderItem) {
             return (orderItem.codelists.coordinates !== undefined) ? true : false;
         },
         orderHasCoordinates: function () {
