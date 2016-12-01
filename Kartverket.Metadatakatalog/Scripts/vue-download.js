@@ -100,9 +100,7 @@ var mainVueModel = new Vue({
                 var orderLines = [];
                 orderItemGroup.forEach(function (orderItem) {
                     var orderLine = {
-                        "metadataUuid": orderItem.metadata.uuid,
-                        "coordinates": orderItem.codelists.coordinates,
-                        "coordinatesystem": orderItem.codelists.coordinatesystem,
+                        "metadataUuid": orderItem.metadata.uuid
                     };
                     if (this.getSelectedAreas(orderItem.codelists.selectedAreas).length) {
                         orderLine.areas = this.getSelectedAreas(orderItem.codelists.selectedAreas);
@@ -112,6 +110,12 @@ var mainVueModel = new Vue({
                     }
                     if (this.getSelectedFormats(orderItem.codelists.selectedFormats).length) {
                         orderLine.formats = this.getSelectedFormats(orderItem.codelists.selectedFormats);
+                    }
+                    if (orderItem.codelists.coordinates !== undefined && orderItem.codelists.coordinates !== "") {
+                        orderLine.coordinates = orderItem.codelists.coordinates;
+                    }
+                    if (orderItem.codelists.coordinatesystem !== undefined && orderItem.codelists.coordinatesystem !== "") {
+                        orderLine.coordinatesystem = orderItem.codelists.coordinatesystem;
                     }
                     orderRequest.order.orderLines.push(orderLine);
                 }.bind(this));
@@ -141,9 +145,7 @@ var mainVueModel = new Vue({
                         "formats": [],
                         "selectedFormats": [],
                         "availableFormats": [],
-                        "areaTypes": [],
-                        "coordinates": "",
-                        "coordinatesystem": "",
+                        "areaTypes": []
                     }
                 }
 
@@ -250,6 +252,7 @@ var mainVueModel = new Vue({
             selectedAreaProjectionsCodes = [];
             availableFormats = [];
             selectedAreaFormatsNames = [];
+            var orderItemHasCoordinates = false;
             orderItem.codelists.selectedAreas.forEach(function (selectedArea) {
                 selectedArea.projections.forEach(function (selectedAreaProjection) {
                     if ($.inArray(selectedAreaProjection.code, selectedAreaProjectionsCodes) == -1) {
@@ -263,7 +266,16 @@ var mainVueModel = new Vue({
                         selectedAreaFormatsNames.push(selectedAreaFormat.name);
                     }
                 });
+                if (selectedArea.type == "polygon") {
+                    orderItem.codelists.coordinates = selectedArea.coordinates;
+                    orderItem.codelists.coordinatesystem = selectedArea.coordinatesystem;
+                    orderItemHasCoordinates = true;
+                }
             });
+            if (!orderItemHasCoordinates) {
+                delete orderItem.codelists.coordinates;
+                delete orderItem.codelists.coordinatesystem;
+            }
             orderItem.codelists.selectedProjections = [];
             orderItem.codelists.availableProjections = availableProjections;
             orderItem.codelists.selectedFormats = [];

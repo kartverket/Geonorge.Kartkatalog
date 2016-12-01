@@ -129,7 +129,9 @@
                                         "type": "polygon",
                                         "code": "Kart",
                                         "formats": orderItem.codelists.formats,
-                                        "projections": orderItem.codelists.projections
+                                        "projections": orderItem.codelists.projections,
+                                        "coordinates": CLIPPERCOORDS,
+                                        "coordinatesystem": defaultCoordinatesystem
                                     }
                                 );
                             }
@@ -156,9 +158,6 @@
                                     });
                                 }
                             }
-
-                            orderItem.codelists.coordinates = CLIPPERCOORDS;
-                            orderItem.codelists.coordinatesystem = defaultCoordinatesystem;
                         });
                     }
                 }
