@@ -145,8 +145,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             ProductSheetUrl = item.ProductSheetUrl;
             ProductSpecificationUrl = item.ProductSpecificationUrl;
             ServiceUuid = item.Uuid;
-            if (item.Type == "dataset" && item.DatasetServices != null && item.DatasetServices[0] != null)
-                ServiceUuid = item.DatasetServices[0].Split('|').First();
+            if (item.Type == "dataset")
+                ServiceUuid = item.ServiceDistributionUuidForDataset;
         }
 
         public static List<SearchResultItemViewModel> CreateFromList(IEnumerable<SearchResultItem> items)

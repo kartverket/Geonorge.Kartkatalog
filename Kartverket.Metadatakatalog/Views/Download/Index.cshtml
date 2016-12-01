@@ -15,8 +15,8 @@
     <section class="heading">
         <div class="row">
             <div class="col-sm-12">
-                <h1 v-show="orderItems.length && !orderResponse.length">Min kurv</h1>
-                <h1 v-show="orderResponse.length"></h1>
+                <h1 v-show="!orderResponse.length">Min kurv</h1>
+                <h1 v-show="orderResponse.length">Min bestilling</h1>
             </div>
             <div class="col-sm-12">
                 <span class="separator-lg"></span>
@@ -40,13 +40,7 @@
                     <div class="col-md-4">
                         <p>Område:</p>
                         <div class="input-group chosen-input-group custom-select input-group-omraade">
-                            <select class="chosen-select" v-chosen="orderItem.codelists.areas" v-bind:parent="orderItem" v-bind:uuid="orderItem.metadata.uuid" v-bind:name="orderItem.metadata.uuid + 'areas'" data-placeholder="Klikk for å velge område" multiple>
-                                <option></option>
-
-                                <optgroup v-for="areaType in orderItem.codelists.areaTypes" v-bind:label="capitalize(areaType)">
-                                    <option v-if="area.type == areaType" is="areaoption" v-for="(area, index) in orderItem.codelists.areas" v-bind:selected="area.selected" v-bind:data-index="index" v-bind:area="area"></option>
-                                </optgroup>
-                            </select>
+                            <v-select v-bind:id="'arealist-' + orderItem.metadata.uuid" v-bind:on-change="changeArea(orderItem)" v-bind:data-type="type" label="name" v-bind:value="orderItem.codelists.selectedAreas" v-bind:options="orderItem.codelists.areas" multiple></v-select>
                             <span v-if="orderItem.capabilities.supportsPolygonSelection" class="input-group-btn selectPolygon" data-toggle="modal" data-target="#kartModal">
                                 <button data-placement="bottom" v-on:click="selectFromMap(orderItem)" v-bind:uuid="orderItem.uuid" title="Velg fra kart" data-toggle="tooltip" class="btn btn-nodivider btn-fullheight selectPolygon-button" type="button"><span class="glyphicon glyphicon-globe"></span></button>
                             </span>
@@ -64,13 +58,9 @@
                             <span>Valg av projeksjon støttes ikke</span>
                         </div>
                         <div v-else>
-                            <div v-show="notSelected(orderItem.codelists.areas)" class="help-text form-element-help-text bg-info"><span>Område må velges</span></div>
-                            <div v-show="notSelected(orderItem.codelists.areas) == false" class="form-group custom-select" v-bind:class="{disabled: notSelected(orderItem.codelists.areas)}">
-                                <select v-show class="chosen-select" v-chosen="orderItem.codelists.projections" v-bind:uuid="orderItem.metadata.uuid" data-placeholder="Klikk for å velge projeksjon" tabindex="-1" multiple>
-                                    <option value=""></option>
-
-                                    <option is="projectionoption" v-for="(projection, index) in orderItem.codelists.availableProjections" v-bind:data-index="index" v-bind:projection="projection"></option>
-                                </select>
+                            <div v-show="!orderItem.codelists.selectedAreas.length" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
+                            <div v-show="orderItem.codelists.selectedAreas.length" class="form-group custom-select">
+                                <v-select label="name" v-bind:value="orderItem.codelists.selectedProjections" v-bind:options="orderItem.codelists.availableProjections" multiple></v-select>
                             </div>
                         </div>
                     </div>
@@ -81,12 +71,10 @@
                             <span>Valg av filformat støttes ikke</span>
                         </div>
                         <div v-else>
-                            <div v-show="notSelected(orderItem.codelists.projections) || notSelected(orderItem.codelists.areas)" class="help-text form-element-help-text bg-info"><span>Område og projeksjon må velges først</span></div>
-                            <div v-show="notSelected(orderItem.codelists.areas) == false && notSelected(orderItem.codelists.projections) == false" class="form-group custom-select" v-bind:class="{disabled: notSelected(orderItem.codelists.projections)}">
-                                <select class="chosen-select" v-chosen="orderItem.codelists.formats" v-bind:uuid="orderItem.metadata.uuid" data-placeholder="Klikk for å velge filformat" tabindex="-1" multiple>
-                                    <option></option>
-                                    <option is="formatoption" v-for="(format, index) in orderItem.codelists.availableFormats" v-bind:data-index="index" v-bind:format="format"></option>
-                                </select>
+                            <div v-show="!orderItem.codelists.selectedProjections.length && !orderItem.codelists.selectedAreas.length" class="help-text form-element-help-text bg-info"><span>Område og projeksjon må velges først</span></div>
+                            <div v-show="!orderItem.codelists.selectedProjections.length && orderItem.codelists.selectedAreas.length" class="help-text form-element-help-text bg-info"><span>Projeksjon må velges først</span></div>
+                            <div v-show="orderItem.codelists.selectedProjections.length && orderItem.codelists.selectedAreas.length" class="form-group custom-select">
+                                <v-select label="name" v-bind:value="orderItem.codelists.selectedFormats" v-bind:options="orderItem.codelists.availableFormats" multiple></v-select>
                             </div>
                         </div>
                     </div>
@@ -95,11 +83,8 @@
             </div>
 
 
-
             <div class="download-form">
-                <article id="orderlist"></article>
-
-                <div class="row margin-bottom-10">
+                <div v-show="emailRequired" class="row margin-bottom-10">
                     <div id="emailField" class="col-sm-6 margin-bottom-10">
                         <p class="article-p">E-post: <span class="required-indicator"></span></p>
                         <input type="text" v-model="email" name="email" class="form-control" />
@@ -113,14 +98,24 @@
                             <div class="pull-right">
                                 <a class="btn" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> Fjern alle</a>
                                 <a href="/" class="btn"><span class="glyphicon glyphicon-shopping-cart"></span> Bestill mer</a>
-                                <button v-on:click="sendRequests()" class="btn"><span class="glyphicon glyphicon-save"></span> Last ned</button>
+                                <button v-on:click="sendRequests()" v-bind:disabled="!formIsValid()" class="btn"><span class="glyphicon glyphicon-save"></span> Last ned</button>
                             </div>
                             <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
                 <div id="kartModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
-                    @Html.Partial("_Norgeskart")
+                    <div class="modal-dialog" id="norgeskartmodal">
+                        <div class="modal-content">
+                            <div id="viewer" role="main" style="height:100%">
+                                <div id="container"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button><button id="setcoordinates" type="button" class="btn btn-default" data-dismiss="modal">Legg til område</button>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
 
                 <div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -135,7 +130,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn" data-dismiss="modal">Nei</button>
-                                <button type="button" id="remove-all-items-submit" class="btn">Ja</button>
+                                <button type="button" v-on:click="removeAllOrderItems()" id="remove-all-items-submit" class="btn">Ja</button>
                             </div>
                         </div>
                     </div>
@@ -143,34 +138,65 @@
             </div>
 
         </div>
+
+    </article>
+
+
+    <article v-show="!orderItems.length && !orderResponse.length">
+        <div class="row">
+            <div class="col-md-12">
+                <p>Du har ingen elementer i kurven</p>
+            </div>
+        </div>
     </article>
 
     <article id="responseList" v-show="orderResponse.length">
-        {{ orderResponse.length }}
         <div class="row">
             <div class="col-md-12">
                 <div v-for="responseItem in orderResponse">
-                    <p>Ordre URL: {{ responseItem.distributionUrl }}</p>
-                    <p>Epost: {{ responseItem.data.email}}</p>
-                    <p>Dato: {{ responseItem.data.orderDate }}</p>
                     <p>Referansenummer: {{ responseItem.data.referenceNumber }}</p>
                     <div class="list-group download-list">
-                        <a v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" v-bind:href="file.downloadUrl" class="list-group-item">
-                            <span class="custom-icon custom-icon-lastned"></span>{{ file.name }}
-                            <span class="pull-right label label-info">{{file.format}}</span>
-                        </a>
-                        <p v-if="file.status == 'WaitingForProcessing'" v-bind:class="" v-for="file in responseItem.data.files" v-bind:href="file.downloadUrl" class="list-group-item">
-                            {{ file.fileId }} (Under behandling)
-                            <span class="pull-right label label-info">{{file.format}}</span>
-                        </p>
+                        <div v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" class="list-group-item">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-7">
+                                    <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
+                                        <span class="custom-icon custom-icon-lastned"></span>
+                                        <span class="download-list-item-name">
+                                            {{ file.metadataName }}, <span class="inline-block">{{ file.areaName }}</span>
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="col-sm-4 col-md-3">
+                                    <span class="label label-success auto-width">{{file.projectionName}}</span>
+                                </div>
+                                <div class="col-sm-2 col-md-2">
+                                    <span class="label label-info">{{file.format}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="file.status == 'WaitingForProcessing'" v-for="file in responseItem.data.files" class="list-group-item">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-7">
+                                    <span class="custom-icon custom-icon-info"></span>
+                                    <span class="download-list-item-name">
+                                        {{ file.metadataName }}, <span class="inline-block">Valgt fra kart</span> <small class="inline-block">(Under behandling)</small>
+                                    </span>
+                                </div>
+                                <div class="col-sm-4 col-md-3">
+                                    <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                </div>
+                                <div class="col-sm-2 col-md-2">
+                                    <span class="label label-info">{{file.format}}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </article>
 </div>
+<script type="text/javascript" src="~/Scripts/vue-select.js"></script>
 
-
-<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>-->
 <script type="text/javascript" src="~/Scripts/vue-download.js"></script>
+@Html.Partial("_Norgeskart")

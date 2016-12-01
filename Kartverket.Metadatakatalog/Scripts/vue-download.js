@@ -1,17 +1,23 @@
-﻿function showAlert(message, colorClass) {
+﻿function clearAlertMessage() {
+    $('#feedback-alert .message').html("");
+}
+
+function showAlert(message, colorClass) {
     $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
-    $('#feedback-alert .message').html($('#feedback-alert .message').html() + message);
+    $('#feedback-alert .message').html($('#feedback-alert .message').html() + message + "<br/>");
     $('#feedback-alert').show();
 }
+
+$(document).on("click", "#remove-all-items", function () {
+    $('#remove-all-items-modal').modal('show')
+});
+
 
 function fixUrl(urlen) {
     urlJson = urlen.replace("%3F", "?");
     return urlJson;
 }
 
-function updateChosen() {
-    $(".chosen-select").trigger("chosen:updated");
-}
 
 function getOrderItemName(uuid) {
     var metadata = JSON.parse(localStorage.getItem(uuid + ".metadata"));
@@ -45,121 +51,38 @@ function getJsonData(url) {
     return returnData;
 }
 
-function setAvailableProjections(itemProjections, projectionsArray) {
-    itemProjections.forEach(function (itemProjection) {
-        var inArray = false;
-        projectionsArray.forEach(function (availableProjection) {
-            itemProjection.selected = false;
-            if (itemProjection.code == availableProjection.code) inArray = true;
-        });
-        if (!inArray) {
-            projectionsArray.push(itemProjection);
-        }
-    });
-    return projectionsArray;
-}
 
-function setAvailableFormats(itemFormats, formatsArray) {
-    itemFormats.forEach(function (itemFormat) {
-        var inArray = false;
-        formatsArray.forEach(function (availableFormat) {
-            itemFormat.selected = false;
-            if (itemFormat.name == availableFormat.name) inArray = true;
-        });
-        if (!inArray) {
-            formatsArray.push(itemFormat);
-        }
-    });
-    return formatsArray;
-}
-
-function updateLocalStorageOrderItem(vnode, binding) {
-    var uuid = (vnode.data.attrs.uuid !== undefined) ? vnode.data.attrs.uuid : false;
-    var name = (binding.expression !== undefined) ? binding.expression : false;
-    var value = (binding.value !== undefined) ? binding.value : false;
-    if (uuid && name && value) {
-        localStorage[uuid + "." + name] = JSON.stringify(value)
-    }
-}
-
-$(document).on("click", ".custom-select", function () {
-    updateChosen();
-});
-
-
-
-    showLoadingAnimation("Laster inn kurv");
-
+showLoadingAnimation("Laster inn kurv");
 
 $(window).load(function () {
     hideLoadingAnimation();
-    updateChosen();
 });
 
-Vue.directive('chosen', {
-    twoWay: true, // note the two-way binding
-    bind: function (el, binding, vnode) {
-        $(el)
-            .change(function (ev, nv) {
-                // two-way set
-                var ref = el.selectedOptions;
-                var indexesForSelectedOptions = [];
-                var vueNodes = [];
-                $(vnode.data.directives).each(function () {
-                    vueNodes = (this.name == "chosen") ? this.value : [];
-                });
-                $(ref).each(function () {
-                    indexesForSelectedOptions.push($(this).data("index"));
-                });
-                var availableProjections = [];
-                var availableFormats = [];
-                $(vueNodes).each(function (key, val) {
-                    if ($.inArray(key, indexesForSelectedOptions) !== -1) {
-                        val.selected = true;
-                        if (val.projections !== undefined && vnode.data.attrs.parent !== undefined) {
-                            availableProjections = setAvailableProjections(val.projections, availableProjections);
-                        }
-                        if (val.formats !== undefined && vnode.data.attrs.parent !== undefined) {
-                            availableFormats = setAvailableFormats(val.formats, availableFormats);
-                        }
-
-                    } else {
-                        val.selected = false;
-                    }
-                });
-                if (vnode.data.attrs.parent !== undefined) {
-                    var orderItem = vnode.data.attrs.parent;
-                    orderItem.codelists.availableProjections = availableProjections;
-                    orderItem.codelists.availableFormats = availableFormats;
-                }
-                //   updateLocalStorageOrderItem(vnode, binding);
-            });
-    },
-
-});
 
 Vue.component('areaoption', {
     props: ['area'],
-    template: '<option v-bind:value="area.code">{{area.name}}</option>'
+    template: '<option v-bind:value="area">{{area.name}}</option>'
 });
 
 Vue.component('projectionoption', {
     props: ['projection'],
-    template: '<option v-bind:value="projection.code" >{{projection.name}}</option>'
+    template: '<option v-bind:value="projection">{{projection.name}}</option>'
 });
 
 Vue.component('formatoption', {
     props: ['format'],
-    template: '<option v-bind:value="format.name" >{{format.name}}</option>'
+    template: '<option v-bind:value="format">{{format.name}}</option>'
 });
 
+Vue.config.debug = true;
 
-var app = new Vue({
+var mainVueModel = new Vue({
     el: '#vueContainer',
     data: {
         orderItems: [],
         email: "",
-        orderResponse: {}
+        orderResponse: {},
+        emailRequired: false
     },
     computed: {
         orderRequests: function () {
@@ -177,25 +100,33 @@ var app = new Vue({
                 };
                 var orderLines = [];
                 orderItemGroup.forEach(function (orderItem) {
-                    orderRequest.order.orderLines.push(
-                            {
-                                "metadataUuid": orderItem.metadata.uuid,
-                                "coordinates": orderItem.codelists.coordinates,
-                                "coordinatesystem": orderItem.codelists.coordinatesystem,
-                                "areas": this.getSelectedAreas(orderItem.codelists.areas),
-                                "projections": this.getSelectedProjections(orderItem.codelists.projections),
-                                "formats": this.getSelectedFormats(orderItem.codelists.formats)
-                            }
-                    );
+                    var orderLine = {
+                        "metadataUuid": orderItem.metadata.uuid
+                    };
+                    if (this.getSelectedAreas(orderItem.codelists.selectedAreas).length) {
+                        orderLine.areas = this.getSelectedAreas(orderItem.codelists.selectedAreas);
+                    }
+                    if (this.getSelectedProjections(orderItem.codelists.selectedProjections).length) {
+                        orderLine.projections = this.getSelectedProjections(orderItem.codelists.selectedProjections);
+                    }
+                    if (this.getSelectedFormats(orderItem.codelists.selectedFormats).length) {
+                        orderLine.formats = this.getSelectedFormats(orderItem.codelists.selectedFormats);
+                    }
+                    if (orderItem.codelists.coordinates !== undefined && orderItem.codelists.coordinates !== "") {
+                        orderLine.coordinates = orderItem.codelists.coordinates;
+                    }
+                    if (orderItem.codelists.coordinatesystem !== undefined && orderItem.codelists.coordinatesystem !== "") {
+                        orderLine.coordinatesystem = orderItem.codelists.coordinatesystem;
+                    }
+                    orderRequest.order.orderLines.push(orderLine);
                 }.bind(this));
                 orderRequests.push(orderRequest);
-                
+
             }.bind(this));
             return orderRequests;
         },
     },
     created: function () {
-        //loadData();
         var defaultUrl = "https://nedlasting.geonorge.no/api/capabilities/";
         var orderItemsJson = (localStorage["orderItems"] != null) ? JSON.parse(localStorage["orderItems"]) : [];
         var orderItems = [];
@@ -207,19 +138,19 @@ var app = new Vue({
                     "metadata": metadata,
                     "capabilities": getJsonData(apiUrl + val),
                     "codelists": {
-                        "areas": (localStorage[val + ".orderItem.codelists.areas"] !== undefined) ? JSON.parse(localStorage[val + ".orderItem.codelists.areas"]) : [],
-                        "projections": (localStorage[val + ".orderItem.codelists.projections"] !== undefined) ? JSON.parse(localStorage[val + ".orderItem.codelists.projections"]) : [],
+                        "areas": [],
+                        "selectedAreas": [],
+                        "projections": [],
+                        "selectedProjections": [],
                         "availableProjections": [],
-                        "formats": (localStorage[val + ".orderItem.codelists.formats"] !== undefined) ? JSON.parse(localStorage[val + ".orderItem.codelists.formats"]) : [],
+                        "formats": [],
+                        "selectedFormats": [],
                         "availableFormats": [],
-                        "areaTypes": [],
-                        "coordinates": "",
-                        "coordinatesystem": ""
+                        "areaTypes": []
                     }
                 }
 
                 var distributionUrl = (orderItems[key].metadata.distributionUrl !== undefined) ? orderItems[key].metadata.distributionUrl : "";
-                orderItems[key].metadata.orderDistributionUrl = this.getOrderDistributionUrl(distributionUrl);
 
                 if (orderItems[key].capabilities._links) {
                     $(orderItems[key].capabilities._links).each(function (index, link) {
@@ -232,35 +163,54 @@ var app = new Vue({
                         if (link.rel == "http://rel.geonorge.no/download/format") {
                             orderItems[key].codelists.formats = getJsonData(link.href);
                         }
+                        if (link.rel == "http://rel.geonorge.no/download/order") {
+                            orderItems[key].metadata.orderDistributionUrl = link.href;
+                        }
+                        if (link.rel == "http://rel.geonorge.no/download/can-download") {
+                            orderItems[key].metadata.canDownloadUrl = link.href;
+                        }
                     });
                 }
                 orderItems[key].capabilities.supportsGridSelection = (orderItems[key].capabilities.mapSelectionLayer !== undefined && orderItems[key].capabilities.mapSelectionLayer !== "") ? true : false;
 
                 if (orderItems[key].codelists.areas) {
+                    if (orderItems[key].capabilities.supportsPolygonSelection) {
+                        orderItems[key].codelists.areas.push(
+                            {
+                                "name": "Valgt fra kart",
+                                "type": "polygon",
+                                "code": "Kart",
+                                "formats": orderItems[key].codelists.formats,
+                                "projections": orderItems[key].codelists.projections
+                            }
+                        );
+                    }
                     $(orderItems[key].codelists.areas).each(function (index, area) {
-                        area.selected = (area.selected == undefined) ? area.selected = false : area.selected = false; // TODO Get from localStorage if defined
                         if (area.type !== undefined) {
-                            if ($.inArray(area.type, orderItems[key].codelists.areaTypes) == -1) {
-                                orderItems[key].codelists.areaTypes.push(area.type);
+                            var inArray = false;
+                            orderItems[key].codelists.areaTypes.forEach(function (areaType) {
+                                if (area.type == areaType.name) {
+                                    inArray = true;
+                                    areaType.numberOfItems += 1;
+                                }
+                            });
+                            if (!inArray) {
+                                orderItems[key].codelists.areaTypes.push({
+                                    name: area.type,
+                                    numberOfItems: 1
+                                });
                             }
                         }
-
                     })
                 }
-                if (orderItems[key].codelists.projections) {
-                    $(orderItems[key].codelists.projections).each(function (index, projection) {
-                        projection.selected = (projection.selected == undefined) ? projection.selected = false : projection.selected = false; // TODO Get from localStorage if defined
-                    })
-                }
-                if (orderItems[key].codelists.formats) {
-                    $(orderItems[key].codelists.formats).each(function (index, format) {
-                        format.selected = (format.selected == undefined) ? format.selected = false : format.selected = false; // TODO Get from localStorage if defined
-                    })
-                }
-
             }.bind(this));
         }
         this.orderItems = orderItems;
+        this.addAreaOptionGroups(orderItems);
+
+    },
+    components: {
+        'v-select': window.VueSelect.VueSelect
     },
     methods: {
         sendRequests: function () {
@@ -285,22 +235,55 @@ var app = new Vue({
                                         "distributionUrl": orderRequest.distributionUrl,
                                         "data": data
                                     });
+                                mainVueModel.removeAllOrderItems();
                             }
                             else {
                                 showAlert("Feil", "danger");
                             }
                         }
+                    }).done(function () {
+                        $("[data-toggle='tooltip']").tooltip();
                     });
                 }
                 return this.orderResponse = responseData;
             }.bind(this))
         },
-        populateProjectionsAndFormats: function (orderItem) {
-            var selectedAreas = [];
-            orderItem.codelists.areas.forEach(function (index, area) {
-                if (area.selected) selectedAreas.push(area);
+        changeArea: function (orderItem) {
+            availableProjections = [];
+            selectedAreaProjectionsCodes = [];
+            availableFormats = [];
+            selectedAreaFormatsNames = [];
+            var orderItemHasCoordinates = false;
+            orderItem.codelists.selectedAreas.forEach(function (selectedArea) {
+                selectedArea.projections.forEach(function (selectedAreaProjection) {
+                    if ($.inArray(selectedAreaProjection.code, selectedAreaProjectionsCodes) == -1) {
+                        availableProjections.push(selectedAreaProjection);
+                        selectedAreaProjectionsCodes.push(selectedAreaProjection.code);
+                    }
+                });
+                selectedArea.formats.forEach(function (selectedAreaFormat) {
+                    if ($.inArray(selectedAreaFormat.name, selectedAreaFormatsNames) == -1) {
+                        availableFormats.push(selectedAreaFormat);
+                        selectedAreaFormatsNames.push(selectedAreaFormat.name);
+                    }
+                });
+                if (selectedArea.type == "polygon") {
+                    orderItem.codelists.coordinates = selectedArea.coordinates;
+                    orderItem.codelists.coordinatesystem = selectedArea.coordinatesystem;
+                    orderItemHasCoordinates = true;
+                }
             });
+            if (!orderItemHasCoordinates) {
+                delete orderItem.codelists.coordinates;
+                delete orderItem.codelists.coordinatesystem;
+            }
+            orderItem.codelists.selectedProjections = [];
+            orderItem.codelists.availableProjections = availableProjections;
+            orderItem.codelists.selectedFormats = [];
+            orderItem.codelists.availableFormats = availableFormats;
+            this.emailRequired = this.orderHasCoordinates();
         },
+
         notSelected: function (elements) {
             var selected = true;
             $(elements).each(function () {
@@ -312,7 +295,7 @@ var app = new Vue({
             var selectedAreas = [];
             if (areas !== undefined && areas !== "") {
                 areas.forEach(function (area) {
-                    if (area.selected == true) selectedAreas.push({
+                    selectedAreas.push({
                         "code": area.code,
                         "name": area.name,
                         "type": area.type
@@ -321,14 +304,11 @@ var app = new Vue({
             }
             return selectedAreas;
         },
-        getOrderDistributionUrl: function (distributionUrl) {
-            return distributionUrl.replace("capabilities/", "v2/order");
-        },
         getSelectedProjections: function (projections) {
             var selectedProjections = [];
             if (projections !== undefined && projections !== "") {
                 projections.forEach(function (projection) {
-                    if (projection.selected == true) selectedProjections.push({
+                    selectedProjections.push({
                         "code": projection.code,
                         "name": projection.name,
                         "codespace": projection.codespace
@@ -341,13 +321,13 @@ var app = new Vue({
             var selectedFormats = [];
             if (formats !== undefined && formats !== "") {
                 formats.forEach(function (format) {
-                    if (format.selected == true && format.version !== undefined) {
+                    if (format.version !== undefined) {
                         selectedFormats.push({
                             "name": format.name,
                             "version": format.version
                         });
                     }
-                    else if (format.selected == true) {
+                    else {
                         selectedFormats.push({
                             "name": format.name
                         });
@@ -373,6 +353,18 @@ var app = new Vue({
                 return [item.metadata.distributionUrl];
             })
         },
+        resetProjectionSelections: function (orderItem) {
+            orderItem.codelists.projections.forEach(function (projection) {
+                projection.selected = false;
+            });
+        },
+        resetFormatSelections: function (orderItem) {
+            orderItem.codelists.formats.forEach(function (format) {
+                format.selected = false;
+            });
+            $("select[uuid=" + orderItem.metadata.uuid + "].projection-list").val(null);
+            $("select[uuid=" + orderItem.metadata.uuid + "].format-list").val(null);
+        },
         removeFromLocalStorage: function (uuid) {
             var uuidLength = uuid.length;
             var orderItems = JSON.parse(localStorage["orderItems"]);
@@ -396,21 +388,56 @@ var app = new Vue({
             });
             this.removeFromLocalStorage(uuid);
         },
+        removeAllOrderItems: function () {
+            this.orderItems.forEach(function (orderItem) {
+                this.removeOrderItem(orderItem);
+            }.bind(this));
+            $('#remove-all-items-modal').modal('hide');
+        },
         capitalize: function (string) {
             return string[0].toUpperCase() + string.slice(1);
         },
-        selectFromMap: function (item) {
-            var uuid = item.metadata.uuid;
-            var orderItemSelectOmraader = $('select[name=' + uuid + '-areas]');
-            var supportspolygonfixedselection = item.capabilities.supportsGridSelection;
-            var areatype = item.codelists.areaTypes[0];
-            var mapselectionlayer = item.capabilities.mapSelectionLayer;
-            //if (!mapLoaded)
-            loadMap(uuid, supportspolygonfixedselection, areatype, mapselectionlayer, item);
-            //mapLoaded = true; //Need to load each time to set coverageMap.
-            $('#norgeskartmodal #setcoordinates').attr('uuid', uuid);
+        addAreaOptionGroups: function (orderItems) {
+            orderItems.forEach(function (orderItem) {
+                var orderItemId = orderItem.metadata.uuid;
+                var domNodeInserted = false;
+                document.addEventListener("DOMNodeInserted", function (event) {
+                    var target = event.srcElement || event.target;
+                    var elements = $(target).find("#arealist-" + orderItemId);
+
+                    if (elements.length > 0 && !domNodeInserted) {
+                        var areaList = $(elements[0]).find("ul.dropdown-menu");
+                        var areaListItems = areaList.children("li");
+                        areaTypes = orderItem.codelists.areaTypes;
+                        var indexCount = 0;
+                        areaTypes.forEach(function (areaType) {
+                            $(areaListItems[indexCount]).prepend("<span class='area-list-heading'>" + areaType.name + "</span>");
+                            indexCount += areaType.numberOfItems;
+                        })
+                        domNodeInserted = true;
+                    }
+                });
+            })
+        },
+        selectFromMap: function (orderItem) {
+            loadMap(orderItem);
+            $('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
+        },
+        orderItemHasCoordinates: function (orderItem) {
+            return (orderItem.codelists.coordinates !== undefined) ? true : false;
+        },
+        orderHasCoordinates: function () {
+            var hasCoordinates = false;
+            this.orderItems.forEach(function (orderItem) {
+                if (this.orderItemHasCoordinates(orderItem)) hasCoordinates = true;
+            }.bind(this));
+            return hasCoordinates;
+        },
+        formIsValid: function (orderItem) {
+            var emailFieldNotEmpty = (this.email !== "") ? true : false;
+            var emailRequired = this.emailRequired;
+            var formIsValid = ((emailFieldNotEmpty && emailRequired) || (!emailRequired)) ? true : false;
+            return formIsValid;
         }
     }
-}).$mount('#downloadformVue');
-
-
+});
