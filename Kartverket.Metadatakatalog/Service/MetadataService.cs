@@ -128,15 +128,14 @@ namespace Kartverket.Metadatakatalog.Service
                 metadata.ServiceDistributionProtocolForDataset = searchResult.Items[0].ServiceDistributionProtocolForDataset != null ? searchResult.Items[0].ServiceDistributionProtocolForDataset : null;
                 metadata.ServiceDistributionUrlForDataset = searchResult.Items[0].ServiceDistributionUrlForDataset != null ? searchResult.Items[0].ServiceDistributionUrlForDataset : null;
                 metadata.ServiceDistributionNameForDataset = searchResult.Items[0].ServiceDistributionNameForDataset != null ? searchResult.Items[0].ServiceDistributionNameForDataset : null;
+                if (metadata.IsDataset())
+                    metadata.ServiceUuid = searchResult.Items[0].ServiceDistributionUuidForDataset != null ? searchResult.Items[0].ServiceDistributionUuidForDataset : null;
 
                 var datasetServices = searchResult.Items[0].DatasetServices;
 
                 if (datasetServices != null && datasetServices.Count > 0)
                 {
                     metadata.Related = new List<MetadataViewModel>();
-
-                    if (metadata.IsDataset() && datasetServices[0] != null)
-                        metadata.ServiceUuid = datasetServices[0].Split('|').First();
 
                     foreach (var relatert in datasetServices)
                     {
@@ -171,13 +170,8 @@ namespace Kartverket.Metadatakatalog.Service
 
                             if (searchResultRelated != null && searchResultRelated.NumFound > 0)
                             {
-                                var datasetServicesRelated = searchResultRelated.Items[0].DatasetServices;
-
-                                if (datasetServicesRelated != null && datasetServicesRelated.Count > 0)
-                                {
-                                    if (md.HierarchyLevel == "dataset" && datasetServicesRelated[0] != null)
-                                        md.ServiceUuid = datasetServicesRelated[0].Split('|').First();
-                                }
+                                if (md.IsDataset())
+                                    md.ServiceUuid = searchResult.Items[0].ServiceDistributionUuidForDataset != null ? searchResult.Items[0].ServiceDistributionUuidForDataset : null;
                             }
 
                             metadata.Related.Add(md);

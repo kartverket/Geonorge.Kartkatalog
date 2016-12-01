@@ -316,6 +316,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 indexDoc.ServiceDistributionProtocolForDataset = servicedistributionDetails.Protocol;
                                 indexDoc.ServiceDistributionUrlForDataset = servicedistributionDetails.URL;
                                 indexDoc.ServiceDistributionNameForDataset = servicedistributionDetails.Name;
+                                indexDoc.ServiceDistributionUuidForDataset = uuidFound;
                             }
                         }
 
