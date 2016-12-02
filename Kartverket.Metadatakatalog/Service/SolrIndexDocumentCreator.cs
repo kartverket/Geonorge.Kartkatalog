@@ -327,6 +327,7 @@ namespace Kartverket.Metadatakatalog.Service
                         for (int s = 0; s < res.Items.Length; s++)
                         {
                             string serviceId = ((www.opengis.net.DCMIRecordType)(res.Items[s])).Items[0].Text[0];
+                            Log.Info("Search with filter for srv:operatesOn returned uuid=" + serviceId);
                             MD_Metadata_Type md = geoNorge.GetRecordByUuid(serviceId);
                             var simpleMd = new SimpleMetadata(md);
 
