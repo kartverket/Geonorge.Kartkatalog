@@ -46,7 +46,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             try
             {
-                Log.Info("Received notification of updated metadata: " + action + ", " + uuid);
+                Log.Info("Received notification of updated metadata: " + action + ", uuid=" + uuid);
 
                 if (!string.IsNullOrWhiteSpace(uuid))
                 {
