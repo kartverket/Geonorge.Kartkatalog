@@ -804,6 +804,7 @@
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\visninger.js" />
     <Content Include="Scripts\vue-download.js" />
+    <Content Include="Scripts\vue-select.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
