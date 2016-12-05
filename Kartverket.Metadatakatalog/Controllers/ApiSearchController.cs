@@ -13,6 +13,9 @@ using System;
 using Kartverket.Metadatakatalog.Service;
 using System.Web.Configuration;
 using System.Web.Http.Description;
+using System.Net;
+using System.Collections.Specialized;
+using System.Net.Http.Formatting;
 
 
 // Metadata search api examples
@@ -166,6 +169,6 @@ namespace Kartverket.Metadatakatalog.Controllers
                 .ToList();
         }
 
-        
     }
+
 }
