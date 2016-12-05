@@ -190,6 +190,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-if="!file.status && file.name" v-for="file in responseItem.data.files" class="list-group-item">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <span class="custom-icon custom-icon-info"></span>
+                                    <span class="download-list-item-name">
+                                        {{ file.name }} {{email}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
