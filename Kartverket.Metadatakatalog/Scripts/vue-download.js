@@ -85,8 +85,7 @@ var mainVueModel = new Vue({
     data: {
         orderItems: [],
         email: "",
-        orderResponse: {},
-        emailRequired: false
+        orderResponse: {}
     },
     computed: {
         orderRequests: function () {
@@ -290,7 +289,6 @@ var mainVueModel = new Vue({
             orderItem.codelists.availableProjections = availableProjections;
             orderItem.codelists.selectedFormats = [];
             orderItem.codelists.availableFormats = availableFormats;
-            this.emailRequired = this.orderHasCoordinates();
         },
 
         notSelected: function (elements) {
@@ -449,8 +447,7 @@ var mainVueModel = new Vue({
         formIsValid: function (orderItem) {
             var emailFieldNotEmpty = (this.email !== "") ? true : false;
             var emailAddressIsValid = this.emailAddressIsValid(this.email);
-            var emailRequired = this.emailRequired;
-            var formIsValid = ((emailFieldNotEmpty && emailRequired && emailAddressIsValid) || (!emailRequired)) ? true : false;
+            var formIsValid = (emailFieldNotEmpty && emailAddressIsValid) ? true : false;
             return formIsValid;
         }
     }
