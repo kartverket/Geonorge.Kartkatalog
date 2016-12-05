@@ -24,6 +24,10 @@ function getOrderItemName(uuid) {
     return metadata.name;
 }
 
+function IsGeonorge(distributionUrl) {
+    return distributionUrl.indexOf("geonorge.no") > -1;
+}
+
 function getJsonData(url) {
     var lastSlash = url.lastIndexOf('/');
     var uuid = url.substring(lastSlash + 1);
@@ -223,7 +227,7 @@ var mainVueModel = new Vue({
                         dataType: 'json',
                         data: JSON.stringify(orderRequest.order),
                         contentType: "application/json",
-                        xhrFields: { withCredentials: true },
+                        xhrFields: { withCredentials: IsGeonorge(orderRequest.distributionUrl) },
                         async: true,
                         error: function (jqXHR, textStatus, errorThrown) {
                             showAlert(errorThrown, "danger");
