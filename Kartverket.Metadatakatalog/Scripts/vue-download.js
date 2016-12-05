@@ -218,8 +218,9 @@ var mainVueModel = new Vue({
     },
     methods: {
         sendRequests: function () {
+            var responseData = [];
+            var responseFailed = false;
             this.orderRequests.forEach(function (orderRequest) {
-                var responseData = [];
                 if (orderRequest.distributionUrl != "") {
                     $.ajax({
                         url: orderRequest.distributionUrl,
@@ -228,9 +229,10 @@ var mainVueModel = new Vue({
                         data: JSON.stringify(orderRequest.order),
                         contentType: "application/json",
                         xhrFields: { withCredentials: IsGeonorge(orderRequest.distributionUrl) },
-                        async: true,
+                        async: false,
                         error: function (jqXHR, textStatus, errorThrown) {
                             showAlert(errorThrown, "danger");
+                            responseFailed = true;
                         },
                         success: function (data) {
                             if (data !== null) {
@@ -239,18 +241,21 @@ var mainVueModel = new Vue({
                                         "distributionUrl": orderRequest.distributionUrl,
                                         "data": data
                                     });
-                                mainVueModel.removeAllOrderItems();
                             }
                             else {
                                 showAlert("Feil", "danger");
+                                responseFailed = true;
                             }
                         }
                     }).done(function () {
                         $("[data-toggle='tooltip']").tooltip();
-                    });
+                    })
                 }
-                return this.orderResponse = responseData;
-            }.bind(this))
+            });
+            if (!responseFailed) {
+                mainVueModel.removeAllOrderItems();
+            }
+            this.orderResponse = responseData;
         },
         changeArea: function (orderItem) {
             availableProjections = [];
@@ -437,7 +442,7 @@ var mainVueModel = new Vue({
             }.bind(this));
             return hasCoordinates;
         },
-        emailAddressIsValid: function(email){
+        emailAddressIsValid: function (email) {
             var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return regex.test(email);
         },
