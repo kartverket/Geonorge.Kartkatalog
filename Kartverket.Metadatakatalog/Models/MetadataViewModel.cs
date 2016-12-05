@@ -207,7 +207,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowDownloadLink()
         {
-            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains("WWW:DOWNLOAD") && (HierarchyLevel == "dataset" || HierarchyLevel == "series")) return true;
+            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("WWW:DOWNLOAD") || DistributionDetails.Protocol.Contains("GEONORGE:FILEDOWNLOAD")) && (HierarchyLevel == "dataset" || HierarchyLevel == "series")) return true;
             else return false;
         }
 

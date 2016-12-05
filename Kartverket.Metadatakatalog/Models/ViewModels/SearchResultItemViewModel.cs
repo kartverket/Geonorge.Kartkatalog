@@ -54,7 +54,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         public bool ShowDownloadLink()
         {
-            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && DistributionProtocol.Contains("WWW:DOWNLOAD") && (Type == "dataset" || Type == "series") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
+            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("WWW:DOWNLOAD") || DistributionProtocol.Contains("GEONORGE:FILEDOWNLOAD")) && (Type == "dataset" || Type == "series") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
             else return false;
         }
 
