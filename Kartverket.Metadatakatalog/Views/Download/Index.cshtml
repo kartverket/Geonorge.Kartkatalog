@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="col-md-4">
-                        <p>Projeksjon:</p>
+                        <p>Projeksjon:<span v-show="orderItem.projectionAndFormatIsRequired" class="required-indicator"></span></p>
                         <div class="help-text form-element-help-text bg-info" v-if="orderItem.capabilities.supportsProjectionSelection == false">
                             <span>Valg av projeksjon støttes ikke</span>
                         </div>
@@ -66,7 +66,7 @@
                     </div>
 
                     <div class="col-md-4">
-                        <p>Filformat:</p>
+                        <p>Filformat:<span v-show="orderItem.projectionAndFormatIsRequired" class="required-indicator"></span></p>
                         <div class="help-text form-element-help-text bg-info" v-if="orderItem.capabilities.supportsFormatSelection == false">
                             <span>Valg av filformat støttes ikke</span>
                         </div>

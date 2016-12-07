@@ -150,7 +150,8 @@ var mainVueModel = new Vue({
                         "selectedFormats": [],
                         "availableFormats": [],
                         "areaTypes": []
-                    }
+                    },
+                    "projectionAndFormatIsRequired": false
                 }
 
                 var distributionUrl = (orderItems[key].metadata.distributionUrl !== undefined) ? orderItems[key].metadata.distributionUrl : "";
@@ -285,6 +286,7 @@ var mainVueModel = new Vue({
                 delete orderItem.codelists.coordinates;
                 delete orderItem.codelists.coordinatesystem;
             }
+            orderItem.projectionAndFormatIsRequired = this.projectionAndFormatIsRequired(orderItem);
             orderItem.codelists.selectedProjections = [];
             orderItem.codelists.availableProjections = availableProjections;
             orderItem.codelists.selectedFormats = [];
@@ -444,11 +446,30 @@ var mainVueModel = new Vue({
             var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return regex.test(email);
         },
-        formIsValid: function (orderItem) {
+        isEmpty: function (item) {
+            return (item == null || item == undefined || item.length == 0);
+        },
+        allRequiredProjectionAndFormatFieldsIsNotEmpty: function (orderItems) {
+            var orderItemsIsValid = true;
+            orderItems.forEach(function (orderItem) {
+                if (orderItem.projectionAndFormatIsRequired) {
+                    if (this.isEmpty(orderItem.codelists.selectedProjections) || this.isEmpty(orderItem.codelists.selectedFormats)) {
+                        orderItemsIsValid = false;
+                    }
+                }
+            }.bind(this));
+            return orderItemsIsValid;
+        },
+        formIsValid: function () {
             var emailFieldNotEmpty = (this.email !== "") ? true : false;
             var emailAddressIsValid = this.emailAddressIsValid(this.email);
-            var formIsValid = (emailFieldNotEmpty && emailAddressIsValid) ? true : false;
+            var projectionAndFormatFieldsIsValid = this.allRequiredProjectionAndFormatFieldsIsNotEmpty(this.orderItems);
+            var formIsValid = (emailFieldNotEmpty && emailAddressIsValid && projectionAndFormatFieldsIsValid) ? true : false;
             return formIsValid;
+        },
+        projectionAndFormatIsRequired: function (orderItem) {
+            var required = this.orderItemHasCoordinates(orderItem);
+            return required;
         }
     }
 });
