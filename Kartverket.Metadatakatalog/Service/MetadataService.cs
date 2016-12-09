@@ -211,6 +211,14 @@ namespace Kartverket.Metadatakatalog.Service
                                 md.Thumbnails.Add(new Thumbnail { Type = "miniatyrbilde", URL = relData[10] });
                             }
                             md.Constraints = new Constraints { AccessConstraints = relData[11], OtherConstraintsAccess = relData[12] };
+                            if (relData.ElementAtOrDefault(13) != null)
+                                md.ServiceUuid = relData[13];
+                            if (relData.ElementAtOrDefault(14) != null)
+                                md.ServiceDistributionProtocolForDataset = relData[14];
+                            if (relData.ElementAtOrDefault(15) != null)
+                                md.ServiceDistributionUrlForDataset = relData[15];
+                            if (relData.ElementAtOrDefault(16) != null)
+                                md.ServiceDistributionNameForDataset = relData[16];
 
                             metadata.Related.Add(md);
                         }
