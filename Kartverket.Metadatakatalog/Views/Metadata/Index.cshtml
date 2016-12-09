@@ -465,7 +465,13 @@ if (contact != null)
                                                 <a href="/metadata/org/title/@relatedContent.Uuid" data-toggle='tooltip' data-placement='bottom' title="Les mer om @relatedContent.Title" class="show-loading-animation" data-loading-message="Henter @relatedContentHierarchyLevelLabelText.ToLower()"><span class="custom-icon custom-icon-info"></span></a>
                                             </div>
                                             <div class="col-sm-1 search-results-action-icons">
-                                                @if (relatedContent.ShowServiceMapLink())
+                                                @if (relatedContent.ShowMapLink())
+                                                {
+                                                    <a id="mapmacrolink-@relatedContent.Uuid" href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank">
+                                                        <span id="mapmacro-@relatedContent.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
+                                                    </a>
+                                                }
+                                                else if (relatedContent.ShowServiceMapLink())
                                                 {
                                                     <a id="mapmacrolink-@relatedContent.Uuid" href="@Html.NorgeskartUrl()@relatedContent.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank">
                                                         <span id="mapmacro-@relatedContent.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
