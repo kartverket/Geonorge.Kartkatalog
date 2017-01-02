@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="col-md-4">
-                        <p>Projeksjon:</p>
+                        <p>Projeksjon:<span v-show="orderItem.projectionAndFormatIsRequired" class="required-indicator"></span></p>
                         <div class="help-text form-element-help-text bg-info" v-if="orderItem.capabilities.supportsProjectionSelection == false">
                             <span>Valg av projeksjon støttes ikke</span>
                         </div>
@@ -66,7 +66,7 @@
                     </div>
 
                     <div class="col-md-4">
-                        <p>Filformat:</p>
+                        <p>Filformat:<span v-show="orderItem.projectionAndFormatIsRequired" class="required-indicator"></span></p>
                         <div class="help-text form-element-help-text bg-info" v-if="orderItem.capabilities.supportsFormatSelection == false">
                             <span>Valg av filformat støttes ikke</span>
                         </div>
@@ -84,7 +84,7 @@
 
 
             <div class="download-form">
-                <div v-show="emailRequired" class="row margin-bottom-10">
+                <div class="row margin-bottom-10">
                     <div id="emailField" class="col-sm-6 margin-bottom-10">
                         <p class="article-p">E-post: <span class="required-indicator"></span></p>
                         <input type="text" v-model="email" name="email" class="form-control" />
@@ -187,6 +187,16 @@
                                 </div>
                                 <div class="col-sm-2 col-md-2">
                                     <span class="label label-info">{{file.format}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="!file.status && file.name" v-for="file in responseItem.data.files" class="list-group-item">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <span class="custom-icon custom-icon-info"></span>
+                                    <span class="download-list-item-name">
+                                        {{ file.name }}
+                                    </span>
                                 </div>
                             </div>
                         </div>

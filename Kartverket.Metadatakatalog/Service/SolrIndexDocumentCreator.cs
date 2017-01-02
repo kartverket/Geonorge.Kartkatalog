@@ -397,58 +397,150 @@ namespace Kartverket.Metadatakatalog.Service
                             try
                             {
                                 MD_Metadata_Type md = geoNorge.GetRecordByUuid(rel);
-                                var simpleMd = new SimpleMetadata(md);
+                                if(md != null)
+                                { 
+                                    var simpleMd = new SimpleMetadata(md);
+                                    SimpleMetadata serviceMd = null;
+                                    string ServiceDistributionProtocol = "", ServiceDistributionUrl = "", ServiceDistributionName = "", ServiceDistributionUuid = "";
 
-                                SimpleKeyword nationalTheme = SimpleKeyword.Filter(simpleMd.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME).FirstOrDefault();
-                                string keywordNationalTheme = "";
-                                if (nationalTheme != null)
-                                    keywordNationalTheme = nationalTheme.Keyword;
+                                    SimpleKeyword nationalTheme = SimpleKeyword.Filter(simpleMd.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME).FirstOrDefault();
+                                    string keywordNationalTheme = "";
+                                    if (nationalTheme != null)
+                                        keywordNationalTheme = nationalTheme.Keyword;
 
-                                string OrganizationLogoUrl = "";
-                                if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
-                                {
-                                    Task<Organization> organizationTaskRel =
-                                    _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
-                                    Organization organizationRel = organizationTaskRel.Result;
-                                    if (organizationRel != null)
+                                    string OrganizationLogoUrl = "";
+                                    if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
                                     {
-                                        OrganizationLogoUrl = organizationRel.LogoUrl;
+                                        Task<Organization> organizationTaskRel =
+                                        _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
+                                        Organization organizationRel = organizationTaskRel.Result;
+                                        if (organizationRel != null)
+                                        {
+                                            OrganizationLogoUrl = organizationRel.LogoUrl;
+                                        }
                                     }
+
+                                    string thumbnailsUrl = "";
+                                    List<SimpleThumbnail> thumbnailsRel = simpleMd.Thumbnails;
+                                    if (thumbnailsRel != null && thumbnailsRel.Count > 0)
+                                    {
+                                        thumbnailsUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMd.Uuid, thumbnailsRel[thumbnailsRel.Count - 1].URL);
+                                    }
+
+                                    string searchString = rel;
+                                    //Sjekk om denne er koblet til noen tjenester
+                                    var filters = new object[]
+                                    {
+                                    new PropertyIsLikeType
+                                        {
+                                            escapeChar = "\\",
+                                            singleChar = "_",
+                                            wildCard = "%",
+                                            PropertyName = new PropertyNameType {Text = new[] {"srv:operatesOn"}},
+                                            Literal = new LiteralType {Text = new[] {searchString}}
+                                        }
+                                    };
+
+                                    var filterNames = new ItemsChoiceType23[]
+                                    {
+                                        ItemsChoiceType23.PropertyIsLike,
+                                    };
+
+                                    var res = geoNorge.SearchWithFilters(filters, filterNames, 1, 200);
+                                    if (res.numberOfRecordsMatched != "0")
+                                    {
+                                        string uuid = null;
+                                        string uuidFound = null;
+                                        string uriProtocol = null;
+                                        string uriName = null;
+
+                                        foreach (var item in res.Items)
+                                        {
+                                            RecordType record = (RecordType)item;
+
+                                            for (int i = 0; i < record.ItemsElementName.Length; i++)
+                                            {
+                                                var name = record.ItemsElementName[i];
+                                                var value = record.Items[i].Text != null ? record.Items[i].Text[0] : null;
+
+                                                if (name == ItemsChoiceType24.identifier)
+                                                    uuid = value;
+                                                else if (name == ItemsChoiceType24.URI)
+                                                {
+                                                    var uriAttributes = (SimpleUriLiteral)record.Items[i];
+                                                    if (uriAttributes != null)
+                                                    {
+                                                        if (!string.IsNullOrEmpty(uriAttributes.protocol))
+                                                            uriProtocol = uriAttributes.protocol;
+                                                        if (!string.IsNullOrEmpty(uriAttributes.name))
+                                                            uriName = uriAttributes.name;
+                                                    }
+                                                }
+                                            }
+                                            if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS" && string.IsNullOrEmpty(uriName))
+                                            {
+                                                uuidFound = uuid;
+                                                break;
+                                            }
+                                            else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS" && !string.IsNullOrEmpty(uriName))
+                                            {
+                                                uuidFound = uuid;
+                                            }
+
+                                        }
+
+                                        if (!string.IsNullOrEmpty(uuidFound) && uuid != indexDoc.Uuid)
+                                        {
+                                            MD_Metadata_Type m = geoNorge.GetRecordByUuid(uuidFound);
+                                            if (m != null)
+                                            {
+                                                serviceMd = new SimpleMetadata(m);
+                                                var servicedistributionDetails = serviceMd.DistributionDetails;
+                                                if (servicedistributionDetails != null)
+                                                {
+                                                    ServiceDistributionProtocol = servicedistributionDetails.Protocol;
+                                                    ServiceDistributionUrl = servicedistributionDetails.URL;
+                                                    ServiceDistributionName = servicedistributionDetails.Name;
+                                                    ServiceDistributionUuid = uuidFound;
+                                                }
+                                            }
+                                        }
+
+                                    }
+
+                                    bundles.Add(new MetaDataEntry
+                                    {
+                                        Uuid = simpleMd.Uuid,
+                                        Title = simpleMd.Title,
+                                        ParentIdentifier = simpleMd.ParentIdentifier,
+                                        HierarchyLevel = simpleMd.HierarchyLevel,
+                                        ContactOwnerOrganization = (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null) ? simpleMd.ContactOwner.Organization : "",
+                                        DistributionDetailsName = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Name != null) ? simpleMd.DistributionDetails.Name : "",
+                                        DistributionDetailsProtocol = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
+                                        DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
+                                        KeywordNationalTheme = keywordNationalTheme,
+                                        OrganizationLogoUrl = OrganizationLogoUrl,
+                                        ThumbnailUrl = thumbnailsUrl,
+                                        AccessConstraints = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.AccessConstraints) ? simpleMd.Constraints.AccessConstraints : ""),
+                                        OtherConstraintsAccess = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.OtherConstraintsAccess) ? simpleMd.Constraints.OtherConstraintsAccess : ""),
+                                        ServiceDistributionNameForDataset = ServiceDistributionName,
+                                        ServiceDistributionProtocolForDataset = ServiceDistributionProtocol,
+                                        ServiceDistributionUrlForDataset = ServiceDistributionUrl,
+                                        ServiceDistributionUuidForDataset = ServiceDistributionUuid
+                                    });
                                 }
 
-                                string thumbnailsUrl = "";
-                                List<SimpleThumbnail> thumbnailsRel = simpleMd.Thumbnails;
-                                if (thumbnailsRel != null && thumbnailsRel.Count > 0)
-                                {
-                                    thumbnailsUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMd.Uuid, thumbnailsRel[thumbnailsRel.Count - 1].URL);
-                                }
-
-                                bundles.Add(new MetaDataEntry
-                                {
-                                    Uuid = simpleMd.Uuid,
-                                    Title = simpleMd.Title,
-                                    ParentIdentifier = simpleMd.ParentIdentifier,
-                                    HierarchyLevel = simpleMd.HierarchyLevel,
-                                    ContactOwnerOrganization = (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null) ? simpleMd.ContactOwner.Organization : "",
-                                    DistributionDetailsName = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Name != null) ? simpleMd.DistributionDetails.Name : "",
-                                    DistributionDetailsProtocol = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
-                                    DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
-                                    KeywordNationalTheme = keywordNationalTheme,
-                                    OrganizationLogoUrl = OrganizationLogoUrl,
-                                    ThumbnailUrl = thumbnailsUrl,
-                                    AccessConstraints = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.AccessConstraints) ? simpleMd.Constraints.AccessConstraints : ""),
-                                    OtherConstraintsAccess = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.OtherConstraintsAccess) ? simpleMd.Constraints.OtherConstraintsAccess : "")
-                                });                               
                             }
                             catch (Exception ex)
                             {
+                                Log.Error(ex);
                             }
                         }
 
                         List<string> bundlesNewList = new List<string>();
                         foreach (var bundle in bundles)
                         {
-                            bundlesNewList.Add(bundle.Uuid + "|" + bundle.Title + "|" + bundle.ParentIdentifier + "|" + bundle.HierarchyLevel + "|" + bundle.ContactOwnerOrganization + "|" + bundle.DistributionDetailsName + "|" + bundle.DistributionDetailsProtocol + "|" + bundle.DistributionDetailsUrl + "|" + bundle.KeywordNationalTheme + "|" + bundle.OrganizationLogoUrl + "|" + bundle.ThumbnailUrl + "|" + bundle.AccessConstraints + "|" + bundle.OtherConstraintsAccess);
+                            bundlesNewList.Add(bundle.Uuid + "|" + bundle.Title + "|" + bundle.ParentIdentifier + "|" + bundle.HierarchyLevel + "|" + bundle.ContactOwnerOrganization + "|" + bundle.DistributionDetailsName + "|" + bundle.DistributionDetailsProtocol + "|" + bundle.DistributionDetailsUrl + "|" + bundle.KeywordNationalTheme + "|" + bundle.OrganizationLogoUrl + "|" + bundle.ThumbnailUrl + "|" + bundle.AccessConstraints + "|" + bundle.OtherConstraintsAccess  +"|" + bundle.ServiceDistributionUuidForDataset + "|" + bundle.ServiceDistributionProtocolForDataset + "|" + bundle.ServiceDistributionUrlForDataset + "|" + bundle.ServiceDistributionNameForDataset);
                         }
 
                         indexDoc.Bundles = bundlesNewList.ToList();
@@ -689,5 +781,11 @@ namespace Kartverket.Metadatakatalog.Service
 
         public string AccessConstraints { get; set; }
         public string OtherConstraintsAccess { get; set; }
+
+        public string ServiceDistributionUuidForDataset { get; set; }
+        public string ServiceDistributionNameForDataset { get; set; }
+        public string ServiceDistributionProtocolForDataset { get; set; }
+        public string ServiceDistributionUrlForDataset { get; set; }
+
     }
 }

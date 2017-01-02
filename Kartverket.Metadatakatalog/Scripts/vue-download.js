@@ -24,6 +24,10 @@ function getOrderItemName(uuid) {
     return metadata.name;
 }
 
+function IsGeonorge(distributionUrl) {
+    return distributionUrl.indexOf("geonorge.no") > -1;
+}
+
 function getJsonData(url) {
     var lastSlash = url.lastIndexOf('/');
     var uuid = url.substring(lastSlash + 1);
@@ -81,8 +85,7 @@ var mainVueModel = new Vue({
     data: {
         orderItems: [],
         email: "",
-        orderResponse: {},
-        emailRequired: false
+        orderResponse: {}
     },
     computed: {
         orderRequests: function () {
@@ -147,7 +150,8 @@ var mainVueModel = new Vue({
                         "selectedFormats": [],
                         "availableFormats": [],
                         "areaTypes": []
-                    }
+                    },
+                    "projectionAndFormatIsRequired": false
                 }
 
                 var distributionUrl = (orderItems[key].metadata.distributionUrl !== undefined) ? orderItems[key].metadata.distributionUrl : "";
@@ -214,8 +218,9 @@ var mainVueModel = new Vue({
     },
     methods: {
         sendRequests: function () {
+            var responseData = [];
+            var responseFailed = false;
             this.orderRequests.forEach(function (orderRequest) {
-                var responseData = [];
                 if (orderRequest.distributionUrl != "") {
                     $.ajax({
                         url: orderRequest.distributionUrl,
@@ -223,10 +228,11 @@ var mainVueModel = new Vue({
                         dataType: 'json',
                         data: JSON.stringify(orderRequest.order),
                         contentType: "application/json",
-                        xhrFields: { withCredentials: true },
-                        async: true,
+                        xhrFields: { withCredentials: IsGeonorge(orderRequest.distributionUrl) },
+                        async: false,
                         error: function (jqXHR, textStatus, errorThrown) {
                             showAlert(errorThrown, "danger");
+                            responseFailed = true;
                         },
                         success: function (data) {
                             if (data !== null) {
@@ -235,18 +241,21 @@ var mainVueModel = new Vue({
                                         "distributionUrl": orderRequest.distributionUrl,
                                         "data": data
                                     });
-                                mainVueModel.removeAllOrderItems();
                             }
                             else {
                                 showAlert("Feil", "danger");
+                                responseFailed = true;
                             }
                         }
                     }).done(function () {
                         $("[data-toggle='tooltip']").tooltip();
-                    });
+                    })
                 }
-                return this.orderResponse = responseData;
-            }.bind(this))
+            });
+            if (!responseFailed) {
+                mainVueModel.removeAllOrderItems();
+            }
+            this.orderResponse = responseData;
         },
         changeArea: function (orderItem) {
             availableProjections = [];
@@ -277,11 +286,11 @@ var mainVueModel = new Vue({
                 delete orderItem.codelists.coordinates;
                 delete orderItem.codelists.coordinatesystem;
             }
+            orderItem.projectionAndFormatIsRequired = this.projectionAndFormatIsRequired(orderItem);
             orderItem.codelists.selectedProjections = [];
             orderItem.codelists.availableProjections = availableProjections;
             orderItem.codelists.selectedFormats = [];
             orderItem.codelists.availableFormats = availableFormats;
-            this.emailRequired = this.orderHasCoordinates();
         },
 
         notSelected: function (elements) {
@@ -433,16 +442,34 @@ var mainVueModel = new Vue({
             }.bind(this));
             return hasCoordinates;
         },
-        emailAddressIsValid: function(email){
+        emailAddressIsValid: function (email) {
             var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return regex.test(email);
         },
-        formIsValid: function (orderItem) {
+        isEmpty: function (item) {
+            return (item == null || item == undefined || item.length == 0);
+        },
+        allRequiredProjectionAndFormatFieldsIsNotEmpty: function (orderItems) {
+            var orderItemsIsValid = true;
+            orderItems.forEach(function (orderItem) {
+                if (orderItem.projectionAndFormatIsRequired) {
+                    if (this.isEmpty(orderItem.codelists.selectedProjections) || this.isEmpty(orderItem.codelists.selectedFormats)) {
+                        orderItemsIsValid = false;
+                    }
+                }
+            }.bind(this));
+            return orderItemsIsValid;
+        },
+        formIsValid: function () {
             var emailFieldNotEmpty = (this.email !== "") ? true : false;
             var emailAddressIsValid = this.emailAddressIsValid(this.email);
-            var emailRequired = this.emailRequired;
-            var formIsValid = ((emailFieldNotEmpty && emailRequired && emailAddressIsValid) || (!emailRequired)) ? true : false;
+            var projectionAndFormatFieldsIsValid = this.allRequiredProjectionAndFormatFieldsIsNotEmpty(this.orderItems);
+            var formIsValid = (emailFieldNotEmpty && emailAddressIsValid && projectionAndFormatFieldsIsValid) ? true : false;
             return formIsValid;
+        },
+        projectionAndFormatIsRequired: function (orderItem) {
+            var required = this.orderItemHasCoordinates(orderItem);
+            return required;
         }
     }
 });
