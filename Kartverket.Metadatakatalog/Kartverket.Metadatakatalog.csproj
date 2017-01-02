@@ -77,7 +77,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Kartverket.Geonorge.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.26\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.24\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Keen, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -115,7 +115,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.26\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.24\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PCLStorage, Version=0.9.6.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
@@ -140,7 +140,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.26\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.24\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Primitives, Version=4.2.22.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
