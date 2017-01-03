@@ -84,7 +84,7 @@
 
 
             <div class="download-form">
-                <div class="row margin-bottom-10">
+                <div v-show="emailRequired" class="row margin-bottom-10">
                     <div id="emailField" class="col-sm-6 margin-bottom-10">
                         <p class="article-p">E-post: <span class="required-indicator"></span></p>
                         <input type="text" v-model="email" name="email" class="form-control" />
