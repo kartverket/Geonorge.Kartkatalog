@@ -111,7 +111,9 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// DataAccess
         /// </summary>
         public string DataAccess { get; set; }
-
+        /// <summary>
+        /// Url for service mapped to dataset (wms)
+        /// </summary>
         public string ServiceDistributionUrlForDataset { get; set; }
 
         public Metadata() { 
@@ -163,6 +165,23 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public static List<Metadata> CreateFromList(IEnumerable<SearchResultItem> items, UrlHelper urlHelper)
         {
             return items.Select(item => new Metadata(item, urlHelper)).ToList();
+        }
+
+        public string WfsServiceUrl()
+        {
+            string wfsServiceUrl = "";
+
+            if(DatasetServices != null)
+            { 
+                foreach (var service in DatasetServices)
+                {
+                    var data = service.Split('|');
+                    if (data.Count() >= 7 && data[6].ToString() == "OGC:WFS")
+                        wfsServiceUrl = data[7].ToString();
+                }
+            }
+
+            return wfsServiceUrl;
         }
     }
 }
