@@ -112,6 +112,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public string DataAccess { get; set; }
 
+        public string ServiceDistributionUrlForDataset { get; set; }
+
         public Metadata() { 
         }
         public Metadata(SearchResultItem item, UrlHelper urlHelper)
@@ -155,6 +157,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             AccessConstraint = item.AccessConstraint;
             OtherConstraintsAccess = item.OtherConstraintsAccess;
             DataAccess = item.DataAccess;
+            ServiceDistributionUrlForDataset = item.ServiceDistributionUrlForDataset;
         }
 
         public static List<Metadata> CreateFromList(IEnumerable<SearchResultItem> items, UrlHelper urlHelper)
