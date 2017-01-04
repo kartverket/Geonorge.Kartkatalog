@@ -481,14 +481,11 @@ namespace Kartverket.Metadatakatalog.Service
                                             if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS" && string.IsNullOrEmpty(uriName))
                                             {
                                                 uuidFound = uuid;
+                                                break;
                                             }
                                             else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS" && !string.IsNullOrEmpty(uriName))
                                             {
                                                 uuidFound = uuid;
-                                            }
-                                            else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS")
-                                            {
-                                                uuidWfsFound = uuid;
                                             }
 
                                         }
@@ -508,6 +505,37 @@ namespace Kartverket.Metadatakatalog.Service
                                                     ServiceDistributionUuid = uuidFound;
                                                 }
                                             }
+                                        }
+
+                                        foreach (var item in res.Items)
+                                        {
+                                            RecordType record = (RecordType)item;
+
+                                            for (int i = 0; i < record.ItemsElementName.Length; i++)
+                                            {
+                                                var name = record.ItemsElementName[i];
+                                                var value = record.Items[i].Text != null ? record.Items[i].Text[0] : null;
+
+                                                if (name == ItemsChoiceType24.identifier)
+                                                    uuid = value;
+                                                else if (name == ItemsChoiceType24.URI)
+                                                {
+                                                    var uriAttributes = (SimpleUriLiteral)record.Items[i];
+                                                    if (uriAttributes != null)
+                                                    {
+                                                        if (!string.IsNullOrEmpty(uriAttributes.protocol))
+                                                            uriProtocol = uriAttributes.protocol;
+                                                        if (!string.IsNullOrEmpty(uriAttributes.name))
+                                                            uriName = uriAttributes.name;
+                                                    }
+                                                }
+                                            }
+                                            if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS")
+                                            {
+                                                uuidWfsFound = uuid;
+                                                break;
+                                            }
+
                                         }
 
                                         if (!string.IsNullOrEmpty(uuidWfsFound) && uuid != indexDoc.Uuid)
