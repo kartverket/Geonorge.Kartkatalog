@@ -75,7 +75,7 @@ namespace Kartverket.Metadatakatalog.Formatter
         // Helper methods for serializing SearchResult to CSV format. 
         private void Write(SearchResult data, StreamWriter writer)
         {
-            writer.WriteLine("Tittel;Type;Tema;Organisasjon;Åpne data;DOK-data;Uuid;Wms-url;Wfs-url");
+            writer.WriteLine("Tittel;Type;Tema;Organisasjon;Åpne data;DOK-data;Uuid;Wms-url;Wfs-url;Atom-feed");
             foreach(var meta in data.Results)
             {
                 writer.WriteLine(
@@ -87,7 +87,8 @@ namespace Kartverket.Metadatakatalog.Formatter
                     (meta.IsDokData ? "Det offentlige kartgrunnlaget" : "") + ";" +
                     Escape(meta.Uuid) + ";" +
                     Escape(meta.ServiceDistributionUrlForDataset) + ";" +
-                    Escape(meta.WfsServiceUrl())
+                    Escape(meta.WfsServiceUrl()) + ";" +
+                    Escape(meta.AtomFeed())
                 );
             }
         }

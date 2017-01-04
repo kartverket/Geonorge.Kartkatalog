@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace Kartverket.Metadatakatalog.Models.Api
 {
@@ -59,7 +62,6 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// The layer for services
         /// </summary>
         public string DistributionName { get; set; }
-
         /// <summary>
         /// True if one of the nationalinitiativs(Samarbeid og lover) is "Åpne data"
         /// </summary>
@@ -101,12 +103,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// AccessConstraint
         /// </summary>
         public string AccessConstraint { get; set; }
-
         /// <summary>
         /// OtherConstraintsAccess
         /// </summary>
         public string OtherConstraintsAccess { get; set; }
-
         /// <summary>
         /// DataAccess
         /// </summary>
@@ -182,6 +182,47 @@ namespace Kartverket.Metadatakatalog.Models.Api
             }
 
             return wfsServiceUrl;
+        }
+
+        private System.Xml.XmlDocument AtomFeedDoc;
+        XmlNamespaceManager nsmgr;
+
+        public string AtomFeed()
+        {
+            string atomFeed = "";
+            MemoryCache memoryCache = MemoryCache.Default;
+            AtomFeedDoc = memoryCache.Get("AtomFeedDoc") as System.Xml.XmlDocument;
+            if (AtomFeedDoc == null)
+                SetAtomFeed();
+
+            atomFeed = GetAtomFeed();
+
+            return atomFeed;
+        }
+
+        private string GetAtomFeed()
+        {
+            nsmgr = new XmlNamespaceManager(AtomFeedDoc.NameTable);
+            nsmgr.AddNamespace("ns", "http://www.w3.org/2005/Atom");
+            nsmgr.AddNamespace("georss", "http://www.georss.org/georss");
+            nsmgr.AddNamespace("inspire_dls", "http://inspire.ec.europa.eu/schemas/inspire_dls/1.0");
+
+            string feed = "";
+            XmlNode entry = AtomFeedDoc.SelectSingleNode("//ns:feed/ns:entry[inspire_dls:spatial_dataset_identifier_code='" + Uuid + "']/ns:link", nsmgr);
+            if (entry != null) {
+                feed = entry.InnerText;
+            }
+
+            return feed;
+        }
+
+        private void SetAtomFeed()
+        {
+            AtomFeedDoc = new XmlDocument();
+            AtomFeedDoc.Load("https://nedlasting.geonorge.no/geonorge/Tjenestefeed.xml");
+
+            MemoryCache memoryCache = MemoryCache.Default;
+            memoryCache.Add("AtomFeedDoc", AtomFeedDoc, new DateTimeOffset(DateTime.Now.AddDays(1)));
         }
     }
 }
