@@ -168,6 +168,10 @@ namespace Kartverket.Metadatakatalog.Service
                                     md.ServiceDistributionProtocolForDataset = relData[6];
                                     md.ServiceDistributionUrlForDataset = relData[7];
                                 }
+                                if (relData[6] == "OGC:WFS")
+                                {
+                                    md.ServiceWfsDistributionUrlForDataset = relData[7];
+                                }
                             }
 
                             SearchParameters parametersRelated = new SearchParameters();
@@ -225,6 +229,8 @@ namespace Kartverket.Metadatakatalog.Service
                                 md.ServiceDistributionUrlForDataset = relData[15];
                             if (relData.ElementAtOrDefault(16) != null)
                                 md.ServiceDistributionNameForDataset = relData[16];
+                            if (relData.ElementAtOrDefault(17) != null)
+                                md.ServiceWfsDistributionUrlForDataset = relData[17];
 
                             metadata.Related.Add(md);
                         }

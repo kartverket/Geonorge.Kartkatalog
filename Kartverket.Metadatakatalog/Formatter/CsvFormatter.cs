@@ -87,7 +87,7 @@ namespace Kartverket.Metadatakatalog.Formatter
                     (meta.IsDokData ? "Det offentlige kartgrunnlaget" : "") + ";" +
                     Escape(meta.Uuid) + ";" +
                     Escape(meta.ServiceDistributionUrlForDataset) + ";" +
-                    Escape(meta.WfsServiceUrl()) + ";" +
+                    Escape(meta.ServiceWfsDistributionUrlForDataset) + ";" +
                     Escape(meta.AtomFeed())
                 );
             }

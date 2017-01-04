@@ -96,6 +96,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string ServiceDistributionUrlForDataset { get; set; }
         public string ServiceDistributionProtocolForDataset { get; set; }
         public string ServiceUuid { get; set; }
+        public string ServiceWfsDistributionUrlForDataset { get; set; }
 
         public SeoUrl CreateSeoUrl()
         {

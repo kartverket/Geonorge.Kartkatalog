@@ -401,7 +401,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 { 
                                     var simpleMd = new SimpleMetadata(md);
                                     SimpleMetadata serviceMd = null;
-                                    string ServiceDistributionProtocol = "", ServiceDistributionUrl = "", ServiceDistributionName = "", ServiceDistributionUuid = "";
+                                    string ServiceDistributionProtocol = "", ServiceDistributionUrl = "", ServiceDistributionName = "", ServiceDistributionUuid = "", ServiceWfsDistributionUrl = "";
 
                                     SimpleKeyword nationalTheme = SimpleKeyword.Filter(simpleMd.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME).FirstOrDefault();
                                     string keywordNationalTheme = "";
@@ -451,6 +451,7 @@ namespace Kartverket.Metadatakatalog.Service
                                     {
                                         string uuid = null;
                                         string uuidFound = null;
+                                        string uuidWfsFound = null;
                                         string uriProtocol = null;
                                         string uriName = null;
 
@@ -480,11 +481,14 @@ namespace Kartverket.Metadatakatalog.Service
                                             if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS" && string.IsNullOrEmpty(uriName))
                                             {
                                                 uuidFound = uuid;
-                                                break;
                                             }
                                             else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS" && !string.IsNullOrEmpty(uriName))
                                             {
                                                 uuidFound = uuid;
+                                            }
+                                            else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS")
+                                            {
+                                                uuidWfsFound = uuid;
                                             }
 
                                         }
@@ -502,6 +506,20 @@ namespace Kartverket.Metadatakatalog.Service
                                                     ServiceDistributionUrl = servicedistributionDetails.URL;
                                                     ServiceDistributionName = servicedistributionDetails.Name;
                                                     ServiceDistributionUuid = uuidFound;
+                                                }
+                                            }
+                                        }
+
+                                        if (!string.IsNullOrEmpty(uuidWfsFound) && uuid != indexDoc.Uuid)
+                                        {
+                                            MD_Metadata_Type m = geoNorge.GetRecordByUuid(uuidWfsFound);
+                                            if (m != null)
+                                            {
+                                                serviceMd = new SimpleMetadata(m);
+                                                var serviceWfsdistributionDetails = serviceMd.DistributionDetails;
+                                                if (serviceWfsdistributionDetails != null)
+                                                {
+                                                    ServiceWfsDistributionUrl = serviceWfsdistributionDetails.URL;
                                                 }
                                             }
                                         }
@@ -526,7 +544,8 @@ namespace Kartverket.Metadatakatalog.Service
                                         ServiceDistributionNameForDataset = ServiceDistributionName,
                                         ServiceDistributionProtocolForDataset = ServiceDistributionProtocol,
                                         ServiceDistributionUrlForDataset = ServiceDistributionUrl,
-                                        ServiceDistributionUuidForDataset = ServiceDistributionUuid
+                                        ServiceDistributionUuidForDataset = ServiceDistributionUuid,
+                                        ServiceWfsDistributionUrlForDataset = ServiceWfsDistributionUrl
                                     });
                                 }
 
@@ -540,7 +559,7 @@ namespace Kartverket.Metadatakatalog.Service
                         List<string> bundlesNewList = new List<string>();
                         foreach (var bundle in bundles)
                         {
-                            bundlesNewList.Add(bundle.Uuid + "|" + bundle.Title + "|" + bundle.ParentIdentifier + "|" + bundle.HierarchyLevel + "|" + bundle.ContactOwnerOrganization + "|" + bundle.DistributionDetailsName + "|" + bundle.DistributionDetailsProtocol + "|" + bundle.DistributionDetailsUrl + "|" + bundle.KeywordNationalTheme + "|" + bundle.OrganizationLogoUrl + "|" + bundle.ThumbnailUrl + "|" + bundle.AccessConstraints + "|" + bundle.OtherConstraintsAccess  +"|" + bundle.ServiceDistributionUuidForDataset + "|" + bundle.ServiceDistributionProtocolForDataset + "|" + bundle.ServiceDistributionUrlForDataset + "|" + bundle.ServiceDistributionNameForDataset);
+                            bundlesNewList.Add(bundle.Uuid + "|" + bundle.Title + "|" + bundle.ParentIdentifier + "|" + bundle.HierarchyLevel + "|" + bundle.ContactOwnerOrganization + "|" + bundle.DistributionDetailsName + "|" + bundle.DistributionDetailsProtocol + "|" + bundle.DistributionDetailsUrl + "|" + bundle.KeywordNationalTheme + "|" + bundle.OrganizationLogoUrl + "|" + bundle.ThumbnailUrl + "|" + bundle.AccessConstraints + "|" + bundle.OtherConstraintsAccess  +"|" + bundle.ServiceDistributionUuidForDataset + "|" + bundle.ServiceDistributionProtocolForDataset + "|" + bundle.ServiceDistributionUrlForDataset + "|" + bundle.ServiceDistributionNameForDataset + "|" + bundle.ServiceWfsDistributionUrlForDataset);
                         }
 
                         indexDoc.Bundles = bundlesNewList.ToList();
@@ -786,6 +805,6 @@ namespace Kartverket.Metadatakatalog.Service
         public string ServiceDistributionNameForDataset { get; set; }
         public string ServiceDistributionProtocolForDataset { get; set; }
         public string ServiceDistributionUrlForDataset { get; set; }
-
+        public string ServiceWfsDistributionUrlForDataset { get; set; }
     }
 }

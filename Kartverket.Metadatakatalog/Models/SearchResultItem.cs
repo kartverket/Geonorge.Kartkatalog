@@ -20,7 +20,8 @@ namespace Kartverket.Metadatakatalog.Models
         public string ServiceDistributionNameForDataset { get; set; }
         public string ServiceDistributionUrlForDataset { get; set; }
         public string ServiceDistributionProtocolForDataset { get; set; }
-        public string ServiceDistributionUuidForDataset { get; set; }    
+        public string ServiceDistributionUuidForDataset { get; set; }
+        public string ServiceWfsDistributionUrlForDataset { get; set; }
         public string LegendDescriptionUrl { get; set; }
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }

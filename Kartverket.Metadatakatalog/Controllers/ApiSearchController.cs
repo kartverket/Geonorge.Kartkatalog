@@ -138,6 +138,8 @@ namespace Kartverket.Metadatakatalog.Controllers
                     item.OrganizationLogoUrl = related.OrganizationLogoUrl;
                     item.ThumbnailUrl = related.Thumbnails != null && related.Thumbnails.Count > 0 ? related.Thumbnails[0].URL : "";
                     item.DistributionUrl = related.DistributionDetails != null && related.DistributionDetails.URL != null ? related.DistributionDetails.URL : null;
+                    item.ServiceDistributionUrlForDataset = related.ServiceDistributionUrlForDataset;
+                    item.ServiceWfsDistributionUrlForDataset = related.ServiceWfsDistributionUrlForDataset;
                     item.Uuid = related.Uuid;
                     res.Items.Add(item);
                 }
