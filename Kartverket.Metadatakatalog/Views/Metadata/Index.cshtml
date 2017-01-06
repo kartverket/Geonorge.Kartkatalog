@@ -1,4 +1,5 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
+@using Resources;
 @model Kartverket.Metadatakatalog.Models.MetadataViewModel
 @{
     ViewBag.Title = Model.Title + (Model.ContactMetadata != null ? " - " + Model.ContactMetadata.Organization : "");
@@ -91,14 +92,14 @@ if (contact != null)
     <div class="table-btn-container">
         @if (Model.ShowMapLink())
         {
-            <a id="mapmacrolink-@Model.Uuid" href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title=""target="_blank" class="btn">
-                <span id="mapmacro-@Model.Uuid" class="custom-icon custom-icon-kartmarkoer"></span> Vis i kart
+            <a id="mapmacrolink-@Model.Uuid" href="@Html.NorgeskartUrl()@Model.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(Model.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank" class="btn">
+                <span id="mapmacro-@Model.Uuid" class="custom-icon @(Model.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span> Vis i kart
             </a>
         }
         else if (Model.ShowServiceMapLink())
         {
-            <a id="mapmacrolink-@Model.Uuid" href="@Html.NorgeskartUrl()@Model.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn">
-                <span id="mapmacro-@Model.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
+            <a id="mapmacrolink-@Model.Uuid" href="@Html.NorgeskartUrl()@Model.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(Model.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank" class="btn">
+                <span id="mapmacro-@Model.Uuid" class="custom-icon @(Model.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span><span class="button-text"> Vis i kart</span>
             </a>
         }
         else
@@ -467,14 +468,14 @@ if (contact != null)
                                             <div class="col-sm-1 search-results-action-icons">
                                                 @if (relatedContent.ShowMapLink())
                                                 {
-                                                    <a id="mapmacrolink-@relatedContent.Uuid" href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank">
-                                                        <span id="mapmacro-@relatedContent.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
+                                                    <a id="mapmacrolink-@relatedContent.Uuid" href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(relatedContent.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank">
+                                                        <span id="mapmacro-@relatedContent.Uuid" class="custom-icon @(relatedContent.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span>
                                                     </a>
                                                 }
                                                 else if (relatedContent.ShowServiceMapLink())
                                                 {
-                                                    <a id="mapmacrolink-@relatedContent.Uuid" href="@Html.NorgeskartUrl()@relatedContent.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank">
-                                                        <span id="mapmacro-@relatedContent.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
+                                                    <a id="mapmacrolink-@relatedContent.Uuid" href="@Html.NorgeskartUrl()@relatedContent.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(relatedContent.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank">
+                                                        <span id="mapmacro-@relatedContent.Uuid" class="custom-icon @(relatedContent.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span>
                                                     </a>
                                                 }
                                                 else

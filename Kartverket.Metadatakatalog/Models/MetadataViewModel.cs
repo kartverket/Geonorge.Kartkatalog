@@ -97,6 +97,8 @@ namespace Kartverket.Metadatakatalog.Models
         public string ServiceDistributionProtocolForDataset { get; set; }
         public string ServiceUuid { get; set; }
         public string ServiceWfsDistributionUrlForDataset { get; set; }
+        public string ServiceDistributionAccessConstraint { get; set; }
+        public string ServiceWfsDistributionAccessConstraint { get; set; }
 
         public SeoUrl CreateSeoUrl()
         {
@@ -293,6 +295,11 @@ namespace Kartverket.Metadatakatalog.Models
                 return true;
             else
                 return false;
+        }
+
+        public bool IsRestrictedService()
+        {
+            return ServiceDistributionAccessConstraint == "Beskyttet" || ServiceDistributionAccessConstraint == "restricted" || ServiceDistributionAccessConstraint == "norway digital restricted";
         }
 
         public string GetCoverageLink(){

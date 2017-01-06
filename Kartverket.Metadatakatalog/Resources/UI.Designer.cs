@@ -230,5 +230,14 @@ namespace Resources {
                 return ResourceManager.GetString("Facet_type_software", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tjenesten krever spesiell tilgang for å kunne vises - kontakt dataeier.
+        /// </summary>
+        public static string Service_need_permission {
+            get {
+                return ResourceManager.GetString("Service_need_permission", resourceCulture);
+            }
+        }
     }
 }

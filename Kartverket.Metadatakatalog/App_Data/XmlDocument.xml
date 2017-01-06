@@ -992,5 +992,10 @@
               Looks up a localized string similar to Applikasjon.
             </summary>
         </member>
+        <member name="P:Resources.UI.Service_need_permission">
+            <summary>
+              Looks up a localized string similar to Tjenesten krever spesiell tilgang for å kunne vises - kontakt dataeier.
+            </summary>
+        </member>
     </members>
 </doc>

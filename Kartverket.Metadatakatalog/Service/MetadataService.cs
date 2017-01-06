@@ -131,6 +131,8 @@ namespace Kartverket.Metadatakatalog.Service
                 if (metadata.IsDataset())
                     metadata.ServiceUuid = searchResult.Items[0].ServiceDistributionUuidForDataset != null ? searchResult.Items[0].ServiceDistributionUuidForDataset : null;
 
+                metadata.ServiceDistributionAccessConstraint = searchResult.Items[0].ServiceDistributionAccessConstraint;
+
                 var datasetServices = searchResult.Items[0].DatasetServices;
 
                 if (datasetServices != null && datasetServices.Count > 0)
@@ -163,7 +165,8 @@ namespace Kartverket.Metadatakatalog.Service
 
                             if (md.HierarchyLevel == "service") { 
                                 md.ServiceUuid = md.Uuid;
-                                if(relData[6] == "OGC:WMS")
+                                md.ServiceDistributionAccessConstraint = relData[12];
+                                if (relData[6] == "OGC:WMS")
                                 { 
                                     md.ServiceDistributionProtocolForDataset = relData[6];
                                     md.ServiceDistributionUrlForDataset = relData[7];
@@ -231,6 +234,10 @@ namespace Kartverket.Metadatakatalog.Service
                                 md.ServiceDistributionNameForDataset = relData[16];
                             if (relData.ElementAtOrDefault(17) != null)
                                 md.ServiceWfsDistributionUrlForDataset = relData[17];
+                            if (relData.ElementAtOrDefault(18) != null)
+                                md.ServiceDistributionAccessConstraint = relData[18];
+                            if (relData.ElementAtOrDefault(19) != null)
+                                md.ServiceWfsDistributionAccessConstraint = relData[19];
 
                             metadata.Related.Add(md);
                         }

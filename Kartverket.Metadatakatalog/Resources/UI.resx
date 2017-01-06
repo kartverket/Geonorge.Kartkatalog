@@ -174,4 +174,7 @@
   <data name="Facet_dataaccess" xml:space="preserve">
     <value>Tilgang til data</value>
   </data>
+  <data name="Service_need_permission" xml:space="preserve">
+    <value>Tjenesten krever spesiell tilgang for å kunne vises - kontakt dataeier</value>
+  </data>
 </root>

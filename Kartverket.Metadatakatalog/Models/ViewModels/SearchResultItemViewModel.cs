@@ -25,6 +25,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
         public string ServiceUuid { get; set; }
+        public string ServiceDistributionAccessConstraint { get; set; }
+        
 
         public string GetInnholdstypeCSS()
         {
@@ -147,6 +149,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             ServiceUuid = item.Uuid;
             if (item.Type == "dataset")
                 ServiceUuid = item.ServiceDistributionUuidForDataset;
+
+            ServiceDistributionAccessConstraint = item.ServiceDistributionAccessConstraint;
         }
 
         public static List<SearchResultItemViewModel> CreateFromList(IEnumerable<SearchResultItem> items)
@@ -171,6 +175,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         {
             var seoUrl = new SeoUrl(Organization, Title);
             return seoUrl.Organization;
+        }
+
+        public bool IsRestrictedService()
+        {
+            return !string.IsNullOrEmpty(ServiceDistributionAccessConstraint);
         }
 
         string RemoveQueryString(string URL)

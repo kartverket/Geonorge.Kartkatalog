@@ -641,14 +641,14 @@ facet.FacetResults = orderedList.ToList();
                         <div class="col-xs-1 search-results-action-icons action-show-map">
                             @if (item.ShowMapLink())
                             {
-                                <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank">
-                                    <span id="mapmacro-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
+                                <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(item.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank">
+                                    <span id="mapmacro-@item.Uuid" class="custom-icon @(item.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
-                                <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank">
-                                    <span id="mapmacro-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
+                                <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(item.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank">
+                                    <span id="mapmacro-@item.Uuid" class="custom-icon @(item.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span>
                                 </a>
                             }
                             else
@@ -657,7 +657,6 @@ facet.FacetResults = orderedList.ToList();
                                     <span class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
-
                         </div>
                         <div class="col-xs-1 search-results-action-icons action-download">
                             @if (item.ShowDownloadService())
