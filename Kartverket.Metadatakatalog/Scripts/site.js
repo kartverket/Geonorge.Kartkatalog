@@ -80,7 +80,6 @@ function addToCartButtonClick(addToCartButton) {
     var itemtheme = addToCartButton.attr('itemtheme');
     var itemorgname = addToCartButton.attr('itemorgname');
 
-    updateCartButton(addToCartButton);
 
     var orderItems = [];
 
@@ -89,7 +88,6 @@ function addToCartButtonClick(addToCartButton) {
     }
     $.map(orderItems, function (elementOfArray, indexInArray) {
         if (elementOfArray == itemuuid) {
-            orderItems.push(itemuuid);
             added = true;
         }
     });
@@ -112,8 +110,20 @@ function addToCartButtonClick(addToCartButton) {
         updateShoppingCart();
 
     } else {
-        showAlert(itemname + ' er allerede lagt til i <a href="/Download">kurven</a>', 'warning');
+        var index = orderItems.indexOf(itemuuid);
+        if (index > -1) {
+            orderItems.splice(index, 1);
+        }
+        localStorage.removeItem(itemuuid + ".metadata");
+        localStorage["orderItems"] = JSON.stringify(orderItems);
+
+        updateShoppingCart();
+
+        showAlert(itemname + ' er fjernet fra <a href="/Download">kurven</a>', 'warning');
     }
+
+    updateCartButton(addToCartButton, orderItems);
+
 }
 
 $(document).ready(function () {
