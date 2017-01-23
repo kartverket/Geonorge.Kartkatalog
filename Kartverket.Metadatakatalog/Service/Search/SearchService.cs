@@ -82,6 +82,20 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     //}
 
                 });
+
+                //Get other facets not limited to filter, alternativly use tag and exclude filters
+
+                SolrQueryResults<MetadataIndexDoc> queryResultsFacets = _solrInstance.Query(query, new QueryOptions
+                {
+                    OrderBy = order,
+                    Rows = 0,
+                    StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
+                    Facet = BuildFacetParameters(parameters)
+
+                });
+
+                queryResults.FacetFields = queryResultsFacets.FacetFields;
+
                 return CreateSearchResults(queryResults, parameters);
             }
             catch (Exception ex)
@@ -234,7 +248,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
             return new FacetParameters
             {
                 Queries = parameters.Facets.Select(item => 
-                    new SolrFacetFieldQuery(item.Name) { MinCount = 1, Limit=550,  Sort=false }
+                    new SolrFacetFieldQuery(item.Name) { MinCount = 0, Limit=550,  Sort=false }
                     ).ToList<ISolrFacetQuery>()
             };
         }
