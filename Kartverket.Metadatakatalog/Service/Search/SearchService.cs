@@ -241,10 +241,35 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
         private ICollection<ISolrQuery> BuildFilterQueries(SearchParameters parameters)
         {
-            return parameters.Facets
-                .Where(f => !string.IsNullOrWhiteSpace(f.Value))
-                .Select(f => new SolrQueryByField(f.Name, f.Value))
-                .ToList<ISolrQuery>();
+            AbstractSolrQuery query = new SolrQuery("");
+
+            var facets = parameters.Facets
+                         .Where(f => !string.IsNullOrWhiteSpace(f.Value))
+                         .Select(fa => fa.Name).Distinct().ToList();
+
+            foreach (var facet in facets)
+            {
+                var facetValues = parameters.Facets
+                                  .Where(fv => fv.Name == facet.ToString()).ToList();
+
+                if (facetValues.Count == 1)
+                    query = query && new SolrQueryByField(facetValues[0].Name, facetValues[0].Value);
+                else
+                {
+                    for(int fv = 0; fv < facetValues.Count; fv++ )
+                    {
+                        if (fv == 0)
+                            query = query && new SolrQueryByField(facetValues[fv].Name, facetValues[fv].Value);
+                        else
+                            query = query || new SolrQueryByField(facetValues[fv].Name, facetValues[fv].Value);
+                    }
+                }
+            }
+
+            var queryList = new ISolrQuery[] { query };
+
+            return queryList;
+
         }
 
         private ISolrQuery BuildQuery(SearchParameters parameters)
