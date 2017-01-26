@@ -9,6 +9,7 @@ using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -263,7 +264,24 @@ namespace Kartverket.Metadatakatalog.Service
                         ItemsChoiceType23.PropertyIsLike,
                     };
 
-                    var res = geoNorge.SearchWithFilters(filters, filterNames, 1, 200);
+                    SearchResultsType res = null;
+
+                    var tries = 3;
+                    while (true)
+                    {
+                        try
+                        {
+                            res = geoNorge.SearchWithFilters(filters, filterNames, 1, 200);
+                            break; // success!
+                        }
+                        catch
+                        {
+                            if (--tries == 0)
+                                throw;
+                            Thread.Sleep(3000);
+                        }
+                    }
+
                     if (res.numberOfRecordsMatched != "0")
                     {
                         string uuid = null;
