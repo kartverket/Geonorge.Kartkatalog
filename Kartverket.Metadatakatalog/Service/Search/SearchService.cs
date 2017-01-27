@@ -83,19 +83,6 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
                 });
 
-                //Get other facets not limited to filter, alternativly use tag and exclude filters
-
-                SolrQueryResults<MetadataIndexDoc> queryResultsFacets = _solrInstance.Query(query, new QueryOptions
-                {
-                    OrderBy = order,
-                    Rows = 0,
-                    StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
-                    Facet = BuildFacetParameters(parameters)
-
-                });
-
-                queryResults.FacetFields = queryResultsFacets.FacetFields;
-
                 return CreateSearchResults(queryResults, parameters);
             }
             catch (Exception ex)
@@ -245,45 +232,66 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
         private static FacetParameters BuildFacetParameters(SearchParameters parameters)
         {
-            return new FacetParameters
+            var facetQueries = new List<ISolrFacetQuery>();
+
+            List<string> facetsAdded = new List<string>();
+
+            foreach (var facet in parameters.Facets)
             {
-                Queries = parameters.Facets.Select(item => 
-                    new SolrFacetFieldQuery(item.Name) { MinCount = 0, Limit=550,  Sort=false }
-                    ).ToList<ISolrFacetQuery>()
+                if (facet.Value != null)
+                {
+                    if(!facetsAdded.Contains(facet.Name))
+                        facetQueries.Add(new SolrFacetFieldQuery(new LocalParams { { "ex", facet.Name } } + facet.Name) { MinCount = 0, Limit = 550, Sort = false });
+
+                    facetsAdded.Add(facet.Name);
+                }
+                else
+                {
+                    facetQueries.Add(new SolrFacetFieldQuery(facet.Name) { MinCount = 0, Limit = 550, Sort = false });
+                }
+            }
+
+            var facets = new FacetParameters
+            {
+                Queries = facetQueries
             };
+
+            return facets;
         }
 
         private ICollection<ISolrQuery> BuildFilterQueries(SearchParameters parameters)
         {
-            AbstractSolrQuery query = new SolrQuery("");
+            var queryList = new List<ISolrQuery>();
+
+            Dictionary<string, string> facetQueries = new Dictionary<string, string>(); 
 
             var facets = parameters.Facets
                          .Where(f => !string.IsNullOrWhiteSpace(f.Value))
-                         .Select(fa => fa.Name).Distinct().ToList();
+                         .ToList();
+
 
             foreach (var facet in facets)
             {
-                var facetValues = parameters.Facets
-                                  .Where(fv => fv.Name == facet.ToString()).ToList();
+                if(!facetQueries.ContainsKey(facet.Name))
+                    facetQueries.Add(facet.Name, "");
 
-                if (facetValues.Count == 1)
-                    query = query && new SolrQueryByField(facetValues[0].Name, facetValues[0].Value);
+                var queryExpression = facetQueries[facet.Name];
+                if (string.IsNullOrEmpty(queryExpression))
+                {
+                    facetQueries[facet.Name] = facet.Name + ":\"" + facet.Value + "\"";
+                }
                 else
                 {
-                    for(int fv = 0; fv < facetValues.Count; fv++ )
-                    {
-                        if (fv == 0)
-                            query = query && new SolrQueryByField(facetValues[fv].Name, facetValues[fv].Value);
-                        else
-                            query = query || new SolrQueryByField(facetValues[fv].Name, facetValues[fv].Value);
-                    }
+                    facetQueries[facet.Name] = facetQueries[facet.Name] + " OR " + facet.Name + ":\"" + facet.Value + "\"";
                 }
             }
 
-            var queryList = new ISolrQuery[] { query };
+            foreach (var facetQuery in facetQueries)
+            {
+                queryList.Add(new SolrQuery(new LocalParams { { "tag", facetQuery.Key } } + facetQuery.Value));
+            }
 
-            return queryList;
-
+             return queryList;
         }
 
         private ISolrQuery BuildQuery(SearchParameters parameters)
