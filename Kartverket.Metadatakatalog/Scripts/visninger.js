@@ -167,13 +167,9 @@ function getAllUrlParamsForSelectedFacets(selectedFacets) {
     for (var key in allFacets) {
         if (allFacets.hasOwnProperty(key)) {
             var facet = allFacets[key];
-            console.log("facet");
-            console.log(facet);
             var urlParameter = '';
             if (facet.value !== undefined) {
                 urlParameter = createFacetUrlParameter(allUrlParameters.parameterLength, facet.name, facet.value, true);
-                console.log("urlParameter");
-                console.log(urlParameter);
                 allUrlParameters.parameterString += urlParameter;
                 allUrlParameters.parameterLength++;
             }
@@ -193,7 +189,7 @@ function getUrlForFacetLink(facetLinkElement) {
         if (selectedFacets.hasOwnProperty(key)) {
             var facet = selectedFacets[key];
             // Remove already selected facet
-            if (facet.name == facetName && facet.value == facetValue) {
+            if (facet.name == escape(facetName) && facet.value == escape(facetValue)) {
                 delete selectedFacets[key];
                 alreadySelected = true;
             }
@@ -207,7 +203,9 @@ function getUrlForFacetLink(facetLinkElement) {
 
     var mergedUrlParameters = urlParameters.parameterString + newUrlParameter;
 
-    return mergedUrlParameters;
+    var url = window.location.origin + window.location.pathname + mergedUrlParameters;
+
+    return url;
 }
 
 
