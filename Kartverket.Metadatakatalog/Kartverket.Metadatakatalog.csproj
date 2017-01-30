@@ -594,6 +594,7 @@
     <Content Include="Content\map-modal.css" />
     <Content Include="Content\kartverket_logo.png" />
     <Content Include="Content\logo_kartverket_norgedigitalt.png" />
+    <Content Include="Content\temp.css" />
     <Content Include="Content\searchresult-layout.css" />
     <Content Include="Content\shopping-cart.css" />
     <Content Include="Content\site.css" />
