@@ -282,7 +282,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 }
                 else
                 {
-                    facetQueries[facet.Name] = facetQueries[facet.Name] + " OR " + facet.Name + ":\"" + facet.Value + "\"";
+                    if(facet.Name != "area")
+                        facetQueries[facet.Name] = facetQueries[facet.Name] + " OR " + facet.Name + ":\"" + facet.Value + "\"";
                 }
             }
 
