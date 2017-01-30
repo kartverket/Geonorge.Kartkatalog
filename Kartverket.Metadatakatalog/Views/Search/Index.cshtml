@@ -98,7 +98,7 @@ facet.FacetResults = orderedList.ToList();
                 {
                     <li class="filter-options">
                         <a href="@Url.Action("Index", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))" data-facet-name="@facet.FacetField" data-facet-value="@facetResult.Name" class="facet-link btn-link">
-                            @facetResult.Name.Trim() heyye
+                            @facetResult.Name.Trim()
                             <span class="text-muted">(@facetResult.Count)</span>
                         </a>
                     </li>
@@ -136,14 +136,14 @@ facet.FacetResults = orderedList.ToList();
                         <li class="filter-options @hideChildren ">
                             @if (@hideChildren == "show-children")
                             {
-                                <span class="btn-link active">
+                                <a class="btn-link facet-link show-loading-animation active" data-facet-name="@facet.FacetField" data-facet-value="@facetResult.Name" data-loading-message="Filtrerer søkeresultat">
                                     @facetResult.AreaLinkName(Model.areaDictionary).Trim()
                                     <span class="text-muted">(@facetResult.Count)</span>
-                                </span>
+                                </a>
                             }
                             else
                             {
-                                <a href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link show-loading-animation" data-loading-message="Filtrerer søkeresultat">
+                                <a href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link facet-link show-loading-animation" data-facet-name="@facet.FacetField" data-facet-value="@facetResult.Name" data-loading-message="Filtrerer søkeresultat">
                                     @facetResult.AreaLinkName(Model.areaDictionary).Trim()
                                     <span class="text-muted">(@facetResult.Count)</span>
                                 </a>
