@@ -24,7 +24,7 @@ namespace Kartverket.Metadatakatalog.Service
         public List<Register> containedSubRegisters { get; set; }
         public DateTime lastUpdated { get; set; }
     }
-    
+
     public class Registeritem
     {
         public string id { get; set; }
@@ -53,7 +53,7 @@ namespace Kartverket.Metadatakatalog.Service
 
     }
 
-    public  class PlaceResolver
+    public class PlaceResolver
     {
         public const string PlaceNorge = "Norge";
         public const string PlaceHavomraader = "Havområder";
@@ -61,6 +61,8 @@ namespace Kartverket.Metadatakatalog.Service
         public const string PlaceJanMayen = "Jan Mayen";
 
         private Dictionary<string, string> _areas;
+
+        private Dictionary<string, string> _dokCoverageMapping;
 
         /// <summary>
         /// Gets fylke og kommuner fra register i et dictionary
@@ -72,20 +74,21 @@ namespace Kartverket.Metadatakatalog.Service
             return _areas;
         }
 
-        private void populateAreas() {
+        private void populateAreas()
+        {
             if (_areas == null || _areas.Count == 0)
             {
                 _areas = new Dictionary<string, string>();
                 //call register fylker og kommuner
                 HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]); 
+                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 var result = client.GetAsync("api/subregister/sosi-kodelister/kartverket/fylkesnummer").Result;
                 if (result.IsSuccessStatusCode)
                 {
                     var register = result.Content.ReadAsAsync<Register>().Result;
-                    
+
                     foreach (var item in register.containeditems)
                     {
                         _areas.Add("0/" + item.codevalue, item.label);
@@ -97,16 +100,39 @@ namespace Kartverket.Metadatakatalog.Service
                     var register = result2.Content.ReadAsAsync<Register>().Result;
                     foreach (var item in register.containeditems)
                     {
-                        _areas.Add("0/" + item.codevalue.Substring(0,2) + "/" + item.codevalue, item.label);
+                        _areas.Add("0/" + item.codevalue.Substring(0, 2) + "/" + item.codevalue, item.label);
                     }
                 }
-               
+
             }
-            
+
+        }
+
+        private void GetDokCoverageMapping()
+        {
+            if (_dokCoverageMapping == null || _dokCoverageMapping.Count == 0)
+            {
+                _dokCoverageMapping = new Dictionary<string, string>();
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var result = client.GetAsync("api/metadata/DokCoverageMapping").Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var register = result.Content.ReadAsAsync<Dictionary<string, string>>().Result;
+
+                    foreach (var item in register)
+                    {
+                        _dokCoverageMapping.Add(item.Key, item.Value);
+                    }
+                }
+            }
+
         }
 
         // note use of lowercase keywords - comparison is also done with lower casing of input
-        private  readonly Dictionary<string, string> _placeToHavomraader = new Dictionary<string, string>
+        private readonly Dictionary<string, string> _placeToHavomraader = new Dictionary<string, string>
         {
             {"norskehavet", PlaceHavomraader},
             {"barentshavet", PlaceHavomraader},
@@ -124,24 +150,24 @@ namespace Kartverket.Metadatakatalog.Service
             {"kystnær", PlaceHavomraader},
             {"norsk økonomisk sone", PlaceHavomraader},
             {"skagerak", PlaceHavomraader}
-            
+
         };
 
-        private  readonly Dictionary<string, string> _placeToSvalbard = new Dictionary<string, string>
+        private readonly Dictionary<string, string> _placeToSvalbard = new Dictionary<string, string>
         {
             {"norge og svalbard", PlaceSvalbard},
             {"svalbard", PlaceSvalbard}
-            
-           
+
+
         };
 
-        private  readonly Dictionary<string, string> _placeToJanMayen = new Dictionary<string, string>
+        private readonly Dictionary<string, string> _placeToJanMayen = new Dictionary<string, string>
         {
             {"jan mayen", PlaceJanMayen},
-            
+
         };
 
-        public  List<string> Resolve(SimpleMetadata metadata)
+        public List<string> Resolve(SimpleMetadata metadata)
         {
             List<string> placegroup = new List<string>();
             placegroup.Add("Norge");
@@ -171,9 +197,10 @@ namespace Kartverket.Metadatakatalog.Service
         public List<string> ResolveArea(SimpleMetadata metadata)
         {
             populateAreas();
+            GetDokCoverageMapping();
 
             List<string> placegroup = new List<string>();
-            
+
             foreach (var keyword in metadata.Keywords)
             {
                 var myValue = _areas.FirstOrDefault(x => x.Value.ToLower() == keyword.Keyword.ToLower()).Key;
@@ -192,11 +219,43 @@ namespace Kartverket.Metadatakatalog.Service
                     {
                         //Om kommunen ikke har fylke, så fjernes kommunen
                         placegroup.Remove(placekey);
-                    } 
+                    }
                 }
             }
+
+            //Get municipalities coverage
+            if (_dokCoverageMapping.ContainsKey(metadata.Uuid))
+            {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var result = client.GetAsync("https://ws.geonorge.no/dekningsApi/dekning?datasett=" + _dokCoverageMapping[metadata.Uuid]).Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var register = result.Content.ReadAsAsync<Coverage>().Result;
+
+                    for(int c = 0; c < register.kommuner.Count(); c ++)
+                    {
+                        string kommune = register.kommuner[c].ToString("D4");
+                        kommune = "0/" + kommune.Substring(0, 2) + "/" + kommune;
+                        var municipality = _areas.FirstOrDefault(x => x.Key == kommune).Key;
+                        if (municipality != null && !placegroup.Contains(kommune)) placegroup.Add(municipality);
+
+                    }
+
+                }
+            }
+
             return placegroup;
         }
-       
+
     }
+
+
+    public class Coverage
+    {
+        public int[] kommuner { get; set; }
+    }
+
 }
