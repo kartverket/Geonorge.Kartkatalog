@@ -98,7 +98,7 @@ facet.FacetResults = orderedList.ToList();
                 foreach (var facetResult in placegroup.FacetResults)
                 {
                    
-                    string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
+                    string cssClass = (Model.HasFacetFieldValue(placegroup.FacetField, facetResult.Name) ? "active" : "");
                     string emptyClass = (facetResult.Count == 0) ? "empty-facet" : "";
                     <li class="filter-options">
                         <a href="@Url.Action("Index", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))" data-facet-name="@placegroup.FacetField" data-facet-value="@facetResult.Name" class="facet-link btn-link @cssClass @emptyClass">
