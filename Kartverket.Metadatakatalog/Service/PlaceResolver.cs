@@ -206,6 +206,35 @@ namespace Kartverket.Metadatakatalog.Service
                 var myValue = _areas.FirstOrDefault(x => x.Value.ToLower() == keyword.Keyword.ToLower()).Key;
                 if (myValue != null) placegroup.Add(myValue);
             }
+
+            //Get municipalities coverage
+            if (_dokCoverageMapping.ContainsKey(metadata.Uuid))
+            {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var result = client.GetAsync("https://ws.geonorge.no/dekningsApi/dekning?datasett=" + _dokCoverageMapping[metadata.Uuid]).Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var register = result.Content.ReadAsAsync<Coverage>().Result;
+
+                    for(int c = 0; c < register.kommuner.Count(); c ++)
+                    {
+                        string kommune = register.kommuner[c].ToString("D4");
+                        string fylke = kommune.Substring(0,2);
+                        kommune = "0/" + kommune.Substring(0, 2) + "/" + kommune;
+                        fylke = "0/" + fylke;
+                        var municipality = _areas.FirstOrDefault(x => x.Key == kommune).Key;
+                        if (municipality != null && !placegroup.Contains(kommune)) placegroup.Add(municipality);
+
+                        var areaFylke = _areas.FirstOrDefault(x => x.Key == fylke).Key;
+                        if (areaFylke != null && !placegroup.Contains(fylke)) placegroup.Add(areaFylke);
+                    }
+
+                }
+            }
+
             List<string> placegroup2 = new List<string>();
             placegroup2.AddRange(placegroup);
 
@@ -223,29 +252,6 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
 
-            //Get municipalities coverage
-            if (_dokCoverageMapping.ContainsKey(metadata.Uuid))
-            {
-                HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var result = client.GetAsync("https://ws.geonorge.no/dekningsApi/dekning?datasett=" + _dokCoverageMapping[metadata.Uuid]).Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var register = result.Content.ReadAsAsync<Coverage>().Result;
-
-                    for(int c = 0; c < register.kommuner.Count(); c ++)
-                    {
-                        string kommune = register.kommuner[c].ToString("D4");
-                        kommune = "0/" + kommune.Substring(0, 2) + "/" + kommune;
-                        var municipality = _areas.FirstOrDefault(x => x.Key == kommune).Key;
-                        if (municipality != null && !placegroup.Contains(kommune)) placegroup.Add(municipality);
-
-                    }
-
-                }
-            }
 
             return placegroup;
         }
