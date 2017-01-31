@@ -50,17 +50,17 @@
                     <li class="filter-options">
                         @if (cssClass == "active")
                         {
-                            <a class="btn-link facet-link @cssClass @emptyClass" data-facet-name="@facet.FacetField" data-facet-value="@facetResult.Name">
+                            <span class="btn-link facet-link @cssClass @emptyClass" data-facet-name="@facet.FacetField" data-facet-value="@facetResult.Name">
                                 @facetResult.LinkName()
                                 <span class="text-muted">(@facetResult.Count)</span>
-                            </a>
+                            </span>
                         }
                         else
                         {
-                            <a href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link custom-checkbox show-loading-animation facet-link @cssClass @emptyClass" data-facet-name="@facet.FacetField" data-facet-value="@facetResult.Name" data-loading-message="Filtrerer søkeresultat">
+                            <span class="btn-link custom-checkbox show-loading-animation facet-link @cssClass @emptyClass" data-facet-name="@facet.FacetField" data-facet-value="@facetResult.Name" data-loading-message="Filtrerer søkeresultat">
                                 @facetResult.LinkName()
                                 <span class="text-muted">(@facetResult.Count)</span>
-                            </a>
+                            </span>
                         }
                     </li>
                 }
@@ -101,10 +101,10 @@ facet.FacetResults = orderedList.ToList();
                     string cssClass = (Model.HasFacetFieldValue(placegroup.FacetField, facetResult.Name) ? "active" : "");
                     string emptyClass = (facetResult.Count == 0) ? "empty-facet" : "";
                     <li class="filter-options">
-                        <a href="@Url.Action("Index", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))" data-facet-name="@placegroup.FacetField" data-facet-value="@facetResult.Name" class="facet-link btn-link @cssClass @emptyClass">
+                        <span href="@Url.Action("Index", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))" data-facet-name="@placegroup.FacetField" data-facet-value="@facetResult.Name" class="facet-link btn-link @cssClass @emptyClass">
                             @facetResult.Name.Trim()
                             <span class="text-muted">(@facetResult.Count)</span>
-                        </a>
+                        </span>
                     </li>
                     
                         
@@ -143,17 +143,17 @@ facet.FacetResults = orderedList.ToList();
                         <li class="filter-options @hideChildren ">
                             @if (@hideChildren == "show-children")
                             {
-                                <a class="btn-link facet-link show-loading-animation active @emptyClass" data-facet-name="@facet.FacetField" data-facet-value="@facetResult.Name" data-loading-message="Filtrerer søkeresultat">
+                                <span class="btn-link facet-link show-loading-animation active @emptyClass" data-facet-name="@facet.FacetField" data-facet-value="@facetResult.Name" data-loading-message="Filtrerer søkeresultat">
                                     @facetResult.AreaLinkName(Model.areaDictionary).Trim()
                                     <span class="text-muted">(@facetResult.Count)</span>
-                                </a>
+                                </span>
                             }
                             else
                             {
-                                <a href="@Url.Action("Index", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link facet-link show-loading-animation @emptyClass" data-facet-name="@facet.FacetField" data-facet-value="@facetResult.Name" data-loading-message="Filtrerer søkeresultat">
+                                <span class="btn-link facet-link show-loading-animation @emptyClass" data-facet-name="@facet.FacetField" data-facet-value="@facetResult.Name" data-loading-message="Filtrerer søkeresultat">
                                     @facetResult.AreaLinkName(Model.areaDictionary).Trim()
                                     <span class="text-muted">(@facetResult.Count)</span>
-                                </a>
+                                </span>
                             }
                             
                     </text>

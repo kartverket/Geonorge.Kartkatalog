@@ -37,6 +37,11 @@
         padding-left: 15px;
     }
 
+    .facet-sok-emne .facet-sok-undertitler ul li .btn-link{
+        font-style: normal;
+        cursor: pointer;
+    }
+
         .facet-sok-emne .facet-sok-undertitler ul li .btn-link:hover {
             text-decoration: none;
         }
