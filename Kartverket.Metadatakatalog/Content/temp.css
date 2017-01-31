@@ -57,6 +57,27 @@
                 content: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/checkbox-checked.svg);
             }
 
+        .facet-sok-emne .facet-sok-undertitler ul li .empty-facet,
+        .facet-sok-emne .facet-sok-undertitler ul li .empty-facet.active,
+        .facet-sok-emne .facet-sok-undertitler ul li .empty-facet:hover,
+        .facet-sok-emne .facet-sok-undertitler ul li .empty-facet .text-muted {
+            color: #CFCFCF;
+        }
+
+            .facet-sok-emne .facet-sok-undertitler ul li .empty-facet:before
+            {
+                content: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/checkbox-unchecked-disabled.svg);
+            }
+
+            .facet-sok-emne .facet-sok-undertitler ul li .empty-facet.active:before {
+                content: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/checkbox-checked-disabled.svg);
+            }
+
+
+
+
+
+
 .custom-select-list .custom-select-list-input-container {
     border: 1px solid #cfcfcf !important;
     border-radius: 0;

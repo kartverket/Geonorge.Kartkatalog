@@ -241,13 +241,13 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 if (facet.Value != null)
                 {
                     if(!facetsAdded.Contains(facet.Name))
-                        facetQueries.Add(new SolrFacetFieldQuery(new LocalParams { { "ex", facet.Name } } + facet.Name) { MinCount = 1, Limit = 550, Sort = false });
+                        facetQueries.Add(new SolrFacetFieldQuery(new LocalParams { { "ex", facet.Name } } + facet.Name) { MinCount = 0, Limit = 550, Sort = false });
 
                     facetsAdded.Add(facet.Name);
                 }
                 else
                 {
-                    facetQueries.Add(new SolrFacetFieldQuery(facet.Name) { MinCount = 1, Limit = 550, Sort = false });
+                    facetQueries.Add(new SolrFacetFieldQuery(facet.Name) { MinCount = 0, Limit = 550, Sort = false });
                 }
             }
 
