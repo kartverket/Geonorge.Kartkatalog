@@ -12,47 +12,35 @@ function getAllUrlParams(url) {
     // get query string from url (optional) or window
     var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
 
-    // we'll store the parameters here
+    // store the parameters
     var obj = {};
 
     // if query string exists
     if (queryString) {
 
-        // stuff after # is not part of query string, so get rid of it
         queryString = queryString.split('#')[0];
 
-        // split our query string into its component parts
         var arr = queryString.split('&');
 
         for (var i = 0; i < arr.length; i++) {
-            // separate the keys and the values
             var a = arr[i].split('=');
 
-            // in case params look like: list[]=thing1&list[]=thing2
             var paramNum = undefined;
             var paramName = a[0].replace(/\[\d*\]/, function (v) {
                 paramNum = v.slice(1, -1);
                 return '';
             });
 
-            // set parameter value (use 'true' if empty)
             var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
 
-
-            // if parameter name already exists
             if (obj[paramName]) {
-                // convert value to array (if still string)
                 if (typeof obj[paramName] === 'string') {
                     obj[paramName] = [obj[paramName]];
                 }
-                // if no array index number specified...
                 if (typeof paramNum === 'undefined') {
-                    // put the value on the end of the array
                     obj[paramName].push(paramValue);
                 }
-                    // if array index number specified...
                 else {
-                    // put the value at that index number
                     obj[paramName][paramNum] = paramValue;
                 }
             }
@@ -144,6 +132,16 @@ function createFacetUrlParameter(index, name, value, trailingAmpersand) {
     return facetUrlParameter;
 }
 
+function createStringUrlParameter(name, value, trailingAmpersand) {
+    var ampersand = '';
+    if (trailingAmpersand !== undefined && trailingAmpersand == true) ampersand = '&';
+
+    var stringUrlParameter = name + '=' + value + ampersand;
+
+    return stringUrlParameter;
+
+}
+
 function getSelectedFacets() {
     var allUrlParameters = getAllUrlParams(location.search);
     var allFacets = {};
@@ -151,8 +149,11 @@ function getSelectedFacets() {
     for (var parameter in allUrlParameters) {
         if (allUrlParameters.hasOwnProperty(parameter)) {
             var res = parameter.split(".");
-            var facet = allFacets[res[0]] !== undefined ? allFacets[res[0]] : {};
-            facet[res[1]] = allUrlParameters[parameter];
+            var facet = allUrlParameters[parameter];
+            if (res.length > 1) {
+                var facet = allFacets[res[0]] !== undefined ? allFacets[res[0]] : {};
+                facet[res[1]] = allUrlParameters[parameter];
+            }
             allFacets[res[0]] = facet;
 
         }
@@ -168,7 +169,10 @@ function getAllUrlParamsForSelectedFacets(selectedFacets) {
         if (allFacets.hasOwnProperty(key)) {
             var facet = allFacets[key];
             var urlParameter = '';
-            if (facet.value !== undefined) {
+            if (typeof (facet) == "string") {
+                urlParameter = createStringUrlParameter(key, facet, true);
+                allUrlParameters.parameterString += urlParameter;
+            } else if (facet.value !== undefined) {
                 urlParameter = createFacetUrlParameter(allUrlParameters.parameterLength, facet.name, facet.value, true);
                 allUrlParameters.parameterString += urlParameter;
                 allUrlParameters.parameterLength++;
