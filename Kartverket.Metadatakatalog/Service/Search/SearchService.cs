@@ -266,8 +266,55 @@ namespace Kartverket.Metadatakatalog.Service.Search
             Dictionary<string, string> facetQueries = new Dictionary<string, string>(); 
 
             var facets = parameters.Facets
-                         .Where(f => !string.IsNullOrWhiteSpace(f.Value))
+                         .Where(f => !string.IsNullOrWhiteSpace(f.Value) && f.Name != "area")
                          .ToList();
+
+             var facetsFylke = parameters.Facets
+             .Where(f => !string.IsNullOrWhiteSpace(f.Value) && f.Name == "area" && f.Value.Length == 4)
+             .Select(fa => fa.Value)
+             .Distinct()
+             .ToList();
+
+            if(facetsFylke.Count()> 0)
+                facetQueries.Add("area", "");
+
+            foreach (var facetFylke in facetsFylke)
+            {
+                var facetsKommune = parameters.Facets
+                .Where(f => !string.IsNullOrWhiteSpace(f.Value) && f.Name == "area" && f.Value.Length > 4 && f.Value.StartsWith(facetFylke))
+                .Distinct()
+                .ToList();
+
+                if (facetsKommune.Count > 0)
+                {
+
+                    foreach (var facet in facetsKommune)
+                    {
+                        var queryExpression = facetQueries["area"];
+                        if (string.IsNullOrEmpty(queryExpression))
+                        {
+                            facetQueries["area"] = "area:\"" + facet.Value + "\"";
+                        }
+                        else
+                        {
+                            facetQueries["area"] = facetQueries["area"] + " OR  area:\"" + facet.Value + "\"";
+                        }
+                    }
+                }
+                else
+                {
+                    var queryExpression = facetQueries["area"];
+                    if (string.IsNullOrEmpty(queryExpression))
+                    {
+                        facetQueries["area"] = "area:\"" + facetFylke + "\"";
+                    }
+                    else
+                    {
+                        facetQueries["area"] = facetQueries["area"] + " OR  area:\"" + facetFylke + "\"";
+                    }
+                }
+
+            }
 
 
             foreach (var facet in facets)
@@ -282,8 +329,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 }
                 else
                 {
-                    if(facet.Name != "area")
-                        facetQueries[facet.Name] = facetQueries[facet.Name] + " OR " + facet.Name + ":\"" + facet.Value + "\"";
+                   facetQueries[facet.Name] = facetQueries[facet.Name] + " OR " + facet.Name + ":\"" + facet.Value + "\"";
                 }
             }
 
