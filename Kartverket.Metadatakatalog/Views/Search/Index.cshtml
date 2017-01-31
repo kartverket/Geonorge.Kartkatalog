@@ -97,14 +97,18 @@ facet.FacetResults = orderedList.ToList();
             @{
                 foreach (var facetResult in placegroup.FacetResults)
                 {
+                   
                     string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
                     string emptyClass = (facetResult.Count == 0) ? "empty-facet" : "";
                     <li class="filter-options">
-                        <a href="@Url.Action("Index", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))" data-facet-name="@facet.FacetField" data-facet-value="@facetResult.Name" class="facet-link btn-link @cssClass @emptyClass">
+                        <a href="@Url.Action("Index", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))" data-facet-name="@placegroup.FacetField" data-facet-value="@facetResult.Name" class="facet-link btn-link @cssClass @emptyClass">
                             @facetResult.Name.Trim()
                             <span class="text-muted">(@facetResult.Count)</span>
                         </a>
                     </li>
+                    
+                        
+                    
                 }
                 string previousFacetLinkName = null;
                 double hierarchyLevel = 0;
@@ -151,8 +155,8 @@ facet.FacetResults = orderedList.ToList();
                                     <span class="text-muted">(@facetResult.Count)</span>
                                 </a>
                             }
+                            
                     </text>
-
                     previousFacetLinkName = facetResult.LinkName().ToString();
                 }
                 for (int index = 0; index < hierarchyLevel; index++)
