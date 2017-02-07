@@ -203,8 +203,15 @@ namespace Kartverket.Metadatakatalog.Service
 
             foreach (var keyword in metadata.Keywords)
             {
-                var myValue = _areas.FirstOrDefault(x => x.Value.ToLower() == keyword.Keyword.ToLower()).Key;
-                if (myValue != null) placegroup.Add(myValue);
+                var myValueList = _areas.Where(x => x.Value.ToLower() == keyword.Keyword.ToLower()).ToList();
+                if(myValueList != null)
+                {
+                    foreach (var myValue in myValueList)
+                    {
+                        if (myValue.Key != null) placegroup.Add(myValue.Key);
+                    }
+                }
+                
             }
 
             //Get municipalities coverage
