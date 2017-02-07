@@ -1,0 +1,565 @@
+﻿@using Kartverket.Metadatakatalog.Models.ViewModels
+@using Resources
+
+
+@model SearchViewModel
+
+
+@{
+    var Facets = Model.Result.Facets;
+    List<SearchResultFacetValueViewModel> orderedList = new List<SearchResultFacetValueViewModel>();
+
+    var themeFacets = Facets.First(f => f.FacetField == "theme");
+    var themes = themeFacets.FacetResults;
+
+    var typeFacets = Facets.First(f => f.FacetField == "type");
+    var types = typeFacets.FacetResults;
+
+    var nationalinitiativeFacets = Facets.First(f => f.FacetField == "nationalinitiative");
+    var nationalinitiatives = nationalinitiativeFacets.FacetResults;
+
+    var areaFacets = Facets.First(f => f.FacetField == "area");
+    var areas = areaFacets.FacetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.AreaLinkName(Model.areaDictionary)).ToList();
+
+    var placeGroupFacets = Facets.First(f => f.FacetField == "placegroups");
+    var placeGroups = placeGroupFacets.FacetResults;
+
+    var organizationFacets = Facets.First(f => f.FacetField == "organization");
+    var organizations = organizationFacets.FacetResults;
+
+    var dataAccessFacets = Facets.First(f => f.FacetField == "dataaccess");
+    var dataAccesses = dataAccessFacets.FacetResults;
+
+}
+
+@{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
+
+
+
+<div id="facet-filter" class="facet-filter">
+    <div class="facet-filter-item">
+        <div is="themes"></div>
+        <div is="types"></div>
+        <div is="nationalinitiatives"></div>
+        <div is="areas"></div>
+        <div is="organizations"></div>
+        <div is="dataAccesses"></div>
+    </div>
+</div>
+
+
+<script type="text/x-template" id="default-template">
+    <div class="facet-filter-item">
+        <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="indicator"></span>
+        {{ FacetName }}
+        <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
+            <div v-bind:class="{'selected': facetResult.isSelected, 'is-empty': facetResult.Count == 0}" v-for="facetResult in FacetResults">
+                <div v-on:click="$root.toggleFilter(this, facetResult)"
+                     class="facet-checkbox show-loading-animation facet-link">
+                    {{ facetResult.FacetName }} <span class="text-muted">({{ facetResult.Count }})</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="areas-template">
+    <div class="facet-filter-item">
+        <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="indicator"></span>
+        {{ FacetName }}
+        <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
+            <div v-bind:class="{'selected': placeGroup.isSelected, 'is-empty': placeGroup.Count == 0}" v-for="placeGroup in PlaceGroups">
+                <span class="indicator no-indicator"></span>
+                <div v-on:click="$root.toggleFilter({FacetField: 'placegroups'}, placeGroup)"
+                     class="facet-checkbox show-loading-animation facet-link">
+                    {{ placeGroup.Name }} <span class="text-muted">({{ placeGroup.Count }})</span>
+                </div>
+            </div>
+            <div v-for="area in FacetResults">
+                <div v-bind:class="{'selected': area.isSelected, 'is-empty': area.Count == 0}">
+                    <span v-on:click="area.isActive = !area.isActive" v-bind:class="{'active': area.isActive}" class="indicator"></span>
+                    <div v-on:click="$root.toggleFilter(this, area)"
+                         class="facet-checkbox show-loading-animation facet-link">
+                        {{area.FacetName}}
+                    </div>
+                </div>
+                <div v-bind:class="{'active': area.isActive}" class="facet-filter-sub-item-list">
+                    <div v-bind:class="{'selected': municipality.isSelected, 'is-empty': municipality.Count == 0}" v-for="municipality in area.municipalities">
+                        <span class="indicator no-indicator"></span>
+                        <div v-on:click="$root.toggleFilter(this, municipality)"
+                             class="facet-checkbox show-loading-animation facet-link">
+                            {{ municipality.FacetName }} <span class="text-muted">({{ municipality.Count }})</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+
+    // Vue components
+    var Themes = {
+        template: '#default-template',
+        data: function(){
+            var data = {
+                FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(themes))),
+                FacetField: "@themeFacets.FacetField",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + themeFacets.FacetField)))',
+                isActive: false
+            }
+            @{
+                 int themeIndex = 0;
+                 foreach (var theme in themes)
+                 {
+                     @:data.FacetResults[@themeIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(theme.LinkName()))";
+
+                     @:data.FacetResults[@themeIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@themeIndex]);
+
+                     themeIndex++;
+                 }
+             }
+            return data;
+        },
+        computed: {
+            hasSelected: function(){
+                var hasSelected = false;
+                this.FacetResults.forEach(function (FacetResult){
+                    if (FacetResult.isSelected == true){
+                        hasSelected = true;
+                        return;
+                    }
+                })
+                return hasSelected;
+            }
+        },
+        created: function(){
+            this.isActive = this.hasSelected;
+        }
+    }
+
+    var Types = {
+        template: '#default-template',
+        data: function(){
+            var data = {
+                FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(types))),
+                FacetField: "@typeFacets.FacetField",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + typeFacets.FacetField)))',
+                isActive: false
+            }
+            @{
+                int typeIndex = 0;
+                foreach (var type in types)
+                {
+                    @:data.FacetResults[@typeIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(type.LinkName()))";
+
+                    @:data.FacetResults[@typeIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@typeIndex]);
+
+                    typeIndex++;
+                }
+            }
+            return data;
+        },
+        computed: {
+            hasSelected: function(){
+                var hasSelected = false;
+                this.FacetResults.forEach(function (FacetResult){
+                    if (FacetResult.isSelected == true){
+                        hasSelected = true;
+                        return;
+                    }
+                }.bind(this))
+                return hasSelected;
+            }
+        },
+        created: function(){
+            this.isActive = this.hasSelected;
+        }
+    }
+
+    var Nationalinitiatives = {
+        template: '#default-template',
+        data: function(){
+            var data = {
+                FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(nationalinitiatives))),
+                FacetField: "@nationalinitiativeFacets.FacetField",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + nationalinitiativeFacets.FacetField)))',
+                isActive: false
+            }
+            @{
+                int nationalinitiativeIndex = 0;
+                foreach (var nationalinitiative in nationalinitiatives)
+                {
+                    @:data.FacetResults[@nationalinitiativeIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(nationalinitiative.LinkName()))";
+
+                    @:data.FacetResults[@nationalinitiativeIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@nationalinitiativeIndex]);
+
+                    nationalinitiativeIndex++;
+                }
+            }
+            return data;
+        },
+        computed: {
+            hasSelected: function(){
+                var hasSelected = false;
+                this.FacetResults.forEach(function (FacetResult){
+                    if (FacetResult.isSelected == true){
+                        hasSelected = true;
+                        return;
+                    }
+                })
+                return hasSelected;
+            }
+        },
+        created: function(){
+            this.isActive = this.hasSelected;
+        }
+    }
+
+    var Organizations = {
+        template: '#default-template',
+        data: function(){
+            var data = {
+                FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(organizations))),
+                FacetField: "@organizationFacets.FacetField",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + organizationFacets.FacetField)))',
+                isActive: false
+            }
+            @{
+                int organizationIndex = 0;
+                foreach (var organization in organizations)
+                {
+                    @:data.FacetResults[@organizationIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(organization.LinkName()))";
+
+                    @:data.FacetResults[@organizationIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@organizationIndex]);
+
+                    organizationIndex++;
+                }
+            }
+            return data;
+        },
+        computed: {
+            hasSelected: function(){
+                var hasSelected = false;
+                this.FacetResults.forEach(function (FacetResult){
+                    if (FacetResult.isSelected == true){
+                        hasSelected = true;
+                        return;
+                    }
+                })
+                return hasSelected;
+            }
+        },
+        created: function(){
+            this.isActive = this.hasSelected;
+        }
+    }
+
+    var DataAccesses = {
+        template: '#default-template',
+        data: function(){
+            var data = {
+                FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(dataAccesses))),
+                FacetField: "@dataAccessFacets.FacetField",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + dataAccessFacets.FacetField)))',
+                isActive: false
+            }
+            @{
+                int dataAccessIndex = 0;
+                foreach (var dataAccess in dataAccesses)
+                {
+                    @:data.FacetResults[@dataAccessIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(dataAccess.LinkName()))";
+
+                    @:data.FacetResults[@dataAccessIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@dataAccessIndex]);
+
+                    dataAccessIndex++;
+                }
+            }
+            return data;
+        },
+        computed: {
+            hasSelected: function(){
+                return this.$parent.hasSelected(this.FacetResults);
+            }
+        },
+        created: function(){
+            this.isActive = this.hasSelected;
+        }
+    }
+
+
+    var Areas = {
+        template: '#areas-template',
+        data: function(){
+            var data = {
+                FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(areas))),
+                PlaceGroups: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(placeGroups))),
+                FacetField: "@areaFacets.FacetField",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + areaFacets.FacetField)))',
+                isActive: false
+            };
+
+            @{
+                int areaIndex = 0;
+                foreach (var area in areas)
+                {
+                    // Get facet name for areas
+                    var areaName = area.AreaLinkName(Model.areaDictionary).Trim();
+                    @:data.FacetResults[@areaIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(areaName))";
+
+
+
+                    @:data.FacetResults[@areaIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@areaIndex]);
+
+                    //Get municipalities inside area
+                    var municipalities = areaFacets.FacetResults.Where(k => k.Name.Length > 4 && k.Name.StartsWith(area.Name)).Select(ko => ko).OrderBy(ko => ko.AreaLinkName(Model.areaDictionary)).ToList();
+                    @:data.FacetResults[@areaIndex].municipalities = @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(municipalities)));
+
+
+                    // Get facet name for municipalities
+                    int municipalityIndex = 0;
+                    foreach (var municipality in municipalities)
+                    {
+                        var municipalityName = municipality.AreaLinkName(Model.areaDictionary).Trim();
+                        @:data.FacetResults[@areaIndex].municipalities[@municipalityIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(municipalityName))";
+
+                        @:data.FacetResults[@areaIndex].municipalities[@municipalityIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@areaIndex].municipalities[@municipalityIndex]);
+
+                        municipalityIndex++;
+                    }
+
+
+                    @:data.FacetResults[@areaIndex].hasSelected = this.$parent.hasSelected(data.FacetResults[@areaIndex].municipalities);
+                                            @:data.FacetResults[@areaIndex].isActive = data.FacetResults[@areaIndex].hasSelected;
+
+                    areaIndex++;
+                }
+
+                int placeGroupIndex = 0;
+                foreach (var placeGroup in placeGroups)
+                {
+                    // Get facet name for placegroups
+                    var placeGroupName = placeGroup.AreaLinkName(Model.areaDictionary).Trim();
+                    @:data.PlaceGroups[@placeGroupIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(placeGroupName))";
+
+                    @:data.PlaceGroups[@placeGroupIndex].isSelected = this.$parent.isSelected("placegroups", data.PlaceGroups[@placeGroupIndex]);
+
+                    placeGroupIndex++;
+                }
+
+            }
+
+            return data;
+        },
+        computed: {
+            hasSelected: function(){
+                return this.$parent.hasSelected(this.FacetResults) || this.$parent.hasSelected(this.PlaceGroups);
+            }
+        },
+        created: function(){
+            this.isActive = this.hasSelected;
+        }
+    };
+
+
+    // Vue model
+    var facetFilterVueModel = new Vue({
+        el: '#facet-filter',
+        data: {
+            selectedFacets: [],
+            urlParameters: []
+        },
+        computed: {
+        },
+        created: function(){
+            this.getSelectedFacets();
+            if (this.selectedFacets.length > 0){
+                var scrollTopOffset = localStorage.getItem("scrollTopOffset")
+                $(window).scrollTop(scrollTopOffset);
+            }
+        },
+        components: {
+            'areas': Areas,
+            'themes': Themes,
+            'types': Types,
+            'nationalinitiatives': Nationalinitiatives,
+            'organizations': Organizations,
+            'dataAccesses': DataAccesses
+        },
+        methods: {
+            toggleActive: function(vueObject){
+                vueObject.isActive = !vueObject.isActive;
+            },
+            isSelected: function(facetField, facetValue){
+                var isSelected = false;
+                this.selectedFacets.forEach(function(selectedFacet){
+                    if (selectedFacet.name == encodeURIComponent(facetField) && selectedFacet.value == encodeURIComponent(facetValue.Name)){
+                        isSelected = true;
+                        return;
+                    }else if (selectedFacet.name == facetField && selectedFacet.value == facetValue.Name){
+                        isSelected = true;
+                        return;
+                    }
+                })
+
+                return isSelected;
+            },
+            hasSelected: function(facetResults){
+                var hasSelected = false;
+                facetResults.forEach(function (facetResult){
+                    if (facetResult.isSelected){
+                        hasSelected = true;
+                        return;
+                    }
+                })
+                return hasSelected;
+            },
+            getAllUrlParameters: function(){
+                var url = location.search;
+                // get query string from url (optional) or window
+                var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+                // store the parameters
+                var obj = {};
+                // if query string exists
+                if (queryString) {
+                    queryString = queryString.split('#')[0];
+                    var arr = queryString.split('&');
+                    for (var i = 0; i < arr.length; i++) {
+                        var a = arr[i].split('=');
+                        var paramNum = undefined;
+                        var paramName = a[0].replace(/\[\d*\]/, function (v) {
+                            paramNum = v.slice(1, -1);
+                            return '';
+                        });
+                        var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
+                        if (obj[paramName]) {
+                            if (typeof obj[paramName] === 'string') {
+                                obj[paramName] = [obj[paramName]];
+                            }
+                            if (typeof paramNum === 'undefined') {
+                                obj[paramName].push(paramValue);
+                            }
+                            else {
+                                obj[paramName][paramNum] = paramValue;
+                            }
+                        }
+                            // if param name doesn't exist yet, set it
+                        else {
+                            obj[paramName] = paramValue;
+                        }
+                    }
+                }
+                return obj;
+            },
+
+            getSelectedFacetsObjects: function() {
+                var allUrlParameters = this.getAllUrlParameters();
+                var allFacets = {};
+                for (var parameter in allUrlParameters) {
+                    if (allUrlParameters.hasOwnProperty(parameter)) {
+                        var res = parameter.split(".");
+                        var facet = allUrlParameters[parameter];
+                        if (res.length > 1) {
+                            var facet = allFacets[res[0]] !== undefined ? allFacets[res[0]] : {};
+                            facet[res[1]] = allUrlParameters[parameter];
+                        }
+                        allFacets[res[0]] = facet;
+                    }
+                }
+                return allFacets;
+            },
+            getSelectedFacets: function() {
+                var allFacets = this.getSelectedFacetsObjects();
+                for (var key in allFacets) {
+                    if (allFacets.hasOwnProperty(key)) {
+                        var facet = allFacets[key];
+                        if (typeof (facet) == "object" && facet.value !== undefined) {
+                            this.selectedFacets.push({
+                                name: facet.name,
+                                value: facet.value
+                            })
+                        }
+                    }
+                }
+            },
+            createUrlWithParameters: function(){
+                var urlParameters = [];
+                var urlParametersString = "?";
+                var searchParameter = getParameterByName('text');
+                if (searchParameter !== ''){
+                    urlParameters.push("text=" + searchParameter);
+                }
+                this.selectedFacets.forEach(function(selectedFacet, index){
+
+                    var parameterString = escape('Facets[' + index + '].name') + '=' + selectedFacet.name + '&' + escape('Facets[' + index + '].value') + '=' + selectedFacet.value;
+                    urlParameters.push(parameterString);
+                })
+
+                urlParameters.forEach(function(urlParameter, index){
+                    var lastIndex = urlParameters.length-1;
+                    urlParametersString += urlParameter;
+                    if (index < lastIndex){
+                        urlParametersString += "&";
+                    }
+                });
+                var url = window.location.origin + window.location.pathname + urlParametersString;
+                return url;
+            },
+            removeSelectedFacet: function(categoryFacet, facet){
+                var facetUrlObject = {
+                    name: categoryFacet.FacetField,
+                    value: facet.Name
+                }
+                this.selectedFacets.forEach(function(selectedFacet, index){
+                    if (selectedFacet.name == facetUrlObject.name && selectedFacet.value == facetUrlObject.value){
+                        this.selectedFacets.splice(index, 1);
+                        facet.isSelected = false;
+                        return false;
+                    }
+                    else if(selectedFacet.name == encodeURIComponent(facetUrlObject.name) && selectedFacet.value == encodeURIComponent(facetUrlObject.value)){
+                        this.selectedFacets.splice(index, 1);
+                        facet.isSelected = false;
+                        return false;
+                    }
+                }.bind(this));
+            },
+            addSelectedFacet: function(categoryFacet, facet){
+                var facetUrlObject = {
+                    name: categoryFacet.FacetField,
+                    value: facet.Name
+                }
+                this.selectedFacets.push(facetUrlObject);
+                facet.isSelected = true;
+            },
+            toggleFilter: function(categoryFacet, facet){
+
+                if (facet.isSelected){
+                    this.removeSelectedFacet(categoryFacet, facet);
+                    if (facet.hasSelected !== undefined && facet.hasSelected == true && categoryFacet.FacetField == "area" && facet.municipalities !== undefined){
+                        facet.municipalities.forEach(function(municipality){
+
+                            this.removeSelectedFacet(categoryFacet, municipality);
+                        }.bind(this));
+                        facet.hasSelected = false;
+                        facet.isSelected = false;
+                    }
+
+                }else{
+                    this.addSelectedFacet(categoryFacet, facet);
+                }
+
+                var url = this.createUrlWithParameters();
+                var doc = document.documentElement;
+                var scrollTopOffset = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+                localStorage.setItem("scrollTopOffset", scrollTopOffset)
+                window.location.href = url;
+            }
+
+
+        },
+
+    });
+</script>
