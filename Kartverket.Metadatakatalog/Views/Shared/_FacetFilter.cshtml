@@ -310,10 +310,6 @@
                     var areaName = area.AreaLinkName(Model.areaDictionary).Trim();
                     @:data.FacetResults[@areaIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(areaName))";
 
-
-
-                    @:data.FacetResults[@areaIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@areaIndex]);
-
                     //Get municipalities inside area
                     var municipalities = areaFacets.FacetResults.Where(k => k.Name.Length > 4 && k.Name.StartsWith(area.Name)).Select(ko => ko).OrderBy(ko => ko.AreaLinkName(Model.areaDictionary)).ToList();
                     @:data.FacetResults[@areaIndex].municipalities = @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(municipalities)));
@@ -333,7 +329,10 @@
 
 
                     @:data.FacetResults[@areaIndex].hasSelected = this.$parent.hasSelected(data.FacetResults[@areaIndex].municipalities);
-                                            @:data.FacetResults[@areaIndex].isActive = data.FacetResults[@areaIndex].hasSelected;
+
+                    @:data.FacetResults[@areaIndex].isActive = data.FacetResults[@areaIndex].hasSelected;
+
+                    @:data.FacetResults[@areaIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@areaIndex]) || data.FacetResults[@areaIndex].hasSelected;
 
                     areaIndex++;
                 }
