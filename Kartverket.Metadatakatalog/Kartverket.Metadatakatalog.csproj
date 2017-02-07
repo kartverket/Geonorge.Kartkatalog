@@ -812,6 +812,7 @@
     <Content Include="Views\Shared\_SharedMenu.cshtml" />
     <Content Include="settings.config" />
     <Content Include="settings.default.config" />
+    <Content Include="Views\Shared\_FacetFilter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
