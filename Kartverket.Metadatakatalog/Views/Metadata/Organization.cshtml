@@ -26,154 +26,6 @@
     </div>
 </section>
 
-
-@helper DisplayFacet(SearchResultFacetViewModel facet)
-{
-
-    <a data-toggle="collapse" class="facet-sok-tittel collapsed" href="#@facet.FacetField" aria-expanded="false">
-        <span class="indicator"></span><p>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</p>
-    </a>
-
-    <div class="facet-sok-undertitler collapse" id="@facet.FacetField" aria-expanded="false">
-        <ul>
-            @foreach (var facetResult in facet.FacetResults)
-            {
-                string cssClass = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "active" : "");
-                if (!string.IsNullOrEmpty(facetResult.LinkName()))
-                {
-                    <li class="filter-options">
-                        @if (cssClass == "active")
-                        {
-                            <span class="btn-link @cssClass">
-                                @facetResult.LinkName()
-                                <span class="text-muted">(@facetResult.Count)</span>
-                            </span>
-                        }
-                        else
-                        {
-                            <a href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link show-loading-animation @cssClass" data-loading-message="Filtrerer søkeresultat">
-                                @facetResult.LinkName()
-                                <span class="text-muted">(@facetResult.Count)</span>
-                            </a>
-                        }
-                    </li>
-                }
-            }
-            @if (Model.HasFilterForFacetField(facet.FacetField))
-            {
-                <li class="filter-options">
-                    <button type="button" class="btn btn-default list-btn reset show-loading-animation" data-loading-message="Fjerner filter" onclick="location.href = '@Url.Action("Organization", Model.CreateRoutesForFacetFieldsExcept(facet.FacetField))';">
-                        <span class="glyphicon glyphicon-plus"> </span>
-                        Vis alle
-                    </button>
-                </li>
-            }
-        </ul>
-    </div>
-}
-
-@helper DisplayFacetCheckbox(SearchResultFacetViewModel placegroup, SearchResultFacetViewModel facet)
-{
-List<SearchResultFacetValueViewModel> orderedList = new List<SearchResultFacetValueViewModel>();
-var fylker = facet.FacetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.AreaLinkName(Model.areaDictionary)).ToList();
-foreach (var fylke in fylker)
-{
-    orderedList.Add(fylke);
-    var kommuner = facet.FacetResults.Where(k => k.Name.Length > 4 && k.Name.StartsWith(fylke.Name)).Select(ko => ko).OrderBy(ko => ko.AreaLinkName(Model.areaDictionary)).ToList();
-    foreach (var kommune in kommuner)
-    {
-        orderedList.Add(kommune);
-    }
-}
-
-facet.FacetResults = orderedList.ToList();
-
-    <a data-toggle="collapse" class="facet-sok-tittel collapsed" href="#@facet.FacetField" aria-expanded="false">
-        <span class="indicator"></span><p>@UI.ResourceManager.GetString("Facet_" + facet.FacetField)</p>
-    </a>
-
-    <div class="facet-sok-undertitler collapse" id="@facet.FacetField" aria-expanded="false">
-        <ul>
-            @{
-                foreach (var facetResult in placegroup.FacetResults)
-                {
-                    <li class="filter-options">
-                        <a href="@Url.Action("Organization", Model.LinkForFacetValue(placegroup.FacetField, facetResult.Name))" class="btn-link">
-                            @facetResult.Name.Trim()
-                            <span class="text-muted">(@facetResult.Count)</span>
-                        </a>
-                    </li>
-                }
-                string previousFacetLinkName = null;
-                double hierarchyLevel = 0;
-                foreach (var facetResult in facet.FacetResults)
-                {
-
-                    string hideChildren = (Model.HasFacetFieldValue(facet.FacetField, facetResult.Name) ? "show-children" : "hide-children");
-                    double relativeHierarchyLevel = 0;
-
-
-                    if (previousFacetLinkName != null)
-                    {
-                        relativeHierarchyLevel = Model.GetRelativeHierarchyLevel(facetResult.LinkName(), previousFacetLinkName);
-                        hierarchyLevel += relativeHierarchyLevel;
-                        if (relativeHierarchyLevel > 0)
-                        {
-                            <text>
-                                <ul>
-                                    <li class="filter-options">
-                            </text>
-                        }
-                        else if (relativeHierarchyLevel < 0)
-                        {
-                            @: </li></ul>
-                                }
-                        else
-                        {
-                            @:</li>
-                            }
-                    }
-                    <text>
-                        <li class="filter-options @hideChildren ">
-                            @if (@hideChildren == "show-children")
-                            {
-                                <span class="btn-link active">
-                                    @facetResult.AreaLinkName(Model.areaDictionary).Trim()
-                                    <span class="text-muted">(@facetResult.Count)</span>
-                                </span>
-                            }
-                            else
-                            {
-                                <a href="@Url.Action("Organization", Model.LinkForFacetValue(facet.FacetField, facetResult.Name))" class="btn-link show-loading-animation" data-loading-message="Filtrerer søkeresultat">
-                                    @facetResult.AreaLinkName(Model.areaDictionary).Trim()
-                                    <span class="text-muted">(@facetResult.Count)</span>
-                                </a>
-                            }
-                    </text>
-
-                    previousFacetLinkName = facetResult.LinkName().ToString();
-                }
-                for (int index = 0; index < hierarchyLevel; index++)
-                {
-                    @: </li> </ul>
-                        }
-                bool hasAreaFilter = Model.HasFilterForFacetField(facet.FacetField);
-                bool hasPlaceFilter = Model.HasFilterForFacetField(placegroup.FacetField);
-                if (hasAreaFilter || hasPlaceFilter)
-                {
-                    var facetField = hasAreaFilter ? facet.FacetField : placegroup.FacetField;
-                    <li class="filter-options">
-                        <button type="button" class="btn btn-default list-btn reset show-loading-animation" data-loading-message="Fjerner filter" onclick="location.href = '@Url.Action("Organization", Model.CreateRoutesForFacetFieldsExcept(facetField))';">
-                            <span class="glyphicon glyphicon-plus"> </span>
-                            Vis alle
-                        </button>
-                    </li>
-                }
-            }</ul>
-        </div>
-
-
-}
 @helper DisplayPaginationBottom()
 {
     <div class="search-result-navigation">
@@ -223,21 +75,6 @@ facet.FacetResults = orderedList.ToList();
             $('#feedback-alert').show();
         }
 
-        $('ul.facet').each(function () {
-            var max = 15;
-            if ($(this).find("li").length > max) {
-                $(this)
-                  .find('li:gt(' + max + ')')
-                  .hide()
-                  .end()
-                  .append(
-                    $('<li/>').append('<a href="">Vis flere</a>').click(function (event) {
-                        event.preventDefault();
-                        $(this).siblings(':hidden').show().end().remove();
-                    })
-                );
-            }
-        });
         $(document).ready(function () {
             $("#orderby").change(
                  function () {
@@ -270,40 +107,6 @@ facet.FacetResults = orderedList.ToList();
             </text>
             }
         });
-
-
-        /* Save enabled filter from facet-search */
-        $(document).ready(function () {
-            getFacetFromUrl();
-
-            var activeFilters = {}
-            if (JSON.parse(localStorage.getItem("activeFilters")) != null) {
-                activeFilters = JSON.parse(localStorage.getItem("activeFilters"));
-            };
-            $.each(activeFilters, function (name, active) {
-                var element = $("#filterInner .facet-sok-tittel[href='" + name + "']");
-                var subElement = $(name);
-                if (active) {
-                    element.removeClass("collapsed");
-                    element.attr("aria-expanded", "true");
-                    subElement.addClass("in")
-                    subElement.attr("aria-expanded", "true");
-                    subElement.css("height", "auto");
-                }
-            });
-
-            $("#filterInner").on("click", ".facet-sok-tittel", function () {
-                var name = ($(this).attr("href"));
-                if ($(this).attr("aria-expanded") == "true") {
-                    activeFilters[name] = false;
-                } else if ($(this).attr("aria-expanded") == "false") {
-                    activeFilters[name] = true;
-                }
-                var activeFiltersJSON = JSON.stringify(activeFilters);
-                localStorage.setItem("activeFilters", activeFiltersJSON);
-            });
-        });
-
 
         $(window).load(function () {
             @if (Html.DownloadServiceEnabled())
@@ -730,18 +533,10 @@ facet.FacetResults = orderedList.ToList();
         }
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
-        <aside class="facet-sok-emne">
-            <div class="block listblock" id="filterInner">
-                <h3 class="">Filtrer søket på:</h3>
-                <span class="separator-small"></span>
-                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "theme"))
-                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "type"))
-                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "nationalinitiative"))
-                @DisplayFacetCheckbox(Model.Result.Facets.First(f => f.FacetField == "placegroups"), Model.Result.Facets.First(f => f.FacetField == "area"))
-                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "DistributionProtocols"))
-                @DisplayFacet(Model.Result.Facets.First(f => f.FacetField == "organization"))
-
-            </div>
+        <aside class="facet-filter-container" ">
+            <h3 class="">Filtrer søket på:</h3>
+            <span class="separator-small"></span>
+            @Html.Partial("_FacetFilter", Model)
         </aside>
     </div>
 </div>
