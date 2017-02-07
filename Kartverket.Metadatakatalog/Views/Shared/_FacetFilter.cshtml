@@ -80,7 +80,7 @@
                     <span v-on:click="area.isActive = !area.isActive" v-bind:class="{'active': area.isActive}" class="indicator"></span>
                     <div v-on:click="$root.toggleFilter(this, area)"
                          class="facet-checkbox show-loading-animation facet-link">
-                        {{area.FacetName}}
+                        {{area.FacetName}} <span class="text-muted">({{ area.Count }})</span>
                     </div>
                 </div>
                 <div v-bind:class="{'active': area.isActive}" class="facet-filter-sub-item-list">
