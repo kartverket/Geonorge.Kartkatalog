@@ -54,7 +54,7 @@
 
 <script type="text/x-template" id="default-template">
     <div class="facet-filter-item">
-        <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="indicator"></span>
+        <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive, 'no-indicator': !hasChildren}" class="indicator"></span>
         {{ FacetName }}
         <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
             <div v-bind:class="{'selected': facetResult.isSelected, 'is-empty': facetResult.Count == 0}" v-for="facetResult in FacetResults">
@@ -74,7 +74,7 @@
         {{ FacetName }}
         <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
             <div v-bind:class="{'selected': placeGroup.isSelected, 'is-empty': placeGroup.Count == 0}" v-for="placeGroup in PlaceGroups">
-                <span class="indicator no-indicator"></span>
+                <span v-bind:class="{'no-indicator': !placeGroup.hasChildren}" class="indicator"></span>
                 <div v-on:click="$root.toggleFilter({FacetField: 'placegroups'}, placeGroup)"
                      data-loading-message="Filtrerer søkeresultat"
                      class="facet-checkbox show-loading-animation facet-link">
@@ -83,7 +83,7 @@
             </div>
             <div v-for="area in FacetResults">
                 <div v-bind:class="{'selected': area.isSelected, 'is-empty': area.Count == 0}">
-                    <span v-on:click="area.isActive = !area.isActive" v-bind:class="{'active': area.isActive}" class="indicator"></span>
+                    <span v-on:click="area.isActive = !area.isActive" v-bind:class="{'active': area.isActive, 'no-indicator': !area.hasChildren}" class="indicator"></span>
                     <div v-on:click="$root.toggleFilter(this, area)"
                          data-loading-message="Filtrerer søkeresultat"
                          class="facet-checkbox show-loading-animation facet-link">
@@ -127,8 +127,13 @@
 
                      @:data.FacetResults[@themeIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@themeIndex]);
 
+                     @:data.FacetResults[@themeIndex].hasChildren = false;
+
                      themeIndex++;
                  }
+
+                @:data.hasChildren = data.FacetResults.length > 0;
+
              }
             return data;
         },
@@ -166,8 +171,13 @@
 
                     @:data.FacetResults[@typeIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@typeIndex]);
 
+                    @:data.FacetResults[@typeIndex].hasChildren = false;
+
                     typeIndex++;
                 }
+
+                @:data.hasChildren = data.FacetResults.length > 0;
+
             }
             return data;
         },
@@ -205,8 +215,13 @@
 
                     @:data.FacetResults[@nationalinitiativeIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@nationalinitiativeIndex]);
 
+                    @:data.FacetResults[@nationalinitiativeIndex].hasChildren = false;
+
                     nationalinitiativeIndex++;
                 }
+
+                @:data.hasChildren = data.FacetResults.length > 0;
+
             }
             return data;
         },
@@ -244,8 +259,13 @@
 
                     @:data.FacetResults[@distributionProtocolIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@distributionProtocolIndex]);
 
+                    @:data.FacetResults[@distributionProtocolIndex].hasChildren = false;
+
                     distributionProtocolIndex++;
                 }
+
+                @:data.hasChildren = data.FacetResults.length > 0;
+
             }
             return data;
         },
@@ -283,8 +303,13 @@
 
                     @:data.FacetResults[@organizationIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@organizationIndex]);
 
+                    @:data.FacetResults[@organizationIndex].hasSelected = false;
+
                     organizationIndex++;
                 }
+
+                @:data.hasChildren = data.FacetResults.length > 0;
+
             }
             return data;
         },
@@ -322,8 +347,13 @@
 
                     @:data.FacetResults[@dataAccessIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@dataAccessIndex]);
 
+                    @:data.FacetResults[@dataAccessIndex].hasSelected = false;
+
                     dataAccessIndex++;
                 }
+
+                @:data.hasChildren = data.FacetResults.length > 0;
+
             }
             return data;
         },
@@ -371,9 +401,13 @@
 
                         @:data.FacetResults[@areaIndex].municipalities[@municipalityIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@areaIndex].municipalities[@municipalityIndex]);
 
+                        @:data.FacetResults[@areaIndex].municipalities[@municipalityIndex].hasChildren = false;
+
                         municipalityIndex++;
                     }
 
+
+                    @:data.FacetResults[@areaIndex].hasChildren = data.FacetResults[@areaIndex].municipalities.length > 0;
 
                     @:data.FacetResults[@areaIndex].hasSelected = this.$parent.hasSelected(data.FacetResults[@areaIndex].municipalities);
 
@@ -384,6 +418,8 @@
                     areaIndex++;
                 }
 
+                @:data.hasChildren = data.FacetResults.length > 0 || data.PlaceGroups.length > 0;
+
                 int placeGroupIndex = 0;
                 foreach (var placeGroup in placeGroups)
                 {
@@ -392,6 +428,8 @@
                     @:data.PlaceGroups[@placeGroupIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(placeGroupName))";
 
                     @:data.PlaceGroups[@placeGroupIndex].isSelected = this.$parent.isSelected("placegroups", data.PlaceGroups[@placeGroupIndex]);
+
+                    @:data.PlaceGroups[@placeGroupIndex].hasChildren = false;
 
                     placeGroupIndex++;
                 }
