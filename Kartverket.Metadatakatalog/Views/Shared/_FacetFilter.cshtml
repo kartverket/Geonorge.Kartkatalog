@@ -55,12 +55,13 @@
 <script type="text/x-template" id="default-template">
     <div class="facet-filter-item">
         <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive, 'no-indicator': !hasChildren}" class="indicator"></span>
-        {{ FacetName }}
+        <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="facet-filter-title">{{ FacetName }}</span>
         <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
             <div v-bind:class="{'selected': facetResult.isSelected, 'is-empty': facetResult.Count == 0}" v-for="facetResult in FacetResults">
-                <div v-on:click="$root.toggleFilter(this, facetResult)"
-                     data-loading-message="Filtrerer søkeresultat"
-                     class="facet-checkbox show-loading-animation facet-link">
+                <div class="facet-checkbox  facet-link">
+                    <span v-on:click="$root.toggleFilter(this, facetResult)"
+                          data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
+                    </span>
                     {{ facetResult.FacetName }} <span class="text-muted">({{ facetResult.Count }})</span>
                 </div>
             </div>
@@ -71,31 +72,35 @@
 <script type="text/x-template" id="areas-template">
     <div class="facet-filter-item">
         <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="indicator"></span>
-        {{ FacetName }}
+        <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="facet-filter-title">{{ FacetName }}</span>
         <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
             <div v-bind:class="{'selected': placeGroup.isSelected, 'is-empty': placeGroup.Count == 0}" v-for="placeGroup in PlaceGroups">
                 <span v-bind:class="{'no-indicator': !placeGroup.hasChildren}" class="indicator"></span>
-                <div v-on:click="$root.toggleFilter({FacetField: 'placegroups'}, placeGroup)"
-                     data-loading-message="Filtrerer søkeresultat"
-                     class="facet-checkbox show-loading-animation facet-link">
+                <div class="facet-checkbox facet-link">
+                    <span v-on:click="$root.toggleFilter({FacetField: 'placegroups'}, placeGroup)"
+                          data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
+                    </span>
                     {{ placeGroup.Name }} <span class="text-muted">({{ placeGroup.Count }})</span>
                 </div>
             </div>
             <div v-for="area in FacetResults">
                 <div v-bind:class="{'selected': area.isSelected, 'is-empty': area.Count == 0}">
                     <span v-on:click="area.isActive = !area.isActive" v-bind:class="{'active': area.isActive, 'no-indicator': !area.hasChildren}" class="indicator"></span>
-                    <div v-on:click="$root.toggleFilter(this, area)"
-                         data-loading-message="Filtrerer søkeresultat"
-                         class="facet-checkbox show-loading-animation facet-link">
-                        {{area.FacetName}} <span class="text-muted">({{ area.Count }})</span>
+                    <div class="facet-checkbox facet-link">
+                        <span v-on:click="$root.toggleFilter(this, area)"
+                              data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
+                        </span>
+                        <span v-on:click="area.isActive = !area.isActive" class="facet-filter-title">{{area.FacetName}}</span>
+                        <span class="text-muted">({{ area.Count }})</span>
                     </div>
                 </div>
                 <div v-bind:class="{'active': area.isActive}" class="facet-filter-sub-item-list">
                     <div v-bind:class="{'selected': municipality.isSelected, 'is-empty': municipality.Count == 0}" v-for="municipality in area.municipalities">
                         <span class="indicator no-indicator"></span>
-                        <div v-on:click="$root.toggleFilter(this, municipality)"
-                             data-loading-message="Filtrerer søkeresultat"
-                             class="facet-checkbox show-loading-animation facet-link">
+                        <div class="facet-checkbox facet-link">
+                            <span v-on:click="$root.toggleFilter(this, municipality)"
+                                  data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
+                            </span>
                             {{ municipality.FacetName }} <span class="text-muted">({{ municipality.Count }})</span>
                         </div>
                     </div>

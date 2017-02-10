@@ -2472,6 +2472,8 @@ button.btn {
   color: #3867C8;
   font-size: 12pt;
   line-height: 18pt; }
+  .facet-filter .facet-filter-item .facet-filter-title {
+    cursor: pointer; }
   .facet-filter .facet-filter-item .facet-filter-sub-item-list {
     display: none; }
     .facet-filter .facet-filter-item .facet-filter-sub-item-list.active {
@@ -2494,10 +2496,10 @@ button.btn {
     background: none; }
 
 .facet-filter .facet-checkbox {
-  display: inline;
-  cursor: pointer; }
-  .facet-filter .facet-checkbox:before {
+  display: inline; }
+  .facet-filter .facet-checkbox .facet-checkbox-icon:before {
     display: inline-block;
+    cursor: pointer;
     width: 12pt;
     line-height: 12pt;
     vertical-align: middle;
@@ -2507,19 +2509,19 @@ button.btn {
   display: none; }
   .facet-filter .is-empty .facet-checkbox {
     color: #CFCFCF; }
-    .facet-filter .is-empty .facet-checkbox:before {
+    .facet-filter .is-empty .facet-checkbox .facet-checkbox-icon:before {
       content: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/checkbox-unchecked-disabled.svg); }
     .facet-filter .is-empty .facet-checkbox .text-muted {
       color: #CFCFCF; }
 
 .facet-filter .selected {
   display: block; }
-  .facet-filter .selected .facet-checkbox:before {
+  .facet-filter .selected .facet-checkbox .facet-checkbox-icon:before {
     content: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/checkbox-checked.svg); }
 
 .facet-filter .is-empty.selected {
   display: block; }
-  .facet-filter .is-empty.selected .facet-checkbox:before {
+  .facet-filter .is-empty.selected .facet-checkbox .facet-checkbox-icon:before {
     content: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/checkbox-checked-disabled.svg); }
 
 input[readonly] {
