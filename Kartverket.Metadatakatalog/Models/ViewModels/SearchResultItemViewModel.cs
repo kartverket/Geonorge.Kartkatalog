@@ -179,7 +179,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         public bool IsRestrictedService()
         {
-            return !string.IsNullOrEmpty(ServiceDistributionAccessConstraint);
+            return ServiceDistributionAccessConstraint == "Beskyttet" || ServiceDistributionAccessConstraint == "restricted" || ServiceDistributionAccessConstraint == "norway digital restricted";
         }
 
         string RemoveQueryString(string URL)
