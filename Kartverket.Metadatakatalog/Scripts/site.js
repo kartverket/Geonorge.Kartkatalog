@@ -36,7 +36,7 @@ function getServiceStatus(uuid, id) {
     $.getJSON(statusApi + "monitorApi/serviceDetail?uuid=" + uuid, function (result) {
         console.log(result);
         try {
-            var statusOK = result.status;
+            var statusOK = result.connect.vurdering != "no";
             var numLayers = parseInt(result.numLayers.svar);
             console.log("numLayers:" + numLayers);
             if (!statusOK)
