@@ -156,6 +156,9 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("dataaccess")]
         public string DataAccess { get; set; }
 
+        [SolrField("parentidentifier")]
+        public string ParentIdentifier { get; set; }
+
     }
 
 }

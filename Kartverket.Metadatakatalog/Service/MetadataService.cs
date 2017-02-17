@@ -103,6 +103,9 @@ namespace Kartverket.Metadatakatalog.Service
                 ReferenceSystems = simpleMetadata.ReferenceSystems != null ? Convert(simpleMetadata.ReferenceSystems) : null
             };
 
+            if (!string.IsNullOrEmpty(metadata.ParentIdentifier) && metadata.HierarchyLevel == "service")
+                metadata.ServiceUuid = metadata.ParentIdentifier;
+
             if (simpleMetadata.ResourceReference != null)
             {
                 metadata.ResourceReferenceCode = simpleMetadata.ResourceReference.Code != null ? simpleMetadata.ResourceReference.Code : null;
@@ -263,6 +266,7 @@ namespace Kartverket.Metadatakatalog.Service
                             md.Uuid = relData[0] != null ? relData[0] : "";
                             md.Title = relData[1] != null ? relData[1] : "";
                             md.ParentIdentifier = relData[2] != null ? relData[2] : "";
+                            md.ServiceUuid = relData[2] != null ? relData[2] : "";
                             md.HierarchyLevel = relData[3] != null ? relData[3] : "";
                             md.ContactOwner = relData[4] != null ? new Contact { Role = "owner", Organization = relData[4] } : new Contact { Role = "owner", Organization = "" };
                             md.DistributionDetails = new DistributionDetails { Name = relData[5] != null ? relData[5] : "", Protocol = relData[6] != null ? relData[6] : "", URL = relData[7] != null ? relData[7] : "" };

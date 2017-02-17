@@ -33,6 +33,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string AccessConstraint { get; set; }
         public string OtherConstraintsAccess { get; set; }
         public string DataAccess { get; set; }
+        public string ParentIdentifier { get; set; }
 
     }
 }
