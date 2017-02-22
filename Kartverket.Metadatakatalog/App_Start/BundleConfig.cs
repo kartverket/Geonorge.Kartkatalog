@@ -66,6 +66,7 @@ namespace Kartverket.Metadatakatalog
                 "~/Content/bower_components/kartverket-felleskomponenter/assets/css/vendor.min.css",
                 "~/Content/bower_components/kartverket-felleskomponenter/assets/css/vendorfonts.min.css",
                 "~/Content/bower_components/kartverket-felleskomponenter/assets/css/main.min.css",
+                "~/Content/facet-filter-temp.css",
                 "~/Content/temp.css"
                 ));
 
