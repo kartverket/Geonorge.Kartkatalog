@@ -260,6 +260,8 @@
                 int distributionProtocolIndex = 0;
                 foreach (var distributionProtocol in distributionProtocols)
                 {
+                    if (!string.IsNullOrEmpty(distributionProtocol.LinkName()))
+                    { 
                     @:data.FacetResults[@distributionProtocolIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(distributionProtocol.LinkName()))";
 
                     @:data.FacetResults[@distributionProtocolIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@distributionProtocolIndex]);
@@ -267,6 +269,7 @@
                     @:data.FacetResults[@distributionProtocolIndex].hasChildren = false;
 
                     distributionProtocolIndex++;
+                    }
                 }
 
                 @:data.hasChildren = data.FacetResults.length > 0;
