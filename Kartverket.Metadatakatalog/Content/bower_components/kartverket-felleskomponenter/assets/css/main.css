@@ -2501,6 +2501,7 @@ button.btn {
     display: inline-block;
     cursor: pointer;
     width: 12pt;
+    height: 13pt;
     line-height: 12pt;
     vertical-align: middle;
     content: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/checkbox-unchecked.svg); }
