@@ -1,12 +1,21 @@
 ﻿body {
 }
 
+#orderlist h2{
+    font-size: 34pt;
+    line-height: 30pt;
+}
+
 #orderlist h2:after {
-    margin-top: 15px;
+    content: none;
+}
+
+#orderlist .orderlines{
+    margin-bottom: 22px;
 }
 
 #orderlist .orderline {
-    padding: 12px 0 0;
+    padding: 12px 12px 22px;
 }
 
     #orderlist .orderline:nth-child(odd) {
@@ -15,14 +24,9 @@
 
 
     #orderlist .orderline:nth-child(even) {
-        background-color: #f7f7f7;
+        background-color: #f8f9f9;
     }
 
-@media (min-width: 768px) {
-    #orderlist h2:after {
-        margin-top: 15px;
-    }
-}
 
 .custom-select-list .custom-select-list-input-container {
     border: 1px solid #cfcfcf !important;
@@ -83,14 +87,12 @@
 
 .custom-select-list .custom-select-list-dropdown {
     display: none;
-    overflow: auto;
-    max-height: 400px;
+    
     position: absolute;
     z-index: 2;
     background: #FFF;
     width: calc(100% - 30px);
     box-shadow: 0 4px 5px rgba(0,0,0,.15);
-    padding-left: 16px;
     border: 1px solid rgba(0,0,0,.15);
     border-radius: 0 0 4px 4px;
     background-clip: padding-box;
@@ -102,6 +104,23 @@
 
     .custom-select-list .custom-select-list-dropdown.transparent {
         opacity: 0;
+    }
+
+    .custom-select-list .custom-select-list-dropdown .custom-select-list-dropdown-content{
+        overflow: auto;
+    max-height: 340px;
+    padding-top: 17px;
+    padding-left: 16px;
+
+    }
+
+    .custom-select-list .custom-select-list-dropdown .custom-select-list-dropdown-additional-options{
+    background: #ddd;
+    width: 100%;
+    }
+
+    .custom-select-list .custom-select-list-dropdown .custom-select-list-dropdown-additional-options .btn{
+        margin-bottom: 0;
     }
 
     .custom-select-list .custom-select-list-dropdown ul.custom-select-list-options {
@@ -121,3 +140,60 @@
         .custom-select-list .custom-select-list-dropdown ul.custom-select-list-options li:before {
             content: none;
         }
+
+        .custom-select-list .custom-select-list-dropdown ul.custom-select-list-options li.is-selected {
+            color: #cfcfcf;
+        }
+
+            .custom-select-list .custom-select-list-dropdown ul.custom-select-list-options li.is-selected:hover {
+                cursor: default;
+                text-decoration: none;
+            }
+
+
+.custom-select-list .projection-warning-icon:before,
+.custom-select-list .format-warning-icon:before {
+    width: 18px;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: help;
+}
+/*
+.custom-select-list .projection-icon:before {
+    content: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/projection-warning.svg");
+}
+
+.custom-select-list .projection-icon.has-selected-projections:before {
+    content: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/projection-checked.svg");
+}
+
+.custom-select-list .format-icon:before {
+    content: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/format-warning.svg");
+}
+
+.custom-select-list .format-icon.has-selected-formats:before {
+    content: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/format-checked.svg");
+}
+*/
+
+.custom-select-list .projection-warning-icon:before {
+    content: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/projection-warning.svg");
+}
+
+.custom-select-list .format-warning-icon:before {
+    content: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/format-warning.svg");
+}
+
+    .custom-select-list .custom-select-list-dropdown .custom-select-list-option-group {
+        margin-bottom: 17px;
+    }
+
+.custom-select-list .custom-select-list-option-group-name {
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.custom-select-list .custom-select-list-options li:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
