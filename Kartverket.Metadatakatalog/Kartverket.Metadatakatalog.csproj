@@ -779,7 +779,6 @@
     <Content Include="Content\custom-icons.css" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\download.css" />
-    <Content Include="Content\facet-filter-temp.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\forms.css" />
     <Content Include="Content\geonorge-default.css" />
