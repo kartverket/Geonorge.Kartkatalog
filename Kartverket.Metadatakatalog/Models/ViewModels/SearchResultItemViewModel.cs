@@ -150,6 +150,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             if (item.Type == "dataset")
                 ServiceUuid = item.ServiceDistributionUuidForDataset;
 
+            if (!string.IsNullOrEmpty(item.ParentIdentifier) && Type == "servicelayer")
+                ServiceUuid = item.ParentIdentifier;
+
             ServiceDistributionAccessConstraint = item.ServiceDistributionAccessConstraint;
         }
 

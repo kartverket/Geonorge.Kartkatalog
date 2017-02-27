@@ -68,6 +68,8 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.Abstract = simpleMetadata.Abstract;
                 indexDoc.Purpose = simpleMetadata.Purpose;
                 indexDoc.Type = simpleMetadata.HierarchyLevel;
+                if (!string.IsNullOrEmpty(simpleMetadata.ParentIdentifier))
+                    indexDoc.ParentIdentifier = simpleMetadata.ParentIdentifier;
 
                 if (simpleMetadata.ContactOwner != null)
                 {
