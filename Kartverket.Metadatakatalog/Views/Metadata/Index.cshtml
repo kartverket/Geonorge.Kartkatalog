@@ -192,11 +192,18 @@ if (contact != null)
             <a href="" class="btn disabled" disabled="disabled"><span class="fa fa-globe"></span> Vis dekningskart</a>
         }
         </div>
-
-        <div class="table-btn-container">
-        <a id="servicefeed" href="" class="btn disabled" disabled="disabled" target="_blank"><span class="fa fa-rss"></span> Følg endringsvarsel</a>
-        </div>
-
+        @if (!string.IsNullOrEmpty(Model.SupplementalDescription) || !string.IsNullOrEmpty(Model.HelpUrl))
+        {
+            <div class="table-btn-container">
+                <a href="#help" class="btn"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a>
+            </div>
+        }
+        else
+        {
+            <div class="table-btn-container">
+                <a href="#help" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a>
+            </div>
+        }
 
         <div class="table-btn-container">
             @if (Model.ContactOwner != null && !string.IsNullOrEmpty(Model.ContactOwner.Email))
@@ -302,13 +309,6 @@ if (contact != null)
                     <script>getMetadata('@Model.ParentIdentifier');</script>
                     <a id="related-@Model.ParentIdentifier" href="/metadata/org/title/@Model.ParentIdentifier" title="Overordnede metadata for @Model.Title">
                     </a>
-                }
-
-
-                @if (!string.IsNullOrWhiteSpace(Model.SupplementalDescription))
-                {
-                    <h2>Supplerende beskrivelse</h2>
-                    <p>@Model.SupplementalDescription</p>
                 }
 
                 @if (!string.IsNullOrWhiteSpace(Model.SpecificUsage))
@@ -676,7 +676,22 @@ if (contact != null)
                     </div>
                 }
 
-
+                @if (!string.IsNullOrEmpty(Model.SupplementalDescription) || !string.IsNullOrEmpty(Model.HelpUrl))
+                {
+                <div id="help" class="col-sm-12">
+                    <h2>Hjelp</h2>
+                </div>
+                <div class="col-sm-12">
+                    @if (!string.IsNullOrEmpty(Model.SupplementalDescription))
+                    {
+                    <p>@Model.SupplementalDescription</p>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.HelpUrl))
+                    {
+                        <a href="@Model.HelpUrl" class="btn" target="_blank"><span class="custom-icon custom-icon-eksternlink"></span> Vis hjelp</a>
+                    }
+                </div>
+                }
                 <div class="col-sm-12">
                     <a href="#" data-content-toggle="detailed-info" class="toggle-content"><h2><span class="toggle-icon"></span>Detaljert informasjon</h2></a>
                 </div>
@@ -879,7 +894,7 @@ if (keywords != null && keywords.Any())
 
             changeLayout("tableView");
 
-            getServiceFeed();
+            //getServiceFeed();
 
             $("#details-button").click(function () {
                 $("#metadata-text-details").toggle();

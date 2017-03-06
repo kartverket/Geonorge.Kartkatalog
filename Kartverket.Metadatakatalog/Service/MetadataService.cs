@@ -88,6 +88,7 @@ namespace Kartverket.Metadatakatalog.Service
                 SpecificUsage = simpleMetadata.SpecificUsage,
                 Status = register.GetStatus(simpleMetadata.Status),
                 SupplementalDescription = simpleMetadata.SupplementalDescription,
+                HelpUrl = simpleMetadata.HelpUrl,
                 Thumbnails = Convert(simpleMetadata.Thumbnails, simpleMetadata.Uuid),
                 Title = simpleMetadata.Title,
                 TopicCategory = register.GetTopicCategory(simpleMetadata.TopicCategory),
