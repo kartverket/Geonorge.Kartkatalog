@@ -85,17 +85,28 @@ $(window).load(function () {
 });
 
 var Areas = {
-    props: ['available', 'selected'],
+    props: ['available', 'selected', 'master'],
     template: '#areas-template',
+    data: function () {
+        var data = {
+            supportsPolygonSelection: false,
+            supportsGridSelection: false
+        }
+        if (!this.master) {
+            data.supportsPolygonSelection = this.$parent.capabilities.supportsPolygonSelection,
+            data.supportsGridSelection = this.$parent.capabilities.supportsGridSelection
+        }
+        return data;
+    },
     created: function () {
-        if (this.$parent.capabilities._links) {
+        if (!this.master && this.$parent.capabilities._links) {
             var areas = [];
             this.$parent.capabilities._links.forEach(function (link) {
                 if (link.rel == "http://rel.geonorge.no/download/area") {
                     areas = getJsonData(link.href);
                 }
 
-                
+
             });
             areas.forEach(function (area) {
                 if (this.available[area.type] == undefined) { this.available[area.type] = [] }
@@ -105,23 +116,28 @@ var Areas = {
                 this.available[area.type].push(area);
             }.bind(this))
         }
+        if (this.master) {
+
+        }
     },
 
     methods: {
         selectArea: function (area) {
             area.isSelected = true;
 
-            this.$parent.updateSelectedAreas();
+            var orderLineObject = (this.master) ? this.$parent : this.$parent;
 
-            this.$parent.updateAvailableProjections();
-            this.$parent.updateAvailableFormats();
+            orderLineObject.updateSelectedAreas();
+
+            orderLineObject.updateAvailableProjections();
+            orderLineObject.updateAvailableFormats();
 
 
 
-            this.$parent.updateSelectedProjections();
-            this.$parent.updateSelectedFormats();
+            orderLineObject.updateSelectedProjections();
+            orderLineObject.updateSelectedFormats();
 
-            this.$parent.validateAreas();
+            //   orderLineObject.validateAreas();
         },
         removeSelectedArea: function (area) {
             area.isSelected = false;
@@ -140,7 +156,7 @@ var Areas = {
 };
 
 var Projections = {
-    props: ['available', 'selected'],
+    props: ['available', 'selected', 'master'],
     template: '#projections-template',
 
     methods: {
@@ -158,7 +174,7 @@ var Projections = {
 };
 
 var Formats = {
-    props: ['available', 'selected'],
+    props: ['available', 'selected', 'master'],
     template: '#formats-template',
 
     methods: {
@@ -178,17 +194,14 @@ var Formats = {
 
 
 var OrderLine = {
-    props: ['index', 'capabilities', 'metadata'],
+    props: ['metadata', 'capabilities', 'availableAreas', 'selectedAreas'],
     template: '#order-line-template',
     data: function () {
         var data = {
-            availableAreas: {},
-            selectedAreas: [],
-            availableProjections: {},
             selectedProjections: [],
-            availableFormats: {},
             selectedFormats: [],
-
+            availableProjections: {},
+            availableFormats: {}
         }
         return data;
     },
@@ -313,6 +326,164 @@ var OrderLine = {
     },
 };
 
+var MasterOrderLine = {
+    props: ['allAvailableAreas', 'allSelectedAreas'],
+    data: function () {
+        var data = {
+            availableAreas: {},
+            availableProjections: [],
+            selectedAreas: [],
+            availableFormats: [],
+            selectedProjections: [],
+            selectedFormats: []
+        }
+        return data;
+    },
+    created: function () {
+        for (orderLine in this.allAvailableAreas) {
+            for (areaType in this.allAvailableAreas[orderLine]) {
+                this.allAvailableAreas[orderLine][areaType].forEach(function (area) {
+                    if (this.availableAreas[areaType] == undefined) {
+                        this.availableAreas[areaType] = [];
+                    }
+                    var isAllreadyAddedInfo = this.isAllreadyAdded(this.availableAreas[areaType], area, "code");
+                    if (!isAllreadyAddedInfo.added) {
+                        if (area.name == "Agdenes") { console.log(area); console.log(isAllreadyAddedInfo.position); }
+                        area.orderLineUuids = [];
+                        area.orderLineUuids.push(orderLine);
+                        this.availableAreas[areaType].push(area);
+                    } else {
+                        var orderLineUuidIsAdded = false;
+                        if (area.name == "Agdenes") { console.log(area); console.log(isAllreadyAddedInfo.position); }
+
+                        this.availableAreas[areaType][isAllreadyAddedInfo.position].orderLineUuids.forEach(function (orderLineUuid) {
+                            if (orderLineUuid == orderLine) orderLineUuidIsAdded = true;
+                        })
+                        if (!orderLineUuidIsAdded) this.availableAreas[areaType][isAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
+                    }
+                }.bind(this))
+            }
+        }
+    },
+    methods: {
+        isAllreadyAdded: function (array, item, propertyToCompare) {
+            var isAllreadyAdded = {
+                added: false,
+                position: 0
+            };
+            array.forEach(function (arrayItem, index) {
+                if (this.readProperty(arrayItem, propertyToCompare) == this.readProperty(item, propertyToCompare)) {
+                    isAllreadyAdded.added = true
+                    isAllreadyAdded.position = index;
+                };
+            }.bind(this))
+            return isAllreadyAdded;
+        },
+        readProperty: function (obj, prop) {
+            return obj[prop];
+        },
+        filterOptionList: function (optionListId, inputValue) {
+            var dropdownListElements = document.getElementsByClassName(optionListId);
+            var filter = inputValue.toUpperCase();
+            for (var listIndex = 0; listIndex < dropdownListElements.length; listIndex++) {
+                var listItems = dropdownListElements[listIndex].getElementsByTagName('li');
+                for (var i = 0; i < listItems.length; i++) {
+                    if (listItems[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        listItems[i].style.display = "";
+                    } else {
+                        listItems[i].style.display = "none";
+                    }
+                }
+            }
+        },
+        updateSelectedAreas: function () {
+            var allSelectedAreas = {};
+            var selectedAreas = [];
+            for (areaType in this.availableAreas) {
+                this.availableAreas[areaType].forEach(function (area) {
+                    if (area.isSelected) {
+                        area.orderLineUuids.forEach(function (orderLineUuid) {
+                            if (allSelectedAreas[orderLineUuid] == undefined) { allSelectedAreas[orderLineUuid] = [] }
+                            allSelectedAreas[orderLineUuid].push(area);
+
+                            var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, area, "code");
+                            if (!isAllreadyAddedInfo.added) {
+                                selectedAreas.push(area);
+                            }
+                        }.bind(this))
+                        if (area.projections.length == 1) {
+                            area.projections[0].isSelected = true;
+                        }
+                        if (area.formats.length == 1) {
+                            area.formats[0].isSelected = true;
+                        }
+                    }
+                }.bind(this));
+            }
+            this.$parent.masterOrderLine.allSelectedAreas = allSelectedAreas;
+            this.selectedAreas = selectedAreas;
+        },
+        updateAvailableProjections: function () {
+            /*  var availableProjections = {};
+              var selectedAreas = this.selectedAreas !== undefined ? this.selectedAreas : false;
+              if (selectedAreas) {
+                  selectedAreas.forEach(function (selectedArea) {
+                      selectedArea.projections.forEach(function (projection) {
+                          if (availableProjections[projection.code] == undefined) {
+                              availableProjections[projection.code] = projection;
+                              availableProjections[projection.code].areas = [];
+                          }
+                          availableProjections[projection.code].areas.push(selectedArea);
+                      });
+  
+                  });
+              }
+              return this.availableProjections = availableProjections;*/
+        },
+        updateAvailableFormats: function () {
+            /*   var availableFormats = {};
+               var selectedAreas = this.selectedAreas !== undefined ? this.selectedAreas : false;
+               if (selectedAreas) {
+                   selectedAreas.forEach(function (selectedArea) {
+                       selectedArea.formats.forEach(function (format) {
+                           if (availableFormats[format.name] == undefined) {
+                               availableFormats[format.name] = format;
+                               availableFormats[format.name].areas = [];
+                           }
+                           availableFormats[format.name].areas.push(selectedArea);
+                       });
+   
+                   });
+               }
+               return this.availableFormats = availableFormats;*/
+        },
+        updateSelectedProjections: function () {
+            var selectedProjections = [];
+            for (projectionCode in this.availableProjections) {
+                if (this.availableProjections[projectionCode].isSelected) {
+                    selectedProjections.push(this.availableProjections[projectionCode])
+                }
+            }
+            this.selectedProjections = selectedProjections;
+        },
+        updateSelectedFormats: function () {
+            var selectedFormats = [];
+            for (formatName in this.availableFormats) {
+                if (this.availableFormats[formatName].isSelected) {
+                    selectedFormats.push(this.availableFormats[formatName])
+                }
+            }
+            this.selectedFormats = selectedFormats;
+        }
+
+    },
+    template: '#master-order-line-template',
+    components: {
+        'areas': Areas,
+        'projections': Projections,
+        'formats': Formats
+    }
+}
 
 
 
@@ -326,7 +497,16 @@ var mainVueModel = new Vue({
         orderLines: [],
         email: "",
         orderResponse: {},
-        emailRequired: false
+        emailRequired: false,
+
+        masterOrderLine: {
+            allAvailableAreas: {},
+            availableProjections: {},
+            availableFormats: {},
+            allSelectedAreas: {},
+            selectedProjections: [],
+            selectedFormats: []
+        }
     },
     computed: {
         orderRequests: function () {
@@ -435,6 +615,7 @@ var mainVueModel = new Vue({
                     "projectionAndFormatIsRequired": false
                 }
 
+                var uuid = metadata.uuid;
 
                 orderLines[key].capabilities._links.forEach(function (link) {
                     if (link.rel == "http://rel.geonorge.no/download/order") {
@@ -443,13 +624,24 @@ var mainVueModel = new Vue({
                     if (link.rel == "http://rel.geonorge.no/download/can-download") {
                         orderLines[key].metadata.canDownloadUrl = link.href;
                     }
+                    if (link.rel == "http://rel.geonorge.no/download/area") {
+                        var availableAreas = getJsonData(link.href);
+                        this.masterOrderLine.allAvailableAreas[uuid] = {};
+
+                        availableAreas.forEach(function (availableArea) {
+                            if (this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] == undefined) {
+                                this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] = [];
+                            }
+                            this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
+                        }.bind(this))
+                    }
                     if (link.rel == "http://rel.geonorge.no/download/projection") {
                         orderLines[key].defaultProjections = getJsonData(link.href);
                     }
                     if (link.rel == "http://rel.geonorge.no/download/format") {
-                        orderItems[key].codelists.formats = getJsonData(link.href);
+                        orderLines[key].defaultFormats = getJsonData(link.href);
                     }
-                })
+                }.bind(this))
 
                 /*
                 
@@ -502,7 +694,8 @@ var mainVueModel = new Vue({
 
     },
     components: {
-        'orderLine': OrderLine
+        'orderLine': OrderLine,
+        'masterOrderLine': MasterOrderLine
     },
     methods: {
 
@@ -520,6 +713,7 @@ var mainVueModel = new Vue({
                             })
                         })
                     }
+
                     orderLine.updateSelectedAreas();
                     orderLine.updateAvailableProjections();
                     orderLine.updateAvailableFormats();
@@ -547,6 +741,13 @@ var mainVueModel = new Vue({
 
             })
 
+        },
+        updateAllOrderLineFields: function () {
+            this.$children.forEach(function (orderLine, index) {
+                orderLine.updateSelectedAreas();
+                orderLine.updateAvailableProjections();
+                orderLine.updateAvailableFormats();
+            });
         },
         clearSelectedProperties: function (selectedOrderLineIndex) {
             selectedAreas = this.$children[selectedOrderLineIndex].selectedAreas;

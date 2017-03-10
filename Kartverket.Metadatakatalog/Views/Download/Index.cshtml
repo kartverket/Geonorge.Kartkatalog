@@ -33,8 +33,8 @@
                 </div>
             </div>
             <div class="custom-select-list-dropdown-additional-options">
-                <a class="btn" v-on:click="$root.selectFromMap($parent)" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !$parent.capabilities.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
-                <a class="btn" v-on:click="$root.selectFromMap($parent)" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !$parent.capabilities.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
+                <a class="btn" v-on:click="$root.selectFromMap($parent)" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
+                <a class="btn" v-on:click="$root.selectFromMap($parent)" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
             </div>
         </div>
 
@@ -82,34 +82,63 @@
 
 <script type="text/x-template" id="order-line-template">
     <div>
-        <h2><a v-bind:href="metadata.url">{{ metadata.name }}</a></h2>
-        <div class="pull-right margin-top-10">
+        <!--<h2></h2>-->
+
+       <a v-bind:href="metadata.url">{{ metadata.name }}</a>
+         <div class="pull-right margin-top-10">
             <span v-on:click="$parent.cloneSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Bruk valg på alle datasett" class="btn"><span class="fa fa-clone"></span></span>
             <span v-on:click="$parent.clearSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Fjern valg fra datasett" class="btn"><span class="fa fa-eraser"></span></span>
             <span v-on:click="removeOrderItem(orderItem)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
         </div>
         <div class="clearfix"></div>
+        
         <div class="row">
+
             <div class="col-md-4">
                 <p>Område</p>
-                <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas"></div>
+                <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="false"></div>
             </div>
             <div class="col-md-4">
                 <p>Projeksjon</p>
                 <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
-                <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections"></div>
+                <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="false"></div>
 
             </div>
             <div class="col-md-4">
                 <p>Format</p>
                 <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
-                <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats"></div>
+                <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="false"></div>
+            </div>
+
+        </div> 
+    </div>
+</script>
+
+<script type="text/x-template" id="master-order-line-template">
+    <div>
+        <p>Alle datasett</p>
+        <div class="row">
+            <div class="col-md-4">
+                <p>Område</p>
+                <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="true"></div>
+            </div>
+            <div class="col-md-4">
+                <p>Projeksjon</p>
+                <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
+                <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="true"></div>
+
+            </div>
+            <div class="col-md-4">
+                <p>Format</p>
+                <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
+                <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="true"></div>
             </div>
         </div>
     </div>
 
 
 </script>
+
 
 
 
@@ -128,14 +157,25 @@
 
     <article id="orderlist" v-show="orderLines.length && !orderResponse.length">
         <div id="downloadformVue" class="download-form">
+            <div class="orderline orderline-master">
+                <div is="masterOrderLine" v-bind:all-available-areas="masterOrderLine.allAvailableAreas" v-bind:all-selected-areas="masterOrderLine.allSelectedAreas">
+
+                </div>
+
+            </div>
             <div class="orderlines">
                 <div v-for="(orderLine, index) in orderLines" class="orderline">
-                    <div is="orderLine" v-bind:index="index" v-bind:capabilities="orderLine.capabilities" v-bind:metadata="orderLine.metadata">
+                    
+                    <div is="orderLine" 
+                         v-bind:metadata="orderLine.metadata"
+                         v-bind:capabilities="orderLine.capabilities"
+                         v-bind:available-areas="masterOrderLine.allAvailableAreas[orderLine.metadata.uuid]"
+                         v-bind:selected-areas="masterOrderLine.allSelectedAreas[orderLine.metadata.uuid]">
 
-                    </div>
+                    </div> 
                 </div>
             </div>
-
+               
 
 
             @*
