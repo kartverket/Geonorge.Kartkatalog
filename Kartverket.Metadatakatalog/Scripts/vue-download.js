@@ -129,13 +129,13 @@ var Areas = {
 
             orderLineObject.updateSelectedAreas();
 
-            orderLineObject.updateAvailableProjections();
-            orderLineObject.updateAvailableFormats();
+                 orderLineObject.updateAvailableProjections();
+            //     orderLineObject.updateAvailableFormats();
 
 
 
-            orderLineObject.updateSelectedProjections();
-            orderLineObject.updateSelectedFormats();
+            //     orderLineObject.updateSelectedProjections();
+            //     orderLineObject.updateSelectedFormats();
 
             //   orderLineObject.validateAreas();
         },
@@ -144,13 +144,13 @@ var Areas = {
 
             this.$parent.updateSelectedAreas();
 
-            this.$parent.updateAvailableProjections();
-            this.$parent.updateAvailableFormats();
+            //   this.$parent.updateAvailableProjections();
+            //   this.$parent.updateAvailableFormats();
 
-            this.$parent.updateSelectedProjections();
-            this.$parent.updateSelectedFormats();
+            //   this.$parent.updateSelectedProjections();
+            //    this.$parent.updateSelectedFormats();
 
-            this.$parent.validateAreas();
+            //  this.$parent.validateAreas();
         }
     }
 };
@@ -327,7 +327,7 @@ var OrderLine = {
 };
 
 var MasterOrderLine = {
-    props: ['allAvailableAreas', 'allSelectedAreas'],
+    props: ['allAvailableAreas', 'allSelectedAreas', 'allAvailableProjections', 'allAvailableFormats'],
     data: function () {
         var data = {
             availableAreas: {},
@@ -346,20 +346,36 @@ var MasterOrderLine = {
                     if (this.availableAreas[areaType] == undefined) {
                         this.availableAreas[areaType] = [];
                     }
-                    var isAllreadyAddedInfo = this.isAllreadyAdded(this.availableAreas[areaType], area, "code");
-                    if (!isAllreadyAddedInfo.added) {
-                        if (area.name == "Agdenes") { console.log(area); console.log(isAllreadyAddedInfo.position); }
+                    var areaIsAllreadyAddedInfo = this.isAllreadyAdded(this.availableAreas[areaType], area, "code");
+
+
+                    if (!areaIsAllreadyAddedInfo.added) {
+
                         area.orderLineUuids = [];
                         area.orderLineUuids.push(orderLine);
+
+                        if (area.allAvailableProjections == undefined) { area.allAvailableProjections = {} };
+                        if (area.allAvailableProjections[orderLine] == undefined) { area.allAvailableProjections[orderLine] = [] };
+                        area.allAvailableProjections[orderLine] = area.projections;
+
                         this.availableAreas[areaType].push(area);
                     } else {
                         var orderLineUuidIsAdded = false;
-                        if (area.name == "Agdenes") { console.log(area); console.log(isAllreadyAddedInfo.position); }
 
-                        this.availableAreas[areaType][isAllreadyAddedInfo.position].orderLineUuids.forEach(function (orderLineUuid) {
+                        if (area.allAvailableProjections == undefined) { area.allAvailableProjections = {} };
+                        if (area.allAvailableProjections[orderLine] == undefined) { area.allAvailableProjections[orderLine] = [] };
+
+                        this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.forEach(function (orderLineUuid) {
                             if (orderLineUuid == orderLine) orderLineUuidIsAdded = true;
                         })
-                        if (!orderLineUuidIsAdded) this.availableAreas[areaType][isAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
+                        if (!orderLineUuidIsAdded) {
+                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
+
+                            if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] == undefined) {
+                                this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = [];
+                            }
+                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = area.projections;
+                        }
                     }
                 }.bind(this))
             }
@@ -424,21 +440,25 @@ var MasterOrderLine = {
             this.selectedAreas = selectedAreas;
         },
         updateAvailableProjections: function () {
-            /*  var availableProjections = {};
-              var selectedAreas = this.selectedAreas !== undefined ? this.selectedAreas : false;
-              if (selectedAreas) {
-                  selectedAreas.forEach(function (selectedArea) {
-                      selectedArea.projections.forEach(function (projection) {
-                          if (availableProjections[projection.code] == undefined) {
-                              availableProjections[projection.code] = projection;
-                              availableProjections[projection.code].areas = [];
-                          }
-                          availableProjections[projection.code].areas.push(selectedArea);
-                      });
-  
-                  });
-              }
-              return this.availableProjections = availableProjections;*/
+            var availableProjections = {};
+            var selectedAreas = this.selectedAreas !== undefined ? this.selectedAreas : false;
+            if (selectedAreas) {
+                selectedAreas.forEach(function (selectedArea) {
+                    for (orderLine in selectedArea.allAvailableProjections) {
+                        selectedArea.allAvailableProjections[orderLine].forEach(function (projection) {
+                            if (availableProjections[projection.code] == undefined) {
+                                availableProjections[projection.code] = projection;
+                                availableProjections[projection.code].areas = [];
+                            }
+                            var isAllreadyAddedInfo = this.isAllreadyAdded(availableProjections[projection.code].areas, selectedArea, "code");
+                            if (!isAllreadyAddedInfo.added) {
+                                availableProjections[projection.code].areas.push(selectedArea);
+                            }
+                        }.bind(this))
+                    }
+                }.bind(this));
+            }
+            return this.availableProjections = availableProjections;
         },
         updateAvailableFormats: function () {
             /*   var availableFormats = {};
@@ -504,6 +524,8 @@ var mainVueModel = new Vue({
             availableProjections: {},
             availableFormats: {},
             allSelectedAreas: {},
+            allAvailableProjections: {},
+            allAvailableFormats: {},
             selectedProjections: [],
             selectedFormats: []
         }
