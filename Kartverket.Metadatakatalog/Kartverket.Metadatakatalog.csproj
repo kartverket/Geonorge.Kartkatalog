@@ -288,6 +288,8 @@
     <Compile Include="Models\MetadataContext.cs" />
     <Compile Include="Models\OrderLineTypeExt.cs" />
     <Compile Include="Models\OrderTypeExt.cs" />
+    <Compile Include="Models\SearchIndex\ApplicationIndexDoc.cs" />
+    <Compile Include="Models\SearchIndex\ServiceIndexDoc.cs" />
     <Compile Include="Models\SearchIndex\MetadataIndexDoc.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />
     <Compile Include="Models\Api\SearchResult.cs" />
@@ -315,6 +317,8 @@
     <Compile Include="Service\IErrorService.cs" />
     <Compile Include="Service\IMetadataService.cs" />
     <Compile Include="Service\IndexDocumentCreator.cs" />
+    <Compile Include="Service\IndexerService.cs" />
+    <Compile Include="Service\IndexerApplication.cs" />
     <Compile Include="Service\Indexer.cs" />
     <Compile Include="Service\MemoryCacher.cs" />
     <Compile Include="Service\MetadataIndexer.cs" />
@@ -323,7 +327,9 @@
     <Compile Include="Service\Search\ISearchService.cs" />
     <Compile Include="Service\Search\SearchService.cs" />
     <Compile Include="Service\SolrIndexDocumentCreator.cs" />
-    <Compile Include="Service\SolrIndexer.cs" />
+    <Compile Include="Service\SolrIndexerApplication.cs" />
+    <Compile Include="Service\SolrIndexerServices.cs" />
+    <Compile Include="Service\SolrIndexerMetadata.cs" />
     <Compile Include="Service\SolrMetadataIndexer.cs" />
     <Compile Include="Service\PlaceResolver.cs" />
     <Compile Include="Service\ThemeResolver.cs" />

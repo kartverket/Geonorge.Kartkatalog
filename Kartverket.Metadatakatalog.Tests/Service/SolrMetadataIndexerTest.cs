@@ -39,6 +39,8 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             geoNorgeMock.Setup(g => g.SearchIso("", 1, 50, false)).Returns(searchResult);
 
             var indexerMock = new Mock<Indexer>();
+            var indexerAppMock = new Mock<IndexerApplication>();
+            var indexerSerMock = new Mock<IndexerService>();
 
             var indexDocumentCreator = new Mock<IndexDocumentCreator>();
             var indexDocs = new List<MetadataIndexDoc>();
@@ -46,7 +48,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
             var errorMock = new Mock<IErrorService>();
 
-            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexDocumentCreator.Object, errorMock.Object);
+            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexerAppMock.Object, indexerSerMock.Object, indexDocumentCreator.Object, errorMock.Object);
 
             indexer.RunIndexing();
 
@@ -78,6 +80,9 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             geoNorgeMock.Setup(g => g.SearchIso("", 51, 50, false)).Returns(secondSearchResult);
 
             var indexerMock = new Mock<Indexer>();
+            var indexerAppMock = new Mock<IndexerApplication>();
+            var indexerSerMock = new Mock<IndexerService>();
+
             var indexDocumentCreator = new Mock<IndexDocumentCreator>();
             var indexDocs = new List<MetadataIndexDoc>();
 
@@ -85,7 +90,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
             indexDocumentCreator.Setup(i => i.CreateIndexDocs(It.IsAny<object[]>(),geoNorgeMock.Object)).Returns(indexDocs);
 
-            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexDocumentCreator.Object, errorMock.Object);
+            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexerAppMock.Object, indexerSerMock.Object, indexDocumentCreator.Object, errorMock.Object);
 
             indexer.RunIndexing();
 
@@ -103,6 +108,9 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
             var geoNorgeMock = new Mock<IGeoNorge>();
             var indexerMock = new Mock<Indexer>();
+            var indexerAppMock = new Mock<IndexerApplication>();
+            var indexerSerMock = new Mock<IndexerService>();
+
             var indexDocumentCreator = new Mock<IndexDocumentCreator>();
 
             geoNorgeMock.Setup(g => g.GetRecordByUuid(uuid)).Returns(CreateDummyMetadata);
@@ -111,7 +119,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
                 .Returns(metadataIndexDoc);
 
             var errorMock = new Mock<IErrorService>();
-            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexDocumentCreator.Object, errorMock.Object);
+            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexerAppMock.Object, indexerSerMock.Object, indexDocumentCreator.Object, errorMock.Object);
             
             indexer.RunIndexingOn(uuid);
 

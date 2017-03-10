@@ -12,13 +12,17 @@ namespace Kartverket.Metadatakatalog.Service
 
         private readonly IGeoNorge _geoNorge;
         private readonly Indexer _indexer;
+        private readonly IndexerApplication _indexerApplication;
+        private readonly IndexerService _indexerService;
         private readonly IndexDocumentCreator _indexDocumentCreator;
         private readonly IErrorService _errorService;
 
-        public SolrMetadataIndexer(IGeoNorge geoNorge, Indexer indexer, IndexDocumentCreator indexDocumentCreator, IErrorService errorService)
+        public SolrMetadataIndexer(IGeoNorge geoNorge, Indexer indexer, IndexerApplication indexerApp, IndexerService indexerService, IndexDocumentCreator indexDocumentCreator, IErrorService errorService)
         {
             _geoNorge = geoNorge;
             _indexer = indexer;
+            _indexerApplication = indexerApp;
+            _indexerService = indexerService;
             _indexDocumentCreator = indexDocumentCreator;
             _errorService = errorService;
         }
@@ -34,13 +38,17 @@ namespace Kartverket.Metadatakatalog.Service
             try
             {
                 MD_Metadata_Type metadata = _geoNorge.GetRecordByUuid(uuid);
-                if (metadata == null)
+
+                _indexer.RemoveIndexDocument(uuid);
+                _indexerApplication.RemoveIndexDocument(uuid);
+                _indexerService.RemoveIndexDocument(uuid);
+
+               
+                if (metadata != null)
                 {
-                    _indexer.RemoveIndexDocument(uuid);
-                }
-                else {
+
                     MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge);
-                    _indexer.Index(metadataIndexDoc);
+                    RunIndex(metadataIndexDoc);
                 }
 
             }
@@ -49,6 +57,26 @@ namespace Kartverket.Metadatakatalog.Service
                 Log.Error("Error in UUID: " + uuid + "", exception);
                 _errorService.AddError(uuid, exception);
             }
+        }
+
+        private void RunIndex(MetadataIndexDoc metadataIndexDoc)
+        {
+            if (metadataIndexDoc.Type.ToLower() == "service" || metadataIndexDoc.Type.ToLower() == "servicelayer")
+            {
+                _indexerService.Index(_indexDocumentCreator.ConvertIndexDocToService(metadataIndexDoc));
+                //Unntak for services som er koblet til datasett - GEOPORTAL-2169
+                if (metadataIndexDoc.ServiceDatasets == null || metadataIndexDoc.ServiceDatasets.Count == 0) //Hvis service ikke "operatesOn" noen datasett
+                    _indexer.Index(metadataIndexDoc);
+            }
+            else if (metadataIndexDoc.Type.ToLower() == "software")
+            {
+                _indexerApplication.Index(_indexDocumentCreator.ConvertIndexDocToApplication(metadataIndexDoc));
+                //Unntak for applikasjoner som er koblet til datasett - må bruke gruppe tabellen
+                _indexer.Index(metadataIndexDoc);
+            }
+
+            else
+                _indexer.Index(metadataIndexDoc);
         }
 
         private void RunSearch(int startPosition)
@@ -61,7 +89,12 @@ namespace Kartverket.Metadatakatalog.Service
                 searchResult = _geoNorge.SearchIso("", startPosition, 50, false);
                 Log.Info("Next record: " + searchResult.nextRecord + " " + searchResult.numberOfRecordsReturned + " " + searchResult.numberOfRecordsMatched);
                 List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult.Items, _geoNorge);
-                _indexer.Index(indexDocs);
+                foreach (var doc in indexDocs)
+                {
+                    RunIndex(doc);
+                }
+
+                //_indexer.Index(indexDocs);
                 runningSingle = false;
             }
             catch (Exception exception)
@@ -79,14 +112,18 @@ namespace Kartverket.Metadatakatalog.Service
                         
                         Log.Info("Next record: " + searchResult2.nextRecord + " " + searchResult2.numberOfRecordsMatched);
                         List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult2.Items, _geoNorge);
-                        _indexer.Index(indexDocs);
+                        foreach (var doc in indexDocs)
+                        {
+                            RunIndex(doc);
+                        }
+                        //_indexer.Index(indexDocs);
                         startPosition++;
                         runningSingle = true;
                     }
                     catch (Exception exception2)
                     {
                         Log.Error("Error in ISO format from Geonetwork position: " + startPosition + ".", exception2);
-                        if (searchResult2 != null) Log.Info(searchResult2.Items[0]);
+                        if (searchResult2 != null && searchResult2.Items != null) Log.Info(searchResult2.Items[0]);
 
                         startPosition++;
                     }
@@ -120,6 +157,8 @@ namespace Kartverket.Metadatakatalog.Service
         public void RunReIndexing()
         {
             _indexer.DeleteIndex();
+            _indexerApplication.DeleteIndex();
+            _indexerService.DeleteIndex();
 
             RunSearch(1);
         }

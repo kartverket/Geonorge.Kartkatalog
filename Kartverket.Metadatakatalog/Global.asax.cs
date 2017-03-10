@@ -39,6 +39,9 @@ namespace Kartverket.Metadatakatalog
             log4net.Config.XmlConfigurator.Configure();
 
             Startup.Init<MetadataIndexDoc>("http://localhost:8983/solr/metadata");
+            Startup.Init<ServiceIndexDoc>("http://localhost:8983/solr/services");
+            Startup.Init<ApplicationIndexDoc>("http://localhost:8983/solr/applications");
+            //https://github.com/mausch/SolrNet/blob/master/Documentation/Multi-core-instance.md
 
         }
 
