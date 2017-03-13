@@ -28,7 +28,7 @@
     var organizations = organizationFacets.FacetResults;
 
     var distributionProtocolFacets = Facets.First(f => f.FacetField == "DistributionProtocols");
-    var distributionProtocols = distributionProtocolFacets.FacetResults;
+    var distributionProtocols = distributionProtocolFacets.FacetResults.Where(r => r.Name!= "GEONORGE:OFFLINE");
 
     var dataAccessFacets = Facets.First(f => f.FacetField == "dataaccess");
     var dataAccesses = dataAccessFacets.FacetResults;
@@ -261,11 +261,8 @@
                 foreach (var distributionProtocol in distributionProtocols)
                 {
                     @:data.FacetResults[@distributionProtocolIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(distributionProtocol.LinkName()))";
-
-                    @:data.FacetResults[@distributionProtocolIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@distributionProtocolIndex]);
-
+                    @:data.FacetResults[@distributionProtocolIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@distributionProtocolIndex])
                     @:data.FacetResults[@distributionProtocolIndex].hasChildren = false;
-
                     distributionProtocolIndex++;
                 }
 
