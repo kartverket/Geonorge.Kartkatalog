@@ -272,8 +272,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
                          .ToList();
 
              var facetsFylke = parameters.Facets
-             .Where(f => !string.IsNullOrWhiteSpace(f.Value) && f.Name == "area" && f.Value.Length == 4)
-             .Select(fa => fa.Value)
+             .Where(f => !string.IsNullOrWhiteSpace(f.Value) && f.Name == "area")
+             .Select(fa => fa.Value.Substring(0,4))
              .Distinct()
              .ToList();
 
