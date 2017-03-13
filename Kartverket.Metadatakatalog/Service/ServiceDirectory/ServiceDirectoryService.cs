@@ -9,12 +9,12 @@ using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 
 namespace Kartverket.Metadatakatalog.Service.Search
 {
-    public class ServiceDirectioryService : IServiceDirectoryService
+    public class ServiceDirectoryService : IServiceDirectoryService
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly ISolrOperations<ServiceIndexDoc> _solrInstance;
 
-        public ServiceDirectioryService()
+        public ServiceDirectoryService()
         {
             _solrInstance = ServiceLocator.Current.GetInstance<ISolrOperations<ServiceIndexDoc>>();
         }

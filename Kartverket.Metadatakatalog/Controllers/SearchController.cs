@@ -2,7 +2,7 @@
 using System;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
-using Kartverket.Metadatakatalog.Service.Search;
+using Kartverket.Metadatakatalog.Service.Application;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {

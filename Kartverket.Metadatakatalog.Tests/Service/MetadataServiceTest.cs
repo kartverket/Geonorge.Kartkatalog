@@ -4,7 +4,7 @@ using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
-using Kartverket.Metadatakatalog.Service.Search;
+using Kartverket.Metadatakatalog.Service.Application;
 using Moq;
 using NUnit.Framework;
 using www.opengis.net;

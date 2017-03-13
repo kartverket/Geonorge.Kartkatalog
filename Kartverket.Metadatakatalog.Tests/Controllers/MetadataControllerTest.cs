@@ -3,7 +3,7 @@ using FluentAssertions;
 using Kartverket.Metadatakatalog.Controllers;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
-using Kartverket.Metadatakatalog.Service.Search;
+using Kartverket.Metadatakatalog.Service.Application;
 using Moq;
 using NUnit.Framework;
 

@@ -260,10 +260,13 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\ApiMetadataController.cs" />
+    <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Service\Application\IApplicationService.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Service\Application\ApplicationService.cs" />
     <Compile Include="Service\ServiceDirectory\IServiceDirectoryService.cs" />
     <Compile Include="Controllers\MetadataController.cs" />
     <Compile Include="Controllers\ApiSearchController.cs" />
@@ -824,6 +827,7 @@
     <Content Include="settings.default.config" />
     <Content Include="Views\Shared\_FacetFilter.cshtml" />
     <Content Include="Views\ServiceDirectory\Index.cshtml" />
+    <Content Include="Views\Application\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

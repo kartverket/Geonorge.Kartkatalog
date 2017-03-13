@@ -1,31 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
 using Microsoft.Practices.ServiceLocation;
 using SolrNet;
 using SolrNet.Commands.Parameters;
-using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
-using SearchResult = Kartverket.Metadatakatalog.Models.SearchResult;
 using System;
+using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 
 namespace Kartverket.Metadatakatalog.Service.Application
 {
-    public class SearchService : ISearchService
+    public class ApplicationService : IApplicationService
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ISolrOperations<ApplicationIndexDoc> _solrInstance;
 
-        private readonly IOrganizationService _organizationService;
-        private readonly ISolrOperations<MetadataIndexDoc> _solrInstance;
-
-        public SearchService(IOrganizationService organizationService)
+        public ApplicationService()
         {
-            _organizationService = organizationService;
-            _solrInstance = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
+            _solrInstance = ServiceLocator.Current.GetInstance<ISolrOperations<ApplicationIndexDoc>>();
         }
 
-        public SearchResult Search(SearchParameters parameters)
+        public SearchResult Applications(SearchParameters parameters)
         {
             //OrderBy score, tittel, dato(nyeste, oppdatert), organisasjon
             ISolrQuery query = BuildQuery(parameters);
@@ -64,7 +58,7 @@ namespace Kartverket.Metadatakatalog.Service.Application
             }
             try
             {
-                SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
+                SolrQueryResults<ApplicationIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
                 {                                     
                     //WMS lag skal få redusert sin boost
 
@@ -109,39 +103,8 @@ namespace Kartverket.Metadatakatalog.Service.Application
             return hasnovalue;
         }
 
-        public SearchResultForOrganization SearchByOrganization(SearchByOrganizationParameters parameters)
-        {
-            parameters.CreateFacetOfOrganizationSeoName();
-            parameters.AddComplexFacetsIfMissing();
-            var order = new[] { new SortOrder("score", Order.DESC) };
-            if (parameters.orderby == OrderBy.title.ToString())
-            {
-                order = new[] { new SortOrder("title", Order.ASC) };
-            }
-            else if (parameters.orderby == OrderBy.newest.ToString())
-            {
-                order = new[] { new SortOrder("date_published", Order.DESC) };
-            }
-            ISolrQuery query = BuildQuery(parameters);
-            
-            SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new QueryOptions
-            {
-                FilterQueries = BuildFilterQueries(parameters),
-                OrderBy = order,
-                Rows = parameters.Limit,
-                StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
-                Facet = BuildFacetParameters(parameters)
-                
-            });
 
-            SearchResult searchResult = CreateSearchResults(queryResults, parameters);
-            Task<Organization> getOrganizationTask = _organizationService.GetOrganizationByName(searchResult.GetOrganizationNameFromFirstItem());
-            Organization organization = getOrganizationTask.Result;
-
-            return new SearchResultForOrganization(organization, searchResult);
-        }
-
-        private SearchResult CreateSearchResults(SolrQueryResults<MetadataIndexDoc> queryResults, SearchParameters parameters)
+        private SearchResult CreateSearchResults(SolrQueryResults<ApplicationIndexDoc> queryResults, SearchParameters parameters)
         {
             List<SearchResultItem> items = ParseResultDocuments(queryResults);
 
@@ -157,7 +120,7 @@ namespace Kartverket.Metadatakatalog.Service.Application
             };
         }
 
-        private List<Facet> ParseFacetResults(SolrQueryResults<MetadataIndexDoc> queryResults)
+        private List<Facet> ParseFacetResults(SolrQueryResults<ApplicationIndexDoc> queryResults)
         {
             List<Facet> facets = new List<Facet>();
             if (queryResults != null)
@@ -183,7 +146,7 @@ namespace Kartverket.Metadatakatalog.Service.Application
             return facets;
         }
 
-        private static List<SearchResultItem> ParseResultDocuments(SolrQueryResults<MetadataIndexDoc> queryResults)
+        private static List<SearchResultItem> ParseResultDocuments(SolrQueryResults<ApplicationIndexDoc> queryResults)
         {
             var items = new List<SearchResultItem>();
             if (queryResults != null)

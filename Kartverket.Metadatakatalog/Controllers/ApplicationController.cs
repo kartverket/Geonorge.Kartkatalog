@@ -1,7 +1,6 @@
 ﻿using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
-using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +9,17 @@ using System.Web.Mvc;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
-    public class ServiceDirectoryController : Controller
+    public class ApplicationController : Controller
     {
+        // GET: Application
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly IServiceDirectoryService _ServiceDirectoryService;
+        private readonly IApplicationService _applicationService;
         private readonly ISearchService _searchService;
 
-        public ServiceDirectoryController(IServiceDirectoryService ServiceDirectoryService, ISearchService searchService)
+        public ApplicationController(IApplicationService applicationService, ISearchService searchService)
         {
-            _ServiceDirectoryService = ServiceDirectoryService;
+            _applicationService = applicationService;
             _searchService = searchService;
         }
 
@@ -28,7 +28,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         public ActionResult Index(SearchParameters parameters)
         {
             parameters.AddComplexFacetsIfMissing();
-            SearchResult searchResult = _ServiceDirectoryService.Services(parameters);
+            SearchResult searchResult = _applicationService.Applications(parameters);
 
             SearchViewModel model = new SearchViewModel(parameters, searchResult);
 

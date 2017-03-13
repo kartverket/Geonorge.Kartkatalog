@@ -1,6 +1,6 @@
 ﻿using Kartverket.Metadatakatalog.Models;
 
-namespace Kartverket.Metadatakatalog.Service.Search
+namespace Kartverket.Metadatakatalog.Service.Application
 {
     public interface ISearchService
     {

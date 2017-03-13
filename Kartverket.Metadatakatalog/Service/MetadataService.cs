@@ -6,7 +6,7 @@ using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
 using System;
-using Kartverket.Metadatakatalog.Service.Search;
+using Kartverket.Metadatakatalog.Service.Application;
 using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Service
