@@ -264,9 +264,11 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Service\ServiceDirectory\IServiceDirectoryService.cs" />
     <Compile Include="Controllers\MetadataController.cs" />
     <Compile Include="Controllers\ApiSearchController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\ServiceDirectoryController.cs" />
     <Compile Include="Controllers\ThumbnailController.cs" />
     <Compile Include="Formatter\CsvFormatter.cs" />
     <Compile Include="Global.asax.cs">
@@ -326,6 +328,7 @@
     <Compile Include="Service\RegisterFetcher.cs" />
     <Compile Include="Service\Search\ISearchService.cs" />
     <Compile Include="Service\Search\SearchService.cs" />
+    <Compile Include="Service\ServiceDirectory\ServiceDirectoryService.cs" />
     <Compile Include="Service\SolrIndexDocumentCreator.cs" />
     <Compile Include="Service\SolrIndexerApplication.cs" />
     <Compile Include="Service\SolrIndexerServices.cs" />
@@ -725,7 +728,6 @@
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
     <Content Include="authentication.default.config" />
-    <Content Include="authentication.config" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\.bower.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\702ZOKiLJc3WVjuplzInF5uFdDttMLvmWuJdhhgs.ttf" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.eot" />
@@ -759,6 +761,7 @@
     <Content Include="Content\bower_components\vue\bower.json" />
     <Content Include="Content\bower_components\vue\dist\vue.min.js.map" />
     <Content Include="Content\bower_components\vue\LICENSE" />
+    <Content Include="authentication.config" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
@@ -820,6 +823,7 @@
     <Content Include="settings.config" />
     <Content Include="settings.default.config" />
     <Content Include="Views\Shared\_FacetFilter.cshtml" />
+    <Content Include="Views\ServiceDirectory\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

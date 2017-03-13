@@ -13,6 +13,7 @@ using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Search;
 using GeoNorgeAPI;
+using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -87,6 +88,7 @@ namespace Kartverket.Metadatakatalog
             builder.RegisterType<SolrIndexDocumentCreator>().As<IndexDocumentCreator>();
             builder.RegisterType<ThemeResolver>().AsSelf();
             builder.RegisterType<SearchService>().As<ISearchService>();
+            builder.RegisterType<ServiceDirectioryService>().As<IServiceDirectoryService>();
 
 
         }
