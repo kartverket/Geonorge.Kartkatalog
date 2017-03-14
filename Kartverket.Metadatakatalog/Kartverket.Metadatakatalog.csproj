@@ -823,11 +823,11 @@
     <Content Include="Views\Download\Order.cshtml" />
     <Content Include="Views\Download\_NorgesKart.cshtml" />
     <Content Include="Views\Shared\_SharedMenu.cshtml" />
-    <Content Include="settings.config" />
     <Content Include="settings.default.config" />
     <Content Include="Views\Shared\_FacetFilter.cshtml" />
     <Content Include="Views\ServiceDirectory\Index.cshtml" />
     <Content Include="Views\Application\Index.cshtml" />
+    <Content Include="settings.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
