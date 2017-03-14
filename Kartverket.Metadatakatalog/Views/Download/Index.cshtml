@@ -160,11 +160,11 @@
             <div class="orderline orderline-master">
                 <div is="masterOrderLine"
                      v-bind:all-available-areas="masterOrderLine.allAvailableAreas"
-                     v-bind:all-selected-areas="masterOrderLine.allSelectedAreas"
                      v-bind:all-available-projections="masterOrderLine.allAvailableProjections"
+                     v-bind:all-available-formats="masterOrderLine.allAvailableFormats"
+                     v-bind:all-selected-areas="masterOrderLine.allSelectedAreas"
                      v-bind:all-selected-projections="masterOrderLine.allSelectedProjections"
-                     v-bind:all-available-formats="masterOrderLine.allAvailableFormats">
-
+                     v-bind:all-selected-formats="masterOrderLine.allSelectedFormats">
                 </div>
 
             </div>
@@ -175,8 +175,10 @@
                          v-bind:metadata="orderLine.metadata"
                          v-bind:capabilities="orderLine.capabilities"
                          v-bind:available-areas="masterOrderLine.allAvailableAreas[orderLine.metadata.uuid]"
+                         v-bind:available-projections="masterOrderLine.allAvailableProjections[orderLine.metadata.uuid]"
+                         v-bind:available-formats="masterOrderLine.allAvailableFormats[orderLine.metadata.uuid]"
                          v-bind:selected-areas="masterOrderLine.allSelectedAreas[orderLine.metadata.uuid]"
-                         v-bind:available-projections="masterOrderLine.allAvailableProjections[orderLine.metadata.uuid]">
+                         v-bind:selected-projections="masterOrderLine.allAvailableProjections[orderLine.metadata.uuid]">
 
                     </div>
                 </div>

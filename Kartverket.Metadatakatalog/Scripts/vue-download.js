@@ -130,11 +130,11 @@ var Areas = {
             this.$parent.updateSelectedAreas();
 
             this.$parent.updateAvailableProjections();
-            //     orderLineObject.updateAvailableFormats();
+            this.$parent.updateAvailableFormats();
 
 
 
-            //     orderLineObject.updateSelectedProjections();
+            this.$parent.updateSelectedProjections();
             //     orderLineObject.updateSelectedFormats();
 
             //   orderLineObject.validateAreas();
@@ -144,9 +144,9 @@ var Areas = {
 
             this.$parent.updateSelectedAreas();
             this.$parent.updateAvailableProjections();
-            //   this.$parent.updateAvailableFormats();
+            this.$parent.updateAvailableFormats();
 
-            //   this.$parent.updateSelectedProjections();
+               this.$parent.updateSelectedProjections();
             //    this.$parent.updateSelectedFormats();
 
             //  this.$parent.validateAreas();
@@ -193,21 +193,14 @@ var Formats = {
 
 
 var OrderLine = {
-    props: ['metadata', 'capabilities', 'availableAreas', 'selectedAreas', 'availableProjections'],
+    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections' ],
     template: '#order-line-template',
     data: function () {
         var data = {
-            selectedProjections: [],
-            selectedFormats: [],
-            availableFormats: {}
+            selectedFormats: []
         }
         return data;
     },
-    /* created: function(){
-         if (this.availableProjections == undefined) {
-             this.availableProjections = {};
-         }
-     },*/
     methods: {
         filterOptionList: function (optionListId, inputValue) {
             var dropdownListElements = document.getElementsByClassName(optionListId);
@@ -330,13 +323,14 @@ var OrderLine = {
 };
 
 var MasterOrderLine = {
-    props: ['allAvailableAreas', 'allSelectedAreas', 'allAvailableProjections', 'allAvailableFormats', 'allSelectedProjections'],
+    props: ['allAvailableAreas', 'allAvailableProjections', 'allAvailableFormats', 'allSelectedAreas', 'allSelectedProjections', 'allSelectedFormats'],
     data: function () {
         var data = {
             availableAreas: {},
             availableProjections: [],
-            selectedAreas: [],
             availableFormats: [],
+
+            selectedAreas: [],
             selectedProjections: [],
             selectedFormats: []
         }
@@ -344,7 +338,6 @@ var MasterOrderLine = {
     },
     created: function () {
         for (orderLine in this.allAvailableAreas) {
-            // this.allAvailableProjections[orderLine] = {};
             for (areaType in this.allAvailableAreas[orderLine]) {
                 this.allAvailableAreas[orderLine][areaType].forEach(function (area) {
                     if (this.availableAreas[areaType] == undefined) {
@@ -362,23 +355,50 @@ var MasterOrderLine = {
                         if (area.allAvailableProjections[orderLine] == undefined) { area.allAvailableProjections[orderLine] = [] };
                         area.allAvailableProjections[orderLine] = area.projections;
 
+                        for (projection in area.allAvailableProjections[orderLine]) {
+                                area.allAvailableProjections[orderLine][projection].orderLineUuids = area.orderLineUuids;
+                        }
+                       
+
+                        if (area.allAvailableFormats == undefined) { area.allAvailableFormats = {} };
+                        if (area.allAvailableFormats[orderLine] == undefined) { area.allAvailableFormats[orderLine] = [] };
+                        area.allAvailableFormats[orderLine] = area.formats;
+
+                        for (format in area.allAvailableFormats[orderLine]) {
+                            area.allAvailableFormats[orderLine][format].orderLineUuids = area.orderLineUuids;
+                        }
+
+
                         this.availableAreas[areaType].push(area);
                     } else {
                         var orderLineUuidIsAdded = false;
 
                         if (area.allAvailableProjections == undefined) { area.allAvailableProjections = {} };
                         if (area.allAvailableProjections[orderLine] == undefined) { area.allAvailableProjections[orderLine] = [] };
+                        if (area.allAvailableFormats == undefined) { area.allAvailableFormats = {} };
+                        if (area.allAvailableFormats[orderLine] == undefined) { area.allAvailableFormats[orderLine] = [] };
 
                         this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.forEach(function (orderLineUuid) {
                             if (orderLineUuid == orderLine) orderLineUuidIsAdded = true;
                         })
+                    
                         if (!orderLineUuidIsAdded) {
                             this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
+
+                           
+                            
 
                             if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] == undefined) {
                                 this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = [];
                             }
                             this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = area.projections;
+
+                            if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] == undefined) {
+                                this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = [];
+                            }
+                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = area.formats;
+
+                            
                         }
                     }
                 }.bind(this))
@@ -445,6 +465,7 @@ var MasterOrderLine = {
         },
         updateAvailableProjections: function () {
             var allAvailableProjections = {};
+            var availableProjections = [];
             for (orderLineUuid in this.allAvailableAreas) {
                 allAvailableProjections[orderLineUuid] = {};
             }
@@ -457,6 +478,7 @@ var MasterOrderLine = {
 
                             selectedArea.orderLineUuids.forEach(function (orderLineUuid) {
 
+                                // allAvailableProjections
                                 if (allAvailableProjections[orderLineUuid] == undefined) {
                                     allAvailableProjections[orderLineUuid] = {};
                                 }
@@ -471,44 +493,122 @@ var MasterOrderLine = {
                                 }
 
 
-                            }.bind(this))
+                                // availableProjections
+                                var isAllreadyAddedInfo = this.isAllreadyAdded(availableProjections, projection, "code");
+                                if (!isAllreadyAddedInfo.added) {
+                                    availableProjections.push(projection);
+                                }
 
+
+                            }.bind(this))
 
                         }.bind(this))
                     }
 
                 }.bind(this));
             }
-            return this.$parent.masterOrderLine.allAvailableProjections = allAvailableProjections;
+            this.$parent.masterOrderLine.allAvailableProjections = allAvailableProjections;
+            this.availableProjections = availableProjections;
         },
         updateAvailableFormats: function () {
-            /*   var availableFormats = {};
+            var allAvailableFormats = {};
+            var availableFormats = [];
             for (orderLineUuid in this.allAvailableAreas) {
-                allAvailableProjections[orderLineUuid] = {};
+                allAvailableFormats[orderLineUuid] = {};
             }
                var selectedAreas = this.selectedAreas !== undefined ? this.selectedAreas : false;
                if (selectedAreas) {
                    selectedAreas.forEach(function (selectedArea) {
-                       selectedArea.formats.forEach(function (format) {
+
+                       for (orderLine in selectedArea.allAvailableFormats) {
+                           selectedArea.allAvailableFormats[orderLine].forEach(function (format) {
+
+                               selectedArea.orderLineUuids.forEach(function (orderLineUuid) {
+
+                                   // allAvailableProjections
+                                   if (allAvailableFormats[orderLineUuid] == undefined) {
+                                       allAvailableFormats[orderLineUuid] = {};
+                                   }
+
+                                   if (allAvailableFormats[orderLineUuid][format.name] == undefined) {
+                                       allAvailableFormats[orderLineUuid][format.name] = format;
+                                       allAvailableFormats[orderLineUuid][format.name].areas = [];
+                                   }
+                                   var isAllreadyAddedInfo = this.isAllreadyAdded(allAvailableFormats[orderLineUuid][format.name].areas, selectedArea, "code");
+                                   if (!isAllreadyAddedInfo.added) {
+                                       allAvailableFormats[orderLineUuid][format.name].areas.push(selectedArea);
+                                   }
+
+
+                                   // availableProjections
+                                   var isAllreadyAddedInfo = this.isAllreadyAdded(availableFormats, format, "name");
+                                   if (!isAllreadyAddedInfo.added) {
+                                       availableFormats.push(format);
+                                   }
+
+
+                               }.bind(this))
+
+                           }.bind(this))
+                       }
+
+                   }.bind(this));
+               }
+               this.$parent.masterOrderLine.allAvailableFormats = allAvailableFormats;
+               this.availableFormats = availableFormats;
+        },
+
+        /*
+        
+          selectedArea.formats.forEach(function (format) {
                            if (availableFormats[format.name] == undefined) {
                                availableFormats[format.name] = format;
                                availableFormats[format.name].areas = [];
                            }
                            availableFormats[format.name].areas.push(selectedArea);
                        });
-   
-                   });
-               }
-               return this.availableFormats = availableFormats;*/
-        },
+
+        
+        */
         updateSelectedProjections: function () {
-            var selectedProjections = [];
+            /*var selectedProjections = [];
             for (projectionCode in this.availableProjections) {
                 if (this.availableProjections[projectionCode].isSelected) {
                     selectedProjections.push(this.availableProjections[projectionCode])
                 }
             }
             this.selectedProjections = selectedProjections;
+            */
+            
+
+
+            var allSelectedProjections = {};
+            var selectedProjections = [];
+            
+                this.availableProjections.forEach(function (projection) {
+                    if (projection.isSelected) {
+                        projection.orderLineUuids.forEach(function (orderLineUuid) {
+                            if (allSelectedProjections[orderLineUuid] == undefined) { allSelectedProjections[orderLineUuid] = [] }
+                            allSelectedProjections[orderLineUuid].push(projection);
+
+                            var isAllreadyAddedInfo = this.isAllreadyAdded(selectedProjections, projection, "code");
+                            if (!isAllreadyAddedInfo.added) {
+                                selectedProjections.push(projection);
+                            }
+                        }.bind(this))
+                        /*if (area.projections.length == 1) {
+                            area.projections[0].isSelected = true;
+                        }
+                        if (area.formats.length == 1) {
+                            area.formats[0].isSelected = true;
+                        }*/
+                    }
+                }.bind(this));
+            
+            this.$parent.masterOrderLine.allSelectedProjections = allSelectedProjections;
+            this.selectedProjections = selectedProjections;
+            
+
         },
         updateSelectedFormats: function () {
             var selectedFormats = [];
@@ -545,13 +645,11 @@ var mainVueModel = new Vue({
 
         masterOrderLine: {
             allAvailableAreas: {},
-            availableProjections: {},
-            availableFormats: {},
-            allSelectedAreas: {},
             allAvailableProjections: {},
             allAvailableFormats: {},
+            allSelectedAreas: {},
             allSelectedProjections: {},
-            selectedFormats: []
+            allSelectedFormats: {}
         }
     },
     computed: {
@@ -664,6 +762,7 @@ var mainVueModel = new Vue({
                 var uuid = metadata.uuid;
 
                 this.masterOrderLine.allAvailableProjections[uuid] = {};
+                this.masterOrderLine.allAvailableFormats[uuid] = {};
 
                 orderLines[key].capabilities._links.forEach(function (link) {
                     if (link.rel == "http://rel.geonorge.no/download/order") {
