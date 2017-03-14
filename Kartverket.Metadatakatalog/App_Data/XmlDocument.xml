@@ -716,6 +716,24 @@
             Result grouped by facets
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Models.SearchParameters.OrderBy">
+            <summary>
+            Gets a sort order based on "Orderby" parameter
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Models.SearchParameters.BuildQuery">
+            <summary>
+            Builds a Solr query based on "Text" parameter
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Models.SearchParameters.BuildFilterQueries">
+            <summary>
+            Builds a solr Filter query based on "Facets" parameter
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:AreaType">
             <remarks/>
         </member>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SolrNet;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Models
@@ -36,7 +37,6 @@ namespace Kartverket.Metadatakatalog.Models
                 }
             }
             return null;
-        }
-        
+        }    
     }
 }
