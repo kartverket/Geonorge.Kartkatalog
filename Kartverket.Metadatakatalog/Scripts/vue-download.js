@@ -125,11 +125,11 @@ var Areas = {
         selectArea: function (area) {
             area.isSelected = true;
 
-            var orderLineObject = (this.master) ? this.$parent : this.$parent;
+            //var orderLineObject = (this.master) ? this.$parent : this.$parent;
 
-            orderLineObject.updateSelectedAreas();
+            this.$parent.updateSelectedAreas();
 
-                 orderLineObject.updateAvailableProjections();
+            this.$parent.updateAvailableProjections();
             //     orderLineObject.updateAvailableFormats();
 
 
@@ -143,8 +143,7 @@ var Areas = {
             area.isSelected = false;
 
             this.$parent.updateSelectedAreas();
-
-            //   this.$parent.updateAvailableProjections();
+            this.$parent.updateAvailableProjections();
             //   this.$parent.updateAvailableFormats();
 
             //   this.$parent.updateSelectedProjections();
@@ -194,17 +193,21 @@ var Formats = {
 
 
 var OrderLine = {
-    props: ['metadata', 'capabilities', 'availableAreas', 'selectedAreas'],
+    props: ['metadata', 'capabilities', 'availableAreas', 'selectedAreas', 'availableProjections'],
     template: '#order-line-template',
     data: function () {
         var data = {
             selectedProjections: [],
             selectedFormats: [],
-            availableProjections: {},
             availableFormats: {}
         }
         return data;
     },
+    /* created: function(){
+         if (this.availableProjections == undefined) {
+             this.availableProjections = {};
+         }
+     },*/
     methods: {
         filterOptionList: function (optionListId, inputValue) {
             var dropdownListElements = document.getElementsByClassName(optionListId);
@@ -327,7 +330,7 @@ var OrderLine = {
 };
 
 var MasterOrderLine = {
-    props: ['allAvailableAreas', 'allSelectedAreas', 'allAvailableProjections', 'allAvailableFormats'],
+    props: ['allAvailableAreas', 'allSelectedAreas', 'allAvailableProjections', 'allAvailableFormats', 'allSelectedProjections'],
     data: function () {
         var data = {
             availableAreas: {},
@@ -341,6 +344,7 @@ var MasterOrderLine = {
     },
     created: function () {
         for (orderLine in this.allAvailableAreas) {
+            // this.allAvailableProjections[orderLine] = {};
             for (areaType in this.allAvailableAreas[orderLine]) {
                 this.allAvailableAreas[orderLine][areaType].forEach(function (area) {
                     if (this.availableAreas[areaType] == undefined) {
@@ -440,28 +444,48 @@ var MasterOrderLine = {
             this.selectedAreas = selectedAreas;
         },
         updateAvailableProjections: function () {
-            var availableProjections = {};
+            var allAvailableProjections = {};
+            for (orderLineUuid in this.allAvailableAreas) {
+                allAvailableProjections[orderLineUuid] = {};
+            }
             var selectedAreas = this.selectedAreas !== undefined ? this.selectedAreas : false;
             if (selectedAreas) {
                 selectedAreas.forEach(function (selectedArea) {
+
                     for (orderLine in selectedArea.allAvailableProjections) {
                         selectedArea.allAvailableProjections[orderLine].forEach(function (projection) {
-                            if (availableProjections[projection.code] == undefined) {
-                                availableProjections[projection.code] = projection;
-                                availableProjections[projection.code].areas = [];
-                            }
-                            var isAllreadyAddedInfo = this.isAllreadyAdded(availableProjections[projection.code].areas, selectedArea, "code");
-                            if (!isAllreadyAddedInfo.added) {
-                                availableProjections[projection.code].areas.push(selectedArea);
-                            }
+
+                            selectedArea.orderLineUuids.forEach(function (orderLineUuid) {
+
+                                if (allAvailableProjections[orderLineUuid] == undefined) {
+                                    allAvailableProjections[orderLineUuid] = {};
+                                }
+
+                                if (allAvailableProjections[orderLineUuid][projection.code] == undefined) {
+                                    allAvailableProjections[orderLineUuid][projection.code] = projection;
+                                    allAvailableProjections[orderLineUuid][projection.code].areas = [];
+                                }
+                                var isAllreadyAddedInfo = this.isAllreadyAdded(allAvailableProjections[orderLineUuid][projection.code].areas, selectedArea, "code");
+                                if (!isAllreadyAddedInfo.added) {
+                                    allAvailableProjections[orderLineUuid][projection.code].areas.push(selectedArea);
+                                }
+
+
+                            }.bind(this))
+
+
                         }.bind(this))
                     }
+
                 }.bind(this));
             }
-            return this.availableProjections = availableProjections;
+            return this.$parent.masterOrderLine.allAvailableProjections = allAvailableProjections;
         },
         updateAvailableFormats: function () {
             /*   var availableFormats = {};
+            for (orderLineUuid in this.allAvailableAreas) {
+                allAvailableProjections[orderLineUuid] = {};
+            }
                var selectedAreas = this.selectedAreas !== undefined ? this.selectedAreas : false;
                if (selectedAreas) {
                    selectedAreas.forEach(function (selectedArea) {
@@ -526,7 +550,7 @@ var mainVueModel = new Vue({
             allSelectedAreas: {},
             allAvailableProjections: {},
             allAvailableFormats: {},
-            selectedProjections: [],
+            allSelectedProjections: {},
             selectedFormats: []
         }
     },
@@ -638,6 +662,8 @@ var mainVueModel = new Vue({
                 }
 
                 var uuid = metadata.uuid;
+
+                this.masterOrderLine.allAvailableProjections[uuid] = {};
 
                 orderLines[key].capabilities._links.forEach(function (link) {
                     if (link.rel == "http://rel.geonorge.no/download/order") {
