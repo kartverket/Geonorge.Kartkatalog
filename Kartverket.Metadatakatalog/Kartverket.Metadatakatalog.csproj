@@ -264,6 +264,7 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\SearchIndex\SearchIndexDoc.cs" />
     <Compile Include="Service\Application\IApplicationService.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Service\Application\ApplicationService.cs" />

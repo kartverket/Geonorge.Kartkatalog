@@ -36,5 +36,61 @@ namespace Kartverket.Metadatakatalog.Models
         public string DataAccess { get; set; }
         public string ParentIdentifier { get; set; }
 
+        public SearchResultItem()
+        {
+
+        }
+
+        public SearchResultItem(object doc)
+        {
+            if (doc is MetadataIndexDoc)
+            {
+                MetadataIndexDoc metadataIndexDoc = (MetadataIndexDoc)doc;
+                SetSearchIndexDoc(metadataIndexDoc);
+            }
+            else if (doc is ServiceIndexDoc)
+            {
+                ServiceIndexDoc serviceIndexDoc = (ServiceIndexDoc)doc;
+                SetSearchIndexDoc(serviceIndexDoc);
+            }
+            if (doc is ApplicationIndexDoc)
+            {
+                ApplicationIndexDoc applicationIndexDoc = (ApplicationIndexDoc)doc;
+                SetSearchIndexDoc(applicationIndexDoc);
+            }
+        }
+
+        private void SetSearchIndexDoc(SearchIndexDoc doc)
+        {
+            Uuid = doc.Uuid;
+            Title = doc.Title;
+            Abstract = doc.Abstract;
+            Organization = doc.Organizationgroup;
+            Theme = doc.Theme;
+            Type = doc.Type;
+            OrganizationLogoUrl = doc.OrganizationLogoUrl;
+            ThumbnailUrl = doc.ThumbnailUrl;
+            DistributionUrl = doc.DistributionUrl;
+            DistributionProtocol = doc.DistributionProtocol;
+            MaintenanceFrequency = doc.MaintenanceFrequency;
+            DistributionName = doc.DistributionName;
+            NationalInitiative = doc.NationalInitiative;
+            ServiceDistributionNameForDataset = doc.ServiceDistributionNameForDataset;
+            ServiceDistributionUrlForDataset = doc.ServiceDistributionUrlForDataset;
+            ServiceDistributionProtocolForDataset = doc.ServiceDistributionProtocolForDataset;
+            ServiceDistributionUuidForDataset = doc.ServiceDistributionUuidForDataset;
+            LegendDescriptionUrl = doc.LegendDescriptionUrl;
+            ProductSheetUrl = doc.ProductSheetUrl;
+            ProductSpecificationUrl = doc.ProductSpecificationUrl;
+            DatasetServices = doc.DatasetServices;
+            ServiceDatasets = doc.ServiceDatasets;
+            Bundles = doc.Bundles;
+            ServiceLayers = doc.ServiceLayers;
+            AccessConstraint = doc.AccessConstraint;
+            OtherConstraintsAccess = doc.OtherConstraintsAccess;
+            DataAccess = doc.DataAccess;
+            ServiceDistributionAccessConstraint = doc.ServiceDistributionAccessConstraint;
+            ParentIdentifier = doc.ParentIdentifier;
+        }
     }
 }

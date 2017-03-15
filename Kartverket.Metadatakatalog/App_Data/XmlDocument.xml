@@ -501,12 +501,6 @@
             Get related services, datasets and bundles for uuid
             </summary>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Service.PlaceResolver.GetAreas">
-            <summary>
-            Gets fylke og kommuner fra register i et dictionary
-            </summary>
-            <returns></returns>
-        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Facet.FacetField">
             <summary>
             The name of the facet field
@@ -731,6 +725,12 @@
         <member name="M:Kartverket.Metadatakatalog.Models.SearchParameters.BuildFilterQueries">
             <summary>
             Builds a solr Filter query based on "Facets" parameter
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Service.PlaceResolver.GetAreas">
+            <summary>
+            Gets fylke og kommuner fra register i et dictionary
             </summary>
             <returns></returns>
         </member>

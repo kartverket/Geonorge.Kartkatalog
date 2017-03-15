@@ -94,38 +94,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 {
                     Log.Debug(doc.Score + " " + doc.Title + " " + doc.Uuid);
 
-                    var item = new SearchResultItem
-                    {
-                        Uuid = doc.Uuid,
-                        Title = doc.Title,
-                        Abstract = doc.Abstract,
-                        Organization = doc.Organizationgroup,
-                        Theme = doc.Theme,
-                        Type = doc.Type,
-                        OrganizationLogoUrl = doc.OrganizationLogoUrl,
-                        ThumbnailUrl = doc.ThumbnailUrl,
-                        DistributionUrl = doc.DistributionUrl,
-                        DistributionProtocol = doc.DistributionProtocol,
-                        MaintenanceFrequency = doc.MaintenanceFrequency,
-                        DistributionName = doc.DistributionName,
-                        NationalInitiative = doc.NationalInitiative,
-                        ServiceDistributionNameForDataset = doc.ServiceDistributionNameForDataset,
-                        ServiceDistributionUrlForDataset = doc.ServiceDistributionUrlForDataset,
-                        ServiceDistributionProtocolForDataset = doc.ServiceDistributionProtocolForDataset,
-                        ServiceDistributionUuidForDataset = doc.ServiceDistributionUuidForDataset,
-                        LegendDescriptionUrl = doc.LegendDescriptionUrl,
-                        ProductSheetUrl = doc.ProductSheetUrl,
-                        ProductSpecificationUrl = doc.ProductSpecificationUrl,
-                        DatasetServices = doc.DatasetServices,
-                        ServiceDatasets = doc.ServiceDatasets,
-                        Bundles = doc.Bundles,
-                        ServiceLayers = doc.ServiceLayers,
-                        AccessConstraint = doc.AccessConstraint,
-                        OtherConstraintsAccess = doc.OtherConstraintsAccess,
-                        DataAccess = doc.DataAccess,
-                        ServiceDistributionAccessConstraint = doc.ServiceDistributionAccessConstraint,
-                        ParentIdentifier = doc.ParentIdentifier
-                    };
+                    var item = new SearchResultItem(doc);
                     items.Add(item);
                 }
             }
