@@ -18,6 +18,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string DownloadUrl { get; set; }
         public string ServiceUrl { get; set; }
         public string DistributionProtocol { get; set; }
+        public string DistributionType { get; set; }
         public bool IsOpendata { get; set; }
         public bool IsRestricted { get; set; }
         public bool IsOffline { get; set; }
@@ -98,6 +99,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             OrganizationLogoUrl = item.OrganizationLogoUrl;
             ThumbnailUrl = item.ThumbnailUrl;
             MaintenanceFrequency = item.MaintenanceFrequency;
+            DistributionType = item.DistributionType;
             
             DistributionProtocol = item.DistributionProtocol;
             if (!string.IsNullOrEmpty(item.OtherConstraintsAccess) && item.OtherConstraintsAccess.ToLower() == "no restrictions") IsOpendata = true;

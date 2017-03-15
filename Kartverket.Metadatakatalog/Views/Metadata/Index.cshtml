@@ -1,6 +1,6 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
 @using Resources;
-@model Kartverket.Metadatakatalog.Models.MetadataViewModel
+@model MetadataViewModel
 @{
     ViewBag.Title = Model.Title + (Model.ContactMetadata != null ? " - " + Model.ContactMetadata.Organization : "");
     ViewBag.MetaDescription = Model.Abstract;

@@ -15,6 +15,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string DistributionUrl { get; set; }
         public string DistributionProtocol { get; set; }
         public string DistributionName { get; set; }
+        public string DistributionType { get; set; }
         public string ShowDetailsUrl { get; set; }
         public string MaintenanceFrequency { get; set; }
         public List<string> NationalInitiative { get; set; }
@@ -52,6 +53,7 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 ServiceIndexDoc serviceIndexDoc = (ServiceIndexDoc)doc;
                 SetSearchIndexDoc(serviceIndexDoc);
+                DistributionType = serviceIndexDoc.DistributionType;
             }
             if (doc is ApplicationIndexDoc)
             {
