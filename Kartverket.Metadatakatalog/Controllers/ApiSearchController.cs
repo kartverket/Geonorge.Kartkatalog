@@ -11,6 +11,7 @@ using SearchParameters = Kartverket.Metadatakatalog.Models.Api.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
 using System;
 using Kartverket.Metadatakatalog.Service;
+using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 
 
 // Metadata search api examples
@@ -41,15 +42,17 @@ namespace Kartverket.Metadatakatalog.Controllers
     {
         private readonly ISearchService _searchService;
         private readonly IApplicationService _applicationService;
+        private readonly IServiceDirectoryService _serviceDirectoryService;
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IMetadataService _metadataService;
 
-        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService)
+        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService)
         {
             _searchService = searchService;
             _metadataService = metadataService;
             _applicationService = applicationService;
+            _serviceDirectoryService = serviceDirectoryService;
         }
 
         /// <summary>
@@ -92,6 +95,30 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
                 searchParameters.AddDefaultFacetsIfMissing();
                 Models.SearchResult searchResult = _applicationService.Applications(searchParameters);
+
+                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+                return new SearchResult(searchResult, urlHelper);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return null;
+            }
+        }
+
+        [System.Web.Http.Route("api/servicedirectory")]
+        [System.Web.Http.HttpGet]
+        public SearchResult servicedirectory([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
+        {
+            try
+            {
+                if (parameters == null)
+                    parameters = new SearchParameters();
+
+                Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
+                searchParameters.AddDefaultFacetsIfMissing();
+                Models.SearchResult searchResult = _serviceDirectoryService.Services(searchParameters);
 
                 var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
 
