@@ -197,7 +197,7 @@ var OrderLine = {
     template: '#order-line-template',
     data: function () {
         var data = {
-            selectedFormats: []
+            expanded: false
         }
         return data;
     },

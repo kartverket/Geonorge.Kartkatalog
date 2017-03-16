@@ -80,35 +80,35 @@
 
 
 <script type="text/x-template" id="order-line-template">
-    <div>
+    <div v-bind:class="[expanded ? '' : 'readonly']">
         <!--<h2></h2>-->
 
-        <a v-bind:href="metadata.url">{{ metadata.name }}</a>
-        <div class="pull-right margin-top-10">
-            <span v-on:click="$parent.cloneSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Bruk valg på alle datasett" class="btn"><span class="fa fa-clone"></span></span>
-            <span v-on:click="$parent.clearSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Fjern valg fra datasett" class="btn"><span class="fa fa-eraser"></span></span>
-            <span v-on:click="removeOrderItem(orderItem)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
-        </div>
-        <div class="clearfix"></div>
-
-        <div class="row">
-
-            <div class="col-md-4">
+        <span v-on:click="expanded = !expanded" class="indicator" v-bind:class="[expanded ? 'active' : '']"></span><a v-bind:href="metadata.url">{{ metadata.name }}</a>
+        <span v-if="selectedAreas">{{ selectedAreas.length }}</span>
+        <span v-if="selectedProjections">{{ selectedProjections.length }}</span>
+        <span v-if="selectedFormats">{{ selectedFormats.length }}</span>
+            <div class="pull-right margin-top-10">
+                <span v-on:click="$parent.cloneSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Bruk valg på alle datasett" class="btn"><span class="fa fa-clone"></span></span>
+                <span v-on:click="$parent.clearSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Fjern valg fra datasett" class="btn"><span class="fa fa-eraser"></span></span>
+                <span v-on:click="removeOrderItem(orderItem)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
+            </div>
+            <div class="clearfix"></div>
+        <div v-show="expanded" class="row orderline-fields">
+            <div class="col-md-4 orderline-field">
                 <p>Område</p>
                 <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="false"></div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 orderline-field">
                 <p>Projeksjon</p>
                 <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                 <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="false"></div>
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 orderline-fields">
                 <p>Format</p>
                 <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                 <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="false"></div>
             </div>
-
         </div>
     </div>
 </script>

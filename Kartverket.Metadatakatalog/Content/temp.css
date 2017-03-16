@@ -10,6 +10,22 @@
         content: none;
     }
 
+#orderlist .indicator {
+    background-image: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/arrow-right.svg);
+    width: 11px;
+    height: 12px;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: 50%;
+    display: inline-block;
+    margin-right: 2px;
+}
+
+    #orderlist .indicator.active {
+        background-image: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/arrow-down.svg);
+    }
+
 #orderlist .orderlines {
     margin-bottom: 22px;
 }
@@ -202,3 +218,42 @@
     cursor: pointer;
     text-decoration: underline;
 }
+
+
+
+#orderlist .orderline > .readonly {
+}
+
+    #orderlist .orderline > .readonly p {
+        display: none;
+    }
+
+    #orderlist .orderline > .readonly .orderline-fields {
+        margin-left: 0;
+        margin-right: 0;
+        display: inline-block;
+    }
+
+        #orderlist .orderline > .readonly .orderline-fields .orderline-field {
+        }
+
+    #orderlist .orderline > .readonly .custom-select-list {
+    }
+
+        #orderlist .orderline > .readonly .custom-select-list .custom-select-list-input-container {
+            border: none !important;
+            background: none;
+        }
+
+            #orderlist .orderline > .readonly .custom-select-list .custom-select-list-input-container .custom-select-list-selected {
+                padding: .2em .6em .3em 0.6em;
+            }
+
+            #orderlist .orderline > .readonly .custom-select-list .custom-select-list-input-container .custom-select-list-input {
+                display: none;
+            }
+
+
+            #orderlist .orderline > .readonly .custom-select-list .custom-select-list-input-container .custom-select-list-selected .custom-select-list-remove-button {
+                display: none;
+            }
