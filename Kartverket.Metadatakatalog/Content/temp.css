@@ -52,6 +52,12 @@
         background: #f1f2f2;
     }
 
+    #orderlist .orderline .orderline-field-counter {
+        height: 28px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
 .custom-select-list .custom-select-list-input-container {
     border: 1px solid #cfcfcf !important;
     border-radius: 0;
