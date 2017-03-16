@@ -68,9 +68,12 @@ namespace Kartverket.Metadatakatalog.Models
 
             foreach (var defaultFacet in defaultFacets)
             {
-                if (Facets.All(f => f.Name != defaultFacet))
+                if (Facets != null)
                 {
-                    Facets.Add(new FacetParameter { Name = defaultFacet });
+                    if (Facets.All(f => f.Name != defaultFacet))
+                    {
+                        Facets.Add(new FacetParameter { Name = defaultFacet });
+                    }
                 }
             }
         }

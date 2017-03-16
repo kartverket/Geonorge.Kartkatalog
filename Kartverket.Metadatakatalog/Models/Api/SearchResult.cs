@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Kartverket.Metadatakatalog.Models.Api
@@ -19,6 +20,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             NumFound = searchResult.NumFound;
             Results = Metadata.CreateFromList(searchResult.Items, urlHelper);
             Facets = Facet.CreateFromList(searchResult.Facets);
+            Type = searchResult.Type;
         }
         /// <summary>
         /// Number of items found
@@ -40,6 +42,22 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// Result grouped by facets
         /// </summary>
         public List<Facet> Facets { get; set; }
+        public string Type { get; set; }
+
+        public bool IsApplication()
+        {
+            return Type == "application";
+        }
+
+        public bool IsServiceDirectory()
+        {
+            return Type == "serviceDirectory";
+        }
+
+        public bool IsSearch()
+        {
+            return Type == "search";
+        }
     }
 
 }

@@ -33,10 +33,11 @@ namespace Kartverket.Metadatakatalog.Service.Application
                     Facet = parameters.BuildFacetParameters(),
                     Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
                     "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
-                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier" }
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "DistributionType" }
                     //ExtraParams = new Dictionary<string, string> {
                     //    {"q", ""}
                     //}
+                    
                 });
 
                 return CreateSearchResults(queryResults, parameters);
@@ -63,8 +64,18 @@ namespace Kartverket.Metadatakatalog.Service.Application
                 Facets = facets,
                 Limit = parameters.Limit,
                 Offset = parameters.Offset,
-                NumFound = queryResults.NumFound
+                NumFound = queryResults.NumFound,
+                Type = GetType(queryResults),
             };
+        }
+
+        private string GetType(SolrQueryResults<ApplicationIndexDoc> queryResults)
+        {
+            if (queryResults != null)
+            {
+                return queryResults[0].ClassName;
+            }
+            return null;
         }
 
         private List<Facet> ParseFacetResults(SolrQueryResults<ApplicationIndexDoc> queryResults)

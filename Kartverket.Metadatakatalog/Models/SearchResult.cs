@@ -11,6 +11,7 @@ namespace Kartverket.Metadatakatalog.Models
         public int NumFound { get; set; }
         public int Limit { get; set; }
         public int Offset { get; set; }
+        public string Type { get; set; }
 
         public SearchResult()
         {
@@ -24,6 +25,7 @@ namespace Kartverket.Metadatakatalog.Models
             NumFound = otherResult.NumFound;
             Limit = otherResult.Limit;
             Offset = otherResult.Offset;
+            Type = otherResult.Type;
         }
 
         public string GetOrganizationNameFromFirstItem()

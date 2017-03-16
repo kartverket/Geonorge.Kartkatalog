@@ -93,8 +93,18 @@ namespace Kartverket.Metadatakatalog.Service.Application
                 Facets = facets,
                 Limit = parameters.Limit,
                 Offset = parameters.Offset,
-                NumFound = queryResults.NumFound
+                NumFound = queryResults.NumFound,
+                Type = GetType(queryResults)
             };
+        }
+
+        private string GetType(SolrQueryResults<MetadataIndexDoc> queryResults)
+        {
+            if (queryResults != null)
+            {
+                return queryResults[0].ClassName;
+            }
+            return null;
         }
 
         private List<Facet> ParseFacetResults(SolrQueryResults<MetadataIndexDoc> queryResults)

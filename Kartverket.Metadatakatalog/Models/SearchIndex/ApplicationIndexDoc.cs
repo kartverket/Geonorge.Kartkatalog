@@ -2,7 +2,10 @@
 {
     public class ApplicationIndexDoc : SearchIndexDoc
     {
-
+        public ApplicationIndexDoc()
+        {
+            ClassName = "application";
+        }
     }
 
 }

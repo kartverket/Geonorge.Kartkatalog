@@ -2,6 +2,10 @@
 {
     public class MetadataIndexDoc : SearchIndexDoc
     {
+        public MetadataIndexDoc()
+        {
+            ClassName = "search";
+        }
     }
 
 }

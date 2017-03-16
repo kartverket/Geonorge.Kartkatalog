@@ -62,12 +62,12 @@ namespace Kartverket.Metadatakatalog.Formatter
 
             using (var writer = new StreamWriter(writeStream, effectiveEncoding))
             {
-                    var data = value as SearchResult;
-                    if (data == null)
-                    {
-                        throw new InvalidOperationException("Cannot serialize type");
-                    }   
-                    Write(data, writer);
+                var data = value as SearchResult;
+                if (data == null)
+                {
+                    throw new InvalidOperationException("Cannot serialize type");
+                }
+                Write(data, writer);
             }
         }
 
@@ -75,8 +75,55 @@ namespace Kartverket.Metadatakatalog.Formatter
         // Helper methods for serializing SearchResult to CSV format. 
         private void Write(SearchResult data, StreamWriter writer)
         {
+
+            if (data.IsSearch())
+            {
+                WriteSearchLines(data, writer);
+            }
+            else if (data.IsApplication())
+            {
+                WriteApplicationLines(data, writer);
+            }
+            else if (data.IsServiceDirectory())
+            {
+                WriteServiceDirectoryLines(data, writer);
+            }
+        }
+
+        private void WriteApplicationLines(SearchResult data, StreamWriter writer)
+        {
+            writer.WriteLine("Tittel;Type;Organisasjon;Uuid;Service url;");
+            foreach (var meta in data.Results)
+            {
+                writer.WriteLine(
+                    Escape(meta.Title) + ";" +
+                    Escape(meta.DistributionType) + ";" +
+                    Escape(meta.Organization) + ";" +
+                    Escape(meta.Uuid) + ";" +
+                    Escape(meta.DistributionUrl)
+                );
+            }
+        }
+
+        private void WriteServiceDirectoryLines(SearchResult data, StreamWriter writer)
+        {
+            writer.WriteLine("Tittel;Type;Organisasjon;Uuid;Service url;");
+            foreach (var meta in data.Results)
+            {
+                writer.WriteLine(
+                    Escape(meta.Title) + ";" +
+                    Escape(meta.DistributionType) + ";" +
+                    Escape(meta.Organization) + ";" +
+                    Escape(meta.Uuid) + ";" +
+                    Escape(meta.DistributionUrl)
+                );
+            }
+        }
+
+        private void WriteSearchLines(SearchResult data, StreamWriter writer)
+        {
             writer.WriteLine("Tittel;Type;Tema;Organisasjon;Åpne data;DOK-data;Uuid;Wms-url;Wfs-url;Atom-feed");
-            foreach(var meta in data.Results)
+            foreach (var meta in data.Results)
             {
                 writer.WriteLine(
                     Escape(meta.Title) + ";" +
@@ -92,6 +139,7 @@ namespace Kartverket.Metadatakatalog.Formatter
                 );
             }
         }
+
 
 
         static char[] _specialChars = new char[] { ';', '\n', '\r', '"' };

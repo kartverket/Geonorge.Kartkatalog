@@ -11,11 +11,6 @@ using SearchParameters = Kartverket.Metadatakatalog.Models.Api.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
 using System;
 using Kartverket.Metadatakatalog.Service;
-using System.Web.Configuration;
-using System.Web.Http.Description;
-using System.Net;
-using System.Collections.Specialized;
-using System.Net.Http.Formatting;
 
 
 // Metadata search api examples
@@ -45,14 +40,16 @@ namespace Kartverket.Metadatakatalog.Controllers
     public class ApiSearchController : ApiController
     {
         private readonly ISearchService _searchService;
+        private readonly IApplicationService _applicationService;
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IMetadataService _metadataService;
 
-        public ApiSearchController(ISearchService searchService, IMetadataService metadataService)
+        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService)
         {
             _searchService = searchService;
             _metadataService = metadataService;
+            _applicationService = applicationService;
         }
 
         /// <summary>
@@ -62,9 +59,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         public SearchResult Get([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
         {
             try
-            {
-
-            
+            {            
                 if (parameters == null)
                     parameters = new SearchParameters();
 
@@ -82,6 +77,31 @@ namespace Kartverket.Metadatakatalog.Controllers
                 return null;
             }
 
+        }
+
+
+        [System.Web.Http.Route("api/application")]
+        [System.Web.Http.HttpGet]
+        public SearchResult applications([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
+        {
+            try
+            {
+                if (parameters == null)
+                    parameters = new SearchParameters();
+
+                Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
+                searchParameters.AddDefaultFacetsIfMissing();
+                Models.SearchResult searchResult = _applicationService.Applications(searchParameters);
+
+                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+                return new SearchResult(searchResult, urlHelper);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return null;
+            }
         }
 
         /// <summary>

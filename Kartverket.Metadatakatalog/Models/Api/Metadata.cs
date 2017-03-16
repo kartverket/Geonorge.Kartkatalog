@@ -120,12 +120,16 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public string ServiceWfsDistributionUrlForDataset { get; set; }
 
+        /// <summary>
+        /// DistributionType
+        /// </summary>
+        //public string DistributionType { get; set; } 
+        public string DistributionType { get; set; }
+
         public Metadata() { 
         }
         public Metadata(SearchResultItem item, UrlHelper urlHelper)
         {
-
-
             Uuid = item.Uuid;
             Title = item.Title;
             Abstract = item.Abstract;
@@ -137,6 +141,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             DistributionUrl = item.DistributionUrl;
             DistributionProtocol = item.DistributionProtocol;
             DistributionName = item.DistributionName;
+            DistributionType = item.DistributionType;
             if (urlHelper != null)
             {
                 ShowDetailsUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/uuid/" + item.Uuid;

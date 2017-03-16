@@ -160,6 +160,8 @@ namespace Kartverket.Metadatakatalog.Models
         public string ParentIdentifier { get; set; }
 
         public string DistributionType { get; internal set; }
+
+        public string ClassName { get; set; }
     }
 
 }

@@ -662,6 +662,11 @@
             Url for service mapped to dataset (wfs)
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.DistributionType">
+            <summary>
+            DistributionType
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.text">
             <summary>
             The text to search for
