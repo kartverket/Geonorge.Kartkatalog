@@ -11,6 +11,7 @@ namespace Kartverket.Metadatakatalog.Service.Application
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly ISolrOperations<ApplicationIndexDoc> _solrInstance;
+        RegisterFetcher register;
 
         public ApplicationService()
         {
@@ -84,8 +85,9 @@ namespace Kartverket.Metadatakatalog.Service.Application
             return facets;
         }
 
-        private static List<SearchResultItem> ParseResultDocuments(SolrQueryResults<ApplicationIndexDoc> queryResults)
+        private List<SearchResultItem> ParseResultDocuments(SolrQueryResults<ApplicationIndexDoc> queryResults)
         {
+            register = new RegisterFetcher();
             var items = new List<SearchResultItem>();
             if (queryResults != null)
             {
@@ -94,6 +96,7 @@ namespace Kartverket.Metadatakatalog.Service.Application
                     Log.Debug(doc.Score + " " + doc.Title + " " + doc.Uuid);
 
                     var item = new SearchResultItem(doc);
+                    item.DistributionType = register.GetDistributionType(item.DistributionProtocol);
                     items.Add(item);
                 }
             }

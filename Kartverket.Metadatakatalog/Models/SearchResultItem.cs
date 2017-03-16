@@ -53,7 +53,6 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 ServiceIndexDoc serviceIndexDoc = (ServiceIndexDoc)doc;
                 SetSearchIndexDoc(serviceIndexDoc);
-                DistributionType = serviceIndexDoc.DistributionType;
             }
             if (doc is ApplicationIndexDoc)
             {
@@ -93,6 +92,7 @@ namespace Kartverket.Metadatakatalog.Models
             DataAccess = doc.DataAccess;
             ServiceDistributionAccessConstraint = doc.ServiceDistributionAccessConstraint;
             ParentIdentifier = doc.ParentIdentifier;
+            DistributionType = doc.DistributionType;
         }
     }
 }

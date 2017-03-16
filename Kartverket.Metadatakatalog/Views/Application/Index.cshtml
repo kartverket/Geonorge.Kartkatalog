@@ -23,7 +23,7 @@
     <div class="row">
         <div class="col-sm-12">
             <h1 class="small-h1">
-                Kartkatalogen
+                Kartløsninger i Norge
             </h1>
         </div>
         <div class="col-sm-12">
@@ -232,64 +232,33 @@
 
 <span class="separator-small separator-gray margin-bottom-10"></span>
 
-
-
-
 <div class="row">
-    <div class="col-sm-12 col-md-9">
+    <div class="col-md-12">
 
         @if (Model.Result != null)
         {
             <div id="tableView" class="search-results">
                 <div class="row search-results-table-heading">
-                    <div class="col-sm-3 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-3 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-4 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-4 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
 
                     <div class="col-sm-2"><p>Type</p></div>
+
                     <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Les mer</p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Vis i kart</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Last ned</p></div>
                 </div>
                 <div class="menu-separator search-results-table-heading"></div>
                 @foreach (var item in Model.Result.Items)
                 {
-
-                    string addToCartUrl = "";
-                    string addToCartClass = "add-to-cart-btn";
-                    if (item.ShowDownloadService())
-                    {
-                        if (item.IsRestricted || item.IsOffline)
-                        {
-                            string addToCartEventParamater = "?addtocart_event_id=addToCart-" + item.Uuid;
-                            if (Request.Url.AbsoluteUri.Contains("?"))
-                            {
-                                addToCartEventParamater = "&addtocart_event_id=addToCart-" + item.Uuid;
-                            }
-
-                            string downloadSignInUrl = Html.DownloadUrl()
-                                                     + "AuthServices/SignIn?ReturnUrl="
-                                                     + Url.Encode(Request.Url.AbsoluteUri)
-                                                     + Url.Encode(addToCartEventParamater);
-
-                            addToCartUrl = Html.KartkatalogenUrl()
-                                         + "AuthServices/SignIn?ReturnUrl="
-                                         + Url.Encode(downloadSignInUrl);
-
-
-                            addToCartClass = "add-to-cart-btn prevent-action";
-
-
-                        }
-                    }
                     <div class="row result-row metadata">
 
                         <div class="col-sm-1 search-results-logo">
                             @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
                             {
-                                System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
+                                Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
                                 string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
                                 <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold">
                                     <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
@@ -297,7 +266,7 @@
                             }
                         </div>
 
-                        <div class="col-sm-3 search-results-title">
+                        <div class="col-sm-4 search-results-title">
                             <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" class="show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
                                 <p class="role-button search-results-name" role="button">@item.Title</p>
                             </a>
@@ -325,12 +294,12 @@
                                 </p>
                                 <p>
                                     Tilgjengelig som:
-                                    <span title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
+                                    <span title="Tilgjengelig som @item.DistributionType" style="width:auto" class="label label-tjeneste">@item.DistributionType</span>
                                 </p>
                             </div>
                         </div>
                         <div class="col-sm-2 search-results-type">
-                            <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
+                            <span title="@item.DistributionType" class="label label-tjeneste" style="width:auto">@item.DistributionType</span>
                         </div>
                         <div class="col-sm-3 search-results-organization">
                             <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
@@ -357,7 +326,7 @@
                             }
                         </div>
 
-                        <div class="col-sm-2 search-results-action-buttons">
+                        <div class="col-sm-2 search-results-action-buttons pull-right">
 
                             <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="btn btn-default show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
                                 <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
@@ -380,55 +349,6 @@
                                     <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
-
-
-                            @if (item.ShowDownloadService())
-                            {
-                                string relativeOrganizationLogoUrl = "";
-                                string relativeDowloadUrl = "";
-
-                                if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
-                                {
-                                    System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
-                                    relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                }
-
-                                if (!string.IsNullOrWhiteSpace(item.DownloadUrl))
-                                {
-                                    System.Uri downloadUrl = new Uri(item.DownloadUrl);
-                                    relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
-                                }
-
-                                <a id='addToCart-@item.Uuid'
-                                   href='@addToCartUrl'
-                                   data-toggle='tooltip'
-                                   data-placement='bottom'
-                                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                                   title='Legg til @item.Title i kurv'
-                                   class='@addToCartClass btn btn-default'
-                                   itemname='@item.Title'
-                                   itemuuid='@item.Uuid'
-                                   itemurl='/metadata/uuid/@item.Uuid'
-                                   itemorglogo='@relativeOrganizationLogoUrl'
-                                   itemdisturl='@relativeDowloadUrl'
-                                   itemtheme='@item.Theme'
-                                   itemorgname='@item.Organization'>
-                                    <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
-                                </a>
-                            }
-                            else if (item.ShowDownloadLink())
-                            {
-                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
-                                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a title="Last ned datasett for @item.Title" class="disabled btn btn-default">
-                                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                                </a>
-                            }
-
                         </div>
 
                         <div class="col-xs-1 search-results-action-icons">
@@ -457,65 +377,6 @@
                                     <span class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
-                        </div>
-                        <div class="col-xs-1 search-results-action-icons action-download">
-                            @if (item.ShowDownloadService())
-                            {
-                                string relativeOrganizationLogoUrl = "";
-                                string relativeDowloadUrl = "";
-
-                                if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
-                                {
-                                    System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
-                                    relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                }
-
-                                if (!string.IsNullOrWhiteSpace(item.DownloadUrl))
-                                {
-                                    System.Uri downloadUrl = new Uri(item.DownloadUrl);
-                                    relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
-                                }
-
-                                <a id='addToCart-@item.Uuid'
-                                   href='@addToCartUrl'
-                                   data-toggle='tooltip'
-                                   data-placement='bottom'
-                                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                                   title='Legg til @item.Title i kurv'
-                                   class='@addToCartClass'
-                                   itemname='@item.Title'
-                                   itemuuid='@item.Uuid'
-                                   itemurl='/metadata/uuid/@item.Uuid'
-                                   itemorglogo='@relativeOrganizationLogoUrl'
-                                   itemdisturl='@relativeDowloadUrl'
-                                   itemtheme='@item.Theme'
-                                   itemorgname='@item.Organization'>
-                                    <span class="custom-icon custom-icon-handlekurv"></span>
-                                </a>
-                            }
-                            else if (item.ShowDownloadLink())
-                            {
-                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @item.Title" target="_blank">
-                                    <span class="custom-icon custom-icon-lastned"></span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a title="Last ned datasett for @item.Title" class="disabled">
-                                    <span class="custom-icon custom-icon-lastned"></span>
-                                </a>
-                            }
-                        </div>
-
-
-                        <div class="col-sm-2 search-results-list-image">
-                            @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
-                            {
-                                <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                    <img src="@Url.Action("Index", "Thumbnail", new { uuid = item.Uuid, type = "small" })" />
-                                </a>
-                            }
-
                         </div>
                     </div>
 
@@ -550,13 +411,6 @@
 
                                         }
     </div>
-    <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
-        <aside class="facet-filter-container"">
-            <h3 class="">Filtrer søket på:</h3>
-            <span class="separator-small"></span>
-            @Html.Partial("_FacetFilter", Model)
-        </aside>
-    </div>
 </div>
 <script>
 @foreach (var item in Model.Result.Items)
@@ -564,6 +418,6 @@
     if (item.ShowMapLink() || item.ShowServiceMapLink())
     {
       @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                          }
+                                  }
 }
 </script>

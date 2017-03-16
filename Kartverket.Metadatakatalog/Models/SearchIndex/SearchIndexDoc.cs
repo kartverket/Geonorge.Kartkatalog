@@ -158,6 +158,8 @@ namespace Kartverket.Metadatakatalog.Models
 
         [SolrField("parentidentifier")]
         public string ParentIdentifier { get; set; }
+
+        public string DistributionType { get; internal set; }
     }
 
 }
