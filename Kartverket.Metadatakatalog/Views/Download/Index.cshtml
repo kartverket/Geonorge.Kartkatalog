@@ -37,6 +37,7 @@
                 <a class="btn" v-on:click="$root.selectFromMap($parent)" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
             </div>
         </div>
+        <pre v-for="test in selected"> {{ test.orderLineUuids }} </pre>
 
     </div>
 </script>
@@ -76,6 +77,7 @@
                 <li v-on:click="selectFormat(format)" v-bind:class="{'is-selected': format.isSelected}" v-for="(format, formatName) in available">{{ format.name }}</li>
             </ul>
         </div>
+        <div v-for="test in available"> {{ test.name }}<pre v-for="testuuid in test.orderLineUuids">{{ testuuid }}</pre> </div>
     </div>
 </script>
 
@@ -120,7 +122,10 @@
         <div class="row">
             <div class="col-md-4">
                 <p>Område</p>
-                <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="true"></div>
+                <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="true">
+                   
+
+                </div>
             </div>
             <div class="col-md-4">
                 <p>Projeksjon</p>
@@ -132,6 +137,16 @@
                 <p>Format</p>
                 <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                 <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="true"></div>
+            </div>
+        </div>
+        <div v-for="selectedArea in selectedAreas">
+            {{ selectedArea.name }}
+            <div v-for="uuid in allAvailableFormats">
+                <span>UUID</span>
+                <div v-for="format in uuid">
+
+                    {{ format.name }}
+                </div>
             </div>
         </div>
     </div>

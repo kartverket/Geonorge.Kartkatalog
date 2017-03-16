@@ -146,7 +146,7 @@ var Areas = {
             this.$parent.updateAvailableProjections();
             this.$parent.updateAvailableFormats();
 
-               this.$parent.updateSelectedProjections();
+            this.$parent.updateSelectedProjections();
             //    this.$parent.updateSelectedFormats();
 
             //  this.$parent.validateAreas();
@@ -162,12 +162,12 @@ var Projections = {
         selectProjection: function (projection) {
             projection.isSelected = true;
             this.$parent.updateSelectedProjections();
-            this.$parent.validateAreas();
+            //  this.$parent.validateAreas();
         },
         removeSelectedProjection: function (projection) {
             projection.isSelected = false;
             this.$parent.updateSelectedProjections();
-            this.$parent.validateAreas();
+            //   this.$parent.validateAreas();
         }
     }
 };
@@ -180,12 +180,12 @@ var Formats = {
         selectFormat: function (format) {
             format.isSelected = true;
             this.$parent.updateSelectedFormats();
-            this.$parent.validateAreas();
+            //   this.$parent.validateAreas();
         },
         removeSelectedFormat: function (format) {
             format.isSelected = false;
             this.$parent.updateSelectedFormats();
-            this.$parent.validateAreas();
+            // this.$parent.validateAreas();
         }
     }
 };
@@ -193,7 +193,7 @@ var Formats = {
 
 
 var OrderLine = {
-    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections' ],
+    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections'],
     template: '#order-line-template',
     data: function () {
         var data = {
@@ -305,15 +305,15 @@ var OrderLine = {
             })
             return hasSelectedFormats;
         },
-        validateAreas: function () {
-            this.selectedAreas.forEach(function (selectedArea) {
-                selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea);
-                selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea);
-            }.bind(this));
-            setTimeout
-            setTimeout(function () { $("[data-toggle='tooltip']").tooltip(); }, 300);
-
-        }
+        /*  validateAreas: function () {
+              this.selectedAreas.forEach(function (selectedArea) {
+                  selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea);
+                  selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea);
+              }.bind(this));
+              setTimeout
+              setTimeout(function () { $("[data-toggle='tooltip']").tooltip(); }, 300);
+  
+          }*/
     },
     components: {
         'areas': Areas,
@@ -345,29 +345,26 @@ var MasterOrderLine = {
                     }
                     var areaIsAllreadyAddedInfo = this.isAllreadyAdded(this.availableAreas[areaType], area, "code");
 
+                    area.orderLineUuids = [];
+                    area.orderLineUuids.push(orderLine);
+
+                    if (area.allAvailableProjections == undefined) { area.allAvailableProjections = {} };
+                    if (area.allAvailableProjections[orderLine] == undefined) { area.allAvailableProjections[orderLine] = [] };
+                    area.allAvailableProjections[orderLine] = area.projections;
+                    for (projection in area.allAvailableProjections[orderLine]) {
+                        area.allAvailableProjections[orderLine][projection].orderLineUuids = area.orderLineUuids;
+                    }
+
+
+                    if (area.allAvailableFormats == undefined) { area.allAvailableFormats = {} };
+                    if (area.allAvailableFormats[orderLine] == undefined) { area.allAvailableFormats[orderLine] = [] };
+                    area.formats.forEach(function (format) {
+                        format.orderLineUuids = area.orderLineUuids;
+                        area.allAvailableFormats[orderLine].push(format);
+                    })
+
 
                     if (!areaIsAllreadyAddedInfo.added) {
-
-                        area.orderLineUuids = [];
-                        area.orderLineUuids.push(orderLine);
-
-                        if (area.allAvailableProjections == undefined) { area.allAvailableProjections = {} };
-                        if (area.allAvailableProjections[orderLine] == undefined) { area.allAvailableProjections[orderLine] = [] };
-                        area.allAvailableProjections[orderLine] = area.projections;
-
-                        for (projection in area.allAvailableProjections[orderLine]) {
-                                area.allAvailableProjections[orderLine][projection].orderLineUuids = area.orderLineUuids;
-                        }
-                       
-
-                        if (area.allAvailableFormats == undefined) { area.allAvailableFormats = {} };
-                        if (area.allAvailableFormats[orderLine] == undefined) { area.allAvailableFormats[orderLine] = [] };
-                        area.allAvailableFormats[orderLine] = area.formats;
-
-                        for (format in area.allAvailableFormats[orderLine]) {
-                            area.allAvailableFormats[orderLine][format].orderLineUuids = area.orderLineUuids;
-                        }
-
 
                         this.availableAreas[areaType].push(area);
                     } else {
@@ -377,16 +374,20 @@ var MasterOrderLine = {
                         if (area.allAvailableProjections[orderLine] == undefined) { area.allAvailableProjections[orderLine] = [] };
                         if (area.allAvailableFormats == undefined) { area.allAvailableFormats = {} };
                         if (area.allAvailableFormats[orderLine] == undefined) { area.allAvailableFormats[orderLine] = [] };
+                        /*     area.formats.forEach(function (format) {
+                                 format.orderLineUuids = area.orderLineUuids;
+                                 area.allAvailableFormats[orderLine].push(format);
+                             })
+                             */
 
                         this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.forEach(function (orderLineUuid) {
                             if (orderLineUuid == orderLine) orderLineUuidIsAdded = true;
                         })
-                    
-                        if (!orderLineUuidIsAdded) {
-                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
 
-                           
-                            
+                        if (!orderLineUuidIsAdded) {
+
+
+                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
 
                             if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] == undefined) {
                                 this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = [];
@@ -398,7 +399,6 @@ var MasterOrderLine = {
                             }
                             this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = area.formats;
 
-                            
                         }
                     }
                 }.bind(this))
@@ -451,23 +451,24 @@ var MasterOrderLine = {
                                 selectedAreas.push(area);
                             }
                         }.bind(this))
-                        if (area.projections.length == 1) {
-                            area.projections[0].isSelected = true;
-                        }
-                        if (area.formats.length == 1) {
-                            area.formats[0].isSelected = true;
-                        }
+                        /* if (area.projections.length == 1) {
+                             area.projections[0].isSelected = true;
+                         }
+                         if (area.formats.length == 1) {
+                             area.formats[0].isSelected = true;
+                         }*/
                     }
                 }.bind(this));
             }
             this.$parent.masterOrderLine.allSelectedAreas = allSelectedAreas;
             this.selectedAreas = selectedAreas;
+
         },
         updateAvailableProjections: function () {
-            var allAvailableProjections = {};
+            allAvailableProjections = {};
             var availableProjections = [];
             for (orderLineUuid in this.allAvailableAreas) {
-                allAvailableProjections[orderLineUuid] = {};
+                allAvailableProjections[orderLineUuid] = [];
             }
             var selectedAreas = this.selectedAreas !== undefined ? this.selectedAreas : false;
             if (selectedAreas) {
@@ -475,30 +476,35 @@ var MasterOrderLine = {
 
                     for (orderLine in selectedArea.allAvailableProjections) {
                         selectedArea.allAvailableProjections[orderLine].forEach(function (projection) {
-
                             selectedArea.orderLineUuids.forEach(function (orderLineUuid) {
+
+                                if (projection.areas == undefined) { projection.areas = [] };
+
+                                var isAllreadyAddedInfo = this.isAllreadyAdded(projection.areas, selectedArea, "code");
+                                if (!isAllreadyAddedInfo.added) {
+                                    projection.areas.push(selectedArea);
+                                }
 
                                 // allAvailableProjections
                                 if (allAvailableProjections[orderLineUuid] == undefined) {
-                                    allAvailableProjections[orderLineUuid] = {};
+                                    allAvailableProjections[orderLineUuid] = [];
                                 }
 
-                                if (allAvailableProjections[orderLineUuid][projection.code] == undefined) {
-                                    allAvailableProjections[orderLineUuid][projection.code] = projection;
-                                    allAvailableProjections[orderLineUuid][projection.code].areas = [];
-                                }
-                                var isAllreadyAddedInfo = this.isAllreadyAdded(allAvailableProjections[orderLineUuid][projection.code].areas, selectedArea, "code");
+                                var isAllreadyAddedInfo = this.isAllreadyAdded(allAvailableProjections[orderLineUuid], projection, "code");
                                 if (!isAllreadyAddedInfo.added) {
-                                    allAvailableProjections[orderLineUuid][projection.code].areas.push(selectedArea);
+                                    var formatIsSupportedForOrderLine = false;
+                                    var formatIsSupportedForAreas = false;
+                                    if (orderLine == orderLineUuid) formatIsSupportedForOrderLine = true;
+                                    if (formatIsSupportedForOrderLine) allAvailableProjections[orderLineUuid].push(projection);
                                 }
-
 
                                 // availableProjections
+
+                                if (availableProjections[orderLineUuid] == undefined) { availableProjections[orderLineUuid] = [] };
                                 var isAllreadyAddedInfo = this.isAllreadyAdded(availableProjections, projection, "code");
                                 if (!isAllreadyAddedInfo.added) {
                                     availableProjections.push(projection);
                                 }
-
 
                             }.bind(this))
 
@@ -509,114 +515,100 @@ var MasterOrderLine = {
             }
             this.$parent.masterOrderLine.allAvailableProjections = allAvailableProjections;
             this.availableProjections = availableProjections;
+
         },
         updateAvailableFormats: function () {
             var allAvailableFormats = {};
             var availableFormats = [];
             for (orderLineUuid in this.allAvailableAreas) {
-                allAvailableFormats[orderLineUuid] = {};
+                allAvailableFormats[orderLineUuid] = [];
             }
-               var selectedAreas = this.selectedAreas !== undefined ? this.selectedAreas : false;
-               if (selectedAreas) {
-                   selectedAreas.forEach(function (selectedArea) {
+            var selectedAreas = this.selectedAreas !== undefined ? this.selectedAreas : false;
+            if (selectedAreas) {
+                selectedAreas.forEach(function (selectedArea) {
 
-                       for (orderLine in selectedArea.allAvailableFormats) {
-                           selectedArea.allAvailableFormats[orderLine].forEach(function (format) {
+                    for (orderLine in selectedArea.allAvailableFormats) {
+                        selectedArea.allAvailableFormats[orderLine].forEach(function (format) {
+                            selectedArea.orderLineUuids.forEach(function (orderLineUuid) {
 
-                               selectedArea.orderLineUuids.forEach(function (orderLineUuid) {
+                                if (format.areas == undefined) { format.areas = [] };
 
-                                   // allAvailableProjections
-                                   if (allAvailableFormats[orderLineUuid] == undefined) {
-                                       allAvailableFormats[orderLineUuid] = {};
-                                   }
+                                var isAllreadyAddedInfo = this.isAllreadyAdded(format.areas, selectedArea, "code");
+                                if (!isAllreadyAddedInfo.added) {
+                                    format.areas.push(selectedArea);
+                                }
 
-                                   if (allAvailableFormats[orderLineUuid][format.name] == undefined) {
-                                       allAvailableFormats[orderLineUuid][format.name] = format;
-                                       allAvailableFormats[orderLineUuid][format.name].areas = [];
-                                   }
-                                   var isAllreadyAddedInfo = this.isAllreadyAdded(allAvailableFormats[orderLineUuid][format.name].areas, selectedArea, "code");
-                                   if (!isAllreadyAddedInfo.added) {
-                                       allAvailableFormats[orderLineUuid][format.name].areas.push(selectedArea);
-                                   }
+                                // allAvailableFormats
+                                if (allAvailableFormats[orderLineUuid] == undefined) {
+                                    allAvailableFormats[orderLineUuid] = [];
+                                }
 
+                                var isAllreadyAddedInfo = this.isAllreadyAdded(allAvailableFormats[orderLineUuid], format, "name");
+                                if (!isAllreadyAddedInfo.added) {
+                                    var formatIsSupportedForOrderLine = false;
+                                    var formatIsSupportedForAreas = false;
+                                    if (orderLine == orderLineUuid) formatIsSupportedForOrderLine = true;
+                                    if (formatIsSupportedForOrderLine) allAvailableFormats[orderLineUuid].push(format);
+                                }
 
-                                   // availableProjections
-                                   var isAllreadyAddedInfo = this.isAllreadyAdded(availableFormats, format, "name");
-                                   if (!isAllreadyAddedInfo.added) {
-                                       availableFormats.push(format);
-                                   }
+                                // availableFormats
 
+                                if (availableFormats[orderLineUuid] == undefined) { availableFormats[orderLineUuid] = [] };
+                                var isAllreadyAddedInfo = this.isAllreadyAdded(availableFormats, format, "name");
+                                if (!isAllreadyAddedInfo.added) {
+                                    availableFormats.push(format);
+                                }
 
-                               }.bind(this))
+                            }.bind(this))
 
-                           }.bind(this))
-                       }
+                        }.bind(this))
+                    }
 
-                   }.bind(this));
-               }
-               this.$parent.masterOrderLine.allAvailableFormats = allAvailableFormats;
-               this.availableFormats = availableFormats;
+                }.bind(this));
+            }
+            this.$parent.masterOrderLine.allAvailableFormats = allAvailableFormats;
+            this.availableFormats = availableFormats;
         },
-
-        /*
-        
-          selectedArea.formats.forEach(function (format) {
-                           if (availableFormats[format.name] == undefined) {
-                               availableFormats[format.name] = format;
-                               availableFormats[format.name].areas = [];
-                           }
-                           availableFormats[format.name].areas.push(selectedArea);
-                       });
-
-        
-        */
         updateSelectedProjections: function () {
-            /*var selectedProjections = [];
-            for (projectionCode in this.availableProjections) {
-                if (this.availableProjections[projectionCode].isSelected) {
-                    selectedProjections.push(this.availableProjections[projectionCode])
-                }
-            }
-            this.selectedProjections = selectedProjections;
-            */
-            
-
-
             var allSelectedProjections = {};
             var selectedProjections = [];
-            
-                this.availableProjections.forEach(function (projection) {
-                    if (projection.isSelected) {
-                        projection.orderLineUuids.forEach(function (orderLineUuid) {
-                            if (allSelectedProjections[orderLineUuid] == undefined) { allSelectedProjections[orderLineUuid] = [] }
-                            allSelectedProjections[orderLineUuid].push(projection);
 
-                            var isAllreadyAddedInfo = this.isAllreadyAdded(selectedProjections, projection, "code");
-                            if (!isAllreadyAddedInfo.added) {
-                                selectedProjections.push(projection);
-                            }
-                        }.bind(this))
-                        /*if (area.projections.length == 1) {
-                            area.projections[0].isSelected = true;
+            this.availableProjections.forEach(function (projection) {
+                if (projection.isSelected) {
+                    projection.orderLineUuids.forEach(function (orderLineUuid) {
+                        if (allSelectedProjections[orderLineUuid] == undefined) { allSelectedProjections[orderLineUuid] = [] }
+                        allSelectedProjections[orderLineUuid].push(projection);
+
+                        var isAllreadyAddedInfo = this.isAllreadyAdded(selectedProjections, projection, "code");
+                        if (!isAllreadyAddedInfo.added) {
+                            selectedProjections.push(projection);
                         }
-                        if (area.formats.length == 1) {
-                            area.formats[0].isSelected = true;
-                        }*/
-                    }
-                }.bind(this));
-            
+                    }.bind(this))
+                }
+            }.bind(this));
+
             this.$parent.masterOrderLine.allSelectedProjections = allSelectedProjections;
             this.selectedProjections = selectedProjections;
-            
-
         },
         updateSelectedFormats: function () {
+            var allSelectedFormats = {};
             var selectedFormats = [];
-            for (formatName in this.availableFormats) {
-                if (this.availableFormats[formatName].isSelected) {
-                    selectedFormats.push(this.availableFormats[formatName])
+
+            this.availableProjections.forEach(function (format) {
+                if (format.isSelected) {
+                    format.orderLineUuids.forEach(function (orderLineUuid) {
+                        if (allSelectedFormats[orderLineUuid] == undefined) { allSelectedFormats[orderLineUuid] = [] }
+                        allSelectedFormats[orderLineUuid].push(format);
+
+                        var isAllreadyAddedInfo = this.isAllreadyAdded(selectedFormats, format, "name");
+                        if (!isAllreadyAddedInfo.added) {
+                            selectedFormats.push(format);
+                        }
+                    }.bind(this))
                 }
-            }
+            }.bind(this));
+
+            this.$parent.masterOrderLine.allSelectedFormats = allSelectedFormats;
             this.selectedFormats = selectedFormats;
         }
 
