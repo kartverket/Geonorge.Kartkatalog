@@ -7,7 +7,7 @@
 	.st1{fill:#FFFFFF;stroke:#CFCFCF;stroke-miterlimit:10;}
 	.st2{fill:#CFCFCF;}
 	.st3{fill:none;stroke:#CFCFCF;stroke-miterlimit:10;}
-	.st4{fill:#FFBA33;stroke:#333333;stroke-width:0.5;stroke-miterlimit:10;}
+	.st4{fill:#FED633;stroke:#333333;stroke-width:0.5;stroke-miterlimit:10;}
 	.st5{fill:#333333;}
 </style>
 <path class="st0" d="M37.5,16.8"/>
@@ -25,8 +25,6 @@
 		<line class="st3" x1="9.7" y1="15.3" x2="12.3" y2="8.8"/>
 	</g>
 </g>
-<g>
-	<path class="st4" d="M21.6,21.8h-13l6.5-11.2L21.6,21.8z"/>
-	<path class="st5" d="M14.5,19.1v1.2h1.2v-1.2C15.6,19.1,14.5,19.1,14.5,19.1z M14.5,14v4.1h1.2V14H14.5z"/>
-</g>
+<path class="st4" d="M21.6,21.8h-13l6.5-11.2L21.6,21.8z"/>
+<path class="st5" d="M14.5,19.1v1.2h1.2v-1.2C15.6,19.1,14.5,19.1,14.5,19.1z M14.5,14v4.1h1.2V14H14.5z"/>
 </svg>
