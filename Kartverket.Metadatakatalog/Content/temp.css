@@ -2,8 +2,10 @@
 }
 
 #orderlist h2 {
-    font-size: 34pt;
-    line-height: 30pt;
+    font-size: 18pt;
+    line-height: 31pt;
+    cursor: pointer;
+    margin-bottom: 0;
 }
 
     #orderlist h2:after {
@@ -20,6 +22,7 @@
     background-position: 50%;
     display: inline-block;
     margin-right: 2px;
+    margin-bottom: 2px;
 }
 
     #orderlist .indicator.active {
@@ -31,7 +34,7 @@
 }
 
 #orderlist .orderline {
-    padding: 12px 12px 22px;
+    padding: 12px;
 }
 
     #orderlist .orderline:nth-child(odd) {

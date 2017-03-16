@@ -83,16 +83,19 @@
     <div v-bind:class="[expanded ? '' : 'readonly']">
         <!--<h2></h2>-->
 
-        <span v-on:click="expanded = !expanded" class="indicator" v-bind:class="[expanded ? 'active' : '']"></span><a v-bind:href="metadata.url">{{ metadata.name }}</a>
+        <h2 v-on:click="expanded = !expanded">
+            <span class="indicator" v-bind:class="[expanded ? 'active' : '']"></span> {{ metadata.name }}
+        </h2>
         <span v-if="selectedAreas">{{ selectedAreas.length }}</span>
         <span v-if="selectedProjections">{{ selectedProjections.length }}</span>
         <span v-if="selectedFormats">{{ selectedFormats.length }}</span>
-            <div class="pull-right margin-top-10">
-                <span v-on:click="$parent.cloneSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Bruk valg på alle datasett" class="btn"><span class="fa fa-clone"></span></span>
-                <span v-on:click="$parent.clearSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Fjern valg fra datasett" class="btn"><span class="fa fa-eraser"></span></span>
-                <span v-on:click="removeOrderItem(orderItem)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
-            </div>
-            <div class="clearfix"></div>
+        <div class="pull-right margin-top-10">
+            <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom" title="Gå til datasett" class="btn"><span class="fa fa-home"></span></a>
+            <span v-on:click="$parent.cloneSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Bruk valg på alle datasett" class="btn"><span class="fa fa-clone"></span></span>
+            <span v-on:click="$parent.clearSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Fjern valg fra datasett" class="btn"><span class="fa fa-eraser"></span></span>
+            <span v-on:click="removeOrderItem(orderItem)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
+        </div>
+        <div class="clearfix"></div>
         <div v-show="expanded" class="row orderline-fields">
             <div class="col-md-4 orderline-field">
                 <p>Område</p>
