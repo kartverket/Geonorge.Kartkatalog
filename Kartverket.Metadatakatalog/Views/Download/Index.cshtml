@@ -86,9 +86,21 @@
         <h2 v-on:click="expanded = !expanded">
             <span class="indicator" v-bind:class="[expanded ? 'active' : '']"></span> {{ metadata.name }}
         </h2>
-        <span v-if="selectedAreas">{{ selectedAreas.length }}</span>
-        <span v-if="selectedProjections">{{ selectedProjections.length }}</span>
-        <span v-if="selectedFormats">{{ selectedFormats.length }}</span>
+        <span v-if="selectedAreas" class="orderline-field-counter">
+            <span class="custom-icon custom-icon-kartmarkoer">
+                <span class="custom-icon-overlay">{{ selectedAreas.length }}</span>
+            </span>
+        </span>
+        <span v-if="selectedProjections" class="orderline-field-counter">
+            <span class="custom-icon custom-icon-kartmarkoer">
+                <span class="custom-icon-overlay">{{ selectedProjections.length }}</span>
+            </span>
+        </span>
+        <span v-if="selectedFormats" class="orderline-field-counter">
+            <span class="custom-icon custom-icon-kartmarkoer">
+                <span class="custom-icon-overlay">{{ selectedFormats.length }}</span>
+            </span>
+        </span>
         <div class="pull-right margin-top-10">
             <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom" title="Gå til datasett" class="btn"><span class="fa fa-home"></span></a>
             <span v-on:click="$parent.cloneSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Bruk valg på alle datasett" class="btn"><span class="fa fa-clone"></span></span>

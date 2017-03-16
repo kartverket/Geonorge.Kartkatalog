@@ -132,10 +132,8 @@ var Areas = {
             this.$parent.updateAvailableProjections();
             this.$parent.updateAvailableFormats();
 
-
-
             this.$parent.updateSelectedProjections();
-            //     orderLineObject.updateSelectedFormats();
+            this.$parent.updateSelectedFormats();
 
             //   orderLineObject.validateAreas();
         },
@@ -143,13 +141,13 @@ var Areas = {
             area.isSelected = false;
 
             this.$parent.updateSelectedAreas();
+
             this.$parent.updateAvailableProjections();
             this.$parent.updateAvailableFormats();
 
             this.$parent.updateSelectedProjections();
-            //    this.$parent.updateSelectedFormats();
+            this.$parent.updateSelectedFormats();
 
-            //  this.$parent.validateAreas();
         }
     }
 };
@@ -162,12 +160,10 @@ var Projections = {
         selectProjection: function (projection) {
             projection.isSelected = true;
             this.$parent.updateSelectedProjections();
-            //  this.$parent.validateAreas();
         },
         removeSelectedProjection: function (projection) {
             projection.isSelected = false;
             this.$parent.updateSelectedProjections();
-            //   this.$parent.validateAreas();
         }
     }
 };
@@ -180,12 +176,10 @@ var Formats = {
         selectFormat: function (format) {
             format.isSelected = true;
             this.$parent.updateSelectedFormats();
-            //   this.$parent.validateAreas();
         },
         removeSelectedFormat: function (format) {
             format.isSelected = false;
             this.$parent.updateSelectedFormats();
-            // this.$parent.validateAreas();
         }
     }
 };
