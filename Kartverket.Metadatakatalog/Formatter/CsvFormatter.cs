@@ -92,7 +92,7 @@ namespace Kartverket.Metadatakatalog.Formatter
 
         private void WriteApplicationLines(SearchResult data, StreamWriter writer)
         {
-            writer.WriteLine("Tittel;Type;Organisasjon;Uuid;Service url;");
+            writer.WriteLine("Tittel;Type;Organisasjon;Uuid;Url til tjeneste;");
             foreach (var meta in data.Results)
             {
                 writer.WriteLine(
@@ -107,7 +107,7 @@ namespace Kartverket.Metadatakatalog.Formatter
 
         private void WriteServiceDirectoryLines(SearchResult data, StreamWriter writer)
         {
-            writer.WriteLine("Tittel;Type;Organisasjon;Uuid;Service url;");
+            writer.WriteLine("Tittel;Type;Organisasjon;Uuid;Url til tjeneste;");
             foreach (var meta in data.Results)
             {
                 writer.WriteLine(
