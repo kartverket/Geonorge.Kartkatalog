@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "kartverket-felleskomponenter": "6.3.1",
-    "vue": "~1.0.0"
+    "vue": "~1.0.0",
+    "clipboard": "^1.6.1"
   },
   "license": "MIT",
   "name": "Metadatakatalog",

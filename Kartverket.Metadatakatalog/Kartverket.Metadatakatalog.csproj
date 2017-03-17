@@ -350,6 +350,9 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bower_components\clipboard\dist\clipboard.js" />
+    <Content Include="Content\bower_components\clipboard\dist\clipboard.min.js" />
+    <Content Include="Content\bower_components\clipboard\package.js" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\chosen-sprite%402x.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\chosen-sprite.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -766,6 +769,11 @@
     <Content Include="Content\bower_components\vue\dist\vue.min.js.map" />
     <Content Include="Content\bower_components\vue\LICENSE" />
     <Content Include="authentication.config" />
+    <Content Include="Content\bower_components\clipboard\.bower.json" />
+    <Content Include="Content\bower_components\clipboard\bower.json" />
+    <Content Include="Content\bower_components\clipboard\contributing.md" />
+    <Content Include="Content\bower_components\clipboard\package.json" />
+    <Content Include="Content\bower_components\clipboard\readme.md" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
