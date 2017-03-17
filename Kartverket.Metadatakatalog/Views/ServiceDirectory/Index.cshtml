@@ -244,10 +244,9 @@
 
                     <div class="col-sm-2"><p>Type</p></div>
 
-                    <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-4 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-4 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Les mer</p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Vis i kart</p></div>
                 </div>
                 <div class="menu-separator search-results-table-heading"></div>
@@ -301,7 +300,7 @@
                         <div class="col-sm-2 search-results-type">
                             <span title="@item.DistributionType" class="label label-tjeneste" style="width:auto">@item.DistributionType</span>
                         </div>
-                        <div class="col-sm-3 search-results-organization">
+                        <div class="col-sm-4 search-results-organization">
                             <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
                                 @if (item.Organization != null)
                                 {
@@ -328,9 +327,6 @@
 
                         <div class="col-sm-2 search-results-action-buttons pull-right">
 
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="btn btn-default show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
-                                <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
-                            </a>
                             @if (item.ShowMapLink())
                             {
                                 <a id="mapmacrolink-button-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
@@ -349,12 +345,6 @@
                                     <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
                                 </a>
                             }
-                        </div>
-
-                        <div class="col-xs-1 search-results-action-icons">
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
-                                <span class="custom-icon custom-icon-info"></span>
-                            </a>
                         </div>
 
 
