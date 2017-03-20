@@ -88,6 +88,7 @@ if (contact != null)
     </div>
 </section>
 
+
 <div class="btn-table-row-5">
     <div class="table-btn-container">
         @if (Model.ShowMapLink())
@@ -152,28 +153,27 @@ if (contact != null)
 
             <a id='addToCart-@Model.Uuid'
                href='@addToCartUrl'
-               onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');" 
-               class="btn @addToCartClass" 
+               onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+               class="btn @addToCartClass"
                itemuuid="@Model.Uuid"
                itemname="@Model.Title"
                itemurl="/metadata/uuid/@Model.Uuid"
                itemdisturl="@DowloadUrl"
                itemorglogo="@OrganizationLogoUrl"
                itemtheme='@(Model.KeywordsNationalTheme != null && Model.KeywordsNationalTheme.Count > 0 ? Model.KeywordsNationalTheme[0].KeywordValue : "")'
-               itemorgname='@(Model.ContactOwner != null ? Model.ContactOwner.Organization : "" )'
-               >
+               itemorgname='@(Model.ContactOwner != null ? Model.ContactOwner.Organization : "" )'>
                 <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
             </a>
         }
         else if (Model.ShowDownloadLink())
         {
-                <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" target="_blank" class="btn"><span class="custom-icon custom-icon-lastned"></span> Last ned</a>
-                }
-                else
-                {
-                <a href="" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span> Last ned</a>
-                }
-</div>
+            <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" target="_blank" class="btn"><span class="custom-icon custom-icon-lastned"></span> Last ned</a>
+        }
+        else
+        {
+            <a href="" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span> Last ned</a>
+        }
+    </div>
 
     <div class="table-btn-container">
         @if (!string.IsNullOrEmpty(Model.CoverageUrl))
@@ -191,92 +191,92 @@ if (contact != null)
         {
             <a href="" class="btn disabled" disabled="disabled"><span class="fa fa-globe"></span> Vis dekningskart</a>
         }
+    </div>
+    @if (!string.IsNullOrEmpty(Model.SupplementalDescription) || !string.IsNullOrEmpty(Model.HelpUrl))
+    {
+        <div class="table-btn-container">
+            <a href="#help" class="btn"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a>
         </div>
-        @if (!string.IsNullOrEmpty(Model.SupplementalDescription) || !string.IsNullOrEmpty(Model.HelpUrl))
-        {
-            <div class="table-btn-container">
-                <a href="#help" class="btn"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a>
-            </div>
+    }
+    else
+    {
+        <div class="table-btn-container">
+            <a href="#help" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a>
+        </div>
+    }
+
+    <div class="table-btn-container">
+        @if (Model.ContactOwner != null && !string.IsNullOrEmpty(Model.ContactOwner.Email))
+            {
+            <a href="mailto:@Model.ContactOwner.Email" onclick="ga('send', 'event', 'Nedlasting', 'kontaktdataeier');" class="btn" target="_blank"><span class="fa fa-envelope"></span> Kontakt dataeier</a>
         }
         else
         {
-            <div class="table-btn-container">
-                <a href="#help" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a>
-            </div>
+            <a href="" class="btn disabled" disabled="disabled"><span class="fa fa-envelope"></span> Kontakt dataeier</a>
         }
-
-        <div class="table-btn-container">
-            @if (Model.ContactOwner != null && !string.IsNullOrEmpty(Model.ContactOwner.Email))
-            {
-                <a href="mailto:@Model.ContactOwner.Email" onclick="ga('send', 'event', 'Nedlasting', 'kontaktdataeier');" class="btn" target="_blank"><span class="fa fa-envelope"></span> Kontakt dataeier</a>
-            }
-            else
-            {
-                <a href="" class="btn disabled" disabled="disabled"><span class="fa fa-envelope"></span> Kontakt dataeier</a>
-            }
-        </div>
-
-
-
-
-
-        <div class="table-btn-container">
-            @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
-            {
-                <a href="@Model.ProductSheetUrl" onclick="ga('send', 'event', 'MerInfo', 'produktark');" title="Vis produktark for @Model.Title" class="btn show-loading-animation" data-loading-message="Henter produktark"><span class="custom-icon custom-icon-info"></span> Vis produktark</a>
-            }
-            else
-            {
-                <a href="#" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-info"></span> Vis produktark</a>
-            }
-        </div>
-
-        <div class="table-btn-container">
-            @if (!string.IsNullOrWhiteSpace(Model.ProductSpecificationUrl))
-            {
-                <a href="@Model.ProductSpecificationUrl" onclick="ga('send', 'event', 'MerInfo', 'produktspesifikasjon');" class="btn show-loading-animation" data-loading-message="Henter produktspesifikasjon" title="Last ned produktspesifikasjon for @Model.Title"><span class="glyphicon glyphicon-list-alt"></span> Vis produktspesifikasjon</a>
-            }
-            else
-            {
-                <a href="#" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-list-alt"></span> Vis produktspesifikasjon</a>
-            }
-        </div>
-
-        <div class="table-btn-container">
-            @if (!string.IsNullOrWhiteSpace(Model.LegendDescriptionUrl))
-            {
-                <a href="@Model.LegendDescriptionUrl" onclick="ga('send', 'event', 'MerInfo', 'tegneregler');" class="btn show-loading-animation" data-loading-message="Henter tegneregler" title="Vis tegneregler for @Model.Title"> <span class="glyphicon glyphicon-picture"></span> Vis tegneregler</a>
-            }
-            else
-            {
-                <a href="#" class="btn disabled" disabled="disabled"> <span class="glyphicon glyphicon-picture"></span> Vis tegneregler</a>
-            }
-        </div>
-
-        <div class="table-btn-container">
-            @if (Model.ShowWebsiteLink())
-            {
-                <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'MerInfo', 'nettside');" class="btn show-loading-animation" data-loading-message="Henter nettside"><span class="custom-icon custom-icon-eksternlink"></span> Besøk nettside</a>
-            }
-            else
-            {
-                <a href="" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-eksternlink"></span> Besøk nettside</a>
-            }
-        </div>
-
-        <div class="table-btn-container">
-            @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
-            {
-                <a href="@Model.ProductPageUrl" onclick="ga('send', 'event', 'MerInfo', 'produktside');" class="btn show-loading-animation" data-loading-message="Henter produktside" title="Gå til produktsiden for @Model.Title"><span class="custom-icon custom-icon-eksternlink"></span> Vis produktside</a>
-            }
-            else
-            {
-                <a href="#" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-eksternlink"></span> Vis produktside</a>
-            }
-        </div>
-
-
     </div>
+
+
+
+
+
+    <div class="table-btn-container">
+        @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
+            {
+            <a href="@Model.ProductSheetUrl" onclick="ga('send', 'event', 'MerInfo', 'produktark');" title="Vis produktark for @Model.Title" class="btn show-loading-animation" data-loading-message="Henter produktark"><span class="custom-icon custom-icon-info"></span> Vis produktark</a>
+        }
+        else
+        {
+            <a href="#" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-info"></span> Vis produktark</a>
+        }
+    </div>
+
+    <div class="table-btn-container">
+        @if (!string.IsNullOrWhiteSpace(Model.ProductSpecificationUrl))
+            {
+            <a href="@Model.ProductSpecificationUrl" onclick="ga('send', 'event', 'MerInfo', 'produktspesifikasjon');" class="btn show-loading-animation" data-loading-message="Henter produktspesifikasjon" title="Last ned produktspesifikasjon for @Model.Title"><span class="glyphicon glyphicon-list-alt"></span> Vis produktspesifikasjon</a>
+        }
+        else
+        {
+            <a href="#" class="btn disabled" disabled="disabled"><span class="glyphicon glyphicon-list-alt"></span> Vis produktspesifikasjon</a>
+        }
+    </div>
+
+    <div class="table-btn-container">
+        @if (!string.IsNullOrWhiteSpace(Model.LegendDescriptionUrl))
+            {
+            <a href="@Model.LegendDescriptionUrl" onclick="ga('send', 'event', 'MerInfo', 'tegneregler');" class="btn show-loading-animation" data-loading-message="Henter tegneregler" title="Vis tegneregler for @Model.Title"> <span class="glyphicon glyphicon-picture"></span> Vis tegneregler</a>
+        }
+        else
+        {
+            <a href="#" class="btn disabled" disabled="disabled"> <span class="glyphicon glyphicon-picture"></span> Vis tegneregler</a>
+        }
+    </div>
+
+    <div class="table-btn-container">
+        @if (Model.ShowWebsiteLink())
+            {
+            <a href="@Model.DistributionDetails.URL" onclick="ga('send', 'event', 'MerInfo', 'nettside');" class="btn show-loading-animation" data-loading-message="Henter nettside"><span class="custom-icon custom-icon-eksternlink"></span> Besøk nettside</a>
+        }
+        else
+        {
+            <a href="" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-eksternlink"></span> Besøk nettside</a>
+        }
+    </div>
+
+    <div class="table-btn-container">
+        @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
+            {
+            <a href="@Model.ProductPageUrl" onclick="ga('send', 'event', 'MerInfo', 'produktside');" class="btn show-loading-animation" data-loading-message="Henter produktside" title="Gå til produktsiden for @Model.Title"><span class="custom-icon custom-icon-eksternlink"></span> Vis produktside</a>
+        }
+        else
+        {
+            <a href="#" class="btn disabled" disabled="disabled"><span class="custom-icon custom-icon-eksternlink"></span> Vis produktside</a>
+        }
+    </div>
+
+
+</div>
 
 <div class="row">
     <article class="col-md-8">
@@ -317,7 +317,7 @@ if (contact != null)
                     <p>@Model.SpecificUsage</p>
                 }
                 <h3>Distribusjoner</h3>
-                
+
                 Filnedlastning med leveranseformater, samt tjenester som WMS,WFS, REST etc og Innsynsløsninger som relatert applikasjoner.
 
             </div>
@@ -528,8 +528,7 @@ if (contact != null)
                                                        itemorglogo='@relativeOrganizationLogoUrl'
                                                        itemdisturl='@relativeDowloadUrl'
                                                        itemtheme='@(relatedContent.KeywordsNationalTheme != null && relatedContent.KeywordsNationalTheme.Count > 0 ? relatedContent.KeywordsNationalTheme[0].KeywordValue : "")'
-                                                       itemorgname='@(relatedContent.ContactOwner != null ? relatedContent.ContactOwner.Organization : "" )'
-                                                       >
+                                                       itemorgname='@(relatedContent.ContactOwner != null ? relatedContent.ContactOwner.Organization : "" )'>
                                                         <span class="custom-icon custom-icon-handlekurv"></span>
                                                     </a>
                                                 }
@@ -590,19 +589,19 @@ if (contact != null)
                     if (Model.DistributionFormats.Any())
                     {
                             <strong>Format: </strong>
-                                <ul>
-                                    @foreach (var format in Model.DistributionFormats)
+                            <ul>
+                                @foreach (var format in Model.DistributionFormats)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(format.Version))
                                     {
-                                        if (!string.IsNullOrWhiteSpace(format.Version))
-                                        {
-                                            <li>@format.Name @format.Version</li>
-                                        }
-                                        else
-                                        {
-                                            <li>@format.Name</li>
-                                        }
+                                        <li>@format.Name @format.Version</li>
                                     }
-                                </ul>
+                                    else
+                                    {
+                                        <li>@format.Name</li>
+                                    }
+                                }
+                            </ul>
                         }
                     }
                     @if (Model.DistributionDetails != null && Model.DistributionDetails.Protocol != null && Model.DistributionDetails.Protocol != "GEONORGE:OFFLINE")
@@ -612,15 +611,19 @@ if (contact != null)
                         {
                             if (Model.IsService() || Model.IsServiceLayer())
                             {
-                                <p>
-                                    <strong>Get Capabilities Url:</strong> <a href="@Model.DistributionDetailsGetCapabilitiesUrl()">@Model.DistributionDetails.URL <i class="custom-icon-sm custom-icon-eksternlink"></i></a>
-                                </p>
+                                <p><strong>Get Capabilities Url:</strong></p>
+                                <div class="input-group">
+                                    <input class="form-control" readonly id="input-copy" value="@Model.DistributionDetailsGetCapabilitiesUrl()">
+                                    <span class="btn btn-copy input-group-addon" alt="kopier til utklippstavle" data-clipboard-target="#input-copy">
+                                            <i class="fa fa-clipboard"></i>
+                                    </span>
+                                </div>
                             }
                             else
                             {
                                 @*<p>
-                            <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
-                        </p>*@
+                                        <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
+                                    </p>*@
                             }
 
                         }
@@ -633,12 +636,12 @@ if (contact != null)
                     if (Model.ReferenceSystems.Any())
                     {
                             <strong>Romlig referansesystem: </strong>
-                                <ul>
-                                    @foreach (var refsys in Model.ReferenceSystems)
-                                    {
-                                        <li>@refsys.CoordinateSystem</li>
-                                    }
-                                </ul>
+                            <ul>
+                                @foreach (var refsys in Model.ReferenceSystems)
+                                {
+                                    <li>@refsys.CoordinateSystem</li>
+                                }
+                            </ul>
                         }
 
                     }
@@ -646,7 +649,7 @@ if (contact != null)
 
 
 
-                
+
 
                 @if (Model.Constraints != null)
                 {
@@ -667,24 +670,24 @@ if (contact != null)
 
                 @if (!string.IsNullOrEmpty(Model.SupplementalDescription) || !string.IsNullOrEmpty(Model.HelpUrl))
                 {
-                <div id="help" class="col-sm-12">
-                    <h2>Hjelp</h2>
-                </div>
-                <div class="col-sm-12">
-                    @if (!string.IsNullOrEmpty(Model.SupplementalDescription))
+                    <div id="help" class="col-sm-12">
+                        <h2>Hjelp</h2>
+                    </div>
+                    <div class="col-sm-12">
+                        @if (!string.IsNullOrEmpty(Model.SupplementalDescription))
                     {
-                    <p>@Model.SupplementalDescription</p>
-                    }
-                    @if (!string.IsNullOrEmpty(Model.HelpUrl))
+                            <p>@Model.SupplementalDescription</p>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.HelpUrl))
                     {
-                        <a href="@Model.HelpUrl" class="btn" target="_blank"><span class="custom-icon custom-icon-eksternlink"></span> Vis hjelp</a>
-                    }
-                </div>
+                            <a href="@Model.HelpUrl" class="btn" target="_blank"><span class="custom-icon custom-icon-eksternlink"></span> Vis hjelp</a>
+                        }
+                    </div>
                 }
                 <div class="col-sm-12">
                     <a href="#" data-content-toggle="detailed-info" class="toggle-content"><h2><span class="toggle-icon"></span>Detaljert informasjon</h2></a>
                 </div>
-               
+
                 <div id="metadata-text-details" class="detailed-info" style="display:none;">
                     <div class="col-sm-6">
                         <h3>Kvalitet</h3>
@@ -720,38 +723,38 @@ if (contact != null)
                     <div class="col-sm-6">
                         <h3>Tid og rom</h3>
                         @if (Model.DateUpdated != null)
-                    {
+                        {
                             <p><strong>Oppdatert(Ressurs):</strong> @Html.DisplayFor(m => m.DateUpdated)</p>
                         }
                         @if (Model.DateMetadataUpdated != null)
-                    {
+                        {
                             <p><strong>Oppdatert(Metadata):</strong> @Html.DisplayFor(m => m.DateMetadataUpdated)</p>
                         }
                         @if (Model.DatePublished != null)
-                    {
+                        {
                             <p><strong>Publisert:</strong> @Html.DisplayFor(m => m.DatePublished)</p>
                         }
                         @if (Model.DateCreated != null)
-                    {
+                        {
                             <p><strong>Opprettet:</strong> @Html.DisplayFor(m => m.DateCreated)</p>
                         }
                         @if (Model.DateMetadataValidFrom != null)
-                    {
+                        {
                             <p><strong>Gyldighetsperiode:</strong> @Html.DisplayFor(m => m.DateMetadataValidFrom) - @Html.DisplayFor(m => m.DateMetadataValidTo) </p>
                         }
                         @if (Model.MaintenanceFrequency != null)
-                    {
+                        {
                             <p><strong>Oppdateringshyppighet:</strong> @Model.MaintenanceFrequency</p>
                         }
                         @if (Model.KeywordsPlace != null && Model.KeywordsPlace.Count > 0)
-                    {
+                        {
 
                             @DisplayKeywords("Geografisk område", Model.KeywordsPlace)
 
                         }
 
                         @if (Model.BoundingBox != null)
-                    {
+                        {
                             <p>
                                 <strong>Geografisk utstrekning:</strong>
                                 <ul>
@@ -776,7 +779,7 @@ if (contact != null)
                         @DisplayKeywords("Begreper", Model.KeywordsConcept)
 
                         @if (!string.IsNullOrWhiteSpace(Model.TopicCategory))
-                    {
+                        {
                             <p><strong>Tematisk hovedkategori:</strong> @Model.TopicCategory</p>
                         }
 
@@ -804,7 +807,7 @@ if (contact != null)
 
 
 @helper DisplayValue(string label, string value)
-{
+        {
 if (!string.IsNullOrWhiteSpace(value))
 {
         <p><strong>@label: </strong>@value</p>
@@ -812,7 +815,7 @@ if (!string.IsNullOrWhiteSpace(value))
 }
 
 @helper DisplayKeywords(string label, List<Keyword> keywords)
-{
+        {
 if (keywords != null && keywords.Any())
 {
         <strong>@label:</strong>
@@ -825,7 +828,7 @@ if (keywords != null && keywords.Any())
                 }
                 else
                 {
-                <li>@keyword.KeywordValue</li>
+                    <li>@keyword.KeywordValue</li>
                 }
             }
         </ul>
@@ -868,7 +871,7 @@ if (keywords != null && keywords.Any())
 
             $(xml).find("entry").each(function () {
                 var identifier_code = $(this).find("inspire_dls\\:spatial_dataset_identifier_code, spatial_dataset_identifier_code").text();
-                if (uuid == identifier_code){
+                if (uuid == identifier_code) {
                     var link = $(this).find("link").text();
                     $("#servicefeed").removeClass("disabled");
                     $("#servicefeed").removeAttr("disabled");
@@ -923,7 +926,7 @@ if (keywords != null && keywords.Any())
 
         @if (Model.ShowMapLink() || Model.ShowServiceMapLink()) {
             @:getServiceStatus("@Model.ServiceUuid", "@Model.Uuid");
-        }
+                                                }
 
         @if(Model.Related != null)
         {
@@ -931,8 +934,14 @@ if (keywords != null && keywords.Any())
             {
                 if (relatedContent.ShowMapLink() || relatedContent.ShowServiceMapLink()) {
                 @:getServiceStatus("@relatedContent.ServiceUuid", "@relatedContent.Uuid");
-                }
+                                                            }
             }
         }
+
+        $(document).ready(function () {
+            new Clipboard('.btn-copy');
+        });
+
     </script>
 }
+

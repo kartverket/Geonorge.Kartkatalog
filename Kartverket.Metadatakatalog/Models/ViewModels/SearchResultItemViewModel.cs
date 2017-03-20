@@ -27,16 +27,16 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string ProductSpecificationUrl { get; set; }
         public string ServiceUuid { get; set; }
         public string ServiceDistributionAccessConstraint { get; set; }
-        
+        public string DistributionUrl { get; set; }
 
         public string GetInnholdstypeCSS()
         {
             string t = "label-default";
-            if (Type=="dataset") t="label-datasett";
-            else if (Type=="software") t="label-applikasjon";
-            else if (Type=="service") t="label-tjeneste";
+            if (Type == "dataset") t = "label-datasett";
+            else if (Type == "software") t = "label-applikasjon";
+            else if (Type == "service") t = "label-tjeneste";
             else if (Type == "servicelayer") t = "label-tjenestelag";
-            else if (Type=="series") t="label-datasettserie";
+            else if (Type == "series") t = "label-datasettserie";
             else if (Type == "dimensionGroup") t = "label-datasett";
 
             return t;
@@ -45,11 +45,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string GetInnholdstype()
         {
             string t = Type;
-            if (Type=="dataset") t="Datasett";
-            else if (Type=="software") t="Applikasjon";
-            else if (Type=="service") t="Tjeneste";
+            if (Type == "dataset") t = "Datasett";
+            else if (Type == "software") t = "Applikasjon";
+            else if (Type == "service") t = "Tjeneste";
             else if (Type == "servicelayer") t = "Tjenestelag";
-            else if (Type=="series") t="Datasettserie";
+            else if (Type == "series") t = "Datasettserie";
             else if (Type == "dimensionGroup") t = "Datapakke";
 
             return t;
@@ -79,7 +79,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         }
         public bool ShowServiceMapLink()
         {
-            if  (!string.IsNullOrWhiteSpace(ServiceUrl)) return true;
+            if (!string.IsNullOrWhiteSpace(ServiceUrl)) return true;
             else return false;
         }
         public bool ShowWebsiteLink()
@@ -100,11 +100,12 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             ThumbnailUrl = item.ThumbnailUrl;
             MaintenanceFrequency = item.MaintenanceFrequency;
             DistributionType = item.DistributionType;
-            
+            DistributionUrl = item.DistributionUrl;
+
             DistributionProtocol = item.DistributionProtocol;
             if (!string.IsNullOrEmpty(item.OtherConstraintsAccess) && item.OtherConstraintsAccess.ToLower() == "no restrictions") IsOpendata = true;
             if (!string.IsNullOrEmpty(item.OtherConstraintsAccess) && item.OtherConstraintsAccess.ToLower() == "norway digital restricted") IsRestricted = true;
-            if (item.AccessConstraint == "restricted") IsOffline = true; 
+            if (item.AccessConstraint == "restricted") IsOffline = true;
 
 
             if (Type == "dataset")
@@ -123,7 +124,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                     else if (!string.IsNullOrWhiteSpace(item.DistributionUrl))
                         ServiceUrl = "#5/355422/6668909/l/wfs/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]";
                 }
-               
+
             }
 
             if (Type == "service" || Type == "servicelayer")
@@ -133,7 +134,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                     if (!string.IsNullOrWhiteSpace(item.DistributionName) && !string.IsNullOrWhiteSpace(item.DistributionUrl))
                         DownloadUrl = "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(item.DistributionUrl) + "]/+" + item.DistributionName;
                     else if (!string.IsNullOrWhiteSpace(item.DistributionUrl))
-                        DownloadUrl =  "#5/355422/6668909/l/wms/[" + RemoveQueryString(item.DistributionUrl) + "]";
+                        DownloadUrl = "#5/355422/6668909/l/wms/[" + RemoveQueryString(item.DistributionUrl) + "]";
                 }
                 else if (!string.IsNullOrWhiteSpace(item.DistributionProtocol) && item.DistributionProtocol.Contains(("OGC:WFS")))
                 {

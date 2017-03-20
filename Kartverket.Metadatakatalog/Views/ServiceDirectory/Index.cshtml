@@ -247,7 +247,7 @@
                     <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Les mer</p></div>
+                    <div class="col-sm-1 no-padding text-center"><p>URL til tjeneste</p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Vis i kart</p></div>
                 </div>
                 <div class="menu-separator search-results-table-heading"></div>
@@ -328,9 +328,9 @@
 
                         <div class="col-sm-2 search-results-action-buttons pull-right">
 
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="btn btn-default show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
-                                <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
-                            </a>
+                            <button class="btn-copy" data-clipboard-text="@item.DistributionUrl" alt="Kopier til utklippstavle">
+                                Url til tjeneste
+                            </button>
                             @if (item.ShowMapLink())
                             {
                                 <a id="mapmacrolink-button-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
@@ -352,9 +352,9 @@
                         </div>
 
                         <div class="col-xs-1 search-results-action-icons">
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
-                                <span class="custom-icon custom-icon-info"></span>
-                            </a>
+                            <span class="btn btn-copy input-group-addon" data-clipboard-text="@item.DistributionUrl" alt="Kopier til utklippstavle">
+                                <i class="fa fa-clipboard"></i>
+                            </span>
                         </div>
 
 
@@ -418,6 +418,22 @@
     if (item.ShowMapLink() || item.ShowServiceMapLink())
     {
       @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                                  }
+                                      }
 }
+
+    $(document).ready(function () {
+        //new Clipboard('.btn-copy');
+
+        var clipboard = new Clipboard('.btn-copy');
+
+        clipboard.on('success', function (e) {
+            console.info('Text:', e.text);
+            e.clearSelection();
+        });
+
+        clipboard.on('error', function (e) {
+            console.error('Action:', e.action);
+            console.error('Trigger:', e.trigger);
+        });
+    });
 </script>
