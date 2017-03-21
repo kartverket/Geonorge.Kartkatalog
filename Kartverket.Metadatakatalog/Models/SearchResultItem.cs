@@ -36,14 +36,17 @@ namespace Kartverket.Metadatakatalog.Models
         public string OtherConstraintsAccess { get; set; }
         public string DataAccess { get; set; }
         public string ParentIdentifier { get; set; }
+        public DistributionDetails DistributionDetails { get; set; }
+        
 
         public SearchResultItem()
         {
-
+            DistributionDetails = new DistributionDetails();
         }
 
         public SearchResultItem(object doc)
         {
+            DistributionDetails = new DistributionDetails();
             if (doc is MetadataIndexDoc)
             {
                 MetadataIndexDoc metadataIndexDoc = (MetadataIndexDoc)doc;
@@ -53,6 +56,9 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 ServiceIndexDoc serviceIndexDoc = (ServiceIndexDoc)doc;
                 SetSearchIndexDoc(serviceIndexDoc);
+                DistributionDetails.Name = serviceIndexDoc.DistributionName;
+                DistributionDetails.Protocol = serviceIndexDoc.DistributionProtocol;
+                DistributionDetails.URL = serviceIndexDoc.DistributionUrl;
             }
             if (doc is ApplicationIndexDoc)
             {

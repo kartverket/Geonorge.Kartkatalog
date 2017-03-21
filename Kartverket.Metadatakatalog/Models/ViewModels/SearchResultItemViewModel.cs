@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Routing;
 
@@ -28,6 +29,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string ServiceUuid { get; set; }
         public string ServiceDistributionAccessConstraint { get; set; }
         public string DistributionUrl { get; set; }
+        public string GetCapabilitiesUrl { get; set; }
 
         public string GetInnholdstypeCSS()
         {
@@ -101,6 +103,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             MaintenanceFrequency = item.MaintenanceFrequency;
             DistributionType = item.DistributionType;
             DistributionUrl = item.DistributionUrl;
+            GetCapabilitiesUrl = DistributionDetailsGetCapabilitiesUrl(item.DistributionDetails);
 
             DistributionProtocol = item.DistributionProtocol;
             if (!string.IsNullOrEmpty(item.OtherConstraintsAccess) && item.OtherConstraintsAccess.ToLower() == "no restrictions") IsOpendata = true;
@@ -196,6 +199,35 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 URL = URL.Substring(0, startQueryString);
 
             return URL;
+        }
+
+        public String DistributionDetailsGetCapabilitiesUrl(DistributionDetails distributionDetails)
+        {
+            if (distributionDetails != null)
+            {
+                if (!string.IsNullOrWhiteSpace(distributionDetails.URL))
+                {
+                    string tmp = distributionDetails.URL;
+                    int startQueryString = tmp.IndexOf("?");
+
+                    if (startQueryString != -1)
+                        tmp = tmp.Substring(0, startQueryString + 1);
+                    else
+                        tmp = tmp + "?";
+
+                    if (distributionDetails.IsWmsUrl())
+                        return tmp + "request=GetCapabilities&service=WMS";
+                    else if (distributionDetails.IsWfsUrl())
+                        return tmp + "request=GetCapabilities&service=WFS";
+                    else if (!string.IsNullOrWhiteSpace(distributionDetails.Protocol) && distributionDetails.Protocol.Contains(("OGC:WCS")))
+                        return tmp + "request=GetCapabilities&service=WCS";
+                    else if (!string.IsNullOrWhiteSpace(distributionDetails.Protocol) && distributionDetails.Protocol.Contains(("OGC:CSW")))
+                        return tmp + "request=GetCapabilities&service=CSW";
+                    else return tmp;
+                }
+                else return "";
+            }
+            return "";
         }
 
 

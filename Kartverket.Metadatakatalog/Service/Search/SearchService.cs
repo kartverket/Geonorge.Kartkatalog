@@ -86,7 +86,6 @@ namespace Kartverket.Metadatakatalog.Service.Application
             List<SearchResultItem> items = ParseResultDocuments(queryResults);
 
             List<Facet> facets = ParseFacetResults(queryResults);
-
             SearchResult searchResult = new SearchResult
             {
                 Items = items,
