@@ -328,7 +328,7 @@
 
                         <div class="col-sm-2 search-results-action-buttons pull-right">
 
-                            <button class="btn-copy" data-clipboard-text="@item.GetCapabilitiesUrl" alt="Kopier til utklippstavle">
+                            <button class="btn btn-copy" data-clipboard-text="@item.GetCapabilitiesUrl" alt="Kopier til utklippstavle">
                                 Url til tjeneste
                             </button>
                             @if (item.ShowMapLink())
@@ -352,7 +352,7 @@
                         </div>
 
                         <div class="col-xs-1 search-results-action-icons">
-                            <span class="btn btn-copy input-group-addon" data-clipboard-text="@item.GetCapabilitiesUrl" alt="Kopier til utklippstavle">
+                            <span class="btn btn-copy input-group-addon" data-toggle="tooltip" data-placement="bottom" data-clipboard-text="@item.GetCapabilitiesUrl" alt="Kopier til utklippstavle" onclick="">
                                 <i class="fa fa-clipboard"></i>
                             </span>
                         </div>
@@ -402,7 +402,7 @@
                         </div>
                     </div>
 
-                        <hr />
+                    <hr />
                                         }
                 <div class="clearfix"></div>
             </div>
@@ -418,14 +418,38 @@
     if (item.ShowMapLink() || item.ShowServiceMapLink())
     {
       @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                                      }
+                                          }
 }
+        $('.btn-copy').tooltip({
+            trigger: 'click',
+            placement: 'bottom'
+        });
+
+        function setTooltip(btn, message) {
+            btn.tooltip('hide')
+              .attr('data-original-title', message)
+              .tooltip('show');
+        }
+
+        function hideTooltip(btn) {
+            setTimeout(function () {
+                btn.tooltip('hide');
+            }, 1000);
+        }
 
     $(document).ready(function () {
         var clipboard = new Clipboard('.btn-copy');
 
         clipboard.on('success', function (e) {
-            e.clearSelection();
+            var btn = $(e.trigger);
+            setTooltip(btn, 'Kopiert');
+            hideTooltip(btn);
+        });
+
+        clipboard.on('error', function (e) {
+            var btn = $(e.trigger);
+            setTooltip(btn, 'Feilet!');
+            hideTooltip(btn);
         });
     });
 </script>
