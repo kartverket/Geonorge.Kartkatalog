@@ -191,9 +191,9 @@
                     <div is="orderLine"
                          v-bind:metadata="orderLine.metadata"
                          v-bind:capabilities="orderLine.capabilities"
-                         v-bind:available-areas="masterOrderLine.allAvailableAreas[orderLine.metadata.uuid]"
-                         v-bind:available-projections="masterOrderLine.allAvailableProjections[orderLine.metadata.uuid]"
-                         v-bind:available-formats="masterOrderLine.allAvailableFormats[orderLine.metadata.uuid]"
+                         v-bind:available-areas="masterOrderLine.allAvailableAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableAreas[orderLine.metadata.uuid] : []"
+                         v-bind:available-projections="masterOrderLine.allAvailableProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableProjections[orderLine.metadata.uuid] : []"
+                         v-bind:available-formats="masterOrderLine.allAvailableFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableFormats[orderLine.metadata.uuid] : []"
                          v-bind:selected-areas="masterOrderLine.allSelectedAreas[orderLine.metadata.uuid]"
                          v-bind:selected-projections="masterOrderLine.allSelectedProjections[orderLine.metadata.uuid]"
                          v-bind:selected-formats="masterOrderLine.allSelectedFormats[orderLine.metadata.uuid]">
