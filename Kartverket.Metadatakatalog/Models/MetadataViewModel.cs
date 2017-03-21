@@ -110,32 +110,7 @@ namespace Kartverket.Metadatakatalog.Models
             else
                 return new SeoUrl("", Title);
         }
-        public String DistributionDetailsGetCapabilitiesUrl()
-        {
-            if (!string.IsNullOrWhiteSpace(DistributionDetails.URL))
-            {
-                string tmp = DistributionDetails.URL;
-                int startQueryString = tmp.IndexOf("?");
-                
-                if (startQueryString != -1)
-                    tmp = tmp.Substring(0, startQueryString + 1);
-                else
-                    tmp = tmp + "?";
-
-                if (DistributionDetails.IsWmsUrl())
-                    return tmp + "request=GetCapabilities&service=WMS";
-                else if (DistributionDetails.IsWfsUrl())
-                    return tmp + "request=GetCapabilities&service=WFS";
-                else if (!string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:WCS")))
-                    return tmp + "request=GetCapabilities&service=WCS";
-                else if (!string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:CSW")))
-                    return tmp + "request=GetCapabilities&service=CSW";
-                else return tmp;
-            }
-            else return "";
-            
-
-        }
+        
 
         public String MapUrl()
         {
@@ -512,6 +487,18 @@ namespace Kartverket.Metadatakatalog.Models
         public string ProtocolName { get; set; }
         public string URL { get; set; }
 
+        public DistributionDetails() {
+
+        }
+
+        public DistributionDetails(string name, string protocol, string protocolName, string url)
+        {
+            Name = name;
+            Protocol = protocol;
+            ProtocolName = protocolName;
+            URL = url;
+        }
+
         public bool IsWmsUrl()
         {
             return !string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains("OGC:WMS");
@@ -521,6 +508,39 @@ namespace Kartverket.Metadatakatalog.Models
         {
             return !string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains("OGC:WFS");
         }
+
+
+        public String DistributionDetailsGetCapabilitiesUrl()
+        {
+            if (this != null)
+            {
+                if (!string.IsNullOrWhiteSpace(URL))
+                {
+                    string tmp = URL;
+                    int startQueryString = tmp.IndexOf("?");
+
+                    if (startQueryString != -1)
+                        tmp = tmp.Substring(0, startQueryString + 1);
+                    else
+                        tmp = tmp + "?";
+
+                    if (IsWmsUrl())
+                        return tmp + "request=GetCapabilities&service=WMS";
+                    else if (IsWfsUrl())
+                        return tmp + "request=GetCapabilities&service=WFS";
+                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WCS")))
+                        return tmp + "request=GetCapabilities&service=WCS";
+                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:CSW")))
+                        return tmp + "request=GetCapabilities&service=CSW";
+                    else return tmp;
+                }
+                else return "";
+            }
+            return "";
+        }
+
+
+
     }
 
     public class DistributionFormat

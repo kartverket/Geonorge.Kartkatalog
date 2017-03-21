@@ -27,7 +27,11 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             return View(model);
         }
+
         
+
+
+
         protected override void OnException(ExceptionContext filterContext)
         {
             Log.Error("Error", filterContext.Exception);

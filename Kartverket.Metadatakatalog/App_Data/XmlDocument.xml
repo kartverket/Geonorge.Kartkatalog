@@ -667,6 +667,11 @@
             DistributionType
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.GetCapabilitiesUrl">
+            <summary>
+            URL for Get Capabilities
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.text">
             <summary>
             The text to search for

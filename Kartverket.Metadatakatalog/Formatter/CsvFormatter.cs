@@ -115,7 +115,7 @@ namespace Kartverket.Metadatakatalog.Formatter
                     Escape(meta.DistributionType) + ";" +
                     Escape(meta.Organization) + ";" +
                     Escape(meta.Uuid) + ";" +
-                    Escape(meta.DistributionUrl)
+                    Escape(meta.GetCapabilitiesUrl)
                 );
             }
         }
