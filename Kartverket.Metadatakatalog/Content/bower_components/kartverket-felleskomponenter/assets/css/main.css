@@ -1957,7 +1957,11 @@ button.btn {
     text-align: center;
     color: #FFF;
     margin-left: 12px;
-    margin-top: 11px; }
+    margin-top: 11px;
+    line-height: 14px; }
+
+.btn .custom-icon .custom-icon-overlay {
+  margin-top: 8px; }
 
 .custom-icon-sm {
   background-repeat: no-repeat;
@@ -2194,6 +2198,16 @@ button.btn {
 
 .custom-icon.custom-icon-norgeskart-area {
   background-color: #779cfd; }
+
+/* Validation */
+.custom-icon.custom-icon-checked {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/checked.svg"); }
+
+.custom-icon.custom-icon-warning {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/warning.svg"); }
+
+.custom-icon.custom-icon-danger {
+  background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/danger.svg"); }
 
 .download-form p {
   margin-bottom: 0; }
@@ -3103,10 +3117,13 @@ h1 .label {
     background-color: #7da1c4;
     transition: all 0.35s linear 0s;
     color: #FFF;
-    border-bottom: none;
+    border-bottom: 1px solid transparent;
+    background-clip: padding-box;
     border-radius: 0;
     font-size: 13px;
     margin-bottom: 0; }
+    .nav-tabs > li > a:hover {
+      border-color: transparent; }
     .nav-tabs > li > a.btn {
       border: none;
       font-size: 12pt;
