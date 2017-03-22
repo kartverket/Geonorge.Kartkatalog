@@ -257,102 +257,21 @@ var OrderLine = {
             }
         },
         updateSelectedAreas: function () {
-            var selectedAreas = [];
-            for (areaType in this.availableAreas) {
-                this.availableAreas[areaType].forEach(function (area) {
-                    if (area.isSelected) {
-                        selectedAreas.push(area);
-                        if (area.projections.length == 1) {
-                            area.projections[0].isSelected = true;
-                        }
-                        if (area.formats.length == 1) {
-                            area.formats[0].isSelected = true;
-                        }
-                    }
-                });
-            }
-            this.selectedAreas = selectedAreas;
         },
         updateAvailableProjections: function () {
-            var availableProjections = {};
-            var selectedAreas = this.selectedAreas !== undefined ? this.selectedAreas : false;
-            if (selectedAreas) {
-                selectedAreas.forEach(function (selectedArea) {
-                    selectedArea.projections.forEach(function (projection) {
-                        if (availableProjections[projection.code] == undefined) {
-                            availableProjections[projection.code] = projection;
-                            availableProjections[projection.code].areas = [];
-                        }
-                        availableProjections[projection.code].areas.push(selectedArea);
-                    });
-
-                });
-            }
-            return this.availableProjections = availableProjections;
         },
         updateSelectedProjections: function () {
-            var selectedProjections = [];
-            for (projectionCode in this.availableProjections) {
-                if (this.availableProjections[projectionCode].isSelected) {
-                    selectedProjections.push(this.availableProjections[projectionCode])
-                }
-            }
-            this.selectedProjections = selectedProjections;
         },
         updateAvailableFormats: function () {
-            var availableFormats = {};
-            var selectedAreas = this.selectedAreas !== undefined ? this.selectedAreas : false;
-            if (selectedAreas) {
-                selectedAreas.forEach(function (selectedArea) {
-                    selectedArea.formats.forEach(function (format) {
-                        if (availableFormats[format.name] == undefined) {
-                            availableFormats[format.name] = format;
-                            availableFormats[format.name].areas = [];
-                        }
-                        availableFormats[format.name].areas.push(selectedArea);
-                    });
-
-                });
-            }
-            return this.availableFormats = availableFormats;
         },
         updateSelectedFormats: function () {
-            var selectedFormats = [];
-            for (formatName in this.availableFormats) {
-                if (this.availableFormats[formatName].isSelected) {
-                    selectedFormats.push(this.availableFormats[formatName])
-                }
-            }
-            this.selectedFormats = selectedFormats;
         },
 
         hasSelectedProjections: function (area) {
-            var hasSelectedProjections = false;
-            this.selectedProjections.forEach(function (selectedProjection) {
-                selectedProjection.areas.forEach(function (selectedProjectionArea) {
-                    if (area.code == selectedProjectionArea.code) hasSelectedProjections = true;
-                })
-            })
-            return hasSelectedProjections;
         },
         hasSelectedFormats: function (area) {
-            var hasSelectedFormats = false;
-            this.selectedFormats.forEach(function (selectedFormat) {
-                selectedFormat.areas.forEach(function (selectedFormatArea) {
-                    if (area.code == selectedFormatArea.code) hasSelectedFormats = true;
-                })
-            })
-            return hasSelectedFormats;
         },
-        /*  validateAreas: function () {
-              this.selectedAreas.forEach(function (selectedArea) {
-                  selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea);
-                  selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea);
-              }.bind(this));
-              setTimeout
-              setTimeout(function () { $("[data-toggle='tooltip']").tooltip(); }, 300);
-  
-          }*/
+
     },
     components: {
         'areas': Areas,
@@ -401,17 +320,8 @@ var MasterOrderLine = {
                         this.availableAreas[areaType].push(area);
                     } else {
                         var orderLineUuidIsAdded = false
-                        /*
-                        if (area.allAvailableProjections == undefined) { area.allAvailableProjections = {} };
-                        if (area.allAvailableProjections[orderLine] == undefined) { area.allAvailableProjections[orderLine] = [] };
-                        if (area.allAvailableFormats == undefined) { area.allAvailableFormats = {} };
-                        if (area.allAvailableFormats[orderLine] == undefined) { area.allAvailableFormats[orderLine] = [] };
-                        */
 
                         if (!orderLineUuidIsAdded) {
-
-
-                            //  this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
 
                             // Add available projections to area
                             if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] == undefined) {
@@ -732,62 +642,7 @@ var mainVueModel = new Vue({
             }.bind(this))
             return orderRequests;
         }
-        /*
-        selectedProjections: function () {
-            var selectedProjections = [];
-            var orderItems = this.orderItems !== undefined ? this.orderItems : false;
-            if (orderItems) {
-                orderItems.forEach(function (orderItem) {
-                    orderItem.codelists.selectedAreas.forEach(function (selectedArea) {
-                        selectedArea.projections.forEach(function (projection) {
-                            selectedProjections.push(projection);
-                        })
-                    })
-                });
-            }
-            return selectedProjections;
-        },
-        orderRequests: function () {
-            var orderItemsGrouped = this.groupBy(this.orderItems, function (orderItem) {
-                return [orderItem.metadata.distributionUrl]
-            });
-            var orderRequests = [];
-            orderItemsGrouped.forEach(function (orderItemGroup) {
-                var orderRequest = {
-                    "distributionUrl": orderItemGroup[0].metadata.orderDistributionUrl,
-                    "order": {
-                        "email": this.email,
-                        "orderLines": []
-                    }
-                };
-                var orderLines = [];
-                orderItemGroup.forEach(function (orderItem) {
-                    var orderLine = {
-                        "metadataUuid": orderItem.metadata.uuid
-                    };
-                    if (this.getSelectedAreas(orderItem.codelists.selectedAreas).length) {
-                        orderLine.areas = this.getSelectedAreas(orderItem.codelists.selectedAreas);
-                    }
-                    if (this.getSelectedProjections(orderItem.codelists.selectedProjections).length) {
-                        orderLine.projections = this.getSelectedProjections(orderItem.codelists.selectedProjections);
-                    }
-                    if (this.getSelectedFormats(orderItem.codelists.selectedFormats).length) {
-                        orderLine.formats = this.getSelectedFormats(orderItem.codelists.selectedFormats);
-                    }
-                    if (orderItem.codelists.coordinates !== undefined && orderItem.codelists.coordinates !== "") {
-                        orderLine.coordinates = orderItem.codelists.coordinates;
-                    }
-                    if (orderItem.codelists.coordinatesystem !== undefined && orderItem.codelists.coordinatesystem !== "") {
-                        orderLine.coordinatesystem = orderItem.codelists.coordinatesystem;
-                    }
-                    orderRequest.order.orderLines.push(orderLine);
-                }.bind(this));
-                orderRequests.push(orderRequest);
-
-            }.bind(this));
-            return orderRequests;
-        },
-    */},
+    },
     created: function () {
         var defaultUrl = "https://nedlasting.geonorge.no/api/capabilities/";
         var orderItemsJson = (localStorage["orderItems"] != null) ? JSON.parse(localStorage["orderItems"]) : [];
