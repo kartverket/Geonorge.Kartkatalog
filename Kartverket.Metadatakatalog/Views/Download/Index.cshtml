@@ -182,7 +182,8 @@
                      v-bind:all-available-formats="masterOrderLine.allAvailableFormats"
                      v-bind:all-selected-areas="masterOrderLine.allSelectedAreas"
                      v-bind:all-selected-projections="masterOrderLine.allSelectedProjections"
-                     v-bind:all-selected-formats="masterOrderLine.allSelectedFormats">
+                     v-bind:all-selected-formats="masterOrderLine.allSelectedFormats"
+                     v-bind:all-order-line-errors="masterOrderLine.allOrderLineErrors">
                 </div>
 
             </div>
@@ -197,7 +198,8 @@
                          v-bind:available-formats="masterOrderLine.allAvailableFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableFormats[orderLine.metadata.uuid] : []"
                          v-bind:selected-areas="masterOrderLine.allSelectedAreas[orderLine.metadata.uuid]"
                          v-bind:selected-projections="masterOrderLine.allSelectedProjections[orderLine.metadata.uuid]"
-                         v-bind:selected-formats="masterOrderLine.allSelectedFormats[orderLine.metadata.uuid]">
+                         v-bind:selected-formats="masterOrderLine.allSelectedFormats[orderLine.metadata.uuid]"
+                         v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid]">
 
                     </div>
                 </div>

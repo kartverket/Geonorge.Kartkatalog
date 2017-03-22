@@ -233,7 +233,7 @@ var Formats = {
 
 
 var OrderLine = {
-    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats'],
+    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'orderLineErrors'],
     template: '#order-line-template',
     data: function () {
         var data = {
@@ -281,7 +281,7 @@ var OrderLine = {
 };
 
 var MasterOrderLine = {
-    props: ['allAvailableAreas', 'allAvailableProjections', 'allAvailableFormats', 'allSelectedAreas', 'allSelectedProjections', 'allSelectedFormats'],
+    props: ['allAvailableAreas', 'allAvailableProjections', 'allAvailableFormats', 'allSelectedAreas', 'allSelectedProjections', 'allSelectedFormats', 'allOrderLineErrors'],
     data: function () {
         var data = {
             availableAreas: {},
@@ -543,6 +543,14 @@ var MasterOrderLine = {
                     }
                 }.bind(this))
             }
+            if (!hasSelectedProjections) {
+                var errorMessage = "Støttet projeksjon for " + area.name + " mangler";
+
+                this.$parent.masterOrderLine.allOrderLineErrors[orderLine].push({
+                    message: errorMessage,
+                    field: "projection"
+                })
+            }
             return hasSelectedProjections;
         },
         hasSelectedFormats: function (area, orderLine) {
@@ -559,10 +567,19 @@ var MasterOrderLine = {
                     }
                 }.bind(this))
             }
+            if (!hasSelectedFormats) {
+                var errorMessage = "Støttet format for " + area.name + " mangler";
+                
+                this.$parent.masterOrderLine.allOrderLineErrors[orderLine].push({
+                    message: errorMessage,
+                    field: "format"
+                })
+            }
             return hasSelectedFormats;
         },
         validateAreas: function () {
             for (orderLine in this.$parent.masterOrderLine.allSelectedAreas) {
+                this.$parent.masterOrderLine.allOrderLineErrors[orderLine] = [];
                 this.$parent.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
                     selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLine);
                     selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLine);
@@ -603,7 +620,8 @@ var mainVueModel = new Vue({
             allAvailableFormats: {},
             allSelectedAreas: {},
             allSelectedProjections: {},
-            allSelectedFormats: {}
+            allSelectedFormats: {},
+            allOrderLineErrors: {}
         }
     },
     computed: {
