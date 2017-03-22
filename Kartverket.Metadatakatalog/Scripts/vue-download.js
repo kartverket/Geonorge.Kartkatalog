@@ -384,7 +384,7 @@ var MasterOrderLine = {
                         if (!orderLineUuidIsAdded) {
 
 
-                          //  this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
+                            //  this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
 
                             // Add available projections to area
                             if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] == undefined) {
@@ -466,19 +466,15 @@ var MasterOrderLine = {
         },
         updateAvailableProjections: function () {
             var availableProjections = [];
-            var allAvailableProjections = {};
-            console.log(" "); console.log(" "); console.log(" "); console.log(" ");
-            console.log("-------------------------------------");
-            console.log("------------ Projections ------------");
-            if (this.selectedAreas !== undefined && this.selectedAreas.length) {
-                this.selectedAreas.forEach(function (selectedArea) {
-                    if (selectedArea.allAvailableProjections !== undefined) {
-                        for (orderLine in selectedArea.allAvailableProjections) {
-                            console.log("-------------------------------------");
-                            console.log("orderLine:  " + orderLine);
+            var allAvailableProjections = {}
+            if (this.$parent.masterOrderLine.allSelectedAreas !== undefined) {
+                for (orderLine in this.$parent.masterOrderLine.allSelectedAreas) {
+
+                    this.$parent.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
+                        if (selectedArea.allAvailableProjections !== undefined) {
+
                             // All available projections for orderLine
                             selectedArea.allAvailableProjections[orderLine].forEach(function (projection) {
-                                console.log("projection: " + projection.name + " (" + projection.code + ")");
                                 if (projection.isSelected == undefined) { projection.isSelected = false }
 
                                 // Update availableProjections array
@@ -494,62 +490,48 @@ var MasterOrderLine = {
                                     allAvailableProjections[orderLine].push(projection);
                                 }
                             }.bind(this))
+
                         }
-                    }
-                }.bind(this))
+                    }.bind(this))
+
+                }
             }
             this.availableProjections = availableProjections;
             this.$parent.masterOrderLine.allAvailableProjections = allAvailableProjections;
 
 
-
-            /* -- Only for debuging -- */
-            console.log(" ");
-            console.log("-------------------------------------");
-            console.log("------- Available Projections -------");
-            availableProjections.forEach(function (availableProjection) {
-                console.log("projection: " + availableProjection.name + " (" + availableProjection.code + ")");
-            })
-            console.log(" ");
-            console.log("-------------------------------------");
-            console.log("----- All Available Projections -----");
-            for (orderLine in allAvailableProjections) {
-                console.log("-------------------------------------");
-                console.log("orderLine:  " + orderLine);
-                allAvailableProjections[orderLine].forEach(function (availableProjection) {
-                    console.log("projection: " + availableProjection.name + " (" + availableProjection.code + ")");
-                })
-            }
-            /* ----------------------- */
-
         },
         updateAvailableFormats: function () {
             var availableFormats = [];
             var allAvailableFormats = {};
-            if (this.selectedAreas !== undefined && this.selectedAreas.length) {
-                this.selectedAreas.forEach(function (selectedArea) {
-                    if (selectedArea.allAvailableFormats !== undefined) {
-                        for (orderLine in selectedArea.allAvailableFormats) {
-                            // All available projections for orderLine
-                            selectedArea.allAvailableFormats[orderLine].forEach(function (format) {
-                                if (format.isSelected == undefined) { format.isSelected = false }
+            if (this.$parent.masterOrderLine.allSelectedAreas !== undefined) {
+                for (orderLine in this.$parent.masterOrderLine.allSelectedAreas) {
 
-                                // Update availableProjections array
-                                var isAllreadyAddedInfo = this.isAllreadyAdded(availableFormats, format, "name");
-                                if (!isAllreadyAddedInfo.added) {
-                                    availableFormats.push(format);
-                                }
+                    this.$parent.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
+                        if (selectedArea.allAvailableFormats !== undefined) {
 
-                                // Update allAvailableProjections object
-                                if (allAvailableFormats[orderLine] == undefined) { allAvailableFormats[orderLine] = [] }
-                                var isAllreadyAddedInfo = this.isAllreadyAdded(allAvailableFormats[orderLine], format, "name");
-                                if (!isAllreadyAddedInfo.added) {
-                                    allAvailableFormats[orderLine].push(format);
-                                }
-                            }.bind(this))
+                                // All available formats for orderLine
+                                selectedArea.allAvailableFormats[orderLine].forEach(function (format) {
+                                    if (format.isSelected == undefined) { format.isSelected = false }
+
+                                    // Update availableFormats array
+                                    var isAllreadyAddedInfo = this.isAllreadyAdded(availableFormats, format, "name");
+                                    if (!isAllreadyAddedInfo.added) {
+                                        availableFormats.push(format);
+                                    }
+
+                                    // Update allAvailableFormats object
+                                    if (allAvailableFormats[orderLine] == undefined) { allAvailableFormats[orderLine] = [] }
+                                    var isAllreadyAddedInfo = this.isAllreadyAdded(allAvailableFormats[orderLine], format, "name");
+                                    if (!isAllreadyAddedInfo.added) {
+                                        allAvailableFormats[orderLine].push(format);
+                                    }
+                                }.bind(this))
+
                         }
-                    }
-                }.bind(this))
+                    }.bind(this))
+
+                }
             }
             this.availableFormats = availableFormats;
             this.$parent.masterOrderLine.allAvailableFormats = allAvailableFormats;
@@ -617,6 +599,28 @@ var MasterOrderLine = {
 
             this.$parent.masterOrderLine.allSelectedFormats = allSelectedFormats;
             this.selectedFormats = selectedFormats;
+        },
+        hasSelectedFormats: function (area) {
+            var hasSelectedFormats = false;
+            this.selectedFormats.forEach(function (selectedFormat) {
+                selectedFormat.areas.forEach(function (selectedFormatArea) {
+                    if (area.code == selectedFormatArea.code) hasSelectedFormats = true;
+                })
+            })
+            return hasSelectedFormats;
+        },
+        validateAreas: function () {
+            for (orderLine in this.allSelectedAreas) {
+                this.allSelectedAreas[orderLine].forEach(function (selectedArea) {
+                    //selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea);
+                    selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea);
+                }.bind(this));
+
+            }
+            setTimeout(function () {
+                $("[data-toggle='tooltip']").tooltip();
+            }, 300);
+
         }
 
     },
