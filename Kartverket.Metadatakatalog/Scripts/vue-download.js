@@ -928,7 +928,7 @@ var mainVueModel = new Vue({
             orderItem.codelists.selectedAreas = newSelectedAreas;
         },
 
-        getAreasByType(areas, type) {
+        getAreasByType: function (areas, type) {
             var areasWithType = [];
             areas.forEach(function (area) {
                 if (area.type == type) areasWithType.push(area);
