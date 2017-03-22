@@ -569,7 +569,7 @@ var MasterOrderLine = {
             }
             if (!hasSelectedFormats) {
                 var errorMessage = "Støttet format for " + area.name + " mangler";
-                
+
                 this.$parent.masterOrderLine.allOrderLineErrors[orderLine].push({
                     message: errorMessage,
                     field: "format"
@@ -681,32 +681,33 @@ var mainVueModel = new Vue({
                 this.masterOrderLine.allAvailableProjections[uuid] = {};
                 this.masterOrderLine.allAvailableFormats[uuid] = {};
 
-                orderLines[key].capabilities._links.forEach(function (link) {
-                    if (link.rel == "http://rel.geonorge.no/download/order") {
-                        orderLines[key].metadata.orderDistributionUrl = link.href;
-                    }
-                    if (link.rel == "http://rel.geonorge.no/download/can-download") {
-                        orderLines[key].metadata.canDownloadUrl = link.href;
-                    }
-                    if (link.rel == "http://rel.geonorge.no/download/area") {
-                        var availableAreas = getJsonData(link.href);
-                        this.masterOrderLine.allAvailableAreas[uuid] = {};
+                if (orderLines[key].capabilities._links !== undefined && orderLines[key].capabilities._links.length) {
+                    orderLines[key].capabilities._links.forEach(function (link) {
+                        if (link.rel == "http://rel.geonorge.no/download/order") {
+                            orderLines[key].metadata.orderDistributionUrl = link.href;
+                        }
+                        if (link.rel == "http://rel.geonorge.no/download/can-download") {
+                            orderLines[key].metadata.canDownloadUrl = link.href;
+                        }
+                        if (link.rel == "http://rel.geonorge.no/download/area") {
+                            var availableAreas = getJsonData(link.href);
+                            this.masterOrderLine.allAvailableAreas[uuid] = {};
 
-                        availableAreas.forEach(function (availableArea) {
-                            if (this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] == undefined) {
-                                this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] = [];
-                            }
-                            this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
-                        }.bind(this))
-                    }
-                    if (link.rel == "http://rel.geonorge.no/download/projection") {
-                        orderLines[key].defaultProjections = getJsonData(link.href);
-                    }
-                    if (link.rel == "http://rel.geonorge.no/download/format") {
-                        orderLines[key].defaultFormats = getJsonData(link.href);
-                    }
-                }.bind(this))
-
+                            availableAreas.forEach(function (availableArea) {
+                                if (this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] == undefined) {
+                                    this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] = [];
+                                }
+                                this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
+                            }.bind(this))
+                        }
+                        if (link.rel == "http://rel.geonorge.no/download/projection") {
+                            orderLines[key].defaultProjections = getJsonData(link.href);
+                        }
+                        if (link.rel == "http://rel.geonorge.no/download/format") {
+                            orderLines[key].defaultFormats = getJsonData(link.href);
+                        }
+                    }.bind(this))
+                }
                 /*
                 
                 
