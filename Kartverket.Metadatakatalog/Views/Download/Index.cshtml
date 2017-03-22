@@ -86,7 +86,7 @@
         <h2 v-on:click="expanded = !expanded">
             <span class="indicator" v-bind:class="[expanded ? 'active' : '']"></span> {{ metadata.name }}
         </h2>
-        
+        <!--
         <span v-if="selectedAreas" class="orderline-field-counter">
             <span class="custom-icon custom-icon-kartmarkoer">
                 <span class="custom-icon-overlay">{{ selectedAreas.length }}</span>
@@ -102,28 +102,45 @@
                 <span class="custom-icon-overlay">{{ selectedFormats.length }}</span>
             </span>
         </span>
+            -->
         <div class="pull-right margin-top-10">
+            <span v-if="orderLineErrors && orderLineErrors.length" class="orderline-field-counter">
+                <span class="custom-icon custom-icon-warning">
+                    <span class="custom-icon-overlay">{{ orderLineErrors.length }}</span>
+                </span>
+            </span>
+            <span v-if="orderLineErrors && orderLineErrors.length == 0" class="orderline-field-counter">
+                <span class="custom-icon custom-icon-checked">
+                </span>
+            </span>
             <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom" title="Gå til datasett" class="btn"><span class="fa fa-home"></span></a>
-           <!-- <span v-on:click="$parent.cloneSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Bruk valg på alle datasett" class="btn"><span class="fa fa-clone"></span></span>
-            <span v-on:click="$parent.clearSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Fjern valg fra datasett" class="btn"><span class="fa fa-eraser"></span></span> -->
+            <!-- <span v-on:click="$parent.cloneSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Bruk valg på alle datasett" class="btn"><span class="fa fa-clone"></span></span>
+             <span v-on:click="$parent.clearSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Fjern valg fra datasett" class="btn"><span class="fa fa-eraser"></span></span> -->
             <span v-on:click="removeOrderItem(orderItem)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
         </div>
         <div class="clearfix"></div>
-        <div v-show="expanded" class="row orderline-fields">
-            <div class="col-md-4 orderline-field">
-                <p>Område</p>
-                <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="false"></div>
-            </div>
-            <div class="col-md-4 orderline-field">
-                <p>Projeksjon</p>
-                <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
-                <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="false"></div>
+        <div v-show="expanded">
+            <div class="row orderline-fields">
+                <div class="col-md-4 orderline-field">
+                    <p>Område</p>
+                    <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="false"></div>
+                </div>
+                <div class="col-md-4 orderline-field">
+                    <p>Projeksjon</p>
+                    <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
+                    <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="false"></div>
 
+                </div>
+                <div class="col-md-4 orderline-fields">
+                    <p>Format</p>
+                    <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
+                    <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="false"></div>
+                </div>
             </div>
-            <div class="col-md-4 orderline-fields">
-                <p>Format</p>
-                <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
-                <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="false"></div>
+            <div class="orderline-errors margin-top-10">
+                <div v-for="orderlineError in orderLineErrors" class="help-text form-element-help-text bg-info">
+                    {{ orderlineError.message }}
+                </div>
             </div>
         </div>
     </div>
@@ -203,7 +220,7 @@
                     </div>
                 </div>
             </div>
-        
+
 
             <div class="download-form">
                 <div v-show="emailRequired" class="row margin-bottom-10">
