@@ -151,6 +151,7 @@
 
         .custom-select-list .custom-select-list-dropdown .custom-select-list-dropdown-additional-options .btn {
             margin-bottom: 0;
+            display: block;
         }
 
     .custom-select-list .custom-select-list-dropdown ul.custom-select-list-options {
