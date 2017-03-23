@@ -241,6 +241,28 @@ var OrderLine = {
         }
         return data;
     },
+    computed: {
+        hasErrors: function () {
+            var hasErrors = false;
+            if (this.orderLineErrors !== undefined && Object.keys(this.orderLineErrors).length) {
+                for (errorType in this.orderLineErrors) {
+                    if (this.orderLineErrors[errorType].length) {
+                        hasErrors = true;
+                    }
+                }
+            }
+            return hasErrors;
+        },
+        numberOfErrors: function () {
+            var numberOfErrors = 0;
+            if (this.orderLineErrors !== undefined && Object.keys(this.orderLineErrors).length) {
+                for (errorType in this.orderLineErrors) {
+                    numberOfErrors += this.orderLineErrors[errorType].length;
+                }
+            }
+            return numberOfErrors;
+        }
+    },
     methods: {
         filterOptionList: function (optionListId, inputValue) {
             var dropdownListElements = document.getElementsByClassName(optionListId);
@@ -545,11 +567,7 @@ var MasterOrderLine = {
             }
             if (!hasSelectedProjections) {
                 var errorMessage = "Støttet projeksjon for " + area.name + " mangler";
-
-                this.$parent.masterOrderLine.allOrderLineErrors[orderLine].push({
-                    message: errorMessage,
-                    field: "projection"
-                })
+                this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["projection"].push(errorMessage);
             }
             return hasSelectedProjections;
         },
@@ -569,27 +587,41 @@ var MasterOrderLine = {
             }
             if (!hasSelectedFormats) {
                 var errorMessage = "Støttet format for " + area.name + " mangler";
-
-                this.$parent.masterOrderLine.allOrderLineErrors[orderLine].push({
-                    message: errorMessage,
-                    field: "format"
-                })
+                this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["format"].push(errorMessage);
             }
             return hasSelectedFormats;
         },
+        removeAllValidationErrors: function () {
+            for (orderLine in this.$parent.masterOrderLine.allOrderLineErrors) {
+                for (errorType in this.$parent.masterOrderLine.allOrderLineErrors[orderLine]) {
+                    this.$parent.masterOrderLine.allOrderLineErrors[orderLine][errorType] = [];
+                }
+            }
+        },
         validateAreas: function () {
-            for (orderLine in this.$parent.masterOrderLine.allSelectedAreas) {
-                this.$parent.masterOrderLine.allOrderLineErrors[orderLine] = [];
-                this.$parent.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
-                    selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLine);
-                    selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLine);
-                }.bind(this));
 
+            for (orderLine in this.$parent.masterOrderLine.allAvailableAreas) {
+                this.$parent.masterOrderLine.allOrderLineErrors[orderLine] = {};
+                this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["projection"] = [];
+                this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["format"] = [];
+                this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["area"] = [];
+                if (this.$parent.masterOrderLine.allSelectedAreas[orderLine] !== undefined && this.$parent.masterOrderLine.allSelectedAreas[orderLine].length) {
+
+                    
+                        this.$parent.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
+                            selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLine);
+                            selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLine);
+                        }.bind(this));
+                    
+                } else {
+                    this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["area"] = ["Datasett mangler valgt område"];
+                }
             }
             setTimeout(function () {
                 $("[data-toggle='tooltip']").tooltip();
             }, 300);
         }
+
 
     },
     template: '#master-order-line-template',

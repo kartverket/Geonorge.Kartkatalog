@@ -38,12 +38,12 @@
 }
 
     #orderlist .orderline:nth-child(odd) {
-        /*    background-color: #fcfcfc;*/
+        background-color: #fbfcfc;
     }
 
 
     #orderlist .orderline:nth-child(even) {
-        background-color: #f8f9f9;
+        background-color: #f7f8f8;
     }
 
 
@@ -55,8 +55,19 @@
     #orderlist .orderline .orderline-field-counter {
         height: 34px;
         display: inline-block;
-        vertical-align: middle;
+        vertical-align: top;
+        margin-right: 6px;
+        padding-right: 6px;
+        border-right: 1px solid #eaebeb;
     }
+
+        #orderlist .orderline .orderline-field-counter .custom-icon-warning {
+            margin-top: 3px;
+        }
+
+        #orderlist .orderline .orderline-field-counter .custom-icon-checked {
+            margin-top: 5px;
+        }
 
 .custom-select-list .custom-select-list-input-container {
     border: 1px solid #cfcfcf !important;

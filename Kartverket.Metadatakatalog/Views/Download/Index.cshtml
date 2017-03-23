@@ -33,8 +33,8 @@
                 </div>
             </div>
             <div class="custom-select-list-dropdown-additional-options">
-                <a class="btn" v-on:click="$root.selectFromMap($parent)" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
-                <a class="btn" v-on:click="$root.selectFromMap($parent)" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
+                <a v-show="this.supportsPolygonSelection" class="btn" v-on:click="$root.selectFromMap($parent)" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
+                <a v-show="this.supportsGridSelection" class="btn" v-on:click="$root.selectFromMap($parent)" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
             </div>
         </div>
     </div>
@@ -104,13 +104,13 @@
         </span>
             -->
         <div class="pull-right margin-top-10">
-            <span v-if="orderLineErrors && orderLineErrors.length" class="orderline-field-counter">
-                <span class="custom-icon custom-icon-warning">
-                    <span class="custom-icon-overlay">{{ orderLineErrors.length }}</span>
+            <span v-show="hasErrors" class="orderline-field-counter">
+                <span class="custom-icon custom-icon-warning" data-toggle="tooltip" data-placement="bottom" title="Vis mangler">
+                    <span class="custom-icon-overlay">{{ numberOfErrors }}</span>
                 </span>
             </span>
-            <span v-if="orderLineErrors && orderLineErrors.length == 0" class="orderline-field-counter">
-                <span class="custom-icon custom-icon-checked">
+            <span v-show="!hasErrors" class="orderline-field-counter">
+                <span class="custom-icon custom-icon-checked" data-toggle="tooltip" data-placement="bottom" title="Datasett er korrekt utfylt">
                 </span>
             </span>
             <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom" title="Gå til datasett" class="btn"><span class="fa fa-home"></span></a>
@@ -124,24 +124,34 @@
                 <div class="col-md-4 orderline-field">
                     <p>Område</p>
                     <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="false"></div>
+                    <div v-if="orderLineErrors && orderLineErrors.area" class="orderline-errors margin-top-10">
+                        <div v-for="orderlineError in orderLineErrors.area" class="help-text form-element-help-text bg-info">
+                            {{ orderlineError }}
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4 orderline-field">
                     <p>Projeksjon</p>
                     <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                     <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="false"></div>
-
+                    <div v-if="orderLineErrors && orderLineErrors.projection" class="orderline-errors margin-top-10">
+                        <div v-for="orderlineError in orderLineErrors.projection" class="help-text form-element-help-text bg-info">
+                            {{ orderlineError }}
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4 orderline-fields">
                     <p>Format</p>
                     <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                     <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="false"></div>
+                    <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
+                        <div v-for="orderlineError in orderLineErrors.format" class="help-text form-element-help-text bg-info">
+                            {{ orderlineError }}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="orderline-errors margin-top-10">
-                <div v-for="orderlineError in orderLineErrors" class="help-text form-element-help-text bg-info">
-                    {{ orderlineError.message }}
-                </div>
-            </div>
+            
         </div>
     </div>
 </script>
@@ -151,20 +161,20 @@
         <p>Alle datasett</p>
         <div class="row">
             <div class="col-md-4">
-                <p>Område</p>
+                <p>Område <span href="#" class="badge help-text-toggle">?</span></p>
                 <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="true">
 
 
                 </div>
             </div>
             <div class="col-md-4">
-                <p>Projeksjon</p>
+                <p>Projeksjon <span href="#" class="badge help-text-toggle">?</span></p>
                 <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                 <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="true"></div>
 
             </div>
             <div class="col-md-4">
-                <p>Format</p>
+                <p>Format <span href="#" class="badge help-text-toggle">?</span></p>
                 <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                 <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="true"></div>
             </div>
