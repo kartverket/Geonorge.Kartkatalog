@@ -63,6 +63,7 @@
 
         #orderlist .orderline .orderline-field-counter .custom-icon-warning {
             margin-top: 3px;
+            cursor: pointer;
         }
 
         #orderlist .orderline .orderline-field-counter .custom-icon-checked {
@@ -127,6 +128,10 @@
         background: transparent;
     }
 
+
+.hasError .custom-select-list-input-container{
+    border-color: #EE432a!important;
+}
 
 .custom-select-list .custom-select-list-dropdown {
     display: none;

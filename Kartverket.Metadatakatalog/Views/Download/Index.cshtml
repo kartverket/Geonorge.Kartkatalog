@@ -105,7 +105,7 @@
             -->
         <div class="pull-right margin-top-10">
             <span v-show="hasErrors" class="orderline-field-counter">
-                <span class="custom-icon custom-icon-warning" data-toggle="tooltip" data-placement="bottom" title="Vis mangler">
+                <span v-on:click="expanded = true" class="custom-icon custom-icon-warning" data-toggle="tooltip" data-placement="bottom" title="Vis mangler">
                     <span class="custom-icon-overlay">{{ numberOfErrors }}</span>
                 </span>
             </span>
@@ -123,9 +123,9 @@
             <div class="row orderline-fields">
                 <div class="col-md-4 orderline-field">
                     <p>Område</p>
-                    <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="false"></div>
+                    <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="false" v-bind:class="[orderLineErrors && orderLineErrors.area && orderLineErrors.area.length ? 'hasError' : '']"></div>
                     <div v-if="orderLineErrors && orderLineErrors.area" class="orderline-errors margin-top-10">
-                        <div v-for="orderlineError in orderLineErrors.area" class="help-text form-element-help-text bg-info">
+                        <div v-for="orderlineError in orderLineErrors.area" class="help-text form-element-help-text bg-danger">
                             {{ orderlineError }}
                         </div>
                     </div>
@@ -133,9 +133,9 @@
                 <div class="col-md-4 orderline-field">
                     <p>Projeksjon</p>
                     <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
-                    <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="false"></div>
+                    <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="false" v-bind:class="[orderLineErrors && orderLineErrors.projection && orderLineErrors.projection.length ? 'hasError' : '']"></div>
                     <div v-if="orderLineErrors && orderLineErrors.projection" class="orderline-errors margin-top-10">
-                        <div v-for="orderlineError in orderLineErrors.projection" class="help-text form-element-help-text bg-info">
+                        <div v-for="orderlineError in orderLineErrors.projection" class="help-text form-element-help-text bg-danger">
                             {{ orderlineError }}
                         </div>
                     </div>
@@ -143,9 +143,9 @@
                 <div class="col-md-4 orderline-fields">
                     <p>Format</p>
                     <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
-                    <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="false"></div>
+                    <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="false" v-bind:class="[orderLineErrors && orderLineErrors.format && orderLineErrors.format.length ? 'hasError' : '']"></div>
                     <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
-                        <div v-for="orderlineError in orderLineErrors.format" class="help-text form-element-help-text bg-info">
+                        <div v-for="orderlineError in orderLineErrors.format" class="help-text form-element-help-text bg-danger">
                             {{ orderlineError }}
                         </div>
                     </div>
@@ -226,7 +226,7 @@
                          v-bind:selected-areas="masterOrderLine.allSelectedAreas[orderLine.metadata.uuid]"
                          v-bind:selected-projections="masterOrderLine.allSelectedProjections[orderLine.metadata.uuid]"
                          v-bind:selected-formats="masterOrderLine.allSelectedFormats[orderLine.metadata.uuid]"
-                         v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid]">
+                         v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}">
                     </div>
                 </div>
             </div>

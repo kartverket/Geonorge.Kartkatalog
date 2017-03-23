@@ -361,8 +361,10 @@ var MasterOrderLine = {
                         }
                     }
                 }.bind(this))
-            }
+            } 
         }
+        this.validateAreas();
+        this.updateSelectedAreas();
     },
     methods: {
         isAllreadyAdded: function (array, item, propertyToCompare) {

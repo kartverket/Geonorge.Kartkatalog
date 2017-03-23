@@ -2961,6 +2961,12 @@ input[type="radio"]:checked.custom-radio.disabled:after,
     border-left: 8px solid #36c545; }
   .help-text.bg-info {
     border-left: 8px solid #7da1c4; }
+  .help-text.bg-primary {
+    border-left: 8px solid #fe5000; }
+  .help-text.bg-warning {
+    border-left: 8px solid #FED633; }
+  .help-text.bg-danger {
+    border-left: 8px solid #EE432a; }
   .help-text.form-element-help-text {
     margin: 0px;
     padding: 6px 10px; }
