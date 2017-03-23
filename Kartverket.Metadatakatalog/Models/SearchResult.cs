@@ -15,7 +15,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public SearchResult()
         {
-            
+
         }
 
         public SearchResult(SearchResult otherResult)
@@ -41,22 +41,31 @@ namespace Kartverket.Metadatakatalog.Models
             return null;
         }
 
-        public Dictionary<string,string> Organizations()
+        public Dictionary<string, string> Organizations()
         {
             Dictionary<string, string> organizationList = new Dictionary<string, string>();
             var organizationFacets = Facets.First(f => f.FacetField == "organization");
+
             var organizations = organizationFacets.FacetResults;
 
             foreach (var organization in organizations)
             {
-                var seoName = new SeoUrl(organization.Name);
-                if (!organizationList.ContainsKey(seoName.Organization))
+                if (OrganizationFacet(organization))
                 {
-                    organizationList.Add(seoName.Organization, organization.Name);
+                    var seoName = new SeoUrl(organization.Name);
+                    if (!organizationList.ContainsKey(seoName.Organization))
+                    {
+                        organizationList.Add(seoName.Organization, organization.Name);
 
+                    }
                 }
             }
-            return organizationList ;
+            return organizationList;
+        }
+
+        private static bool OrganizationFacet(Facet.FacetValue organization)
+        {
+            return organization.Name != "Kommune" && organization.Name != "Fylke" && organization.Name != "Kommunesamarbeid";
         }
     }
 }

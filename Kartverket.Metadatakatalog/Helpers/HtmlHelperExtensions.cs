@@ -63,5 +63,14 @@ namespace Kartverket.Metadatakatalog.Helpers
             return WebConfigurationManager.AppSettings["StatusApiUrl"];
         }
 
+        public static string GetOrganizationNameOrDefault(string organizationName){
+            if (organizationName == null)
+            {
+                return "Etatsvis oversikt over data";
+            }
+            else {
+                return organizationName;
+            }
+        }
     }
 }

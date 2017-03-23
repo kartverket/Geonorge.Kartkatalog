@@ -9,15 +9,18 @@
         public SearchByOrganizationViewModel(SearchByOrganizationParameters parameters, SearchResultForOrganization searchResult)
             : base(parameters, searchResult)
         {
-            OrganizationSeoName = parameters.OrganizationSeoName;
-            if (searchResult.Organization != null)
+            if (parameters.OrganizationSeoName != null)
             {
-                OrganizationName = searchResult.Organization.Name;
-                OrganizationLogoUrl = searchResult.Organization.LogoUrl;    
-            } 
-            else
-            {
-                OrganizationName = searchResult.GetOrganizationNameFromFirstItem();
+                OrganizationSeoName = parameters.OrganizationSeoName;
+                if (searchResult.Organization != null)
+                {
+                    OrganizationName = searchResult.Organization.Name;
+                    OrganizationLogoUrl = searchResult.Organization.LogoUrl;
+                }
+                else
+                {
+                    OrganizationName = searchResult.GetOrganizationNameFromFirstItem();
+                }
             }
         }
         

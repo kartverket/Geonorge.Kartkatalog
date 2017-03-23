@@ -2,40 +2,42 @@
 @using Kartverket.Metadatakatalog.Helpers
 @model SearchByOrganizationViewModel
 @{
-    ViewBag.Title = Model.OrganizationName;
+    var title = HtmlHelperExtensions.GetOrganizationNameOrDefault(Model.OrganizationName);
+    ViewBag.Title = title;
     SelectList organizations = ViewBag.OrganizationList;
 }
 @section breadcrumb {
-    <li class="active">@Model.OrganizationName</li>
+    <li class="active">@title</li>
 }
 
 <div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
 </div>
+<div class="row">
+</div>
 <section class="heading">
     <div class="row">
-        <div class="col-sm-9">
+        <div class="col-sm-12">
             <h1 class="small-h1">
-                @Model.OrganizationName
+                @title
             </h1>
-        </div>
-        <div class="col-sm-3 custom-select">
-            <select class="form-control">
-                <option>Organisasjon 1</option>
-                <option>Organisasjon 2</option>
-                <option>Organisasjon 3</option>
-                <option>Organisasjon 4</option>
-            </select>
         </div>
         <div class="col-sm-12">
             <span class="separator-lg"></span>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <form action="@Request.Url.LocalPath" name="FilterForm" method="get" class="custom-select">
+                @Html.DropDownList("organizationSeoName", organizations, "Velg etat", htmlAttributes: new { @class = "form-control", onchange = "this.form.submit()" })
+            </form>
+        </div>
+    </div>
 </section>
 
 @helper DisplayPaginationBottom()
-{
+        {
     <div class="search-result-navigation">
         Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
         <div class="pagination-container">
@@ -141,21 +143,21 @@
 }
 
 @{
-    string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("metadata/" + Model.OrganizationSeoName, "api/search");
-    Uri uri = new Uri(url);
-    string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
-    Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
-    var qs = HttpUtility.ParseQueryString("");
+            string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("metadata/" + Model.OrganizationSeoName, "api/search");
+            Uri uri = new Uri(url);
+            string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
+            Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
+            var qs = HttpUtility.ParseQueryString("");
 
-    for (int f = 0; f < Model.FacetParameters.Count; f++)
-    {
-        var facet = Model.FacetParameters[f];
+            for (int f = 0; f < Model.FacetParameters.Count; f++)
+            {
+                var facet = Model.FacetParameters[f];
 
-        qs.Add("facets[" + f + "]name", facet.Name);
-        qs.Add("facets[" + f + "]value", facet.Value);
-    }
-    qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
-    string query = qs.ToString(); string urlCSV = path + "?" + query;
+                qs.Add("facets[" + f + "]name", facet.Name);
+                qs.Add("facets[" + f + "]value", facet.Value);
+            }
+            qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
+            string query = qs.ToString(); string urlCSV = path + "?" + query;
 }
 <div class="row search-result-navigation">
     <div class="col-md-4">
@@ -212,13 +214,13 @@
     </div>
     <div class="col-md-3 col-md-offset-1">
         Velg visningsform:
-        <div class="custom-select">
-            <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
-                <option value="tableView" id="button-tableView">Tabell</option>
-                <option value="listView" id="button-listView">Liste</option>
-                <option value="galleryView" id="button-galleryView">Galleri</option>
-            </select>
-        </div>
+            <div class="custom-select">
+                <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
+                    <option value="tableView" id="button-tableView">Tabell</option>
+                    <option value="listView" id="button-listView">Liste</option>
+                    <option value="galleryView" id="button-galleryView">Galleri</option>
+                </select>
+            </div>
     </div>
     <div class="clearfix"></div>
 
@@ -228,7 +230,7 @@
 
 
 <div class="row">
-    <div class="col-sm-12 col-md-9">
+    <div class="col-sm-12 col-md-12">
         @if (Model.Result != null)
         {
             <div id="tableView" class="search-results">
@@ -537,18 +539,9 @@
                 <div class="clearfix"></div>
             </div>
 
-            @DisplayPaginationBottom()
+                    @DisplayPaginationBottom()
 
         }
-    </div>
-    <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
-        <aside class="facet-filter-container" ">
-            <h3 class="">Filtrer søket på:</h3>
-            <span class="separator-small"></span>
-            <form action="@Request.Url.LocalPath" name="FilterForm" method="get">
-                @Html.DropDownList("organizationSeoName", organizations, null, htmlAttributes: new { @class = "form-control", onchange = "this.form.submit()" })
-            </form>
-</aside>
     </div>
 </div>
 <script>
@@ -557,6 +550,6 @@
     if (item.ShowMapLink() || item.ShowServiceMapLink())
     {
         @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-              }
+                              }
 }
 </script>
