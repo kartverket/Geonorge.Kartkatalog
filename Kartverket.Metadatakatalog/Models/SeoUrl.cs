@@ -13,6 +13,10 @@ namespace Kartverket.Metadatakatalog.Models
             _seoTitle = MakeSeoFriendlyString(title);
         }
 
+        public SeoUrl(string organization) {
+            _seoOrganization = MakeSeoFriendlyString(organization);
+        }
+
         public string Organization
         {
             get { return _seoOrganization; }

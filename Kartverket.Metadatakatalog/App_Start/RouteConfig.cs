@@ -29,7 +29,11 @@ namespace Kartverket.Metadatakatalog
             routes.MapRoute("DisplayOrganizationMetadata", "metadata/{OrganizationSeoName}",
                 new { controller = "Metadata", action = "Organization" }
             );
-            
+
+            routes.MapRoute("SearchByOrganization", "search/organization",
+                new { controller = "Search", action = "Organization" }
+            );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

@@ -39,6 +39,24 @@ namespace Kartverket.Metadatakatalog.Models
                 }
             }
             return null;
-        }    
+        }
+
+        public Dictionary<string,string> Organizations()
+        {
+            Dictionary<string, string> organizationList = new Dictionary<string, string>();
+            var organizationFacets = Facets.First(f => f.FacetField == "organization");
+            var organizations = organizationFacets.FacetResults;
+
+            foreach (var organization in organizations)
+            {
+                var seoName = new SeoUrl(organization.Name);
+                if (!organizationList.ContainsKey(seoName.Organization))
+                {
+                    organizationList.Add(seoName.Organization, organization.Name);
+
+                }
+            }
+            return organizationList ;
+        }
     }
 }

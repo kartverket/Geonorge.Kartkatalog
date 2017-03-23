@@ -837,6 +837,7 @@
     <Content Include="Views\ServiceDirectory\Index.cshtml" />
     <Content Include="Views\Application\Index.cshtml" />
     <Content Include="settings.config" />
+    <Content Include="Views\Search\Organization.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

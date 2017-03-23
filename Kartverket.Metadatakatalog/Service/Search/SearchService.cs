@@ -104,7 +104,7 @@ namespace Kartverket.Metadatakatalog.Service.Application
 
         private string GetType(SolrQueryResults<MetadataIndexDoc> queryResults)
         {
-            if (queryResults != null)
+            if (queryResults != null && queryResults.Count > 0)
             {
                 return queryResults[0].ClassName;
             }
