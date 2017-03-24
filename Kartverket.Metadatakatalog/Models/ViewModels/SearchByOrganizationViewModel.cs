@@ -1,4 +1,6 @@
-﻿namespace Kartverket.Metadatakatalog.Models.ViewModels
+﻿using System.Web.Routing;
+
+namespace Kartverket.Metadatakatalog.Models.ViewModels
 {
     public class SearchByOrganizationViewModel : SearchViewModel
     {
@@ -9,20 +11,33 @@
         public SearchByOrganizationViewModel(SearchByOrganizationParameters parameters, SearchResultForOrganization searchResult)
             : base(parameters, searchResult)
         {
-            if (parameters.OrganizationSeoName != null)
+            if (parameters.OrganizationSeoName == null) return;
+            OrganizationSeoName = parameters.OrganizationSeoName;
+            if (searchResult.Organization != null)
             {
-                OrganizationSeoName = parameters.OrganizationSeoName;
-                if (searchResult.Organization != null)
-                {
-                    OrganizationName = searchResult.Organization.Name;
-                    OrganizationLogoUrl = searchResult.Organization.LogoUrl;
-                }
-                else
-                {
-                    OrganizationName = searchResult.GetOrganizationNameFromFirstItem();
-                }
+                OrganizationName = searchResult.Organization.Name;
+                OrganizationLogoUrl = searchResult.Organization.LogoUrl;
+            }
+            else
+            {
+                OrganizationName = searchResult.GetOrganizationNameFromFirstItem();
             }
         }
-        
+
+        public RouteValueDictionary ParamsForOrderByTitleLinkOrganization()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues["orderby"] = "title";
+            routeValues["organizationSeoName"] = OrganizationSeoName;
+            return routeValues;
+        }
+
+        public RouteValueDictionary ParamsForOrderByTitleDescLinkOrganization()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues["orderby"] = "title_desc";
+            routeValues["organizationSeoName"] = OrganizationSeoName;
+            return routeValues;
+        }
     }
 }

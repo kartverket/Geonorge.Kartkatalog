@@ -235,12 +235,11 @@
         {
             <div id="tableView" class="search-results">
                 <div class="row search-results-table-heading">
-                    <div class="col-sm-3 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByTitleLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-3 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByTitleDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-3 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByTitleLinkOrganization())" class="show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-3 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByTitleDescLinkOrganization())" class="show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
 
                     <div class="col-sm-2"><p>Type</p></div>
-                    <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByOrganizationLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Organization", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-3"><p>Dataeier</p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Les mer</p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Vis i kart</p></div>
@@ -295,13 +294,11 @@
                                 <p class="role-button search-results-name" role="button">@item.Title</p>
                             </a>
                             <div class="search-results-description">
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
                                     @if (item.Organization != null)
                                     {
-                                        <p>  @item.Organization</p>
+                                        <p><strong>@item.Organization</strong></p>
                                     }
 
-                                </a>
                                 <p>
                                     @if (item.Abstract != null)
                                     {
@@ -328,13 +325,8 @@
                             <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
                         </div>
                         <div class="col-sm-3 search-results-organization">
-                            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
-                                @if (item.Organization != null)
-                                {
+                            
                                     <p>  @item.Organization</p>
-                                }
-
-                            </a>
                         </div>
 
                         <div class="col-sm-1 search-results-action-icons search-results-open-data">
