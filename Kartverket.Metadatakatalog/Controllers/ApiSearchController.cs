@@ -162,6 +162,16 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         }
 
+        /// <summary>
+        /// Get distributions for uuid
+        /// </summary>
+        [System.Web.Http.Route("api/distributions/{uuid}")]
+        [System.Web.Http.HttpGet]
+        public List<Distribution> GetDistributions(string uuid)
+        {
+            return  _metadataService.GetRelatedDistributionsForUuid(uuid);
+        }
+
         private Models.SearchResult CreateRelated(MetadataViewModel result)
         {
             Models.SearchResult res = null;

@@ -501,6 +501,11 @@
             Get related services, datasets and bundles for uuid
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetDistributions(System.String)">
+            <summary>
+            Get distributions for uuid
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Facet.FacetField">
             <summary>
             The name of the facet field

@@ -29,6 +29,39 @@ namespace Kartverket.Metadatakatalog.Service
             _searchService = searchService;
         }
 
+        public List<Models.Api.Distribution> GetRelatedDistributionsForUuid(string uuid)
+        {
+            List<Models.Api.Distribution> distlist = new List<Models.Api.Distribution>();
+
+            //Henter distribusjoner - mulig å få raskere med å lese søkeindex
+            MD_Metadata_Type mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
+            if (mdMetadataType == null)
+                return null;
+
+            var simpleMetadata = new SimpleMetadata(mdMetadataType);
+
+            foreach (var dist in simpleMetadata.DistributionsFormats)
+            {
+                var tmp = new Models.Api.Distribution();
+                tmp.Uuid = uuid;
+                tmp.Title = simpleMetadata.Title;
+                tmp.Type = simpleMetadata.HierarchyLevel;
+                tmp.DistributionName = dist.Name;
+                tmp.DistributionProtocol = dist.Protocol;
+                tmp.DistributionUrl = dist.URL;
+                tmp.FormatName = dist.FormatName;
+                tmp.FormatVersion = dist.FormatVersion;
+                tmp.Organization = dist.Organization;
+                tmp.ShowDetailsUrl = "";
+
+                distlist.Add(tmp);
+            }
+            //TODO Hente inn indeks og relaterte services
+
+
+            return distlist;
+        }
+
         public MetadataViewModel GetMetadataByUuid(string uuid)
         {
             MD_Metadata_Type mdMetadataType = _geoNorge.GetRecordByUuid(uuid);

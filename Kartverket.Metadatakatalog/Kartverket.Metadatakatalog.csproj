@@ -72,8 +72,8 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="GeoNorgeAPI, Version=3.0.31.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GeoNorgeAPI.3.0.31.0\lib\net40\GeoNorgeAPI.dll</HintPath>
+    <Reference Include="GeoNorgeAPI, Version=3.0.35.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GeoNorgeAPI.3.0.35.0\lib\net40\GeoNorgeAPI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Kartverket.Geonorge.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -264,6 +264,7 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\Api\Distribution.cs" />
     <Compile Include="Models\SearchIndex\SearchIndexDoc.cs" />
     <Compile Include="Service\Application\IApplicationService.cs" />
     <Compile Include="Controllers\IndexController.cs" />
