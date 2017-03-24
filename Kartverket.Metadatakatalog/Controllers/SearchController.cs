@@ -1,9 +1,7 @@
 ﻿using System.Web.Mvc;
-using System;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
-using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -22,9 +20,9 @@ namespace Kartverket.Metadatakatalog.Controllers
         public ActionResult Index(SearchParameters parameters)
         {
             parameters.AddComplexFacetsIfMissing();
-            SearchResult searchResult = _searchService.Search(parameters);
+            var searchResult = _searchService.Search(parameters);
 
-            SearchViewModel model = new SearchViewModel(parameters, searchResult);
+            var model = new SearchViewModel(parameters, searchResult);
 
             return View(model);
         }
@@ -35,11 +33,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         public ActionResult Organization(SearchByOrganizationParameters parameters)
         {
             parameters.AddDefaultFacetsIfMissing();
-            SearchResultForOrganization searchResult = _searchService.SearchByOrganization(parameters);
-            var organizations = searchResult.Organizations();
-
-            ViewBag.OrganizationList = new SelectList(organizations, "key","value", parameters.OrganizationSeoName);
-
+            var searchResult = _searchService.SearchByOrganization(parameters);      
             var model = new SearchByOrganizationViewModel(parameters, searchResult);
             return View(model);
         }

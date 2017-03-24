@@ -4,7 +4,6 @@
 @{
     var title = HtmlHelperExtensions.GetOrganizationNameOrDefault(Model.OrganizationName);
     ViewBag.Title = title;
-    SelectList organizations = ViewBag.OrganizationList;
 }
 @section breadcrumb {
     <li class="active">@title</li>
@@ -30,7 +29,7 @@
     <div class="row">
         <div class="col-sm-3">
             <form action="@Request.Url.LocalPath" name="FilterForm" method="get" class="custom-select">
-                @Html.DropDownList("organizationSeoName", organizations, "Velg etat", htmlAttributes: new { @class = "form-control", onchange = "this.form.submit()" })
+                @Html.DropDownList("organizationSeoName", Model.OrganizationSelectList, "Velg etat", htmlAttributes: new { @class = "form-control", onchange = "this.form.submit()" })
             </form>
         </div>
     </div>
