@@ -105,14 +105,13 @@ var Areas = {
                 if (link.rel == "http://rel.geonorge.no/download/area") {
                     areas = getJsonData(link.href);
                 }
-
-
             });
             areas.forEach(function (area) {
                 if (this.available[area.type] == undefined) { this.available[area.type] = [] }
                 area.hasSelectedProjections = false;
                 area.hasSelectedFormats = false;
-                area.isSelected = false;
+                //   area.isSelected = false;
+                //  area.isLocalSelected = false;
                 this.available[area.type].push(area);
             }.bind(this))
         }
@@ -123,7 +122,11 @@ var Areas = {
 
     methods: {
         selectArea: function (area) {
-            area.isSelected = true;
+            if (this.master) {
+                area.isSelected = true;
+            } else {
+                area.isLocalSelected = true;
+            }
 
             //var orderLineObject = (this.master) ? this.$parent : this.$parent;
 
@@ -138,7 +141,11 @@ var Areas = {
             this.$parent.validateAreas();
         },
         removeSelectedArea: function (area) {
-            area.isSelected = false;
+            if (this.master) {
+                area.isSelected = false;
+            } else {
+                area.isLocalSelected = false;
+            }
 
             this.$parent.updateSelectedAreas();
 
@@ -233,7 +240,7 @@ var Formats = {
 
 
 var OrderLine = {
-    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'orderLineErrors'],
+    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'localSelectedAreas', 'localSelectedProjections', 'localSelectedFormats', 'orderLineErrors'],
     template: '#order-line-template',
     data: function () {
         var data = {
@@ -264,6 +271,22 @@ var OrderLine = {
         }
     },
     methods: {
+        isAllreadyAdded: function (array, item, propertyToCompare) {
+            var isAllreadyAdded = {
+                added: false,
+                position: 0
+            };
+            array.forEach(function (arrayItem, index) {
+                if (this.readProperty(arrayItem, propertyToCompare) == this.readProperty(item, propertyToCompare)) {
+                    isAllreadyAdded.added = true
+                    isAllreadyAdded.position = index;
+                };
+            }.bind(this))
+            return isAllreadyAdded;
+        },
+        readProperty: function (obj, prop) {
+            return obj[prop];
+        },
         filterOptionList: function (optionListId, inputValue) {
             var dropdownListElements = document.getElementsByClassName(optionListId);
             var filter = inputValue.toUpperCase();
@@ -288,6 +311,24 @@ var OrderLine = {
             }
         },
         updateSelectedAreas: function () {
+            var orderLineUuid = this.metadata.uuid;
+            var selectedAreas = [];
+            for (areaType in this.$parent.masterOrderLine.allAvailableAreas[orderLineUuid]) {
+                if (this.$parent.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].length) {
+                    this.$parent.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (localSelectedArea) {
+                        if (localSelectedArea.isLocalSelected || localSelectedArea.isSelected) {
+                            var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, localSelectedArea, "code");
+                            if (!isAllreadyAddedInfo.added) {
+                                selectedAreas.push(localSelectedArea);
+                            }
+
+                        }
+                    }.bind(this))
+                }
+
+            }
+            this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid] = selectedAreas;
+            this.selectedAreas = selectedAreas;
         },
         updateAvailableProjections: function () {
         },
@@ -302,6 +343,9 @@ var OrderLine = {
         },
         hasSelectedFormats: function (area) {
         },
+        validateAreas: function (area) {
+           
+        }
 
     },
     components: {
@@ -327,6 +371,11 @@ var MasterOrderLine = {
     },
     created: function () {
         for (orderLine in this.allAvailableAreas) {
+
+            if (this.$parent.masterOrderLine.allLocalSelectedAreas[orderLine] == undefined) { this.$parent.masterOrderLine.allLocalSelectedAreas[orderLine] = [] }
+            if (this.$parent.masterOrderLine.allLocalSelectedProjections[orderLine] == undefined) { this.$parent.masterOrderLine.allLocalSelectedProjections[orderLine] = [] }
+            if (this.$parent.masterOrderLine.allLocalSelectedFormats[orderLine] == undefined) { this.$parent.masterOrderLine.allLocalSelectedFormats[orderLine] = [] }
+
             for (areaType in this.allAvailableAreas[orderLine]) {
                 this.allAvailableAreas[orderLine][areaType].forEach(function (area) {
                     if (this.availableAreas[areaType] == undefined) {
@@ -424,15 +473,18 @@ var MasterOrderLine = {
             var selectedAreas = [];
             for (areaType in this.availableAreas) {
                 this.availableAreas[areaType].forEach(function (area) {
-                    if (area.isSelected) {
+                    if (area.isSelected || area.isLocalSelected) {
                         area.orderLineUuids.forEach(function (orderLineUuid) {
                             if (allSelectedAreas[orderLineUuid] == undefined) { allSelectedAreas[orderLineUuid] = [] }
                             allSelectedAreas[orderLineUuid].push(area);
 
-                            var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, area, "code");
-                            if (!isAllreadyAddedInfo.added) {
-                                selectedAreas.push(area);
+                            if (area.isSelected) {
+                                var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, area, "code");
+                                if (!isAllreadyAddedInfo.added) {
+                                    selectedAreas.push(area);
+                                }
                             }
+
                         }.bind(this))
                         /* if (area.projections.length == 1) {
                              area.projections[0].isSelected = true;
@@ -631,12 +683,12 @@ var MasterOrderLine = {
                 this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["area"] = [];
                 if (this.$parent.masterOrderLine.allSelectedAreas[orderLine] !== undefined && this.$parent.masterOrderLine.allSelectedAreas[orderLine].length) {
 
-                    
-                        this.$parent.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
-                            selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLine);
-                            selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLine);
-                        }.bind(this));
-                    
+
+                    this.$parent.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
+                        selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLine);
+                        selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLine);
+                    }.bind(this));
+
                 } else {
                     this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["area"] = ["Datasett mangler valgt område"];
                 }
@@ -677,6 +729,9 @@ var mainVueModel = new Vue({
             allSelectedAreas: {},
             allSelectedProjections: {},
             allSelectedFormats: {},
+            allLocalSelectedAreas: {},
+            allLocalSelectedProjections: {},
+            allLocalSelectedFormats: {},
             allOrderLineErrors: {}
         }
     },
@@ -753,6 +808,8 @@ var mainVueModel = new Vue({
                                 if (this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] == undefined) {
                                     this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] = [];
                                 }
+                                availableArea.isSelected = false;
+                                availableArea.isLocalSelected = false;
                                 this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
                             }.bind(this))
                         }
