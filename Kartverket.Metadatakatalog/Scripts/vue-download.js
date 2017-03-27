@@ -324,15 +324,44 @@ var OrderLine = {
 
             }
             this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid] = selectedAreas;
-            //   this.selectedAreas = selectedAreas;
         },
         updateAvailableProjections: function () {
+
         },
         updateSelectedProjections: function () {
+            var orderLineUuid = this.metadata.uuid;
+            var selectedProjections = [];
+            if (this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid].length) {
+                this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid].forEach(function (localSelectedProjection) {
+                    if (localSelectedProjection.isLocalSelected || localSelectedProjection.isSelected) {
+                        var isAllreadyAddedInfo = this.isAllreadyAdded(selectedProjections, localSelectedProjection, "code");
+                        if (!isAllreadyAddedInfo.added) {
+                            selectedProjections.push(localSelectedProjection);
+                        }
+
+                    }
+                }.bind(this))
+            }
+
+            this.$parent.masterOrderLine.allSelectedProjections[orderLineUuid] = selectedProjections;
         },
         updateAvailableFormats: function () {
         },
         updateSelectedFormats: function () {
+            var orderLineUuid = this.metadata.uuid;
+            var selectedFormats = [];
+            if (this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid].length) {
+                this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid].forEach(function (localSelectedFormat) {
+                    if (localSelectedFormat.isLocalSelected || localSelectedFormat.isSelected) {
+                        var isAllreadyAddedInfo = this.isAllreadyAdded(selectedFormats, localSelectedFormat, "name");
+                        if (!isAllreadyAddedInfo.added) {
+                            selectedFormats.push(localSelectedFormat);
+                        }
+                    }
+                }.bind(this))
+            }
+
+            this.$parent.masterOrderLine.allSelectedFormats[orderLineUuid] = selectedFormats;
         },
 
         hasSelectedProjections: function (area) {
@@ -509,6 +538,7 @@ var MasterOrderLine = {
                             // All available projections for orderLine
                             selectedArea.allAvailableProjections[orderLine].forEach(function (projection) {
                                 if (projection.isSelected == undefined) { projection.isSelected = false }
+                                if (projection.isLocalSelected == undefined) { projection.isLocalSelected = false }
 
                                 // Update availableProjections array
                                 var isAllreadyAddedInfo = this.isAllreadyAdded(availableProjections, projection, "code");
@@ -531,7 +561,6 @@ var MasterOrderLine = {
             }
             this.availableProjections = availableProjections;
             this.$parent.masterOrderLine.allAvailableProjections = allAvailableProjections;
-
 
         },
         updateAvailableFormats: function () {
@@ -576,11 +605,14 @@ var MasterOrderLine = {
             for (orderLine in this.$parent.masterOrderLine.allAvailableProjections) {
                 this.$parent.masterOrderLine.allAvailableProjections[orderLine].forEach(function (availableProjection) {
 
-                    if (availableProjection.isSelected) {
-                        // Update availableProjections array
-                        var isAllreadyAddedInfo = this.isAllreadyAdded(selectedProjections, availableProjection, "code");
-                        if (!isAllreadyAddedInfo.added) {
-                            selectedProjections.push(availableProjection);
+                    if (availableProjection.isSelected || availableProjection.isLocalSelected) {
+
+                        if (availableProjection.isSelected) {
+                            // Update availableProjections array
+                            var isAllreadyAddedInfo = this.isAllreadyAdded(selectedProjections, availableProjection, "code");
+                            if (!isAllreadyAddedInfo.added) {
+                                selectedProjections.push(availableProjection);
+                            }
                         }
 
                         // Update allAvailableProjections object
@@ -604,11 +636,14 @@ var MasterOrderLine = {
             for (orderLine in this.$parent.masterOrderLine.allAvailableFormats) {
                 this.$parent.masterOrderLine.allAvailableFormats[orderLine].forEach(function (availableFormats) {
 
-                    if (availableFormats.isSelected) {
-                        // Update availableFormats array
-                        var isAllreadyAddedInfo = this.isAllreadyAdded(selectedFormats, availableFormats, "name");
-                        if (!isAllreadyAddedInfo.added) {
-                            selectedFormats.push(availableFormats);
+                    if (availableFormats.isSelected || availableFormats.isLocalSelected) {
+
+                        if (availableFormats.isSelected) {
+                            // Update availableFormats array
+                            var isAllreadyAddedInfo = this.isAllreadyAdded(selectedFormats, availableFormats, "name");
+                            if (!isAllreadyAddedInfo.added) {
+                                selectedFormats.push(availableFormats);
+                            }
                         }
 
                         // Update allAvailableFormats object
