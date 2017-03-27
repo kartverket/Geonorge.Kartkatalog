@@ -134,7 +134,7 @@ var Areas = {
             this.$parent.updateSelectedProjections();
             this.$parent.updateSelectedFormats();
 
-            this.$parent.validateAreas();
+            this.$root.validateAreas();
         },
         removeSelectedArea: function (area) {
             if (this.master) {
@@ -151,7 +151,7 @@ var Areas = {
             this.$parent.updateSelectedProjections();
             this.$parent.updateSelectedFormats();
 
-            this.$parent.validateAreas();
+            this.$root.validateAreas();
 
         }
     }
@@ -174,7 +174,7 @@ var Projections = {
                 }
             }
             this.$parent.updateSelectedProjections();
-            this.$parent.validateAreas();
+            this.$root.validateAreas();
             this.$parent.updateSelectedAreas();
         },
         removeSelectedProjection: function (projection) {
@@ -189,7 +189,7 @@ var Projections = {
                 }
             }
             this.$parent.updateSelectedProjections();
-            this.$parent.validateAreas();
+            this.$root.validateAreas();
             this.$parent.updateSelectedAreas();
         }
     }
@@ -212,7 +212,7 @@ var Formats = {
                 }
             }
             this.$parent.updateSelectedFormats();
-            this.$parent.validateAreas();
+            this.$root.validateAreas();
             this.$parent.updateSelectedAreas();
         },
         removeSelectedFormat: function (format) {
@@ -227,7 +227,7 @@ var Formats = {
                 }
             }
             this.$parent.updateSelectedFormats();
-            this.$parent.validateAreas();
+            this.$root.validateAreas();
             this.$parent.updateSelectedAreas();
         }
     }
@@ -362,14 +362,6 @@ var OrderLine = {
             }
 
             this.$parent.masterOrderLine.allSelectedFormats[orderLineUuid] = selectedFormats;
-        },
-
-        hasSelectedProjections: function (area) {
-        },
-        hasSelectedFormats: function (area) {
-        },
-        validateAreas: function (area) {
-
         }
 
     },
@@ -450,7 +442,7 @@ var MasterOrderLine = {
                 }.bind(this))
             }
         }
-        this.validateAreas();
+        this.$root.validateAreas();
         this.updateSelectedAreas();
     },
     methods: {
@@ -659,79 +651,7 @@ var MasterOrderLine = {
 
             this.$parent.masterOrderLine.allSelectedFormats = allSelectedFormats;
             this.selectedFormats = selectedFormats;
-        },
-        hasSelectedProjections: function (area, orderLine) {
-            var hasSelectedProjections = false;
-
-            if (area.allAvailableProjections[orderLine] && area.allAvailableProjections[orderLine].length) {
-                area.allAvailableProjections[orderLine].forEach(function (availableProjection) {
-                    if (this.$parent.masterOrderLine.allSelectedProjections[orderLine] !== undefined && this.$parent.masterOrderLine.allSelectedProjections[orderLine].length) {
-                        this.$parent.masterOrderLine.allSelectedProjections[orderLine].forEach(function (selectedProjection) {
-                            if (selectedProjection.code == availableProjection.code) {
-                                hasSelectedProjections = true
-                            }
-                        }.bind(this))
-                    }
-                }.bind(this))
-            }
-            if (!hasSelectedProjections) {
-                var errorMessage = "Støttet projeksjon for " + area.name + " mangler";
-                this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["projection"].push(errorMessage);
-            }
-            return hasSelectedProjections;
-        },
-        hasSelectedFormats: function (area, orderLine) {
-            var hasSelectedFormats = false;
-
-            if (area.allAvailableFormats[orderLine] && area.allAvailableFormats[orderLine].length) {
-                area.allAvailableFormats[orderLine].forEach(function (availableFormat) {
-                    if (this.$parent.masterOrderLine.allSelectedFormats[orderLine] !== undefined && this.$parent.masterOrderLine.allSelectedFormats[orderLine].length) {
-                        this.$parent.masterOrderLine.allSelectedFormats[orderLine].forEach(function (selectedFormat) {
-                            if (selectedFormat.name == availableFormat.name) {
-                                hasSelectedFormats = true
-                            }
-                        }.bind(this))
-                    }
-                }.bind(this))
-            }
-            if (!hasSelectedFormats) {
-                var errorMessage = "Støttet format for " + area.name + " mangler";
-                this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["format"].push(errorMessage);
-            }
-            return hasSelectedFormats;
-        },
-        removeAllValidationErrors: function () {
-            for (orderLine in this.$parent.masterOrderLine.allOrderLineErrors) {
-                for (errorType in this.$parent.masterOrderLine.allOrderLineErrors[orderLine]) {
-                    this.$parent.masterOrderLine.allOrderLineErrors[orderLine][errorType] = [];
-                }
-            }
-        },
-        validateAreas: function () {
-
-            for (orderLine in this.$parent.masterOrderLine.allAvailableAreas) {
-                this.$parent.masterOrderLine.allOrderLineErrors[orderLine] = {};
-                this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["projection"] = [];
-                this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["format"] = [];
-                this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["area"] = [];
-                if (this.$parent.masterOrderLine.allSelectedAreas[orderLine] !== undefined && this.$parent.masterOrderLine.allSelectedAreas[orderLine].length) {
-
-
-                    this.$parent.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
-                        selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLine);
-                        selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLine);
-                    }.bind(this));
-
-                } else {
-                    this.$parent.masterOrderLine.allOrderLineErrors[orderLine]["area"] = ["Datasett mangler valgt område"];
-                }
-            }
-            setTimeout(function () {
-                $("[data-toggle='tooltip']").tooltip();
-            }, 300);
         }
-
-
     },
     template: '#master-order-line-template',
     components: {
@@ -909,6 +829,70 @@ var mainVueModel = new Vue({
         'masterOrderLine': MasterOrderLine
     },
     methods: {
+        hasSelectedProjections: function (area, orderLine) {
+            var hasSelectedProjections = false;
+
+            if (area.allAvailableProjections[orderLine] && area.allAvailableProjections[orderLine].length) {
+                area.allAvailableProjections[orderLine].forEach(function (availableProjection) {
+                    if (this.masterOrderLine.allSelectedProjections[orderLine] !== undefined && this.masterOrderLine.allSelectedProjections[orderLine].length) {
+                        this.masterOrderLine.allSelectedProjections[orderLine].forEach(function (selectedProjection) {
+                            if (selectedProjection.code == availableProjection.code) {
+                                hasSelectedProjections = true
+                            }
+                        }.bind(this))
+                    }
+                }.bind(this))
+            }
+            if (!hasSelectedProjections) {
+                var errorMessage = "Støttet projeksjon for " + area.name + " mangler";
+                this.masterOrderLine.allOrderLineErrors[orderLine]["projection"].push(errorMessage);
+            }
+            return hasSelectedProjections;
+        },
+        hasSelectedFormats: function (area, orderLine) {
+            var hasSelectedFormats = false;
+
+            if (area.allAvailableFormats[orderLine] && area.allAvailableFormats[orderLine].length) {
+                area.allAvailableFormats[orderLine].forEach(function (availableFormat) {
+                    if (this.masterOrderLine.allSelectedFormats[orderLine] !== undefined && this.masterOrderLine.allSelectedFormats[orderLine].length) {
+                        this.masterOrderLine.allSelectedFormats[orderLine].forEach(function (selectedFormat) {
+                            if (selectedFormat.name == availableFormat.name) {
+                                hasSelectedFormats = true
+                            }
+                        }.bind(this))
+                    }
+                }.bind(this))
+            }
+            if (!hasSelectedFormats) {
+                var errorMessage = "Støttet format for " + area.name + " mangler";
+                this.masterOrderLine.allOrderLineErrors[orderLine]["format"].push(errorMessage);
+            }
+            return hasSelectedFormats;
+        },
+        validateAreas: function () {
+
+            for (orderLine in this.masterOrderLine.allAvailableAreas) {
+                this.masterOrderLine.allOrderLineErrors[orderLine] = {};
+                this.masterOrderLine.allOrderLineErrors[orderLine]["projection"] = [];
+                this.masterOrderLine.allOrderLineErrors[orderLine]["format"] = [];
+                this.masterOrderLine.allOrderLineErrors[orderLine]["area"] = [];
+                if (this.masterOrderLine.allSelectedAreas[orderLine] !== undefined && this.masterOrderLine.allSelectedAreas[orderLine].length) {
+
+
+                    this.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
+                        selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLine);
+                        selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLine);
+                    }.bind(this));
+
+                } else {
+                    this.masterOrderLine.allOrderLineErrors[orderLine]["area"] = ["Datasett mangler valgt område"];
+                }
+            }
+            setTimeout(function () {
+                $("[data-toggle='tooltip']").tooltip();
+            }, 300);
+        },
+
 
         cloneSelectedProperties: function (selectedOrderLineIndex) {
             selectedAreas = this.$children[selectedOrderLineIndex].selectedAreas;
