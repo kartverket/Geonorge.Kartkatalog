@@ -50,5 +50,13 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             };
             return routeValues;
         }
+
+
+        public RouteValueDictionary OrganizationRouteValues(RouteValueDictionary routeValues)
+        {
+            routeValues["organizationSeoName"] = OrganizationSeoName;
+            return routeValues;
+
+        }
     }
 }
