@@ -347,30 +347,34 @@ var MasterOrderLine = {
 
                     var areaIsAllreadyAddedInfo = this.isAllreadyAdded(this.availableAreas[areaType], area, "code");
 
-                    if (!areaIsAllreadyAddedInfo.added) {
-                        this.availableAreas[areaType].push(area);
-                    } else {
-                        var orderLineUuidIsAdded = false
 
-                        if (!orderLineUuidIsAdded) {
+                    if (areaType == "kommune" || areaType == "fylke" || areaType == "landsdekkende") {
+                        if (!areaIsAllreadyAddedInfo.added) {
+                            this.availableAreas[areaType].push(area);
+                        } else {
+                            var orderLineUuidIsAdded = false
 
-                            // Add available projections to area
-                            if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] == undefined) {
-                                this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = [];
+                            if (!orderLineUuidIsAdded) {
+
+                                // Add available projections to area
+                                if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] == undefined) {
+                                    this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = [];
+                                }
+                                this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = area.projections;
+
+
+                                // Add available formats to area
+                                if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] == undefined) {
+                                    this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = [];
+                                }
+                                this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = area.formats;
+
                             }
-                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = area.projections;
-
-
-                            // Add available formats to area
-                            if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] == undefined) {
-                                this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = [];
-                            }
-                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = area.formats;
-
                         }
                     }
+
                 }.bind(this))
-            } 
+            }
         }
         this.validateAreas();
         this.updateSelectedAreas();
