@@ -156,7 +156,6 @@
     .custom-select-list .custom-select-list-dropdown .custom-select-list-dropdown-content {
         overflow: auto;
         max-height: 340px;
-        padding-top: 17px;
         padding-left: 16px;
     }
 
@@ -232,7 +231,6 @@
 }
 
 .custom-select-list .custom-select-list-dropdown .custom-select-list-option-group {
-    margin-bottom: 17px;
 }
 
 .custom-select-list .custom-select-list-option-group-name {

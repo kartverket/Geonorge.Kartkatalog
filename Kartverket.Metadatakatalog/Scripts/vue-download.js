@@ -269,12 +269,21 @@ var OrderLine = {
             var filter = inputValue.toUpperCase();
             for (var listIndex = 0; listIndex < dropdownListElements.length; listIndex++) {
                 var listItems = dropdownListElements[listIndex].getElementsByTagName('li');
+                var hasResults = false;
                 for (var i = 0; i < listItems.length; i++) {
                     if (listItems[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
                         listItems[i].style.display = "";
+                        hasResults = true;
                     } else {
                         listItems[i].style.display = "none";
                     }
+                }
+
+                var optionGroupNameElement = $(dropdownListElements[listIndex]).closest("div").find(".custom-select-list-option-group-name");
+                if (!hasResults) {
+                    optionGroupNameElement.hide();
+                } else {
+                    optionGroupNameElement.show();
                 }
             }
         },
@@ -388,12 +397,21 @@ var MasterOrderLine = {
             var filter = inputValue.toUpperCase();
             for (var listIndex = 0; listIndex < dropdownListElements.length; listIndex++) {
                 var listItems = dropdownListElements[listIndex].getElementsByTagName('li');
+                var hasResults = false;
                 for (var i = 0; i < listItems.length; i++) {
                     if (listItems[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
                         listItems[i].style.display = "";
+                        hasResults = true;
                     } else {
                         listItems[i].style.display = "none";
                     }
+                }
+
+                var optionGroupNameElement = $(dropdownListElements[listIndex]).closest("div").find(".custom-select-list-option-group-name");
+                if (!hasResults) {
+                    optionGroupNameElement.hide();
+                } else {
+                    optionGroupNameElement.show();
                 }
             }
         },
