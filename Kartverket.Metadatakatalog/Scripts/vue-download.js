@@ -110,8 +110,6 @@ var Areas = {
                 if (this.available[area.type] == undefined) { this.available[area.type] = [] }
                 area.hasSelectedProjections = false;
                 area.hasSelectedFormats = false;
-                //   area.isSelected = false;
-                //  area.isLocalSelected = false;
                 this.available[area.type].push(area);
             }.bind(this))
         }
@@ -127,8 +125,6 @@ var Areas = {
             } else {
                 area.isLocalSelected = true;
             }
-
-            //var orderLineObject = (this.master) ? this.$parent : this.$parent;
 
             this.$parent.updateSelectedAreas();
 
@@ -328,7 +324,7 @@ var OrderLine = {
 
             }
             this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid] = selectedAreas;
-            this.selectedAreas = selectedAreas;
+            //   this.selectedAreas = selectedAreas;
         },
         updateAvailableProjections: function () {
         },
@@ -344,7 +340,7 @@ var OrderLine = {
         hasSelectedFormats: function (area) {
         },
         validateAreas: function (area) {
-           
+
         }
 
     },
@@ -372,9 +368,9 @@ var MasterOrderLine = {
     created: function () {
         for (orderLine in this.allAvailableAreas) {
 
-            if (this.$parent.masterOrderLine.allLocalSelectedAreas[orderLine] == undefined) { this.$parent.masterOrderLine.allLocalSelectedAreas[orderLine] = [] }
-            if (this.$parent.masterOrderLine.allLocalSelectedProjections[orderLine] == undefined) { this.$parent.masterOrderLine.allLocalSelectedProjections[orderLine] = [] }
-            if (this.$parent.masterOrderLine.allLocalSelectedFormats[orderLine] == undefined) { this.$parent.masterOrderLine.allLocalSelectedFormats[orderLine] = [] }
+            if (this.$parent.masterOrderLine.allSelectedAreas[orderLine] == undefined) { this.$parent.masterOrderLine.allSelectedAreas[orderLine] = [] }
+            if (this.$parent.masterOrderLine.allSelectedProjections[orderLine] == undefined) { this.$parent.masterOrderLine.allSelectedProjections[orderLine] = [] }
+            if (this.$parent.masterOrderLine.allSelectedFormats[orderLine] == undefined) { this.$parent.masterOrderLine.allSelectedFormats[orderLine] = [] }
 
             for (areaType in this.allAvailableAreas[orderLine]) {
                 this.allAvailableAreas[orderLine][areaType].forEach(function (area) {
@@ -473,26 +469,28 @@ var MasterOrderLine = {
             var selectedAreas = [];
             for (areaType in this.availableAreas) {
                 this.availableAreas[areaType].forEach(function (area) {
-                    if (area.isSelected || area.isLocalSelected) {
-                        area.orderLineUuids.forEach(function (orderLineUuid) {
-                            if (allSelectedAreas[orderLineUuid] == undefined) { allSelectedAreas[orderLineUuid] = [] }
+                    area.orderLineUuids.forEach(function (orderLineUuid) {
+                        if (allSelectedAreas[orderLineUuid] == undefined) { allSelectedAreas[orderLineUuid] = [] }
+                        if (area.isSelected || area.isLocalSelected) {
                             allSelectedAreas[orderLineUuid].push(area);
+                        }
+                    }.bind(this))
 
-                            if (area.isSelected) {
-                                var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, area, "code");
-                                if (!isAllreadyAddedInfo.added) {
-                                    selectedAreas.push(area);
-                                }
-                            }
-
-                        }.bind(this))
-                        /* if (area.projections.length == 1) {
-                             area.projections[0].isSelected = true;
-                         }
-                         if (area.formats.length == 1) {
-                             area.formats[0].isSelected = true;
-                         }*/
+                    if (area.isSelected) {
+                        var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, area, "code");
+                        if (!isAllreadyAddedInfo.added) {
+                            selectedAreas.push(area);
+                        }
                     }
+
+
+                    /* if (area.projections.length == 1) {
+                         area.projections[0].isSelected = true;
+                     }
+                     if (area.formats.length == 1) {
+                         area.formats[0].isSelected = true;
+                     }*/
+
                 }.bind(this));
             }
             this.$parent.masterOrderLine.allSelectedAreas = allSelectedAreas;
