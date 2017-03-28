@@ -52,10 +52,9 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 if (OrganizationFacet(organization))
                 {
-                    var seoName = new SeoUrl(organization.Name);
-                    if (!organizationList.ContainsKey(seoName.Organization))
+                    if (!organizationList.ContainsKey(organization.Name))
                     {
-                        organizationList.Add(seoName.Organization, organization.Name);
+                        organizationList.Add(organization.Name, organization.Name);
 
                     }
                 }

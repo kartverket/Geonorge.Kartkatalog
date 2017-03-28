@@ -32,13 +32,16 @@
             <span class="separator-lg"></span>
         </div>
     </div>
-    @*<div class="row">
+    <div class="row">
         <div class="col-sm-3">
             <form action="@Request.Url.LocalPath" name="FilterForm" method="get" class="custom-select">
-                @Html.DropDownList("organizationSeoName", Model.OrganizationSelectList, "Velg etat", htmlAttributes: new { @class = "form-control", onchange = "this.form.submit()" })
+                @Html.Hidden("Facets[0].name", "organization")
+                @Html.DropDownList("Facets[0].value", Model.OrganizationSelectList, "Velg etat", htmlAttributes: new { @class = "form-control", onchange = "this.form.submit()" })
+
+
             </form>
         </div>
-    </div>*@
+    </div>
 </section>
 
 @helper DisplayPaginationBottom()
@@ -144,6 +147,7 @@
             }
 
         });
+
     </script>
 }
 

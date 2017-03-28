@@ -14,7 +14,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public SearchByOrganizationViewModel(SearchByOrganizationParameters parameters, SearchResultForOrganization searchResult)
             : base(parameters, searchResult)
         {
-            EnabledFacets = new List<string> { "organizations" };
+            EnabledFacets = new List<string> { "themes", "types", "nationalinitiatives", "areas", "distributionProtocols", "dataAccesses" };
 
             if (parameters.OrganizationSeoName != null)
             {
