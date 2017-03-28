@@ -2,11 +2,17 @@
 @using Kartverket.Metadatakatalog.Helpers
 @model SearchByOrganizationViewModel
 @{
-    var title = HtmlHelperExtensions.GetOrganizationNameOrDefault(Model.OrganizationName);
-    ViewBag.Title = title;
+    if (!string.IsNullOrWhiteSpace(Model.Text))
+    {
+        ViewBag.Title = "Etatsvis oversikt over data: " + Model.OrganizationName;
+    }
+    else
+    {
+        ViewBag.Title = "Etatsvis oversikt over data";
+    }
 }
 @section breadcrumb {
-    <li class="active">@title</li>
+    <li class="active">@ViewBag.Title</li>
 }
 
 <div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
@@ -19,20 +25,20 @@
     <div class="row">
         <div class="col-sm-12">
             <h1 class="small-h1">
-                @title
+                @ViewBag.Title
             </h1>
         </div>
         <div class="col-sm-12">
             <span class="separator-lg"></span>
         </div>
     </div>
-    <div class="row">
+    @*<div class="row">
         <div class="col-sm-3">
             <form action="@Request.Url.LocalPath" name="FilterForm" method="get" class="custom-select">
                 @Html.DropDownList("organizationSeoName", Model.OrganizationSelectList, "Velg etat", htmlAttributes: new { @class = "form-control", onchange = "this.form.submit()" })
             </form>
         </div>
-    </div>
+    </div>*@
 </section>
 
 @helper DisplayPaginationBottom()
@@ -213,13 +219,13 @@
     </div>
     <div class="col-md-3 col-md-offset-1">
         Velg visningsform:
-            <div class="custom-select">
-                <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
-                    <option value="tableView" id="button-tableView">Tabell</option>
-                    <option value="listView" id="button-listView">Liste</option>
-                    <option value="galleryView" id="button-galleryView">Galleri</option>
-                </select>
-            </div>
+        <div class="custom-select">
+            <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
+                <option value="tableView" id="button-tableView">Tabell</option>
+                <option value="listView" id="button-listView">Liste</option>
+                <option value="galleryView" id="button-galleryView">Galleri</option>
+            </select>
+        </div>
     </div>
     <div class="clearfix"></div>
 
@@ -229,7 +235,7 @@
 
 
 <div class="row">
-    <div class="col-sm-12 col-md-12">
+    <div class="col-sm-12 col-md-9">
         @if (Model.Result != null)
         {
             <div id="tableView" class="search-results">
@@ -260,13 +266,13 @@
                             }
 
                             string downloadSignInUrl = Html.DownloadUrl()
-                                                     + "AuthServices/SignIn?ReturnUrl="
-                                                     + Url.Encode(Request.Url.AbsoluteUri)
-                                                     + Url.Encode(addToCartEventParamater);
+                                                       + "AuthServices/SignIn?ReturnUrl="
+                                                       + Url.Encode(Request.Url.AbsoluteUri)
+                                                       + Url.Encode(addToCartEventParamater);
 
                             addToCartUrl = Html.KartkatalogenUrl()
-                                         + "AuthServices/SignIn?ReturnUrl="
-                                         + Url.Encode(downloadSignInUrl);
+                                           + "AuthServices/SignIn?ReturnUrl="
+                                           + Url.Encode(downloadSignInUrl);
 
 
                             addToCartClass = "add-to-cart-btn prevent-action";
@@ -293,16 +299,16 @@
                                 <p class="role-button search-results-name" role="button">@item.Title</p>
                             </a>
                             <div class="search-results-description">
-                                    @if (item.Organization != null)
-                                    {
-                                        <p><strong>@item.Organization</strong></p>
-                                    }
+                                @if (item.Organization != null)
+                                {
+                                    <p><strong>@item.Organization</strong></p>
+                                }
 
                                 <p>
                                     @if (item.Abstract != null)
-                                    {
-                                        if (item.Abstract.Length > 250)
-                                        {
+                    {
+                        if (item.Abstract.Length > 250)
+                        {
                                             @item.Abstract.Substring(0, 251)<text>...</text>
                                         }
                                         else
@@ -324,8 +330,8 @@
                             <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
                         </div>
                         <div class="col-sm-3 search-results-organization">
-                            
-                                    <p>  @item.Organization</p>
+
+                            <p>  @item.Organization</p>
                         </div>
 
                         <div class="col-sm-1 search-results-action-icons search-results-open-data">
@@ -530,9 +536,16 @@
                 <div class="clearfix"></div>
             </div>
 
-                    @DisplayPaginationBottom()
+            @DisplayPaginationBottom()
 
         }
+    </div>
+    <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
+        <aside class="facet-filter-container">
+            <h3 class="">Filtrer søket på:</h3>
+            <span class="separator-small"></span>
+            @Html.Partial("_FacetFilter", Model)
+        </aside>
     </div>
 </div>
 <script>
@@ -541,6 +554,6 @@
     if (item.ShowMapLink() || item.ShowServiceMapLink())
     {
         @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                              }
+                                          }
 }
 </script>

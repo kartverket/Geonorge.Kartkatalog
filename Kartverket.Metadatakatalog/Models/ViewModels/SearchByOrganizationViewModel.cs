@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
@@ -13,6 +14,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public SearchByOrganizationViewModel(SearchByOrganizationParameters parameters, SearchResultForOrganization searchResult)
             : base(parameters, searchResult)
         {
+            EnabledFacets = new List<string> { "organizations" };
+
             if (parameters.OrganizationSeoName != null)
             {
                 OrganizationSeoName = parameters.OrganizationSeoName;

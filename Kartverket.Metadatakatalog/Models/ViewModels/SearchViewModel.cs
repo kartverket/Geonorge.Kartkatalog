@@ -18,6 +18,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public int startPage { get; set; }
         public int endPage { get; set; }
         public Dictionary<string, string> areaDictionary { get; set; }
+        public List<string> EnabledFacets { get; set; }
 
         public SearchViewModel(SearchParameters parameters, SearchResult searchResult)
         {
