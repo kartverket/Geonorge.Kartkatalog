@@ -38,10 +38,20 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View(model);
         }
 
+        //[System.Web.Http.HttpGet]
+        //[Route("search/area")]
+        public ActionResult Area(SearchParameters parameters)
+        {
+            parameters.AddDefaultFacetsIfMissing();
+            parameters.AddComplexFacetsIfMissing();
+            var searchResult = _searchService.Search(parameters);
+            var model = new SearchByAreaViewModel(parameters, searchResult);
+            return View(model);
+        }
+
         protected override void OnException(ExceptionContext filterContext)
         {
             Log.Error("Error", filterContext.Exception);
         }
-
     }
 }

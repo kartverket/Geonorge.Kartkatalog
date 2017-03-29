@@ -266,6 +266,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Models\Api\Distribution.cs" />
     <Compile Include="Models\SearchIndex\SearchIndexDoc.cs" />
+    <Compile Include="Models\ViewModels\SearchByAreaViewModel.cs" />
     <Compile Include="Service\Application\IApplicationService.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Service\Application\ApplicationService.cs" />
@@ -839,6 +840,7 @@
     <Content Include="Views\Application\Index.cshtml" />
     <Content Include="settings.config" />
     <Content Include="Views\Search\Organization.cshtml" />
+    <Content Include="Views\Search\Area.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

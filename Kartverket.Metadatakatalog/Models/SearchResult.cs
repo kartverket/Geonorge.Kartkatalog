@@ -43,7 +43,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public Dictionary<string, string> Organizations()
         {
-            Dictionary<string, string> organizationList = new Dictionary<string, string>();
+            var organizationList = new Dictionary<string, string>();
             var organizationFacets = Facets.First(f => f.FacetField == "organization");
 
             var organizations = organizationFacets.FacetResults;
