@@ -266,6 +266,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
             return string.Format("{0} - {1}", from, to);
         }
+
+        public List<string> FacetsServiceDirectory()
+        {
+            return new List<string> { "themes", "organizations", "nationalinitiatives", "areas", "distributionProtocols", "dataAccesses" };
+        }
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using Kartverket.Metadatakatalog.Models;
+﻿using System.Collections.Generic;
+using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
@@ -27,6 +28,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             SearchResult searchResult = _ServiceDirectoryService.Services(parameters);
 
             SearchViewModel model = new SearchViewModel(parameters, searchResult);
+            model.EnabledFacets = model.FacetsServiceDirectory();
 
             return View(model);
         }

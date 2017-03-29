@@ -237,7 +237,7 @@
 <span class="separator-small separator-gray margin-bottom-10"></span>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-9">
 
         @if (Model.Result != null)
         {
@@ -407,13 +407,20 @@
                     </div>
 
                     <hr />
-                                        }
+                }
                 <div class="clearfix"></div>
             </div>
 
             @DisplayPaginationBottom()
 
-                                        }
+        }
+    </div>
+    <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
+        <aside class="facet-filter-container">
+            <h3 class="">Filtrer søket på:</h3>
+            <span class="separator-small"></span>
+            @Html.Partial("_FacetFilter", Model)
+        </aside>
     </div>
 </div>
 <script>
