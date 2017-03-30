@@ -8,6 +8,7 @@ using www.opengis.net;
 using System;
 using Kartverket.Metadatakatalog.Service.Application;
 using System.Linq;
+using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog.Service
 {

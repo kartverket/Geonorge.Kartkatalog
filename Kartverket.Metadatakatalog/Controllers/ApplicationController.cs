@@ -11,12 +11,10 @@ namespace Kartverket.Metadatakatalog.Controllers
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IApplicationService _applicationService;
-        private readonly ISearchService _searchService;
 
-        public ApplicationController(IApplicationService applicationService, ISearchService searchService)
+        public ApplicationController(IApplicationService applicationService)
         {
             _applicationService = applicationService;
-            _searchService = searchService;
         }
 
 

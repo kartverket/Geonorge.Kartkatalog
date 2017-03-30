@@ -9,7 +9,7 @@ using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.SearchResult;
 using System;
 
-namespace Kartverket.Metadatakatalog.Service.Application
+namespace Kartverket.Metadatakatalog.Service.Search
 {
     public class SearchService : ISearchService
     {

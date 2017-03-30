@@ -4,6 +4,7 @@ using Kartverket.Metadatakatalog.Controllers;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Application;
+using Kartverket.Metadatakatalog.Service.Search;
 using Moq;
 using NUnit.Framework;
 

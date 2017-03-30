@@ -4,6 +4,7 @@ using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 using System.Web.Mvc;
+using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {

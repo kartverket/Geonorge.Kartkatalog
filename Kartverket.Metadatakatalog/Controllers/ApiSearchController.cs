@@ -11,6 +11,7 @@ using SearchParameters = Kartverket.Metadatakatalog.Models.Api.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
 using System;
 using Kartverket.Metadatakatalog.Service;
+using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 
 

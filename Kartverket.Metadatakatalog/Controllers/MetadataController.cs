@@ -5,6 +5,7 @@ using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Application;
 using System.Linq;
+using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
