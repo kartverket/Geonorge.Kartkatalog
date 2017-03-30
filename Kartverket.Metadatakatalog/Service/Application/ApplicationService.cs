@@ -64,18 +64,19 @@ namespace Kartverket.Metadatakatalog.Service.Application
                 Facets = facets,
                 Limit = parameters.Limit,
                 Offset = parameters.Offset,
-                NumFound = queryResults.NumFound,
+                NumFound = GetNumFound(queryResults),
                 Type = GetType(queryResults),
             };
         }
 
+        private int GetNumFound(SolrQueryResults<ApplicationIndexDoc> queryResults)
+        {
+            return queryResults?.NumFound ?? 0;
+        }
+
         private string GetType(SolrQueryResults<ApplicationIndexDoc> queryResults)
         {
-            if (queryResults != null)
-            {
-                return queryResults[0].ClassName;
-            }
-            return null;
+            return queryResults?[0].ClassName;
         }
 
         private List<Facet> ParseFacetResults(SolrQueryResults<ApplicationIndexDoc> queryResults)
