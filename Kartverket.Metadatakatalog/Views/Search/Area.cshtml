@@ -34,7 +34,14 @@
                     <optgroup label="Fylker">
                         @foreach (var countie in Model.Counties)
                         {
-                            <option value="@countie.Code">@countie.Name</option>
+                            if (Model.AreaCode == countie.Code)
+                            {
+                                <option selected value="@countie.Code">@countie.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@countie.Code">@countie.Name</option>
+                            }
                         }
                     </optgroup>
                     <optgroup label="Kommuner">
