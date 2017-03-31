@@ -30,7 +30,8 @@
         <div class="col-sm-3">
             <form action="@Request.Url.LocalPath" name="FilterForm" method="get" class="custom-select">
                 @Html.Hidden("Facets[0].name", "area")
-                <select class="chosen form-control" name="Facets[0].value"  onchange="this.form.submit()">
+                <select class="chosen form-control" name="Facets[0].value" onchange="this.form.submit()">
+                    <option Selected disabled>Velg kommune/Fylke</option>
                     <optgroup label="Fylker">
                         @foreach (var countie in Model.Counties)
                         {
