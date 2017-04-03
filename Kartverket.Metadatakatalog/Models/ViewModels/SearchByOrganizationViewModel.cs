@@ -34,7 +34,6 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         {
             var routeValues = new RouteValueDictionary
             {
-                ["OrganizationSeoName"] = OrganizationName,
                 ["orderby"] = "title"
             };
 
@@ -46,7 +45,6 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             var routeValues = new RouteValueDictionary
             {
                 ["orderby"] = "title_desc",
-                ["OrganizationSeoName"] = OrganizationName
             };
             return routeValues;
         }
@@ -54,8 +52,13 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         public RouteValueDictionary OrganizationRouteValues(RouteValueDictionary routeValues)
         {
-            routeValues["OrganizationSeoName"] = OrganizationName;
+            routeValues["OrganizationSeoName"] = GetOrganizationSeoName();
             return routeValues;
+        }
+
+        private string GetOrganizationSeoName()
+        {
+            return OrganizationSeoName ?? "organisasjon";
         }
     }
 }
