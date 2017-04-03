@@ -75,11 +75,12 @@ namespace Kartverket.Metadatakatalog.Service.Search
             });
 
             SearchResult searchResult = CreateSearchResults(queryResults, parameters);
-            Task<Organization> getOrganizationTask = _organizationService.GetOrganizationByName(searchResult.GetOrganizationNameFromFirstItem());
+            Task<Organization> getOrganizationTask = _organizationService.GetOrganizationByName(parameters.OrganizationSeoName);
             Organization organization = getOrganizationTask.Result;
 
             return new SearchResultForOrganization(organization, searchResult);
         }
+
 
         private SearchResult CreateSearchResults(SolrQueryResults<MetadataIndexDoc> queryResults, SearchParameters parameters)
         {

@@ -2,8 +2,9 @@
 @using Kartverket.Metadatakatalog.Helpers
 @model SearchByOrganizationViewModel
 @{
-    ViewBag.Title = Model.OrganizationName;
-}
+    ViewBag.Title = "Etatsvis oversikt over data";
+ }
+
 @section breadcrumb {
     <li class="active">@Model.OrganizationName</li>
 }
@@ -16,11 +17,18 @@
     <div class="row">
         <div class="col-sm-12">
             <h1 class="small-h1">
-                @Model.OrganizationName
+                @ViewBag.Title
             </h1>
         </div>
         <div class="col-sm-12">
             <span class="separator-lg"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <form id="organizationDD" action="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = "" })" name="FilterForm" method="get" class="custom-select">
+                @Html.DropDownList("OrganizationSeoName", Model.OrganizationSelectList, "Velg etat", new { @class = "form-control" })
+            </form>
         </div>
     </div>
 </section>
@@ -74,15 +82,22 @@
             $('#feedback-alert').show();
         }
 
-        $(document).ready(function () {
-            $("#orderby").change(
-                 function () {
-                     location.href = $(this).val();
-                 }
-             );
+
+        $(document).ready(function() {
+            $("#OrganizationSeoName").change(
+                function () {
+                    this.form.submit();
+                    location.href = $(this).val();
+                }
+            );
 
         });
 
+        $(function () {
+            $('#ddlNames').change(function () {
+                var value = this.value; // get the selected value
+            });
+        });
 
         $(document).ready(function () {
             @if (Html.DownloadServiceEnabled())
@@ -128,6 +143,8 @@
             }
 
         });
+
+
     </script>
 }
 

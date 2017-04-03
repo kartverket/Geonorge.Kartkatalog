@@ -45,17 +45,16 @@ namespace Kartverket.Metadatakatalog.Models
         {
             var organizationList = new Dictionary<string, string>();
             var organizationFacets = Facets.First(f => f.FacetField == "organization");
-
             var organizations = organizationFacets.FacetResults;
 
             foreach (var organization in organizations)
             {
                 if (OrganizationFacet(organization))
                 {
-                    if (!organizationList.ContainsKey(organization.Name))
+                    SeoUrl seoName = new SeoUrl(organization.Name);
+                    if (!organizationList.ContainsKey(seoName.Organization))
                     {
-                        organizationList.Add(organization.Name, organization.Name);
-
+                        organizationList.Add(seoName.Organization, organization.Name);
                     }
                 }
             }

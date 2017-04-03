@@ -25,10 +25,6 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 OrganizationName = searchResult.Organization.Name;
                 OrganizationLogoUrl = searchResult.Organization.LogoUrl;
             }
-            else
-            {
-                OrganizationName = searchResult.GetOrganizationNameFromFirstItem();
-            }
 
             var organizations = searchResult.Organizations();
             OrganizationSelectList = new SelectList(organizations, "key", "value", parameters.OrganizationSeoName);
@@ -38,9 +34,10 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         {
             var routeValues = new RouteValueDictionary
             {
-                ["orderby"] = "title",
-                ["organizationSeoName"] = OrganizationSeoName
+                ["OrganizationSeoName"] = OrganizationName,
+                ["orderby"] = "title"
             };
+
             return routeValues;
         }
 
@@ -49,7 +46,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             var routeValues = new RouteValueDictionary
             {
                 ["orderby"] = "title_desc",
-                ["organizationSeoName"] = OrganizationSeoName
+                ["OrganizationSeoName"] = OrganizationName
             };
             return routeValues;
         }
@@ -57,9 +54,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         public RouteValueDictionary OrganizationRouteValues(RouteValueDictionary routeValues)
         {
-            routeValues["organizationSeoName"] = OrganizationSeoName;
+            routeValues["OrganizationSeoName"] = OrganizationName;
             return routeValues;
-
         }
     }
 }

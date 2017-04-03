@@ -11,6 +11,17 @@ namespace Kartverket.Metadatakatalog.Models
             Facets.Add(new FacetParameter { Name = "organization_seo_lowercase", Value = OrganizationSeoName });
         }
 
+        public void OrganizationSeoNameToOrganizationFacet()
+        {
+            foreach (var facet in Facets)
+            {
+                if (facet.isOrganization())
+                {
+                    facet.Value = OrganizationSeoName;
+                }
+            }
+        }
+
         public new ISolrQuery BuildQuery
         {
             get

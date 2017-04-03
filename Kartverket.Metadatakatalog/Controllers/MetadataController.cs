@@ -72,11 +72,20 @@ namespace Kartverket.Metadatakatalog.Controllers
         public ActionResult Organization(SearchByOrganizationParameters parameters)
         {
             parameters.AddDefaultFacetsIfMissing();
+            FixOrganizationParameters(parameters);
             //parameters.Limit = 30;
             //parameters.orderby = OrderBy.title;
             SearchResultForOrganization searchResult = _searchService.SearchByOrganization(parameters);
             var model = new SearchByOrganizationViewModel(parameters, searchResult);
             return View(model);
+        }
+
+        private static void FixOrganizationParameters(SearchByOrganizationParameters parameters)
+        {
+            if (parameters.OrganizationSeoName == "organisasjon")
+            {
+                parameters.OrganizationSeoName = null;
+            }
         }
 
         protected override void OnException(ExceptionContext filterContext)
