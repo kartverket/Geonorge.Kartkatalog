@@ -3,7 +3,7 @@
 @model SearchByOrganizationViewModel
 @{
     ViewBag.Title = "Etatsvis oversikt over data";
- }
+}
 
 @section breadcrumb {
     <li class="active">@Model.OrganizationName</li>
@@ -83,7 +83,7 @@
         }
 
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             $("#OrganizationSeoName").change(
                 function () {
                     this.form.submit();
@@ -160,7 +160,7 @@
         var facet = Model.FacetParameters[f];
 
         qs.Add("facets[" + f + "]name", facet.Name);
-        qs.Add("facets[" + f+ "]value", facet.Value);
+        qs.Add("facets[" + f + "]value", facet.Value);
     }
     qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
     string query = qs.ToString(); string urlCSV = path + "?" + query;
@@ -554,6 +554,10 @@
             <h3 class="">Filtrer søket på:</h3>
             <span class="separator-small"></span>
             @Html.Partial("_FacetFilter", Model)
+
+        <h3 class="" style="padding-top: 40px;">Sider</h3>
+        <span class="separator-small"></span>
+        @Html.Partial("_FilterPages")
         </aside>
     </div>
 </div>
@@ -563,6 +567,6 @@
     if (item.ShowMapLink() || item.ShowServiceMapLink())
     {
         @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-          }
+                  }
 }
 </script>

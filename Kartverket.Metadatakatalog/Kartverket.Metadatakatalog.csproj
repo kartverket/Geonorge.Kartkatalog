@@ -841,6 +841,7 @@
     <Content Include="settings.config" />
     <Content Include="Views\Search\Organization.cshtml" />
     <Content Include="Views\Search\Area.cshtml" />
+    <Content Include="Views\Shared\_FilterPages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
