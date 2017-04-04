@@ -14,5 +14,10 @@ namespace Kartverket.Metadatakatalog.Models
         {
             return Name == "organization";
         }
+
+        public bool IsArea()
+        {
+            return Name == "area";
+        }
     }
 }

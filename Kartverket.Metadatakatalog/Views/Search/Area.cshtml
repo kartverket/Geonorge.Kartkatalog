@@ -28,9 +28,8 @@
     </div>
     <div class="row">
         <div class="col-sm-3">
-            <form action="@Request.Url.LocalPath" name="FilterForm" method="get" class="custom-select">
-                @Html.Hidden("Facets[0].name", "area")
-                <select class="chosen form-control" name="Facets[0].value" onchange="this.form.submit()">
+            <form action=@Url.Action("Area", "Search", new { AreaCode = ""}) method="get" class="custom-select">
+                <select class="form-control" name="AreaCode" onchange="this.form.submit()">
                     <option Selected disabled>Velg kommune/Fylke</option>
                     <optgroup label="Fylker">
                         @foreach (var countie in Model.Counties)
@@ -58,9 +57,7 @@
                             }
                         }
                     </optgroup>
-
                 </select>
-                @*@Html.DropDownList("Facets[0].value", Model.AreaSelectList, "Velg område", new { @class = "form-control input-group custom-select input-group-omraade", onchange = "this.form.submit()" })*@
             </form>
         </div>
     </div>
@@ -266,8 +263,8 @@
         {
             <div id="tableView" class="search-results">
                 <div class="row search-results-table-heading">
-                    <div class="col-sm-3 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Area", Model.ParamsForOrderByTitleLinkArea())" @*class="show-loading-animation" data-loading-message="Sorterer innhold"*@>Tittel<span class="orderby-title"></span></a></p></div>
-                    <div class="col-sm-3 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Area", Model.ParamsForOrderByTitleDescLinkArea())" @*class="show-loading-animation" data-loading-message="Sorterer innhold"*@>Tittel<span class="orderby-title"></span></a></p></div>
+                    <div class="col-sm-3 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForOrderByTitleLink()))" class="show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-title"></span></a></p></div>
+                    <div class="col-sm-3 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForOrderByTitleDescLink()))" class="show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-title"></span></a></p></div>
 
                     <div class="col-sm-2"><p>Type</p></div>
                     <div class="col-sm-3"><p>Dataeier</p></div>

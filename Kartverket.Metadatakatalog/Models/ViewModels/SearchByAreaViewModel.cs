@@ -14,17 +14,21 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public ICollection<Area> Counties { get; set; }
         public string AreaCode { get; set; }
 
-        public SearchByAreaViewModel(SearchParameters parameters, SearchResult searchResult)
+        public SearchByAreaViewModel(SearchByAreaParameters parameters, SearchResult searchResult)
             : base(parameters, searchResult)
         {
             EnabledFacets = new List<string> { "themes", "types", "nationalinitiatives", "organizations", "distributionProtocols", "dataAccesses" };
+            if (parameters.AreaCode != null)
+            {
+                AreaCode = parameters.AreaCode;
+            }
             if (parameters.Facets != null)
             {
                 foreach (var facet in parameters.Facets)
                 {
                     if (facet.Name == "area")
                     {
-                        AreaCode = facet.Value;
+                        facet.Value = parameters.AreaCode;
                     }
                 }
             }
@@ -69,29 +73,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return false;
         }
 
-        public RouteValueDictionary ParamsForOrderByTitleLinkArea()
-        {
-            var routeValues = new RouteValueDictionary
-            {
-                ["orderby"] = "title",
-                ["area"] = AreaCode
-            };
-            return routeValues;
-        }
-
-        public RouteValueDictionary ParamsForOrderByTitleDescLinkArea()
-        {
-            var routeValues = new RouteValueDictionary
-            {
-                ["orderby"] = "title_desc",
-                ["area"] = AreaCode
-            };
-            return routeValues;
-        }
-
         public RouteValueDictionary AreaRouteValues(RouteValueDictionary routeValues)
         {
-            routeValues["area"] = AreaCode;
+            routeValues["areacode"] = AreaCode;
             return routeValues;
 
         }

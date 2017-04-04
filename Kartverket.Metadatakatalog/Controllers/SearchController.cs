@@ -39,20 +39,31 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View(model);
         }
 
-        //[System.Web.Http.HttpGet]
-        //[Route("search/area")]
-        public ActionResult Area(SearchParameters parameters)
+
+        public ActionResult Area(SearchByAreaParameters parameters)
         {
             parameters.AddDefaultFacetsIfMissing();
+            parameters.CreateFacetOfArea();
             parameters.AddComplexFacetsIfMissing();
+            FixAreaParameters(parameters);
+
             var searchResult = _searchService.Search(parameters);
             var model = new SearchByAreaViewModel(parameters, searchResult);
+
             return View(model);
         }
 
         protected override void OnException(ExceptionContext filterContext)
         {
             Log.Error("Error", filterContext.Exception);
+        }
+
+        private static void FixAreaParameters(SearchByAreaParameters parameters)
+        {
+            if (parameters.AreaCode == "omrade")
+            {
+                parameters.AreaCode = null;
+            }
         }
     }
 }

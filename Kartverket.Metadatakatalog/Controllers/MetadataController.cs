@@ -73,12 +73,11 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             parameters.AddDefaultFacetsIfMissing();
             FixOrganizationParameters(parameters);
-            //parameters.Limit = 30;
-            //parameters.orderby = OrderBy.title;
             SearchResultForOrganization searchResult = _searchService.SearchByOrganization(parameters);
             var model = new SearchByOrganizationViewModel(parameters, searchResult);
             return View(model);
         }
+
 
         private static void FixOrganizationParameters(SearchByOrganizationParameters parameters)
         {
@@ -87,6 +86,8 @@ namespace Kartverket.Metadatakatalog.Controllers
                 parameters.OrganizationSeoName = null;
             }
         }
+
+        
 
         protected override void OnException(ExceptionContext filterContext)
         {
