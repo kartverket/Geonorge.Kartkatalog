@@ -122,9 +122,9 @@ var Areas = {
         selectArea: function (area) {
             if (this.master) {
                 area.isSelected = true;
-            } else {
-                area.isLocalSelected = true;
             }
+            area.isLocalSelected = true;
+
 
             this.$parent.updateSelectedAreas();
 
@@ -139,9 +139,8 @@ var Areas = {
         removeSelectedArea: function (area) {
             if (this.master) {
                 area.isSelected = false;
-            } else {
-                area.isLocalSelected = false;
             }
+            area.isLocalSelected = false;
 
             this.$parent.updateSelectedAreas();
 
@@ -163,8 +162,9 @@ var Projections = {
 
     methods: {
         selectProjection: function (projection) {
-            projection.isSelected = true;
+            projection.isLocalSelected = true;
             if (this.master) {
+                projection.isSelected = true;
                 for (orderLine in this.$parent.allAvailableProjections) {
                     this.$parent.allAvailableProjections[orderLine].forEach(function (availableProjection) {
                         if (availableProjection.code == projection.code) {
@@ -178,8 +178,9 @@ var Projections = {
             this.$parent.updateSelectedAreas();
         },
         removeSelectedProjection: function (projection) {
-            projection.isSelected = false;
+            projection.isLocalSelected = false;
             if (this.master) {
+                projection.isSelected = false;
                 for (orderLine in this.$parent.allAvailableProjections) {
                     this.$parent.allAvailableProjections[orderLine].forEach(function (availableProjection) {
                         if (availableProjection.code == projection.code) {
@@ -201,8 +202,9 @@ var Formats = {
 
     methods: {
         selectFormat: function (format) {
-            format.isSelected = true;
+            format.isLocalSelected = true;
             if (this.master) {
+                format.isSelected = true;
                 for (orderLine in this.$parent.allAvailableFormats) {
                     this.$parent.allAvailableFormats[orderLine].forEach(function (availableFormat) {
                         if (availableFormat.name == format.name) {
@@ -216,8 +218,9 @@ var Formats = {
             this.$parent.updateSelectedAreas();
         },
         removeSelectedFormat: function (format) {
-            format.isSelected = false;
+            format.isLocalSelected = false;
             if (this.master) {
+                format.isSelected = false;
                 for (orderLine in this.$parent.allAvailableFormats) {
                     this.$parent.allAvailableFormats[orderLine].forEach(function (availableFormat) {
                         if (availableFormat.name == format.name) {
@@ -312,16 +315,14 @@ var OrderLine = {
             for (areaType in this.$parent.masterOrderLine.allAvailableAreas[orderLineUuid]) {
                 if (this.$parent.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].length) {
                     this.$parent.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (localSelectedArea) {
-                        if (localSelectedArea.isLocalSelected || localSelectedArea.isSelected) {
+                        if (localSelectedArea.isLocalSelected) {
                             var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, localSelectedArea, "code");
                             if (!isAllreadyAddedInfo.added) {
                                 selectedAreas.push(localSelectedArea);
                             }
-
                         }
                     }.bind(this))
                 }
-
             }
             this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid] = selectedAreas;
         },
@@ -333,7 +334,7 @@ var OrderLine = {
             var selectedProjections = [];
             if (this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid].length) {
                 this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid].forEach(function (localSelectedProjection) {
-                    if (localSelectedProjection.isLocalSelected || localSelectedProjection.isSelected) {
+                    if (localSelectedProjection.isLocalSelected) {
                         var isAllreadyAddedInfo = this.isAllreadyAdded(selectedProjections, localSelectedProjection, "code");
                         if (!isAllreadyAddedInfo.added) {
                             selectedProjections.push(localSelectedProjection);
@@ -352,7 +353,7 @@ var OrderLine = {
             var selectedFormats = [];
             if (this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid].length) {
                 this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid].forEach(function (localSelectedFormat) {
-                    if (localSelectedFormat.isLocalSelected || localSelectedFormat.isSelected) {
+                    if (localSelectedFormat.isLocalSelected) {
                         var isAllreadyAddedInfo = this.isAllreadyAdded(selectedFormats, localSelectedFormat, "name");
                         if (!isAllreadyAddedInfo.added) {
                             selectedFormats.push(localSelectedFormat);
@@ -503,7 +504,6 @@ var MasterOrderLine = {
                             selectedAreas.push(area);
                         }
                     }
-
 
                     /* if (area.projections.length == 1) {
                          area.projections[0].isSelected = true;

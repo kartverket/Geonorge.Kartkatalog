@@ -15,7 +15,7 @@
 <script type="text/x-template" id="areas-template">
     <div class="custom-select-list">
         <div class="custom-select-list-input-container">
-            <span v-for="area in selected" class="custom-select-list-selected">
+            <span v-for="area in selected" v-if="master || area.isLocalSelected" class="custom-select-list-selected">
                 {{ area.name }}
                 <span v-if="!area.hasSelectedProjections" data-toggle="tooltip" data-placement="bottom" title="Støttet projeksjon er ikke valgt" class="projection-warning-icon"></span>
                 <span v-if="!area.hasSelectedFormats" data-toggle="tooltip" data-placement="bottom" title="Støttet format er ikke valgt" class="format-warning-icon"></span>
@@ -47,7 +47,7 @@
 <script type="text/x-template" id="projections-template">
     <div class="custom-select-list">
         <div class="custom-select-list-input-container">
-            <span v-for="projection in selected" class="custom-select-list-selected">
+            <span v-for="projection in selected" v-if="master || projection.isLocalSelected" class="custom-select-list-selected">
                 {{ projection.name }}
                 <span v-on:click="removeSelectedProjection(projection)" class="custom-select-list-remove-button"></span>
             </span>
@@ -66,7 +66,7 @@
 <script type="text/x-template" id="formats-template">
     <div class="custom-select-list">
         <div class="custom-select-list-input-container">
-            <span v-for="format in selected" class="custom-select-list-selected">
+            <span v-for="format in selected" v-if="master || format.isLocalSelected" class="custom-select-list-selected">
                 {{ format.name }}
                 <span v-on:click="removeSelectedFormat(format)" class="custom-select-list-remove-button"></span>
             </span>
@@ -165,7 +165,6 @@
             <div class="col-md-4">
                 <p>Område <span href="#" class="badge help-text-toggle">?</span></p>
                 <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="true">
-
 
                 </div>
             </div>
