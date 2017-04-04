@@ -132,7 +132,7 @@ namespace Kartverket.Metadatakatalog.Service
                             //Vis kart
                             if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
                             {
-                                tmp.MapUrl = relData[7];
+                                tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]) ;
                                 tmp.CanShowMapUrl = true;
                             }
                             ////Last ned

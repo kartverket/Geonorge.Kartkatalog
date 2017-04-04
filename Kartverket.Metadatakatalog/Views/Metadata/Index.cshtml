@@ -361,17 +361,18 @@ if (contact != null)
                             <span v-if="item.AccessIsProtected" data-toggle="tooltip" data-placement="bottom" title="Skjermede data" class="custom-icon custom-icon-hengelaas-closed-red" data-original-title="Skjermede data"></span>
                         </td>
                         <td>
-                            <a v-if="item.CanShowMapUrl" v-bind:href="item.MapUrl" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle="tooltip" data-placement="bottom" title="Vis i kart" target="_blank" data-original-title="Vis i kart">
-                                <span class="custom-icon custom-icon-kartmarkoer"></span>
+                            <a v-if="item.CanShowMapUrl" v-bind:id="'mapmacrolink-' + item.Uuid" v-bind:href="item.MapUrl" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle="tooltip" data-placement="bottom" title="Vis i kart" target="_blank" data-original-title="Vis i kart">
+                                <span v-if="item.AccessIsRestricted" v-bind:id="'mapmacro-' + item.Uuid" class="custom-icon custom-icon-kartmarkoer-needs-permission" title="@UI.Service_need_permission"></span>
+                                <span v-else v-bind:id="'mapmacro-' + item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
                             </a>
-                            <p v-if="item.CanShowMapUrl">
+                            <div v-if="item.CanShowMapUrl"> 
                                 <div class="input-group">
-                                    <input class="form-control" readonly id="input-copy" v-bind:value="item.DistributionUrl">
-                                    <span class="btn btn-copy input-group-addon" alt="kopier til utklippstavle" title="kopier til utklippstavle" data-clipboard-target="#input-copy">
+                                    <input class="form-control" readonly v-bind:id="'input-copy' + item.Uuid" v-bind:value="item.DistributionUrl">
+                                    <span class="btn btn-copy input-group-addon" alt="kopier til utklippstavle" title="kopier til utklippstavle" v-bind:data-clipboard-target="'#input-copy' + item.Uuid" >
                                         <i class="fa fa-clipboard"></i>
                                     </span>
                                 </div>
-                            </p>
+                            </div>
                             <a v-else class="disabled" disabled="disabled"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
                         </td>
                         <td>
