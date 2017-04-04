@@ -34,6 +34,10 @@ namespace Kartverket.Metadatakatalog
                 new { controller = "Search", action = "Organization" }
             );
 
+            routes.MapRoute("SearchByApplication", "kartlosninger-i-norge",
+               new { controller = "Application", action = "Index" }
+           );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
