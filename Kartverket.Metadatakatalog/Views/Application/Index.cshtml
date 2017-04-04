@@ -252,7 +252,7 @@
                     <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Les mer</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Vis i kart</p></div>
+                    <div class="col-sm-1 no-padding text-center"><p>Kart</p></div>
                 </div>
                 <div class="menu-separator search-results-table-heading"></div>
                 @foreach (var item in Model.Result.Items)
@@ -338,19 +338,19 @@
                             @if (item.ShowMapLink())
                             {
                                 <a id="mapmacrolink-button-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
-                                    <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
+                                    <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
                                 </a>
                             }
                             else if (item.ShowServiceMapLink())
                             {
                                 <a id="mapmacrolink-button-@item.Uuid" href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
-                                    <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
+                                    <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
                                 </a>
                             }
                             else
                             {
                                 <a id="mapmacrolink-button-@item.Uuid" title="Vis @item.Title i kart" class="disabled btn btn-default">
-                                    <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
+                                    <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
                                 </a>
                             }
                         </div>
