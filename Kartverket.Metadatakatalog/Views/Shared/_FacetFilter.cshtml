@@ -579,12 +579,12 @@
                 var urlParameters = [];
                 var urlParametersString = "?";
                 var searchParameter = getParameterByName('text');
-                var areaCodeParameter = getParameterByName('AreaCode');
+                var areaCodeParameter = getParameterByName('areacode');
                 if (searchParameter !== '') {
                     urlParameters.push("text=" + searchParameter);
                 }
                 if (areaCodeParameter !== '') {
-                    urlParameters.push("AreaCode=" + areaCodeParameter);
+                    urlParameters.push("areacode=" + areaCodeParameter);
                 }
                 this.selectedFacets.forEach(function(selectedFacet, index) {
 

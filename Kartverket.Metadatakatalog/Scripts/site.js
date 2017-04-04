@@ -62,9 +62,13 @@ function getServiceStatus(uuid, id) {
 
 
 function getParameterByName(name) {
+    console.log(location.search);
+    var url = location.search.toLowerCase();
+    console.log(url);
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
+
+        results = regex.exec(url);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
