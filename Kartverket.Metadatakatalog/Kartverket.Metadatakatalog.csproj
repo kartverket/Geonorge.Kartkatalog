@@ -333,10 +333,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\HelpPage\HelpPage.css" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\chosen-sprite%402x.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\chosen-sprite.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -910,7 +906,6 @@
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Helpers\SearchHelpers.cshtml" />
     <Content Include="fonts\MetaComp-Book.ttf" />
@@ -953,7 +948,6 @@
     <Content Include="KartverketSharedMenu\Scripts\ui-bootstrap-1.1.0.js" />
     <Content Include="KartverketSharedMenu\Scripts\ui-bootstrap-1.1.0.min.js" />
     <Content Include="KartverketSharedMenu\web.config" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="KartverketSharedMenu\Scripts\angular-1.4.9.min.js.map" />
     <Content Include="Images\arrow_ffffff_13px-01.svg" />
     <Content Include="Images\geonorge_logo.svg" />
@@ -996,19 +990,10 @@
     <Content Include="KartverketSharedMenu\Styles\geonorge-top\menuTop.css" />
     <Content Include="KartverketSharedMenu\Styles\geonorge-top\searchTop.css" />
     <Content Include="robots.txt" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\chosen.jquery.min.js" />
     <Content Include="Scripts\download.js" />
     <Content Include="Scripts\init.js" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="PostDeploy.ps1" />
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
