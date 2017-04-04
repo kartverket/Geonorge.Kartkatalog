@@ -332,7 +332,7 @@ var OrderLine = {
         updateSelectedProjections: function () {
             var orderLineUuid = this.metadata.uuid;
             var selectedProjections = [];
-            if (this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid].length) {
+            if (this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid] !== undefined && this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid].length) {
                 this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid].forEach(function (localSelectedProjection) {
                     if (localSelectedProjection.isLocalSelected) {
                         var isAllreadyAddedInfo = this.isAllreadyAdded(selectedProjections, localSelectedProjection, "code");
@@ -351,7 +351,7 @@ var OrderLine = {
         updateSelectedFormats: function () {
             var orderLineUuid = this.metadata.uuid;
             var selectedFormats = [];
-            if (this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid].length) {
+            if (this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid] !== undefined && this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid].length) {
                 this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid].forEach(function (localSelectedFormat) {
                     if (localSelectedFormat.isLocalSelected) {
                         var isAllreadyAddedInfo = this.isAllreadyAdded(selectedFormats, localSelectedFormat, "name");
@@ -415,30 +415,31 @@ var MasterOrderLine = {
                     var areaIsAllreadyAddedInfo = this.isAllreadyAdded(this.availableAreas[areaType], area, "code");
 
 
-                    if (areaType == "kommune" || areaType == "fylke" || areaType == "landsdekkende") {
-                        if (!areaIsAllreadyAddedInfo.added) {
-                            this.availableAreas[areaType].push(area);
-                        } else {
-                            var orderLineUuidIsAdded = false
+                    // if (areaType == "kommune" || areaType == "fylke" || areaType == "landsdekkende") {
 
-                            if (!orderLineUuidIsAdded) {
+                    if (!areaIsAllreadyAddedInfo.added) {
+                        this.availableAreas[areaType].push(area);
+                    } else {
+                        var orderLineUuidIsAdded = false
 
-                                // Add available projections to area
-                                if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] == undefined) {
-                                    this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = [];
-                                }
-                                this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = area.projections;
+                        if (!orderLineUuidIsAdded) {
 
-
-                                // Add available formats to area
-                                if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] == undefined) {
-                                    this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = [];
-                                }
-                                this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = area.formats;
-
+                            // Add available projections to area
+                            if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] == undefined) {
+                                this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = [];
                             }
+                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = area.projections;
+
+
+                            // Add available formats to area
+                            if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] == undefined) {
+                                this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = [];
+                            }
+                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = area.formats;
+
                         }
                     }
+                    // }
 
                 }.bind(this))
             }
@@ -829,10 +830,18 @@ var mainVueModel = new Vue({
         'masterOrderLine': MasterOrderLine
     },
     methods: {
+        isSupportedType: function (areaType) {
+            var isSupportedType = false;
+            var supportedAreaTypes = ["fylke", "kommune", "landsdekkende"];
+            supportedAreaTypes.forEach(function (supportedAreaType) {
+                if (areaType == supportedAreaType) isSupportedType = true;
+            })
+            return isSupportedType;
+        },
         hasSelectedProjections: function (area, orderLine) {
             var hasSelectedProjections = false;
 
-            if (area.allAvailableProjections[orderLine] && area.allAvailableProjections[orderLine].length) {
+            if (area.allAvailableProjections !== undefined && area.allAvailableProjections[orderLine] !== undefined && area.allAvailableProjections[orderLine].length) {
                 area.allAvailableProjections[orderLine].forEach(function (availableProjection) {
                     if (this.masterOrderLine.allSelectedProjections[orderLine] !== undefined && this.masterOrderLine.allSelectedProjections[orderLine].length) {
                         this.masterOrderLine.allSelectedProjections[orderLine].forEach(function (selectedProjection) {
@@ -852,7 +861,7 @@ var mainVueModel = new Vue({
         hasSelectedFormats: function (area, orderLine) {
             var hasSelectedFormats = false;
 
-            if (area.allAvailableFormats[orderLine] && area.allAvailableFormats[orderLine].length) {
+            if (area.allAvailableFormats !== undefined && area.allAvailableFormats[orderLine] !== undefined && area.allAvailableFormats[orderLine].length) {
                 area.allAvailableFormats[orderLine].forEach(function (availableFormat) {
                     if (this.masterOrderLine.allSelectedFormats[orderLine] !== undefined && this.masterOrderLine.allSelectedFormats[orderLine].length) {
                         this.masterOrderLine.allSelectedFormats[orderLine].forEach(function (selectedFormat) {

@@ -26,7 +26,7 @@
         <div class="custom-select-list-dropdown">
             <div class="custom-select-list-dropdown-content">
                 <div v-for="(areas, areaType) in available" class="custom-select-list-option-group">
-                    <div v-show="areas.length">
+                    <div v-if="!master || $root.isSupportedType(areaType)" v-show="areas.length">
                         <p class="custom-select-list-option-group-name">{{ areaType }}</p>
                         <ul class="custom-select-list-options area-option-list">
                             <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': area.isSelected}" v-for="area in areas">{{ area.name }}</li>
@@ -153,7 +153,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </script>
