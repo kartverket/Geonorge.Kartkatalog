@@ -1,13 +1,13 @@
 declare type CompilerOptions = {
   warn?: Function; // allow customizing warning in different environments; e.g. node
-  isIE?: boolean; // for detecting IE SVG innerHTML bug
   expectHTML?: boolean; // only false for non-web builds
   modules?: Array<ModuleOptions>; // platform specific modules; e.g. style; class
   staticKeys?: string; // a list of AST properties to be considered static; for optimization
   directives?: { [key: string]: Function }; // platform specific directives
   isUnaryTag?: (tag: string) => ?boolean; // check if a tag is unary for the platform
+  canBeLeftOpenTag?: (tag: string) => ?boolean; // check if a tag can be left opened
   isReservedTag?: (tag: string) => ?boolean; // check if a tag is a native for the platform
-  mustUseProp?: (tag: string, attr: string) => ?boolean; // check if an attribute should be bound as a property
+  mustUseProp?: (tag: string, type: ?string, name: string) => boolean; // check if an attribute should be bound as a property
   isPreTag?: (attr: string) => ?boolean; // check if a tag needs to preserve whitespace
   getTagNamespace?: (tag: string) => ?string; // check the namespace for a tag
   transforms?: Array<Function>; // a list of transforms on parsed AST before codegen
@@ -25,6 +25,7 @@ declare type CompiledResult = {
   render: string;
   staticRenderFns: Array<string>;
   errors?: Array<string>;
+  tips?: Array<string>;
 }
 
 declare type CompiledFunctionResult = {
@@ -42,6 +43,7 @@ declare type ModuleOptions = {
 }
 
 declare type ASTModifiers = { [key: string]: boolean }
+declare type ASTIfConditions = Array<{ exp: ?string; block: ASTElement }>
 
 declare type ASTElementHandler = {
   value: string;
@@ -88,14 +90,17 @@ declare type ASTElement = {
   transitionMode?: string | null;
   slotName?: ?string;
   slotTarget?: ?string;
+  slotScope?: ?string;
+  scopedSlots?: { [name: string]: ASTElement };
 
   ref?: string;
   refInFor?: boolean;
 
   if?: string;
   ifProcessed?: boolean;
+  elseif?: string;
   else?: true;
-  elseBlock?: ASTElement;
+  ifConditions?: ASTIfConditions;
 
   for?: string;
   forProcessed?: boolean;
@@ -114,6 +119,12 @@ declare type ASTElement = {
   transition?: string | true;
   transitionOnAppear?: boolean;
 
+  model?: {
+    value: string;
+    callback: string;
+    expression: string;
+  };
+
   directives?: Array<ASTDirective>;
 
   forbidden?: true;
@@ -122,7 +133,7 @@ declare type ASTElement = {
   wrapData?: (code: string) => string;
 
   // weex specific
-  atom?: boolean;
+  appendAsTree?: boolean;
 }
 
 declare type ASTExpression = {
@@ -145,6 +156,16 @@ declare type SFCDescriptor = {
   template: ?SFCBlock;
   script: ?SFCBlock;
   styles: Array<SFCBlock>;
+  customBlocks: Array<SFCCustomBlock>;
+}
+
+declare type SFCCustomBlock = {
+  type: string;
+  content: string;
+  start?: number;
+  end?: number;
+  src?: string;
+  attrs: {[attribute:string]: string};
 }
 
 declare type SFCBlock = {

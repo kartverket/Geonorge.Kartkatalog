@@ -67,7 +67,7 @@ describe('Directive v-bind', () => {
     }).then(done)
   })
 
-  it('enumrated attr', done => {
+  it('enumerated attr', done => {
     const vm = new Vue({
       template: '<div><span :draggable="foo">hello</span></div>',
       data: { foo: true }
@@ -109,7 +109,7 @@ describe('Directive v-bind', () => {
     }).then(done)
   })
 
-  it('bind as prop', () => {
+  it('.prop modifier', () => {
     const vm = new Vue({
       template: '<div><span v-bind:text-content.prop="foo"></span><span :inner-html.prop="bar"></span></div>',
       data: {
@@ -119,6 +119,28 @@ describe('Directive v-bind', () => {
     }).$mount()
     expect(vm.$el.children[0].textContent).toBe('hello')
     expect(vm.$el.children[1].innerHTML).toBe('<span>qux</span>')
+  })
+
+  it('.prop modifier with normal attribute binding', () => {
+    const vm = new Vue({
+      template: '<input :some.prop="some" :id="id">',
+      data: {
+        some: 'hello',
+        id: false
+      }
+    }).$mount()
+    expect(vm.$el.some).toBe('hello')
+    expect(vm.$el.getAttribute('id')).toBe(null)
+  })
+
+  it('.camel modifier', () => {
+    const vm = new Vue({
+      template: '<svg :view-box.camel="viewBox"></svg>',
+      data: {
+        viewBox: '0 0 1 1'
+      }
+    }).$mount()
+    expect(vm.$el.getAttribute('viewBox')).toBe('0 0 1 1')
   })
 
   it('bind object', done => {
@@ -140,6 +162,29 @@ describe('Directive v-bind', () => {
     waitForUpdate(() => {
       expect(vm.$el.getAttribute('id')).toBe('hi')
       expect(vm.$el.getAttribute('class')).toBe('ok')
+      expect(vm.$el.value).toBe('bye')
+    }).then(done)
+  })
+
+  it('bind object with overwrite', done => {
+    const vm = new Vue({
+      template: '<input v-bind="test" id="foo" :class="test.value">',
+      data: {
+        test: {
+          id: 'test',
+          class: 'ok',
+          value: 'hello'
+        }
+      }
+    }).$mount()
+    expect(vm.$el.getAttribute('id')).toBe('foo')
+    expect(vm.$el.getAttribute('class')).toBe('hello')
+    expect(vm.$el.value).toBe('hello')
+    vm.test.id = 'hi'
+    vm.test.value = 'bye'
+    waitForUpdate(() => {
+      expect(vm.$el.getAttribute('id')).toBe('foo')
+      expect(vm.$el.getAttribute('class')).toBe('bye')
       expect(vm.$el.value).toBe('bye')
     }).then(done)
   })
@@ -224,6 +269,17 @@ describe('Directive v-bind', () => {
       }
     }).$mount()
     expect('v-bind without argument expects an Object or Array value').toHaveBeenWarned()
+  })
+
+  it('set value for option element', () => {
+    const vm = new Vue({
+      template: '<select><option :value="val">val</option></select>',
+      data: {
+        val: 'val'
+      }
+    }).$mount()
+    // check value attribute
+    expect(vm.$el.options[0].getAttribute('value')).toBe('val')
   })
 
   // a vdom patch edge case where the user has several un-keyed elements of the

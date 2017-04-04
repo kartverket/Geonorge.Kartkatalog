@@ -87,23 +87,52 @@ describe('Component', () => {
       },
       components: {
         'view-a': {
-          template: '<div>foo</div>',
+          template: '<div>foo {{view}}</div>',
           data () {
             return { view: 'a' }
           }
         },
         'view-b': {
-          template: '<div>bar</div>',
+          template: '<div>bar {{view}}</div>',
           data () {
             return { view: 'b' }
           }
         }
       }
     }).$mount()
-    expect(vm.$el.outerHTML).toBe('<div view="view-a">foo</div>')
+    expect(vm.$el.outerHTML).toBe('<div view="view-a">foo a</div>')
     vm.view = 'view-b'
     waitForUpdate(() => {
-      expect(vm.$el.outerHTML).toBe('<div view="view-b">bar</div>')
+      expect(vm.$el.outerHTML).toBe('<div view="view-b">bar b</div>')
+      vm.view = ''
+    })
+    .then(() => {
+      expect(vm.$el.nodeType).toBe(8)
+      expect(vm.$el.data).toBe('')
+    }).then(done)
+  })
+
+  it('dynamic with props', done => {
+    const vm = new Vue({
+      template: '<component :is="view" :view="view"></component>',
+      data: {
+        view: 'view-a'
+      },
+      components: {
+        'view-a': {
+          template: '<div>foo {{view}}</div>',
+          props: ['view']
+        },
+        'view-b': {
+          template: '<div>bar {{view}}</div>',
+          props: ['view']
+        }
+      }
+    }).$mount()
+    expect(vm.$el.outerHTML).toBe('<div>foo view-a</div>')
+    vm.view = 'view-b'
+    waitForUpdate(() => {
+      expect(vm.$el.outerHTML).toBe('<div>bar view-b</div>')
       vm.view = ''
     })
     .then(() => {
@@ -137,7 +166,7 @@ describe('Component', () => {
     const vm = new Vue({
       template:
         '<div>' +
-          '<component v-for="c in comps" :is="c.type"></component>' +
+          '<component v-for="c in comps" :key="c.type" :is="c.type"></component>' +
         '</div>',
       data: {
         comps: [{ type: 'one' }, { type: 'two' }]
@@ -229,6 +258,41 @@ describe('Component', () => {
     expect(vm.$el.outerHTML).toBe('<ul><li>1</li><li>2</li></ul>')
   })
 
+  it('should warn when using camelCased props in in-DOM template', () => {
+    new Vue({
+      data: {
+        list: [{ a: 1 }, { a: 2 }]
+      },
+      template: '<test :somecollection="list"></test>', // <-- simulate lowercased template
+      components: {
+        test: {
+          template: '<ul><li v-for="item in someCollection">{{item.a}}</li></ul>',
+          props: ['someCollection']
+        }
+      }
+    }).$mount()
+    expect(
+      'You should probably use "some-collection" instead of "someCollection".'
+    ).toHaveBeenTipped()
+  })
+
+  it('should warn when using camelCased events in in-DOM template', () => {
+    new Vue({
+      template: '<test @foobar="a++"></test>', // <-- simulate lowercased template
+      components: {
+        test: {
+          template: '<div></div>',
+          created () {
+            this.$emit('fooBar')
+          }
+        }
+      }
+    }).$mount()
+    expect(
+      'You should probably use "foo-bar" instead of "fooBar".'
+    ).toHaveBeenTipped()
+  })
+
   it('not found component should not throw', () => {
     expect(function () {
       new Vue({
@@ -294,7 +358,6 @@ describe('Component', () => {
     expect(spy).not.toHaveBeenCalled()
     vm.a = null
     waitForUpdate(() => {
-      expect('Error when rendering root instance').toHaveBeenWarned()
       expect(spy).toHaveBeenCalled()
       expect(vm.$el.textContent).toBe('123') // should preserve rendered DOM
       vm.a = { b: 234 }

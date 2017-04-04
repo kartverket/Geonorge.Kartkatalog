@@ -4,8 +4,8 @@ You can join them in supporting  Vue.js development by [pledging on Patreon](htt
 
 ### $2000
 
-<a href="http://www.thedifferenceengine.io/">
-  <img width="600px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/tde.png">
+<a href="https://stdlib.com/">
+  <img width="600px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/stdlib.png">
 </a>
 
 ---
@@ -32,10 +32,6 @@ You can join them in supporting  Vue.js development by [pledging on Patreon](htt
   <img width="240px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/someline.png">
 </a>
 
-<a href="http://gold.xitu.io/?utm_source=vuejs&utm_medium=image&utm_content=juejin&utm_campaign=q3_website">
-  <img width="180px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/juejin.png">
-</a>
-
 <a href="http://monterail.com/" target="_blank">
   <img width="240px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/monterail.png">
 </a>
@@ -52,26 +48,40 @@ You can join them in supporting  Vue.js development by [pledging on Patreon](htt
   <img width="240px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/vuejobs.png">
 </a>
 
+<a href="https://leanpub.com/vuejs2" target="_blank">
+  <img width="240px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/tmvuejs2.png">
+</a>
+
+#### Sacha Kupambana
+
 ---
 
 ### $250
 
-It could be you!
+[It could be you!](https://www.patreon.com/bePatron?u=2341390)
 
 ---
 
 ### $100
 
 <a href="http://tighten.co/">
-  <img width="200px" src="http://i.imgur.com/T7fQYLT.png">
+  <img width="240px" src="http://i.imgur.com/T7fQYLT.png">
 </a>
 
 <a href="http://invoicemachine.com/">
-  <img width="200px" src="http://assets.invoicemachine.com/images/flat_logo.png">
+  <img width="220px" src="http://assets.invoicemachine.com/images/flat_logo.png">
 </a>
 
-<a href="https://statamic.com/">
-  <img width="240px" src="http://i.imgur.com/MRIkKgp.png">
+<a href="https://alligator.io">
+  <img width="240px" src="https://alligator.io/images/alligator-logo.svg">
+</a>
+
+<a href="https://monei.net/">
+  <img width="200px" src="http://i.imgur.com/JUSjHAi.png">
+</a>
+
+<a href="https://www.accelebrate.com/">
+  <img width="220px" src="https://www.accelebrate.com/assets/images/accelebrate_logo@2x.png">
 </a>
 
 ---
@@ -86,8 +96,9 @@ It could be you!
 - Greg McCarvell
 - Yoshiya Hinosawa
 - Wasim Khamlichi
-- Jivan Roquet
 - errorrik
+- Alex Balashov
+- Cheng-Wei Chien
 
 ---
 
@@ -184,3 +195,43 @@ It could be you!
 - Christian Griffith
 - Matt Rockwell
 - Jarek Tkaczyk
+- Michael Laccetti
+- Jonothan Allen
+- Andrew Davis
+- Jason Rys
+- Sean
+- Xiaojie Li
+- Joakim Bugge
+- Lacey Pevey
+- David Hess
+- Niannian Modisette
+- Kim Cuartero
+- Luke Sampson
+- Dariusz Jastrzębski
+- Ivan Sieder
+- Jivan Roquet
+- Shane
+- Stew Heckenberg
+- Matt Jones
+- Dave Chenell
+- Frank Baele
+- Jack McDade
+- Patrick O'Dacre
+- Wietse Wind
+- Donny Donny
+- Duncan Kenzie
+- Mike Margerum
+- Michael Richards
+- Eduardo Reveles
+- Jan Kremlacek
+- Guy Gavergun
+- Keith Bailey
+- Joel Birch
+- Bernhard E. Reiter
+- Radu Cretu
+- Luiz
+- Poamrong Rith
+- Chengzhi Yin
+- Dan Barrett
+- Zoran Knezevic
+- Charles Beaumont

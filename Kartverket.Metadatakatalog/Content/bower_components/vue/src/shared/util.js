@@ -16,8 +16,8 @@ export function _toString (val: any): string {
  * If the conversion fails, return original string.
  */
 export function toNumber (val: string): number | string {
-  const n = parseFloat(val, 10)
-  return (n || n === 0) ? n : val
+  const n = parseFloat(val)
+  return isNaN(n) ? val : n
 }
 
 /**
@@ -73,16 +73,16 @@ export function isPrimitive (value: any): boolean {
 /**
  * Create a cached version of a pure function.
  */
-export function cached (fn: Function): Function {
+export function cached<F: Function> (fn: F): F {
   const cache = Object.create(null)
-  return function cachedFn (str: string): any {
+  return (function cachedFn (str: string) {
     const hit = cache[str]
     return hit || (cache[str] = fn(str))
-  }
+  }: any)
 }
 
 /**
- * Camelize a hyphen-delmited string.
+ * Camelize a hyphen-delimited string.
  */
 const camelizeRE = /-(\w)/g
 export const camelize = cached((str: string): string => {
@@ -190,6 +190,11 @@ export function noop () {}
 export const no = () => false
 
 /**
+ * Return same value
+ */
+export const identity = (_: any) => _
+
+/**
  * Generate a static keys string from compiler modules.
  */
 export function genStaticKeys (modules: Array<ModuleOptions>): string {
@@ -203,13 +208,20 @@ export function genStaticKeys (modules: Array<ModuleOptions>): string {
  * if they are plain objects, do they have the same shape?
  */
 export function looseEqual (a: mixed, b: mixed): boolean {
-  /* eslint-disable eqeqeq */
-  return a == b || (
-    isObject(a) && isObject(b)
-      ? JSON.stringify(a) === JSON.stringify(b)
-      : false
-  )
-  /* eslint-enable eqeqeq */
+  const isObjectA = isObject(a)
+  const isObjectB = isObject(b)
+  if (isObjectA && isObjectB) {
+    try {
+      return JSON.stringify(a) === JSON.stringify(b)
+    } catch (e) {
+      // possible circular reference
+      return a === b
+    }
+  } else if (!isObjectA && !isObjectB) {
+    return String(a) === String(b)
+  } else {
+    return false
+  }
 }
 
 export function looseIndexOf (arr: Array<mixed>, val: mixed): number {
@@ -217,4 +229,17 @@ export function looseIndexOf (arr: Array<mixed>, val: mixed): number {
     if (looseEqual(arr[i], val)) return i
   }
   return -1
+}
+
+/**
+ * Ensure a function is called only once.
+ */
+export function once (fn: Function): Function {
+  let called = false
+  return () => {
+    if (!called) {
+      called = true
+      fn()
+    }
+  }
 }

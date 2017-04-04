@@ -4,10 +4,8 @@ import { cached, extend, toObject } from 'shared/util'
 
 export const parseStyleText = cached(function (cssText) {
   const res = {}
-  const hasBackground = cssText.indexOf('background') >= 0
-  // maybe with background-image: url(http://xxx) or base64 img
-  const listDelimiter = hasBackground ? /;(?![^(]*\))/g : ';'
-  const propertyDelimiter = hasBackground ? /:(.+)/ : ':'
+  const listDelimiter = /;(?![^(]*\))/g
+  const propertyDelimiter = /:(.+)/
   cssText.split(listDelimiter).forEach(function (item) {
     if (item) {
       var tmp = item.split(propertyDelimiter)
@@ -48,8 +46,8 @@ export function getStyle (vnode: VNode, checkChild: boolean): Object {
 
   if (checkChild) {
     let childNode = vnode
-    while (childNode.child) {
-      childNode = childNode.child._vnode
+    while (childNode.componentInstance) {
+      childNode = childNode.componentInstance._vnode
       if (childNode.data && (styleData = normalizeStyleData(childNode.data))) {
         extend(res, styleData)
       }

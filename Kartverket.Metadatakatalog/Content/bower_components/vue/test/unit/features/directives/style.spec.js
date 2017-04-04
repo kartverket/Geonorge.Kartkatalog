@@ -83,6 +83,13 @@ describe('Directive v-bind:style', () => {
     }).then(done)
   })
 
+  it('!important', done => {
+    vm.styles = { display: 'block !important' }
+    waitForUpdate(() => {
+      expect(vm.$el.style.getPropertyPriority('display')).toBe('important')
+    }).then(done)
+  })
+
   it('object with multiple entries', done => {
     vm.$el.style.color = 'red'
     vm.styles = {
@@ -301,6 +308,41 @@ describe('Directive v-bind:style', () => {
     }).then(() => {
       expect(style.color).toBe('')
       expect(style.fontSize).toBe('')
+      expect(style.marginTop).toBe('12px')
+    }).then(done)
+  })
+
+  it('should not merge for v-if, v-else-if and v-else elements', (done) => {
+    const vm = new Vue({
+      template:
+        '<div>' +
+          '<section style="color: blue" :style="style" v-if="foo"></section>' +
+          '<section style="margin-top: 12px" v-else-if="bar"></section>' +
+          '<section style="margin-bottom: 24px" v-else></section>' +
+          '<div></div>' +
+        '</div>',
+      data: {
+        foo: true,
+        bar: false,
+        style: {
+          fontSize: '12px'
+        }
+      }
+    }).$mount()
+    const style = vm.$el.children[0].style
+    expect(style.fontSize).toBe('12px')
+    expect(style.color).toBe('blue')
+    waitForUpdate(() => {
+      vm.foo = false
+    }).then(() => {
+      expect(style.color).toBe('')
+      expect(style.fontSize).toBe('')
+      expect(style.marginBottom).toBe('24px')
+      vm.bar = true
+    }).then(() => {
+      expect(style.color).toBe('')
+      expect(style.fontSize).toBe('')
+      expect(style.marginBottom).toBe('')
       expect(style.marginTop).toBe('12px')
     }).then(done)
   })

@@ -9,7 +9,7 @@ type PropOptions = {
   default: any,
   required: ?boolean,
   validator: ?Function
-}
+};
 
 export function validateProp (
   key: string,
@@ -21,10 +21,10 @@ export function validateProp (
   const absent = !hasOwn(propsData, key)
   let value = propsData[key]
   // handle boolean props
-  if (isBooleanType(prop.type)) {
+  if (isType(Boolean, prop.type)) {
     if (absent && !hasOwn(prop, 'default')) {
       value = false
-    } else if (value === '' || value === hyphenate(key)) {
+    } else if (!isType(String, prop.type) && (value === '' || value === hyphenate(key))) {
       value = true
     }
   }
@@ -54,8 +54,8 @@ function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): a
   }
   const def = prop.default
   // warn against non-factory defaults for Object & Array
-  if (isObject(def)) {
-    process.env.NODE_ENV !== 'production' && warn(
+  if (process.env.NODE_ENV !== 'production' && isObject(def)) {
+    warn(
       'Invalid default value for prop "' + key + '": ' +
       'Props with type Object/Array must use a factory function ' +
       'to return the default value.',
@@ -66,11 +66,12 @@ function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): a
   // return previous default value to avoid unnecessary watcher trigger
   if (vm && vm.$options.propsData &&
     vm.$options.propsData[key] === undefined &&
-    vm[key] !== undefined) {
-    return vm[key]
+    vm._props[key] !== undefined) {
+    return vm._props[key]
   }
   // call factory function for non-Function types
-  return typeof def === 'function' && prop.type !== Function
+  // a value is Function if its prototype is function even across different execution context
+  return typeof def === 'function' && getType(prop.type) !== 'Function'
     ? def.call(vm)
     : def
 }
@@ -104,7 +105,7 @@ function assertProp (
     }
     for (let i = 0; i < type.length && !valid; i++) {
       const assertedType = assertType(value, type[i])
-      expectedTypes.push(assertedType.expectedType)
+      expectedTypes.push(assertedType.expectedType || '')
       valid = assertedType.valid
     }
   }
@@ -168,12 +169,12 @@ function getType (fn) {
   return match && match[1]
 }
 
-function isBooleanType (fn) {
+function isType (type, fn) {
   if (!Array.isArray(fn)) {
-    return getType(fn) === 'Boolean'
+    return getType(fn) === getType(type)
   }
   for (let i = 0, len = fn.length; i < len; i++) {
-    if (getType(fn[i]) === 'Boolean') {
+    if (getType(fn[i]) === getType(type)) {
       return true
     }
   }

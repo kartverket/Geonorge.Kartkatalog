@@ -45,6 +45,7 @@ describe('Directive v-model text', () => {
     expect(vm.test).toBe(1)
     vm.$el.value = '2'
     triggerEvent(vm.$el, 'input')
+    expect(vm.test).toBe(2)
     // should let strings pass through
     vm.$el.value = 'f'
     triggerEvent(vm.$el, 'input')
@@ -62,6 +63,61 @@ describe('Directive v-model text', () => {
     vm.$el.value = ' what '
     triggerEvent(vm.$el, 'input')
     expect(vm.test).toBe('what')
+  })
+
+  it('.number focus and typing', (done) => {
+    const vm = new Vue({
+      data: {
+        test: 0,
+        update: 0
+      },
+      template:
+        '<div>' +
+          '<input ref="input" v-model.number="test">{{ update }}' +
+          '<input ref="blur">' +
+        '</div>'
+    }).$mount()
+    document.body.appendChild(vm.$el)
+    vm.$refs.input.focus()
+    expect(vm.test).toBe(0)
+    vm.$refs.input.value = '1.0'
+    triggerEvent(vm.$refs.input, 'input')
+    expect(vm.test).toBe(1)
+    vm.update++
+    waitForUpdate(() => {
+      expect(vm.$refs.input.value).toBe('1.0')
+      vm.$refs.blur.focus()
+      vm.update++
+    }).then(() => {
+      expect(vm.$refs.input.value).toBe('1')
+    }).then(done)
+  })
+
+  it('.trim focus and typing', (done) => {
+    const vm = new Vue({
+      data: {
+        test: 'abc',
+        update: 0
+      },
+      template:
+        '<div>' +
+          '<input ref="input" v-model.trim="test" type="text">{{ update }}' +
+          '<input ref="blur"/>' +
+        '</div>'
+    }).$mount()
+    document.body.appendChild(vm.$el)
+    vm.$refs.input.focus()
+    vm.$refs.input.value = ' abc '
+    triggerEvent(vm.$refs.input, 'input')
+    expect(vm.test).toBe('abc')
+    vm.update++
+    waitForUpdate(() => {
+      expect(vm.$refs.input.value).toBe(' abc ')
+      vm.$refs.blur.focus()
+      vm.update++
+    }).then(() => {
+      expect(vm.$refs.input.value).toBe('abc')
+    }).then(done)
   })
 
   it('multiple inputs', (done) => {
@@ -149,30 +205,6 @@ describe('Directive v-model text', () => {
     })
   }
 
-  it('warn inline value attribute', () => {
-    const vm = new Vue({
-      data: {
-        test: 'foo'
-      },
-      template: '<input v-model="test" value="bar">'
-    }).$mount()
-    expect(vm.test).toBe('foo')
-    expect(vm.$el.value).toBe('foo')
-    expect('inline value attributes will be ignored').toHaveBeenWarned()
-  })
-
-  it('warn textarea inline content', function () {
-    const vm = new Vue({
-      data: {
-        test: 'foo'
-      },
-      template: '<textarea v-model="test">bar</textarea>'
-    }).$mount()
-    expect(vm.test).toBe('foo')
-    expect(vm.$el.value).toBe('foo')
-    expect('inline content inside <textarea> will be ignored').toHaveBeenWarned()
-  })
-
   it('warn invalid tag', () => {
     new Vue({
       data: {
@@ -180,7 +212,7 @@ describe('Directive v-model text', () => {
       },
       template: '<div v-model="test"></div>'
     }).$mount()
-    expect('v-model is not supported on element type: <div>').toHaveBeenWarned()
+    expect('<div v-model="test">: v-model is not supported on this element type').toHaveBeenWarned()
   })
 
   // #3468

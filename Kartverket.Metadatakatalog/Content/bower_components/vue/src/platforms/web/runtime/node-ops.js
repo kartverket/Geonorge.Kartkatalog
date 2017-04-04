@@ -7,7 +7,8 @@ export function createElement (tagName: string, vnode: VNode): Element {
   if (tagName !== 'select') {
     return elm
   }
-  if (vnode.data && vnode.data.attrs && 'multiple' in vnode.data.attrs) {
+  // false or null will remove the attribute but undefined will not
+  if (vnode.data && vnode.data.attrs && vnode.data.attrs.multiple !== undefined) {
     elm.setAttribute('multiple', 'multiple')
   }
   return elm
@@ -51,10 +52,6 @@ export function tagName (node: Element): string {
 
 export function setTextContent (node: Node, text: string) {
   node.textContent = text
-}
-
-export function childNodes (node: Node): NodeList<Node> {
-  return node.childNodes
 }
 
 export function setAttribute (node: Element, key: string, val: string) {

@@ -17,8 +17,8 @@ Vue.js is an MIT-licensed open source project. Its ongoing development is made p
 <p align="center">
   <b>Special thanks to the generous sponsorship by:</b>
   <br><br>
-  <a href="http://www.thedifferenceengine.io/">
-    <img width="300px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/tde.png">
+  <a href="https://stdlib.com">
+    <img width="240px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/stdlib.png">
   </a>
   <br><br>
   <a href="https://jsfiddle.net/">
@@ -41,10 +41,6 @@ Vue.js is an MIT-licensed open source project. Its ongoing development is made p
     <img width="120px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/someline.png">
   </a>
   <br><br>
-  <a href="http://gold.xitu.io/?utm_source=vuejs&utm_medium=image&utm_content=juejin&utm_campaign=q3_website">
-    <img width="120px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/juejin.png">
-  </a>
-  <br><br>
   <a href="http://monterail.com/" target="_blank">
     <img width="120px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/monterail.png">
   </a>
@@ -59,6 +55,10 @@ Vue.js is an MIT-licensed open source project. Its ongoing development is made p
   <br><br>
   <a href="https://vuejsjob.com/?ref=vuejs" target="_blank">
     <img width="120px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/vuejobs.png">
+  </a>
+  <br><br>
+  <a href="https://leanpub.com/vuejs2" target="_blank">
+    <img width="120px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/tmvuejs2.png">
   </a>
 </p>
 
@@ -98,4 +98,4 @@ Details changes for each release are documented in the [release notes](https://g
 
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2013-2016 Evan You
+Copyright (c) 2013-present, Yuxi (Evan) You

@@ -1,68 +1,110 @@
 /* @flow */
 
-import VNode, { emptyVNode } from './vnode'
+import VNode, { createEmptyVNode } from './vnode'
 import config from '../config'
 import { createComponent } from './create-component'
-import { normalizeChildren } from './helpers/index'
-import { warn, resolveAsset } from '../util/index'
+import { normalizeChildren, simpleNormalizeChildren } from './helpers/index'
+import { warn, resolveAsset, isPrimitive } from '../util/index'
+
+const SIMPLE_NORMALIZE = 1
+const ALWAYS_NORMALIZE = 2
 
 // wrapper function for providing a more flexible interface
 // without getting yelled at by flow
 export function createElement (
+  context: Component,
   tag: any,
   data: any,
-  children: any
-): VNode | void {
-  if (data && (Array.isArray(data) || typeof data !== 'object')) {
+  children: any,
+  normalizationType: any,
+  alwaysNormalize: boolean
+): VNode {
+  if (Array.isArray(data) || isPrimitive(data)) {
+    normalizationType = children
     children = data
     data = undefined
   }
-  // make sure to use real instance instead of proxy as context
-  return _createElement(this._self, tag, data, children)
+  if (alwaysNormalize) normalizationType = ALWAYS_NORMALIZE
+  return _createElement(context, tag, data, children, normalizationType)
 }
 
 export function _createElement (
   context: Component,
   tag?: string | Class<Component> | Function | Object,
   data?: VNodeData,
-  children?: VNodeChildren | void
-): VNode | void {
+  children?: any,
+  normalizationType?: number
+): VNode {
   if (data && data.__ob__) {
     process.env.NODE_ENV !== 'production' && warn(
       `Avoid using observed data object as vnode data: ${JSON.stringify(data)}\n` +
       'Always create fresh vnode data objects in each render!',
       context
     )
-    return
+    return createEmptyVNode()
   }
   if (!tag) {
     // in case of component :is set to falsy value
-    return emptyVNode()
+    return createEmptyVNode()
   }
+  // support single function children as default scoped slot
+  if (Array.isArray(children) &&
+      typeof children[0] === 'function') {
+    data = data || {}
+    data.scopedSlots = { default: children[0] }
+    children.length = 0
+  }
+  if (normalizationType === ALWAYS_NORMALIZE) {
+    children = normalizeChildren(children)
+  } else if (normalizationType === SIMPLE_NORMALIZE) {
+    children = simpleNormalizeChildren(children)
+  }
+  let vnode, ns
   if (typeof tag === 'string') {
     let Ctor
-    const ns = config.getTagNamespace(tag)
+    ns = config.getTagNamespace(tag)
     if (config.isReservedTag(tag)) {
       // platform built-in elements
-      return new VNode(
-        tag, data, normalizeChildren(children, ns),
-        undefined, undefined, ns, context
+      vnode = new VNode(
+        config.parsePlatformTagName(tag), data, children,
+        undefined, undefined, context
       )
     } else if ((Ctor = resolveAsset(context.$options, 'components', tag))) {
       // component
-      return createComponent(Ctor, data, context, children, tag)
+      vnode = createComponent(Ctor, data, context, children, tag)
     } else {
       // unknown or unlisted namespaced elements
       // check at runtime because it may get assigned a namespace when its
       // parent normalizes children
-      const childNs = tag === 'foreignObject' ? 'xhtml' : ns
-      return new VNode(
-        tag, data, normalizeChildren(children, childNs),
-        undefined, undefined, ns, context
+      vnode = new VNode(
+        tag, data, children,
+        undefined, undefined, context
       )
     }
   } else {
     // direct component options / constructor
-    return createComponent(tag, data, context, children)
+    vnode = createComponent(tag, data, context, children)
+  }
+  if (vnode) {
+    if (ns) applyNS(vnode, ns)
+    return vnode
+  } else {
+    return createEmptyVNode()
+  }
+}
+
+function applyNS (vnode, ns) {
+  vnode.ns = ns
+  if (vnode.tag === 'foreignObject') {
+    // use default namespace inside foreignObject
+    return
+  }
+  if (vnode.children) {
+    for (let i = 0, l = vnode.children.length; i < l; i++) {
+      const child = vnode.children[i]
+      if (child.tag && !child.ns) {
+        applyNS(child, ns)
+      }
+    }
   }
 }

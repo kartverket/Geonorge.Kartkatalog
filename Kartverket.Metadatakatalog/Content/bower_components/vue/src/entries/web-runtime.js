@@ -2,39 +2,41 @@
 
 import Vue from 'core/index'
 import config from 'core/config'
-import { extend, noop } from 'shared/util'
-import { devtools, inBrowser } from 'core/util/index'
 import { patch } from 'web/runtime/patch'
+import { extend, noop } from 'shared/util'
+import { mountComponent } from 'core/instance/lifecycle'
+import { devtools, inBrowser, isChrome } from 'core/util/index'
 import platformDirectives from 'web/runtime/directives/index'
 import platformComponents from 'web/runtime/components/index'
+
 import {
   query,
-  isUnknownElement,
+  mustUseProp,
   isReservedTag,
   getTagNamespace,
-  mustUseProp
+  isUnknownElement
 } from 'web/util/index'
 
 // install platform specific utils
-Vue.config.isUnknownElement = isUnknownElement
+Vue.config.mustUseProp = mustUseProp
 Vue.config.isReservedTag = isReservedTag
 Vue.config.getTagNamespace = getTagNamespace
-Vue.config.mustUseProp = mustUseProp
+Vue.config.isUnknownElement = isUnknownElement
 
 // install platform runtime directives & components
 extend(Vue.options.directives, platformDirectives)
 extend(Vue.options.components, platformComponents)
 
 // install platform patch function
-Vue.prototype.__patch__ = config._isServer ? noop : patch
+Vue.prototype.__patch__ = inBrowser ? patch : noop
 
-// wrap mount
+// public mount method
 Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean
 ): Component {
-  el = el && !config._isServer ? query(el) : undefined
-  return this._mount(el, hydrating)
+  el = el && inBrowser ? query(el) : undefined
+  return mountComponent(this, el, hydrating)
 }
 
 // devtools global hook
@@ -43,15 +45,21 @@ setTimeout(() => {
   if (config.devtools) {
     if (devtools) {
       devtools.emit('init', Vue)
-    } else if (
-      process.env.NODE_ENV !== 'production' &&
-      inBrowser && /Chrome\/\d+/.test(window.navigator.userAgent)
-    ) {
-      console.log(
-        'Download the Vue Devtools for a better development experience:\n' +
+    } else if (process.env.NODE_ENV !== 'production' && isChrome) {
+      console[console.info ? 'info' : 'log'](
+        'Download the Vue Devtools extension for a better development experience:\n' +
         'https://github.com/vuejs/vue-devtools'
       )
     }
+  }
+  if (process.env.NODE_ENV !== 'production' &&
+      config.productionTip !== false &&
+      inBrowser && typeof console !== 'undefined') {
+    console[console.info ? 'info' : 'log'](
+      `You are running Vue in development mode.\n` +
+      `Make sure to turn on production mode when deploying for production.\n` +
+      `See more tips at https://vuejs.org/guide/deployment.html`
+    )
   }
 }, 0)
 

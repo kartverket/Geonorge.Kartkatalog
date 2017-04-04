@@ -17,7 +17,7 @@ describe('Component async', () => {
         }
       }
     }).$mount()
-    expect(vm.$el.innerHTML).toBe('')
+    expect(vm.$el.innerHTML).toBe('<!---->')
     expect(vm.$children.length).toBe(0)
     function next () {
       expect(vm.$el.innerHTML).toBe('<div>hi</div>')
@@ -110,7 +110,7 @@ describe('Component async', () => {
 
   it('with v-for', done => {
     const vm = new Vue({
-      template: '<div><test v-for="n in list" :n="n"></test></div>',
+      template: '<div><test v-for="n in list" :key="n" :n="n"></test></div>',
       data: {
         list: [1, 2, 3]
       },
@@ -151,7 +151,7 @@ describe('Component async', () => {
         }
       }
     }).$mount()
-    expect(vm.$el.innerHTML).toBe('')
+    expect(vm.$el.innerHTML).toBe('<!---->')
     expect(vm.$children.length).toBe(0)
     function next () {
       expect(vm.$el.innerHTML).toBe('<div>hi</div>')

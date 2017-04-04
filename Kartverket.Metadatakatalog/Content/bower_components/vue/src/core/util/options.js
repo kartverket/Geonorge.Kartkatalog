@@ -110,7 +110,7 @@ strats.data = function (
 }
 
 /**
- * Hooks and param attributes are merged as arrays.
+ * Hooks and props are merged as arrays.
  */
 function mergeHook (
   parentVal: ?Array<Function>,
@@ -155,7 +155,7 @@ config._assetTypes.forEach(function (type) {
  */
 strats.watch = function (parentVal: ?Object, childVal: ?Object): ?Object {
   /* istanbul ignore if */
-  if (!childVal) return parentVal
+  if (!childVal) return Object.create(parentVal || null)
   if (!parentVal) return childVal
   const ret = {}
   extend(ret, parentVal)
@@ -178,7 +178,7 @@ strats.watch = function (parentVal: ?Object, childVal: ?Object): ?Object {
 strats.props =
 strats.methods =
 strats.computed = function (parentVal: ?Object, childVal: ?Object): ?Object {
-  if (!childVal) return parentVal
+  if (!childVal) return Object.create(parentVal || null)
   if (!parentVal) return childVal
   const ret = Object.create(null)
   extend(ret, parentVal)
@@ -319,11 +319,14 @@ export function resolveAsset (
     return
   }
   const assets = options[type]
-  const res = assets[id] ||
-    // camelCase ID
-    assets[camelize(id)] ||
-    // Pascal Case ID
-    assets[capitalize(camelize(id))]
+  // check local registration variations first
+  if (hasOwn(assets, id)) return assets[id]
+  const camelizedId = camelize(id)
+  if (hasOwn(assets, camelizedId)) return assets[camelizedId]
+  const PascalCaseId = capitalize(camelizedId)
+  if (hasOwn(assets, PascalCaseId)) return assets[PascalCaseId]
+  // fallback to prototype chain
+  const res = assets[id] || assets[camelizedId] || assets[PascalCaseId]
   if (process.env.NODE_ENV !== 'production' && warnMissing && !res) {
     warn(
       'Failed to resolve ' + type.slice(0, -1) + ': ' + id,

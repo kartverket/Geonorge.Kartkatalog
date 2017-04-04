@@ -45,7 +45,7 @@ describe('optimizer', () => {
     // ul
     expect(ast.static).toBe(false) // ul
     // li
-    expect(ast.children[0].static).toBe(false) // firts
+    expect(ast.children[0].static).toBe(false) // first
     expect(ast.children[1].static).toBe(true) // second
     expect(ast.children[2].static).toBe(false) // third
     // text node inside li
@@ -66,7 +66,7 @@ describe('optimizer', () => {
     optimize(ast, baseOptions)
     expect(ast.static).toBe(false)
     expect(ast.children[0].static).toBe(false)
-    expect(ast.children[0].elseBlock.static).toBeUndefined()
+    expect(ast.children[0].ifConditions[1].block.static).toBeUndefined()
   })
 
   it('v-pre directive', () => {
@@ -98,17 +98,17 @@ describe('optimizer', () => {
   })
 
   it('single slot', () => {
-    const ast = parse('<slot>hello</slot>', baseOptions)
+    const ast = parse('<div><slot>hello</slot></div>', baseOptions)
     optimize(ast, baseOptions)
-    expect(ast.static).toBe(false) // slot
-    expect(ast.children[0].static).toBe(true) // text node
+    expect(ast.children[0].static).toBe(false) // slot
+    expect(ast.children[0].children[0].static).toBe(true) // text node
   })
 
   it('named slot', () => {
-    const ast = parse('<slot name="one">hello world</slot>', baseOptions)
+    const ast = parse('<div><slot name="one">hello world</slot></div>', baseOptions)
     optimize(ast, baseOptions)
-    expect(ast.static).toBe(false) // slot
-    expect(ast.children[0].static).toBe(true) // text node
+    expect(ast.children[0].static).toBe(false) // slot
+    expect(ast.children[0].children[0].static).toBe(true) // text node
   })
 
   it('slot target', () => {
@@ -208,5 +208,33 @@ describe('optimizer', () => {
     optimize(ast, baseOptions)
     expect(ast.children[0].children[0].staticRoot).toBe(true)
     expect(ast.children[0].children[0].staticInFor).toBe(true)
+  })
+
+  it('mark static trees inside v-for with nested v-else and v-once', () => {
+    const ast = parse(`
+      <div v-if="1"></div>
+      <div v-else-if="2">
+        <div v-for="i in 10" :key="i">
+          <div v-if="1">{{ i }}</div>
+          <div v-else-if="2" v-once>{{ i }}</div>
+          <div v-else v-once>{{ i }}</div>
+        </div>
+      </div>
+      <div v-else>
+        <div v-for="i in 10" :key="i">
+          <div v-if="1">{{ i }}</div>
+          <div v-else v-once>{{ i }}</div>
+        </div>
+      </div>
+      `, baseOptions)
+    optimize(ast, baseOptions)
+    expect(ast.ifConditions[1].block.children[0].children[0].ifConditions[1].block.staticRoot).toBe(false)
+    expect(ast.ifConditions[1].block.children[0].children[0].ifConditions[1].block.staticInFor).toBe(true)
+
+    expect(ast.ifConditions[1].block.children[0].children[0].ifConditions[2].block.staticRoot).toBe(false)
+    expect(ast.ifConditions[1].block.children[0].children[0].ifConditions[2].block.staticInFor).toBe(true)
+
+    expect(ast.ifConditions[2].block.children[0].children[0].ifConditions[1].block.staticRoot).toBe(false)
+    expect(ast.ifConditions[2].block.children[0].children[0].ifConditions[1].block.staticInFor).toBe(true)
   })
 })

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-const mergeOptions = Vue.util.mergeOptions
+import { mergeOptions } from 'core/util/index'
 
 describe('Options mixins', () => {
   it('vm should have options from mixin', () => {
@@ -17,7 +17,7 @@ describe('Options mixins', () => {
       methods: {
         b: function () {}
       }
-    }).$mount()
+    })
 
     expect(vm.a).toBeDefined()
     expect(vm.b).toBeDefined()
@@ -103,7 +103,7 @@ describe('Options mixins', () => {
       methods: {
         b: function () {}
       }
-    }).$mount()
+    })
 
     expect(vm.a).toBeDefined()
     expect(vm.b).toBeDefined()

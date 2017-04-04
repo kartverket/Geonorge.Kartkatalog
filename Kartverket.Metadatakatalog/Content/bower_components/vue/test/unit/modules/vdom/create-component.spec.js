@@ -16,7 +16,8 @@ describe('create-component', () => {
   it('create a component basically', () => {
     const child = {
       name: 'child',
-      props: ['msg']
+      props: ['msg'],
+      render () {}
     }
     const init = jasmine.createSpy()
     const data = {
@@ -39,7 +40,7 @@ describe('create-component', () => {
     expect(vnode.context).toEqual(vm)
 
     vnode.data.hook.init(vnode)
-    expect(init).toHaveBeenCalledWith(vnode, undefined)
+    expect(init.calls.argsFor(0)[0]).toBe(vnode)
   })
 
   it('create a component when resolved with async loading', done => {

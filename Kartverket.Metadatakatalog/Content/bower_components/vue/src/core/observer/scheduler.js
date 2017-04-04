@@ -2,6 +2,7 @@
 
 import type Watcher from './watcher'
 import config from '../config'
+import { callHook } from '../instance/lifecycle'
 import {
   warn,
   nextTick,
@@ -32,6 +33,7 @@ function resetSchedulerState () {
  */
 function flushSchedulerQueue () {
   flushing = true
+  let watcher, id, vm
 
   // Sort queue before flush.
   // This ensures that:
@@ -46,8 +48,8 @@ function flushSchedulerQueue () {
   // do not cache length because more watchers might be pushed
   // as we run existing watchers
   for (index = 0; index < queue.length; index++) {
-    const watcher = queue[index]
-    const id = watcher.id
+    watcher = queue[index]
+    id = watcher.id
     has[id] = null
     watcher.run()
     // in dev build, check and stop circular updates.
@@ -67,13 +69,25 @@ function flushSchedulerQueue () {
     }
   }
 
+  // reset scheduler before updated hook called
+  const oldQueue = queue.slice()
+  resetSchedulerState()
+
+  // call updated hooks
+  index = oldQueue.length
+  while (index--) {
+    watcher = oldQueue[index]
+    vm = watcher.vm
+    if (vm._watcher === watcher && vm._isMounted) {
+      callHook(vm, 'updated')
+    }
+  }
+
   // devtool hook
   /* istanbul ignore if */
   if (devtools && config.devtools) {
     devtools.emit('flush')
   }
-
-  resetSchedulerState()
 }
 
 /**

@@ -2,7 +2,7 @@
 
 import VNode from 'core/vdom/vnode'
 import { renderAttr } from './attrs'
-import { propsToAttrMap, isRenderableAttr } from 'web/util/attrs'
+import { propsToAttrMap, isRenderableAttr } from '../util'
 
 export default function renderDOMProps (node: VNodeWithData): string {
   let props = node.data.domProps
@@ -20,14 +20,17 @@ export default function renderDOMProps (node: VNodeWithData): string {
     return res
   }
 
+  const attrs = node.data.attrs
   for (const key in props) {
     if (key === 'innerHTML') {
       setText(node, props[key], true)
     } else if (key === 'textContent') {
-      setText(node, props[key])
+      setText(node, props[key], false)
     } else {
       const attr = propsToAttrMap[key] || key.toLowerCase()
-      if (isRenderableAttr(attr)) {
+      if (isRenderableAttr(attr) &&
+          // avoid rendering double-bound props/attrs twice
+          !(attrs && attrs[attr])) {
         res += renderAttr(attr, props[key])
       }
     }

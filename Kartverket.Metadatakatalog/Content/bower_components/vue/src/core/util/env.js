@@ -7,24 +7,43 @@ import { noop } from 'shared/util'
 export const hasProto = '__proto__' in {}
 
 // Browser environment sniffing
-export const inBrowser =
-  typeof window !== 'undefined' &&
-  Object.prototype.toString.call(window) !== '[object Object]'
-
+export const inBrowser = typeof window !== 'undefined'
 export const UA = inBrowser && window.navigator.userAgent.toLowerCase()
 export const isIE = UA && /msie|trident/.test(UA)
 export const isIE9 = UA && UA.indexOf('msie 9.0') > 0
 export const isEdge = UA && UA.indexOf('edge/') > 0
 export const isAndroid = UA && UA.indexOf('android') > 0
 export const isIOS = UA && /iphone|ipad|ipod|ios/.test(UA)
+export const isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge
+
+// this needs to be lazy-evaled because vue may be required before
+// vue-server-renderer can set VUE_ENV
+let _isServer
+export const isServerRendering = () => {
+  if (_isServer === undefined) {
+    /* istanbul ignore if */
+    if (!inBrowser && typeof global !== 'undefined') {
+      // detect presence of vue-server-renderer and avoid
+      // Webpack shimming the process
+      _isServer = global['process'].env.VUE_ENV === 'server'
+    } else {
+      _isServer = false
+    }
+  }
+  return _isServer
+}
 
 // detect devtools
 export const devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__
 
 /* istanbul ignore next */
-function isNative (Ctor: Function): boolean {
+export function isNative (Ctor: Function): boolean {
   return /native code/.test(Ctor.toString())
 }
+
+export const hasSymbol =
+  typeof Symbol !== 'undefined' && isNative(Symbol) &&
+  typeof Reflect !== 'undefined' && isNative(Reflect.ownKeys)
 
 /**
  * Defer a task to execute it asynchronously.
@@ -52,8 +71,9 @@ export const nextTick = (function () {
   /* istanbul ignore if */
   if (typeof Promise !== 'undefined' && isNative(Promise)) {
     var p = Promise.resolve()
+    var logError = err => { console.error(err) }
     timerFunc = () => {
-      p.then(nextTickHandler)
+      p.then(nextTickHandler).catch(logError)
       // in problematic UIWebViews, Promise.then doesn't completely break, but
       // it can get stuck in a weird state where callbacks are pushed into the
       // microtask queue but the queue isn't being flushed, until the browser
@@ -86,14 +106,20 @@ export const nextTick = (function () {
     }
   }
 
-  return function queueNextTick (cb: Function, ctx?: Object) {
-    const func = ctx
-      ? function () { cb.call(ctx) }
-      : cb
-    callbacks.push(func)
+  return function queueNextTick (cb?: Function, ctx?: Object) {
+    let _resolve
+    callbacks.push(() => {
+      if (cb) cb.call(ctx)
+      if (_resolve) _resolve(ctx)
+    })
     if (!pending) {
       pending = true
       timerFunc()
+    }
+    if (!cb && typeof Promise !== 'undefined') {
+      return new Promise(resolve => {
+        _resolve = resolve
+      })
     }
   }
 })()
@@ -111,10 +137,10 @@ if (typeof Set !== 'undefined' && isNative(Set)) {
       this.set = Object.create(null)
     }
     has (key: string | number) {
-      return this.set[key] !== undefined
+      return this.set[key] === true
     }
     add (key: string | number) {
-      this.set[key] = 1
+      this.set[key] = true
     }
     clear () {
       this.set = Object.create(null)

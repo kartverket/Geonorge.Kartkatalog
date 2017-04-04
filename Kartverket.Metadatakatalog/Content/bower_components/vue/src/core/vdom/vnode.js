@@ -3,7 +3,7 @@
 export default class VNode {
   tag: string | void;
   data: VNodeData | void;
-  children: Array<VNode> | void;
+  children: ?Array<VNode>;
   text: string | void;
   elm: Node | void;
   ns: string | void;
@@ -11,7 +11,7 @@ export default class VNode {
   functionalContext: Component | void; // only for functional component root nodes
   key: string | number | void;
   componentOptions: VNodeComponentOptions | void;
-  child: Component | void; // component instance
+  componentInstance: Component | void; // component instance
   parent: VNode | void; // component placeholder node
   raw: boolean; // contains raw HTML? (server only)
   isStatic: boolean; // hoisted static node
@@ -23,10 +23,9 @@ export default class VNode {
   constructor (
     tag?: string,
     data?: VNodeData,
-    children?: Array<VNode> | void,
+    children?: ?Array<VNode>,
     text?: string,
     elm?: Node,
-    ns?: string | void,
     context?: Component,
     componentOptions?: VNodeComponentOptions
   ) {
@@ -35,12 +34,12 @@ export default class VNode {
     this.children = children
     this.text = text
     this.elm = elm
-    this.ns = ns
+    this.ns = undefined
     this.context = context
     this.functionalContext = undefined
     this.key = data && data.key
     this.componentOptions = componentOptions
-    this.child = undefined
+    this.componentInstance = undefined
     this.parent = undefined
     this.raw = false
     this.isStatic = false
@@ -49,13 +48,23 @@ export default class VNode {
     this.isCloned = false
     this.isOnce = false
   }
+
+  // DEPRECATED: alias for componentInstance for backwards compat.
+  /* istanbul ignore next */
+  get child (): Component | void {
+    return this.componentInstance
+  }
 }
 
-export const emptyVNode = () => {
+export const createEmptyVNode = () => {
   const node = new VNode()
   node.text = ''
   node.isComment = true
   return node
+}
+
+export function createTextVNode (val: string | number) {
+  return new VNode(undefined, undefined, undefined, String(val))
 }
 
 // optimized shallow clone
@@ -69,10 +78,10 @@ export function cloneVNode (vnode: VNode): VNode {
     vnode.children,
     vnode.text,
     vnode.elm,
-    vnode.ns,
     vnode.context,
     vnode.componentOptions
   )
+  cloned.ns = vnode.ns
   cloned.isStatic = vnode.isStatic
   cloned.key = vnode.key
   cloned.isCloned = true
@@ -80,8 +89,9 @@ export function cloneVNode (vnode: VNode): VNode {
 }
 
 export function cloneVNodes (vnodes: Array<VNode>): Array<VNode> {
-  const res = new Array(vnodes.length)
-  for (let i = 0; i < vnodes.length; i++) {
+  const len = vnodes.length
+  const res = new Array(len)
+  for (let i = 0; i < len; i++) {
     res[i] = cloneVNode(vnodes[i])
   }
   return res
