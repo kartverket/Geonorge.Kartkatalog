@@ -28,6 +28,9 @@ namespace Kartverket.Metadatakatalog.Service
                 case "datasetserie":
                     res = "Datasettserie";
                     break;
+                case "dimmensiongroup":
+                    res = "Datapakke";
+                    break;
             }
             return res;
         }
@@ -96,6 +99,32 @@ namespace Kartverket.Metadatakatalog.Service
             else return false;
         }
 
+        public static String GetCapabilitiesUrl(string URL, string Protocol)
+        {
+            
+                if (!string.IsNullOrWhiteSpace(URL))
+                {
+                    string tmp = URL;
+                    int startQueryString = tmp.IndexOf("?");
+
+                    if (startQueryString != -1)
+                        tmp = tmp.Substring(0, startQueryString + 1);
+                    else
+                        tmp = tmp + "?";
+
+                    if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WMS")))
+                        return tmp + "request=GetCapabilities&service=WMS";
+                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WFS")))
+                        return tmp + "request=GetCapabilities&service=WFS";
+                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WCS")))
+                        return tmp + "request=GetCapabilities&service=WCS";
+                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:CSW")))
+                        return tmp + "request=GetCapabilities&service=CSW";
+                    else return tmp;
+                }
+                else return "";
+            
+        }
 
         public static String MapUrl(SimpleMetadata simpleMetadata)
         {
