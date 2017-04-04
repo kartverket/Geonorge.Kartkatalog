@@ -63,9 +63,19 @@ namespace Kartverket.Metadatakatalog.Service
                     tmp.MapUrl = SimpleMetadataUtil.MapUrl(simpleMetadata);
                     tmp.CanShowMapUrl = true;
                 }
-                
+
                 //Last ned
-                
+                if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadata))
+                {
+                    tmp.DownloadUrl = dist.URL;
+                    tmp.CanShowDownloadUrl = true;
+                }
+                if (SimpleMetadataUtil.ShowDownloadService(simpleMetadata))
+                {
+                    tmp.DownloadUrl = dist.URL;
+                    tmp.CanShowDownloadService = true;
+                }
+
                 //Åpne data, begrenset, skjermet
                 if (SimpleMetadataUtil.IsOpendata(simpleMetadata)) tmp.AccessIsOpendata = true;
                 if (SimpleMetadataUtil.IsRestricted(simpleMetadata)) tmp.AccessIsRestricted = true;
@@ -103,6 +113,7 @@ namespace Kartverket.Metadatakatalog.Service
                             tmp.Uuid = relData[0] != null ? relData[0] : "";
                             tmp.Title = relData[1] != null ? relData[1] : "";
                             tmp.Type = relData[3] != null ? relData[3] : "";
+                            tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
                             tmp.DistributionName = relData[5] != null ? relData[5] : "";
                             tmp.DistributionProtocol = relData[6] != null ? relData[6] : "";
                             tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
@@ -110,6 +121,16 @@ namespace Kartverket.Metadatakatalog.Service
                             tmp.FormatVersion = "";
                             tmp.Organization = relData[4];
                             tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
+
+                            if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
+                            if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
+                            if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
+
+                            if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
+                            {
+                                tmp.MapUrl = relData[7];
+                                tmp.CanShowMapUrl = true;
+                            }
 
                             distlist.Add(tmp);
 

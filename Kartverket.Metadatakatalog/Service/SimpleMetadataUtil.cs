@@ -33,21 +33,42 @@ namespace Kartverket.Metadatakatalog.Service
         }
         public static bool IsOpendata(SimpleMetadata simpleMetadata)
         {
-            if (simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.OtherConstraintsAccess) && simpleMetadata.Constraints.OtherConstraintsAccess.ToLower() == "no restrictions")
+            if (simpleMetadata.Constraints != null && IsOpendata(simpleMetadata.Constraints.OtherConstraintsAccess))
+                return true;
+            else
+                return false;
+        }
+        public static bool IsOpendata(string OtherConstraintsAccess)
+        {
+            if (!string.IsNullOrEmpty(OtherConstraintsAccess) && OtherConstraintsAccess.ToLower() == "no restrictions")
                 return true;
             else
                 return false;
         }
         public static bool IsRestricted(SimpleMetadata simpleMetadata)
         {
-            if (simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.OtherConstraintsAccess) && simpleMetadata.Constraints.OtherConstraintsAccess.ToLower() == "norway digital restricted")
+            if (simpleMetadata.Constraints != null && IsRestricted(simpleMetadata.Constraints.OtherConstraintsAccess))
+                return true;
+            else
+                return false;
+        }
+        public static bool IsRestricted(string OtherConstraintsAccess)
+        {
+            if (!string.IsNullOrEmpty(OtherConstraintsAccess) && OtherConstraintsAccess.ToLower() == "norway digital restricted")
                 return true;
             else
                 return false;
         }
         public static bool IsProtected(SimpleMetadata simpleMetadata)
         {
-            if (simpleMetadata.Constraints != null && (simpleMetadata.Constraints.AccessConstraints == "Beskyttet" || simpleMetadata.Constraints.AccessConstraints == "restricted"))
+            if (simpleMetadata.Constraints != null && IsProtected(simpleMetadata.Constraints.AccessConstraints))
+                return true;
+            else
+                return false;
+        }
+        public static bool IsProtected(string AccessConstraints)
+        {
+            if ((AccessConstraints == "Beskyttet" || AccessConstraints == "restricted"))
                 return true;
             else
                 return false;

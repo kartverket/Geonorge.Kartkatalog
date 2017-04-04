@@ -345,8 +345,27 @@ if (contact != null)
                                 </a>
                                 <a v-else class="disabled" disabled="disabled"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
                             </td>
-                            <td><a href="{{item.DistributionUrl}}" class="disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span></a></td>
-                            <td>{{item.FormatName}}</td>
+                            <td>
+                                <a v-if="item.CanShowDownloadService" 
+                                   href=''
+                                   data-toggle='tooltip'
+                                   data-placement='bottom'
+                                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                                   title='Legg til {{item.Title}} i kurv'
+                                   class=''
+                                   itemname='{{item.Title}}'
+                                   itemuuid='{{item.Uuid}}'
+                                   itemurl='/metadata/uuid/{{item.Uuid}}'
+                                   itemorglogo=''
+                                   itemdisturl=''
+                                   itemtheme=''
+                                   itemorgname='{{item.Organization}}'>
+                                    <span class="custom-icon custom-icon-handlekurv"></span>
+                                </a>
+                                <a v-if="item.CanShowDownloadUrl" href="{{item.DistributionUrl}}" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for {{item.Title}}"><span class="custom-icon custom-icon-lastned"></span></a>
+                                <a v-else class="disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span></a>
+                            </td>
+                            <td>{{item.FormatName}} {{item.FormatVersion}}</td>
                         </tr>
 
                     
