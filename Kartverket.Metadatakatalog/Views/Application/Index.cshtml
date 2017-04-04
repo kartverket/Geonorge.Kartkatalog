@@ -149,7 +149,7 @@
 
 @{
 
-    string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.ToLower().Replace("application", "api/application");
+    string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.ToLower().Replace("kartlosninger-i-norge", "api/kartlosninger-i-norge");
     Uri uri = new Uri(url);
     string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
     Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
@@ -165,7 +165,6 @@
     qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
     string query = qs.ToString(); string urlCSV = path + "?" + query;
 }
-
 
 <div class="row search-result-navigation">
     <div class="col-md-4">

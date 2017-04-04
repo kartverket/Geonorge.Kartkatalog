@@ -84,7 +84,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
 
-        [System.Web.Http.Route("api/application")]
+        [System.Web.Http.Route("api/kartlosninger-i-norge")]
         [System.Web.Http.HttpGet]
         public SearchResult applications([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
         {
