@@ -19,5 +19,13 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public string FormatName { get; set; }
         public string FormatVersion { get; set; }
         public string ShowDetailsUrl { get; set; }
-       }
+        public bool CanShowMapUrl { get; set; }
+        public bool CanShowDownloadUrl { get; set; }
+        public string MapUrl { get; set; }
+        public string DownloadUrl { get; set; }
+        public bool AccessIsOpendata { get; set; }
+        public bool AccessIsRestricted { get; set; }
+        public bool AccessIsProtected { get; set; }
+        
+    }
 }

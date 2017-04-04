@@ -29,6 +29,8 @@ namespace Kartverket.Metadatakatalog.Service
             _organizationService = organizationService;
             _searchService = searchService;
         }
+        
+        
 
         public List<Models.Api.Distribution> GetRelatedDistributionsForUuid(string uuid)
         {
@@ -46,22 +48,81 @@ namespace Kartverket.Metadatakatalog.Service
                 var tmp = new Models.Api.Distribution();
                 tmp.Uuid = uuid;
                 tmp.Title = simpleMetadata.Title;
-                tmp.Type = simpleMetadata.HierarchyLevel;
+                tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(simpleMetadata.HierarchyLevel);
                 tmp.DistributionName = dist.Name;
                 tmp.DistributionProtocol = dist.Protocol;
                 tmp.DistributionUrl = dist.URL;
                 tmp.FormatName = dist.FormatName;
                 tmp.FormatVersion = dist.FormatVersion;
-                tmp.Organization = dist.Organization;
-                tmp.ShowDetailsUrl = "";
+                tmp.Organization = dist.Organization; //TOM?
+                if (String.IsNullOrEmpty(tmp.Organization))
+                    tmp.Organization = simpleMetadata.ContactMetadata.Organization;
+                tmp.ShowDetailsUrl = "/metadata/org/title/" + uuid;
+                //Vis kart
+                if (SimpleMetadataUtil.ShowMapLink(simpleMetadata)) {
+                    tmp.MapUrl = SimpleMetadataUtil.MapUrl(simpleMetadata);
+                    tmp.CanShowMapUrl = true;
+                }
+                
+                //Last ned
+                
+                //Åpne data, begrenset, skjermet
+                if (SimpleMetadataUtil.IsOpendata(simpleMetadata)) tmp.AccessIsOpendata = true;
+                if (SimpleMetadataUtil.IsRestricted(simpleMetadata)) tmp.AccessIsRestricted = true;
+                if (SimpleMetadataUtil.IsProtected(simpleMetadata)) tmp.AccessIsProtected = true;
 
                 distlist.Add(tmp);
             }
-            //TODO Hente inn indeks og relaterte services
-
+            //Hente inn indeks og relaterte services
+            distlist.AddRange(GetRelatedServices(uuid));
 
             return distlist;
         }
+
+        private List<Models.Api.Distribution> GetRelatedServices(string uuid)
+        {
+            List<Models.Api.Distribution> distlist = new List<Models.Api.Distribution>();
+
+            SearchParameters parameters = new SearchParameters();
+            parameters.Text = uuid;
+            SearchResult searchResult = _searchService.Search(parameters);
+
+            if (searchResult != null && searchResult.NumFound > 0)
+            {
+                var datasetServices = searchResult.Items[0].DatasetServices;
+
+                if (datasetServices != null && datasetServices.Count > 0)
+                {
+                    foreach (var relatert in datasetServices)
+                    {
+                        var relData = relatert.Split('|');
+
+                        try
+                        {
+                            var tmp = new Models.Api.Distribution();
+                            tmp.Uuid = relData[0] != null ? relData[0] : "";
+                            tmp.Title = relData[1] != null ? relData[1] : "";
+                            tmp.Type = relData[3] != null ? relData[3] : "";
+                            tmp.DistributionName = relData[5] != null ? relData[5] : "";
+                            tmp.DistributionProtocol = relData[6] != null ? relData[6] : "";
+                            tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
+                            tmp.FormatName = relData[6] != null ? relData[6] : "";
+                            tmp.FormatVersion = "";
+                            tmp.Organization = relData[4];
+                            tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
+
+                            distlist.Add(tmp);
+
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                }
+            }
+            return distlist;
+        }
+
 
         public MetadataViewModel GetMetadataByUuid(string uuid)
         {

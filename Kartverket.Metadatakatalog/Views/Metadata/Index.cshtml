@@ -316,9 +316,42 @@ if (contact != null)
                     <h2>Bruksområde</h2>
                     <p>@Model.SpecificUsage</p>
                 }
-                <h3>Distribusjoner</h3>
+                <h3 data-loading-message="Henter distribusjoner" class="show-loading-animation">Distribusjoner</h3>
+                <table style="width:100%;border-top:none;" class="table table-responsive" id="distributionsList" >   
+                    <tr style="border-bottom: 2px solid #fe5000;border-top:0px;">
+                        <th style="border-top:none;">Tittel</th>
+                        <th style="border-top:none;">Type</th>
+                        <th style="border-top:none;">Dataeier</th>
+                        <th style="border-top:none;">Åpne data</th>
+                        <th style="border-top:none;">Vis i kart</th>
+                        <th style="border-top:none;">Last ned</th>
+                        <th style="border-top:none;">Format</th>
+                    </tr>
 
-                Filnedlastning med leveranseformater, samt tjenester som WMS,WFS, REST etc og Innsynsløsninger som relatert applikasjoner.
+                        <tr v-for="item in distributionlist">
+                            <td><a href="{{item.ShowDetailsUrl}}">{{item.Title}}</a></td>
+                            <td>
+                                <span class="label label-{{item.Type}}">{{item.Type}}</span>
+                            </td>
+                            <td>{{item.Organization}}</td>
+                            <td>
+                                <span v-if="item.AccessIsOpendata" data-toggle="tooltip" data-placement="bottom" title="Åpne data" class="custom-icon custom-icon-hengelaas-open-green" data-original-title="Åpne data"></span>
+                                <span v-if="item.AccessIsRestricted" data-toggle="tooltip" data-placement="bottom" title="Tilgangsbegrensede data" class="custom-icon custom-icon-hengelaas-closed-yellow" data-original-title="Tilgangsbegrensede data"></span>
+                                <span v-if="item.AccessIsProtected" data-toggle="tooltip" data-placement="bottom" title="Skjermede data" class="custom-icon custom-icon-hengelaas-closed-red" data-original-title="Skjermede data"></span>
+                            </td>
+                            <td>
+                                <a v-if="item.CanShowMapUrl" href="@Html.NorgeskartUrl(){{item.MapUrl}}" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle="tooltip" data-placement="bottom" title="" target="_blank" data-original-title="">
+                                    <span class="custom-icon custom-icon-kartmarkoer"></span>
+                                </a>
+                                <a v-else class="disabled" disabled="disabled"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
+                            </td>
+                            <td><a href="{{item.DistributionUrl}}" class="disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span></a></td>
+                            <td>{{item.FormatName}}</td>
+                        </tr>
+
+                    
+                </table>
+                
 
             </div>
 
@@ -836,6 +869,11 @@ if (keywords != null && keywords.Any())
 }
 
 @section scripts {
+    <script src="https://unpkg.com/axios/dist/axios.min.js">
+    </script>
+    <script>
+        
+    </script>
     <script>
         @{
             string itemUuid = (Model.Uuid != null) ? Model.Uuid : "";
@@ -852,6 +890,18 @@ if (keywords != null && keywords.Any())
         var theme = '@(Model.KeywordsNationalTheme != null && Model.KeywordsNationalTheme.Count > 0 ? Model.KeywordsNationalTheme[0].KeywordValue : "")'
         var orgname = '@(Model.ContactOwner != null ? Model.ContactOwner.Organization : "" )'
 
+        var distributions = new Vue({
+            el: '#distributionsList',
+            data: {
+                distributionlist: []
+            },
+            created: function () {
+                axios.get('/api/distributions/' + uuid).then(function (response) {
+                    this.distributionlist = response.data;
+                }.bind(this))
+            }
+        })
+        
         function showAlert(message, colorClass) {
             $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
             $('#feedback-alert .message').html(message);
