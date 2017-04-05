@@ -671,13 +671,97 @@ var mainVueModel = new Vue({
         }
     },
     computed: {
-        
+
         orderRequests: function () {
             var orderRequests = [];
-            var orderLinesGrouped = this.groupBy(this.$children, function (orderLine) {
+            /*var orderLinesGrouped = this.groupBy(this.$children, function (orderLine) {
                 return [orderLine.metadata.distributionUrl]
-            });
-            orderLinesGrouped.forEach(function (orderLineGroup) {
+            });*/
+            var orderLinesGrouped = {};
+
+            if (this.orderLines.length) {
+                this.orderLines.forEach(function (orderLine) {
+                    if (orderLinesGrouped[orderLine.metadata.distributionUrl] == undefined) {
+                        orderLinesGrouped[orderLine.metadata.distributionUrl] = {
+                            "email": "",
+                            "_links": "",
+                            "orderLines": []
+                        }
+                    }
+
+                    var links = [];
+                    if (orderLine.capabilities._links !== undefined && orderLine.capabilities._links.length) {
+                        orderLine.capabilities._links.forEach(function (capabilityLink) {
+                            var link = {
+                                "href": capabilityLink.href,
+                                "rel": capabilityLink.rel,
+                                "templated": capabilityLink.templatedSpecified,
+                                "type": "",
+                                "deprecation": "",
+                                "name": "",
+                                "title": ""
+                            }
+                            links.push(link);
+                        })
+                    }
+
+
+                    var areas = [];
+                    if (this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid].length) {
+                        this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid].forEach(function (selectedArea) {
+                            var area = {
+                                "code": selectedArea.code,
+                                "name": selectedArea.name,
+                                "type": selectedArea.type,
+                                "_links": []
+                            }
+                            areas.push(area);
+                        });
+                    }
+
+                    var projections = [];
+                    if (this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid].length) {
+                        this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid].forEach(function (selectedProjection) {
+                            var projection = {
+                                "code": selectedProjection.code,
+                                "name": selectedProjection.name,
+                                "codespace": selectedProjection.codespace,
+                                "_links": []
+                            }
+                            projections.push(projection);
+                        });
+                    }
+
+                    var formats = [];
+                    if (this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid].length) {
+                        this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid].forEach(function (selectedFormat) {
+                            var format = {
+                                "code": "",
+                                "name": selectedFormat.name,
+                                "type": "",
+                                "_links": []
+                            }
+                            formats.push(format);
+                        });
+                    }
+
+                    orderLinesGrouped[orderLine.metadata.distributionUrl].orderLines.push({
+                        "metadataUuid": orderLine.metadata.uuid,
+                        "areas": areas,
+                        "projections": projections,
+                        "formats": formats,
+                        "_links": links
+                    })
+                }.bind(this));
+            }
+            /*this.masterOrderLine.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
+
+            })*/
+
+
+
+            return orderLinesGrouped;
+            /*orderLinesGrouped.forEach(function (orderLineGroup) {
                 var orderRequest = {
                     "distributionUrl": orderLineGroup[0].metadata.orderDistributionUrl,
                     "order": {
@@ -706,6 +790,7 @@ var mainVueModel = new Vue({
                 orderRequests.push(orderRequest);
             }.bind(this))
             return orderRequests;
+            */
         }
     },
     created: function () {
@@ -746,10 +831,10 @@ var mainVueModel = new Vue({
                                 }
                                 availableArea.isSelected = false;
                                 availableArea.isLocalSelected = false;
-                             //   var isAllreadyAddedInfo = this.isAllreadyAdded(this.masterOrderLine.allAvailableAreas[uuid][availableArea.type], availableArea, "code");
-                              //  if (!isAllreadyAddedInfo.added){
-                                    this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
-                              //  }
+                                //   var isAllreadyAddedInfo = this.isAllreadyAdded(this.masterOrderLine.allAvailableAreas[uuid][availableArea.type], availableArea, "code");
+                                //  if (!isAllreadyAddedInfo.added){
+                                this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
+                                //  }
                             }.bind(this))
                         }
                         if (link.rel == "http://rel.geonorge.no/download/projection") {
@@ -815,24 +900,24 @@ var mainVueModel = new Vue({
         'masterOrderLine': MasterOrderLine
     },
     methods: {
-       /* isAllreadyAdded: function (array, item, propertyToCompare) {
-            var isAllreadyAdded = {
-                added: false,
-                position: 0
-            };
-            if (array !== undefined && array.length) {
-                array.forEach(function (arrayItem, index) {
-                    if (this.readProperty(arrayItem, propertyToCompare) == this.readProperty(item, propertyToCompare)) {
-                        isAllreadyAdded.added = true
-                        isAllreadyAdded.position = index;
-                    };
-                }.bind(this))
-            }
-            return isAllreadyAdded;
-        },
-        readProperty: function (obj, prop) {
-            return obj[prop];
-        },*/
+        /* isAllreadyAdded: function (array, item, propertyToCompare) {
+             var isAllreadyAdded = {
+                 added: false,
+                 position: 0
+             };
+             if (array !== undefined && array.length) {
+                 array.forEach(function (arrayItem, index) {
+                     if (this.readProperty(arrayItem, propertyToCompare) == this.readProperty(item, propertyToCompare)) {
+                         isAllreadyAdded.added = true
+                         isAllreadyAdded.position = index;
+                     };
+                 }.bind(this))
+             }
+             return isAllreadyAdded;
+         },
+         readProperty: function (obj, prop) {
+             return obj[prop];
+         },*/
         isSupportedType: function (areaType) {
             var isSupportedType = false;
             var supportedAreaTypes = ["fylke", "kommune", "landsdekkende"];
