@@ -88,23 +88,6 @@
         <h2 v-on:click="expanded = !expanded">
             <span class="indicator" v-bind:class="[expanded ? 'active' : '']"></span> {{ metadata.name }}
         </h2>
-        <!--
-        <span v-if="selectedAreas" class="orderline-field-counter">
-            <span class="custom-icon custom-icon-kartmarkoer">
-                <span class="custom-icon-overlay">{{ selectedAreas.length }}</span>
-            </span>
-        </span>
-        <span v-if="selectedProjections" class="orderline-field-counter">
-            <span class="custom-icon custom-icon-kartmarkoer">
-                <span class="custom-icon-overlay">{{ selectedProjections.length }}</span>
-            </span>
-        </span>
-        <span v-if="selectedFormats" class="orderline-field-counter">
-            <span class="custom-icon custom-icon-kartmarkoer">
-                <span class="custom-icon-overlay">{{ selectedFormats.length }}</span>
-            </span>
-        </span>
-            -->
         <div class="pull-right margin-top-10">
             <span v-show="hasErrors" class="orderline-field-counter">
                 <span v-on:click="expanded = true" class="custom-icon custom-icon-warning" data-toggle="tooltip" data-placement="bottom" title="Vis mangler">
@@ -209,6 +192,7 @@
                      v-bind:all-available-projections="masterOrderLine.allAvailableProjections"
                      v-bind:all-available-formats="masterOrderLine.allAvailableFormats"
                      v-bind:all-selected-areas="masterOrderLine.allSelectedAreas"
+
                      v-bind:all-selected-projections="masterOrderLine.allSelectedProjections"
                      v-bind:all-selected-formats="masterOrderLine.allSelectedFormats"
                      v-bind:all-order-line-errors="masterOrderLine.allOrderLineErrors">
