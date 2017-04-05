@@ -29,7 +29,7 @@
                     <div v-if="!master || $root.isSupportedType(areaType)" v-show="areas.length">
                         <p class="custom-select-list-option-group-name">{{ areaType }}</p>
                         <ul class="custom-select-list-options area-option-list">
-                            <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': area.isSelected}" v-for="area in areas">{{ area.name }}</li>
+                            <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': area.isLocalSelected}" v-for="area in areas">{{ area.name }}</li>
                         </ul>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
         </div>
         <div class="custom-select-list-dropdown">
             <ul class="custom-select-list-options projection-option-list">
-                <li v-on:click="selectProjection(projection)" v-bind:class="{'is-selected': projection.isSelected}" v-for="(projection, projectionCode) in available">{{ projection.name }}</li>
+                <li v-on:click="selectProjection(projection)" v-bind:class="{'is-selected': projection.isLocalSelected}" v-for="(projection, projectionCode) in available">{{ projection.name }}</li>
             </ul>
         </div>
     </div>
@@ -74,7 +74,7 @@
         </div>
         <div class="custom-select-list-dropdown">
             <ul class="custom-select-list-options format-option-list">
-                <li v-on:click="selectFormat(format)" v-bind:class="{'is-selected': format.isSelected}" v-for="(format, formatName) in available">{{ format.name }}</li>
+                <li v-on:click="selectFormat(format)" v-bind:class="{'is-selected': format.isLocalSelected}" v-for="(format, formatName) in available">{{ format.name }}</li>
             </ul>
         </div>
     </div>
@@ -192,7 +192,6 @@
                      v-bind:all-available-projections="masterOrderLine.allAvailableProjections"
                      v-bind:all-available-formats="masterOrderLine.allAvailableFormats"
                      v-bind:all-selected-areas="masterOrderLine.allSelectedAreas"
-
                      v-bind:all-selected-projections="masterOrderLine.allSelectedProjections"
                      v-bind:all-selected-formats="masterOrderLine.allSelectedFormats"
                      v-bind:all-order-line-errors="masterOrderLine.allOrderLineErrors">
