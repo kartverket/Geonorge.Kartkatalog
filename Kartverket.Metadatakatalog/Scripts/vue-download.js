@@ -98,25 +98,6 @@ var Areas = {
         }
         return data;
     },
-    created: function () {
-        if (!this.master && this.$parent.capabilities._links) {
-            var areas = [];
-            this.$parent.capabilities._links.forEach(function (link) {
-                if (link.rel == "http://rel.geonorge.no/download/area") {
-                    areas = getJsonData(link.href);
-                }
-            });
-            areas.forEach(function (area) {
-                if (this.available[area.type] == undefined) { this.available[area.type] = [] }
-                area.hasSelectedProjections = false;
-                area.hasSelectedFormats = false;
-                this.available[area.type].push(area);
-            }.bind(this))
-        }
-        if (this.master) {
-
-        }
-    },
 
     methods: {
         selectArea: function (area) {
@@ -690,6 +671,7 @@ var mainVueModel = new Vue({
         }
     },
     computed: {
+        
         orderRequests: function () {
             var orderRequests = [];
             var orderLinesGrouped = this.groupBy(this.$children, function (orderLine) {
@@ -764,7 +746,10 @@ var mainVueModel = new Vue({
                                 }
                                 availableArea.isSelected = false;
                                 availableArea.isLocalSelected = false;
-                                this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
+                             //   var isAllreadyAddedInfo = this.isAllreadyAdded(this.masterOrderLine.allAvailableAreas[uuid][availableArea.type], availableArea, "code");
+                              //  if (!isAllreadyAddedInfo.added){
+                                    this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
+                              //  }
                             }.bind(this))
                         }
                         if (link.rel == "http://rel.geonorge.no/download/projection") {
@@ -830,6 +815,24 @@ var mainVueModel = new Vue({
         'masterOrderLine': MasterOrderLine
     },
     methods: {
+       /* isAllreadyAdded: function (array, item, propertyToCompare) {
+            var isAllreadyAdded = {
+                added: false,
+                position: 0
+            };
+            if (array !== undefined && array.length) {
+                array.forEach(function (arrayItem, index) {
+                    if (this.readProperty(arrayItem, propertyToCompare) == this.readProperty(item, propertyToCompare)) {
+                        isAllreadyAdded.added = true
+                        isAllreadyAdded.position = index;
+                    };
+                }.bind(this))
+            }
+            return isAllreadyAdded;
+        },
+        readProperty: function (obj, prop) {
+            return obj[prop];
+        },*/
         isSupportedType: function (areaType) {
             var isSupportedType = false;
             var supportedAreaTypes = ["fylke", "kommune", "landsdekkende"];
