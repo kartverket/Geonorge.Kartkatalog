@@ -83,8 +83,6 @@
 
 <script type="text/x-template" id="order-line-template">
     <div v-bind:class="[expanded ? '' : 'readonly']">
-        <!--<h2></h2>-->
-
         <h2 v-on:click="expanded = !expanded">
             <span class="indicator" v-bind:class="[expanded ? 'active' : '']"></span> {{ metadata.name }}
         </h2>
@@ -99,8 +97,7 @@
                 </span>
             </span>
             <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom" title="Gå til datasett" class="btn"><span class="fa fa-home"></span></a>
-            <!-- <span v-on:click="$parent.cloneSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Bruk valg på alle datasett" class="btn"><span class="fa fa-clone"></span></span>
-             <span v-on:click="$parent.clearSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Fjern valg fra datasett" class="btn"><span class="fa fa-eraser"></span></span> -->
+            <!--  <span v-on:click="$parent.clearSelectedProperties(index)" data-toggle="tooltip" data-placement="bottom" title="Fjern valg fra datasett" class="btn"><span class="fa fa-eraser"></span></span> -->
             <span v-on:click="removeOrderItem(orderItem)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
         </div>
         <div class="clearfix"></div>
@@ -164,8 +161,6 @@
             </div>
         </div>
     </div>
-
-
 </script>
 
 
