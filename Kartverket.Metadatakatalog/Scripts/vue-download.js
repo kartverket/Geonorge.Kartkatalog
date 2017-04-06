@@ -994,10 +994,11 @@ var mainVueModel = new Vue({
         sendRequests: function () {
             var responseData = [];
             var responseFailed = false;
-            for (orderRequest in this.orderRequests) {
+            var orderRequests = this.orderRequests;
+            for (orderRequest in orderRequests) {
                 if (orderRequests[orderRequest].distributionUrl != "") {
                     $.ajax({
-                        url: orderRequests[orderRequest].distributionUrl,
+                        url: this.orderRequests[orderRequest].distributionUrl,
                         type: "POST",
                         dataType: 'json',
                         data: JSON.stringify(orderRequests[orderRequest].order),
