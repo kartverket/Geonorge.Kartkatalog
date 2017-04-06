@@ -256,12 +256,14 @@ var OrderLine = {
                 added: false,
                 position: 0
             };
-            array.forEach(function (arrayItem, index) {
-                if (this.readProperty(arrayItem, propertyToCompare) == this.readProperty(item, propertyToCompare)) {
-                    isAllreadyAdded.added = true
-                    isAllreadyAdded.position = index;
-                };
-            }.bind(this))
+            if (array.length) {
+                array.forEach(function (arrayItem, index) {
+                    if (this.readProperty(arrayItem, propertyToCompare) == this.readProperty(item, propertyToCompare)) {
+                        isAllreadyAdded.added = true
+                        isAllreadyAdded.position = index;
+                    };
+                }.bind(this))
+            }
             return isAllreadyAdded;
         },
         readProperty: function (obj, prop) {
@@ -308,7 +310,22 @@ var OrderLine = {
             this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid] = selectedAreas;
         },
         updateAvailableProjections: function () {
+            var orderLineUuid = this.metadata.uuid;
+            var availableProjections = [];
+            if (this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid].length) {
+                this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
+                    if (selectedArea.allAvailableProjections[orderLineUuid] !== undefined && selectedArea.allAvailableProjections[orderLineUuid].length) {
+                        selectedArea.allAvailableProjections[orderLineUuid].forEach(function (availableProjection) {
+                            var isAllreadyAddedInfo = this.isAllreadyAdded(availableProjections, availableProjection, "code");
+                            if (!isAllreadyAddedInfo.added) {
+                                availableProjections.push(availableProjection);
+                            }
+                        }.bind(this))
+                    }
 
+                }.bind(this))
+            }
+            this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid] = availableProjections;
         },
         updateSelectedProjections: function () {
             var orderLineUuid = this.metadata.uuid;
@@ -328,6 +345,22 @@ var OrderLine = {
             this.$parent.masterOrderLine.allSelectedProjections[orderLineUuid] = selectedProjections;
         },
         updateAvailableFormats: function () {
+            var orderLineUuid = this.metadata.uuid;
+            var availableFormats = [];
+            if (this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid].length) {
+                this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
+                    if (selectedArea.allAvailableFormats[orderLineUuid] !== undefined && selectedArea.allAvailableFormats[orderLineUuid].length) {
+                        selectedArea.allAvailableFormats[orderLineUuid].forEach(function (availableFormat) {
+                            var isAllreadyAddedInfo = this.isAllreadyAdded(availableFormats, availableFormat, "name");
+                            if (!isAllreadyAddedInfo.added) {
+                                availableFormats.push(availableFormat);
+                            }
+                        }.bind(this))
+                    }
+
+                }.bind(this))
+            }
+            this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid] = availableFormats;
         },
         updateSelectedFormats: function () {
             var orderLineUuid = this.metadata.uuid;
@@ -810,8 +843,8 @@ var mainVueModel = new Vue({
 
                 var uuid = metadata.uuid;
 
-                this.masterOrderLine.allAvailableProjections[uuid] = {};
-                this.masterOrderLine.allAvailableFormats[uuid] = {};
+                this.masterOrderLine.allAvailableProjections[uuid] = [];
+                this.masterOrderLine.allAvailableFormats[uuid] = [];
 
                 if (orderLines[key].capabilities._links !== undefined && orderLines[key].capabilities._links.length) {
                     orderLines[key].capabilities._links.forEach(function (link) {
