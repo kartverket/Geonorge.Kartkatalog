@@ -705,16 +705,12 @@ var mainVueModel = new Vue({
     computed: {
 
         orderRequests: function () {
-            var orderRequests = [];
-            /*var orderLinesGrouped = this.groupBy(this.$children, function (orderLine) {
-                return [orderLine.metadata.distributionUrl]
-            });*/
-            var orderLinesGrouped = {};
+            var orderRequests = {};
 
             if (this.orderLines.length) {
                 this.orderLines.forEach(function (orderLine) {
-                    if (orderLinesGrouped[orderLine.metadata.distributionUrl] == undefined) {
-                        orderLinesGrouped[orderLine.metadata.distributionUrl] = {
+                    if (orderRequests[orderLine.metadata.distributionUrl] == undefined) {
+                        orderRequests[orderLine.metadata.distributionUrl] = {
                             "email": "",
                             "_links": "",
                             "orderLines": []
@@ -777,7 +773,7 @@ var mainVueModel = new Vue({
                         });
                     }
 
-                    orderLinesGrouped[orderLine.metadata.distributionUrl].orderLines.push({
+                    orderRequests[orderLine.metadata.distributionUrl].orderLines.push({
                         "metadataUuid": orderLine.metadata.uuid,
                         "areas": areas,
                         "projections": projections,
@@ -998,15 +994,15 @@ var mainVueModel = new Vue({
         sendRequests: function () {
             var responseData = [];
             var responseFailed = false;
-            this.orderRequests.forEach(function (orderRequest) {
-                if (orderRequest.distributionUrl != "") {
+            for (orderRequest in this.orderRequests) {
+                if (orderRequests[orderRequest].distributionUrl != "") {
                     $.ajax({
-                        url: orderRequest.distributionUrl,
+                        url: orderRequests[orderRequest].distributionUrl,
                         type: "POST",
                         dataType: 'json',
-                        data: JSON.stringify(orderRequest.order),
+                        data: JSON.stringify(orderRequests[orderRequest].order),
                         contentType: "application/json",
-                        xhrFields: { withCredentials: IsGeonorge(orderRequest.distributionUrl) },
+                        xhrFields: { withCredentials: IsGeonorge(orderRequests[orderRequest].distributionUrl) },
                         async: false,
                         error: function (jqXHR, textStatus, errorThrown) {
                             showAlert(errorThrown, "danger");
@@ -1016,7 +1012,7 @@ var mainVueModel = new Vue({
                             if (data !== null) {
                                 responseData.push(
                                     {
-                                        "distributionUrl": orderRequest.distributionUrl,
+                                        "distributionUrl": orderRequests[orderRequest].distributionUrl,
                                         "data": data
                                     });
                             }
@@ -1029,7 +1025,8 @@ var mainVueModel = new Vue({
                         $("[data-toggle='tooltip']").tooltip();
                     })
                 }
-            });
+            }
+
             if (!responseFailed) {
                 mainVueModel.removeAllOrderItems();
             }
