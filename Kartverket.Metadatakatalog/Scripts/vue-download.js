@@ -997,10 +997,10 @@ var mainVueModel = new Vue({
             var orderRequests = this.orderRequests;
             for (distributionUrl in orderRequests) {
                 $.ajax({
-                    url: this.orderRequests[distributionUrl].distributionUrl,
+                    url: distributionUrl,
                     type: "POST",
                     dataType: 'json',
-                    data: JSON.stringify(orderRequests[distributionUrl].order),
+                    data: JSON.stringify(orderRequests[distributionUrl]),
                     contentType: "application/json",
                     xhrFields: { withCredentials: IsGeonorge(distributionUrl) },
                     async: false,
@@ -1012,7 +1012,7 @@ var mainVueModel = new Vue({
                         if (data !== null) {
                             responseData.push(
                                 {
-                                    "distributionUrl": orderRequests[distributionUrl].distributionUrl,
+                                    "distributionUrl": distributionUrl,
                                     "data": data
                                 });
                         }
