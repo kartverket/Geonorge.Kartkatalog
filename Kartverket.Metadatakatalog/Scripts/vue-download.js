@@ -996,36 +996,34 @@ var mainVueModel = new Vue({
             var responseFailed = false;
             var orderRequests = this.orderRequests;
             for (distributionUrl in orderRequests) {
-                if (orderRequests[distributionUrl].distributionUrl != "") {
-                    $.ajax({
-                        url: this.orderRequests[distributionUrl].distributionUrl,
-                        type: "POST",
-                        dataType: 'json',
-                        data: JSON.stringify(orderRequests[distributionUrl].order),
-                        contentType: "application/json",
-                        xhrFields: { withCredentials: IsGeonorge(distributionUrl) },
-                        async: false,
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            showAlert(errorThrown, "danger");
-                            responseFailed = true;
-                        },
-                        success: function (data) {
-                            if (data !== null) {
-                                responseData.push(
-                                    {
-                                        "distributionUrl": orderRequests[distributionUrl].distributionUrl,
-                                        "data": data
-                                    });
-                            }
-                            else {
-                                showAlert("Feil", "danger");
-                                responseFailed = true;
-                            }
+                $.ajax({
+                    url: this.orderRequests[distributionUrl].distributionUrl,
+                    type: "POST",
+                    dataType: 'json',
+                    data: JSON.stringify(orderRequests[distributionUrl].order),
+                    contentType: "application/json",
+                    xhrFields: { withCredentials: IsGeonorge(distributionUrl) },
+                    async: false,
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        showAlert(errorThrown, "danger");
+                        responseFailed = true;
+                    },
+                    success: function (data) {
+                        if (data !== null) {
+                            responseData.push(
+                                {
+                                    "distributionUrl": orderRequests[distributionUrl].distributionUrl,
+                                    "data": data
+                                });
                         }
-                    }).done(function () {
-                        $("[data-toggle='tooltip']").tooltip();
-                    })
-                }
+                        else {
+                            showAlert("Feil", "danger");
+                            responseFailed = true;
+                        }
+                    }
+                }).done(function () {
+                    $("[data-toggle='tooltip']").tooltip();
+                })
             }
 
             if (!responseFailed) {
