@@ -106,6 +106,7 @@
                 <div class="col-md-4 orderline-field">
                     <p>Område</p>
                     <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="false" v-bind:class="[orderLineErrors && orderLineErrors.area && orderLineErrors.area.length ? 'hasError' : '']"></div>
+                    
                     <div v-if="orderLineErrors && orderLineErrors.area" class="orderline-errors margin-top-10">
                         <div v-for="orderlineError in orderLineErrors.area" class="help-text form-element-help-text bg-danger">
                             {{ orderlineError }}
@@ -116,8 +117,12 @@
                     <p>Projeksjon</p>
                     <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                     <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="false" v-bind:class="[orderLineErrors && orderLineErrors.projection && orderLineErrors.projection.length ? 'hasError' : '']"></div>
+                    
                     <div v-if="orderLineErrors && orderLineErrors.projection" class="orderline-errors margin-top-10">
-                        <div v-for="orderlineError in orderLineErrors.projection" class="help-text form-element-help-text bg-danger">
+                        <div v-show="orderLineErrors.projection.length" class="help-text form-element-help-text bg-danger">
+                            <span class="custom-icon projection-warning-icon"></span> Mangler projeksjon for {{ orderLineErrors.projection.length }} {{orderLineErrors.projection.length == 1 ? "område" : "områder"}}
+                        </div>
+                        <div v-for="orderlineError in orderLineErrors.projection" class="help-text hidden form-element-help-text bg-danger">
                             {{ orderlineError }}
                         </div>
                     </div>
@@ -126,8 +131,12 @@
                     <p>Format</p>
                     <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                     <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="false" v-bind:class="[orderLineErrors && orderLineErrors.format && orderLineErrors.format.length ? 'hasError' : '']"></div>
-                    <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
-                        <div v-for="orderlineError in orderLineErrors.format" class="help-text form-element-help-text bg-danger">
+                   
+                     <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
+                        <div v-show="orderLineErrors.format.length" class="help-text form-element-help-text bg-danger">
+                            <span class="custom-icon format-warning-icon"></span> Mangler støttet format for {{ orderLineErrors.format.length }} {{orderLineErrors.format.length == 1 ? "område" : "områder"}}
+                        </div>
+                        <div v-for="orderlineError in orderLineErrors.format" class="help-text hidden form-element-help-text bg-danger">
                             {{ orderlineError }}
                         </div>
                     </div>

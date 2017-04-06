@@ -281,3 +281,19 @@
             #orderlist .orderline > .readonly .custom-select-list .custom-select-list-input-container .custom-select-list-selected .custom-select-list-remove-button {
                 display: none;
             }
+
+
+.custom-icon.projection-warning-icon:before{
+    content: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/projection-warning-disabled.svg);
+}
+
+.custom-icon.format-warning-icon:before{
+    content: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/format-warning-disabled.svg);
+}
+
+
+.orderline-errors .custom-icon{
+    width: 21px;
+    height: 21px;
+    float: right;
+}
