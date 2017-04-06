@@ -995,15 +995,15 @@ var mainVueModel = new Vue({
             var responseData = [];
             var responseFailed = false;
             var orderRequests = this.orderRequests;
-            for (orderRequest in orderRequests) {
-                if (orderRequests[orderRequest].distributionUrl != "") {
+            for (distributionUrl in orderRequests) {
+                if (orderRequests[distributionUrl].distributionUrl != "") {
                     $.ajax({
-                        url: this.orderRequests[orderRequest].distributionUrl,
+                        url: this.orderRequests[distributionUrl].distributionUrl,
                         type: "POST",
                         dataType: 'json',
-                        data: JSON.stringify(orderRequests[orderRequest].order),
+                        data: JSON.stringify(orderRequests[distributionUrl].order),
                         contentType: "application/json",
-                        xhrFields: { withCredentials: IsGeonorge(orderRequests[orderRequest].distributionUrl) },
+                        xhrFields: { withCredentials: IsGeonorge(distributionUrl) },
                         async: false,
                         error: function (jqXHR, textStatus, errorThrown) {
                             showAlert(errorThrown, "danger");
@@ -1013,7 +1013,7 @@ var mainVueModel = new Vue({
                             if (data !== null) {
                                 responseData.push(
                                     {
-                                        "distributionUrl": orderRequests[orderRequest].distributionUrl,
+                                        "distributionUrl": orderRequests[distributionUrl].distributionUrl,
                                         "data": data
                                     });
                             }
