@@ -396,14 +396,14 @@ var MasterOrderLine = {
                     var areaIsAllreadyAddedInfo = this.isAllreadyAdded(this.availableAreas[areaType], area, "code");
 
 
-                    // if (areaType == "kommune" || areaType == "fylke" || areaType == "landsdekkende") {
-
                     if (!areaIsAllreadyAddedInfo.added) {
                         this.availableAreas[areaType].push(area);
                     } else {
                         var orderLineUuidIsAdded = false
 
                         if (!orderLineUuidIsAdded) {
+
+                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
 
                             // Add available projections to area
                             if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] == undefined) {
