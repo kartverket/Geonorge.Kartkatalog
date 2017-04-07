@@ -43,7 +43,7 @@ function fixUrl(urlen) {
 
 function getOrderItemName(uuid) {
     var metadata = JSON.parse(localStorage.getItem(uuid + ".metadata"));
-    return metadata.name;
+    return metadata !== null && metadata.name !== undefined ? metadata.name : "";
 }
 
 function IsGeonorge(distributionUrl) {
@@ -791,96 +791,99 @@ var mainVueModel = new Vue({
         var orderLines = [];
         if (orderItemsJson != []) {
             $(orderItemsJson).each(function (key, val) {
-                var metadata = (localStorage[val + ".metadata"] !== undefined) ? JSON.parse(localStorage[val + ".metadata"]) : "";
-                var apiUrl = (metadata.distributionUrl !== undefined) ? metadata.distributionUrl : defaultUrl;
+                if (val !== undefined && val !== null && val !== "") {
+                    var metadata = (localStorage[val + ".metadata"] !== undefined) ? JSON.parse(localStorage[val + ".metadata"]) : "";
+                    var apiUrl = (metadata.distributionUrl !== undefined) ? metadata.distributionUrl : defaultUrl;
 
-                orderLines[key] = {
-                    "metadata": metadata,
-                    "capabilities": getJsonData(apiUrl + val),
-                    "projectionAndFormatIsRequired": false
-                }
+                    orderLines[key] = {
+                        "metadata": metadata,
+                        "capabilities": getJsonData(apiUrl + val),
+                        "projectionAndFormatIsRequired": false
+                    }
 
-                var uuid = metadata.uuid;
+                    var uuid = metadata.uuid;
 
-                this.masterOrderLine.allAvailableProjections[uuid] = [];
-                this.masterOrderLine.allAvailableFormats[uuid] = [];
+                    this.masterOrderLine.allAvailableProjections[uuid] = [];
+                    this.masterOrderLine.allAvailableFormats[uuid] = [];
 
-                if (orderLines[key].capabilities._links !== undefined && orderLines[key].capabilities._links.length) {
-                    orderLines[key].capabilities._links.forEach(function (link) {
-                        if (link.rel == "http://rel.geonorge.no/download/order") {
-                            orderLines[key].metadata.orderDistributionUrl = link.href;
-                        }
-                        if (link.rel == "http://rel.geonorge.no/download/can-download") {
-                            orderLines[key].metadata.canDownloadUrl = link.href;
-                        }
-                        if (link.rel == "http://rel.geonorge.no/download/area") {
-                            var availableAreas = getJsonData(link.href);
-                            this.masterOrderLine.allAvailableAreas[uuid] = {};
+                    if (orderLines[key].capabilities._links !== undefined && orderLines[key].capabilities._links.length) {
+                        orderLines[key].capabilities._links.forEach(function (link) {
+                            if (link.rel == "http://rel.geonorge.no/download/order") {
+                                orderLines[key].metadata.orderDistributionUrl = link.href;
+                            }
+                            if (link.rel == "http://rel.geonorge.no/download/can-download") {
+                                orderLines[key].metadata.canDownloadUrl = link.href;
+                            }
+                            if (link.rel == "http://rel.geonorge.no/download/area") {
+                                var availableAreas = getJsonData(link.href);
+                                this.masterOrderLine.allAvailableAreas[uuid] = {};
 
-                            availableAreas.forEach(function (availableArea) {
-                                if (this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] == undefined) {
-                                    this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] = [];
-                                }
-                                availableArea.isSelected = false;
-                                availableArea.isLocalSelected = false;
-                                //   var isAllreadyAddedInfo = this.isAllreadyAdded(this.masterOrderLine.allAvailableAreas[uuid][availableArea.type], availableArea, "code");
-                                //  if (!isAllreadyAddedInfo.added){
-                                this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
-                                //  }
-                            }.bind(this))
-                        }
-                        if (link.rel == "http://rel.geonorge.no/download/projection") {
-                            orderLines[key].defaultProjections = getJsonData(link.href);
-                        }
-                        if (link.rel == "http://rel.geonorge.no/download/format") {
-                            orderLines[key].defaultFormats = getJsonData(link.href);
-                        }
-                    }.bind(this))
-                }
-                /*
-                
-                
-                
-                if (link.rel == "http://rel.geonorge.no/download/can-download") {
-                    orderItems[key].metadata.canDownloadUrl = link.href;
-                }
-                */
+                                availableAreas.forEach(function (availableArea) {
+                                    if (this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] == undefined) {
+                                        this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] = [];
+                                    }
+                                    availableArea.isSelected = false;
+                                    availableArea.isLocalSelected = false;
+                                    //   var isAllreadyAddedInfo = this.isAllreadyAdded(this.masterOrderLine.allAvailableAreas[uuid][availableArea.type], availableArea, "code");
+                                    //  if (!isAllreadyAddedInfo.added){
+                                    this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
+                                    //  }
+                                }.bind(this))
+                            }
+                            if (link.rel == "http://rel.geonorge.no/download/projection") {
+                                orderLines[key].defaultProjections = getJsonData(link.href);
+                            }
+                            if (link.rel == "http://rel.geonorge.no/download/format") {
+                                orderLines[key].defaultFormats = getJsonData(link.href);
+                            }
+                        }.bind(this))
+                    }
 
-                var distributionUrl = (orderLines[key].metadata.distributionUrl !== undefined) ? orderLines[key].metadata.distributionUrl : "";
+                    /*
+                    
+                    
+                    
+                    if (link.rel == "http://rel.geonorge.no/download/can-download") {
+                        orderItems[key].metadata.canDownloadUrl = link.href;
+                    }
+                    */
+
+                    var distributionUrl = (orderLines[key].metadata.distributionUrl !== undefined) ? orderLines[key].metadata.distributionUrl : "";
 
 
-                orderLines[key].capabilities.supportsGridSelection = (orderLines[key].capabilities.mapSelectionLayer !== undefined && orderLines[key].capabilities.mapSelectionLayer !== "") ? true : false;
+                    orderLines[key].capabilities.supportsGridSelection = (orderLines[key].capabilities.mapSelectionLayer !== undefined && orderLines[key].capabilities.mapSelectionLayer !== "") ? true : false;
 
-                /*   if (orderItems[key].codelists.areas) {
-                       if (orderItems[key].capabilities.supportsPolygonSelection) {
-                           orderItems[key].codelists.areas.push(
-                               {
-                                   "name": "Valgt fra kart",
-                                   "type": "polygon",
-                                   "code": "Kart",
-                                   "formats": orderItems[key].codelists.formats,
-                                   "projections": orderItems[key].codelists.projections
-                               }
-                           );
-                       }
-                       $(orderItems[key].codelists.areas).each(function (index, area) {
-                           if (area.type !== undefined) {
-                               var inArray = false;
-                               orderItems[key].codelists.areaTypes.forEach(function (areaType) {
-                                   if (area.type == areaType.name) {
-                                       inArray = true;
-                                       areaType.numberOfItems += 1;
+                    /*   if (orderItems[key].codelists.areas) {
+                           if (orderItems[key].capabilities.supportsPolygonSelection) {
+                               orderItems[key].codelists.areas.push(
+                                   {
+                                       "name": "Valgt fra kart",
+                                       "type": "polygon",
+                                       "code": "Kart",
+                                       "formats": orderItems[key].codelists.formats,
+                                       "projections": orderItems[key].codelists.projections
                                    }
-                               });
-                               if (!inArray) {
-                                   orderItems[key].codelists.areaTypes.push({
-                                       name: area.type,
-                                       numberOfItems: 1
-                                   });
-                               }
+                               );
                            }
-                       })
-                   }*/
+                           $(orderItems[key].codelists.areas).each(function (index, area) {
+                               if (area.type !== undefined) {
+                                   var inArray = false;
+                                   orderItems[key].codelists.areaTypes.forEach(function (areaType) {
+                                       if (area.type == areaType.name) {
+                                           inArray = true;
+                                           areaType.numberOfItems += 1;
+                                       }
+                                   });
+                                   if (!inArray) {
+                                       orderItems[key].codelists.areaTypes.push({
+                                           name: area.type,
+                                           numberOfItems: 1
+                                       });
+                                   }
+                               }
+                           })
+                       }*/
+                }
             }.bind(this));
         }
         this.orderLines = orderLines;
