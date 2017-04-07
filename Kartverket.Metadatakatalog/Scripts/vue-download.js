@@ -709,8 +709,8 @@ var mainVueModel = new Vue({
 
             if (this.orderLines.length) {
                 this.orderLines.forEach(function (orderLine) {
-                    if (orderRequests[orderLine.metadata.distributionUrl] == undefined) {
-                        orderRequests[orderLine.metadata.distributionUrl] = {
+                    if (orderRequests[orderLine.metadata.orderDistributionUrl] == undefined) {
+                        orderRequests[orderLine.metadata.orderDistributionUrl] = {
                             "email": "",
                             "_links": "",
                             "orderLines": []
@@ -773,7 +773,7 @@ var mainVueModel = new Vue({
                         });
                     }
 
-                    orderRequests[orderLine.metadata.distributionUrl].orderLines.push({
+                    orderRequests[orderLine.metadata.orderDistributionUrl].orderLines.push({
                         "metadataUuid": orderLine.metadata.uuid,
                         "areas": areas,
                         "projections": projections,
