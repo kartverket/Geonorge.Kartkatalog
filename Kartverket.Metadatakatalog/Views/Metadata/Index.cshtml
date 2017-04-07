@@ -316,61 +316,9 @@ if (contact != null)
                     <h2>Bruksområde</h2>
                     <p>@Model.SpecificUsage</p>
                 }
-                <h3 data-loading-message="Henter distribusjoner" class="show-loading-animation">Distribusjoner</h3>
-                <table style="width:100%;border-top:none;" class="table table-responsive" id="distributionsList" >   
-                    <tr style="border-bottom: 2px solid #fe5000;border-top:0px;">
-                        <th style="border-top:none;">Tittel</th>
-                        <th style="border-top:none;">Type</th>
-                        <th style="border-top:none;">Dataeier</th>
-                        <th style="border-top:none;">Åpne data</th>
-                        <th style="border-top:none;">Vis i kart</th>
-                        <th style="border-top:none;">Last ned</th>
-                        <th style="border-top:none;">Format</th>
-                    </tr>
 
-                        <tr v-for="item in distributionlist">
-                            <td><a href="{{item.ShowDetailsUrl}}">{{item.Title}}</a></td>
-                            <td>
-                                <span class="label label-{{item.Type}}">{{item.Type}}</span>
-                            </td>
-                            <td>{{item.Organization}}</td>
-                            <td>
-                                <span v-if="item.AccessIsOpendata" data-toggle="tooltip" data-placement="bottom" title="Åpne data" class="custom-icon custom-icon-hengelaas-open-green" data-original-title="Åpne data"></span>
-                                <span v-if="item.AccessIsRestricted" data-toggle="tooltip" data-placement="bottom" title="Tilgangsbegrensede data" class="custom-icon custom-icon-hengelaas-closed-yellow" data-original-title="Tilgangsbegrensede data"></span>
-                                <span v-if="item.AccessIsProtected" data-toggle="tooltip" data-placement="bottom" title="Skjermede data" class="custom-icon custom-icon-hengelaas-closed-red" data-original-title="Skjermede data"></span>
-                            </td>
-                            <td>
-                                <a v-if="item.CanShowMapUrl" href="@Html.NorgeskartUrl(){{item.MapUrl}}" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle="tooltip" data-placement="bottom" title="" target="_blank" data-original-title="">
-                                    <span class="custom-icon custom-icon-kartmarkoer"></span>
-                                </a>
-                                <a v-else class="disabled" disabled="disabled"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
-                            </td>
-                            <td>
-                                <a v-if="item.CanShowDownloadService" 
-                                   href=''
-                                   data-toggle='tooltip'
-                                   data-placement='bottom'
-                                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                                   title='Legg til {{item.Title}} i kurv'
-                                   class=''
-                                   itemname='{{item.Title}}'
-                                   itemuuid='{{item.Uuid}}'
-                                   itemurl='/metadata/uuid/{{item.Uuid}}'
-                                   itemorglogo=''
-                                   itemdisturl=''
-                                   itemtheme=''
-                                   itemorgname='{{item.Organization}}'>
-                                    <span class="custom-icon custom-icon-handlekurv"></span>
-                                </a>
-                                <a v-if="item.CanShowDownloadUrl" href="{{item.DistributionUrl}}" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for {{item.Title}}"><span class="custom-icon custom-icon-lastned"></span></a>
-                                <a v-else class="disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span></a>
-                            </td>
-                            <td>{{item.FormatName}} {{item.FormatVersion}}</td>
-                        </tr>
-
-                    
-                </table>
                 
+
 
             </div>
 
@@ -386,7 +334,75 @@ if (contact != null)
             }
         </div>
     </aside>
+    <article class="col-md-12">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 data-loading-message="Henter distribusjoner" class="show-loading-animation">Distribusjoner</h3>
+                <table style="width:100%;border-top:none;" class="table table-responsive" id="distributionsList">
+                    <tr style="border-bottom: 2px solid #fe5000;border-top:0px;">
+                        <th style="border-top:none;">Tittel</th>
+                        <th style="border-top:none;">Type</th>
+                        <th style="border-top:none;">Dataeier</th>
+                        <th style="border-top:none;">Åpne data</th>
+                        <th style="border-top:none;">Vis i kart</th>
+                        <th style="border-top:none;">Last ned</th>
+                        <th style="border-top:none;">Format</th>
+                    </tr>
 
+                    <tr v-for="item in distributionlist">
+                        <td><a v-bind:href="item.ShowDetailsUrl">{{item.Title}}</a></td>
+                        <td>
+                            <span class="label label-{{item.Type}}">{{item.Type}}</span>
+                        </td>
+                        <td>{{item.Organization}}</td>
+                        <td>
+                            <span v-if="item.AccessIsOpendata" data-toggle="tooltip" data-placement="bottom" title="Åpne data" class="custom-icon custom-icon-hengelaas-open-green" data-original-title="Åpne data"></span>
+                            <span v-if="item.AccessIsRestricted" data-toggle="tooltip" data-placement="bottom" title="Tilgangsbegrensede data" class="custom-icon custom-icon-hengelaas-closed-yellow" data-original-title="Tilgangsbegrensede data"></span>
+                            <span v-if="item.AccessIsProtected" data-toggle="tooltip" data-placement="bottom" title="Skjermede data" class="custom-icon custom-icon-hengelaas-closed-red" data-original-title="Skjermede data"></span>
+                        </td>
+                        <td>
+                            <a v-if="item.CanShowMapUrl" v-bind:id="'mapmacrolink-' + item.Uuid" v-bind:href="item.MapUrl" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle="tooltip" data-placement="bottom" title="Vis i kart" target="_blank" data-original-title="Vis i kart">
+                                <span v-if="item.AccessIsRestricted" v-bind:id="'mapmacro-' + item.Uuid" class="custom-icon custom-icon-kartmarkoer-needs-permission" title="@UI.Service_need_permission"></span>
+                                <span v-else v-bind:id="'mapmacro-' + item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
+                            </a>
+                            <div v-if="item.CanShowMapUrl"> 
+                                <div class="input-group">
+                                    <input class="form-control" readonly v-bind:id="'input-copy' + item.Uuid" v-bind:value="item.DistributionUrl">
+                                    <span class="btn btn-copy input-group-addon" alt="kopier til utklippstavle" title="kopier til utklippstavle" v-bind:data-clipboard-target="'#input-copy' + item.Uuid" >
+                                        <i class="fa fa-clipboard"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <a v-else class="disabled" disabled="disabled"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
+                        </td>
+                        <td>
+                           
+                            <a v-if="item.CanShowDownloadService"
+                               v-bind:href="'?addtocart_event_id=addToCart-' + item.Uuid"
+                               data-toggle='tooltip'
+                               data-placement='bottom'
+                               onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                               v-bind:title="item.Title"
+                               class='add-to-cart-btn'
+                               v-bind:itemname='item.Title'
+                               v-bind:itemuuid='item.Uuid'
+                               v-bind:itemurl="'/metadata/uuid/' + item.Uuid"
+                               v-bind:itemdisturl='item.DistributionUrl'
+                               v-bind:itemorgname='item.Organization'>
+                                <span class="custom-icon custom-icon-handlekurv"></span>
+                            </a>
+                            <a v-else-if="item.CanShowDownloadUrl" v-bind:href="item.DistributionUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' v-bind:title="'Last ned datasett for ' + item.Title"><span class="custom-icon custom-icon-lastned"></span></a>
+                            <a v-else class="disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span></a>
+                        </td>
+                        <td>{{item.FormatName}} {{item.FormatVersion}}</td>
+                    </tr>
+
+
+                </table>
+            </div>
+
+        </div>
+    </article>
     @{
         string urlCSV = Html.KartkatalogenUrl() + "/api/relateddata/" + Model.Uuid + "?mediatype=csv";
     }
@@ -399,208 +415,208 @@ if (contact != null)
                     if (Model.Related.Count > 0)
                     {
                         <h3 class="article-h3">Relaterte data</h3>
-                        <div class="col-sm-7"></div>
-                        <div class="col-sm-5">
-                            <div class="row save-as-menu">
-                                <div class="col-xs-4 text-right no-padding save-as-label">
-                                    <p>Lagre som:</p>
-                                </div>
-                                <div class="col-xs-5 no-padding-bottom save-as-dropdown">
-                                    <div class="custom-select">
-                                        <select onchange="additionalView(this.value)" class="form-control">
-                                            <option value="csvUrl" selected="selected">CSV</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div id="saveButtons" class="col-xs-3 no-padding-bottom save-as-buttons">
-                                    <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div id="tableView" class="search-results">
-                            <div id="relatedList">
-                                <div class="row search-results-table-heading">
-                                    <div class="col-sm-3 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" class="table-ordering">Tittel<span class="orderby-indicator"></span></a></p></div>
-                                    <div class="col-sm-3 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleDescLink())" class="table-ordering">Tittel<span class="orderby-indicator"></span></a></p></div>
-                                    <div class="col-sm-2"><p>Type</p></div>
-                                    <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" class="table-ordering">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                                    <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                                    <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
-                                    <div class="col-sm-1 no-padding text-center"><p>Les mer</p></div>
-                                    <div class="col-sm-1 no-padding text-center"><p>Vis i kart</p></div>
-                                    <div class="col-sm-1 no-padding text-center"><p>Last ned</p></div>
-                                </div>
-                                <div class="menu-separator search-results-table-heading"></div>
-
-                                @foreach (var relatedContent in Model.Related)
-                                {
-                                    if (relatedContent != null)
-                                    {
-
-                                        var relatedContentHierarchyLevelCssClass = "";
-                                        var relatedContentHierarchyLevelLabelText = "";
-                                        if (relatedContent.IsDataset())
-                                        {
-                                            relatedContentHierarchyLevelCssClass = "label-datasett";
-                                            relatedContentHierarchyLevelLabelText = "Datasett";
-                                        }
-                                        else if (relatedContent.IsServiceLayer())
-                                        {
-                                            relatedContentHierarchyLevelCssClass = "label-tjenestelag";
-                                            relatedContentHierarchyLevelLabelText = "Tjenestelag";
-                                        }
-                                        else if (relatedContent.IsService())
-                                        {
-                                            relatedContentHierarchyLevelCssClass = "label-tjeneste";
-                                            relatedContentHierarchyLevelLabelText = "Tjeneste";
-                                        }
-                                        else if (relatedContent.IsApplication())
-                                        {
-                                            relatedContentHierarchyLevelCssClass = "label-applikasjon";
-                                            relatedContentHierarchyLevelLabelText = "Applikasjon";
-                                        }
-                                        else if (relatedContent.IsDatasetSeries())
-                                        {
-                                            relatedContentHierarchyLevelCssClass = "label-datasettserie";
-                                            relatedContentHierarchyLevelLabelText = "Datasettserie";
-                                        }
-                                        else if (relatedContent.IsDatasetBundle())
-                                        {
-                                            relatedContentHierarchyLevelCssClass = "label-datasett";
-                                            relatedContentHierarchyLevelLabelText = "Datapakke";
-                                        }
-                                        else
-                                        {
-                                            relatedContentHierarchyLevelCssClass = "label-default";
-                                            relatedContentHierarchyLevelLabelText = relatedContent.HierarchyLevel;
-                                        }
-
-
-                                        <div class="row result-row">
-                                            <div class="col-sm-3 search-results-title">
-                                                <a id="related-@relatedContent.Uuid" href="/metadata/org/title/@relatedContent.Uuid" class="show-loading-animation" data-loading-message="Henter @relatedContentHierarchyLevelLabelText.ToLower()" title="Relatert metadata for @relatedContent.Title">
-                                                    @relatedContent.Title
-                                                </a>
+                                    <div class="col-sm-7"></div>
+                                    <div class="col-sm-5">
+                                        <div class="row save-as-menu">
+                                            <div class="col-xs-4 text-right no-padding save-as-label">
+                                                <p>Lagre som:</p>
                                             </div>
-                                            <div class="col-sm-2 search-results-type">
-                                                <span class="label @relatedContentHierarchyLevelCssClass">@relatedContentHierarchyLevelLabelText</span>
+                                            <div class="col-xs-5 no-padding-bottom save-as-dropdown">
+                                                <div class="custom-select">
+                                                    <select onchange="additionalView(this.value)" class="form-control">
+                                                        <option value="csvUrl" selected="selected">CSV</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="col-sm-3 search-results-organization">
-                                                @relatedContent.ContactOwner.Organization
+                                            <div id="saveButtons" class="col-xs-3 no-padding-bottom save-as-buttons">
+                                                <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
                                             </div>
-                                            <div class="col-sm-1 search-results-open-data search-results-action-icons">
-                                                @if (relatedContent.IsOpendata())
-                                                {
-                                                    <span data-toggle='tooltip' data-placement='bottom' title="Åpne data" class="custom-icon custom-icon-hengelaas-open-green"></span>
-                                                }
-                                                else if (relatedContent.IsOffline())
-                                                {
-                                                    <span data-toggle='tooltip' data-placement='bottom' title="Skjermede data" class="custom-icon custom-icon-hengelaas-closed-red"></span>
-                                                }
-                                                else if (relatedContent.IsRestricted())
-                                                {
-                                                    <span data-toggle='tooltip' data-placement='bottom' title="Tilgangsbegrensede data" class="custom-icon custom-icon-hengelaas-closed-yellow"></span>
-                                                }
-                                            </div>
-                                            <div class="col-sm-1 search-results-action-icons">
-                                                <a href="/metadata/org/title/@relatedContent.Uuid" data-toggle='tooltip' data-placement='bottom' title="Les mer om @relatedContent.Title" class="show-loading-animation" data-loading-message="Henter @relatedContentHierarchyLevelLabelText.ToLower()"><span class="custom-icon custom-icon-info"></span></a>
-                                            </div>
-                                            <div class="col-sm-1 search-results-action-icons">
-                                                @if (relatedContent.ShowMapLink())
-                                                {
-                                                    <a id="mapmacrolink-@relatedContent.Uuid" href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(relatedContent.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank">
-                                                        <span id="mapmacro-@relatedContent.Uuid" class="custom-icon @(relatedContent.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span>
-                                                    </a>
-                                                }
-                                                else if (relatedContent.ShowServiceMapLink())
-                                                {
-                                                    <a id="mapmacrolink-@relatedContent.Uuid" href="@Html.NorgeskartUrl()@relatedContent.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(relatedContent.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank">
-                                                        <span id="mapmacro-@relatedContent.Uuid" class="custom-icon @(relatedContent.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span>
-                                                    </a>
-                                                }
-                                                else
-                                                {
-                                                    <a class="disabled" disabled="disabled"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
-                                                }
-                                            </div>
-                                            <div class="col-sm-1 search-results-action-icons">
-                                                @if (relatedContent.ShowDownloadService())
-                                                {
-                                                    string relativeOrganizationLogoUrl = "";
-                                                    string relativeDowloadUrl = "";
-
-                                                    if (!string.IsNullOrWhiteSpace(relatedContent.OrganizationLogoUrl))
-                                                    {
-                                                        System.Uri organizationLogoUrl = new Uri(relatedContent.OrganizationLogoUrl);
-                                                        relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                                    }
-
-                                                    if (relatedContent.DistributionDetails != null && !string.IsNullOrWhiteSpace(relatedContent.DistributionDetails.URL))
-                                                    {
-                                                        System.Uri downloadUrl = new Uri(relatedContent.DistributionDetails.URL);
-                                                        relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
-                                                    }
-
-                                                    string addToCartUrl = "";
-                                                    string addToCartClass = "add-to-cart-btn";
-                                                    if (relatedContent.IsRestricted() || relatedContent.IsOffline())
-                                                    {
-                                                        string addToCartEventParamater = "?addtocart_event_id=addToCart-" + relatedContent.Uuid;
-                                                        if (Request.Url.AbsoluteUri.Contains("?"))
-                                                        {
-                                                            addToCartEventParamater = "&addtocart_event_id=addToCart-" + relatedContent.Uuid;
-                                                        }
-
-                                                        string downloadSignInUrl = Html.DownloadUrl()
-                                                                                 + "AuthServices/SignIn?ReturnUrl="
-                                                                                 + Url.Encode(Request.Url.AbsoluteUri)
-                                                                                 + Url.Encode(addToCartEventParamater);
-
-                                                        addToCartUrl = Html.KartkatalogenUrl()
-                                                                     + "AuthServices/SignIn?ReturnUrl="
-                                                                     + Url.Encode(downloadSignInUrl);
-
-
-                                                        addToCartClass = "add-to-cart-btn prevent-action";
-
-
-                                                    }
-
-                                                    <a id='addToCart-@relatedContent.Uuid'
-                                                       href='@addToCartUrl'
-                                                       data-toggle='tooltip'
-                                                       data-placement='bottom'
-                                                       onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                                                       title='Legg til @relatedContent.Title i kurv'
-                                                       class='@addToCartClass'
-                                                       itemname='@relatedContent.Title'
-                                                       itemuuid='@relatedContent.Uuid'
-                                                       itemurl='/metadata/uuid/@relatedContent.Uuid'
-                                                       itemorglogo='@relativeOrganizationLogoUrl'
-                                                       itemdisturl='@relativeDowloadUrl'
-                                                       itemtheme='@(relatedContent.KeywordsNationalTheme != null && relatedContent.KeywordsNationalTheme.Count > 0 ? relatedContent.KeywordsNationalTheme[0].KeywordValue : "")'
-                                                       itemorgname='@(relatedContent.ContactOwner != null ? relatedContent.ContactOwner.Organization : "" )'>
-                                                        <span class="custom-icon custom-icon-handlekurv"></span>
-                                                    </a>
-                                                }
-                                                else if (relatedContent.ShowDownloadLink())
-                                                {
-                                                    <a href="@relatedContent.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @relatedContent.Title"><span class="custom-icon custom-icon-lastned"></span></a>
-                                                }
-                                                else
-                                                {
-                                                    <a class="disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span></a>
-                                                }
-                                            </div>
-
                                         </div>
-                                        <hr />
-                                    }
-                                }
-                            </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div id="tableView" class="search-results">
+                                        <div id="relatedList">
+                                            <div class="row search-results-table-heading">
+                                                <div class="col-sm-3 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" class="table-ordering">Tittel<span class="orderby-indicator"></span></a></p></div>
+                                                <div class="col-sm-3 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleDescLink())" class="table-ordering">Tittel<span class="orderby-indicator"></span></a></p></div>
+                                                <div class="col-sm-2"><p>Type</p></div>
+                                                <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" class="table-ordering">Dataeier<span class="orderby-indicator"></span></a></p></div>
+                                                <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering">Dataeier<span class="orderby-indicator"></span></a></p></div>
+                                                <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
+                                                <div class="col-sm-1 no-padding text-center"><p>Les mer</p></div>
+                                                <div class="col-sm-1 no-padding text-center"><p>Vis i kart</p></div>
+                                                <div class="col-sm-1 no-padding text-center"><p>Last ned</p></div>
+                                            </div>
+                                            <div class="menu-separator search-results-table-heading"></div>
 
-                        </div>
+                                            @foreach (var relatedContent in Model.Related)
+                                            {
+                                                if (relatedContent != null)
+                                                {
+
+                                                    var relatedContentHierarchyLevelCssClass = "";
+                                                    var relatedContentHierarchyLevelLabelText = "";
+                                                    if (relatedContent.IsDataset())
+                                                    {
+                                                        relatedContentHierarchyLevelCssClass = "label-datasett";
+                                                        relatedContentHierarchyLevelLabelText = "Datasett";
+                                                    }
+                                                    else if (relatedContent.IsServiceLayer())
+                                                    {
+                                                        relatedContentHierarchyLevelCssClass = "label-tjenestelag";
+                                                        relatedContentHierarchyLevelLabelText = "Tjenestelag";
+                                                    }
+                                                    else if (relatedContent.IsService())
+                                                    {
+                                                        relatedContentHierarchyLevelCssClass = "label-tjeneste";
+                                                        relatedContentHierarchyLevelLabelText = "Tjeneste";
+                                                    }
+                                                    else if (relatedContent.IsApplication())
+                                                    {
+                                                        relatedContentHierarchyLevelCssClass = "label-applikasjon";
+                                                        relatedContentHierarchyLevelLabelText = "Applikasjon";
+                                                    }
+                                                    else if (relatedContent.IsDatasetSeries())
+                                                    {
+                                                        relatedContentHierarchyLevelCssClass = "label-datasettserie";
+                                                        relatedContentHierarchyLevelLabelText = "Datasettserie";
+                                                    }
+                                                    else if (relatedContent.IsDatasetBundle())
+                                                    {
+                                                        relatedContentHierarchyLevelCssClass = "label-datasett";
+                                                        relatedContentHierarchyLevelLabelText = "Datapakke";
+                                                    }
+                                                    else
+                                                    {
+                                                        relatedContentHierarchyLevelCssClass = "label-default";
+                                                        relatedContentHierarchyLevelLabelText = relatedContent.HierarchyLevel;
+                                                    }
+
+
+                                                    <div class="row result-row">
+                                                        <div class="col-sm-3 search-results-title">
+                                                            <a id="related-@relatedContent.Uuid" href="/metadata/org/title/@relatedContent.Uuid" class="show-loading-animation" data-loading-message="Henter @relatedContentHierarchyLevelLabelText.ToLower()" title="Relatert metadata for @relatedContent.Title">
+                                                                @relatedContent.Title
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-sm-2 search-results-type">
+                                                            <span class="label @relatedContentHierarchyLevelCssClass">@relatedContentHierarchyLevelLabelText</span>
+                                                        </div>
+                                                        <div class="col-sm-3 search-results-organization">
+                                                            @relatedContent.ContactOwner.Organization
+                                                        </div>
+                                                        <div class="col-sm-1 search-results-open-data search-results-action-icons">
+                                                            @if (relatedContent.IsOpendata())
+                                                            {
+                                                                <span data-toggle='tooltip' data-placement='bottom' title="Åpne data" class="custom-icon custom-icon-hengelaas-open-green"></span>
+                                                            }
+                                                            else if (relatedContent.IsOffline())
+                                                            {
+                                                                <span data-toggle='tooltip' data-placement='bottom' title="Skjermede data" class="custom-icon custom-icon-hengelaas-closed-red"></span>
+                                                            }
+                                                            else if (relatedContent.IsRestricted())
+                                                            {
+                                                                <span data-toggle='tooltip' data-placement='bottom' title="Tilgangsbegrensede data" class="custom-icon custom-icon-hengelaas-closed-yellow"></span>
+                                                            }
+                                                        </div>
+                                                        <div class="col-sm-1 search-results-action-icons">
+                                                            <a href="/metadata/org/title/@relatedContent.Uuid" data-toggle='tooltip' data-placement='bottom' title="Les mer om @relatedContent.Title" class="show-loading-animation" data-loading-message="Henter @relatedContentHierarchyLevelLabelText.ToLower()"><span class="custom-icon custom-icon-info"></span></a>
+                                                        </div>
+                                                        <div class="col-sm-1 search-results-action-icons">
+                                                            @if (relatedContent.ShowMapLink())
+                                                            {
+                                                                <a id="mapmacrolink-@relatedContent.Uuid" href="@Html.NorgeskartUrl()@relatedContent.MapUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(relatedContent.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank">
+                                                                    <span id="mapmacro-@relatedContent.Uuid" class="custom-icon @(relatedContent.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span>
+                                                                </a>
+                                                            }
+                                                            else if (relatedContent.ShowServiceMapLink())
+                                                            {
+                                                                <a id="mapmacrolink-@relatedContent.Uuid" href="@Html.NorgeskartUrl()@relatedContent.ServiceUrl()/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(relatedContent.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank">
+                                                                    <span id="mapmacro-@relatedContent.Uuid" class="custom-icon @(relatedContent.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span>
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="disabled" disabled="disabled"><span class="custom-icon custom-icon-kartmarkoer"></span></a>
+                                                            }
+                                                        </div>
+                                                        <div class="col-sm-1 search-results-action-icons">
+                                                            @if (relatedContent.ShowDownloadService())
+                                                            {
+                                                                string relativeOrganizationLogoUrl = "";
+                                                                string relativeDowloadUrl = "";
+
+                                                                if (!string.IsNullOrWhiteSpace(relatedContent.OrganizationLogoUrl))
+                                                                {
+                                                                    System.Uri organizationLogoUrl = new Uri(relatedContent.OrganizationLogoUrl);
+                                                                    relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
+                                                                }
+
+                                                                if (relatedContent.DistributionDetails != null && !string.IsNullOrWhiteSpace(relatedContent.DistributionDetails.URL))
+                                                                {
+                                                                    System.Uri downloadUrl = new Uri(relatedContent.DistributionDetails.URL);
+                                                                    relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
+                                                                }
+
+                                                                string addToCartUrl = "";
+                                                                string addToCartClass = "add-to-cart-btn";
+                                                                if (relatedContent.IsRestricted() || relatedContent.IsOffline())
+                                                                {
+                                                                    string addToCartEventParamater = "?addtocart_event_id=addToCart-" + relatedContent.Uuid;
+                                                                    if (Request.Url.AbsoluteUri.Contains("?"))
+                                                                    {
+                                                                        addToCartEventParamater = "&addtocart_event_id=addToCart-" + relatedContent.Uuid;
+                                                                    }
+
+                                                                    string downloadSignInUrl = Html.DownloadUrl()
+                                                                                             + "AuthServices/SignIn?ReturnUrl="
+                                                                                             + Url.Encode(Request.Url.AbsoluteUri)
+                                                                                             + Url.Encode(addToCartEventParamater);
+
+                                                                    addToCartUrl = Html.KartkatalogenUrl()
+                                                                                 + "AuthServices/SignIn?ReturnUrl="
+                                                                                 + Url.Encode(downloadSignInUrl);
+
+
+                                                                    addToCartClass = "add-to-cart-btn prevent-action";
+
+
+                                                                }
+
+                                                                <a id='addToCart-@relatedContent.Uuid'
+                                                                   href='@addToCartUrl'
+                                                                   data-toggle='tooltip'
+                                                                   data-placement='bottom'
+                                                                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                                                                   title='Legg til @relatedContent.Title i kurv'
+                                                                   class='@addToCartClass'
+                                                                   itemname='@relatedContent.Title'
+                                                                   itemuuid='@relatedContent.Uuid'
+                                                                   itemurl='/metadata/uuid/@relatedContent.Uuid'
+                                                                   itemorglogo='@relativeOrganizationLogoUrl'
+                                                                   itemdisturl='@relativeDowloadUrl'
+                                                                   itemtheme='@(relatedContent.KeywordsNationalTheme != null && relatedContent.KeywordsNationalTheme.Count > 0 ? relatedContent.KeywordsNationalTheme[0].KeywordValue : "")'
+                                                                   itemorgname='@(relatedContent.ContactOwner != null ? relatedContent.ContactOwner.Organization : "" )'>
+                                                                    <span class="custom-icon custom-icon-handlekurv"></span>
+                                                                </a>
+                                                            }
+                                                            else if (relatedContent.ShowDownloadLink())
+                                                            {
+                                                                <a href="@relatedContent.DistributionDetails.URL" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @relatedContent.Title"><span class="custom-icon custom-icon-lastned"></span></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="disabled" disabled="disabled"><span class="custom-icon custom-icon-lastned"></span></a>
+                                                            }
+                                                        </div>
+
+                                                    </div>
+                                                    <hr />
+                                                }
+                                            }
+                                        </div>
+
+                                    </div>
                     }
                 }
 
@@ -633,76 +649,6 @@ if (contact != null)
                 </div>
 
 
-                <div class="col-sm-6">
-                    <h3>Distribusjon</h3>
-                    @DisplayValue("Representasjonsform", Model.SpatialRepresentation)
-                    @if (Model.DistributionFormats != null)
-                {
-                    if (Model.DistributionFormats.Any())
-                    {
-                            <strong>Format: </strong>
-                            <ul>
-                                @foreach (var format in Model.DistributionFormats)
-                                {
-                                    if (!string.IsNullOrWhiteSpace(format.Version))
-                                    {
-                                        <li>@format.Name @format.Version</li>
-                                    }
-                                    else
-                                    {
-                                        <li>@format.Name</li>
-                                    }
-                                }
-                            </ul>
-                        }
-                    }
-                    @if (Model.DistributionDetails != null && Model.DistributionDetails.Protocol != null && Model.DistributionDetails.Protocol != "GEONORGE:OFFLINE")
-                {
-                        <text>@DisplayValue("Distribusjonstype", Model.DistributionDetails.ProtocolName)</text>
-                        if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
-                        {
-                            if (Model.IsService() || Model.IsServiceLayer())
-                            {
-                                <p><strong>Get Capabilities Url:</strong></p>
-                                <div class="input-group">
-                                    <input class="form-control" readonly id="input-copy" value="@Model.DistributionDetails.DistributionDetailsGetCapabilitiesUrl()">
-                                    <span class="btn btn-copy input-group-addon" alt="kopier til utklippstavle" data-clipboard-target="#input-copy">
-                                            <i class="fa fa-clipboard"></i>
-                                    </span>
-                                </div>
-                            }
-                            else
-                            {
-                                @*<p>
-                                        <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
-                                    </p>*@
-                            }
-
-                        }
-                        <text>@DisplayValue("Geografisk distribusjonsinndeling", Model.UnitsOfDistribution)</text>
-                        <text>@DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
-                    }
-
-                    @if (Model.ReferenceSystems != null)
-                {
-                    if (Model.ReferenceSystems.Any())
-                    {
-                            <strong>Romlig referansesystem: </strong>
-                            <ul>
-                                @foreach (var refsys in Model.ReferenceSystems)
-                                {
-                                    <li>@refsys.CoordinateSystem</li>
-                                }
-                            </ul>
-                        }
-
-                    }
-                </div>
-
-
-
-
-
                 @if (Model.Constraints != null)
                 {
                     <div class="col-sm-6">
@@ -725,16 +671,16 @@ if (contact != null)
                     <div id="help" class="col-sm-12">
                         <h2>Hjelp</h2>
                     </div>
-                    <div class="col-sm-12">
-                        @if (!string.IsNullOrEmpty(Model.SupplementalDescription))
+                                <div class="col-sm-12">
+                                    @if (!string.IsNullOrEmpty(Model.SupplementalDescription))
                     {
-                            <p>@Model.SupplementalDescription</p>
-                        }
-                        @if (!string.IsNullOrEmpty(Model.HelpUrl))
+                                        <p>@Model.SupplementalDescription</p>
+                                    }
+                                    @if (!string.IsNullOrEmpty(Model.HelpUrl))
                     {
-                            <a href="@Model.HelpUrl" class="btn" target="_blank"><span class="custom-icon custom-icon-eksternlink"></span> Vis hjelp</a>
-                        }
-                    </div>
+                                        <a href="@Model.HelpUrl" class="btn" target="_blank"><span class="custom-icon custom-icon-eksternlink"></span> Vis hjelp</a>
+                                    }
+                                </div>
                 }
                 <div class="col-sm-12">
                     <a href="#" data-content-toggle="detailed-info" class="toggle-content"><h2><span class="toggle-icon"></span>Detaljert informasjon</h2></a>
@@ -753,9 +699,9 @@ if (contact != null)
                             for (int s = 0; s < Model.QualitySpecifications.Count; s++)
                             {
                                 <p><strong>Standard: </strong>@Model.QualitySpecifications[s].Title </p>
-                                <p> <strong>Dato: </strong>@Html.DisplayFor(m => Model.QualitySpecifications[s].Date) (@Model.QualitySpecifications[s].DateType) </p>
-                                <p> <strong>Forklaring av resultat: </strong>@Model.QualitySpecifications[s].Explanation </p>
-                                <p> @(Model.QualitySpecifications[s].Result ? "Godkjent" : "Ikke godkjent")  </p>
+                                            <p> <strong>Dato: </strong>@Html.DisplayFor(m => Model.QualitySpecifications[s].Date) (@Model.QualitySpecifications[s].DateType) </p>
+                                            <p> <strong>Forklaring av resultat: </strong>@Model.QualitySpecifications[s].Explanation </p>
+                                            <p> @(Model.QualitySpecifications[s].Result ? "Godkjent" : "Ikke godkjent")  </p>
                                 if (Model.QualitySpecifications.Count > 1 && s != Model.QualitySpecifications.Count - 1)
                                 {
                                     <hr />
@@ -766,7 +712,7 @@ if (contact != null)
                         {
 
                             <h3>Formål</h3>
-                            <p>@Model.Purpose</p>
+                                        <p>@Model.Purpose</p>
 
                         }
                     </div>
@@ -847,18 +793,20 @@ if (contact != null)
 
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <div>
-            <a href="@Model.MetadataXmlUrl" class="btn show-loading-animation" data-loading-message="Henter XML data"><span class="glyphicon glyphicon-file"></span> Last ned metadata XML</a>
-            <a href="@Model.MetadataEditUrl" class="btn show-loading-animation" data-loading-message="Henter metadata"><span class="glyphicon glyphicon-pencil"></span> Rediger metadata</a>
-        </div>
-    </div>
-</div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <a href="@Model.MetadataXmlUrl" class="btn show-loading-animation" data-loading-message="Henter XML data"><span class="glyphicon glyphicon-file"></span> Last ned metadata XML</a>
+                        <a href="@Model.MetadataEditUrl" class="btn show-loading-animation" data-loading-message="Henter metadata"><span class="glyphicon glyphicon-pencil"></span> Rediger metadata</a>
+                    </div>
+                </div>
+            </div>
 
 
 
-@helper DisplayValue(string label, string value)
+            @helper DisplayValue(string label, string value)
         {
 if (!string.IsNullOrWhiteSpace(value))
 {
@@ -866,7 +814,7 @@ if (!string.IsNullOrWhiteSpace(value))
 }
 }
 
-@helper DisplayKeywords(string label, List<Keyword> keywords)
+            @helper DisplayKeywords(string label, List<Keyword> keywords)
         {
 if (keywords != null && keywords.Any())
 {
@@ -887,13 +835,13 @@ if (keywords != null && keywords.Any())
 }
 }
 
-@section scripts {
-    <script src="https://unpkg.com/axios/dist/axios.min.js">
-    </script>
-    <script>
-        
-    </script>
-    <script>
+            @section scripts {
+                <script src="https://unpkg.com/axios/dist/axios.min.js">
+                </script>
+                <script>
+
+                </script>
+                <script>
         @{
             string itemUuid = (Model.Uuid != null) ? Model.Uuid : "";
             string itemTitle = (Model.Title != null) ? Model.Title : "";
@@ -901,146 +849,146 @@ if (keywords != null && keywords.Any())
             string itemDistributionDetailsUrl = (@Model.DistributionDetails != null && @Model.DistributionDetails.URL != null) ? @Model.DistributionDetails.URL : "";
         }
 
-        var uuid = '@itemUuid';
-        var title = '@itemTitle';
-        var organizationLogoUrl = '@itemOrganizationLogoUrl.Replace("http://", "https://")';
-        var distributionDetailsUrl = '@itemDistributionDetailsUrl.Replace("http://", "https://")';
-        var rootUrl = 'metadata/uuid/';
-        var theme = '@(Model.KeywordsNationalTheme != null && Model.KeywordsNationalTheme.Count > 0 ? Model.KeywordsNationalTheme[0].KeywordValue : "")'
-        var orgname = '@(Model.ContactOwner != null ? Model.ContactOwner.Organization : "" )'
+                    var uuid = '@itemUuid';
+                    var title = '@itemTitle';
+                    var organizationLogoUrl = '@itemOrganizationLogoUrl.Replace("http://", "https://")';
+                    var distributionDetailsUrl = '@itemDistributionDetailsUrl.Replace("http://", "https://")';
+                    var rootUrl = 'metadata/uuid/';
+                    var theme = '@(Model.KeywordsNationalTheme != null && Model.KeywordsNationalTheme.Count > 0 ? Model.KeywordsNationalTheme[0].KeywordValue : "")'
+                    var orgname = '@(Model.ContactOwner != null ? Model.ContactOwner.Organization : "" )'
 
-        var distributions = new Vue({
-            el: '#distributionsList',
-            data: {
-                distributionlist: []
-            },
-            created: function () {
-                axios.get('/api/distributions/' + uuid).then(function (response) {
-                    this.distributionlist = response.data;
-                }.bind(this))
-            }
-        })
-        
-        function showAlert(message, colorClass) {
-            $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
-            $('#feedback-alert .message').html(message);
-            $('#feedback-alert').show();
-        }
+                    var distributions = new Vue({
+                        el: '#distributionsList',
+                        data: {
+                            distributionlist: []
+                        },
+                        created: function () {
+                            axios.get('/api/distributions/' + uuid).then(function (response) {
+                                this.distributionlist = response.data;
+                            }.bind(this))
+                        }
+                    })
 
-        function getServiceFeed() {
-            $.ajax({
-                type: "GET",
-                url: "https://nedlasting.geonorge.no/geonorge/Tjenestefeed.xml",
-                dataType: "xml",
-                success: getFeedLink
-            });
-        }
+                    function showAlert(message, colorClass) {
+                        $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
+                        $('#feedback-alert .message').html(message);
+                        $('#feedback-alert').show();
+                    }
 
-        function getFeedLink(xml) {
+                    function getServiceFeed() {
+                        $.ajax({
+                            type: "GET",
+                            url: "https://nedlasting.geonorge.no/geonorge/Tjenestefeed.xml",
+                            dataType: "xml",
+                            success: getFeedLink
+                        });
+                    }
 
-            $(xml).find("entry").each(function () {
-                var identifier_code = $(this).find("inspire_dls\\:spatial_dataset_identifier_code, spatial_dataset_identifier_code").text();
-                if (uuid == identifier_code) {
-                    var link = $(this).find("link").text();
-                    $("#servicefeed").removeClass("disabled");
-                    $("#servicefeed").removeAttr("disabled");
-                    $("#servicefeed").prop("href", link);
-                    return false;
-                }
+                    function getFeedLink(xml) {
 
-            });
-        }
+                        $(xml).find("entry").each(function () {
+                            var identifier_code = $(this).find("inspire_dls\\:spatial_dataset_identifier_code, spatial_dataset_identifier_code").text();
+                            if (uuid == identifier_code) {
+                                var link = $(this).find("link").text();
+                                $("#servicefeed").removeClass("disabled");
+                                $("#servicefeed").removeAttr("disabled");
+                                $("#servicefeed").prop("href", link);
+                                return false;
+                            }
 
-        $(document).ready(function () {
+                        });
+                    }
 
-            changeLayout("tableView");
+                    $(document).ready(function () {
 
-            //getServiceFeed();
+                        changeLayout("tableView");
 
-            $("#details-button").click(function () {
-                $("#metadata-text-details").toggle();
-            });
+                        //getServiceFeed();
+
+                        $("#details-button").click(function () {
+                            $("#metadata-text-details").toggle();
+                        });
 
 
-            if (typeof Storage !== "undefined") {
+                        if (typeof Storage !== "undefined") {
 
-                var orderItems = [];
-                if (localStorage.getItem('orderItems') != null) {
-                    orderItems = (JSON.parse(localStorage.getItem('orderItems')));
-                    updateAllCartButtons(orderItems)
-                }
-            } else {
-                console.log('no native support for HTML5 storage :(');
-            }
-        });
+                            var orderItems = [];
+                            if (localStorage.getItem('orderItems') != null) {
+                                orderItems = (JSON.parse(localStorage.getItem('orderItems')));
+                                updateAllCartButtons(orderItems)
+                            }
+                        } else {
+                            console.log('no native support for HTML5 storage :(');
+                        }
+                    });
 
-        $(window).load(function () {
-            @if (Html.DownloadServiceEnabled())
+                    $(window).load(function () {
+                        @if (Html.DownloadServiceEnabled())
             {
                 <text>
-            if (typeof Storage !== "undefined") {
+                        if (typeof Storage !== "undefined") {
 
-                console.log('window.localStorage is available!');
-                var orderItems = [];
-                $('.add-to-cart-btn:not(.prevent-action)').click(function () {
-                    addToCartButtonClick($(this));
-                });
-            } else {
-                console.log('no native support for HTML5 storage :(');
-            }
-            </text>
+                            console.log('window.localStorage is available!');
+                            var orderItems = [];
+                            $('.add-to-cart-btn:not(.prevent-action)').click(function () {
+                                addToCartButtonClick($(this));
+                            });
+                        } else {
+                            console.log('no native support for HTML5 storage :(');
+                        }
+                        </text>
         }
 
-        });
+                    });
 
-        @if (Model.ShowMapLink() || Model.ShowServiceMapLink()) {
+                    @if (Model.ShowMapLink() || Model.ShowServiceMapLink()) {
             @:getServiceStatus("@Model.ServiceUuid", "@Model.Uuid");
-                                                }
+                                                                    }
 
-        @if(Model.Related != null)
+                    @if(Model.Related != null)
         {
             foreach (var relatedContent in Model.Related)
             {
                 if (relatedContent.ShowMapLink() || relatedContent.ShowServiceMapLink()) {
                 @:getServiceStatus("@relatedContent.ServiceUuid", "@relatedContent.Uuid");
-                                                            }
+                                                                                }
             }
         }
 
 
-        $('.btn-copy').tooltip({
-            trigger: 'click',
-            placement: 'bottom'
-        });
+                    $('.btn-copy').tooltip({
+                        trigger: 'click',
+                        placement: 'bottom'
+                    });
 
-        function setTooltip(btn, message) {
-            btn.tooltip('hide')
-              .attr('data-original-title', message)
-              .tooltip('show');
-        }
+                    function setTooltip(btn, message) {
+                        btn.tooltip('hide')
+                          .attr('data-original-title', message)
+                          .tooltip('show');
+                    }
 
-        function hideTooltip(btn) {
-            setTimeout(function () {
-                btn.tooltip('hide');
-            }, 1000);
-        }
+                    function hideTooltip(btn) {
+                        setTimeout(function () {
+                            btn.tooltip('hide');
+                        }, 1000);
+                    }
 
-        $(document).ready(function () {
-            new Clipboard('.btn-copy');
+                    $(document).ready(function () {
+                        new Clipboard('.btn-copy');
 
-            clipboard.on('success', function (e) {
-                var btn = $(e.trigger);
-                setTooltip(btn, 'Kopiert');
-                hideTooltip(btn);
-            });
+                        clipboard.on('success', function (e) {
+                            var btn = $(e.trigger);
+                            setTooltip(btn, 'Kopiert');
+                            hideTooltip(btn);
+                        });
 
-            clipboard.on('error', function (e) {
-                var btn = $(e.trigger);
-                setTooltip(btn, 'Feilet!');
-                hideTooltip(btn);
-            });
-        });
+                        clipboard.on('error', function (e) {
+                            var btn = $(e.trigger);
+                            setTooltip(btn, 'Feilet!');
+                            hideTooltip(btn);
+                        });
+                    });
 
-    </script>
-}
+                </script>
+            }
 

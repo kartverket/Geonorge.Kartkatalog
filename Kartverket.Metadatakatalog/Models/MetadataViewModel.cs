@@ -1,4 +1,5 @@
 ﻿using GeoNorgeAPI;
+using Kartverket.Metadatakatalog.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -514,29 +515,9 @@ namespace Kartverket.Metadatakatalog.Models
         {
             if (this != null)
             {
-                if (!string.IsNullOrWhiteSpace(URL))
-                {
-                    string tmp = URL;
-                    int startQueryString = tmp.IndexOf("?");
-
-                    if (startQueryString != -1)
-                        tmp = tmp.Substring(0, startQueryString + 1);
-                    else
-                        tmp = tmp + "?";
-
-                    if (IsWmsUrl())
-                        return tmp + "request=GetCapabilities&service=WMS";
-                    else if (IsWfsUrl())
-                        return tmp + "request=GetCapabilities&service=WFS";
-                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WCS")))
-                        return tmp + "request=GetCapabilities&service=WCS";
-                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:CSW")))
-                        return tmp + "request=GetCapabilities&service=CSW";
-                    else return tmp;
-                }
-                else return "";
+                return SimpleMetadataUtil.GetCapabilitiesUrl(URL, Protocol);
             }
-            return "";
+            else return "";
         }
 
 

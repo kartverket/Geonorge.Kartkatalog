@@ -28,6 +28,9 @@ namespace Kartverket.Metadatakatalog.Service
                 case "datasetserie":
                     res = "Datasettserie";
                     break;
+                case "dimmensiongroup":
+                    res = "Datapakke";
+                    break;
             }
             return res;
         }
@@ -96,31 +99,65 @@ namespace Kartverket.Metadatakatalog.Service
             else return false;
         }
 
+        public static String GetCapabilitiesUrl(string URL, string Protocol)
+        {
+            
+                if (!string.IsNullOrWhiteSpace(URL))
+                {
+                    string tmp = URL;
+                    int startQueryString = tmp.IndexOf("?");
+
+                    if (startQueryString != -1)
+                        tmp = tmp.Substring(0, startQueryString + 1);
+                    else
+                        tmp = tmp + "?";
+
+                    if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WMS")))
+                        return tmp + "request=GetCapabilities&service=WMS";
+                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WFS")))
+                        return tmp + "request=GetCapabilities&service=WFS";
+                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WCS")))
+                        return tmp + "request=GetCapabilities&service=WCS";
+                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:CSW")))
+                        return tmp + "request=GetCapabilities&service=CSW";
+                    else return tmp;
+                }
+                else return "";
+            
+        }
 
         public static String MapUrl(SimpleMetadata simpleMetadata)
         {
-            if (simpleMetadata.HierarchyLevel == "service" || simpleMetadata.HierarchyLevel == "servicelayer")
+                if (simpleMetadata.DistributionDetails != null )
+                {
+                    return MapUrl(simpleMetadata.DistributionDetails.URL, simpleMetadata.HierarchyLevel, simpleMetadata.DistributionDetails.Protocol, simpleMetadata.DistributionDetails.Name);
+                }
+                else return "";
+        }
+        public static String MapUrl(string URL, string HierarchyLevel, string Protocol, string Name)
+        {
+            if (HierarchyLevel == "service" || HierarchyLevel == "servicelayer")
             {
-                if (simpleMetadata.DistributionDetails != null && !string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.URL) && !string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.Protocol) && simpleMetadata.DistributionDetails.Protocol.Contains(("OGC:WMS")))
+                if (!string.IsNullOrWhiteSpace(URL) && !string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WMS")))
                 {
-                    if (!string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.Name))
-                        return "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(simpleMetadata.DistributionDetails.URL) + "]/+" + simpleMetadata.DistributionDetails.Name;
+                    if (!string.IsNullOrWhiteSpace(Name))
+                        return "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(URL) + "]/+" + Name;
                     else
-                        return "#5/355422/6668909/l/wms/[" + RemoveQueryString(simpleMetadata.DistributionDetails.URL) + "]";
+                        return "#5/355422/6668909/l/wms/[" + RemoveQueryString(URL) + "]";
                 }
-                else if (simpleMetadata.DistributionDetails != null && !string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.URL) && !string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.Protocol) && simpleMetadata.DistributionDetails.Protocol.Contains(("OGC:WFS")))
+                else if (!string.IsNullOrWhiteSpace(URL) && !string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WFS")))
                 {
-                    if (!string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.Name))
-                        return "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(simpleMetadata.DistributionDetails.URL) + "]/+" + simpleMetadata.DistributionDetails.Name;
+                    if (!string.IsNullOrWhiteSpace(Name))
+                        return "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(URL) + "]/+" + Name;
                     else
-                        return "#5/355422/6668909/l/wfs/[" + RemoveQueryString(simpleMetadata.DistributionDetails.URL) + "]";
+                        return "#5/355422/6668909/l/wfs/[" + RemoveQueryString(URL) + "]";
                 }
-                else if (simpleMetadata.DistributionDetails != null && !string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.URL) && !string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.Protocol) && simpleMetadata.DistributionDetails.Protocol.Contains(("OGC:WCS")))
+                else if (!string.IsNullOrWhiteSpace(URL) && !string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WCS")))
                 {
-                    if (!string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.Name))
-                        return "#5/355422/6668909/*/l/wcs/[" + RemoveQueryString(simpleMetadata.DistributionDetails.URL) + "]/+" + simpleMetadata.DistributionDetails.Name;
+                    if (!string.IsNullOrWhiteSpace(Name))
+                        return "#5/355422/6668909/*/l/wcs/[" + RemoveQueryString(URL) + "]/+" + Name;
                     else
-                        return "#5/355422/6668909/l/wcs/[" + RemoveQueryString(simpleMetadata.DistributionDetails.URL) + "]";
+                        return "#5/355422/6668909/l/wcs/[" + RemoveQueryString(URL) + "]";
                 }
 
                 else return "";

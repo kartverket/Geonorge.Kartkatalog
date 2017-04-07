@@ -60,8 +60,9 @@ namespace Kartverket.Metadatakatalog.Service
                 tmp.ShowDetailsUrl = "/metadata/org/title/" + uuid;
                 //Vis kart
                 if (SimpleMetadataUtil.ShowMapLink(simpleMetadata)) {
-                    tmp.MapUrl = SimpleMetadataUtil.MapUrl(simpleMetadata);
+                    tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(simpleMetadata);
                     tmp.CanShowMapUrl = true;
+                    tmp.DistributionUrl = SimpleMetadataUtil.GetCapabilitiesUrl(dist.URL,dist.Protocol);
                 }
 
                 //Last ned
@@ -70,6 +71,7 @@ namespace Kartverket.Metadatakatalog.Service
                     tmp.DownloadUrl = dist.URL;
                     tmp.CanShowDownloadUrl = true;
                 }
+                //Handlekurv
                 if (SimpleMetadataUtil.ShowDownloadService(simpleMetadata))
                 {
                     tmp.DownloadUrl = dist.URL;
@@ -122,15 +124,29 @@ namespace Kartverket.Metadatakatalog.Service
                             tmp.Organization = relData[4];
                             tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
 
+                            //Åpne data, begrenset, skjermet
                             if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
                             if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
                             if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
 
+                            //Vis kart
                             if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
                             {
-                                tmp.MapUrl = relData[7];
+                                tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]) ;
                                 tmp.CanShowMapUrl = true;
                             }
+                            ////Last ned
+                            //if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadata))
+                            //{
+                            //    tmp.DownloadUrl = dist.URL;
+                            //    tmp.CanShowDownloadUrl = true;
+                            //}
+                            ////Handlekurv
+                            //if (SimpleMetadataUtil.ShowDownloadService(simpleMetadata))
+                            //{
+                            //    tmp.DownloadUrl = dist.URL;
+                            //    tmp.CanShowDownloadService = true;
+                            //}
 
                             distlist.Add(tmp);
 
@@ -262,7 +278,7 @@ namespace Kartverket.Metadatakatalog.Service
                     foreach (var relatert in datasetServices)
                     {
                         var relData = relatert.Split('|');
-                        
+
                         try
                         {
                             MetadataViewModel md = new MetadataViewModel();
@@ -270,10 +286,10 @@ namespace Kartverket.Metadatakatalog.Service
                             md.Title = relData[1] != null ? relData[1] : "";
                             md.ParentIdentifier = relData[2] != null ? relData[2] : "";
                             md.HierarchyLevel = relData[3] != null ? relData[3] : "";
-                            md.ContactOwner = relData[4] != null ? new Contact { Role = "owner", Organization = relData[4]} : new Contact { Role = "owner", Organization = "" };
-                            md.DistributionDetails = new DistributionDetails { Name = relData[5] != null ? relData[5] : "" , Protocol = relData[6] != null ? relData[6] : "", URL = relData[7] != null ? relData[7] : "" };
-                            if(!string.IsNullOrEmpty(relData[8]))
-                                md.KeywordsNationalTheme = new List<Keyword> { new Keyword { KeywordValue = relData[8], Thesaurus = SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE } } ;
+                            md.ContactOwner = relData[4] != null ? new Contact { Role = "owner", Organization = relData[4] } : new Contact { Role = "owner", Organization = "" };
+                            md.DistributionDetails = new DistributionDetails { Name = relData[5] != null ? relData[5] : "", Protocol = relData[6] != null ? relData[6] : "", URL = relData[7] != null ? relData[7] : "" };
+                            if (!string.IsNullOrEmpty(relData[8]))
+                                md.KeywordsNationalTheme = new List<Keyword> { new Keyword { KeywordValue = relData[8], Thesaurus = SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE } };
                             md.OrganizationLogoUrl = relData[9];
                             if (!string.IsNullOrEmpty(relData[10]))
                             {
@@ -283,11 +299,12 @@ namespace Kartverket.Metadatakatalog.Service
 
                             md.Constraints = new Constraints { AccessConstraints = relData[11], OtherConstraintsAccess = relData[12] };
 
-                            if (md.HierarchyLevel == "service") { 
+                            if (md.HierarchyLevel == "service")
+                            {
                                 md.ServiceUuid = md.Uuid;
                                 md.ServiceDistributionAccessConstraint = relData[12];
                                 if (relData[6] == "OGC:WMS")
-                                { 
+                                {
                                     md.ServiceDistributionProtocolForDataset = relData[6];
                                     md.ServiceDistributionUrlForDataset = relData[7];
                                 }
@@ -306,7 +323,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 if (md.IsDataset())
                                     md.ServiceUuid = searchResult.Items[0].ServiceDistributionUuidForDataset != null ? searchResult.Items[0].ServiceDistributionUuidForDataset : null;
                             }
-
+                            
                             metadata.Related.Add(md);
                         }
                         catch (Exception ex)
