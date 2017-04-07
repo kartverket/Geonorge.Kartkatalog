@@ -260,24 +260,31 @@
 
                     string addToCartUrl = "";
                     string addToCartClass = "add-to-cart-btn";
+                    string baseUrl = Request.Url.AbsoluteUri;
                     if (item.ShowDownloadService())
                     {
                         if (item.IsRestricted || item.IsOffline)
                         {
-                            string addToCartEventParamater = "?addtocart_event_id=addToCart-" + item.Uuid;
-                            if (Request.Url.AbsoluteUri.Contains("?"))
+                            if (baseUrl.Contains("addtocart_event_id"))
                             {
+                                baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
+                            }
+
+                            string addToCartEventParamater = "?addtocart_event_id=addToCart-" + item.Uuid;
+                            if (baseUrl.Contains("?"))
+                            {
+
                                 addToCartEventParamater = "&addtocart_event_id=addToCart-" + item.Uuid;
                             }
 
                             string downloadSignInUrl = Html.DownloadUrl()
                                                      + "AuthServices/SignIn?ReturnUrl="
-                                                     + Url.Encode(Request.Url.AbsoluteUri)
+                                                     + Url.Encode(baseUrl)
                                                      + Url.Encode(addToCartEventParamater);
 
                             addToCartUrl = Html.KartkatalogenUrl()
-                                         + "AuthServices/SignIn?ReturnUrl="
-                                         + Url.Encode(downloadSignInUrl);
+                                                                 + "AuthServices/SignIn?ReturnUrl="
+                                                                 + Url.Encode(downloadSignInUrl);
 
 
                             addToCartClass = "add-to-cart-btn prevent-action";
@@ -552,7 +559,7 @@
                                         }
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
-        <aside class="facet-filter-container"">
+        <aside class="facet-filter-container">
             <h3 class="">Filtrer søket på:</h3>
             <span class="separator-small"></span>
             @Html.Partial("_FacetFilter", Model)
@@ -561,10 +568,10 @@
 </div>
 <script>
 @foreach (var item in Model.Result.Items)
-{
-    if (item.ShowMapLink() || item.ShowServiceMapLink())
-    {
+        {
+            if (item.ShowMapLink() || item.ShowServiceMapLink())
+            {
       @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                          }
+                                      }
 }
 </script>
