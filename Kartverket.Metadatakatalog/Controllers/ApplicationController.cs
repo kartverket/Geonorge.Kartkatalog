@@ -30,6 +30,17 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View(model);
         }
 
+        public ActionResult IndexNy(SearchParameters parameters)
+        {
+            parameters.AddComplexFacetsIfMissing();
+            SearchResult searchResult = _applicationService.Applications(parameters);
+
+            SearchViewModel model = new SearchViewModel(parameters, searchResult);
+            model.EnabledFacets = model.FacetApplications();
+
+            return View(model);
+        }
+
         protected override void OnException(ExceptionContext filterContext)
         {
             Log.Error("Error", filterContext.Exception);

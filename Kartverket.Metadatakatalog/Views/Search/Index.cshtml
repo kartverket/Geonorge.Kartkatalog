@@ -292,7 +292,7 @@
                             {
                                 System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
                                 string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold">
+                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.GetOrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold">
                                     <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
                                 </a>
                             }
@@ -303,7 +303,7 @@
                                 <p class="role-button search-results-name" role="button">@item.Title</p>
                             </a>
                             <div class="search-results-description">
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
+                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.GetOrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
                                     @if (item.Organization != null)
                                     {
                                         <p>  @item.Organization</p>
@@ -334,7 +334,7 @@
                             <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
                         </div>
                         <div class="col-sm-3 search-results-organization">
-                            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
+                            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.GetOrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
                                 @if (item.Organization != null)
                                 {
                                     <p>  @item.Organization</p>

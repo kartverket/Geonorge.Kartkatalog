@@ -30,6 +30,12 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string ServiceDistributionAccessConstraint { get; set; }
         public string DistributionUrl { get; set; }
         public string GetCapabilitiesUrl { get; set; }
+        public string TypeCssClass { get; set; }
+        public string TypeTranslated { get; set; }
+        public RouteValueDictionary MetadataLinkRouteValueDictionary { get; set; }
+        public string OrganizationSeoName { get; set; }
+        public string TitleSeo { get; set; }
+        public string MapTitleTag { get; set; }
 
         public string GetInnholdstypeCSS()
         {
@@ -104,12 +110,16 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             DistributionType = item.DistributionType;
             DistributionUrl = item.DistributionUrl;
             GetCapabilitiesUrl = item.DistributionDetails.DistributionDetailsGetCapabilitiesUrl();
-
+            TypeCssClass = GetInnholdstypeCSS();
+            TypeTranslated = GetInnholdstype();
             DistributionProtocol = item.DistributionProtocol;
+            var seoUrl = new SeoUrl(Organization, Title);
+            OrganizationSeoName = seoUrl.Organization;
+            TitleSeo = seoUrl.Title;
+
             if (!string.IsNullOrEmpty(item.OtherConstraintsAccess) && item.OtherConstraintsAccess.ToLower() == "no restrictions") IsOpendata = true;
             if (!string.IsNullOrEmpty(item.OtherConstraintsAccess) && item.OtherConstraintsAccess.ToLower() == "norway digital restricted") IsRestricted = true;
             if (item.AccessConstraint == "restricted") IsOffline = true;
-
 
             if (Type == "dataset")
             {
@@ -160,6 +170,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 ServiceUuid = item.ParentIdentifier;
 
             ServiceDistributionAccessConstraint = item.ServiceDistributionAccessConstraint;
+            MetadataLinkRouteValueDictionary = ShowMetadataLinkRouteValueDictionary();
+            MapTitleTag = GetMapTitleTag();
         }
 
         public static List<SearchResultItemViewModel> CreateFromList(IEnumerable<SearchResultItem> items)
@@ -180,7 +192,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return routeValueDictionary;
         }
 
-        public string OrganizationSeoName()
+        public string GetOrganizationSeoName()
         {
             var seoUrl = new SeoUrl(Organization, Title);
             return seoUrl.Organization;
@@ -189,6 +201,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public bool IsRestrictedService()
         {
             return ServiceDistributionAccessConstraint == "Beskyttet" || ServiceDistributionAccessConstraint == "restricted" || ServiceDistributionAccessConstraint == "norway digital restricted";
+        }
+
+        public string GetMapTitleTag()
+        {
+            return IsRestrictedService() ? "Tjenesten krever spesiell tilgang for å kunne vises - kontakt dataeier" : "";
         }
 
         string RemoveQueryString(string URL)

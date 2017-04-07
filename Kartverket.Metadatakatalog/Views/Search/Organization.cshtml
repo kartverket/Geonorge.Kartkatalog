@@ -292,7 +292,7 @@
                             {
                                 System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
                                 string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold">
+                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.GetOrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold">
                                     <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
                                 </a>
                             }

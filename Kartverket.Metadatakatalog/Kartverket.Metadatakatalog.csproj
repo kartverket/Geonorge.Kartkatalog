@@ -844,6 +844,7 @@
     <Content Include="Views\Search\Organization.cshtml" />
     <Content Include="Views\Search\Area.cshtml" />
     <Content Include="Views\Shared\_FilterPages.cshtml" />
+    <Content Include="Views\Application\IndexNy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
@@ -859,6 +860,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UI.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
