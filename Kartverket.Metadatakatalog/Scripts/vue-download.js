@@ -101,11 +101,20 @@ var Areas = {
 
     methods: {
         selectArea: function (area) {
+            area.isLocalSelected = true;
             if (this.master) {
                 area.isSelected = true;
+                for (orderLine in this.$parent.allAvailableAreas) {
+                    if (this.$parent.allAvailableAreas[orderLine][area.type] !== undefined) {
+                        this.$parent.allAvailableAreas[orderLine][area.type].forEach(function (availableArea) {
+                            if (availableArea.code == area.code) {
+                                availableArea.isSelected = true;
+                                availableArea.isLocalSelected = true;
+                            }
+                        })
+                    }
+                }
             }
-            area.isLocalSelected = true;
-
 
             this.$parent.updateSelectedAreas();
 
@@ -118,10 +127,20 @@ var Areas = {
             this.$root.validateAreas();
         },
         removeSelectedArea: function (area) {
+            area.isLocalSelected = false;
             if (this.master) {
                 area.isSelected = false;
+                for (orderLine in this.$parent.allAvailableAreas) {
+                    if (this.$parent.allAvailableAreas[orderLine][area.type] !== undefined) {
+                        this.$parent.allAvailableAreas[orderLine][area.type].forEach(function (availableArea) {
+                            if (availableArea.code == area.code) {
+                                availableArea.isSelected = false;
+                                availableArea.isLocalSelected = false;
+                            }
+                        })
+                    }
+                }
             }
-            area.isLocalSelected = false;
 
             this.$parent.updateSelectedAreas();
 
@@ -150,6 +169,7 @@ var Projections = {
                     this.$parent.allAvailableProjections[orderLine].forEach(function (availableProjection) {
                         if (availableProjection.code == projection.code) {
                             availableProjection.isSelected = true;
+                            availableProjection.isLocalSelected = true;
                         }
                     })
                 }
@@ -166,6 +186,7 @@ var Projections = {
                     this.$parent.allAvailableProjections[orderLine].forEach(function (availableProjection) {
                         if (availableProjection.code == projection.code) {
                             availableProjection.isSelected = false;
+                            availableProjection.isLocalSelected = false;
                         }
                     })
                 }
@@ -190,6 +211,7 @@ var Formats = {
                     this.$parent.allAvailableFormats[orderLine].forEach(function (availableFormat) {
                         if (availableFormat.name == format.name) {
                             availableFormat.isSelected = true;
+                            availableFormat.isLocalSelected = true;
                         }
                     })
                 }
@@ -206,6 +228,7 @@ var Formats = {
                     this.$parent.allAvailableFormats[orderLine].forEach(function (availableFormat) {
                         if (availableFormat.name == format.name) {
                             availableFormat.isSelected = false;
+                            availableFormat.isLocalSelected = false;
                         }
                     })
                 }
