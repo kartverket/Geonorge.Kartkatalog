@@ -243,7 +243,7 @@ var Formats = {
 
 
 var OrderLine = {
-    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'localSelectedAreas', 'localSelectedProjections', 'localSelectedFormats', 'orderLineErrors'],
+    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'orderLineErrors'],
     template: '#order-line-template',
     data: function () {
         var data = {
@@ -719,9 +719,6 @@ var mainVueModel = new Vue({
             allSelectedAreas: {},
             allSelectedProjections: {},
             allSelectedFormats: {},
-            allLocalSelectedAreas: {},
-            allLocalSelectedProjections: {},
-            allLocalSelectedFormats: {},
             allOrderLineErrors: {}
         }
     },
@@ -1251,6 +1248,9 @@ var mainVueModel = new Vue({
             loadMap(orderItem);
             $('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
         },
+
+
+
         orderItemHasCoordinates: function (orderItem) {
             return (orderItem.codelists.coordinates !== undefined) ? true : false;
         },
@@ -1279,6 +1279,7 @@ var mainVueModel = new Vue({
             }.bind(this));
             return orderItemsIsValid;
         },
+
         formIsValid: function () {
             var emailFieldNotEmpty = (this.email !== "") ? true : false;
             var emailAddressIsValid = this.emailAddressIsValid(this.email);
