@@ -175,7 +175,7 @@
 
 
 
-<div id="vueContainer">
+<div id="vueContainer" class="hidden">
     <section class="heading">
         <div class="row">
             <div class="col-sm-12">
@@ -213,9 +213,6 @@
                          v-bind:selected-areas="masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] : []"
                          v-bind:selected-projections="masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] : []"
                          v-bind:selected-formats="masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] : []"
-                         v-bind:local-selected-areas="masterOrderLine.allLocalSelectedAreas[orderLine.metadata.uuid]"
-                         v-bind:local-selected-projections="masterOrderLine.allLocalSelectedProjections[orderLine.metadata.uuid]"
-                         v-bind:local-selected-formats="masterOrderLine.allLocalSelectedFormats[orderLine.metadata.uuid]"
                          v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}">
                     </div>
                 </div>
@@ -230,7 +227,7 @@
                     </div>
                 </div>
 
-
+              
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -243,17 +240,18 @@
                         </div>
                     </div>
                 </div>
-                <div id="kartModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
-                    <div class="modal-dialog" id="norgeskartmodal">
-                        <div class="modal-content">
+                <div id="norgeskartmodal" class="custom-modal" v-show="showMap"  tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
+                  
+                        <div class="custom-modal-container">
                             <div id="viewer" role="main" style="height:100%">
                                 <div id="container"></div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button><button id="setcoordinates" type="button" class="btn btn-default" data-dismiss="modal">Legg til område</button>
+                                <button type="button" v-on:click="showMap = false" class="btn btn-default" data-dismiss="modal">Avbryt</button>
+                                <button id="setcoordinates" type="button" class="btn btn-default" data-dismiss="modal">Legg til område</button>
                             </div>
                         </div>
-                    </div>
+                    
                 </div>
 
                 <div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
