@@ -12,7 +12,7 @@
         content: none;
     }
 
-#orderlist .indicator {
+.expand-arrow {
     background-image: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/arrow-right.svg);
     width: 11px;
     height: 12px;
@@ -25,7 +25,7 @@
     margin-bottom: 2px;
 }
 
-    #orderlist .indicator.active {
+    .expand-arrow.active {
         background-image: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/arrow-down.svg);
     }
 
@@ -129,8 +129,8 @@
     }
 
 
-.hasError .custom-select-list-input-container{
-    border-color: #EE432a!important;
+.hasError .custom-select-list-input-container {
+    border-color: #EE432a !important;
 }
 
 .custom-select-list .custom-select-list-dropdown {
@@ -283,47 +283,50 @@
             }
 
 
-.custom-icon.projection-warning-icon:before{
+.custom-icon.projection-warning-icon:before {
     content: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/projection-warning-disabled.svg);
 }
 
-.custom-icon.format-warning-icon:before{
+.custom-icon.format-warning-icon:before {
     content: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/format-warning-disabled.svg);
 }
 
 
-.orderline-errors .custom-icon{
+.orderline-errors .custom-icon {
     width: 21px;
     height: 21px;
     float: right;
 }
 
 
-.custom-modal{
-    width: 100%!important;
-    height: 100%!important;
+.custom-modal {
+    width: 100% !important;
+    height: 100% !important;
     position: fixed;
-    top: 0!important;
-    left: 0!important;
+    top: 0 !important;
+    left: 0 !important;
     z-index: 10;
-    background-color: rgba(33, 33, 33, 0.48)!important;
+    background-color: rgba(33, 33, 33, 0.48) !important;
 }
 
-.custom-modal .custom-modal-container{
-    width: 90%;
-    height: 90%;
-    position: absolute;
-    top: 5%;
-    left:5%;
-    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.3);
-    background-color: #FFF;
-}
+    .custom-modal .custom-modal-container {
+        width: 90%;
+        height: 90%;
+        position: absolute;
+        top: 5%;
+        left: 5%;
+        box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.3);
+        background-color: #FFF;
+    }
 
-.custom-modal .custom-modal-container iframe{
-    position: absolute!important;
-    border: none;
-}
-#norgeskartmodal .modal-footer{
-    bottom: calc(5% + 10px)!important;
-    right: calc(5% + 10px)!important;
-}
+        .custom-modal .custom-modal-container iframe {
+            position: absolute !important;
+            border: none;
+        }
+
+        .custom-modal .custom-modal-container .modal-footer {
+            bottom: 0;
+            right: 0;
+            position: absolute;
+            border-top: none;
+        }

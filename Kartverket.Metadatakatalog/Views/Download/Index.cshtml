@@ -1,5 +1,5 @@
 ﻿@using Newtonsoft.Json
-
+@using Kartverket.Metadatakatalog.Helpers
 @{
     ViewBag.Title = "Nedlasting - Min kurv";
 }
@@ -10,6 +10,27 @@
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
 </div>
+
+<!-- Map modal -->
+<script type="text/x-template" id="map-template">
+    <div class="map">
+        <!-- <iframe src='@*Html.SecureNorgeskartUrl()select.html" + coverageParams + "*@' id='iframe' name='iframe'></iframe>-->
+        @* "<iframe src='@Html.SecureNorgeskartUrl()nedlasting.html#" + conf.zoom_level + "/" + conf.center_longitude + "/" + conf.center_latitude + "/+" + conf.service_name + "' id='iframe' name='iframe'></iframe>" *@
+        <div class="custom-modal" tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
+            <div class="custom-modal-container">
+                <iframe v-bind:id="$parent.metadata.uuid + '-iframe'" v-bind:src="mapSrc" name="iframe" style="height:100%"></iframe>
+                <div class="modal-footer">
+                    <button type="button" v-on:click="$parent.showMap = false" class="btn btn-default" data-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Legg til område</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+
+
 
 <!-- Area select -->
 <script type="text/x-template" id="areas-template">
@@ -35,8 +56,8 @@
                 </div>
             </div>
             <div class="custom-select-list-dropdown-additional-options">
-                <a v-show="this.supportsPolygonSelection" class="btn" v-on:click="$root.selectFromMap($parent)" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
-                <a v-show="this.supportsGridSelection" class="btn" v-on:click="$root.selectFromMap($parent)" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
+                <a v-show="this.supportsPolygonSelection" class="btn" v-on:click="$root.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
+                <a v-show="this.supportsGridSelection" class="btn" v-on:click="$root.selectFromMap($parent, 'grid')" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
             </div>
         </div>
     </div>
@@ -84,7 +105,7 @@
 <script type="text/x-template" id="order-line-template">
     <div v-bind:class="[expanded ? '' : 'readonly']">
         <h2 v-on:click="expanded = !expanded">
-            <span class="indicator" v-bind:class="[expanded ? 'active' : '']"></span> {{ metadata.name }}
+            <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span> {{ metadata.name }}
         </h2>
         <div class="pull-right margin-top-10">
             <span v-show="hasErrors" class="orderline-field-counter">
@@ -106,7 +127,6 @@
                 <div class="col-md-4 orderline-field">
                     <p>Område</p>
                     <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="false" v-bind:class="[orderLineErrors && orderLineErrors.area && orderLineErrors.area.length ? 'hasError' : '']"></div>
-                    
                     <div v-if="orderLineErrors && orderLineErrors.area" class="orderline-errors margin-top-10">
                         <div v-for="orderlineError in orderLineErrors.area" class="help-text form-element-help-text bg-danger">
                             {{ orderlineError }}
@@ -117,7 +137,7 @@
                     <p>Projeksjon</p>
                     <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                     <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="false" v-bind:class="[orderLineErrors && orderLineErrors.projection && orderLineErrors.projection.length ? 'hasError' : '']"></div>
-                    
+
                     <div v-if="orderLineErrors && orderLineErrors.projection" class="orderline-errors margin-top-10">
                         <div v-show="orderLineErrors.projection.length" class="help-text form-element-help-text bg-danger">
                             <span class="custom-icon projection-warning-icon"></span> Mangler projeksjon for {{ orderLineErrors.projection.length }} {{orderLineErrors.projection.length == 1 ? "område" : "områder"}}
@@ -131,8 +151,8 @@
                     <p>Format</p>
                     <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                     <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="false" v-bind:class="[orderLineErrors && orderLineErrors.format && orderLineErrors.format.length ? 'hasError' : '']"></div>
-                   
-                     <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
+
+                    <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
                         <div v-show="orderLineErrors.format.length" class="help-text form-element-help-text bg-danger">
                             <span class="custom-icon format-warning-icon"></span> Mangler støttet format for {{ orderLineErrors.format.length }} {{orderLineErrors.format.length == 1 ? "område" : "områder"}}
                         </div>
@@ -142,7 +162,10 @@
                     </div>
                 </div>
             </div>
-
+        </div>
+        <div v-if="capabilities.supportsPolygonSelection && mapIsLoaded">
+            <div v-show="showMap" is="mapSelect" v-bind:map-data="mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="false">
+            </div>
         </div>
     </div>
 </script>
@@ -173,8 +196,6 @@
 </script>
 
 
-
-
 <div id="vueContainer" class="hidden">
     <section class="heading">
         <div class="row">
@@ -199,8 +220,8 @@
                      v-bind:all-selected-projections="masterOrderLine.allSelectedProjections"
                      v-bind:all-selected-formats="masterOrderLine.allSelectedFormats"
                      v-bind:all-order-line-errors="masterOrderLine.allOrderLineErrors">
-                </div>
 
+                </div>
             </div>
             <div class="orderlines">
                 <div v-for="(orderLine, index) in orderLines" class="orderline">
@@ -213,6 +234,9 @@
                          v-bind:selected-areas="masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] : []"
                          v-bind:selected-projections="masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] : []"
                          v-bind:selected-formats="masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] : []"
+                         v-bind:selected-coordinates="masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] : ''"
+                         v-bind:default-projections="masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] : []"
+                         v-bind:default-formats="masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] : []"
                          v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}">
                     </div>
                 </div>
@@ -226,8 +250,6 @@
                         <input type="text" v-model="email" name="email" class="form-control" />
                     </div>
                 </div>
-
-              
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -239,19 +261,6 @@
                             <div class="clearfix"></div>
                         </div>
                     </div>
-                </div>
-                <div id="norgeskartmodal" class="custom-modal" v-show="showMap"  tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
-                  
-                        <div class="custom-modal-container">
-                            <div id="viewer" role="main" style="height:100%">
-                                <div id="container"></div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" v-on:click="showMap = false" class="btn btn-default" data-dismiss="modal">Avbryt</button>
-                                <button id="setcoordinates" type="button" class="btn btn-default" data-dismiss="modal">Legg til område</button>
-                            </div>
-                        </div>
-                    
                 </div>
 
                 <div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -272,11 +281,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
     </article>
-
 
     <article v-show="!orderLines.length && !orderResponse.length">
         <div class="row">
@@ -303,7 +309,7 @@
                                     </a>
                                 </div>
                                 <div class="col-sm-4 col-md-3">
-                                    <span class="label label-success auto-width">{{file.projectionName}}</span>
+                                    <span class="label label-success auto-width">{{ file.projectionName }}</span>
                                 </div>
                                 <div class="col-sm-2 col-md-2">
                                     <span class="label label-info">{{file.format}}</span>
@@ -342,7 +348,4 @@
         </div>
     </article>
 </div>
-<script type="text/javascript" src="~/Scripts/vue-select.js"></script>
-
 <script type="text/javascript" src="~/Scripts/vue-download.js"></script>
-@Html.Partial("_Norgeskart")

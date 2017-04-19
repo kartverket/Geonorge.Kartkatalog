@@ -240,14 +240,22 @@ var Formats = {
     }
 };
 
+var MapSelect = {
+    props: ['mapData', 'mapSrc', 'master'],
+    template: '#map-template',
+}
+
 
 
 var OrderLine = {
-    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'orderLineErrors'],
+    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'selectedCoordinates', 'defaultProjections', 'defaultFormats', 'orderLineErrors'],
     template: '#order-line-template',
     data: function () {
         var data = {
-            expanded: false
+            expanded: false,
+            mapData: {},
+            mapIsLoaded: false,
+            showMap: false
         }
         return data;
     },
@@ -406,7 +414,8 @@ var OrderLine = {
     components: {
         'areas': Areas,
         'projections': Projections,
-        'formats': Formats
+        'formats': Formats,
+        'mapSelect': MapSelect
     },
 };
 
@@ -719,7 +728,10 @@ var mainVueModel = new Vue({
             allSelectedAreas: {},
             allSelectedProjections: {},
             allSelectedFormats: {},
-            allOrderLineErrors: {}
+            allOrderLineErrors: {},
+            allSelectedCoordinates: {},
+            allDefaultProjections: {},
+            allDefaultFormats: {}
         }
     },
     computed: {
@@ -793,19 +805,30 @@ var mainVueModel = new Vue({
                         });
                     }
 
-                    orderRequests[orderLine.metadata.orderDistributionUrl].orderLines.push({
+
+                    var orderRequest = {
                         "metadataUuid": orderLine.metadata.uuid,
                         "areas": areas,
                         "projections": projections,
                         "formats": formats,
                         "_links": links
-                    })
+                    }
+
+                    if (this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
+                        orderRequest.coordinates = this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid];
+                    }
+
+                    orderRequests[orderLine.metadata.orderDistributionUrl].orderLines.push(orderRequest);
+
+
+
                 }.bind(this));
             }
             return orderRequests;
         }
     },
     created: function () {
+        $("#vueContainer").removeClass("hidden");
         var defaultUrl = "https://nedlasting.geonorge.no/api/capabilities/";
         var orderItemsJson = (localStorage["orderItems"] != null) ? JSON.parse(localStorage["orderItems"]) : [];
         var orderLines = [];
@@ -825,6 +848,10 @@ var mainVueModel = new Vue({
 
                     this.masterOrderLine.allAvailableProjections[uuid] = [];
                     this.masterOrderLine.allAvailableFormats[uuid] = [];
+                    this.masterOrderLine.allSelectedCoordinates[uuid] = "";
+                    this.masterOrderLine.allDefaultProjections[uuid] = [];
+                    this.masterOrderLine.allDefaultFormats[uuid] = [];
+
 
                     if (orderLines[key].capabilities._links !== undefined && orderLines[key].capabilities._links.length) {
                         orderLines[key].capabilities._links.forEach(function (link) {
@@ -851,10 +878,14 @@ var mainVueModel = new Vue({
                                 }.bind(this))
                             }
                             if (link.rel == "http://rel.geonorge.no/download/projection") {
-                                orderLines[key].defaultProjections = getJsonData(link.href);
+                                var defaultProjections = getJsonData(link.href)
+                                orderLines[key].defaultProjections = defaultProjections;
+                                this.masterOrderLine.allDefaultProjections[uuid] = defaultProjections;
                             }
                             if (link.rel == "http://rel.geonorge.no/download/format") {
-                                orderLines[key].defaultFormats = getJsonData(link.href);
+                                var defaultFormats = getJsonData(link.href);
+                                orderLines[key].defaultFormats = defaultFormats;
+                                this.masterOrderLine.allDefaultFormats[uuid] = defaultFormats;
                             }
                         }.bind(this))
                     }
@@ -913,6 +944,24 @@ var mainVueModel = new Vue({
         'masterOrderLine': MasterOrderLine
     },
     methods: {
+        isAllreadyAdded: function (array, item, propertyToCompare) {
+            var isAllreadyAdded = {
+                added: false,
+                position: 0
+            };
+            if (array.length) {
+                array.forEach(function (arrayItem, index) {
+                    if (this.readProperty(arrayItem, propertyToCompare) == this.readProperty(item, propertyToCompare)) {
+                        isAllreadyAdded.added = true
+                        isAllreadyAdded.position = index;
+                    };
+                }.bind(this))
+            }
+            return isAllreadyAdded;
+        },
+        readProperty: function (obj, prop) {
+            return obj[prop];
+        },
         isSupportedType: function (areaType) {
             var isSupportedType = false;
             var supportedAreaTypes = ["fylke", "kommune", "landsdekkende"];
@@ -969,7 +1018,6 @@ var mainVueModel = new Vue({
                 this.masterOrderLine.allOrderLineErrors[orderLine]["format"] = [];
                 this.masterOrderLine.allOrderLineErrors[orderLine]["area"] = [];
                 if (this.masterOrderLine.allSelectedAreas[orderLine] !== undefined && this.masterOrderLine.allSelectedAreas[orderLine].length) {
-
 
                     this.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
                         selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLine);
@@ -1062,9 +1110,113 @@ var mainVueModel = new Vue({
             }.bind(this));
             $('#remove-all-items-modal').modal('hide');
         },
-        selectFromMap: function (orderItem) {
-            loadMap(orderItem);
+
+        selectFromMap: function (orderItem, mapType) {
+            orderItem.showMap = true;
+            var fixed = orderItem.capabilities.supportsGridSelection;
+            if (mapType == "grid") { this.loadGridMap(orderItem) }
+            else if (mapType == "polygon") { this.loadPolygonMap(orderItem) }
             $('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
+        },
+
+        loadGridMap: function (orderItem) {
+        },
+        loadPolygonMap: function (orderItem) {
+            var coverageParams = "";
+            $.ajax({
+                url: '/api/getdata/' + orderItem.metadata.uuid,
+                type: "GET",
+                async: false,
+                success: function (result) {
+                    coverageParams = result.CoverageUrl;
+                    if (typeof coverageParams == 'undefined') {
+                        orderItem.mapData.coverageParams = coverageParams;
+                    }
+                }
+            });
+            orderItem.mapIsLoaded = true;
+            orderItem.mapData.defaultConfigurations = {
+                center_latitude: "7226208",
+                center_longitude: "378604",
+                grid_folder: "/sites/all/modules/custom/kms_widget/grid/",
+                coordinatSystem: "32633",
+                selection_type: "3525",
+                service_name: "fylker-utm32",
+                zoom_level: "4",
+            }
+
+            window.addEventListener('message', function (e) {
+                $("#setcoordinates").attr("disabled", true);
+                if (e !== undefined && e.data !== undefined && typeof (e.data) == "string") {
+                    var msg = JSON.parse(e.data);
+                    if (msg.type === "mapInitialized") {
+                        iframeMessage = {
+                            "cmd": "setCenter",
+                            "x": orderItem.mapData.defaultConfigurations.center_longitude,
+                            "y": orderItem.mapData.defaultConfigurations.center_latitude,
+                            "zoom": orderItem.mapData.defaultConfigurations.zoom_level
+                        };
+                        var iframeElement = document.getElementById(orderItem.metadata.uuid + "-iframe").contentWindow;
+                        iframeElement.postMessage(JSON.stringify(iframeMessage), '*');
+                    }
+                    else if (msg.cmd === "setVisible") { return }
+                    else {
+                        var reslist = document.getElementById('result');
+                        if (msg.feature != null) {
+
+                            var coordinatesString = msg.feature.geometry.coordinates.toString();
+                            coordinatesString = coordinatesString.replace(/,/g, " ");
+                            var canDownload = {
+                                "metadataUuid": orderItem.metadata.uuid,
+                                "coordinates": coordinatesString,
+                                "coordinateSystem": orderItem.mapData.defaultConfigurations.coordinateSystem
+                            };
+
+                            this.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid] = coordinatesString;
+
+                            var polygonArea = {
+                                "name": "Valgt fra kart",
+                                "type": "polygon",
+                                "code": "Kart",
+                                "isLocalSelected": true,
+                                "formats": orderItem.defaultFormats,
+                                "projections": orderItem.defaultProjections,
+                                "coordinates": coordinatesString,
+                                "coordinatesystem": orderItem.mapData.defaultConfigurations.coordinateSystem
+                            }
+
+                            var isAllreadyAddedInfo = this.isAllreadyAdded(this.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid], polygonArea, "code");
+                            if (!isAllreadyAddedInfo.added) {
+                                this.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(polygonArea);
+                            }
+
+                            this.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
+                            this.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
+
+
+                            // Set coordinates for orderline in order request
+                            this.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
+                                if (orderRequest.metadataUuid == orderItem.metadata.uuid) {
+                                    orderRequest.coordinates = this.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid];
+                                }
+                            }.bind(this))
+
+                            this.$forceUpdate();
+
+                            // IF CAN DOWNLOAD
+                            //orderItem.coordinates = coordinatesString;
+
+                        }
+
+
+                    }
+                }
+
+
+
+            }.bind(this));
+
+            $("#container").html("<iframe src='@Html.SecureNorgeskartUrl()select.html" + coverageParams + "' id='iframe' name='iframe'></iframe>");
         },
 
 
