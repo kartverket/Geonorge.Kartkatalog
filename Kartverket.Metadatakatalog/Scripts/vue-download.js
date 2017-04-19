@@ -5,6 +5,13 @@ function showAlert(message, colorClass) {
     $('#feedback-alert').show();
 }
 
+function clearAlertMessage() {
+    $('#feedback-alert .message').html("");
+}
+
+function hideAlert() {
+    $('#feedback-alert').hide();
+}
 
 $(document).on('focus', '.custom-select-list-input', function () {
     var customSelectListElement = $(this).closest('.custom-select-list');
@@ -1166,57 +1173,80 @@ var mainVueModel = new Vue({
 
                             var coordinatesString = msg.feature.geometry.coordinates.toString();
                             coordinatesString = coordinatesString.replace(/,/g, " ");
-                            var canDownload = {
+                            var canDownloadData = {
                                 "metadataUuid": orderItem.metadata.uuid,
                                 "coordinates": coordinatesString,
                                 "coordinateSystem": orderItem.mapData.defaultConfigurations.coordinateSystem
                             };
 
-                            this.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid] = coordinatesString;
-
-                            var polygonArea = {
-                                "name": "Valgt fra kart",
-                                "type": "polygon",
-                                "code": "Kart",
-                                "isLocalSelected": true,
-                                "formats": orderItem.defaultFormats,
-                                "projections": orderItem.defaultProjections,
-                                "coordinates": coordinatesString,
-                                "coordinatesystem": orderItem.mapData.defaultConfigurations.coordinateSystem
-                            }
-
-                            var isAllreadyAddedInfo = this.isAllreadyAdded(this.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid], polygonArea, "code");
-                            if (!isAllreadyAddedInfo.added) {
-                                this.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(polygonArea);
-                            }
-
-                            this.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
-                            this.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
-
-
-                            // Set coordinates for orderline in order request
-                            this.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
-                                if (orderRequest.metadataUuid == orderItem.metadata.uuid) {
-                                    orderRequest.coordinates = this.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid];
-                                }
-                            }.bind(this))
-
-                            this.$forceUpdate();
 
                             // IF CAN DOWNLOAD
                             //orderItem.coordinates = coordinatesString;
+                            var urlCanDownload = (orderItem.metadata.canDownloadUrl !== undefined) ? orderItem.metadata.canDownloadUrl : false;
+                            if (urlCanDownload) {
+                                $.ajax({
+                                    url: urlCanDownload,
+                                    type: "POST",
+                                    dataType: 'json',
+                                    data: JSON.stringify(canDownloadData),
+                                    contentType: "application/json",
+                                    async: true,
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        //Ignore error
+                                    },
+                                    beforeSend: function () {
+                                        showLoadingAnimation("Sjekker størrelse for valgt område");
+                                    },
+                                    success: function (data) {
+                                        if (data !== null) {
+                                            if (!data.canDownload) {
+                                                clearAlertMessage();
+                                                showAlert("Området er for stort til å laste ned, vennligst velg mindre område", "danger");
+                                            } else {
+                                                clearAlertMessage();
+                                                hideAlert();
+
+                                                this.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid] = coordinatesString;
+                                                var polygonArea = {
+                                                    "name": "Valgt fra kart",
+                                                    "type": "polygon",
+                                                    "code": "Kart",
+                                                    "isLocalSelected": true,
+                                                    "formats": orderItem.defaultFormats,
+                                                    "projections": orderItem.defaultProjections,
+                                                    "coordinates": coordinatesString,
+                                                    "coordinatesystem": orderItem.mapData.defaultConfigurations.coordinateSystem
+                                                }
+
+                                                var isAllreadyAddedInfo = this.isAllreadyAdded(this.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid], polygonArea, "code");
+                                                if (!isAllreadyAddedInfo.added) {
+                                                    this.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(polygonArea);
+                                                }
+
+                                                this.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
+                                                this.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
+
+
+                                                // Set coordinates for orderline in order request
+                                                this.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
+                                                    if (orderRequest.metadataUuid == orderItem.metadata.uuid) {
+                                                        orderRequest.coordinates = this.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid];
+                                                    }
+                                                }.bind(this))
+
+                                                this.$forceUpdate();
+                                            }
+                                        }
+                                        hideLoadingAnimation();
+                                    }.bind(this),
+                                });
+                            }
 
                         }
-
-
                     }
                 }
-
-
-
             }.bind(this));
 
-            $("#container").html("<iframe src='@Html.SecureNorgeskartUrl()select.html" + coverageParams + "' id='iframe' name='iframe'></iframe>");
         },
 
 
