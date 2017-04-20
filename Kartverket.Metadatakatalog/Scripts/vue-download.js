@@ -428,28 +428,83 @@ var OrderLine = {
             $('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
         },
 
+        isJson: function (str) {
+            try {
+                JSON.parse(str);
+            } catch (e) {
+                return false;
+            }
+            return true;
+        },
+
         loadGridMap: function (orderItem) {
+            orderItem.mapIsLoaded = true;
             orderItem.mapData.defaultConfigurations = {
                 "service_name": orderItem.capabilities.mapSelectionLayer,
                 "center_longitude": "378604",
                 "center_latitude": "7226208",
                 "zoom_level": "3"
             }
+
             window.addEventListener('message', function (e) {
                 if (e !== undefined && e.data !== undefined && typeof (e.data) == "string") {
                     var msg = JSON.parse(e.data);
                     if (msg.type === "mapInitialized") {
+
+                        var iframeElement = document.getElementById(orderItem.metadata.uuid + "-iframe").contentWindow;
+
                         iframeMessage = {
                             "cmd": "setCenter",
                             "x": orderItem.mapData.defaultConfigurations.center_longitude,
                             "y": orderItem.mapData.defaultConfigurations.center_latitude,
                             "zoom": orderItem.mapData.defaultConfigurations.zoom_level
                         };
-                        var iframeElement = document.getElementById(orderItem.metadata.uuid + "-iframe").contentWindow;
                         iframeElement.postMessage(JSON.stringify(iframeMessage), '*');
+
+                        iframeMessage = {
+                            "cmd": "setVisible",
+                            "id": orderItem.mapData.defaultConfigurations.service_name
+                        };
+                        iframeElement.postMessage(JSON.stringify(iframeMessage), '*');
+
+                    } else {
+                        if (msg.cmd === "setVisible") return;
+                        var obj = msg;
+
+                        if (this.isJson(msg)) {
+                            var data = JSON.parse(msg);
+                            if (data["type"] == "mapInitialized") return;
+
+                            var areaname = data["attributes"]["n"];
+
+
+
+                            if (data["cmd"] == "featureSelected") {
+                                for (areaType in this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid]) {
+                                    this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][areaType].forEach(function (availableArea) {
+                                        if (availableArea.code == areaname) {
+                                            availableArea.isLocalSelected = true;
+                                        }
+                                    })
+                                }
+                            }
+                            if (data["cmd"] == "featureUnselected") {
+                                for (areaType in this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid]) {
+                                    this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][areaType].forEach(function (availableArea) {
+                                        if (availableArea.code == areaname) {
+                                            availableArea.isLocalSelected = false;
+                                        }
+                                    })
+                                }
+                            }
+                            this.updateSelectedAreas();
+                            this.updateAvailableProjections();
+                            this.updateAvailableFormats();
+                            this.$root.validateAreas();
+                        }
                     }
                 }
-            });
+            }.bind(this));
         },
         loadPolygonMap: function (orderItem) {
             var coverageParams = "";
@@ -546,7 +601,7 @@ var OrderLine = {
                                                 if (!isAllreadyAddedInfo.added) {
                                                     this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(polygonArea);
                                                 } else {
-                                                    console.log(this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid][isAllreadyAddedInfo.position]);
+                                                    this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid][isAllreadyAddedInfo.position] = polygonArea;
 
                                                 }
 
@@ -565,6 +620,7 @@ var OrderLine = {
 
                                                 this.updateAvailableProjections();
                                                 this.updateAvailableFormats();
+                                                this.$root.validateAreas();
                                             }
                                         }
                                         hideLoadingAnimation();
@@ -906,7 +962,6 @@ var mainVueModel = new Vue({
 
         orderRequests: function () {
             var orderRequests = {};
-
             if (this.orderLines.length) {
                 this.orderLines.forEach(function (orderLine) {
                     if (orderRequests[orderLine.metadata.orderDistributionUrl] == undefined) {

@@ -62,9 +62,17 @@
             </div>
         </div>
         <div v-if="supportsPolygonSelection && $parent.mapIsLoaded">
-
             <div v-if="!master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="false">
             </div>
+        </div>
+        <div v-if="supportsGridSelection && $parent.mapIsLoaded">
+            <div v-if="!master"
+                 v-show="$parent.showMap" is="mapSelect"
+                 v-bind:map-data="$parent.mapData"
+                 v-bind:map-src="'@Html.SecureNorgeskartUrl()' + 'nedlasting.html#' + $parent.mapData.defaultConfigurations.zoom_level + '/' + $parent.mapData.defaultConfigurations.center_longitude + '/' + $parent.mapData.defaultConfigurations.center_latitude + '/' + $parent.mapData.defaultConfigurations.service_name"
+                 v-bind:master="false">
+            </div>
+
         </div>
     </div>
 </script>
