@@ -16,11 +16,11 @@
     <div class="map">
         <!-- <iframe src='@*Html.SecureNorgeskartUrl()select.html" + coverageParams + "*@' id='iframe' name='iframe'></iframe>-->
         @* "<iframe src='@Html.SecureNorgeskartUrl()nedlasting.html#" + conf.zoom_level + "/" + conf.center_longitude + "/" + conf.center_latitude + "/+" + conf.service_name + "' id='iframe' name='iframe'></iframe>" *@
-        <div class="custom-modal" tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
+        <div class="custom-modal">
             <div class="custom-modal-container">
-                <iframe v-bind:id="$parent.metadata.uuid + '-iframe'" v-bind:src="mapSrc" name="iframe" style="height:100%"></iframe>
+                <iframe v-bind:id="$parent.$parent.metadata.uuid + '-iframe'" v-bind:src="mapSrc" name="iframe" style="height:100%"></iframe>
                 <div class="modal-footer">
-                    <button type="button" v-on:click="$parent.showMap = false" class="btn btn-default" data-dismiss="modal">Lukk</button>
+                    <button type="button" v-on:click="$parent.$parent.showMap = false" class="btn btn-default" data-dismiss="modal">Lukk</button>
                 </div>
             </div>
         </div>
@@ -33,30 +33,37 @@
 
 <!-- Area select -->
 <script type="text/x-template" id="areas-template">
-    <div class="custom-select-list">
-        <div class="custom-select-list-input-container">
-            <span v-for="area in selected" v-if="master || area.isLocalSelected" class="custom-select-list-selected">
-                {{ area.name }}
-                <span v-if="!area.hasSelectedProjections" data-toggle="tooltip" data-placement="bottom" title="Støttet projeksjon er ikke valgt" class="projection-warning-icon"></span>
-                <span v-if="!area.hasSelectedFormats" data-toggle="tooltip" data-placement="bottom" title="Støttet format er ikke valgt" class="format-warning-icon"></span>
-                <span v-on:click="removeSelectedArea(area)" class="custom-select-list-remove-button"></span>
-            </span>
-            <input v-on:keyup="$parent.filterOptionList('area-option-list', $event.target.value)" type="text" class="custom-select-list-input" />
-        </div>
-        <div class="custom-select-list-dropdown">
-            <div class="custom-select-list-dropdown-content">
-                <div v-for="(areas, areaType) in available" class="custom-select-list-option-group">
-                    <div v-if="!master || $root.isSupportedType(areaType)" v-show="areas.length">
-                        <p class="custom-select-list-option-group-name">{{ areaType }}</p>
-                        <ul class="custom-select-list-options area-option-list">
-                            <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': area.isLocalSelected}" v-for="area in areas">{{ area.name }}</li>
-                        </ul>
+    <div>
+        <div class="custom-select-list">
+            <div class="custom-select-list-input-container">
+                <span v-for="area in selected" v-if="master || area.isLocalSelected" class="custom-select-list-selected">
+                    {{ area.name }}
+                    <span v-if="!area.hasSelectedProjections" data-toggle="tooltip" data-placement="bottom" title="Støttet projeksjon er ikke valgt" class="projection-warning-icon"></span>
+                    <span v-if="!area.hasSelectedFormats" data-toggle="tooltip" data-placement="bottom" title="Støttet format er ikke valgt" class="format-warning-icon"></span>
+                    <span v-on:click="removeSelectedArea(area)" class="custom-select-list-remove-button"></span>
+                </span>
+                <input v-on:keyup="$parent.filterOptionList('area-option-list', $event.target.value)" type="text" class="custom-select-list-input" />
+            </div>
+            <div class="custom-select-list-dropdown">
+                <div class="custom-select-list-dropdown-content">
+                    <div v-for="(areas, areaType) in available" class="custom-select-list-option-group">
+                        <div v-if="!master || $root.isSupportedType(areaType)" v-show="areas.length">
+                            <p class="custom-select-list-option-group-name">{{ areaType }}</p>
+                            <ul class="custom-select-list-options area-option-list">
+                                <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': area.isLocalSelected}" v-for="area in areas">{{ area.name }}</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
+                <div class="custom-select-list-dropdown-additional-options">
+                    <a v-show="supportsPolygonSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
+                    <a v-show="supportsGridSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'grid')" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
+                </div>
             </div>
-            <div class="custom-select-list-dropdown-additional-options">
-                <a v-show="this.supportsPolygonSelection" class="btn" v-on:click="$root.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
-                <a v-show="this.supportsGridSelection" class="btn" v-on:click="$root.selectFromMap($parent, 'grid')" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
+        </div>
+        <div v-if="supportsPolygonSelection && $parent.mapIsLoaded">
+
+            <div v-if="!master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="false">
             </div>
         </div>
     </div>
@@ -160,10 +167,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div v-if="capabilities.supportsPolygonSelection && mapIsLoaded">
-            <div v-show="showMap" is="mapSelect" v-bind:map-data="mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="false">
             </div>
         </div>
     </div>

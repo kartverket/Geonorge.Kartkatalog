@@ -91,6 +91,12 @@ $(window).load(function () {
     hideLoadingAnimation();
 });
 
+var MapSelect = {
+    props: ['mapData', 'mapSrc', 'master'],
+    template: '#map-template',
+}
+
+
 var Areas = {
     props: ['available', 'selected', 'master'],
     template: '#areas-template',
@@ -160,6 +166,9 @@ var Areas = {
             this.$root.validateAreas();
 
         }
+    },
+    components: {
+        'mapSelect': MapSelect
     }
 };
 
@@ -246,11 +255,6 @@ var Formats = {
         }
     }
 };
-
-var MapSelect = {
-    props: ['mapData', 'mapSrc', 'master'],
-    template: '#map-template',
-}
 
 
 
@@ -415,14 +419,171 @@ var OrderLine = {
             }
 
             this.$parent.masterOrderLine.allSelectedFormats[orderLineUuid] = selectedFormats;
-        }
+        },
+        selectFromMap: function (orderItem, mapType) {
+            orderItem.showMap = true;
+            var fixed = orderItem.capabilities.supportsGridSelection;
+            if (mapType == "grid") { this.loadGridMap(orderItem) }
+            else if (mapType == "polygon") { this.loadPolygonMap(orderItem) }
+            $('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
+        },
+
+        loadGridMap: function (orderItem) {
+            orderItem.mapData.defaultConfigurations = {
+                "service_name": orderItem.capabilities.mapSelectionLayer,
+                "center_longitude": "378604",
+                "center_latitude": "7226208",
+                "zoom_level": "3"
+            }
+            window.addEventListener('message', function (e) {
+                if (e !== undefined && e.data !== undefined && typeof (e.data) == "string") {
+                    var msg = JSON.parse(e.data);
+                    if (msg.type === "mapInitialized") {
+                        iframeMessage = {
+                            "cmd": "setCenter",
+                            "x": orderItem.mapData.defaultConfigurations.center_longitude,
+                            "y": orderItem.mapData.defaultConfigurations.center_latitude,
+                            "zoom": orderItem.mapData.defaultConfigurations.zoom_level
+                        };
+                        var iframeElement = document.getElementById(orderItem.metadata.uuid + "-iframe").contentWindow;
+                        iframeElement.postMessage(JSON.stringify(iframeMessage), '*');
+                    }
+                }
+            });
+        },
+        loadPolygonMap: function (orderItem) {
+            var coverageParams = "";
+            $.ajax({
+                url: '/api/getdata/' + orderItem.metadata.uuid,
+                type: "GET",
+                async: false,
+                success: function (result) {
+                    coverageParams = result.CoverageUrl;
+                    if (typeof coverageParams == 'undefined') {
+                        orderItem.mapData.coverageParams = coverageParams;
+                    }
+                }
+            });
+            orderItem.mapIsLoaded = true;
+            orderItem.mapData.defaultConfigurations = {
+                center_latitude: "7226208",
+                center_longitude: "378604",
+                grid_folder: "/sites/all/modules/custom/kms_widget/grid/",
+                coordinateSystem: "32633",
+                selection_type: "3525",
+                service_name: "fylker-utm32",
+                zoom_level: "4",
+            }
+
+            window.addEventListener('message', function (e) {
+                if (e !== undefined && e.data !== undefined && typeof (e.data) == "string") {
+                    var msg = JSON.parse(e.data);
+                    if (msg.type === "mapInitialized") {
+                        iframeMessage = {
+                            "cmd": "setCenter",
+                            "x": orderItem.mapData.defaultConfigurations.center_longitude,
+                            "y": orderItem.mapData.defaultConfigurations.center_latitude,
+                            "zoom": orderItem.mapData.defaultConfigurations.zoom_level
+                        };
+                        var iframeElement = document.getElementById(orderItem.metadata.uuid + "-iframe").contentWindow;
+                        iframeElement.postMessage(JSON.stringify(iframeMessage), '*');
+                    }
+                    else if (msg.cmd === "setVisible") { return }
+                    else {
+                        var reslist = document.getElementById('result');
+                        if (msg.feature != null) {
+
+                            var coordinatesString = msg.feature.geometry.coordinates.toString();
+                            coordinatesString = coordinatesString.replace(/,/g, " ");
+                            var canDownloadData = {
+                                "metadataUuid": orderItem.metadata.uuid,
+                                "coordinates": coordinatesString,
+                                "coordinateSystem": orderItem.mapData.defaultConfigurations.coordinateSystem
+                            };
+                            var urlCanDownload = (orderItem.metadata.canDownloadUrl !== undefined) ? orderItem.metadata.canDownloadUrl : false;
+                            if (urlCanDownload) {
+                                $.ajax({
+                                    url: urlCanDownload,
+                                    type: "POST",
+                                    dataType: 'json',
+                                    data: JSON.stringify(canDownloadData),
+                                    contentType: "application/json",
+                                    async: true,
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        //Ignore error
+                                    },
+                                    beforeSend: function () {
+                                        showLoadingAnimation("Sjekker størrelse for valgt område");
+                                    },
+                                    success: function (data) {
+                                        if (data !== null) {
+                                            if (!data.canDownload) {
+                                                clearAlertMessage();
+                                                showAlert("Området er for stort til å laste ned, vennligst velg mindre område", "danger");
+                                            } else {
+                                                clearAlertMessage();
+                                                hideAlert();
+
+                                                this.$root.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid] = coordinatesString;
+                                                var polygonArea = {
+                                                    "name": "Valgt fra kart",
+                                                    "type": "polygon",
+                                                    "code": "Kart",
+                                                    "isLocalSelected": true,
+                                                    "formats": orderItem.defaultFormats,
+                                                    "projections": orderItem.defaultProjections,
+                                                    "coordinates": coordinatesString,
+                                                    "coordinatesystem": orderItem.mapData.defaultConfigurations.coordinateSystem
+                                                }
+
+                                                polygonArea.allAvailableProjections = {};
+                                                polygonArea.allAvailableProjections[orderItem.metadata.uuid] = orderItem.defaultProjections;
+
+                                                polygonArea.allAvailableFormats = {};
+                                                polygonArea.allAvailableFormats[orderItem.metadata.uuid] = orderItem.defaultFormats;
+
+                                                var isAllreadyAddedInfo = this.isAllreadyAdded(this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid], polygonArea, "code");
+                                                if (!isAllreadyAddedInfo.added) {
+                                                    this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(polygonArea);
+                                                } else {
+                                                    console.log(this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid][isAllreadyAddedInfo.position]);
+
+                                                }
+
+                                                this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
+                                                this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
+
+
+                                                // Set coordinates for orderline in order request
+                                                this.$root.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
+                                                    if (orderRequest.metadataUuid == orderItem.metadata.uuid) {
+                                                        orderRequest.coordinates = this.$root.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid];
+                                                    }
+                                                }.bind(this))
+
+                                                this.$root.$forceUpdate();
+
+                                                this.updateAvailableProjections();
+                                                this.updateAvailableFormats();
+                                            }
+                                        }
+                                        hideLoadingAnimation();
+                                    }.bind(this),
+                                });
+                            }
+
+                        }
+                    }
+                }
+            }.bind(this));
+
+        },
 
     },
     components: {
         'areas': Areas,
         'projections': Projections,
-        'formats': Formats,
-        'mapSelect': MapSelect
+        'formats': Formats
     },
 };
 
@@ -1117,139 +1278,6 @@ var mainVueModel = new Vue({
             }.bind(this));
             $('#remove-all-items-modal').modal('hide');
         },
-
-        selectFromMap: function (orderItem, mapType) {
-            orderItem.showMap = true;
-            var fixed = orderItem.capabilities.supportsGridSelection;
-            if (mapType == "grid") { this.loadGridMap(orderItem) }
-            else if (mapType == "polygon") { this.loadPolygonMap(orderItem) }
-            $('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
-        },
-
-        loadGridMap: function (orderItem) {
-        },
-        loadPolygonMap: function (orderItem) {
-            var coverageParams = "";
-            $.ajax({
-                url: '/api/getdata/' + orderItem.metadata.uuid,
-                type: "GET",
-                async: false,
-                success: function (result) {
-                    coverageParams = result.CoverageUrl;
-                    if (typeof coverageParams == 'undefined') {
-                        orderItem.mapData.coverageParams = coverageParams;
-                    }
-                }
-            });
-            orderItem.mapIsLoaded = true;
-            orderItem.mapData.defaultConfigurations = {
-                center_latitude: "7226208",
-                center_longitude: "378604",
-                grid_folder: "/sites/all/modules/custom/kms_widget/grid/",
-                coordinatSystem: "32633",
-                selection_type: "3525",
-                service_name: "fylker-utm32",
-                zoom_level: "4",
-            }
-
-            window.addEventListener('message', function (e) {
-                $("#setcoordinates").attr("disabled", true);
-                if (e !== undefined && e.data !== undefined && typeof (e.data) == "string") {
-                    var msg = JSON.parse(e.data);
-                    if (msg.type === "mapInitialized") {
-                        iframeMessage = {
-                            "cmd": "setCenter",
-                            "x": orderItem.mapData.defaultConfigurations.center_longitude,
-                            "y": orderItem.mapData.defaultConfigurations.center_latitude,
-                            "zoom": orderItem.mapData.defaultConfigurations.zoom_level
-                        };
-                        var iframeElement = document.getElementById(orderItem.metadata.uuid + "-iframe").contentWindow;
-                        iframeElement.postMessage(JSON.stringify(iframeMessage), '*');
-                    }
-                    else if (msg.cmd === "setVisible") { return }
-                    else {
-                        var reslist = document.getElementById('result');
-                        if (msg.feature != null) {
-
-                            var coordinatesString = msg.feature.geometry.coordinates.toString();
-                            coordinatesString = coordinatesString.replace(/,/g, " ");
-                            var canDownloadData = {
-                                "metadataUuid": orderItem.metadata.uuid,
-                                "coordinates": coordinatesString,
-                                "coordinateSystem": orderItem.mapData.defaultConfigurations.coordinateSystem
-                            };
-
-
-                            // IF CAN DOWNLOAD
-                            //orderItem.coordinates = coordinatesString;
-                            var urlCanDownload = (orderItem.metadata.canDownloadUrl !== undefined) ? orderItem.metadata.canDownloadUrl : false;
-                            if (urlCanDownload) {
-                                $.ajax({
-                                    url: urlCanDownload,
-                                    type: "POST",
-                                    dataType: 'json',
-                                    data: JSON.stringify(canDownloadData),
-                                    contentType: "application/json",
-                                    async: true,
-                                    error: function (jqXHR, textStatus, errorThrown) {
-                                        //Ignore error
-                                    },
-                                    beforeSend: function () {
-                                        showLoadingAnimation("Sjekker størrelse for valgt område");
-                                    },
-                                    success: function (data) {
-                                        if (data !== null) {
-                                            if (!data.canDownload) {
-                                                clearAlertMessage();
-                                                showAlert("Området er for stort til å laste ned, vennligst velg mindre område", "danger");
-                                            } else {
-                                                clearAlertMessage();
-                                                hideAlert();
-
-                                                this.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid] = coordinatesString;
-                                                var polygonArea = {
-                                                    "name": "Valgt fra kart",
-                                                    "type": "polygon",
-                                                    "code": "Kart",
-                                                    "isLocalSelected": true,
-                                                    "formats": orderItem.defaultFormats,
-                                                    "projections": orderItem.defaultProjections,
-                                                    "coordinates": coordinatesString,
-                                                    "coordinatesystem": orderItem.mapData.defaultConfigurations.coordinateSystem
-                                                }
-
-                                                var isAllreadyAddedInfo = this.isAllreadyAdded(this.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid], polygonArea, "code");
-                                                if (!isAllreadyAddedInfo.added) {
-                                                    this.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(polygonArea);
-                                                }
-
-                                                this.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
-                                                this.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
-
-
-                                                // Set coordinates for orderline in order request
-                                                this.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
-                                                    if (orderRequest.metadataUuid == orderItem.metadata.uuid) {
-                                                        orderRequest.coordinates = this.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid];
-                                                    }
-                                                }.bind(this))
-
-                                                this.$forceUpdate();
-                                            }
-                                        }
-                                        hideLoadingAnimation();
-                                    }.bind(this),
-                                });
-                            }
-
-                        }
-                    }
-                }
-            }.bind(this));
-
-        },
-
-
 
         orderItemHasCoordinates: function (orderItem) {
             return (orderItem.codelists.coordinates !== undefined) ? true : false;
