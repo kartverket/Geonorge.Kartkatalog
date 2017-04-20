@@ -1,7 +1,5 @@
 ﻿@using Kartverket.Metadatakatalog.Models.ViewModels
-@using Resources
 @using Kartverket.Metadatakatalog.Helpers
-@using System;
 @model SearchViewModel
 
 @{
@@ -35,6 +33,75 @@
         </div>
     </div>
 </section>
+
+@Html.Partial("_UnderlayingDistributions")
+
+
+@*Template for a table row*@
+<script type="text/x-template" id="resultItemRow">
+    <div>
+        <div v-bind:style="{ backgroundColor: bgcolor }" style="padding: 5px 0px 5px;">
+            <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-sm-1" title="Vis underliggende distribusjoner">
+                <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
+            </div>
+            <div class="col-sm-4 search-results-title">
+                @*Tittel*@
+                <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                    <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+                </a>
+                @*Beskrivelse*@
+                <div class="search-results-description">
+                    <a v-bind:href="organizationUrl" class="show-loading-animation" v-bind:data-loading-message="'Henter innhold fra ' +  resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                        {{resultItem.Organization}}
+                    </a>
+                    <p>
+                        {{resultItem.Abstract}}
+                    </p>
+                    <p>
+                        Tilgjengelig som:
+                        <span v-bind:title="'Tilgjengelig som ' + resultItem.DistributionType" style="width:auto" class="label label-tjeneste">{{resultItem.DistributionType}}</span>
+                    </p>
+                </div>
+            </div>
+
+            @*Distribusjonstype *@
+            <div class="col-sm-2 search-results-type">
+                <span v-bind:title="resultItem.DistributionType" data-toggle='tooltip' data-placement='bottom' class="label label-tjeneste" style="width:auto">{{resultItem.DistributionType}}</span>
+            </div>
+
+            @*Organisasjon*@
+            <div class="col-sm-3 search-results-organization">
+                <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                    {{resultItem.Organization}}
+                </a>
+            </div>
+
+            @*Åpne data*@
+            <div class="col-sm-1 search-results-action-icons search-results-open-data">
+                <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+            </div>
+
+            <div class="col-sm-1 search-results-action-buttons pull-right">
+                @*Kart*@
+                <a v-bind:id="mapLink.mapLinkButtonId" v-bind:href="mapLink.href" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
+                    <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
+                </a>
+            </div>
+
+            @*Kart*@
+            <div class="col-xs-1 search-results-action-icons action-show-map">
+                <a v-bind:id="mapLink.mapLinkId" v-bind:href="mapLink.href" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                    <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
+                </a>
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+        <div v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
+
+        </div>
+    </div>
+</script>
 
 @helper DisplayPaginationBottom()
 {
@@ -78,74 +145,6 @@
 }
 
 
-
-@section scripts {
-    <script>
-        function showAlert(message, colorClass) {
-            $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
-            $('#feedback-alert .message').html(message);
-            $('#feedback-alert').show();
-        }
-        $(document).ready(function () {
-            $("#orderby").change(
-                 function () {
-                     location.href = $(this).val();
-                 }
-             );
-        });
-
-
-        $(document).ready(function () {
-            @if (Html.DownloadServiceEnabled())
-            {
-            <text>
-            if (localStorage.getItem("orderItems") != null) {
-                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
-                var orderitemCount = storedOrderItems.length;
-                if (orderitemCount > 0) {
-                    $('#orderitem-count').text(orderitemCount);
-                    $('#orderitem-count-text').text(' datasett');
-                    updateAllCartButtons(storedOrderItems);
-                } else {
-                    $('#orderitem-count').text('');
-                    $('#orderitem-count-text').text('Kurven er tom');
-                }
-            } else {
-                $('#orderitem-count').text('');
-                $('#orderitem-count-text').text('Kurven er tom');
-            }
-            </text>
-            }
-        });
-
-
-        $(window).load(function () {
-            @if (Html.DownloadServiceEnabled())
-            {
-         <text>
-            if (typeof Storage !== "undefined") {
-
-                console.log('window.localStorage is available!');
-                var orderItems = [];
-                $('.add-to-cart-btn:not(.prevent-action)').click(function () {
-                    addToCartButtonClick($(this));
-                });
-            } else {
-                console.log('no native support for HTML5 storage :(');
-            }
-
-            </text>
-            }
-
-        });
-    </script>
-}
-
-@*
-    <article class="row">
-        @Html.Partial("_SearchBarPartial", Model)
-    </article>
-*@
 
 @{
 
@@ -237,180 +236,31 @@
 <span class="separator-small separator-gray margin-bottom-10"></span>
 
 <div class="row">
-    <div class="col-md-9">
+    <div id="searchResultTable" class="col-md-9">
         @if (Model.Result != null)
-        {
+            {
             <div id="tableView" class="search-results">
                 <div class="row search-results-table-heading">
-                    <div class="col-sm-4 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-4 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-5 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
+                    <div class="col-sm-5 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
 
                     <div class="col-sm-2"><p>Type</p></div>
 
                     <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Les mer</p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Kart</p></div>
                 </div>
+
                 <div class="menu-separator search-results-table-heading"></div>
-                @foreach (var item in Model.Result.Items)
-                {
-                    <div class="row result-row metadata">
+                <div v-for="item in viewModel.Result.Items" style="border-bottom: 1px rgb(207, 207, 208) solid;">
+                    <div is="resultItem" v-bind:result-item="item"></div>
+                </div>
 
-                        <div class="col-sm-1 search-results-logo">
-                            @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
-                            {
-                                Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
-                                string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.GetOrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold">
-                                    <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
-                                </a>
-                            }
-                        </div>
-
-                        <div class="col-sm-4 search-results-title">
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" class="show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
-                                <p class="role-button search-results-name" role="button">@item.Title</p>
-                            </a>
-                            <div class="search-results-description">
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.GetOrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
-                                    @if (item.Organization != null)
-                                    {
-                                        <p>  @item.Organization</p>
-                                    }
-
-                                </a>
-                                <p>
-                                    @if (item.Abstract != null)
-                                    {
-                                        if (item.Abstract.Length > 250)
-                                        {
-                                            @item.Abstract.Substring(0, 251)<text>...</text>
-                                        }
-                                        else
-                                        {
-                                            @item.Abstract
-                                        }
-                                    }
-
-                                </p>
-                                <p>
-                                    Tilgjengelig som:
-                                    <span title="Tilgjengelig som @item.DistributionType" style="width:auto" class="label label-tjeneste">@item.DistributionType</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 search-results-type">
-                            <span title="@item.DistributionType" class="label label-tjeneste" style="width:auto">@item.DistributionType</span>
-                        </div>
-                        <div class="col-sm-3 search-results-organization">
-                            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.GetOrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
-                                @if (item.Organization != null)
-                                {
-                                    <p>  @item.Organization</p>
-                                }
-
-                            </a>
-                        </div>
-
-                        <div class="col-sm-1 search-results-action-icons search-results-open-data">
-                            @if (item.IsOpendata)
-                            {
-                                <span data-toggle='tooltip' data-placement='bottom' title="Åpne data" class="custom-icon custom-icon-hengelaas-open-green"></span>
-                            }
-                            else if (item.IsOffline)
-                            {
-                                <span data-toggle='tooltip' data-placement='bottom' title="Skjermede data" class="custom-icon custom-icon-hengelaas-closed-red"></span>
-                            }
-                            else if (item.IsRestricted)
-                            {
-                                <span data-toggle='tooltip' data-placement='bottom' title="Tilgangsbegrensede data" class="custom-icon custom-icon-hengelaas-closed-yellow"></span>
-                            }
-                        </div>
-
-                        <div class="col-sm-2 search-results-action-buttons pull-right">
-
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="btn btn-default show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
-                                <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
-                            </a>
-                            @if (item.ShowMapLink())
-                            {
-                                <a id="mapmacrolink-button-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
-                                    <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
-                                </a>
-                            }
-                            else if (item.ShowServiceMapLink())
-                            {
-                                <a id="mapmacrolink-button-@item.Uuid" href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
-                                    <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a id="mapmacrolink-button-@item.Uuid" title="Vis @item.Title i kart" class="disabled btn btn-default">
-                                    <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
-                                </a>
-                            }
-                        </div>
-
-                        <div class="col-xs-1 search-results-action-icons">
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
-                                <span class="custom-icon custom-icon-info"></span>
-                            </a>
-                        </div>
-
-
-                        <div class="col-xs-1 search-results-action-icons action-show-map">
-                            @if (item.ShowMapLink())
-                            {
-                                <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(item.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank">
-                                    <span id="mapmacro-@item.Uuid" class="custom-icon @(item.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span>
-                                </a>
-                            }
-                            else if (item.ShowServiceMapLink())
-                            {
-                                <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(item.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank">
-                                    <span id="mapmacro-@item.Uuid" class="custom-icon @(item.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a title="Vis @item.Title i kart" class="disabled">
-                                    <span class="custom-icon custom-icon-kartmarkoer"></span>
-                                </a>
-                            }
-                        </div>
-                    </div>
-
-                    <div class="search-results-gallery-image layoutblock">
-                        <div class="block shortcutpageteaserblock size-4 col-sm-4">
-                            <div class="teaser-with-background-image">
-                                <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                    @{
-                                        String thumbnailUrl = (!string.IsNullOrWhiteSpace(item.ThumbnailUrl)) ? Url.Action("Index", "Thumbnail", new { uuid = item.Uuid, type = "small" }) : "";
-                                    }
-                                    <div class="teaser-background-image" style="background: url(@thumbnailUrl) no-repeat center;">
-                                        <div class="teaser-background-image">
-                                            <div class="teaser-overlay">
-                                                <div class="teaser-caption">
-                                                    <div class="teaser-heading">@item.Title</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-
-                    <hr />
-                }
                 <div class="clearfix"></div>
             </div>
 
-            @DisplayPaginationBottom()
+                @DisplayPaginationBottom()
 
         }
     </div>
@@ -425,12 +275,223 @@
         </aside>
     </div>
 </div>
+
 <script>
-@foreach (var item in Model.Result.Items)
-{
-    if (item.ShowMapLink() || item.ShowServiceMapLink())
+    @foreach (var item in Model.Result.Items)
     {
-      @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                                  }
-}
+        if (item.ShowMapLink() || item.ShowServiceMapLink())
+        {
+            @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
+                }
+    }
 </script>
+
+@section scripts {
+    @{ var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
+
+    <script>
+        //Component
+        var ResultItemComponent = {
+            template: "#resultItemRow",
+            props: ["resultItem"],
+            data: function() {
+                var data = {
+                    expanded: false,
+                    underlayingDistributions: {},
+                    underlayingDistributionsRequested: false,
+                    bgcolor: "#dfdcda"
+                };
+                return data;
+            },
+            components: {
+                distributionRows: distributionRows
+            },
+            computed: {
+                openData: function() {
+                    var openData = {
+                        className: "",
+                        title: ""
+                    };
+                    if (this.resultItem.IsRestricted) {
+                        openData.className = "custom-icon custom-icon-hengelaas-closed-yellow";
+                        openData.title = "Tilgangsbegrensede data";
+                    } else if (this.resultItem.IsOffline) {
+                        openData.className = "custom-icon custom-icon-hengelaas-closed-red";
+                        openData.title = "Skjermede data";
+                    } else if (this.resultItem.IsOpendata) {
+                        openData.className = "custom-icon custom-icon-hengelaas-open-green";
+                        openData.title = "Åpne data";
+                    }
+                    return openData;
+                },
+                mapLink: function() {
+                    var mapLink = {
+                        href: "@Html.NorgeskartUrl() ",
+                        mapLinkButtonId: "mapmacrolink-button-" + this.resultItem.Uuid,
+                        mapMacroButtonId: "mapmacro-button-" + this.resultItem.Uuid,
+                        mapLinkId: "mapmacrolink-" + this.resultItem.Uuid,
+                        mapMacroId: "mapmacro-" + this.resultItem.Uuid,
+                        onClick: "ga('send', 'event', 'Nedlasting', 'viskart')",
+                        mapLinkClassButton: "btn btn-default",
+                        mapLinkClassLink: "",
+                        iconPermission: "custom-icon",
+                        mapTitleTag: this.resultItem.MapTitleTag
+                    };
+
+                    if (this.showMapLink()) {
+                        mapLink.href += this.resultItem.DownloadUrl;
+
+                    } else if (this.showServiceMapLink()) {
+                        mapLink.href += this.resultItem.ServiceUrl;
+                        mapLink.iconPermission += restrictedServiceClass();
+                    } else {
+                        mapLink.href = "";
+                        mapLink.mapLinkClassLink = "disabled";
+                        mapLink.mapLinkClassButton = "disabled";
+                        mapLink.iconPermission += " custom-icon-kartmarkoer";
+                        mapLink.mapLinkButtonId = "";
+                        mapLink.mapMacroButtonId = "";
+                        mapLink.mapLinkId = "";
+                        mapLink.mapMacroId = "";
+                        mapLink.onClick = "";
+                        mapLink.mapTitleTag = "Vis " + this.resultItem.Title + " i kart";
+                    }
+                    return mapLink;
+                },
+                organizationUrl: function() {
+                    url = "/metadata/" + this.resultItem.OrganizationSeoName;
+                    return url;
+                },
+                readMoreUrl: function() {
+                    var organization = this.resultItem.OrganizationSeoName;
+                    var title = this.resultItem.TitleSeo;
+                    var uuid = this.resultItem.Uuid;
+                    var url = "/metadata/" + organization + "/" + title + "/" + uuid;
+                    return url;
+                }
+            },
+            methods: {
+                downloadUrl: function(url) {
+                    url += this.resultItem.DownloadUrl;
+                    return url;
+                },
+                showMapLink: function() {
+                    if (this.resultItem.DistributionProtocol &&
+                        (this.resultItem.DistributionProtocol.indexOf("OGC:WMS") > -1 ||
+                            this.resultItem.DistributionProtocol.indexOf("OGC:WFS") > -1 ||
+                            this.resultItem.DistributionProtocol.indexOf("OGC:WCS") > -1) &&
+                        (this.resultItem.Type == "service" || this.resultItem.Type == "servicelayer") &&
+                        this.resultItem.DownloadUrl)
+                        return true;
+                    else return false;
+                },
+                showServiceMapLink: function() {
+                    if (this.resultItemServiceUrl) return true;
+                    else return false;
+                },
+                isRestrictedService: function() {
+                    if (this.resultItem.ServiceDistributionAccessConstraint == "Beskyttet" ||
+                        this.resultItem.ServiceDistributionAccessConstraint == "restricted" ||
+                        this.resultItem.ServiceDistributionAccessConstraint == "norway digital restricted") return true;
+                    else {
+                        return false;
+                    }
+                },
+                restrictedServiceClass: function() {
+                    var iconPermissionClass;
+                    if (this.isRestrictedService) {
+                        iconPermissionClass = " custom-icon-kartmarkoer";
+                    } else {
+                        iconPermissionClass = " custom-icon-kartmarkoer-needs-permission";
+                    }
+                    return iconPermissionClass;
+                },
+                getUnderlyingDistributions: function() {
+                    this.expanded = !this.expanded;
+                    this
+                    if (!this.underlayingDistributionsRequested) {
+                        showLoadingAnimation("Henter underliggende distribusjoner"); 
+                        axios.get('/api/distributions/' + this.resultItem.Uuid).then(function(response) {
+                            this.underlayingDistributions = response.data;
+                            hideLoadingAnimation();
+                        }.bind(this));
+                    }
+                    this.underlayingDistributionsRequested = true;
+                }
+            }
+        };
+
+        //Main vue model
+        var vueModel = new Vue({
+            el: '#searchResultTable',
+            data: {
+                viewModel: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
+                ResultItems: []
+
+            },
+            components: {
+                ResultItem: ResultItemComponent
+            }
+        });
+    </script>
+
+    <script>
+        function showAlert(message, colorClass) {
+            $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
+            $('#feedback-alert .message').html(message);
+            $('#feedback-alert').show();
+        }
+        $(document).ready(function () {
+            $("#orderby").change(
+                 function () {
+                     location.href = $(this).val();
+                 }
+             );
+        });
+
+
+        $(document).ready(function () {
+            @if (Html.DownloadServiceEnabled())
+            {
+            <text>
+            if (localStorage.getItem("orderItems") != null) {
+                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+                var orderitemCount = storedOrderItems.length;
+                if (orderitemCount > 0) {
+                    $('#orderitem-count').text(orderitemCount);
+                    $('#orderitem-count-text').text(' datasett');
+                    updateAllCartButtons(storedOrderItems);
+                } else {
+                    $('#orderitem-count').text('');
+                    $('#orderitem-count-text').text('Kurven er tom');
+                }
+            } else {
+                $('#orderitem-count').text('');
+                $('#orderitem-count-text').text('Kurven er tom');
+            }
+            </text>
+            }
+        });
+
+
+        $(window).load(function () {
+            @if (Html.DownloadServiceEnabled())
+            {
+         <text>
+            if (typeof Storage !== "undefined") {
+
+                console.log('window.localStorage is available!');
+                var orderItems = [];
+                $('.add-to-cart-btn:not(.prevent-action)').click(function () {
+                    addToCartButtonClick($(this));
+                });
+            } else {
+                console.log('no native support for HTML5 storage :(');
+            }
+
+            </text>
+            }
+
+        });
+    </script>
+}
