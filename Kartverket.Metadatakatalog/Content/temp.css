@@ -12,22 +12,6 @@
         content: none;
     }
 
-.expand-arrow {
-    background-image: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/arrow-right.svg);
-    width: 11px;
-    height: 12px;
-    padding: 0;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    background-position: 50%;
-    display: inline-block;
-    margin-right: 2px;
-    margin-bottom: 2px;
-}
-
-    .expand-arrow.active {
-        background-image: url(/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/arrow-down.svg);
-    }
 
 #orderlist .orderlines {
     margin-bottom: 22px;
