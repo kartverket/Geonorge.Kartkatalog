@@ -207,6 +207,27 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return routeValues;
         }
 
+        public RouteValueDictionary ParamsForOrderByLink(string name)
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+
+            if (orderby.Contains(name))
+            {
+                if (orderby.Contains("_desc"))
+                {
+                    routeValues["orderby"] = name;
+                }
+                else {
+                    routeValues["orderby"] = name + "_desc";
+                }
+            }
+            else {
+                routeValues["orderby"] = name;
+            }
+            return routeValues;
+        }
+
         public RouteValueDictionary ParamsForOrderByTitleLink()
         {
             var routeValues = new RouteValueDictionary();

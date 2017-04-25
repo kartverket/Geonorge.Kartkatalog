@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using System.Web.Configuration;
 using System.Web.Routing;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
@@ -36,6 +38,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string OrganizationSeoName { get; set; }
         public string TitleSeo { get; set; }
         public string MapTitleTag { get; set; }
+        public bool ShowDownloadService { get; set; }
+        public bool ShowDownloadLink { get; set; }
+        public string AddToCartUrl { get; set; }
+
+
 
         public string GetInnholdstypeCSS()
         {
@@ -63,13 +70,13 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return t;
         }
 
-        public bool ShowDownloadLink()
+        public bool DownloadLink()
         {
             if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("WWW:DOWNLOAD") || DistributionProtocol.Contains("GEONORGE:FILEDOWNLOAD")) && (Type == "dataset" || Type == "series") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
             else return false;
         }
 
-        public bool ShowDownloadService()
+        public bool DownloadService()
         {
             if (System.Web.Configuration.WebConfigurationManager.AppSettings["DownloadServiceEnabled"] == "true")
             {
@@ -104,7 +111,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             Type = item.Type;
             Theme = item.Theme;
             Organization = item.Organization;
-            OrganizationLogoUrl = item.OrganizationLogoUrl;
+            OrganizationLogoUrl = GetOrganizationLogoUrl(item.OrganizationLogoUrl);
             ThumbnailUrl = item.ThumbnailUrl;
             MaintenanceFrequency = item.MaintenanceFrequency;
             DistributionType = item.DistributionType;
@@ -158,6 +165,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 }
             }
             else DownloadUrl = item.DistributionUrl;
+            DownloadUrl = MakeDownloadUrlRelative();
 
             LegendDescriptionUrl = item.LegendDescriptionUrl;
             ProductSheetUrl = item.ProductSheetUrl;
@@ -172,6 +180,57 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             ServiceDistributionAccessConstraint = item.ServiceDistributionAccessConstraint;
             MetadataLinkRouteValueDictionary = ShowMetadataLinkRouteValueDictionary();
             MapTitleTag = GetMapTitleTag();
+            ShowDownloadService = DownloadService();
+            ShowDownloadLink = DownloadLink();
+            AddToCartUrl = GetAddToCartUrl();
+        }
+
+        private string GetAddToCartUrl()
+        {
+            string addToCartUrl = "";
+            if (DownloadService())
+            {
+                if (IsRestricted || IsOffline)
+                {
+                    string addToCartEventParamater = "?addtocart_event_id=addToCart-" + Uuid;
+                    if (HttpContext.Current.Request.Url.AbsoluteUri.Contains("?"))
+                    {
+                        addToCartEventParamater = "&addtocart_event_id=addToCart-" + Uuid;
+                    }
+
+                    string downloadSignInUrl = WebConfigurationManager.AppSettings["DownloadUrl"]
+                                             + "AuthServices/SignIn?ReturnUrl="
+                                             + HttpContext.Current.Request.Url.AbsoluteUri
+                                             + addToCartEventParamater;
+
+                    addToCartUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"]
+                                 + "AuthServices/SignIn?ReturnUrl="
+                                 + downloadSignInUrl;
+                }
+            }
+            return addToCartUrl;
+        }
+
+        private string MakeDownloadUrlRelative()
+        {
+            if (!string.IsNullOrWhiteSpace(DownloadUrl))
+            {
+                Uri downloadUrl = new Uri(DownloadUrl);
+                return "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
+            }
+            return null;
+        }
+
+        private string GetOrganizationLogoUrl(string organizationLogoUrl)
+        {
+            if (!string.IsNullOrWhiteSpace(organizationLogoUrl))
+            {
+                Uri uri = new Uri(organizationLogoUrl);
+                string relativeOrganizationLogoUrl = "//" + uri.Host + uri.PathAndQuery;
+                return relativeOrganizationLogoUrl;
+            }
+            return OrganizationLogoUrl;
+
         }
 
         public static List<SearchResultItemViewModel> CreateFromList(IEnumerable<SearchResultItem> items)
