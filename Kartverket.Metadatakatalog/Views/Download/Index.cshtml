@@ -16,7 +16,8 @@
     <div class="map">
         <div class="custom-modal">
             <div class="custom-modal-container">
-                <iframe v-bind:id="$parent.$parent.metadata.uuid + '-iframe'" v-bind:src="mapSrc" name="iframe" style="height:100%"></iframe>
+                <iframe v-if="master" id="masterorderline-iframe" v-bind:src="mapSrc" name="iframe" style="height:100%"></iframe>
+                <iframe v-else v-bind:id="$parent.$parent.metadata.uuid + '-iframe'" v-bind:src="mapSrc" name="iframe" style="height:100%"></iframe>
                 <div class="modal-footer">
                     <button type="button" v-on:click="$parent.$parent.showMap = false" class="btn btn-default" data-dismiss="modal">Lukk</button>
                 </div>
@@ -54,6 +55,10 @@
                     <a v-show="supportsPolygonSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
                     <a v-show="supportsGridSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'grid')" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
                 </div>
+            </div>
+        </div>
+        <div v-if="supportsPolygonSelection && $parent.mapIsLoaded">
+            <div v-if="master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="true">
             </div>
         </div>
         <div v-if="supportsPolygonSelection && $parent.mapIsLoaded">
@@ -134,7 +139,7 @@
             <div class="row orderline-fields">
                 <div class="col-md-4 orderline-field">
                     <p>Område</p>
-                    <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="false" v-bind:class="[orderLineErrors && orderLineErrors.area && orderLineErrors.area.length ? 'hasError' : '']"></div>
+                    <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.area && orderLineErrors.area.length ? 'hasError' : '']"></div>
                     <div v-if="orderLineErrors && orderLineErrors.area" class="orderline-errors margin-top-10">
                         <div v-for="orderlineError in orderLineErrors.area" class="help-text form-element-help-text bg-danger">
                             {{ orderlineError }}
@@ -144,7 +149,7 @@
                 <div class="col-md-4 orderline-field">
                     <p>Projeksjon</p>
                     <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
-                    <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="false" v-bind:class="[orderLineErrors && orderLineErrors.projection && orderLineErrors.projection.length ? 'hasError' : '']"></div>
+                    <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.projection && orderLineErrors.projection.length ? 'hasError' : '']"></div>
 
                     <div v-if="orderLineErrors && orderLineErrors.projection" class="orderline-errors margin-top-10">
                         <div v-show="orderLineErrors.projection.length" class="help-text form-element-help-text bg-danger">
@@ -158,7 +163,7 @@
                 <div class="col-md-4 orderline-fields">
                     <p>Format</p>
                     <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
-                    <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="false" v-bind:class="[orderLineErrors && orderLineErrors.format && orderLineErrors.format.length ? 'hasError' : '']"></div>
+                    <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.format && orderLineErrors.format.length ? 'hasError' : '']"></div>
 
                     <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
                         <div v-show="orderLineErrors.format.length" class="help-text form-element-help-text bg-danger">
@@ -180,20 +185,20 @@
         <div class="row">
             <div class="col-md-4">
                 <p>Område <span href="#" class="badge help-text-toggle">?</span></p>
-                <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="true">
+                <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master">
 
                 </div>
             </div>
             <div class="col-md-4">
                 <p>Projeksjon <span href="#" class="badge help-text-toggle">?</span></p>
                 <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
-                <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="true"></div>
+                <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="master"></div>
 
             </div>
             <div class="col-md-4">
                 <p>Format <span href="#" class="badge help-text-toggle">?</span></p>
                 <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
-                <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="true"></div>
+                <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="master"></div>
             </div>
         </div>
     </div>
