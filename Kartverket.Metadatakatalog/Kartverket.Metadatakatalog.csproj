@@ -903,9 +903,6 @@
     <Content Include="KartverketSharedMenu\Styles\geonorge-top\menuTop.css" />
     <Content Include="KartverketSharedMenu\Styles\geonorge-top\searchTop.css" />
     <Content Include="robots.txt" />
-    <Content Include="Scripts\chosen.jquery.js" />
-    <Content Include="Scripts\chosen.jquery.min.js" />
-    <Content Include="Scripts\init.js" />
     <Content Include="PostDeploy.ps1" />
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />

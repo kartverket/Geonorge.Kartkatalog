@@ -931,11 +931,7 @@ var MasterOrderLine = {
     }
 }
 
-
-
 Vue.config.debug = true;
-
-
 
 var mainVueModel = new Vue({
     el: '#vueContainer',
@@ -1043,8 +1039,6 @@ var mainVueModel = new Vue({
 
                     orderRequests[orderLine.metadata.orderDistributionUrl].orderLines.push(orderRequest);
 
-
-
                 }.bind(this));
             }
             return orderRequests;
@@ -1094,10 +1088,7 @@ var mainVueModel = new Vue({
                                     }
                                     availableArea.isSelected = false;
                                     availableArea.isLocalSelected = false;
-                                    //   var isAllreadyAddedInfo = this.isAllreadyAdded(this.masterOrderLine.allAvailableAreas[uuid][availableArea.type], availableArea, "code");
-                                    //  if (!isAllreadyAddedInfo.added){
                                     this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
-                                    //  }
                                 }.bind(this))
                             }
                             if (link.rel == "http://rel.geonorge.no/download/projection") {
@@ -1114,9 +1105,6 @@ var mainVueModel = new Vue({
                     }
 
                     /*
-                    
-                    
-                    
                     if (link.rel == "http://rel.geonorge.no/download/can-download") {
                         orderItems[key].metadata.canDownloadUrl = link.href;
                     }
@@ -1126,37 +1114,6 @@ var mainVueModel = new Vue({
 
 
                     orderLines[key].capabilities.supportsGridSelection = (orderLines[key].capabilities.mapSelectionLayer !== undefined && orderLines[key].capabilities.mapSelectionLayer !== "") ? true : false;
-
-                    /*   if (orderItems[key].codelists.areas) {
-                           if (orderItems[key].capabilities.supportsPolygonSelection) {
-                               orderItems[key].codelists.areas.push(
-                                   {
-                                       "name": "Valgt fra kart",
-                                       "type": "polygon",
-                                       "code": "Kart",
-                                       "formats": orderItems[key].codelists.formats,
-                                       "projections": orderItems[key].codelists.projections
-                                   }
-                               );
-                           }
-                           $(orderItems[key].codelists.areas).each(function (index, area) {
-                               if (area.type !== undefined) {
-                                   var inArray = false;
-                                   orderItems[key].codelists.areaTypes.forEach(function (areaType) {
-                                       if (area.type == areaType.name) {
-                                           inArray = true;
-                                           areaType.numberOfItems += 1;
-                                       }
-                                   });
-                                   if (!inArray) {
-                                       orderItems[key].codelists.areaTypes.push({
-                                           name: area.type,
-                                           numberOfItems: 1
-                                       });
-                                   }
-                               }
-                           })
-                       }*/
                 }
             }.bind(this));
         }
@@ -1320,16 +1277,15 @@ var mainVueModel = new Vue({
             updateShoppingCart();
             updateShoppingCartCookie();
         },
-        removeOrderItem: function (item) {
-            var uuid = item.metadata.uuid;
+        removeOrderItem: function (orderLine) {
             this.orderLines = this.orderLines.filter(function (obj) {
-                return obj.metadata.uuid !== uuid;
+                return obj.metadata.uuid !== orderLine.metadata.uuid;
             });
-            this.removeFromLocalStorage(uuid);
+            this.removeFromLocalStorage(orderLine.metadata.uuid);
         },
         removeAllOrderItems: function () {
-            this.orderLines.forEach(function (orderItem) {
-                this.removeOrderItem(orderItem);
+            this.orderLines.forEach(function (orderLine) {
+                this.removeOrderItem(orderLine);
             }.bind(this));
             $('#remove-all-items-modal').modal('hide');
         },
