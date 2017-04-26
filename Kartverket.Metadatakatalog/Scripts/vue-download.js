@@ -771,13 +771,15 @@ var MasterOrderLine = {
             var selectedAreas = [];
             for (areaType in this.availableAreas) {
                 this.availableAreas[areaType].forEach(function (area) {
-                    area.orderLineUuids.forEach(function (orderLineUuid) {
-                        if (allSelectedAreas[orderLineUuid] == undefined) { allSelectedAreas[orderLineUuid] = [] }
-                        if (area.isSelected || area.isLocalSelected) {
-                            allSelectedAreas[orderLineUuid].push(area);
-                        }
-                    }.bind(this))
+                    if (area.orderLineUuids !== undefined) {
 
+                        area.orderLineUuids.forEach(function (orderLineUuid) {
+                            if (allSelectedAreas[orderLineUuid] == undefined) { allSelectedAreas[orderLineUuid] = [] }
+                            if (area.isSelected || area.isLocalSelected) {
+                                allSelectedAreas[orderLineUuid].push(area);
+                            }
+                        }.bind(this))
+                    }
                     if (area.isSelected) {
                         var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, area, "code");
                         if (!isAllreadyAddedInfo.added) {
@@ -1029,6 +1031,8 @@ var MasterOrderLine = {
                                                 clearAlertMessage();
                                                 hideAlert();
 
+
+
                                                 mainVueModel.$children.forEach(function (orderItem) {
                                                     if (orderItem.master !== undefined && orderItem.master == false) {
                                                         if (orderItem.capabilities !== undefined && orderItem.capabilities.supportsPolygonSelection !== undefined && orderItem.capabilities.supportsPolygonSelection == true) {
@@ -1038,6 +1042,7 @@ var MasterOrderLine = {
                                                                 "name": "Valgt fra kart",
                                                                 "type": "polygon",
                                                                 "code": "Kart",
+                                                                "isSelected": true,
                                                                 "isLocalSelected": true,
                                                                 "formats": orderItem.defaultFormats,
                                                                 "projections": orderItem.defaultProjections,
@@ -1051,16 +1056,29 @@ var MasterOrderLine = {
                                                             polygonArea.allAvailableFormats = {};
                                                             polygonArea.allAvailableFormats[orderItem.metadata.uuid] = orderItem.defaultFormats;
 
+
+                                                            // orderLine
                                                             var isAllreadyAddedInfo = this.isAllreadyAdded(this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid], polygonArea, "code");
                                                             if (!isAllreadyAddedInfo.added) {
                                                                 this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(polygonArea);
                                                             } else {
                                                                 this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid][isAllreadyAddedInfo.position] = polygonArea;
-
                                                             }
 
                                                             this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
                                                             this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
+
+
+                                                            // MasterOrderLine:
+                                                            var isAllreadyAddedInfo = this.isAllreadyAdded(this.selectedAreas, polygonArea, "code");
+                                                            if (!isAllreadyAddedInfo.added) {
+                                                                this.selectedAreas.push(polygonArea);
+                                                            } else {
+                                                                this.selectedAreas[isAllreadyAddedInfo.position] = polygonArea;
+                                                            }
+
+                                                            this.availableAreas[polygonArea.type] = [];
+                                                            this.availableAreas[polygonArea.type].push(polygonArea);
 
 
                                                             // Set coordinates for orderline in order request
@@ -1069,16 +1087,9 @@ var MasterOrderLine = {
                                                                     orderRequest.coordinates = this.$root.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid];
                                                                 }
                                                             }.bind(this))
-
-
-
                                                         }
                                                     }
                                                 }.bind(this));
-
-                                                
-
-
 
                                                 this.$root.$forceUpdate();
 
