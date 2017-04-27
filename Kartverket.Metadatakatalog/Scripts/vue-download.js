@@ -69,7 +69,8 @@ function getJsonData(url) {
             dataType: 'json',
             async: false,
             error: function (jqXHR, textStatus, errorThrown) {
-                showAlert("Vennligst fjern " + name + " fra kurv. Feilmelding: " + errorThrown + "<br/>", "danger");
+                showAlert("Kunne ikke legge til " + name + " i kurv. Feilmelding: " + errorThrown + "<br/>", "danger");
+                returnData = "error";
             },
             success: function (data) {
                 if (data !== null) {
@@ -1244,7 +1245,10 @@ var mainVueModel = new Vue({
                     var metadata = (localStorage[val + ".metadata"] !== undefined) ? JSON.parse(localStorage[val + ".metadata"]) : "";
                     var apiUrl = (metadata.distributionUrl !== undefined) ? metadata.distributionUrl : defaultUrl;
                     var capabilities = getJsonData(apiUrl + val);
-                    if (capabilities !== "") {
+                    if (capabilities == "error") {
+                        this.removeOrderLine(metadata.uuid);
+                    }
+                    else if (capabilities !== "") {
                         orderLines[key] = {
                             "metadata": metadata,
                             "capabilities": capabilities,
