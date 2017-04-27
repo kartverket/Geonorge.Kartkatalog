@@ -981,7 +981,6 @@
     <Content Include="Scripts\jquery-2.2.0.min.js" />
     <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
-    <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.typeahead.js" />
     <Content Include="Scripts\jquery.typeahead.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -989,7 +988,6 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\js.cookie.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
