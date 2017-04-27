@@ -1146,85 +1146,88 @@ var mainVueModel = new Vue({
             var orderRequests = {};
             if (this.orderLines.length) {
                 this.orderLines.forEach(function (orderLine) {
-                    if (orderRequests[orderLine.metadata.orderDistributionUrl] == undefined) {
-                        orderRequests[orderLine.metadata.orderDistributionUrl] = {
-                            "email": "",
-                            "_links": "",
-                            "orderLines": []
+
+                    if (orderLine.metadata !== undefined) {
+
+                        if (orderRequests[orderLine.metadata.orderDistributionUrl] == undefined) {
+                            orderRequests[orderLine.metadata.orderDistributionUrl] = {
+                                "email": "",
+                                "_links": "",
+                                "orderLines": []
+                            }
                         }
+
+                        var links = [];
+                        if (orderLine.capabilities._links !== undefined && orderLine.capabilities._links.length) {
+                            orderLine.capabilities._links.forEach(function (capabilityLink) {
+                                var link = {
+                                    "href": capabilityLink.href,
+                                    "rel": capabilityLink.rel,
+                                    "templated": capabilityLink.templatedSpecified,
+                                    "type": "",
+                                    "deprecation": "",
+                                    "name": "",
+                                    "title": ""
+                                }
+                                links.push(link);
+                            })
+                        }
+
+
+                        var areas = [];
+                        if (this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid].length) {
+                            this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid].forEach(function (selectedArea) {
+                                var area = {
+                                    "code": selectedArea.code,
+                                    "name": selectedArea.name,
+                                    "type": selectedArea.type,
+                                    "_links": []
+                                }
+                                areas.push(area);
+                            });
+                        }
+
+                        var projections = [];
+                        if (this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid].length) {
+                            this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid].forEach(function (selectedProjection) {
+                                var projection = {
+                                    "code": selectedProjection.code,
+                                    "name": selectedProjection.name,
+                                    "codespace": selectedProjection.codespace,
+                                    "_links": []
+                                }
+                                projections.push(projection);
+                            });
+                        }
+
+                        var formats = [];
+                        if (this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid].length) {
+                            this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid].forEach(function (selectedFormat) {
+                                var format = {
+                                    "code": "",
+                                    "name": selectedFormat.name,
+                                    "type": "",
+                                    "_links": []
+                                }
+                                formats.push(format);
+                            });
+                        }
+
+
+                        var orderRequest = {
+                            "metadataUuid": orderLine.metadata.uuid,
+                            "areas": areas,
+                            "projections": projections,
+                            "formats": formats,
+                            "_links": links
+                        }
+
+                        if (this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
+                            orderRequest.coordinates = this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid];
+                        }
+
+                        orderRequests[orderLine.metadata.orderDistributionUrl].orderLines.push(orderRequest);
                     }
-
-                    var links = [];
-                    if (orderLine.capabilities._links !== undefined && orderLine.capabilities._links.length) {
-                        orderLine.capabilities._links.forEach(function (capabilityLink) {
-                            var link = {
-                                "href": capabilityLink.href,
-                                "rel": capabilityLink.rel,
-                                "templated": capabilityLink.templatedSpecified,
-                                "type": "",
-                                "deprecation": "",
-                                "name": "",
-                                "title": ""
-                            }
-                            links.push(link);
-                        })
-                    }
-
-
-                    var areas = [];
-                    if (this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid].length) {
-                        this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid].forEach(function (selectedArea) {
-                            var area = {
-                                "code": selectedArea.code,
-                                "name": selectedArea.name,
-                                "type": selectedArea.type,
-                                "_links": []
-                            }
-                            areas.push(area);
-                        });
-                    }
-
-                    var projections = [];
-                    if (this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid].length) {
-                        this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid].forEach(function (selectedProjection) {
-                            var projection = {
-                                "code": selectedProjection.code,
-                                "name": selectedProjection.name,
-                                "codespace": selectedProjection.codespace,
-                                "_links": []
-                            }
-                            projections.push(projection);
-                        });
-                    }
-
-                    var formats = [];
-                    if (this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid].length) {
-                        this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid].forEach(function (selectedFormat) {
-                            var format = {
-                                "code": "",
-                                "name": selectedFormat.name,
-                                "type": "",
-                                "_links": []
-                            }
-                            formats.push(format);
-                        });
-                    }
-
-
-                    var orderRequest = {
-                        "metadataUuid": orderLine.metadata.uuid,
-                        "areas": areas,
-                        "projections": projections,
-                        "formats": formats,
-                        "_links": links
-                    }
-
-                    if (this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
-                        orderRequest.coordinates = this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid];
-                    }
-
-                    orderRequests[orderLine.metadata.orderDistributionUrl].orderLines.push(orderRequest);
-
                 }.bind(this));
             }
             return orderRequests;
@@ -1235,71 +1238,76 @@ var mainVueModel = new Vue({
         var defaultUrl = "https://nedlasting.geonorge.no/api/capabilities/";
         var orderItemsJson = (localStorage["orderItems"] != null) ? JSON.parse(localStorage["orderItems"]) : [];
         var orderLines = [];
-        if (orderItemsJson != []) {
+        if (orderItemsJson.length) {
             $(orderItemsJson).each(function (key, val) {
                 if (val !== undefined && val !== null && val !== "") {
                     var metadata = (localStorage[val + ".metadata"] !== undefined) ? JSON.parse(localStorage[val + ".metadata"]) : "";
                     var apiUrl = (metadata.distributionUrl !== undefined) ? metadata.distributionUrl : defaultUrl;
+                    var capabilities = getJsonData(apiUrl + val);
+                    if (capabilities !== "") {
+                        orderLines[key] = {
+                            "metadata": metadata,
+                            "capabilities": capabilities,
+                            "projectionAndFormatIsRequired": false
+                        }
 
-                    orderLines[key] = {
-                        "metadata": metadata,
-                        "capabilities": getJsonData(apiUrl + val),
-                        "projectionAndFormatIsRequired": false
-                    }
+                        if (metadata !== "" && metadata.uuid !== undefined && metadata.uuid !== "") {
 
-                    var uuid = metadata.uuid;
+                            var uuid = metadata.uuid;
 
-                    this.masterOrderLine.allAvailableProjections[uuid] = [];
-                    this.masterOrderLine.allAvailableFormats[uuid] = [];
-                    this.masterOrderLine.allSelectedCoordinates[uuid] = "";
-                    this.masterOrderLine.allDefaultProjections[uuid] = [];
-                    this.masterOrderLine.allDefaultFormats[uuid] = [];
+                            this.masterOrderLine.allAvailableProjections[uuid] = [];
+                            this.masterOrderLine.allAvailableFormats[uuid] = [];
+                            this.masterOrderLine.allSelectedCoordinates[uuid] = "";
+                            this.masterOrderLine.allDefaultProjections[uuid] = [];
+                            this.masterOrderLine.allDefaultFormats[uuid] = [];
 
 
-                    if (orderLines[key].capabilities._links !== undefined && orderLines[key].capabilities._links.length) {
-                        orderLines[key].capabilities._links.forEach(function (link) {
-                            if (link.rel == "http://rel.geonorge.no/download/order") {
-                                orderLines[key].metadata.orderDistributionUrl = link.href;
-                            }
-                            if (link.rel == "http://rel.geonorge.no/download/can-download") {
-                                orderLines[key].metadata.canDownloadUrl = link.href;
-                            }
-                            if (link.rel == "http://rel.geonorge.no/download/area") {
-                                var availableAreas = getJsonData(link.href);
-                                this.masterOrderLine.allAvailableAreas[uuid] = {};
-
-                                availableAreas.forEach(function (availableArea) {
-                                    if (this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] == undefined) {
-                                        this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] = [];
+                            if (orderLines[key].capabilities._links !== undefined && orderLines[key].capabilities._links.length) {
+                                orderLines[key].capabilities._links.forEach(function (link) {
+                                    if (link.rel == "http://rel.geonorge.no/download/order") {
+                                        orderLines[key].metadata.orderDistributionUrl = link.href;
                                     }
-                                    availableArea.isSelected = false;
-                                    availableArea.isLocalSelected = false;
-                                    this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
+                                    if (link.rel == "http://rel.geonorge.no/download/can-download") {
+                                        orderLines[key].metadata.canDownloadUrl = link.href;
+                                    }
+                                    if (link.rel == "http://rel.geonorge.no/download/area") {
+                                        var availableAreas = getJsonData(link.href);
+                                        this.masterOrderLine.allAvailableAreas[uuid] = {};
+
+                                        availableAreas.forEach(function (availableArea) {
+                                            if (this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] == undefined) {
+                                                this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] = [];
+                                            }
+                                            availableArea.isSelected = false;
+                                            availableArea.isLocalSelected = false;
+                                            this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
+                                        }.bind(this))
+                                    }
+                                    if (link.rel == "http://rel.geonorge.no/download/projection") {
+                                        var defaultProjections = getJsonData(link.href)
+                                        orderLines[key].defaultProjections = defaultProjections;
+                                        this.masterOrderLine.allDefaultProjections[uuid] = defaultProjections;
+                                    }
+                                    if (link.rel == "http://rel.geonorge.no/download/format") {
+                                        var defaultFormats = getJsonData(link.href);
+                                        orderLines[key].defaultFormats = defaultFormats;
+                                        this.masterOrderLine.allDefaultFormats[uuid] = defaultFormats;
+                                    }
                                 }.bind(this))
                             }
-                            if (link.rel == "http://rel.geonorge.no/download/projection") {
-                                var defaultProjections = getJsonData(link.href)
-                                orderLines[key].defaultProjections = defaultProjections;
-                                this.masterOrderLine.allDefaultProjections[uuid] = defaultProjections;
-                            }
-                            if (link.rel == "http://rel.geonorge.no/download/format") {
-                                var defaultFormats = getJsonData(link.href);
-                                orderLines[key].defaultFormats = defaultFormats;
-                                this.masterOrderLine.allDefaultFormats[uuid] = defaultFormats;
-                            }
-                        }.bind(this))
+                        }
+
+                        /*
+                        if (link.rel == "http://rel.geonorge.no/download/can-download") {
+                            orderItems[key].metadata.canDownloadUrl = link.href;
+                        }
+                        */
+
+                        var distributionUrl = (orderLines[key].metadata.distributionUrl !== undefined) ? orderLines[key].metadata.distributionUrl : "";
+
+
+                        orderLines[key].capabilities.supportsGridSelection = (orderLines[key].capabilities.mapSelectionLayer !== undefined && orderLines[key].capabilities.mapSelectionLayer !== "") ? true : false;
                     }
-
-                    /*
-                    if (link.rel == "http://rel.geonorge.no/download/can-download") {
-                        orderItems[key].metadata.canDownloadUrl = link.href;
-                    }
-                    */
-
-                    var distributionUrl = (orderLines[key].metadata.distributionUrl !== undefined) ? orderLines[key].metadata.distributionUrl : "";
-
-
-                    orderLines[key].capabilities.supportsGridSelection = (orderLines[key].capabilities.mapSelectionLayer !== undefined && orderLines[key].capabilities.mapSelectionLayer !== "") ? true : false;
                 }
             }.bind(this));
         }
@@ -1479,9 +1487,15 @@ var mainVueModel = new Vue({
             this.removeFromLocalStorage(orderLineUuid);
         },
         removeAllOrderLines: function () {
-            this.orderLines.forEach(function (orderLine) {
-                this.removeOrderLine(orderLine.metadata.uuid);
-            }.bind(this));
+            var orderLineUuids = [];
+            if (this.orderLines !== undefined && this.orderLines.length) {
+                this.orderLines.forEach(function (orderLine) {
+                    orderLineUuids.push(orderLine.metadata.uuid)
+                });
+                orderLineUuids.forEach(function (orderLineUuid) {
+                    this.removeOrderLine(orderLineUuid);
+                })
+            }
             $('#remove-all-items-modal').modal('hide');
         },
 
