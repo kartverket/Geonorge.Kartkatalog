@@ -1031,8 +1031,6 @@ var MasterOrderLine = {
                                                 clearAlertMessage();
                                                 hideAlert();
 
-
-
                                                 mainVueModel.$children.forEach(function (orderItem) {
                                                     if (orderItem.master !== undefined && orderItem.master == false) {
                                                         if (orderItem.capabilities !== undefined && orderItem.capabilities.supportsPolygonSelection !== undefined && orderItem.capabilities.supportsPolygonSelection == true) {
@@ -1465,13 +1463,22 @@ var mainVueModel = new Vue({
             updateShoppingCart();
             updateShoppingCartCookie();
         },
-        removeOrderItem: function (orderLine) {
-            this.orderLines = this.orderLines.filter(function (obj) {
-                return obj.metadata.uuid !== orderLine.metadata.uuid;
-            });
-            this.removeFromLocalStorage(orderLine.metadata.uuid);
+        removeOrderLine: function (orderLineUuid) {
+            for (property in this.masterOrderLine) {
+                if (this.masterOrderLine[property][orderLineUuid] !== undefined) {
+                   delete this.masterOrderLine[property][orderLineUuid];
+                }
+            }
+            
+            this.orderLines.forEach(function (orderLine, index) {
+                if (orderLine.metadata.uuid == orderLineUuid) {
+                    this.orderLines.splice(index, 1);
+                }
+            }.bind(this));
+
+            this.removeFromLocalStorage(orderLineUuid);
         },
-        removeAllOrderItems: function () {
+        removeAllOrderLine: function () {
             this.orderLines.forEach(function (orderLine) {
                 this.removeOrderItem(orderLine);
             }.bind(this));
