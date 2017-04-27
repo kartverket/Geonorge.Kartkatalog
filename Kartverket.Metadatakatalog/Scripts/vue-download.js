@@ -1466,10 +1466,10 @@ var mainVueModel = new Vue({
         removeOrderLine: function (orderLineUuid) {
             for (property in this.masterOrderLine) {
                 if (this.masterOrderLine[property][orderLineUuid] !== undefined) {
-                   delete this.masterOrderLine[property][orderLineUuid];
+                    delete this.masterOrderLine[property][orderLineUuid];
                 }
             }
-            
+
             this.orderLines.forEach(function (orderLine, index) {
                 if (orderLine.metadata.uuid == orderLineUuid) {
                     this.orderLines.splice(index, 1);
@@ -1478,9 +1478,9 @@ var mainVueModel = new Vue({
 
             this.removeFromLocalStorage(orderLineUuid);
         },
-        removeAllOrderLine: function () {
+        removeAllOrderLines: function () {
             this.orderLines.forEach(function (orderLine) {
-                this.removeOrderItem(orderLine);
+                this.removeOrderLine(orderLine.metadata.uuid);
             }.bind(this));
             $('#remove-all-items-modal').modal('hide');
         },
