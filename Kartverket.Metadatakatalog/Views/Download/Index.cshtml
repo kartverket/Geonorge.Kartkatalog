@@ -46,7 +46,7 @@
                         <div v-if="!master || $root.isSupportedType(areaType)" v-show="areas.length">
                             <p class="custom-select-list-option-group-name">{{ areaType }}</p>
                             <ul class="custom-select-list-options area-option-list">
-                                <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': area.isLocalSelected}" v-for="area in areas">{{ area.name }}</li>
+                                <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': (area.isSelected && master) || (area.isLocalSelected && !master)}" v-for="area in areas">{{ area.name }}</li>
                             </ul>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
         </div>
         <div class="custom-select-list-dropdown">
             <ul class="custom-select-list-options projection-option-list">
-                <li v-on:click="selectProjection(projection)" v-bind:class="{'is-selected': projection.isLocalSelected}" v-for="(projection, projectionCode) in available">{{ projection.name }}</li>
+                <li v-on:click="selectProjection(projection)" v-bind:class="{'is-selected': (projection.isSelected && master) || (projection.isLocalSelected && !master)}" v-for="(projection, projectionCode) in available">{{ projection.name }}</li>
             </ul>
         </div>
     </div>
@@ -109,7 +109,7 @@
         </div>
         <div class="custom-select-list-dropdown">
             <ul class="custom-select-list-options format-option-list">
-                <li v-on:click="selectFormat(format)" v-bind:class="{'is-selected': format.isLocalSelected}" v-for="(format, formatName) in available">{{ format.name }}</li>
+                <li v-on:click="selectFormat(format)" v-bind:class="{'is-selected': (format.isSelected && master) || (format.isLocalSelected && !master)}" v-for="(format, formatName) in available">{{ format.name }}</li>
             </ul>
         </div>
     </div>
