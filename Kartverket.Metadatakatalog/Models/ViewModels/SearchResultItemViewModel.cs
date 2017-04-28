@@ -164,8 +164,10 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                         DownloadUrl = "#5/355422/6668909/l/wfs/[" + RemoveQueryString(item.DistributionUrl) + "]";
                 }
             }
-            else DownloadUrl = item.DistributionUrl;
-            DownloadUrl = MakeDownloadUrlRelative();
+            else {
+                DownloadUrl = item.DistributionUrl;
+                DownloadUrl = MakeDownloadUrlRelative();
+            }
 
             LegendDescriptionUrl = item.LegendDescriptionUrl;
             ProductSheetUrl = item.ProductSheetUrl;

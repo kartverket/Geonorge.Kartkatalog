@@ -257,7 +257,7 @@
                 {
                     string addToCartUrl = "";
                     string addToCartClass = "add-to-cart-btn";
-                    if (item.ShowDownloadService())
+                    if (item.DownloadService())
                     {
                         if (item.IsRestricted || item.IsOffline)
                         {
@@ -385,7 +385,7 @@
                             }
 
 
-                            @if (item.ShowDownloadService())
+                            @if (item.DownloadService())
                             {
                                 string relativeOrganizationLogoUrl = "";
                                 string relativeDowloadUrl = "";
@@ -417,7 +417,7 @@
                                     <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
                                 </a>
                             }
-                            else if (item.ShowDownloadLink())
+                            else if (item.ShowDownloadLink)
                             {
                                 <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
                                     <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
@@ -461,7 +461,7 @@
 
                         </div>
                         <div class="col-sm-1 search-results-action-icons action-download">
-                            @if (item.ShowDownloadService())
+                            @if (item.DownloadService())
                             {
                                 string relativeOrganizationLogoUrl = "";
                                 string relativeDowloadUrl = "";
@@ -493,7 +493,7 @@
                                     <span class="custom-icon custom-icon-handlekurv"></span>
                                 </a>
                             }
-                            else if (item.ShowDownloadLink())
+                            else if (item.ShowDownloadLink)
                             {
                                 <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @item.Title" target="_blank">
                                     <span class="custom-icon custom-icon-lastned"></span>

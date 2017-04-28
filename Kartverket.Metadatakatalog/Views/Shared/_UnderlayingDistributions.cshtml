@@ -1,8 +1,16 @@
 ﻿<script type="text/x-template" id="distributionRows">
-    <div style="padding: 5px 0px 5px; background-color:#f4f4f4">
-    @*Tittel*@
+    @* *** Liste *** *@
+    <div v-if="$root.viewType == 'list'">
+        <div>
+            <div class="col-sm-5"><p>Tittel</p></div>
+            <div class="col-sm-2"><p>Type</p></div>
+            <div class="col-sm-5"><p>Dataeier</p></div>
+            <div class="clearfix"></div>
+        </div>
+        <hr class="menu-separator" />
+        @*Tittel*@
         <div style="padding: 10px 0px;" v-for="resultItemDistribution in underlayingDistributions">
-            <div class="col-sm-offset-1 col-sm-4 distribution-title">
+            <div class="col-sm-5">
                 <a v-if="resultItemDistribution.ShowDetailsUrl" v-bind:href="resultItemDistribution.ShowDetailsUrl" class="show-loading-animation">
                     <span v-if="resultItemDistribution.Title" class="role-button search-results-name" role="button">{{resultItemDistribution.Title}}</span>
                 </a>
@@ -14,10 +22,34 @@
             </div>
 
             @*Organisasjon*@
-            <div class="col-sm-3">
-                    {{resultItemDistribution.Organization}}
+            <div class="col-sm-5">
+                {{resultItemDistribution.Organization}}
             </div>
             <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div v-else-if="$root.viewType == 'table'">
+        <div style="padding: 5px 0px 5px; background-color:#f4f4f4">
+            @*Tittel*@
+            <div style="padding: 10px 0px;" v-for="resultItemDistribution in underlayingDistributions">
+                <div class="col-sm-offset-1 col-sm-4">
+                    <a v-if="resultItemDistribution.ShowDetailsUrl" v-bind:href="resultItemDistribution.ShowDetailsUrl" class="show-loading-animation">
+                        <span v-if="resultItemDistribution.Title" class="role-button search-results-name" role="button">{{resultItemDistribution.Title}}</span>
+                    </a>
+                </div>
+
+                @*Distribusjonstype *@
+                <div class="col-sm-2">
+                    <span v-if="resultItemDistribution.Type" v-bind:title="resultItemDistribution.Type" class="label label-tjeneste" style="width:auto">{{resultItemDistribution.Type}}</span>
+                </div>
+
+                @*Organisasjon*@
+                <div class="col-sm-3">
+                    {{resultItemDistribution.Organization}}
+                </div>
+                <div class="clearfix"></div>
+            </div>
         </div>
     </div>
 </script>
@@ -30,7 +62,7 @@
     var distributionRows = {
         template: "#distributionRows",
         props: ["underlayingDistributions"],
-        data: function() {
+        data: function () {
             var data = {
                 resultItemDistribution: {}
             };

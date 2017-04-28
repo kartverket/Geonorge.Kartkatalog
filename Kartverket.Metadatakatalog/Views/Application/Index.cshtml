@@ -52,7 +52,7 @@
 
                 <div class="col-sm-6">
                     <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                        <p style="font-size:14pt"class="role-button search-results-name" role="button">{{resultItem.Title}}</p>
+                        <p style="font-size:14pt" class="role-button search-results-name" role="button">{{resultItem.Title}}</p>
                     </a>
                     <p>{{description}}</p>
                     <p>
@@ -109,14 +109,17 @@
                 <div class="clearfix"></div>
                 @* Underliggende distribusjoner *@
 
-                    <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-md-offset-1 col-md-11" title="Vis underliggende distribusjoner">
-                        <p>Underliggende distribusjoner  <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span></p>                        
+                <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-md-12" title="Vis underliggende distribusjoner">
+                    <div style="padding: 10px 10px 1px; background-color:#f4f4f4">
+                        <p><b>Underliggende distribusjoner   </b><span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span></p>
+                        <div v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
+
+                        </div>
                     </div>
-
-
-
+                </div>
             </div>
 
+            @* *** TABELL *** *@
             <div v-if="$root.viewType == 'table'">
                 @*Pil underliggende distribusjoner i tabellvisning*@
                 <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-sm-1" title="Vis underliggende distribusjoner">
@@ -156,9 +159,11 @@
                 </div>
 
             </div>
+
             <div class="clearfix"></div>
         </div>
-        <div v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
+
+        <div v-if="$root.viewType == 'table'" v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
 
         </div>
     </div>
@@ -172,39 +177,38 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
+                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
+                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
                 }
             </ul>
         </div>
     </div>
 }
-
 
 
 @{
@@ -233,39 +237,39 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
+                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
+                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
                 }
             </ul>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="save-as-menu">
+    <div class="col-md-4 pull-right">
+        <div class="save-as-menu pull-right">
             <label>Lagre som:</label>
             <div class="no-padding-bottom save-as-dropdown">
                 <div class="custom-select">
@@ -279,16 +283,6 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-md-offset-1">
-        Velg visningsform:
-        <div class="custom-select">
-            <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
-                <option value="tableView" id="button-tableView">Tabell</option>
-                <option value="listView" id="button-listView">Liste</option>
-                <option value="galleryView" id="button-galleryView">Galleri</option>
-            </select>
-        </div>
-    </div>
     <div class="clearfix"></div>
 
 
@@ -299,26 +293,23 @@
 <div class="row">
     <div id="searchResultTable" class="col-md-9">
 
-        <span v-on:click="viewType = 'table'" class="pull-right fa fa-table"></span>
+        @*<span v-on:click="viewType = 'galery'" class="pull-right fa fa-th-large"></span>*@
         <span v-on:click="viewType = 'list'" class="pull-right fa fa-list"></span>
+        <span v-on:click="viewType = 'table'" class="pull-right fa fa-table"></span>
         <div class="clearfix"></div>
         @if (Model.Result != null)
             {
-            <div id="tableView" class="search-results">
-                <div class="row search-results-table-heading">
-                    <div class="col-sm-5 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-5 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
-
+            <div id="tableView">
+                <div v-if="$root.viewType == 'table'" class="row">
+                    <div v-bind:class="orderByTitle.className" class="col-sm-5" v-bind:id="orderByTitle.id"><p><a v-bind:href="orderByTitle.url" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-2"><p>Type</p></div>
-
-                    <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
+                    <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id"><p><a v-bind:href="orderByOwner.url" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Kart</p></div>
                 </div>
 
                 <div class="menu-separator search-results-table-heading"></div>
-                <div v-for="item in viewModel.Result.Items" style="border-bottom: 1px rgb(207, 207, 208) solid;">
+                <div v-for="item in viewModel.Result.Items" style="border-bottom: 1px solid rgb(109, 110, 112);">
                     <div is="resultItem" v-bind:result-item="item"></div>
                 </div>
 
@@ -347,7 +338,7 @@
         if (item.ShowMapLink() || item.ShowServiceMapLink())
         {
             @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                                            }
+                                                        }
     }
 </script>
 
@@ -406,7 +397,7 @@
                     if (this.showMapLink()) {
                         mapLink.href += this.resultItem.DownloadUrl;
 
-                    } else if (this.showServiceMapLink()) {
+                    }else if (this.showServiceMapLink()) {
                         mapLink.href += this.resultItem.ServiceUrl;
                         mapLink.iconPermission += restrictedServiceClass();
                     } else {
@@ -489,9 +480,9 @@
                 restrictedServiceClass: function() {
                     var iconPermissionClass;
                     if (this.isRestrictedService) {
-                        iconPermissionClass = " custom-icon-kartmarkoer";
+                        iconPermissionClass = "custom-icon-kartmarkoer-needs-permission";
                     } else {
-                        iconPermissionClass = " custom-icon-kartmarkoer-needs-permission";
+                        iconPermissionClass = "custom-icon-kartmarkoer";
                     }
                     return iconPermissionClass;
                 },
@@ -555,7 +546,7 @@
                         showAlert(item.name + ' er fjernet fra <a href="/Download">kurven</a>', 'warning');
                     }
                     updateCartButton(addToCartButton, orderItems);
-                }
+                },
             }
         };
 
@@ -565,41 +556,93 @@
             data: {
                 viewModel: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
                 ResultItems: [],
+                currentOrderByParameter: getParameterByName("orderby"),
                 viewType: "table",
+                orderByUrl: "@Html.Raw(HttpUtility.HtmlDecode(HttpContext.Current.Request.Url.AbsoluteUri)).ToString()",
+                orderByTitle: {
+                    orderByParam: "title",
+                    className: "orderby orderby-title orderby-asc",
+                    id: "orderby-title-asc",
+                    url: "",
+                },
+                orderByOwner: {
+                    orderByParam: "organization",
+                    className: "orderby orderby-organization orderby-asc",
+                    id: "orderby-organization-asc",
+                    url: "",
+                }
             },
             components: {
                 ResultItem: ResultItemComponent
             },
-            computed:{
-                header: function() {
-                    var header = {
-                        titleOrderClass: "orderby-asc"
-                    }
-                    return header;
+            created: function() {
+                if (this.currentOrderByParameter == "title") {
+                    this.orderByTitle.orderByParam = "title_desc";
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.orderByParam = "organization";
+                    this.orderByOwner.id = "orderby-organization-asc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
                 }
+                else if (this.currentOrderByParameter == "organization") {
+                    this.orderByTitle.orderByParam = "title";
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.orderByParam = "organization_desc";
+                    this.orderByOwner.id = "orderby-organization-desc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                }
+                else if (this.currentOrderByParameter == "") {
+                    this.orderByTitle.orderByParam = "title";
+                    this.orderByOwner.orderByParam = "organization";
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.id = "orderby-organization-asc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                }
+                else if (this.currentOrderByParameter == "organization_desc") {
+                    this.orderByTitle.orderByParam = "title";
+                    this.orderByOwner.orderByParam = "organization";
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.id = "orderby-organization-desc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-desc";
+                }
+                else if (this.currentOrderByParameter == "title_desc") {
+                    this.orderByTitle.orderByParam = "title";
+                    this.orderByOwner.orderByParam = "organization";
+                    this.orderByTitle.id = "orderby-title-desc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-desc";
+                    this.orderByOwner.id = "orderby-organization-asc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                }
+                
+                this.orderByTitle.url = this.getOrderByUrl(this.orderByTitle.orderByParam);
+                this.orderByOwner.url = this.getOrderByUrl(this.orderByOwner.orderByParam);
             },
             methods: {
-                orderTitle: function(){
-                    this.titleOrder ? 'orderby-title-asc' : 'orderby-title-desc';
-                    if (this.titleOrder == "orderby-title-asc") {
-                        titleClass = "orderby-asc";
+                orderByExists: function(){
+                    return this.orderByUrl.includes("orderby")
+                },
+                isNotFirstParameterInUrl: function(){
+                    return this.orderByUrl.includes("?")
+                },
+                getOrderByUrl: function(param){
+                    if (this.orderByExists()) {
+                        return this.orderByUrl.replace("orderby=" + this.currentOrderByParameter, "orderby=" + param);
                     }
                     else{
-                        titleClass = "orderby-desc";
+                        if (this.isNotFirstParameterInUrl()) {
+                            return this.orderByUrl + "&orderby=" + param;
+                        }
+                        else{
+                            return this.orderByUrl + "?orderby=" + param;
+                        }
                     }
-
-                },
-                titleOrderClass: function(){
-                },
-
-
+                }
             }
         });
     </script>
-
-    @*<div class="col-sm-5 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
-        <div class="col-sm-5 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>*@
-
 
     <script>
         function showAlert(message, colorClass) {
@@ -621,22 +664,22 @@
             @if (Html.DownloadServiceEnabled())
             {
                 <text>
-                    if (localStorage.getItem("orderItems") != null) {
-                        var storedOrderItems = JSON.parse(localStorage["orderItems"]);
-                        var orderitemCount = storedOrderItems.length;
-                        if (orderitemCount > 0) {
-                            $('#orderitem-count').text(orderitemCount);
-                            $('#orderitem-count-text').text(' datasett');
-                            updateAllCartButtons(storedOrderItems);
-                        } else {
-                            $('#orderitem-count').text('');
-                            $('#orderitem-count-text').text('Kurven er tom');
-                        }
-                    } else {
-                        $('#orderitem-count').text('');
-                        $('#orderitem-count-text').text('Kurven er tom');
-                    }
-                </text>
+            if (localStorage.getItem("orderItems") != null) {
+                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+                var orderitemCount = storedOrderItems.length;
+                if (orderitemCount > 0) {
+                    $('#orderitem-count').text(orderitemCount);
+                    $('#orderitem-count-text').text(' datasett');
+                    updateAllCartButtons(storedOrderItems);
+                } else {
+                    $('#orderitem-count').text('');
+                    $('#orderitem-count-text').text('Kurven er tom');
+                }
+            } else {
+                $('#orderitem-count').text('');
+                $('#orderitem-count-text').text('Kurven er tom');
+            }
+            </text>
             }
         });
 
@@ -645,18 +688,18 @@
             @if (Html.DownloadServiceEnabled())
             {
                 <text>
-                    if (typeof Storage !== "undefined") {
+            if (typeof Storage !== "undefined") {
 
-                        console.log('window.localStorage is available!');
-                        var orderItems = [];
-                        $('.add-to-cart-btn:not(.prevent-action)').click(function() {
-                            addToCartButtonClick($(this));
-                        });
-                    } else {
-                        console.log('no native support for HTML5 storage :(');
-                    }
+                console.log('window.localStorage is available!');
+                var orderItems = [];
+                $('.add-to-cart-btn:not(.prevent-action)').click(function() {
+                    addToCartButtonClick($(this));
+                });
+            } else {
+                console.log('no native support for HTML5 storage :(');
+            }
 
-                </text>
+            </text>
             }
 
         });
