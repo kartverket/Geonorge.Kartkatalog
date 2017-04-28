@@ -1240,12 +1240,13 @@ var mainVueModel = new Vue({
         var orderItemsJson = (localStorage["orderItems"] != null) ? JSON.parse(localStorage["orderItems"]) : [];
         var orderLines = [];
         if (orderItemsJson.length) {
-            $(orderItemsJson).each(function (key, val) {
+            var key = 0;
+            $(orderItemsJson).each(function (index, val) {
                 if (val !== undefined && val !== null && val !== "") {
                     var metadata = (localStorage[val + ".metadata"] !== undefined) ? JSON.parse(localStorage[val + ".metadata"]) : "";
                     var apiUrl = (metadata.distributionUrl !== undefined) ? metadata.distributionUrl : defaultUrl;
                     var capabilities = getJsonData(apiUrl + val);
-                    if (capabilities == "error") {
+                    if (capabilities == "error" && metadata !== "") {
                         this.removeOrderLine(metadata.uuid);
                     }
                     else if (capabilities !== "") {
@@ -1312,6 +1313,7 @@ var mainVueModel = new Vue({
 
                         orderLines[key].capabilities.supportsGridSelection = (orderLines[key].capabilities.mapSelectionLayer !== undefined && orderLines[key].capabilities.mapSelectionLayer !== "") ? true : false;
                     }
+                    key += 1;
                 }
             }.bind(this));
         }
