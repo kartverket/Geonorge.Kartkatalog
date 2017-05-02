@@ -813,6 +813,7 @@ var MasterOrderLine = {
                             // All available formats for orderLine
                             selectedArea.allAvailableFormats[orderLine].forEach(function (format) {
                                 if (format.isSelected == undefined) { format.isSelected = false }
+                                if (format.isLocalSelected == undefined) { format.isLocalSelected = false }
 
                                 // Update availableFormats array
                                 var isAllreadyAddedInfo = this.isAllreadyAdded(availableFormats, format, "name");
