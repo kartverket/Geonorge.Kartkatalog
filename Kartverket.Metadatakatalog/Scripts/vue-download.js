@@ -117,6 +117,8 @@ var Areas = {
             this.$parent.updateSelectedProjections();
             this.$parent.updateSelectedFormats();
 
+            if (this.master) { this.$root.updateAllOrderLineFields(); }
+
             this.$root.validateAreas();
         },
         removeSelectedArea: function (area) {
@@ -187,9 +189,11 @@ var Projections = {
                     })
                 }
             }
+            this.$parent.updateAvailableProjections();
             this.$parent.updateSelectedProjections();
             this.$root.validateAreas();
             this.$parent.updateSelectedAreas();
+            this.$forceUpdate();
         }
     }
 };
@@ -324,6 +328,12 @@ var OrderLine = {
                         if (localSelectedArea.isLocalSelected) {
                             var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, localSelectedArea, "code");
                             if (!isAllreadyAddedInfo.added) {
+                                if (localSelectedArea.projections.length == 1) {
+                                    localSelectedArea.projections[0].isLocalSelected = true;
+                                }
+                                if (localSelectedArea.formats.length == 1) {
+                                    localSelectedArea.formats[0].isLocalSelected = true;
+                                }
                                 selectedAreas.push(localSelectedArea);
                             }
                         }
@@ -678,25 +688,10 @@ var MasterOrderLine = {
                         var orderLineUuidIsAdded = false
 
                         if (!orderLineUuidIsAdded) {
-
                             this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
-
-                            // Add available projections to area
-                            if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] == undefined) {
-                                this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = [];
-                            }
-                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableProjections[orderLine] = area.projections;
-
-                            // Add available formats to area
-                            if (this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] == undefined) {
-                                this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = [];
-                            }
                             this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = area.formats;
-
                         }
                     }
-                    // }
-
                 }.bind(this))
             }
         }
@@ -763,14 +758,6 @@ var MasterOrderLine = {
                             selectedAreas.push(area);
                         }
                     }
-
-                    /* if (area.projections.length == 1) {
-                         area.projections[0].isSelected = true;
-                     }
-                     if (area.formats.length == 1) {
-                         area.formats[0].isSelected = true;
-                     }*/
-
                 }.bind(this));
             }
             this.$parent.masterOrderLine.allSelectedAreas = allSelectedAreas;
@@ -784,7 +771,7 @@ var MasterOrderLine = {
                 for (orderLine in this.$parent.masterOrderLine.allSelectedAreas) {
 
                     this.$parent.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
-                        if (selectedArea.allAvailableProjections !== undefined) {
+                        if (selectedArea.allAvailableProjections !== undefined && selectedArea.allAvailableProjections[orderLine] !== undefined && selectedArea.allAvailableProjections[orderLine].length) {
 
                             // All available projections for orderLine
                             selectedArea.allAvailableProjections[orderLine].forEach(function (projection) {
@@ -821,7 +808,7 @@ var MasterOrderLine = {
                 for (orderLine in this.$parent.masterOrderLine.allSelectedAreas) {
 
                     this.$parent.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
-                        if (selectedArea.allAvailableFormats !== undefined) {
+                        if (selectedArea.allAvailableFormats !== undefined && selectedArea.allAvailableFormats[orderLine] !== undefined && selectedArea.allAvailableFormats[orderLine].length) {
 
                             // All available formats for orderLine
                             selectedArea.allAvailableFormats[orderLine].forEach(function (format) {
@@ -1077,7 +1064,6 @@ var MasterOrderLine = {
                                     }.bind(this),
                                 });
                             }
-
                         }
                     }
                 }
@@ -1388,13 +1374,18 @@ var mainVueModel = new Vue({
                 $("[data-toggle='tooltip']").tooltip();
             }, 300);
         },
-
         updateAllOrderLineFields: function () {
             this.$children.forEach(function (orderLine, index) {
-                orderLine.updateSelectedAreas();
-                orderLine.updateAvailableProjections();
-                orderLine.updateAvailableFormats();
+                if (orderLine.master !== undefined && !orderLine.master) {
+                    orderLine.updateSelectedAreas();
+                    orderLine.updateAvailableProjections();
+                    orderLine.updateAvailableFormats();
+                    orderLine.updateSelectedProjections();
+                    orderLine.updateSelectedFormats();
+                    orderLine.updateSelectedFormats();
+                }
             });
+            this.validateAreas();
         },
         sendRequests: function () {
             var responseData = [];
