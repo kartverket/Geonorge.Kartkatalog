@@ -42,8 +42,14 @@
             </div>
             <div class="custom-select-list-dropdown">
                 <div class="custom-select-list-dropdown-content">
+                    <div v-if="available.landsdekkende" class="custom-select-list-option-group">
+                        <p class="custom-select-list-option-group-name">Landsdekkende</p>
+                        <ul class="custom-select-list-options area-option-list">
+                            <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': (area.isSelected && master) || (area.isLocalSelected && !master)}" v-for="area in available.landsdekkende">{{ area.name }}</li>
+                        </ul>
+                    </div>
                     <div v-for="(areas, areaType) in available" class="custom-select-list-option-group">
-                        <div v-if="!master || $root.isSupportedType(areaType)" v-show="areas.length">
+                        <div v-if="areaType !== 'landsdekkende' && (!master || $root.isSupportedType(areaType))" v-show="areas.length">
                             <p class="custom-select-list-option-group-name">{{ areaType }}</p>
                             <ul class="custom-select-list-options area-option-list">
                                 <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': (area.isSelected && master) || (area.isLocalSelected && !master)}" v-for="area in areas">{{ area.name }}</li>

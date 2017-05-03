@@ -1307,7 +1307,7 @@ var mainVueModel = new Vue({
         },
         isSupportedType: function (areaType) {
             var isSupportedType = false;
-            var supportedAreaTypes = ["fylke", "kommune", "landsdekkende"];
+            var supportedAreaTypes = ["fylke", "kommune"];
             supportedAreaTypes.forEach(function (supportedAreaType) {
                 if (areaType == supportedAreaType) isSupportedType = true;
             })
