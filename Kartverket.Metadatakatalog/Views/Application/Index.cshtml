@@ -38,135 +38,150 @@
 
 @*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
-    <div>
-        <div v-bind:style="{ backgroundColor: bgcolor }" style="padding: 10px 0px;">
+        <div v-bind:class="$root.columns">
+            <div v-bind:style="{ backgroundColor: bgcolor }" style="padding: 10px 0px;">
 
-            @* **** LISTE **** *@
-            <div v-if="$root.viewType == 'list'">
+                @* **** LISTE **** *@
+                <div v-if="$root.viewType == 'list'">
 
-                <div class="col-sm-1">
-                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-loading-message="Henter innhold">
-                        <img v-bind:src="resultItem.OrganizationLogoUrl" class="img-responsive center-block" v-bind:alt="resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization" />
-                    </a>
-                </div>
+                    <div class="col-sm-1">
+                        <a v-bind:href="organizationUrl" class="show-loading-animation" data-loading-message="Henter innhold">
+                            <img v-bind:src="resultItem.OrganizationLogoUrl" class="img-responsive center-block" v-bind:alt="resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization" />
+                        </a>
+                    </div>
 
-                <div class="col-sm-6">
-                    <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                        <p style="font-size:14pt" class="role-button search-results-name" role="button">{{resultItem.Title}}</p>
-                    </a>
-                    <p>{{description}}</p>
-                    <p>
-                        Tilgjengelig som:
-                        <span v-bind:title="'Tilgjengelig som ' + resultItem.DistributionType" style="width:auto" class="label label-tjeneste">{{resultItem.DistributionType}}</span>
-                    </p>
-                </div>
+                    <div class="col-sm-6">
+                        <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                            <p style="font-size:14pt" class="role-button search-results-name" role="button">{{resultItem.Title}}</p>
+                        </a>
+                        <p>{{description}}</p>
+                        <p>
+                            Tilgjengelig som:
+                            <span v-bind:title="'Tilgjengelig som ' + resultItem.DistributionType" style="width:auto" class="label label-tjeneste">{{resultItem.DistributionType}}</span>
+                        </p>
+                    </div>
 
-                <div class="col-sm-2">
+                    <div class="col-sm-2">
 
-                    <a style="width: 130px" v-bind:id="mapLink.mapLinkButtonId" v-bind:href="mapLink.href" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
-                        <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
-                    </a>
+                        <a style="width: 130px" v-bind:id="mapLink.mapLinkButtonId" v-bind:href="mapLink.href" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
+                            <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
+                        </a>
 
-                    <a style="width: 130px"
-                       v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                       v-bind:id="'addToCart-' + resultItem.Uuid"
-                       v-bind:href='resultItem.AddToCartUrl'
-                       data-toggle='tooltip'
-                       data-placement='bottom'
-                       onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                       v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                       class="btn btn-default add-to-cart-btn"
-                       v-bind:class="[resultItem.IsRestricted || resultItem.IsOffline ? 'prevent-action' : '']">
-                        <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
-                    </a>
+                        <a style="width: 130px"
+                           v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
+                           v-bind:id="'addToCart-' + resultItem.Uuid"
+                           v-bind:href='resultItem.AddToCartUrl'
+                           data-toggle='tooltip'
+                           data-placement='bottom'
+                           onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                           v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                           class="btn btn-default add-to-cart-btn"
+                           v-bind:class="[resultItem.IsRestricted || resultItem.IsOffline ? 'prevent-action' : '']">
+                            <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
+                        </a>
 
-                    <a style="width: 130px"
-                       v-else-if="resultItem.ShowDownloadLink"
-                       v-bind:href="resultItem.DownloadUrl"
-                       onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                       data-toggle='tooltip'
-                       data-placement='bottom'
-                       v:bind:title='"Last ned datasett for " + resultItem.Title'
-                       target="_blank"
-                       class="btn btn-default">
-                        <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                    </a>
+                        <a style="width: 130px"
+                           v-else-if="resultItem.ShowDownloadLink"
+                           v-bind:href="resultItem.DownloadUrl"
+                           onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                           data-toggle='tooltip'
+                           data-placement='bottom'
+                           v:bind:title='"Last ned datasett for " + resultItem.Title'
+                           target="_blank"
+                           class="btn btn-default">
+                            <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
+                        </a>
 
-                    <a style="width: 130px"
-                       v-else
-                       v-bind:title='"Last ned datasett for " + resultItem.Title'
-                       class="disabled btn btn-default">
-                        <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                    </a>
-                </div>
+                        <a style="width: 130px"
+                           v-else
+                           v-bind:title='"Last ned datasett for " + resultItem.Title'
+                           class="disabled btn btn-default">
+                            <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
+                        </a>
+                    </div>
 
-                <div class="col-sm-3">
-                    <a v-if="thumbnailSrc" v-bind:href="readMoreUrl">
-                        <img v-bind:src="thumbnailSrc" />
-                    </a>
-                </div>
+                    <div class="col-sm-3">
+                        <a v-if="thumbnailSrc" v-bind:href="readMoreUrl">
+                            <img v-bind:src="thumbnailSrc" />
+                        </a>
+                    </div>
 
-                <div class="clearfix"></div>
-                @* Underliggende distribusjoner *@
+                    <div class="clearfix"></div>
+                    @* Underliggende distribusjoner *@
 
-                <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-md-12" title="Vis underliggende distribusjoner">
-                    <div style="padding: 10px 10px 1px; background-color:#f4f4f4">
-                        <p><b>Underliggende distribusjoner   </b><span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span></p>
-                        <div v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
+                    <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-md-12" title="Vis underliggende distribusjoner">
+                        <div style="padding: 10px 10px 1px; background-color:#f4f4f4">
+                            <p><b>Underliggende distribusjoner   </b><span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span></p>
+                            <div v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
 
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                @* *** TABELL *** *@
+                <div v-if="$root.viewType == 'table'">
+                    @*Pil underliggende distribusjoner i tabellvisning*@
+                    <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-sm-1" title="Vis underliggende distribusjoner">
+                        <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
+                    </div>
+
+                    <div class="col-sm-4">
+                        @*Tittel*@
+                        <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                            <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+                        </a>
+                    </div>
+
+                    @*Distribusjonstype tabell *@
+                    <div class="col-sm-2">
+                        <span v-bind:title="resultItem.DistributionType" data-toggle='tooltip' data-placement='bottom' class="label label-tjeneste" style="width:auto">{{resultItem.DistributionType}}</span>
+                    </div>
+
+                    @*Organisasjon tabell*@
+                    <div class="col-sm-3">
+                        <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                            {{resultItem.Organization}}
+                        </a>
+                    </div>
+
+                    @*Åpne data*@
+                    <div class="col-sm-1">
+                        <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                    </div>
+
+
+                    @*Kart*@
+                    <div class="col-xs-1">
+                        <a v-bind:id="mapLink.mapLinkId" v-bind:href="mapLink.href" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                            <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
+                        </a>
+                    </div>
+
+                </div>
+
+                @* *** GALLERI *** *@
+                <div v-if="$root.viewType == 'gallery'" class="block shortcutpageteaserblock" style="padding:0px;">
+                    <div class="teaser-with-background-image">
+                        <a v-bind:href="readMoreUrl">
+                            <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
+                                <div class="teaser-overlay">
+                                    <div class="teaser-caption">
+                                        <div class="teaser-heading">{{resultItem.Title}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
             </div>
 
-            @* *** TABELL *** *@
-            <div v-if="$root.viewType == 'table'">
-                @*Pil underliggende distribusjoner i tabellvisning*@
-                <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-sm-1" title="Vis underliggende distribusjoner">
-                    <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
-                </div>
-
-                <div class="col-sm-4">
-                    @*Tittel*@
-                    <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                        <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
-                    </a>
-                </div>
-
-                @*Distribusjonstype tabell *@
-                <div class="col-sm-2">
-                    <span v-bind:title="resultItem.DistributionType" data-toggle='tooltip' data-placement='bottom' class="label label-tjeneste" style="width:auto">{{resultItem.DistributionType}}</span>
-                </div>
-
-                @*Organisasjon tabell*@
-                <div class="col-sm-3">
-                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
-                        {{resultItem.Organization}}
-                    </a>
-                </div>
-
-                @*Åpne data*@
-                <div class="col-sm-1">
-                    <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
-                </div>
-
-
-                @*Kart*@
-                <div class="col-xs-1">
-                    <a v-bind:id="mapLink.mapLinkId" v-bind:href="mapLink.href" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
-                        <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
-                    </a>
-                </div>
+            <div v-if="$root.viewType == 'table'" v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
 
             </div>
-
-            <div class="clearfix"></div>
         </div>
-
-        <div v-if="$root.viewType == 'table'" v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
-
-        </div>
-    </div>
 </script>
 
 @helper DisplayPaginationBottom()
@@ -177,33 +192,33 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
+                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                     else
                     {
-                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
+                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
                 }
             </ul>
         </div>
@@ -237,33 +252,33 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
+                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
+                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                     else
                     {
-                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
+                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
+                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
                 }
             </ul>
         </div>
@@ -293,13 +308,13 @@
 <div class="row">
     <div id="searchResultTable" class="col-md-9">
 
-        @*<span v-on:click="viewType = 'galery'" class="pull-right fa fa-th-large"></span>*@
-        <span v-on:click="viewType = 'list'" class="pull-right fa fa-list"></span>
-        <span v-on:click="viewType = 'table'" class="pull-right fa fa-table"></span>
+        <span v-on:click="view('gallery')" class="pull-right fa fa-th-large"></span>
+        <span v-on:click="view('list')" class="pull-right fa fa-list"></span>
+        <span v-on:click="view('table')" class="pull-right fa fa-table"></span>
         <div class="clearfix"></div>
         @if (Model.Result != null)
             {
-            <div id="tableView">
+            <div>
                 <div v-if="$root.viewType == 'table'" class="row">
                     <div v-bind:class="orderByTitle.className" class="col-sm-5" v-bind:id="orderByTitle.id"><p><a v-bind:href="orderByTitle.url" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-2"><p>Type</p></div>
@@ -309,7 +324,7 @@
                 </div>
 
                 <div class="menu-separator search-results-table-heading"></div>
-                <div v-for="item in viewModel.Result.Items" style="border-bottom: 1px solid rgb(109, 110, 112);">
+                <div v-for="item in viewModel.Result.Items" v-bind:class="tableBorder">
                     <div is="resultItem" v-bind:result-item="item"></div>
                 </div>
 
@@ -338,7 +353,7 @@
         if (item.ShowMapLink() || item.ShowServiceMapLink())
         {
             @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                                                        }
+                                                                }
     }
 </script>
 
@@ -397,7 +412,7 @@
                     if (this.showMapLink()) {
                         mapLink.href += this.resultItem.DownloadUrl;
 
-                    }else if (this.showServiceMapLink()) {
+                    } else if (this.showServiceMapLink()) {
                         mapLink.href += this.resultItem.ServiceUrl;
                         mapLink.iconPermission += restrictedServiceClass();
                     } else {
@@ -414,7 +429,7 @@
                     }
                     return mapLink;
                 },
-                itemAddToCart: function(){
+                itemAddToCart: function() {
                     var itemAddToCart = {
                         buttonClass: "btn btn-default add-to-cart-btn",
                     };
@@ -436,7 +451,7 @@
                     var url = "/metadata/" + organization + "/" + title + "/" + uuid;
                     return url;
                 },
-                description: function () {
+                description: function() {
                     var description;
                     if (this.resultItem.Abstract.length > 250) {
                         description = this.resultItem.Abstract.substring(0, 251) + " ...";
@@ -445,7 +460,7 @@
                     }
                     return description;
                 },
-                thumbnailSrc: function (){
+                thumbnailSrc: function() {
                     var src = "/thumbnail?uuid=" + this.resultItem.Uuid + "&type=small";
                     return src;
                 }
@@ -497,7 +512,7 @@
                     }
                     this.underlayingDistributionsRequested = true;
                 },
-                addToCart: function(){
+                addToCart: function() {
                     var item = {
                         name: this.resultItem.Title,
                         uuid: this.resultItem.Uuid,
@@ -511,11 +526,12 @@
                     if (localStorage.getItem('orderItems') != null) {
                         orderItems = (JSON.parse(localStorage.getItem('orderItems')));
                     }
-                    $.map(orderItems, function (elementOfArray, indexInArray) {
-                        if (elementOfArray == item.itemuuid) {
-                            added = true;
-                        }
-                    });
+                    $.map(orderItems,
+                        function(elementOfArray, indexInArray) {
+                            if (elementOfArray == item.itemuuid) {
+                                added = true;
+                            }
+                        });
                     if (!added) {
                         orderItems.push(item.uuid);
                         localStorage["orderItems"] = JSON.stringify(orderItems);
@@ -558,6 +574,7 @@
                 ResultItems: [],
                 currentOrderByParameter: getParameterByName("orderby"),
                 viewType: "table",
+                columns: "",
                 orderByUrl: "@Html.Raw(HttpUtility.HtmlDecode(HttpContext.Current.Request.Url.AbsoluteUri)).ToString()",
                 orderByTitle: {
                     orderByParam: "title",
@@ -570,7 +587,8 @@
                     className: "orderby orderby-organization orderby-asc",
                     id: "orderby-organization-asc",
                     url: "",
-                }
+                },
+                tableBorder: "table-border-bottom"
             },
             components: {
                 ResultItem: ResultItemComponent
@@ -583,32 +601,28 @@
                     this.orderByOwner.orderByParam = "organization";
                     this.orderByOwner.id = "orderby-organization-asc";
                     this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                }
-                else if (this.currentOrderByParameter == "organization") {
+                } else if (this.currentOrderByParameter == "organization") {
                     this.orderByTitle.orderByParam = "title";
                     this.orderByTitle.id = "orderby-title-asc";
                     this.orderByTitle.className = "orderby orderby-title orderby-asc";
                     this.orderByOwner.orderByParam = "organization_desc";
                     this.orderByOwner.id = "orderby-organization-desc";
                     this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                }
-                else if (this.currentOrderByParameter == "") {
+                } else if (this.currentOrderByParameter == "") {
                     this.orderByTitle.orderByParam = "title";
                     this.orderByOwner.orderByParam = "organization";
                     this.orderByTitle.id = "orderby-title-asc";
                     this.orderByTitle.className = "orderby orderby-title orderby-asc";
                     this.orderByOwner.id = "orderby-organization-asc";
                     this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                }
-                else if (this.currentOrderByParameter == "organization_desc") {
+                } else if (this.currentOrderByParameter == "organization_desc") {
                     this.orderByTitle.orderByParam = "title";
                     this.orderByOwner.orderByParam = "organization";
                     this.orderByTitle.id = "orderby-title-asc";
                     this.orderByTitle.className = "orderby orderby-title orderby-asc";
                     this.orderByOwner.id = "orderby-organization-desc";
                     this.orderByOwner.className = "orderby orderby-organization orderby-desc";
-                }
-                else if (this.currentOrderByParameter == "title_desc") {
+                } else if (this.currentOrderByParameter == "title_desc") {
                     this.orderByTitle.orderByParam = "title";
                     this.orderByOwner.orderByParam = "organization";
                     this.orderByTitle.id = "orderby-title-desc";
@@ -616,29 +630,47 @@
                     this.orderByOwner.id = "orderby-organization-asc";
                     this.orderByOwner.className = "orderby orderby-organization orderby-asc";
                 }
-                
+
+                this.viewType = this.getSelectedViewType();
+
                 this.orderByTitle.url = this.getOrderByUrl(this.orderByTitle.orderByParam);
                 this.orderByOwner.url = this.getOrderByUrl(this.orderByOwner.orderByParam);
             },
             methods: {
-                orderByExists: function(){
-                    return this.orderByUrl.includes("orderby")
+                orderByExists: function() {
+                    return this.orderByUrl.includes("orderby");
                 },
-                isNotFirstParameterInUrl: function(){
-                    return this.orderByUrl.includes("?")
+                isNotFirstParameterInUrl: function() {
+                    return this.orderByUrl.includes("?");
                 },
-                getOrderByUrl: function(param){
+                getOrderByUrl: function(param) {
                     if (this.orderByExists()) {
                         return this.orderByUrl.replace("orderby=" + this.currentOrderByParameter, "orderby=" + param);
-                    }
-                    else{
+                    } else {
                         if (this.isNotFirstParameterInUrl()) {
                             return this.orderByUrl + "&orderby=" + param;
-                        }
-                        else{
+                        } else {
                             return this.orderByUrl + "?orderby=" + param;
                         }
                     }
+                },
+                view: function(type) {
+                    this.viewType = type;
+                    localStorage.setItem("layout", this.viewType);
+                    if (type == "gallery") {
+                        this.columns = 'col-sm-4';
+                        this.tableBorder = "";
+                    } else {
+                        this.columns = "";
+                    }
+                },
+                getSelectedViewType: function() {
+                    var viewType = "table";
+                    if (localStorage.getItem("layout")) {
+                        viewType = localStorage.getItem("layout");
+                        this.view(viewType);
+                    }
+                    return viewType;
                 }
             }
         });
@@ -664,22 +696,22 @@
             @if (Html.DownloadServiceEnabled())
             {
                 <text>
-            if (localStorage.getItem("orderItems") != null) {
-                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
-                var orderitemCount = storedOrderItems.length;
-                if (orderitemCount > 0) {
-                    $('#orderitem-count').text(orderitemCount);
-                    $('#orderitem-count-text').text(' datasett');
-                    updateAllCartButtons(storedOrderItems);
-                } else {
-                    $('#orderitem-count').text('');
-                    $('#orderitem-count-text').text('Kurven er tom');
-                }
-            } else {
-                $('#orderitem-count').text('');
-                $('#orderitem-count-text').text('Kurven er tom');
-            }
-            </text>
+                    if (localStorage.getItem("orderItems") != null) {
+                        var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+                        var orderitemCount = storedOrderItems.length;
+                        if (orderitemCount > 0) {
+                            $('#orderitem-count').text(orderitemCount);
+                            $('#orderitem-count-text').text(' datasett');
+                            updateAllCartButtons(storedOrderItems);
+                        } else {
+                            $('#orderitem-count').text('');
+                            $('#orderitem-count-text').text('Kurven er tom');
+                        }
+                    } else {
+                        $('#orderitem-count').text('');
+                        $('#orderitem-count-text').text('Kurven er tom');
+                    }
+                </text>
             }
         });
 
@@ -688,18 +720,18 @@
             @if (Html.DownloadServiceEnabled())
             {
                 <text>
-            if (typeof Storage !== "undefined") {
+                    if (typeof Storage !== "undefined") {
 
-                console.log('window.localStorage is available!');
-                var orderItems = [];
-                $('.add-to-cart-btn:not(.prevent-action)').click(function() {
-                    addToCartButtonClick($(this));
-                });
-            } else {
-                console.log('no native support for HTML5 storage :(');
-            }
+                        console.log('window.localStorage is available!');
+                        var orderItems = [];
+                        $('.add-to-cart-btn:not(.prevent-action)').click(function() {
+                            addToCartButtonClick($(this));
+                        });
+                    } else {
+                        console.log('no native support for HTML5 storage :(');
+                    }
 
-            </text>
+                </text>
             }
 
         });

@@ -121,3 +121,7 @@
         .custom-select-list .custom-select-list-dropdown ul.custom-select-list-options li:before {
             content: none;
         }
+
+.table-border-bottom {
+    border-bottom: 1px solid rgb(109, 110, 112);
+}
