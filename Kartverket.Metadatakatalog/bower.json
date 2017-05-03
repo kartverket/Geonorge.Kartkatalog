@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "kartverket-felleskomponenter": "6.8.3",
+    "kartverket-felleskomponenter": "6.8.5",
     "vue": "^2.0.0"
   },
   "license": "MIT",
