@@ -39,7 +39,7 @@
 @*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
         <div v-bind:class="$root.columns">
-            <div v-bind:style="{ backgroundColor: bgcolor }" style="padding: 10px 0px;">
+            <div v-bind:style="[$root.viewType == 'gallery' ? '' : 'backgroundColor: bgcolor']" style="padding: 10px 0px;">
 
                 @* **** LISTE **** *@
                 <div v-if="$root.viewType == 'list'">
@@ -662,6 +662,7 @@
                         this.tableBorder = "";
                     } else {
                         this.columns = "";
+                        this.tableBorder = "table-border-bottom";
                     }
                 },
                 getSelectedViewType: function() {
