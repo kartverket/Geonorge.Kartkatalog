@@ -39,10 +39,10 @@
 @*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
         <div v-bind:class="$root.columns">
-            <div v-bind:style="[$root.viewType == 'gallery' ? '' : 'backgroundColor: bgcolor']" style="padding: 10px 0px;">
+            <div v-bind:style="[$root.viewType == 'galleryView' ? '' : 'backgroundColor: bgcolor']" style="padding: 10px 0px;">
 
                 @* **** LISTE **** *@
-                <div v-if="$root.viewType == 'list'">
+                <div v-if="$root.viewType == 'listView'">
 
                     <div class="col-sm-1">
                         <a v-bind:href="organizationUrl" class="show-loading-animation" data-loading-message="Henter innhold">
@@ -120,7 +120,7 @@
                 </div>
 
                 @* *** TABELL *** *@
-                <div v-if="$root.viewType == 'table'">
+                <div v-if="$root.viewType == 'tableView'">
                     @*Pil underliggende distribusjoner i tabellvisning*@
                     <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-sm-1" title="Vis underliggende distribusjoner">
                         <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
@@ -161,7 +161,7 @@
                 </div>
 
                 @* *** GALLERI *** *@
-                <div v-if="$root.viewType == 'gallery'" class="block shortcutpageteaserblock" style="padding:0px;">
+                <div v-if="$root.viewType == 'galleryView'" class="block shortcutpageteaserblock" style="padding:0px;">
                     <div class="teaser-with-background-image">
                         <a v-bind:href="readMoreUrl">
                             <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
@@ -178,7 +178,7 @@
                 <div class="clearfix"></div>
             </div>
 
-            <div v-if="$root.viewType == 'table'" v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
+            <div v-if="$root.viewType == 'tableView'" v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
 
             </div>
         </div>
@@ -308,14 +308,14 @@
 <div class="row">
     <div id="searchResultTable" class="col-md-9">
 
-        <span v-on:click="view('gallery')" class="pull-right fa fa-th-large"></span>
-        <span v-on:click="view('list')" class="pull-right fa fa-list"></span>
-        <span v-on:click="view('table')" class="pull-right fa fa-table"></span>
+        <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
+        <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
+        <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
         <div class="clearfix"></div>
         @if (Model.Result != null)
             {
             <div>
-                <div v-if="$root.viewType == 'table'" class="row">
+                <div v-if="$root.viewType == 'tableView'" class="row">
                     <div v-bind:class="orderByTitle.className" class="col-sm-5" v-bind:id="orderByTitle.id"><p><a v-bind:href="orderByTitle.url" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-2"><p>Type</p></div>
                     <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id"><p><a v-bind:href="orderByOwner.url" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
@@ -573,7 +573,7 @@
                 viewModel: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
                 ResultItems: [],
                 currentOrderByParameter: getParameterByName("orderby"),
-                viewType: "table",
+                viewType: "tableView",
                 columns: "",
                 orderByUrl: "@Html.Raw(HttpUtility.HtmlDecode(HttpContext.Current.Request.Url.AbsoluteUri)).ToString()",
                 orderByTitle: {
@@ -657,7 +657,7 @@
                 view: function(type) {
                     this.viewType = type;
                     localStorage.setItem("layout", this.viewType);
-                    if (type == "gallery") {
+                    if (type == "galleryView") {
                         this.columns = 'col-sm-4';
                         this.tableBorder = "";
                     } else {
@@ -666,7 +666,7 @@
                     }
                 },
                 getSelectedViewType: function() {
-                    var viewType = "table";
+                    var viewType = "tableView";
                     if (localStorage.getItem("layout")) {
                         viewType = localStorage.getItem("layout");
                         this.view(viewType);
