@@ -39,7 +39,7 @@
 @*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
         <div v-bind:class="$root.columns">
-            <div v-bind:style="[$root.viewType == 'galleryView' ? '' : 'backgroundColor: bgcolor']" style="padding: 10px 0px;">
+            <div v-bind:style="{backgroundColor: backgroundColor}" style="padding: 10px 0px;">
 
                 @* **** LISTE **** *@
                 <div v-if="$root.viewType == 'listView'">
@@ -370,7 +370,7 @@
                     expanded: false,
                     underlayingDistributions: {},
                     underlayingDistributionsRequested: false,
-                    bgcolor: "#dfdcda",
+                    backgroundColor: "#fff",
                 };
                 return data;
             },
@@ -510,6 +510,11 @@
                             hideLoadingAnimation();
                         }.bind(this));
                     }
+                    if (this.expanded) {
+                        this.backgroundColor = "#f4f4f4";
+                    } else {
+                        this.backgroundColor = "#fff";
+                    }
                     this.underlayingDistributionsRequested = true;
                 },
                 addToCart: function() {
@@ -582,6 +587,7 @@
                     id: "orderby-title-asc",
                     url: "",
                 },
+                backgroundColor: "#fff",
                 orderByOwner: {
                     orderByParam: "organization",
                     className: "orderby orderby-organization orderby-asc",
