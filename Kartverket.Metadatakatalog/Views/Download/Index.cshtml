@@ -312,8 +312,8 @@
             <div class="col-md-12">
                 <div v-for="responseItem in orderResponse">
                     <p>Referansenummer: {{ responseItem.data.referenceNumber }}</p>
-                    <div class="list-group download-list">
-                        <div v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" class="list-group-item">
+                    <div class="download-list">
+                        <div v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" class="download-list-item">
                             <div class="row">
                                 <div class="col-sm-6 col-md-7">
                                     <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
@@ -331,7 +331,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-if="file.status == 'WaitingForProcessing'" v-for="file in responseItem.data.files" class="list-group-item">
+                        <div v-if="file.status == 'WaitingForProcessing'" v-for="file in responseItem.data.files" class="download-list-item">
                             <div class="row">
                                 <div class="col-sm-6 col-md-7">
                                     <span class="custom-icon custom-icon-info"></span>

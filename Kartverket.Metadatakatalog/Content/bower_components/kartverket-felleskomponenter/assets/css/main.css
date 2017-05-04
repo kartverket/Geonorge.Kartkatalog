@@ -2663,7 +2663,7 @@ button.btn {
   padding: 12px; }
   #orderlist .orderline.orderline-master {
     border-bottom: 2px solid #fe5000;
-    background: #f1f2f2; }
+    background-color: #fff !important; }
   #orderlist .orderline:nth-child(odd) {
     background-color: #fbfcfc; }
   #orderlist .orderline:nth-child(even) {
@@ -2729,23 +2729,23 @@ button.btn {
   top: 0; }
 
 /* Nedlastingskvittering */
-.download-list .list-group-item a {
-  color: #3867C8;
-  text-decoration: none; }
-
-.download-list .list-group-item span {
-  padding-right: 10px;
-  margin-right: 5px; }
-  .download-list .list-group-item span.custom-icon {
-    display: inline-block;
-    width: 24px;
-    height: 24px; }
-  .download-list .list-group-item span.download-list-item-name {
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 14pt;
-    line-height: 16pt; }
-    .download-list .list-group-item span.download-list-item-name small {
+.download-list .download-list-item {
+  padding: 12px; }
+  .download-list .download-list-item:nth-child(odd) {
+    background-color: #fbfcfc; }
+  .download-list .download-list-item:nth-child(even) {
+    background-color: #f7f8f8; }
+  .download-list .download-list-item a {
+    color: #3867C8;
+    text-decoration: none; }
+  .download-list .download-list-item span {
+    padding-right: 10px;
+    margin-right: 5px; }
+    .download-list .download-list-item span.custom-icon {
+      display: inline-block;
+      width: 24px;
+      height: 24px; }
+    .download-list .download-list-item span.download-list-item-name small {
       display: block;
       margin: 0;
       line-height: 1; }
