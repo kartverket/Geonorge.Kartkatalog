@@ -59,7 +59,7 @@
         <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
             <div v-bind:class="{'selected': facetResult.isSelected, 'is-empty': facetResult.Count == 0}" v-for="facetResult in FacetResults">
                 <div class="facet-checkbox  facet-link">
-                    <span v-on:click="$root.toggleFilter(this, facetResult)"
+                    <span v-on:click="$root.toggleFilter(FacetField, facetResult)"
                           data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
                     </span>
                     {{ facetResult.FacetName }} <span class="text-muted">({{ facetResult.Count }})</span>
@@ -608,9 +608,9 @@
                 var url = window.location.origin + window.location.pathname + urlParametersString;
                 return url;
             },
-            removeSelectedFacet: function(categoryFacet, facet) {
+            removeSelectedFacet: function(FacetField, facet) {
                 var facetUrlObject = {
-                    name: categoryFacet.FacetField,
+                    name: FacetField,
                     value: facet.Name
                 }
                 this.selectedFacets.forEach(function(selectedFacet, index) {
@@ -626,32 +626,32 @@
                     }
                 }.bind(this));
             },
-            addSelectedFacet: function(categoryFacet, facet) {
+            addSelectedFacet: function(FacetField, facet) {
                 var facetUrlObject = {
-                    name: categoryFacet.FacetField,
+                    name: FacetField,
                     value: facet.Name
                 }
                 this.selectedFacets.push(facetUrlObject);
                 facet.isSelected = true;
             },
-            toggleFilter: function(categoryFacet, facet) {
+            toggleFilter: function(FacetField, facet) {
 
                 if (facet.isSelected) {
-                    this.removeSelectedFacet(categoryFacet, facet);
+                    this.removeSelectedFacet(FacetField, facet);
                     if (facet.hasSelected !== undefined &&
                         facet.hasSelected == true &&
-                        categoryFacet.FacetField == "area" &&
+                        FacetField == "area" &&
                         facet.municipalities !== undefined) {
                         facet.municipalities.forEach(function(municipality) {
 
-                            this.removeSelectedFacet(categoryFacet, municipality);
+                            this.removeSelectedFacet(FacetField, municipality);
                         }.bind(this));
                         facet.hasSelected = false;
                         facet.isSelected = false;
                     }
 
                 } else {
-                    this.addSelectedFacet(categoryFacet, facet);
+                    this.addSelectedFacet(FacetField, facet);
                 }
 
                 var url = this.createUrlWithParameters();
