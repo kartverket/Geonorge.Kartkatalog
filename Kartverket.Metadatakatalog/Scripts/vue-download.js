@@ -1468,7 +1468,7 @@ var mainVueModel = new Vue({
                 });
                 orderLineUuids.forEach(function (orderLineUuid) {
                     this.removeOrderLine(orderLineUuid);
-                })
+                }.bind(this));
             }
             $('#remove-all-items-modal').modal('hide');
         },
