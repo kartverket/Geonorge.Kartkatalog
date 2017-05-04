@@ -1424,7 +1424,7 @@ var mainVueModel = new Vue({
             }
 
             if (!responseFailed) {
-                mainVueModel.removeAllOrderItems();
+                this.removeAllOrderLines();
             }
             this.orderResponse = responseData;
         },
