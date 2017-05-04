@@ -1,6 +1,6 @@
 ﻿<script type="text/x-template" id="distributionRows">
     @* *** Liste *** *@
-    <div v-if="$root.viewType == 'list'">
+    <div v-if="$root.viewType == 'listView'">
         <div>
             <div class="col-sm-5"><p>Tittel</p></div>
             <div class="col-sm-2"><p>Type</p></div>
@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <div v-else-if="$root.viewType == 'table'">
+    <div v-else-if="$root.viewType == 'tableView'">
         <div style="padding: 5px 0px 5px; background-color:#f4f4f4">
             @*Tittel*@
             <div style="padding: 10px 0px;" v-for="resultItemDistribution in underlayingDistributions">
