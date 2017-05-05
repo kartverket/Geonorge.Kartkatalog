@@ -447,6 +447,7 @@
 
                     if (this.showMapLink()) {
                         mapLink.href += this.resultItem.DownloadUrl;
+                        mapLink.iconPermission += " custom-icon-kartmarkoer";
 
                     } else if (this.showServiceMapLink()) {
                         mapLink.href += this.resultItem.ServiceUrl;
@@ -471,10 +472,9 @@
                     };
 
                     if (this.resultItem.IsRestricted || this.resultItem.IsOffline) {
-                        itemAddToCart.buttonClass += " add-to-cart-btn prevent-action"
+                        itemAddToCart.buttonClass += " add-to-cart-btn prevent-action";
                     }
                     return itemAddToCart;
-
                 },
                 organizationUrl: function() {
                     url = "/metadata/" + this.resultItem.OrganizationSeoName;
@@ -499,7 +499,8 @@
                 thumbnailSrc: function() {
                     var src = "/thumbnail?uuid=" + this.resultItem.Uuid + "&type=small";
                     return src;
-                }
+                },
+                
             },
             methods: {
                 downloadUrl: function(url) {
@@ -739,22 +740,22 @@
             @if (Html.DownloadServiceEnabled())
             {
                 <text>
-            if (localStorage.getItem("orderItems") != null) {
-                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
-                var orderitemCount = storedOrderItems.length;
-                if (orderitemCount > 0) {
-                    $('#orderitem-count').text(orderitemCount);
-                    $('#orderitem-count-text').text(' datasett');
-                    updateAllCartButtons(storedOrderItems);
-                } else {
-                    $('#orderitem-count').text('');
-                    $('#orderitem-count-text').text('Kurven er tom');
-                }
-            } else {
-                $('#orderitem-count').text('');
-                $('#orderitem-count-text').text('Kurven er tom');
-            }
-            </text>
+                    if (localStorage.getItem("orderItems") != null) {
+                        var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+                        var orderitemCount = storedOrderItems.length;
+                        if (orderitemCount > 0) {
+                            $('#orderitem-count').text(orderitemCount);
+                            $('#orderitem-count-text').text(' datasett');
+                            updateAllCartButtons(storedOrderItems);
+                        } else {
+                            $('#orderitem-count').text('');
+                            $('#orderitem-count-text').text('Kurven er tom');
+                        }
+                    } else {
+                        $('#orderitem-count').text('');
+                        $('#orderitem-count-text').text('Kurven er tom');
+                    }
+                </text>
             }
         });
 
@@ -763,18 +764,18 @@
             @if (Html.DownloadServiceEnabled())
             {
                 <text>
-            if (typeof Storage !== "undefined") {
+                    if (typeof Storage !== "undefined") {
 
-                console.log('window.localStorage is available!');
-                var orderItems = [];
-                $('.add-to-cart-btn:not(.prevent-action)').click(function() {
-                    addToCartButtonClick($(this));
-                });
-            } else {
-                console.log('no native support for HTML5 storage :(');
-            }
+                        console.log('window.localStorage is available!');
+                        var orderItems = [];
+                        $('.add-to-cart-btn:not(.prevent-action)').click(function() {
+                            addToCartButtonClick($(this));
+                        });
+                    } else {
+                        console.log('no native support for HTML5 storage :(');
+                    }
 
-            </text>
+                </text>
             }
 
         });
