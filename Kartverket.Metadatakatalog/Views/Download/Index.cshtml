@@ -124,7 +124,7 @@
 
 <script type="text/x-template" id="order-line-template">
     <div v-bind:class="[expanded ? '' : 'readonly']">
-        <h2 v-on:click="expanded = !expanded">
+        <h2 v-on:click="expanded = !expanded" class="clickable">
             <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span> {{ metadata.name }}
         </h2>
         <div class="pull-right margin-top-10">
@@ -307,53 +307,60 @@
         </div>
     </article>
 
-    <article id="responseList" v-show="orderResponse.length">
+    <article id="responseList" v-show="orderResponseGrouped.length">
         <div class="row">
             <div class="col-md-12">
-                <div v-for="responseItem in orderResponse">
-                    <p>Referansenummer: {{ responseItem.data.referenceNumber }}</p>
-                    <div class="download-list">
-                        <div v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" class="download-list-item">
-                            <div class="row">
-                                <div class="col-sm-6 col-md-7">
-                                    <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
-                                        <span class="custom-icon custom-icon-lastned"></span>
+                <div v-for="responseItem in orderResponseGrouped">
+                    <div class="orderlines">
+                        <div v-for="(orderLineFiles, orderLineName) in responseItem.files" class="orderline">
+                            <h2>{{ orderLineName }}</h2>
+                            <div v-if="file.status == 'ReadyForDownload'" v-for="file in orderLineFiles" class="download-list-subitem">
+                                <div class="row">
+                                    <div class="col-sm-5 col-md-6">
                                         <span class="download-list-item-name">
-                                            {{ file.metadataName }}, <span class="inline-block">{{ file.areaName }}</span>
+                                            <span class="inline-block">{{ file.areaName }}</span>
                                         </span>
-                                    </a>
-                                </div>
-                                <div class="col-sm-4 col-md-3">
-                                    <span class="label label-success auto-width">{{ file.projectionName }}</span>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <span class="label label-info">{{file.format}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="file.status == 'WaitingForProcessing'" v-for="file in responseItem.data.files" class="download-list-item">
-                            <div class="row">
-                                <div class="col-sm-6 col-md-7">
-                                    <span class="custom-icon custom-icon-info"></span>
-                                    <span class="download-list-item-name">
-                                        {{ file.metadataName }}, <span class="inline-block">Valgt fra kart</span> <small class="inline-block">(Under behandling)</small>
-                                    </span>
-                                </div>
-                                <div class="col-sm-4 col-md-3">
-                                    <span class="label label-success auto-width">{{ file.projectionName }}</span>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <span class="label label-info">{{file.format}}</span>
+                                    </div>
+                                    <div class="col-sm-4 col-md-3">
+                                        <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                    </div>
+                                    <div class="col-sm-2 col-md-2">
+                                        <span class="label label-info">{{file.format}}</span>
+                                    </div>
+                                    <div class="col-sm-1 col-md-1 icon-col">
+                                        <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name" class="btn">
+                                            <span class="custom-icon custom-icon-lastned"></span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div v-if="!file.status && file.name" v-for="file in responseItem.data.files" class="list-group-item">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12">
-                                    <span class="custom-icon custom-icon-info"></span>
-                                    <span class="download-list-item-name">
-                                        {{ file.name }}
-                                    </span>
+                            <div v-if="file.status == 'WaitingForProcessing'" v-for="file in orderLineFiles" class="download-list-subitem">
+                                <div class="row">
+                                    <div class="col-sm-5 col-md-6">
+
+                                        <span class="download-list-item-name">
+                                            {{ file.metadataName }}, <span class="inline-block">Valgt fra kart</span> <small class="inline-block">(Under behandling)</small>
+                                        </span>
+                                    </div>
+                                    <div class="col-sm-4 col-md-3">
+                                        <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                    </div>
+                                    <div class="col-sm-2 col-md-2">
+                                        <span class="label label-info">{{file.format}}</span>
+                                    </div>
+                                    <div class="col-sm-1 col-md-1 icon-col">
+                                        <span class="custom-icon custom-icon-info"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="!file.status && file.name" v-for="file in orderLineFiles" class="list-group-subitem">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12">
+                                        <span class="custom-icon custom-icon-info"></span>
+                                        <span class="download-list-item-name">
+                                            {{ file.name }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

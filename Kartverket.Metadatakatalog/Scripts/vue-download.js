@@ -1195,6 +1195,25 @@ var mainVueModel = new Vue({
                 }.bind(this));
             }
             return orderRequests;
+        },
+        orderResponseGrouped: function () {
+            var orderResponseGrouped = [];
+            if (this.orderResponse.length) {
+                this.orderResponse.forEach(function (distribution) {
+                    var orderResponseGroup = {
+                        distributionUrl: distribution.distributionUrl,
+                        files: {}
+                    }
+                    distribution.data.files.forEach(function (file) {
+                        if (orderResponseGroup.files[file.metadataName] == undefined) {
+                            orderResponseGroup.files[file.metadataName] = [];
+                        }
+                        orderResponseGroup.files[file.metadataName].push(file);
+                    });
+                    orderResponseGrouped.push(orderResponseGroup);
+                })
+            }
+            return orderResponseGrouped;
         }
     },
     created: function () {

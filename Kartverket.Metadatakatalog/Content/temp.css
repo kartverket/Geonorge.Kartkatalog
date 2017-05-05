@@ -18,3 +18,18 @@
 }
 */
 
+.download-list-subitem {
+    padding: 4px 12px 4px 20px;
+    min-height: 42px;
+}
+
+@media (min-width: 768px) {
+    .download-list-subitem .icon-col {
+        text-align: center;
+    }
+}
+
+
+.download-list-subitem a {
+    margin-bottom: 0;
+}
