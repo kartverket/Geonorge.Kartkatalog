@@ -1086,7 +1086,6 @@ var mainVueModel = new Vue({
         orderLines: [],
         email: "",
         orderResponse: {},
-        emailRequired: false,
 
         masterOrderLine: {
             allAvailableAreas: {},
@@ -1102,7 +1101,17 @@ var mainVueModel = new Vue({
         }
     },
     computed: {
-
+        emailRequired: function () {
+            var emailRequired = false;
+            for (orderLine in this.masterOrderLine.allSelectedAreas) {
+                this.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
+                    if (selectedArea.type == "polygon") {
+                        emailRequired = true;
+                    }
+                });
+            }
+            return emailRequired;
+        },
         orderRequests: function () {
             var orderRequests = {};
             if (this.orderLines.length) {
