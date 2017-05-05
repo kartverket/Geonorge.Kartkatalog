@@ -370,7 +370,6 @@ var OrderLine = {
                         if (!isAllreadyAddedInfo.added) {
                             selectedProjections.push(localSelectedProjection);
                         }
-
                     }
                 }.bind(this))
             }
@@ -618,14 +617,12 @@ var OrderLine = {
                                     }.bind(this),
                                 });
                             }
-
                         }
                     }
                 }
             }.bind(this));
 
         }
-
     },
     components: {
         'areas': Areas,
@@ -1283,15 +1280,7 @@ var mainVueModel = new Vue({
                                 }.bind(this))
                             }
                         }
-
-                        /*
-                        if (link.rel == "http://rel.geonorge.no/download/can-download") {
-                            orderItems[key].metadata.canDownloadUrl = link.href;
-                        }
-                        */
-
                         var distributionUrl = (orderLines[key].metadata.distributionUrl !== undefined) ? orderLines[key].metadata.distributionUrl : "";
-
 
                         orderLines[key].capabilities.supportsGridSelection = (orderLines[key].capabilities.mapSelectionLayer !== undefined && orderLines[key].capabilities.mapSelectionLayer !== "") ? true : false;
                     }
