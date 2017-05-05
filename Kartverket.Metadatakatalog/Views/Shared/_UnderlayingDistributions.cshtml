@@ -33,7 +33,7 @@
         <div style="padding: 5px 0px 5px;">
             @*Tittel*@
             <div style="padding: 10px 0px;" v-for="resultItemDistribution in underlayingDistributions">
-                <div class="col-sm-offset-1 col-sm-4">
+                <div class="col-sm-offset-1 col-sm-3">
                     <a v-if="resultItemDistribution.ShowDetailsUrl" v-bind:href="resultItemDistribution.ShowDetailsUrl" class="show-loading-animation">
                         <span v-if="resultItemDistribution.Title" class="role-button search-results-name" role="button">{{resultItemDistribution.Title}}</span>
                     </a>
