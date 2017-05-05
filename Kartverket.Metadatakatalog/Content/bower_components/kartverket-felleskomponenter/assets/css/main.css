@@ -1800,7 +1800,7 @@ button.btn {
   font-size: 12pt;
   font-style: normal;
   margin-bottom: 7px;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 0;
   height: 34px;
   line-height: 16pt;
@@ -1819,7 +1819,7 @@ button.btn {
   button.btn:focus {
     background-color: #fe5000;
     color: #FFFFFF !important;
-    border: none;
+    border: 1px solid transparent;
     font-style: normal;
     font-size: 12pt;
     line-height: 16pt; }
@@ -1844,6 +1844,7 @@ button.btn {
     a.btn[disabled]:hover,
     button.btn.disabled:hover,
     button.btn[disabled]:hover {
+      border: 1px solid #CFCFCF;
       color: #CFCFCF; }
       .btn.disabled:hover span, .btn[disabled]:hover span,
       a.btn.disabled:hover span,
@@ -1862,6 +1863,7 @@ button.btn {
     a.btn[disabled]:focus,
     button.btn.disabled:focus,
     button.btn[disabled]:focus {
+      border: 1px solid #CFCFCF;
       color: #CFCFCF !important; }
       .btn.disabled:focus span, .btn[disabled]:focus span,
       a.btn.disabled:focus span,
