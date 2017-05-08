@@ -63,7 +63,7 @@
 
                 <div class="col-sm-2">
 
-                    <a style="width: 130px" v-bind:id="mapLink.mapLinkButtonId" v-bind:href="mapLink.href" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
+                    <a style="width: 130px" v-bind:id="mapLink.mapLinkButtonId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
                         <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
                     </a>
 
@@ -153,7 +153,7 @@
 
                 @*Kart*@
                 <div class="col-xs-1">
-                    <a v-bind:id="mapLink.mapLinkId" v-bind:href="mapLink.href" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                    <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
                         <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
                     </a>
                 </div>
@@ -433,7 +433,6 @@
                 },
                 mapLink: function() {
                     var mapLink = {
-                        href: "@Html.NorgeskartUrl() ",
                         mapLinkButtonId: "mapmacrolink-button-" + this.resultItem.Uuid,
                         mapMacroButtonId: "mapmacro-button-" + this.resultItem.Uuid,
                         mapLinkId: "mapmacrolink-" + this.resultItem.Uuid,
@@ -446,14 +445,11 @@
                     };
 
                     if (this.showMapLink()) {
-                        mapLink.href += this.resultItem.DownloadUrl;
                         mapLink.iconPermission += " custom-icon-kartmarkoer";
 
                     } else if (this.showServiceMapLink()) {
-                        mapLink.href += this.resultItem.ServiceUrl;
                         mapLink.iconPermission += restrictedServiceClass();
                     } else {
-                        mapLink.href = "";
                         mapLink.mapLinkClassLink = "disabled";
                         mapLink.mapLinkClassButton += " disabled";
                         mapLink.iconPermission += " custom-icon-kartmarkoer";

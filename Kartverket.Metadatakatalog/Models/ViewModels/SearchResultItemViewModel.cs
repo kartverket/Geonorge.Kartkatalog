@@ -41,6 +41,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public bool ShowDownloadService { get; set; }
         public bool ShowDownloadLink { get; set; }
         public string AddToCartUrl { get; set; }
+        public string MapUrl { get; set; }
 
 
 
@@ -185,7 +186,23 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             ShowDownloadService = DownloadService();
             ShowDownloadLink = DownloadLink();
             AddToCartUrl = GetAddToCartUrl();
+            MapUrl = GetMapUrl();
         }
+
+        private string GetMapUrl()
+        {
+            var norgeskartUrl = WebConfigurationManager.AppSettings["NorgeskartUrl"];
+            if (ShowMapLink())
+            {
+                return norgeskartUrl + DownloadUrl + "/";
+            }
+            if (ShowServiceMapLink())
+            {
+                return norgeskartUrl + ServiceUrl + "/";
+            }
+            return "";
+        }
+
 
         private string GetAddToCartUrl()
         {
