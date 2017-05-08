@@ -77,7 +77,7 @@
             <div v-bind:class="{'selected': placeGroup.isSelected, 'is-empty': placeGroup.Count == 0}" v-for="placeGroup in PlaceGroups">
                 <span v-bind:class="{'no-indicator': !placeGroup.hasChildren}" class="indicator"></span>
                 <div class="facet-checkbox facet-link">
-                    <span v-on:click="$root.toggleFilter({FacetField: 'placegroups'}, placeGroup)"
+                    <span v-on:click="$root.toggleFilter(FacetField, placeGroup)"
                           data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
                     </span>
                     {{ placeGroup.Name }} <span class="text-muted">({{ placeGroup.Count }})</span>
@@ -87,7 +87,7 @@
                 <div v-bind:class="{'selected': area.isSelected, 'is-empty': area.Count == 0}">
                     <span v-on:click="area.isActive = !area.isActive" v-bind:class="{'active': area.isActive, 'no-indicator': !area.hasChildren}" class="indicator"></span>
                     <div class="facet-checkbox facet-link">
-                        <span v-on:click="$root.toggleFilter(this, area)"
+                        <span v-on:click="$root.toggleFilter(FacetField, area)"
                               data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
                         </span>
                         <span v-on:click="area.isActive = !area.isActive" class="facet-filter-title">{{area.FacetName}}</span>
@@ -98,7 +98,7 @@
                     <div v-bind:class="{'selected': municipality.isSelected, 'is-empty': municipality.Count == 0}" v-for="municipality in area.municipalities">
                         <span class="indicator no-indicator"></span>
                         <div class="facet-checkbox facet-link">
-                            <span v-on:click="$root.toggleFilter(this, municipality)"
+                            <span v-on:click="$root.toggleFilter(FacetField, municipality)"
                                   data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
                             </span>
                             {{ municipality.FacetName }} <span class="text-muted">({{ municipality.Count }})</span>
@@ -429,7 +429,7 @@
                     var placeGroupName = placeGroup.AreaLinkName(Model.areaDictionary).Trim();
                     @:data.PlaceGroups[@placeGroupIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(placeGroupName))";
 
-                    @:data.PlaceGroups[@placeGroupIndex].isSelected = this.$parent.isSelected("placegroups", data.PlaceGroups[@placeGroupIndex]);
+                    @:data.PlaceGroups[@placeGroupIndex].isSelected = this.$parent.isSelected(data.FacetField, data.PlaceGroups[@placeGroupIndex]);
 
                     @:data.PlaceGroups[@placeGroupIndex].hasChildren = false;
 
