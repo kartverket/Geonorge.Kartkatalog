@@ -257,24 +257,30 @@
 
                     string addToCartUrl = "";
                     string addToCartClass = "add-to-cart-btn";
-                    if (item.DownloadService())
+                    if (item.ShowDownloadService())
                     {
                         if (item.IsRestricted || item.IsOffline)
                         {
-                            string addToCartEventParamater = "?addtocart_event_id=addToCart-" + item.Uuid;
-                            if (Request.Url.AbsoluteUri.Contains("?"))
+                            if (baseUrl.Contains("addtocart_event_id"))
                             {
+                                baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
+                            }
+
+                            string addToCartEventParamater = "?addtocart_event_id=addToCart-" + item.Uuid;
+                            if (baseUrl.Contains("?"))
+                            {
+
                                 addToCartEventParamater = "&addtocart_event_id=addToCart-" + item.Uuid;
                             }
 
                             string downloadSignInUrl = Html.DownloadUrl()
                                                      + "AuthServices/SignIn?ReturnUrl="
-                                                     + Url.Encode(Request.Url.AbsoluteUri)
+                                                     + Url.Encode(baseUrl)
                                                      + Url.Encode(addToCartEventParamater);
 
                             addToCartUrl = Html.KartkatalogenUrl()
-                                         + "AuthServices/SignIn?ReturnUrl="
-                                         + Url.Encode(downloadSignInUrl);
+                                                                 + "AuthServices/SignIn?ReturnUrl="
+                                                                 + Url.Encode(downloadSignInUrl);
 
                             addToCartClass = "add-to-cart-btn prevent-action";
                         }
@@ -558,10 +564,10 @@
 </div>
 <script>
 @foreach (var item in Model.Result.Items)
-{
-    if (item.ShowMapLink() || item.ShowServiceMapLink())
-    {
+        {
+            if (item.ShowMapLink() || item.ShowServiceMapLink())
+            {
       @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                          }
+                                      }
 }
 </script>

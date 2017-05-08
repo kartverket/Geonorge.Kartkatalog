@@ -649,6 +649,72 @@ if (contact != null)
                 </div>
 
 
+                <div class="col-sm-6">
+                    <h3>Distribusjon</h3>
+                    @DisplayValue("Representasjonsform", Model.SpatialRepresentation)
+                    @if (Model.DistributionFormats != null)
+                {
+                    if (Model.DistributionFormats.Any())
+                    {
+                            <strong>Format: </strong>
+                                <ul>
+                                    @foreach (var format in Model.DistributionFormats)
+                                    {
+                                        if (!string.IsNullOrWhiteSpace(format.Version))
+                                        {
+                                            <li>@format.Name @format.Version</li>
+                                        }
+                                        else
+                                        {
+                                            <li>@format.Name</li>
+                                        }
+                                    }
+                                </ul>
+                        }
+                    }
+                    @if (Model.DistributionDetails != null && Model.DistributionDetails.Protocol != null && Model.DistributionDetails.Protocol != "GEONORGE:OFFLINE")
+                {
+                        <text>@DisplayValue("Distribusjonstype", Model.DistributionDetails.ProtocolName)</text>
+                        if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
+                        {
+                            if (Model.IsService() || Model.IsServiceLayer())
+                            {
+                                <p>
+                                    <strong>Get Capabilities Url:</strong> <a href="@Model.DistributionDetailsGetCapabilitiesUrl()">@Model.DistributionDetails.URL <i class="custom-icon-sm custom-icon-eksternlink"></i></a>
+                                </p>
+                            }
+                            else
+                            {
+                                @*<p>
+                            <strong>Url:</strong> <a href="@Model.DistributionDetails.URL">@Model.DistributionDetails.URL</a>
+                        </p>*@
+                            }
+
+                        }
+                        <text>@DisplayValue("Geografisk distribusjonsinndeling", Model.UnitsOfDistribution)</text>
+                        <text>@DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
+                    }
+
+                    @if (Model.ReferenceSystems != null)
+                {
+                    if (Model.ReferenceSystems.Any())
+                    {
+                            <strong>Romlig referansesystem: </strong>
+                                <ul>
+                                    @foreach (var refsys in Model.ReferenceSystems)
+                                    {
+                                        <li>@refsys.CoordinateSystem</li>
+                                    }
+                                </ul>
+                        }
+
+                    }
+                </div>
+
+
+
+                
+
                 @if (Model.Constraints != null)
                 {
                     <div class="col-sm-6">
@@ -793,16 +859,14 @@ if (contact != null)
 
 </div>
 
-
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div>
-                        <a href="@Model.MetadataXmlUrl" class="btn show-loading-animation" data-loading-message="Henter XML data"><span class="glyphicon glyphicon-file"></span> Last ned metadata XML</a>
-                        <a href="@Model.MetadataEditUrl" class="btn show-loading-animation" data-loading-message="Henter metadata"><span class="glyphicon glyphicon-pencil"></span> Rediger metadata</a>
-                    </div>
-                </div>
-            </div>
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <a href="@Model.MetadataXmlUrl" class="btn show-loading-animation" data-loading-message="Henter XML data"><span class="glyphicon glyphicon-file"></span> Last ned metadata XML</a>
+            <a href="@Model.MetadataEditUrl" class="btn show-loading-animation" data-loading-message="Henter metadata"><span class="glyphicon glyphicon-pencil"></span> Rediger metadata</a>
+        </div>
+    </div>
+</div>
 
 
 
