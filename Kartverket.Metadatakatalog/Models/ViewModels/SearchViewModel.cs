@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Routing;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
@@ -47,26 +48,6 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 pages = pages + 1;
             }
 
-            //Hvilke sider som skal være synlige
-            /*if (pages > 5)
-            {
-                startPage = 1;
-                endPage = 5;
-
-                if (page > 3 && page <= (pages-2))
-                {
-                    startPage = page - 2;
-                    endPage = page + 2;
-                }
-                if (page > (pages-2) && page > 3) {
-                    startPage = pages - 4;
-                    endPage = pages;
-                }
-            }
-            else { 
-                startPage = 1;
-                endPage = pages;
-            }*/
             startPage = page;
             endPage = page;
         }
@@ -251,6 +232,37 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             routeValues["orderby"] = "organization";
             return routeValues;
         }
+
+        public RouteValueDictionary ParamsForOrderByTitle()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            if (orderby == "title")
+            {
+                routeValues["orderby"] = "title_desc";
+            }
+            else
+            {
+                routeValues["orderby"] = "title";
+            }
+            return routeValues;
+        }
+
+        public RouteValueDictionary ParamsForOrderByOrganization()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            if (orderby == "organization")
+            {
+                routeValues["orderby"] = "organization_desc";
+            }
+            else
+            {
+                routeValues["orderby"] = "organization";
+            }
+            return routeValues;
+        }
+
 
         public RouteValueDictionary ParamsForOrderByOrganizationDescLink()
         {
