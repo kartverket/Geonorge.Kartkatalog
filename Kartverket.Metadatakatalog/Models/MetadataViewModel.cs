@@ -511,13 +511,9 @@ namespace Kartverket.Metadatakatalog.Models
         }
 
 
-        public String DistributionDetailsGetCapabilitiesUrl()
+        public string DistributionDetailsGetCapabilitiesUrl()
         {
-            if (this != null)
-            {
-                return SimpleMetadataUtil.GetCapabilitiesUrl(URL, Protocol);
-            }
-            else return "";
+            return this != null ? SimpleMetadataUtil.GetCapabilitiesUrl(URL, Protocol) : "";
         }
 
 

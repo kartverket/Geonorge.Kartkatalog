@@ -257,7 +257,9 @@
 
                     string addToCartUrl = "";
                     string addToCartClass = "add-to-cart-btn";
-                    if (item.ShowDownloadService())
+                    string baseUrl = Request.Url.AbsoluteUri;
+
+                    if (item.DownloadService())
                     {
                         if (item.IsRestricted || item.IsOffline)
                         {
