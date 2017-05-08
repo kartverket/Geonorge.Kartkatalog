@@ -77,7 +77,7 @@
             <div v-bind:class="{'selected': placeGroup.isSelected, 'is-empty': placeGroup.Count == 0}" v-for="placeGroup in PlaceGroups">
                 <span v-bind:class="{'no-indicator': !placeGroup.hasChildren}" class="indicator"></span>
                 <div class="facet-checkbox facet-link">
-                    <span v-on:click="$root.toggleFilter(FacetField, placeGroup)"
+                    <span v-on:click="$root.toggleFilter('placegroups', placeGroup)"
                           data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
                     </span>
                     {{ placeGroup.Name }} <span class="text-muted">({{ placeGroup.Count }})</span>
@@ -429,7 +429,7 @@
                     var placeGroupName = placeGroup.AreaLinkName(Model.areaDictionary).Trim();
                     @:data.PlaceGroups[@placeGroupIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(placeGroupName))";
 
-                    @:data.PlaceGroups[@placeGroupIndex].isSelected = this.$parent.isSelected(data.FacetField, data.PlaceGroups[@placeGroupIndex]);
+                    @:data.PlaceGroups[@placeGroupIndex].isSelected = this.$parent.isSelected("placegroups", data.PlaceGroups[@placeGroupIndex]);
 
                     @:data.PlaceGroups[@placeGroupIndex].hasChildren = false;
 
