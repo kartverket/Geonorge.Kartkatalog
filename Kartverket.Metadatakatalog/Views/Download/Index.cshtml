@@ -32,7 +32,7 @@
     <div>
         <div class="custom-select-list">
             <div class="custom-select-list-input-container">
-                <span v-for="area in selected" v-if="master || area.isLocalSelected" class="custom-select-list-selected">
+                <span v-for="area in selected" class="custom-select-list-selected">
                     {{ area.name }}
                     <span v-if="!area.hasSelectedProjections" data-toggle="tooltip" data-placement="bottom" title="Støttet projeksjon er ikke valgt" class="projection-warning-icon"></span>
                     <span v-if="!area.hasSelectedFormats" data-toggle="tooltip" data-placement="bottom" title="Støttet format er ikke valgt" class="format-warning-icon"></span>
@@ -45,14 +45,14 @@
                     <div v-if="available.landsdekkende" class="custom-select-list-option-group">
                         <p class="custom-select-list-option-group-name">Landsdekkende</p>
                         <ul class="custom-select-list-options area-option-list">
-                            <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': (area.isSelected && master) || (area.isLocalSelected && !master)}" v-for="area in available.landsdekkende">{{ area.name }}</li>
+                            <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': area.isSelected}" v-for="area in available.landsdekkende">{{ area.name }}</li>
                         </ul>
                     </div>
                     <div v-for="(areas, areaType) in available" class="custom-select-list-option-group">
                         <div v-if="areaType !== 'landsdekkende' && (!master || $root.isSupportedType(areaType))" v-show="areas.length">
                             <p class="custom-select-list-option-group-name">{{ areaType }}</p>
                             <ul class="custom-select-list-options area-option-list">
-                                <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': (area.isSelected && master) || (area.isLocalSelected && !master)}" v-for="area in areas">{{ area.name }}</li>
+                                <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': (!master && area.isSelected) || (master && isMasterSelected(area)) }" v-for="area in areas">{{ area.name }}</li>
                             </ul>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
 <script type="text/x-template" id="projections-template">
     <div class="custom-select-list">
         <div class="custom-select-list-input-container">
-            <span v-for="projection in selected" v-if="master || projection.isLocalSelected" class="custom-select-list-selected">
+            <span v-for="projection in selected" class="custom-select-list-selected">
                 {{ projection.name }}
                 <span v-on:click="removeSelectedProjection(projection)" class="custom-select-list-remove-button"></span>
             </span>
@@ -96,7 +96,7 @@
         </div>
         <div class="custom-select-list-dropdown">
             <ul class="custom-select-list-options projection-option-list">
-                <li v-on:click="selectProjection(projection)" v-bind:class="{'is-selected': (projection.isSelected && master) || (projection.isLocalSelected && !master)}" v-for="(projection, projectionCode) in available">{{ projection.name }}</li>
+                <li v-on:click="selectProjection(projection)" v-bind:class="{'is-selected': (!master && projection.isSelected) || (master && isMasterSelected(projection))}" v-for="(projection, projectionCode) in available">{{ projection.name }}</li>
             </ul>
         </div>
     </div>
@@ -107,7 +107,7 @@
 <script type="text/x-template" id="formats-template">
     <div class="custom-select-list">
         <div class="custom-select-list-input-container">
-            <span v-for="format in selected" v-if="master || format.isLocalSelected" class="custom-select-list-selected">
+            <span v-for="format in selected" class="custom-select-list-selected">
                 {{ format.name }}
                 <span v-on:click="removeSelectedFormat(format)" class="custom-select-list-remove-button"></span>
             </span>
@@ -115,7 +115,7 @@
         </div>
         <div class="custom-select-list-dropdown">
             <ul class="custom-select-list-options format-option-list">
-                <li v-on:click="selectFormat(format)" v-bind:class="{'is-selected': (format.isSelected && master) || (format.isLocalSelected && !master)}" v-for="(format, formatName) in available">{{ format.name }}</li>
+                <li v-on:click="selectFormat(format)" v-bind:class="{'is-selected': (!master && format.isSelected) || (master && isMasterSelected(format))}" v-for="(format, formatName) in available">{{ format.name }}</li>
             </ul>
         </div>
     </div>
@@ -229,8 +229,8 @@
             <div class="orderline orderline-master">
                 <div is="masterOrderLine"
                      v-bind:all-available-areas="masterOrderLine.allAvailableAreas"
-                     v-bind:all-available-projections="masterOrderLine.allAvailableProjections"
-                     v-bind:all-available-formats="masterOrderLine.allAvailableFormats"
+                     v-bind:available-projections="masterOrderLine.masterAvailableProjections"
+                     v-bind:available-formats="masterOrderLine.masterAvailableFormats"
                      v-bind:all-selected-areas="masterOrderLine.allSelectedAreas"
                      v-bind:all-selected-projections="masterOrderLine.allSelectedProjections"
                      v-bind:all-selected-formats="masterOrderLine.allSelectedFormats"
