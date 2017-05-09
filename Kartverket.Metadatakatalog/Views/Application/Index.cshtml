@@ -57,7 +57,7 @@
                     <p>{{description}}</p>
                     <p>
                         Tilgjengelig som:
-                        <span v-bind:title="'Tilgjengelig som ' + resultItem.DistributionType" style="width:auto" class="label label-tjeneste">{{resultItem.DistributionType}}</span>
+                        <span v-bind:title="'Tilgjengelig som ' + resultItem.TypeTranslated" style="width:auto" v-bind:class="type">{{resultItem.TypeTranslated}}</span>
                     </p>
                 </div>
 
@@ -135,7 +135,7 @@
 
                 @*Distribusjonstype tabell *@
                 <div class="col-sm-2">
-                    <span v-bind:title="resultItem.DistributionType" data-toggle='tooltip' data-placement='bottom' class="label label-tjeneste" style="width:auto">{{resultItem.DistributionType}}</span>
+                    <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type" style="width:auto">{{resultItem.TypeTranslated}}</span>
                 </div>
 
                 @*Organisasjon tabell*@
@@ -496,7 +496,18 @@
                     var src = "/thumbnail?uuid=" + this.resultItem.Uuid + "&type=small";
                     return src;
                 },
-                
+                type: function() {
+                    var className = "label ";
+                    if (this.resultItem.Type == "dataset") className += "label-datasett";
+                    else if (this.resultItem.Type == "software") className += "label-applikasjon";
+                    else if (this.resultItem.Type == "service") className += "label-tjeneste";
+                    else if (this.resultItem.Type == "servicelayer") className += "label-tjenestelag";
+                    else if (this.resultItem.Type == "series") className += "label-datasettserie";
+                    else if (this.resultItem.Type == "dimensionGroup") className += "label-datasett";
+                    else className += "lable-default";
+
+                    return className;
+                }
             },
             methods: {
                 downloadUrl: function(url) {
