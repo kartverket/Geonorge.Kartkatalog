@@ -585,9 +585,8 @@ var OrderLine = {
                                     })
                                 }
                             }
-                            this.updateSelectedAreas();
-                            this.updateAvailableProjections();
-                            this.updateAvailableFormats();
+                            this.$root.updateSelectedAreasForSingleOrderLine(orderItem.metadata.uuid);
+                            this.$root.updateAvailableProjectionsAndFormatsForSingleOrderLine(orderItem.metadata.uuid);
                             this.$root.validateAreas();
                         }
                     }
@@ -789,8 +788,8 @@ var MasterOrderLine = {
                 }.bind(this))
             }
         }
+        this.$root.updateSelectedAreasForAllOrderLines();
         this.$root.validateAreas();
-        this.updateSelectedAreas();
     },
     methods: {
         isAllreadyAdded: function (array, item, propertyToCompare) {
@@ -1148,10 +1147,8 @@ var MasterOrderLine = {
                                                     }
                                                 }.bind(this));
 
-                                                this.$root.$forceUpdate();
-
-                                                this.updateAvailableProjections();
-                                                this.updateAvailableFormats();
+                                                this.$root.updateSelectedAreasForAllOrderLines();
+                                                this.$root.updateAvailableProjectionsAndFormatsForAllOrderLines();
                                                 this.$root.validateAreas();
                                             }
                                         }
