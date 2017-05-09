@@ -2,12 +2,10 @@
     $('#remove-all-items-modal').modal('show')
 });
 
-
 function fixUrl(urlen) {
     urlJson = urlen.replace("%3F", "?");
     return urlJson;
 }
-
 
 function getOrderItemName(uuid) {
     var metadata = JSON.parse(localStorage.getItem(uuid + ".metadata"));
@@ -46,7 +44,6 @@ function getJsonData(url) {
     return returnData;
 }
 
-
 showLoadingAnimation("Laster inn kurv");
 
 $(window).load(function () {
@@ -57,7 +54,6 @@ var MapSelect = {
     props: ['mapData', 'mapSrc', 'master'],
     template: '#map-template',
 }
-
 
 var Areas = {
     props: ['available', 'selected', 'master'],
@@ -76,7 +72,6 @@ var Areas = {
         }
         return data;
     },
-
     methods: {
         selectArea: function (area) {
             if (this.master) {
@@ -164,7 +159,6 @@ var Areas = {
 var Projections = {
     props: ['available', 'selected', 'master'],
     template: '#projections-template',
-
     methods: {
         selectProjection: function (projection) {
             if (this.master) {
@@ -196,9 +190,6 @@ var Projections = {
                 this.$root.updateSelectedProjectionsForSingleOrderLine(orderLineUuid);
             }
             this.$root.validateAreas();
-
-
-
         },
         removeSelectedProjection: function (projection) {
             if (this.master) {
@@ -248,7 +239,6 @@ var Projections = {
 var Formats = {
     props: ['available', 'selected', 'master'],
     template: '#formats-template',
-
     methods: {
         selectFormat: function (format) {
             if (this.master) {
@@ -297,7 +287,6 @@ var Formats = {
                     }
                 }
                 this.$root.updateSelectedFormatsForAllOrderLines();
-
             } else {
                 var orderLineUuid = this.$parent.metadata.uuid;
                 if (this.$root.masterOrderLine.allAvailableFormats[orderLineUuid] !== undefined && this.$root.masterOrderLine.allAvailableFormats[orderLineUuid].length) {
@@ -324,7 +313,6 @@ var Formats = {
         }
     }
 };
-
 
 
 var OrderLine = {
@@ -404,110 +392,6 @@ var OrderLine = {
                 }
             }
         },
-        updateSelectedAreas: function () {
-            /* var orderLineUuid = this.metadata.uuid;
-             var selectedAreas = [];
-             for (areaType in this.$parent.masterOrderLine.allAvailableAreas[orderLineUuid]) {
-                 if (this.$parent.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].length) {
-                     this.$parent.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (localSelectedArea) {
-                         if (localSelectedArea.isLocalSelected) {
-                             var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, localSelectedArea, "code");
-                             selectedAreas.push(localSelectedArea);
-                         }
-                     }.bind(this))
-                 }
-             }
-             this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid] = selectedAreas;*/
-        },
-        autoSelectProjectionAndFormats: function () {
-            /*  var orderLineUuid = this.metadata.uuid;
-              this.$root.masterOrderLine.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
-                  if (selectedArea.allAvailableProjections.length == 1) {
-                      var projectionCode = selectedArea.allAvailableProjections[0].code;
-                      this.$root.masterOrderLine.allAvailableProjections[orderLineUuid].forEach(function (availableProjection) {
-                          if (availableProjection.code == projectionCode) {
-                              availableProjection.isLocalSelected = true;
-                          }
-                      })
-                  }
-                  if (selectedArea.allAvailableFormats.length == 1) {
-                      var formatName = selectedArea.allAvailableFormats[0].name;
-                      this.$root.masterOrderLine.allAvailableFormats[orderLineUuid].forEach(function (availableFormat) {
-                          if (availableFormat.name == formatName) {
-                              availableFormat.isLocalSelected = true;
-                          }
-                      })
-                  }
-              });*/
-        },
-        updateAvailableProjections: function () {
-            /* var orderLineUuid = this.metadata.uuid;
-             var availableProjections = [];
-             if (this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid].length) {
-                 this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
-                     if (selectedArea.allAvailableProjections[orderLineUuid] !== undefined && selectedArea.allAvailableProjections[orderLineUuid].length) {
-                         selectedArea.allAvailableProjections[orderLineUuid].forEach(function (availableProjection) {
-                             var isAllreadyAddedInfo = this.isAllreadyAdded(availableProjections, availableProjection, "code");
-                             if (!isAllreadyAddedInfo.added) {
-                                 availableProjections.push(availableProjection);
-                             }
-                         }.bind(this))
-                     }
- 
-                 }.bind(this))
-             }
-             this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid] = availableProjections;*/
-        },
-        updateSelectedProjections: function () {
-            /* var orderLineUuid = this.metadata.uuid;
-             var selectedProjections = [];
-             if (this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid] !== undefined && this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid].length) {
-                 this.$parent.masterOrderLine.allAvailableProjections[orderLineUuid].forEach(function (localSelectedProjection) {
-                     if (localSelectedProjection.isLocalSelected) {
-                         var isAllreadyAddedInfo = this.isAllreadyAdded(selectedProjections, localSelectedProjection, "code");
-                         if (!isAllreadyAddedInfo.added) {
-                             selectedProjections.push(localSelectedProjection);
-                         }
-                     }
-                 }.bind(this))
-             }
- 
-             this.$parent.masterOrderLine.allSelectedProjections[orderLineUuid] = selectedProjections;*/
-        },
-        updateAvailableFormats: function () {
-            /* var orderLineUuid = this.metadata.uuid;
-             var availableFormats = [];
-             if (this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid].length) {
-                 this.$parent.masterOrderLine.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
-                     if (selectedArea.allAvailableFormats[orderLineUuid] !== undefined && selectedArea.allAvailableFormats[orderLineUuid].length) {
-                         selectedArea.allAvailableFormats[orderLineUuid].forEach(function (availableFormat) {
-                             var isAllreadyAddedInfo = this.isAllreadyAdded(availableFormats, availableFormat, "name");
-                             if (!isAllreadyAddedInfo.added) {
-                                 availableFormats.push(availableFormat);
-                             }
-                         }.bind(this))
-                     }
- 
-                 }.bind(this))
-             }
-             this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid] = availableFormats;*/
-        },
-        updateSelectedFormats: function () {
-            /* var orderLineUuid = this.metadata.uuid;
-             var selectedFormats = [];
-             if (this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid] !== undefined && this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid].length) {
-                 this.$parent.masterOrderLine.allAvailableFormats[orderLineUuid].forEach(function (localSelectedFormat) {
-                     if (localSelectedFormat.isLocalSelected) {
-                         var isAllreadyAddedInfo = this.isAllreadyAdded(selectedFormats, localSelectedFormat, "name");
-                         if (!isAllreadyAddedInfo.added) {
-                             selectedFormats.push(localSelectedFormat);
-                         }
-                     }
-                 }.bind(this))
-             }
- 
-             this.$parent.masterOrderLine.allSelectedFormats[orderLineUuid] = selectedFormats;*/
-        },
         selectFromMap: function (orderItem, mapType) {
             orderItem.showMap = true;
             var fixed = orderItem.capabilities.supportsGridSelection;
@@ -562,11 +446,7 @@ var OrderLine = {
                         if (this.isJson(msg)) {
                             var data = JSON.parse(msg);
                             if (data["type"] == "mapInitialized") return;
-
                             var areaname = data["attributes"]["n"];
-
-
-
                             if (data["cmd"] == "featureSelected") {
                                 for (areaType in this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid]) {
                                     this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][areaType].forEach(function (availableArea) {
@@ -695,7 +575,6 @@ var OrderLine = {
                                                 this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
                                                 this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
 
-
                                                 // Set coordinates for orderline in order request
                                                 this.$root.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
                                                     if (orderRequest.metadataUuid == orderItem.metadata.uuid) {
@@ -746,7 +625,6 @@ var MasterOrderLine = {
         }
         return data;
     },
-
     created: function () {
         for (orderLine in this.allAvailableAreas) {
 
@@ -830,167 +708,6 @@ var MasterOrderLine = {
                     optionGroupNameElement.show();
                 }
             }
-        },
-        updateSelectedAreas: function () {
-            /* var allSelectedAreas = {};
-             var selectedAreas = [];
-             for (areaType in this.availableAreas) {
-                 this.availableAreas[areaType].forEach(function (area) {
-                     if (area.orderLineUuids !== undefined) {
- 
-                         area.orderLineUuids.forEach(function (orderLineUuid) {
-                             if (allSelectedAreas[orderLineUuid] == undefined) { allSelectedAreas[orderLineUuid] = [] }
-                             if (area.isSelected || area.isLocalSelected) {
-                                 allSelectedAreas[orderLineUuid].push(area);
-                             }
-                         }.bind(this))
-                     }
-                     if (area.isSelected) {
-                         var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, area, "code");
-                         if (!isAllreadyAddedInfo.added) {
-                             selectedAreas.push(area);
-                         }
-                     }
-                 }.bind(this));
-             }
-             this.$parent.masterOrderLine.allSelectedAreas = allSelectedAreas;
-             this.selectedAreas = selectedAreas;*/
-
-        },
-        updateAvailableProjections: function () {
-            /* var availableProjections = [];
-             var allAvailableProjections = {}
-             if (this.$parent.masterOrderLine.allSelectedAreas !== undefined) {
-                 for (orderLine in this.$parent.masterOrderLine.allSelectedAreas) {
- 
-                     this.$parent.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
-                         if (selectedArea.allAvailableProjections !== undefined && selectedArea.allAvailableProjections[orderLine] !== undefined && selectedArea.allAvailableProjections[orderLine].length) {
- 
-                             // All available projections for orderLine
-                             selectedArea.allAvailableProjections[orderLine].forEach(function (projection) {
-                                 if (projection.isSelected == undefined) { projection.isSelected = false }
-                                 if (projection.isLocalSelected == undefined) { projection.isLocalSelected = false }
- 
-                                 // Update availableProjections array
-                                 var isAllreadyAddedInfo = this.isAllreadyAdded(availableProjections, projection, "code");
-                                 if (!isAllreadyAddedInfo.added) {
-                                     availableProjections.push(projection);
-                                 }
- 
-                                 // Update allAvailableProjections object
-                                 if (allAvailableProjections[orderLine] == undefined) { allAvailableProjections[orderLine] = [] }
-                                 var isAllreadyAddedInfo = this.isAllreadyAdded(allAvailableProjections[orderLine], projection, "code");
-                                 if (!isAllreadyAddedInfo.added) {
-                                     allAvailableProjections[orderLine].push(projection);
-                                 }
-                             }.bind(this))
- 
-                         }
-                     }.bind(this))
- 
-                 }
-             }
-             this.availableProjections = availableProjections;
-             this.$parent.masterOrderLine.allAvailableProjections = allAvailableProjections;
-             */
-        },
-        updateAvailableFormats: function () {
-            /* var availableFormats = [];
-             var allAvailableFormats = {};
-             if (this.$parent.masterOrderLine.allSelectedAreas !== undefined) {
-                 for (orderLine in this.$parent.masterOrderLine.allSelectedAreas) {
- 
-                     this.$parent.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
-                         if (selectedArea.allAvailableFormats !== undefined && selectedArea.allAvailableFormats[orderLine] !== undefined && selectedArea.allAvailableFormats[orderLine].length) {
- 
-                             // All available formats for orderLine
-                             selectedArea.allAvailableFormats[orderLine].forEach(function (format) {
-                                 if (format.isSelected == undefined) { format.isSelected = false }
-                                 if (format.isLocalSelected == undefined) { format.isLocalSelected = false }
- 
-                                 // Update availableFormats array
-                                 var isAllreadyAddedInfo = this.isAllreadyAdded(availableFormats, format, "name");
-                                 if (!isAllreadyAddedInfo.added) {
-                                     availableFormats.push(format);
-                                 }
- 
-                                 // Update allAvailableFormats object
-                                 if (allAvailableFormats[orderLine] == undefined) { allAvailableFormats[orderLine] = [] }
-                                 var isAllreadyAddedInfo = this.isAllreadyAdded(allAvailableFormats[orderLine], format, "name");
-                                 if (!isAllreadyAddedInfo.added) {
-                                     allAvailableFormats[orderLine].push(format);
-                                 }
-                             }.bind(this))
- 
-                         }
-                     }.bind(this))
- 
-                 }
-             }
-             this.availableFormats = availableFormats;
-             this.$parent.masterOrderLine.allAvailableFormats = allAvailableFormats;*/
-        },
-
-        updateSelectedProjections: function () {
-            /*   var allSelectedProjections = {};
-               var selectedProjections = [];
-               for (orderLine in this.$parent.masterOrderLine.allAvailableProjections) {
-                   this.$parent.masterOrderLine.allAvailableProjections[orderLine].forEach(function (availableProjection) {
-   
-                       if (availableProjection.isSelected || availableProjection.isLocalSelected) {
-   
-                           if (availableProjection.isSelected) {
-                               // Update availableProjections array
-                               var isAllreadyAddedInfo = this.isAllreadyAdded(selectedProjections, availableProjection, "code");
-                               if (!isAllreadyAddedInfo.added) {
-                                   selectedProjections.push(availableProjection);
-                               }
-                           }
-   
-                           // Update allAvailableProjections object
-                           if (allSelectedProjections[orderLine] == undefined) { allSelectedProjections[orderLine] = [] }
-                           var isAllreadyAddedInfo = this.isAllreadyAdded(allSelectedProjections[orderLine], availableProjection, "code");
-                           if (!isAllreadyAddedInfo.added) {
-                               allSelectedProjections[orderLine].push(availableProjection);
-                           }
-                       }
-   
-                   }.bind(this))
-               }
-   
-               this.$parent.masterOrderLine.allSelectedProjections = allSelectedProjections;
-               this.selectedProjections = selectedProjections;*/
-        },
-
-        updateSelectedFormats: function () {
-            /*  var allSelectedFormats = {};
-              var selectedFormats = [];
-              for (orderLine in this.$parent.masterOrderLine.allAvailableFormats) {
-                  this.$parent.masterOrderLine.allAvailableFormats[orderLine].forEach(function (availableFormats) {
-  
-                      if (availableFormats.isSelected || availableFormats.isLocalSelected) {
-  
-                          if (availableFormats.isSelected) {
-                              // Update availableFormats array
-                              var isAllreadyAddedInfo = this.isAllreadyAdded(selectedFormats, availableFormats, "name");
-                              if (!isAllreadyAddedInfo.added) {
-                                  selectedFormats.push(availableFormats);
-                              }
-                          }
-  
-                          // Update allAvailableFormats object
-                          if (allSelectedFormats[orderLine] == undefined) { allSelectedFormats[orderLine] = [] }
-                          var isAllreadyAddedInfo = this.isAllreadyAdded(allSelectedFormats[orderLine], availableFormats, "name");
-                          if (!isAllreadyAddedInfo.added) {
-                              allSelectedFormats[orderLine].push(availableFormats);
-                          }
-                      }
-  
-                  }.bind(this))
-              }
-  
-              this.$parent.masterOrderLine.allSelectedFormats = allSelectedFormats;
-              this.selectedFormats = selectedFormats;*/
         },
         masterSupportsPolygonSelection: function () {
             var masterSupportsPolygonSelection = false;
@@ -1160,9 +877,7 @@ var MasterOrderLine = {
                     }
                 }
             }.bind(this));
-
         }
-
     },
     template: '#master-order-line-template',
     components: {
@@ -1212,9 +927,7 @@ var mainVueModel = new Vue({
             var orderRequests = {};
             if (this.orderLines.length) {
                 this.orderLines.forEach(function (orderLine) {
-
                     if (orderLine.metadata !== undefined) {
-
                         if (orderRequests[orderLine.metadata.orderDistributionUrl] == undefined) {
                             orderRequests[orderLine.metadata.orderDistributionUrl] = {
                                 "email": "",
@@ -1238,7 +951,6 @@ var mainVueModel = new Vue({
                                 links.push(link);
                             })
                         }
-
 
                         var areas = [];
                         if (this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid].length) {
@@ -1278,7 +990,6 @@ var mainVueModel = new Vue({
                                 formats.push(format);
                             });
                         }
-
 
                         var orderRequest = {
                             "metadataUuid": orderLine.metadata.uuid,
@@ -1349,7 +1060,6 @@ var mainVueModel = new Vue({
                             this.masterOrderLine.allSelectedCoordinates[uuid] = "";
                             this.masterOrderLine.allDefaultProjections[uuid] = [];
                             this.masterOrderLine.allDefaultFormats[uuid] = [];
-
 
                             if (orderLines[key].capabilities._links !== undefined && orderLines[key].capabilities._links.length) {
                                 orderLines[key].capabilities._links.forEach(function (link) {
@@ -1489,11 +1199,6 @@ var mainVueModel = new Vue({
             }, 300);
         },
 
-
-        /* ----- Nye metoder ---- */
-
-
-
         updateAvailableProjectionsAndFormatsForSingleOrderLine: function (orderLineUuid) {
             var availableProjections = [];
             var availableFormats = [];
@@ -1527,7 +1232,7 @@ var mainVueModel = new Vue({
             this.masterOrderLine.allAvailableFormats[orderLineUuid] = availableFormats;
         },
 
-        updateAvailableProjectionsAndFormatsForAllOrderLines: function(){
+        updateAvailableProjectionsAndFormatsForAllOrderLines: function () {
             this.orderLines.forEach(function (orderLine) {
                 if (orderLine.metadata !== undefined && orderLine.metadata.uuid !== undefined) {
                     this.updateAvailableProjectionsAndFormatsForSingleOrderLine(orderLine.metadata.uuid);
@@ -1656,31 +1361,6 @@ var mainVueModel = new Vue({
             }.bind(this));
         },
 
-
-        /* ---------------------- */
-
-        /*updateSingleOrderLineField: function(orderLineUuid){
-            this.updateSelectedProjectionsAndFormats(orderLineUuid);
-            this.updateAvailableProjectionsAndFormatsForMasterOrderLine();
-        },
-        updateAllOrderLineFields: function () {
-            this.orderLines.forEach(function (orderLine) {
-                if (orderLine.metadata !== undefined && orderLine.metadata.uuid !== undefined) {
-                    this.updateSingleOrderLineField(orderLine.metadata.uuid);
-                }
-            }.bind(this));
-            this.$children.forEach(function (orderLine, index) {
-                if (orderLine.master !== undefined && !orderLine.master) {
-                    orderLine.updateSelectedAreas();
-                    orderLine.updateAvailableProjections();
-                    orderLine.updateAvailableFormats();
-                    orderLine.updateSelectedProjections();
-                    orderLine.updateSelectedFormats();
-                    orderLine.updateSelectedFormats();
-                }
-            });
-            //this.validateAreas();
-       // },*/
         autoSelectProjectionAndFormatsForSingleOrderLine: function (orderLineUuid) {
             this.masterOrderLine.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
                 if (selectedArea.allAvailableProjections[orderLineUuid].length == 1) {
