@@ -1530,6 +1530,14 @@ var mainVueModel = new Vue({
             this.masterOrderLine.allAvailableFormats[orderLineUuid] = availableFormats;
         },
 
+        updateAvailableProjectionsAndFormatsForAllOrderLines: function(){
+            this.orderLines.forEach(function (orderLine) {
+                if (orderLine.metadata !== undefined && orderLine.metadata.uuid !== undefined) {
+                    this.updateAvailableProjectionsAndFormatsForSingleOrderLine(orderLine.metadata.uuid);
+                }
+            }.bind(this));
+        },
+
         updateAvailableProjectionsAndFormatsForMasterOrderLine: function () {
             var masterAvailableProjections = [];
             var masterAvailableFormats = [];
