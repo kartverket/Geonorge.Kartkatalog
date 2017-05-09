@@ -1284,7 +1284,7 @@ var mainVueModel = new Vue({
             this.masterOrderLine.masterAvailableFormats = masterAvailableFormats;
         },
 
-        updateSelectedAreasForSingleOrderLine(orderLineUuid, autoSelectProjectionsAndFormats) {
+        updateSelectedAreasForSingleOrderLine: function (orderLineUuid, autoSelectProjectionsAndFormats) {
             var selectedAreas = [];
             for (areaType in this.masterOrderLine.allAvailableAreas[orderLineUuid]) {
                 if (this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].length) {
@@ -1310,7 +1310,7 @@ var mainVueModel = new Vue({
         },
 
 
-        updateSelectedProjectionsForSingleOrderLine(orderLineUuid) {
+        updateSelectedProjectionsForSingleOrderLine: function (orderLineUuid) {
             var selectedProjections = [];
             if (this.masterOrderLine.allAvailableProjections[orderLineUuid] !== undefined && this.masterOrderLine.allAvailableProjections[orderLineUuid].length) {
                 this.masterOrderLine.allAvailableProjections[orderLineUuid].forEach(function (selectedProjection) {
@@ -1325,7 +1325,7 @@ var mainVueModel = new Vue({
             this.masterOrderLine.allSelectedProjections[orderLineUuid] = selectedProjections;
         },
 
-        updateSelectedFormatsForSingleOrderLine(orderLineUuid) {
+        updateSelectedFormatsForSingleOrderLine: function (orderLineUuid) {
             var selectedFormats = [];
             if (this.masterOrderLine.allAvailableFormats[orderLineUuid] !== undefined && this.masterOrderLine.allAvailableFormats[orderLineUuid].length) {
                 this.masterOrderLine.allAvailableFormats[orderLineUuid].forEach(function (selectedFormat) {
@@ -1340,7 +1340,7 @@ var mainVueModel = new Vue({
             this.masterOrderLine.allSelectedFormats[orderLineUuid] = selectedFormats;
         },
 
-        updateSelectedAreasForAllOrderLines(autoSelectProjectionsAndFormats) {
+        updateSelectedAreasForAllOrderLines: function (autoSelectProjectionsAndFormats) {
             this.orderLines.forEach(function (orderLine) {
                 if (orderLine.metadata !== undefined && orderLine.metadata.uuid !== undefined) {
                     this.updateSelectedAreasForSingleOrderLine(orderLine.metadata.uuid, autoSelectProjectionsAndFormats);
@@ -1348,7 +1348,7 @@ var mainVueModel = new Vue({
             }.bind(this));
         },
 
-        updateSelectedProjectionsForAllOrderLines() {
+        updateSelectedProjectionsForAllOrderLines: function () {
             this.orderLines.forEach(function (orderLine) {
                 if (orderLine.metadata !== undefined && orderLine.metadata.uuid !== undefined) {
                     this.updateSelectedProjectionsForSingleOrderLine(orderLine.metadata.uuid);
@@ -1356,7 +1356,7 @@ var mainVueModel = new Vue({
             }.bind(this));
         },
 
-        updateSelectedFormatsForAllOrderLines() {
+        updateSelectedFormatsForAllOrderLines: function () {
             this.orderLines.forEach(function (orderLine) {
                 if (orderLine.metadata !== undefined && orderLine.metadata.uuid !== undefined) {
                     this.updateSelectedFormatsForSingleOrderLine(orderLine.metadata.uuid);
