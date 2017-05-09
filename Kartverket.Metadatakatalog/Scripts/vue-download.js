@@ -895,6 +895,7 @@ var mainVueModel = new Vue({
         orderLines: [],
         email: "",
         orderResponse: {},
+        emailRequired: false,
 
         masterOrderLine: {
             allAvailableAreas: {},
@@ -912,17 +913,6 @@ var mainVueModel = new Vue({
         }
     },
     computed: {
-        emailRequired: function () {
-            var emailRequired = false;
-            for (orderLine in this.masterOrderLine.allSelectedAreas) {
-                this.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
-                    if (selectedArea.type == "polygon") {
-                        emailRequired = true;
-                    }
-                });
-            }
-            return emailRequired;
-        },
         orderRequests: function () {
             var orderRequests = {};
             if (this.orderLines.length) {
@@ -1177,6 +1167,7 @@ var mainVueModel = new Vue({
             return hasSelectedFormats;
         },
         validateAreas: function () {
+            var emailRequired = false;
             for (orderLineUuid in this.masterOrderLine.allAvailableAreas) {
                 this.masterOrderLine.allOrderLineErrors[orderLineUuid] = {};
                 this.masterOrderLine.allOrderLineErrors[orderLineUuid]["projection"] = [];
@@ -1187,6 +1178,9 @@ var mainVueModel = new Vue({
                     this.masterOrderLine.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
                         selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLineUuid);
                         selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLineUuid);
+                        if (selectedArea.type == "polygon") {
+                            emailRequired = true;
+                        }
                     }.bind(this));
 
                 } else {
@@ -1194,6 +1188,7 @@ var mainVueModel = new Vue({
                 }
                 this.updateSelectedAreasForSingleOrderLine(orderLineUuid, false);
             }
+            this.emailRequired = emailRequired;
             this.$forceUpdate();
             setTimeout(function () {
                 $("[data-toggle='tooltip']").tooltip();
