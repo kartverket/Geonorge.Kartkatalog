@@ -53,6 +53,19 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View(model);
         }
 
+        public ActionResult AreaNy(SearchByAreaParameters parameters)
+        {
+            parameters.AddDefaultFacetsIfMissing();
+            parameters.CreateFacetOfArea();
+            parameters.AddComplexFacetsIfMissing();
+            FixAreaParameters(parameters);
+
+            var searchResult = _searchService.Search(parameters);
+            var model = new SearchByAreaViewModel(parameters, searchResult);
+
+            return View(model);
+        }
+
         protected override void OnException(ExceptionContext filterContext)
         {
             Log.Error("Error", filterContext.Exception);
