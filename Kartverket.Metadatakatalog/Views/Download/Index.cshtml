@@ -33,8 +33,9 @@
             <div class="custom-select-list-input-container">
                 <span v-for="area in selected" class="custom-select-list-selected">
                     {{ area.name }}
-                    <span v-if="!area.hasSelectedProjections" data-toggle="tooltip" data-placement="bottom" title="Støttet projeksjon er ikke valgt" class="projection-warning-icon"></span>
-                    <span v-if="!area.hasSelectedFormats" data-toggle="tooltip" data-placement="bottom" title="Støttet format er ikke valgt" class="format-warning-icon"></span>
+                    {{ !area.hasSelectedProjections }}
+                    <span v-show="!master && !area.hasSelectedProjections" data-toggle="tooltip" data-placement="bottom" title="Støttet projeksjon er ikke valgt" class="projection-warning-icon"></span>
+                    <span v-show="!master && !area.hasSelectedFormats" data-toggle="tooltip" data-placement="bottom" title="Støttet format er ikke valgt" class="format-warning-icon"></span>
                     <span v-on:click="removeSelectedArea(area)" class="custom-select-list-remove-button"></span>
                 </span>
                 <input v-on:keyup="$parent.filterOptionList('area-option-list', $event.target.value)" type="text" class="custom-select-list-input" />

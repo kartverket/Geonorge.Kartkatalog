@@ -89,7 +89,7 @@ var Areas = {
                         }.bind(this));
                     }
                 }
-                this.$root.updateSelectedAreasForAllOrderLines();
+                this.$root.updateSelectedAreasForAllOrderLines(true);
 
             } else {
                 var orderLineUuid = this.$parent.metadata.uuid;
@@ -101,7 +101,7 @@ var Areas = {
                         }
                     }.bind(this));
                 }
-                this.$root.updateSelectedAreasForSingleOrderLine(orderLineUuid);
+                this.$root.updateSelectedAreasForSingleOrderLine(orderLineUuid, true);
             }
 
             this.$root.validateAreas();
@@ -122,7 +122,7 @@ var Areas = {
                         }.bind(this));
                     }
                 }
-                this.$root.updateSelectedAreasForAllOrderLines();
+                this.$root.updateSelectedAreasForAllOrderLines(false);
 
             } else {
                 var orderLineUuid = this.$parent.metadata.uuid;
@@ -133,7 +133,7 @@ var Areas = {
                         }
                     }.bind(this));
                 }
-                this.$root.updateSelectedAreasForSingleOrderLine(orderLineUuid);
+                this.$root.updateSelectedAreasForSingleOrderLine(orderLineUuid, false);
             }
 
             this.$root.validateAreas();
@@ -465,7 +465,7 @@ var OrderLine = {
                                     })
                                 }
                             }
-                            this.$root.updateSelectedAreasForSingleOrderLine(orderItem.metadata.uuid);
+                            this.$root.updateSelectedAreasForSingleOrderLine(orderItem.metadata.uuid, true);
                             this.$root.updateAvailableProjectionsAndFormatsForSingleOrderLine(orderItem.metadata.uuid);
                             this.$root.validateAreas();
                         }
@@ -666,7 +666,7 @@ var MasterOrderLine = {
                 }.bind(this))
             }
         }
-        this.$root.updateSelectedAreasForAllOrderLines();
+        this.$root.updateSelectedAreasForAllOrderLines(true);
         this.$root.validateAreas();
     },
     methods: {
@@ -864,7 +864,7 @@ var MasterOrderLine = {
                                                     }
                                                 }.bind(this));
 
-                                                this.$root.updateSelectedAreasForAllOrderLines();
+                                                this.$root.updateSelectedAreasForAllOrderLines(true);
                                                 this.$root.updateAvailableProjectionsAndFormatsForAllOrderLines();
                                                 this.$root.validateAreas();
                                             }
@@ -1177,21 +1177,22 @@ var mainVueModel = new Vue({
             return hasSelectedFormats;
         },
         validateAreas: function () {
-            for (orderLine in this.masterOrderLine.allAvailableAreas) {
-                this.masterOrderLine.allOrderLineErrors[orderLine] = {};
-                this.masterOrderLine.allOrderLineErrors[orderLine]["projection"] = [];
-                this.masterOrderLine.allOrderLineErrors[orderLine]["format"] = [];
-                this.masterOrderLine.allOrderLineErrors[orderLine]["area"] = [];
-                if (this.masterOrderLine.allSelectedAreas[orderLine] !== undefined && this.masterOrderLine.allSelectedAreas[orderLine].length) {
+            for (orderLineUuid in this.masterOrderLine.allAvailableAreas) {
+                this.masterOrderLine.allOrderLineErrors[orderLineUuid] = {};
+                this.masterOrderLine.allOrderLineErrors[orderLineUuid]["projection"] = [];
+                this.masterOrderLine.allOrderLineErrors[orderLineUuid]["format"] = [];
+                this.masterOrderLine.allOrderLineErrors[orderLineUuid]["area"] = [];
+                if (this.masterOrderLine.allSelectedAreas[orderLineUuid] !== undefined && this.masterOrderLine.allSelectedAreas[orderLineUuid].length) {
 
-                    this.masterOrderLine.allSelectedAreas[orderLine].forEach(function (selectedArea) {
-                        selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLine);
-                        selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLine);
+                    this.masterOrderLine.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
+                        selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLineUuid);
+                        selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLineUuid);
                     }.bind(this));
 
                 } else {
-                    this.masterOrderLine.allOrderLineErrors[orderLine]["area"] = ["Datasett mangler valgt område"];
+                    this.masterOrderLine.allOrderLineErrors[orderLineUuid]["area"] = ["Datasett mangler valgt område"];
                 }
+                this.updateSelectedAreasForSingleOrderLine(orderLineUuid, false);
             }
             this.$forceUpdate();
             setTimeout(function () {
@@ -1283,7 +1284,7 @@ var mainVueModel = new Vue({
             this.masterOrderLine.masterAvailableFormats = masterAvailableFormats;
         },
 
-        updateSelectedAreasForSingleOrderLine(orderLineUuid) {
+        updateSelectedAreasForSingleOrderLine(orderLineUuid, autoSelectProjectionsAndFormats) {
             var selectedAreas = [];
             for (areaType in this.masterOrderLine.allAvailableAreas[orderLineUuid]) {
                 if (this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].length) {
@@ -1300,7 +1301,9 @@ var mainVueModel = new Vue({
             this.masterOrderLine.allSelectedAreas[orderLineUuid] = selectedAreas;
 
             this.updateAvailableProjectionsAndFormatsForSingleOrderLine(orderLineUuid);
-            this.autoSelectProjectionAndFormatsForSingleOrderLine(orderLineUuid);
+            if (autoSelectProjectionsAndFormats !== undefined && autoSelectProjectionsAndFormats === true) {
+                this.autoSelectProjectionAndFormatsForSingleOrderLine(orderLineUuid);
+            }
             this.updateSelectedProjectionsForSingleOrderLine(orderLineUuid);
             this.updateSelectedFormatsForSingleOrderLine(orderLineUuid);
             this.updateAvailableProjectionsAndFormatsForMasterOrderLine();
@@ -1337,10 +1340,10 @@ var mainVueModel = new Vue({
             this.masterOrderLine.allSelectedFormats[orderLineUuid] = selectedFormats;
         },
 
-        updateSelectedAreasForAllOrderLines() {
+        updateSelectedAreasForAllOrderLines(autoSelectProjectionsAndFormats) {
             this.orderLines.forEach(function (orderLine) {
                 if (orderLine.metadata !== undefined && orderLine.metadata.uuid !== undefined) {
-                    this.updateSelectedAreasForSingleOrderLine(orderLine.metadata.uuid);
+                    this.updateSelectedAreasForSingleOrderLine(orderLine.metadata.uuid, autoSelectProjectionsAndFormats);
                 }
             }.bind(this));
         },
