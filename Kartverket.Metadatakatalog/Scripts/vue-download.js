@@ -451,7 +451,7 @@ var OrderLine = {
                                 for (areaType in this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid]) {
                                     this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][areaType].forEach(function (availableArea) {
                                         if (availableArea.code == areaname) {
-                                            availableArea.isLocalSelected = true;
+                                            availableArea.isSelected = true;
                                         }
                                     })
                                 }
@@ -460,7 +460,7 @@ var OrderLine = {
                                 for (areaType in this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid]) {
                                     this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][areaType].forEach(function (availableArea) {
                                         if (availableArea.code == areaname) {
-                                            availableArea.isLocalSelected = false;
+                                            availableArea.isSelected = false;
                                         }
                                     })
                                 }
@@ -551,7 +551,7 @@ var OrderLine = {
                                                     "name": "Valgt fra kart",
                                                     "type": "polygon",
                                                     "code": "Kart",
-                                                    "isLocalSelected": true,
+                                                    "isSelected": true,
                                                     "formats": orderItem.defaultFormats,
                                                     "projections": orderItem.defaultProjections,
                                                     "coordinates": coordinatesString,
@@ -582,10 +582,8 @@ var OrderLine = {
                                                     }
                                                 }.bind(this))
 
-                                                this.$root.$forceUpdate();
-
-                                                this.updateAvailableProjections();
-                                                this.updateAvailableFormats();
+                                                this.$root.updateSelectedAreasForSingleOrderLine(orderItem.metadata.uuid, true);
+                                                this.$root.updateAvailableProjectionsAndFormatsForSingleOrderLine(orderItem.metadata.uuid);
                                                 this.$root.validateAreas();
                                             }
                                         }
@@ -816,7 +814,6 @@ var MasterOrderLine = {
                                                                 "type": "polygon",
                                                                 "code": "Kart",
                                                                 "isSelected": true,
-                                                                "isLocalSelected": true,
                                                                 "formats": orderItem.defaultFormats,
                                                                 "projections": orderItem.defaultProjections,
                                                                 "coordinates": coordinatesString,
@@ -1068,7 +1065,6 @@ var mainVueModel = new Vue({
                                                 this.masterOrderLine.allAvailableAreas[uuid][availableArea.type] = [];
                                             }
                                             availableArea.isSelected = false;
-                                            availableArea.isLocalSelected = false;
                                             this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
                                         }.bind(this))
                                     }
