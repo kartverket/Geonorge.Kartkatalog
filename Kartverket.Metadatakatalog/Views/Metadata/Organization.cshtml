@@ -339,16 +339,34 @@
 
 <div class="row">
     <div id="searchResultTable" class="col-md-9">
+        <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
+        <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
+        <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
+        <div class="clearfix"></div>
         @if (Model.Result != null)
         {
             <div>
                 <div v-if="$root.viewType == 'tableView'" class="row">
-                    <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id"><p><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByTitle()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-2"><p>Type</p></div>
-                    <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id"><p><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByOrganization()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Kart</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Last ned</p></div>
+                    <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
+                        <p><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByTitle()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a>
+                        </p>
+                    </div>
+                    <div class="col-sm-2">
+                        <p>Type</p>
+                    </div>
+                    <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
+                        <p><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByOrganization()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
+                        </p>
+                    </div>
+                    <div class="col-sm-1 no-padding text-center">
+                        <p>Åpne data</p>
+                    </div>
+                    <div class="col-sm-1 no-padding text-center">
+                        <p>Kart</p>
+                    </div>
+                    <div class="col-sm-1 no-padding text-center">
+                        <p>Last ned</p>
+                    </div>
                 </div>
 
                 <div class="menu-separator search-results-table-heading"></div>
