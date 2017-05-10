@@ -1332,7 +1332,6 @@ var mainVueModel = new Vue({
                                     "type": selectedArea.type,
                                     "_links": []
                                 }
-                                console.log(area);
                                 areas.push(area);
                             });
                         }
@@ -1483,24 +1482,29 @@ var mainVueModel = new Vue({
         isEmpty: function (item) {
             return (item == null || item == undefined || item.length == 0);
         },
-        allRequiredProjectionAndFormatFieldsIsNotEmpty: function (orderLines) {
-            var orderItemsIsValid = true;
-            orderLines.forEach(function (orderItem) {
-                if (orderItem.projectionAndFormatIsRequired) {
-                    if (this.isEmpty(orderItem.codelists.selectedProjections) || this.isEmpty(orderItem.codelists.selectedFormats)) {
-                        orderItemsIsValid = false;
-                    }
+        forHasNoErrors: function () {
+            var forHasNoErrors = true;
+            var errorCount = 0;
+
+            for (orderLineUuid in this.masterOrderLine.allOrderLineErrors) {
+                var orderLineErrors = this.masterOrderLine.allOrderLineErrors[orderLineUuid];
+                var orderLineErrorsCount = 0;
+                for (errorType in orderLineErrors) {
+                    orderLineErrorsCount += orderLineErrors[errorType].length;
                 }
-            }.bind(this));
-            return orderItemsIsValid;
+                errorCount += orderLineErrorsCount;
+            }
+
+            if (errorCount > 0) { forHasNoErrors = false }
+            return forHasNoErrors;
         },
 
         formIsValid: function () {
             var emailFieldNotEmpty = (this.email !== "") ? true : false;
             var emailAddressIsValid = this.emailAddressIsValid(this.email);
-            var projectionAndFormatFieldsIsValid = this.allRequiredProjectionAndFormatFieldsIsNotEmpty(this.orderLines);
+            var formHasNoErrors = this.forHasNoErrors();
             var emailRequired = this.emailRequired;
-            var formIsValid = ((emailFieldNotEmpty && emailRequired && emailAddressIsValid) || (!emailRequired)) ? true : false;
+            var formIsValid = ((emailFieldNotEmpty && emailRequired && emailAddressIsValid && formHasNoErrors) || (!emailRequired && formHasNoErrors)) ? true : false;
             return formIsValid;
         },
         projectionAndFormatIsRequired: function (orderItem) {
