@@ -1534,12 +1534,18 @@ var mainVueModel = new Vue({
             for (orderLineUuid in this.masterOrderLine.allAvailableAreas) {
                 if (selectedOrderLineValues.allSelectedAreas !== null && selectedOrderLineValues.allSelectedAreas[orderLineUuid] !== undefined && selectedOrderLineValues.allSelectedAreas[orderLineUuid].length) {
                     for (areaType in this.masterOrderLine.allAvailableAreas[orderLineUuid]) {
-                        this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
-                            selectedOrderLineValues.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
-                                if (availableArea.code == selectedArea.code) {
-                                    this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
-                                }
-                            }.bind(this));
+                        selectedOrderLineValues.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
+                            if (selectedArea.type == 'polygon') {
+                                this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'] = [];
+                                this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'].push(selectedArea);
+                                this.masterOrderLine.allSelectedCoordinates[orderLineUuid] = selectedArea.coordinates;
+                            } else {
+                                this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
+                                    if (availableArea.code == selectedArea.code) {
+                                        this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
+                                    }
+                                }.bind(this));
+                            }
                         }.bind(this));
                     }
                 }
@@ -1579,7 +1585,7 @@ var mainVueModel = new Vue({
 
             this.updateSelectedProjectionsForAllOrderLines();
             this.updateSelectedFormatsForAllOrderLines();
-
+            this.validateAreas();
         }
     }
 });
