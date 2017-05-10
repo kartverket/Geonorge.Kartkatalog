@@ -626,18 +626,11 @@ var MasterOrderLine = {
     created: function () {
         for (orderLine in this.allAvailableAreas) {
 
-            if (this.$parent.masterOrderLine.allSelectedAreas[orderLine] == undefined) { this.$parent.masterOrderLine.allSelectedAreas[orderLine] = [] }
-            if (this.$parent.masterOrderLine.allSelectedProjections[orderLine] == undefined) { this.$parent.masterOrderLine.allSelectedProjections[orderLine] = [] }
-            if (this.$parent.masterOrderLine.allSelectedFormats[orderLine] == undefined) { this.$parent.masterOrderLine.allSelectedFormats[orderLine] = [] }
-
             for (areaType in this.allAvailableAreas[orderLine]) {
                 this.allAvailableAreas[orderLine][areaType].forEach(function (area) {
                     if (this.availableAreas[areaType] == undefined) {
                         this.availableAreas[areaType] = [];
                     }
-
-                    area.orderLineUuids = [];
-                    area.orderLineUuids.push(orderLine);
 
                     if (area.allAvailableProjections == undefined) { area.allAvailableProjections = {} };
                     if (area.allAvailableProjections[orderLine] == undefined) { area.allAvailableProjections[orderLine] = [] };
@@ -647,25 +640,17 @@ var MasterOrderLine = {
                     if (area.allAvailableFormats[orderLine] == undefined) { area.allAvailableFormats[orderLine] = [] };
                     area.allAvailableFormats[orderLine] = area.formats;
 
-
                     var areaIsAllreadyAddedInfo = this.isAllreadyAdded(this.availableAreas[areaType], area, "code");
-
 
                     if (!areaIsAllreadyAddedInfo.added) {
                         this.availableAreas[areaType].push(area);
                     } else {
-                        var orderLineUuidIsAdded = false
-
-                        if (!orderLineUuidIsAdded) {
-                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
-                            this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = area.formats;
-                        }
+                        this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
+                        this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = area.formats;
                     }
                 }.bind(this))
             }
         }
-        this.$root.updateSelectedAreasForAllOrderLines(true);
-        this.$root.validateAreas();
     },
     methods: {
         isAllreadyAdded: function (array, item, propertyToCompare) {
@@ -959,10 +944,13 @@ var mainVueModel = new Vue({
 
                             this.masterOrderLine.allAvailableProjections[uuid] = [];
                             this.masterOrderLine.allAvailableFormats[uuid] = [];
-                            this.masterOrderLine.allSelectedProjections[uuid] = [];
+
                             this.masterOrderLine.allSelectedAreas[uuid] = [];
+                            this.masterOrderLine.allSelectedProjections[uuid] = [];
+
                             this.masterOrderLine.allSelectedFormats[uuid] = [];
                             this.masterOrderLine.allSelectedCoordinates[uuid] = "";
+
                             this.masterOrderLine.allDefaultProjections[uuid] = [];
                             this.masterOrderLine.allDefaultFormats[uuid] = [];
 
@@ -1103,7 +1091,6 @@ var mainVueModel = new Vue({
                 this.updateSelectedAreasForSingleOrderLine(orderLineUuid, false);
             }
             this.emailRequired = emailRequired;
-            this.$forceUpdate();
             this.updateOrderRequests();
             setTimeout(function () {
                 $("[data-toggle='tooltip']").tooltip();
