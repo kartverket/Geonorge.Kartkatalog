@@ -993,9 +993,15 @@ var mainVueModel = new Vue({
                     }
                     key += 1;
                 }
+
             }.bind(this));
         }
         this.orderLines = orderLines;
+        this.updateAvailableProjectionsAndFormatsForAllOrderLines();
+        this.updateAvailableProjectionsAndFormatsForMasterOrderLine();
+    },
+    mounted: function () {
+        this.autoselectWithOrderLineValuesFromLocalStorage();
     },
     components: {
         'orderLine': OrderLine,
@@ -1092,6 +1098,7 @@ var mainVueModel = new Vue({
             }
             this.emailRequired = emailRequired;
             this.updateOrderRequests();
+            this.addSelectedOrderLineValuesToLocalStorage();
             setTimeout(function () {
                 $("[data-toggle='tooltip']").tooltip();
             }, 300);
@@ -1105,7 +1112,7 @@ var mainVueModel = new Vue({
                 this.masterOrderLine.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
 
                     // Get available projections
-                    if (selectedArea.allAvailableProjections[orderLineUuid] !== undefined && selectedArea.allAvailableProjections[orderLineUuid].length) {
+                    if (selectedArea.allAvailableProjections !== undefined && selectedArea.allAvailableProjections[orderLineUuid] !== undefined && selectedArea.allAvailableProjections[orderLineUuid].length) {
                         selectedArea.allAvailableProjections[orderLineUuid].forEach(function (availableProjection) {
                             var isAllreadyAddedInfo = this.isAllreadyAdded(availableProjections, availableProjection, "code");
                             if (!isAllreadyAddedInfo.added) {
@@ -1115,7 +1122,7 @@ var mainVueModel = new Vue({
                     }
 
                     // Get available formats
-                    if (selectedArea.allAvailableFormats[orderLineUuid] !== undefined && selectedArea.allAvailableFormats[orderLineUuid].length) {
+                    if (selectedArea.allAvailableFormats !== undefined && selectedArea.allAvailableFormats[orderLineUuid] !== undefined && selectedArea.allAvailableFormats[orderLineUuid].length) {
                         selectedArea.allAvailableFormats[orderLineUuid].forEach(function (availableFormat) {
                             var isAllreadyAddedInfo = this.isAllreadyAdded(availableFormats, availableFormat, "name");
                             if (!isAllreadyAddedInfo.added) {
@@ -1404,6 +1411,7 @@ var mainVueModel = new Vue({
 
             if (!responseFailed) {
                 this.removeAllOrderLines();
+                this.removeSelectedOrderLineValuesFromLocalStorage();
             }
             this.orderResponse = responseData;
         },
@@ -1497,6 +1505,81 @@ var mainVueModel = new Vue({
         projectionAndFormatIsRequired: function (orderItem) {
             var required = this.orderItemHasCoordinates(orderItem);
             return required;
+        },
+        addSelectedOrderLineValuesToLocalStorage: function () {
+            localStorage.setItem('allSelectedAreas', JSON.stringify(this.masterOrderLine.allSelectedAreas));
+            localStorage.setItem('allSelectedProjections', JSON.stringify(this.masterOrderLine.allSelectedProjections));
+            localStorage.setItem('allSelectedFormats', JSON.stringify(this.masterOrderLine.allSelectedFormats));
+            localStorage.setItem('allSelectedCoordinates', JSON.stringify(this.masterOrderLine.allSelectedCoordinates));
+        },
+        getSelectedOrderLineValuesFromLocalStorage: function () {
+            var selectedOrderLineValues = {
+                allSelectedAreas: localStorage.getItem('allSelectedAreas') !== null ? JSON.parse(localStorage.getItem('allSelectedAreas')) : null,
+                allSelectedProjections: localStorage.getItem('allSelectedProjections') !== null ? JSON.parse(localStorage.getItem('allSelectedProjections')) : null,
+                allSelectedFormats: localStorage.getItem('allSelectedFormats') !== null ? JSON.parse(localStorage.getItem('allSelectedFormats')) : null,
+                allSelectedCoordinates: localStorage.getItem('allSelectedCoordinates') !== null ? JSON.parse(localStorage.getItem('allSelectedCoordinates')) : null
+            }
+            return selectedOrderLineValues;
+        },
+        removeSelectedOrderLineValuesFromLocalStorage: function () {
+            localStorage.removeItem('allSelectedAreas');
+            localStorage.removeItem('allSelectedProjections');
+            localStorage.removeItem('allSelectedFormats');
+            localStorage.removeItem('allSelectedCoordinates');
+        },
+        autoselectWithOrderLineValuesFromLocalStorage: function () {
+            var selectedOrderLineValues = this.getSelectedOrderLineValuesFromLocalStorage();
+
+            // Autoselect areas
+            for (orderLineUuid in this.masterOrderLine.allAvailableAreas) {
+                if (selectedOrderLineValues.allSelectedAreas !== null && selectedOrderLineValues.allSelectedAreas[orderLineUuid] !== undefined && selectedOrderLineValues.allSelectedAreas[orderLineUuid].length) {
+                    for (areaType in this.masterOrderLine.allAvailableAreas[orderLineUuid]) {
+                        this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
+                            selectedOrderLineValues.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
+                                if (availableArea.code == selectedArea.code) {
+                                    this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
+                                }
+                            }.bind(this));
+                        }.bind(this));
+                    }
+                }
+            }
+
+            this.updateSelectedAreasForAllOrderLines();
+            this.updateAvailableProjectionsAndFormatsForAllOrderLines();
+            this.updateAvailableProjectionsAndFormatsForMasterOrderLine();
+
+            // Autoselect projections
+            for (orderLineUuid in this.masterOrderLine.allAvailableProjections) {
+                if (selectedOrderLineValues.allSelectedProjections !== null && selectedOrderLineValues.allSelectedProjections[orderLineUuid] !== undefined && selectedOrderLineValues.allSelectedProjections[orderLineUuid].length) {
+                    this.masterOrderLine.allAvailableProjections[orderLineUuid].forEach(function (availableProjection, index) {
+                        selectedOrderLineValues.allSelectedProjections[orderLineUuid].forEach(function (selectedProjection) {
+                            if (availableProjection.code == selectedProjection.code) {
+                                this.masterOrderLine.allAvailableProjections[orderLineUuid][index].isSelected = true;
+                            }
+                        }.bind(this));
+                    }.bind(this));
+
+                }
+            }
+
+            // Autoselect formats
+            for (orderLineUuid in this.masterOrderLine.allAvailableFormats) {
+                if (selectedOrderLineValues.allSelectedFormats !== null && selectedOrderLineValues.allSelectedFormats[orderLineUuid] !== undefined && selectedOrderLineValues.allSelectedFormats[orderLineUuid].length) {
+                    this.masterOrderLine.allAvailableFormats[orderLineUuid].forEach(function (availableFormat, index) {
+                        selectedOrderLineValues.allSelectedFormats[orderLineUuid].forEach(function (selectedFormat) {
+                            if (availableFormat.code == selectedFormat.code) {
+                                this.masterOrderLine.allAvailableFormats[orderLineUuid][index].isSelected = true;
+                            }
+                        }.bind(this));
+                    }.bind(this));
+
+                }
+            }
+
+            this.updateSelectedProjectionsForAllOrderLines();
+            this.updateSelectedFormatsForAllOrderLines();
+
         }
     }
 });
