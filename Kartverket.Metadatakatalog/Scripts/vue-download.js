@@ -891,6 +891,7 @@ var mainVueModel = new Vue({
     data: {
         orderLines: [],
         email: "",
+        orderRequests: {},
         orderResponse: {},
         emailRequired: false,
 
@@ -910,92 +911,6 @@ var mainVueModel = new Vue({
         }
     },
     computed: {
-        orderRequests: function () {
-            var orderRequests = {};
-            if (this.orderLines.length) {
-                this.orderLines.forEach(function (orderLine) {
-                    if (orderLine.metadata !== undefined) {
-                        if (orderRequests[orderLine.metadata.orderDistributionUrl] == undefined) {
-                            orderRequests[orderLine.metadata.orderDistributionUrl] = {
-                                "email": "",
-                                "_links": "",
-                                "orderLines": []
-                            }
-                        }
-
-                        var links = [];
-                        if (orderLine.capabilities._links !== undefined && orderLine.capabilities._links.length) {
-                            orderLine.capabilities._links.forEach(function (capabilityLink) {
-                                var link = {
-                                    "href": capabilityLink.href,
-                                    "rel": capabilityLink.rel,
-                                    "templated": capabilityLink.templatedSpecified,
-                                    "type": "",
-                                    "deprecation": "",
-                                    "name": "",
-                                    "title": ""
-                                }
-                                links.push(link);
-                            })
-                        }
-
-                        var areas = [];
-                        if (this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid].length) {
-                            this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid].forEach(function (selectedArea) {
-                                var area = {
-                                    "code": selectedArea.code,
-                                    "name": selectedArea.name,
-                                    "type": selectedArea.type,
-                                    "_links": []
-                                }
-                                areas.push(area);
-                            });
-                        }
-
-                        var projections = [];
-                        if (this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid].length) {
-                            this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid].forEach(function (selectedProjection) {
-                                var projection = {
-                                    "code": selectedProjection.code,
-                                    "name": selectedProjection.name,
-                                    "codespace": selectedProjection.codespace,
-                                    "_links": []
-                                }
-                                projections.push(projection);
-                            });
-                        }
-
-                        var formats = [];
-                        if (this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid].length) {
-                            this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid].forEach(function (selectedFormat) {
-                                var format = {
-                                    "code": "",
-                                    "name": selectedFormat.name,
-                                    "type": "",
-                                    "_links": []
-                                }
-                                formats.push(format);
-                            });
-                        }
-
-                        var orderRequest = {
-                            "metadataUuid": orderLine.metadata.uuid,
-                            "areas": areas,
-                            "projections": projections,
-                            "formats": formats,
-                            "_links": links
-                        }
-
-                        if (this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
-                            orderRequest.coordinates = this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid];
-                        }
-
-                        orderRequests[orderLine.metadata.orderDistributionUrl].orderLines.push(orderRequest);
-                    }
-                }.bind(this));
-            }
-            return orderRequests;
-        },
         orderResponseGrouped: function () {
             var orderResponseGrouped = [];
             if (this.orderResponse.length) {
@@ -1044,6 +959,9 @@ var mainVueModel = new Vue({
 
                             this.masterOrderLine.allAvailableProjections[uuid] = [];
                             this.masterOrderLine.allAvailableFormats[uuid] = [];
+                            this.masterOrderLine.allSelectedProjections[uuid] = [];
+                            this.masterOrderLine.allSelectedAreas[uuid] = [];
+                            this.masterOrderLine.allSelectedFormats[uuid] = [];
                             this.masterOrderLine.allSelectedCoordinates[uuid] = "";
                             this.masterOrderLine.allDefaultProjections[uuid] = [];
                             this.masterOrderLine.allDefaultFormats[uuid] = [];
@@ -1186,6 +1104,7 @@ var mainVueModel = new Vue({
             }
             this.emailRequired = emailRequired;
             this.$forceUpdate();
+            this.updateOrderRequests();
             setTimeout(function () {
                 $("[data-toggle='tooltip']").tooltip();
             }, 300);
@@ -1374,6 +1293,93 @@ var mainVueModel = new Vue({
                     }.bind(this));
                 }
             }.bind(this));
+        },
+        updateOrderRequests: function () {
+            var orderRequests = {};
+            if (this.orderLines.length) {
+                this.orderLines.forEach(function (orderLine) {
+                    if (orderLine.metadata !== undefined) {
+                        if (orderRequests[orderLine.metadata.orderDistributionUrl] == undefined) {
+                            orderRequests[orderLine.metadata.orderDistributionUrl] = {
+                                "email": "",
+                                "_links": "",
+                                "orderLines": []
+                            }
+                        }
+
+                        var links = [];
+                        if (orderLine.capabilities._links !== undefined && orderLine.capabilities._links.length) {
+                            orderLine.capabilities._links.forEach(function (capabilityLink) {
+                                var link = {
+                                    "href": capabilityLink.href,
+                                    "rel": capabilityLink.rel,
+                                    "templated": capabilityLink.templatedSpecified,
+                                    "type": "",
+                                    "deprecation": "",
+                                    "name": "",
+                                    "title": ""
+                                }
+                                links.push(link);
+                            })
+                        }
+
+                        var areas = [];
+                        if (this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid].length) {
+                            this.masterOrderLine.allSelectedAreas[orderLine.metadata.uuid].forEach(function (selectedArea) {
+                                var area = {
+                                    "code": selectedArea.code,
+                                    "name": selectedArea.name,
+                                    "type": selectedArea.type,
+                                    "_links": []
+                                }
+                                console.log(area);
+                                areas.push(area);
+                            });
+                        }
+
+                        var projections = [];
+                        if (this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid].length) {
+                            this.masterOrderLine.allSelectedProjections[orderLine.metadata.uuid].forEach(function (selectedProjection) {
+                                var projection = {
+                                    "code": selectedProjection.code,
+                                    "name": selectedProjection.name,
+                                    "codespace": selectedProjection.codespace,
+                                    "_links": []
+                                }
+                                projections.push(projection);
+                            });
+                        }
+
+                        var formats = [];
+                        if (this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] !== undefined && this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid].length) {
+                            this.masterOrderLine.allSelectedFormats[orderLine.metadata.uuid].forEach(function (selectedFormat) {
+                                var format = {
+                                    "code": "",
+                                    "name": selectedFormat.name,
+                                    "type": "",
+                                    "_links": []
+                                }
+                                formats.push(format);
+                            });
+                        }
+
+                        var orderRequest = {
+                            "metadataUuid": orderLine.metadata.uuid,
+                            "areas": areas,
+                            "projections": projections,
+                            "formats": formats,
+                            "_links": links
+                        }
+
+                        if (this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
+                            orderRequest.coordinates = this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid];
+                        }
+
+                        orderRequests[orderLine.metadata.orderDistributionUrl].orderLines.push(orderRequest);
+                    }
+                }.bind(this));
+            }
+            this.orderRequests = orderRequests;
         },
         sendRequests: function () {
             var responseData = [];
