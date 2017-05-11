@@ -42,6 +42,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public bool ShowDownloadLink { get; set; }
         public string AddToCartUrl { get; set; }
         public string MapUrl { get; set; }
+        public bool ShowMapLink { get; set; }
+        public bool ShowServiceMapLink { get; set; }
 
 
 
@@ -88,12 +90,12 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return false;
         }
 
-        public bool ShowMapLink()
+        public bool ShowMaplink()
         {
             if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") || DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
             else return false;
         }
-        public bool ShowServiceMapLink()
+        public bool ShowServiceMaplink()
         {
             if (!string.IsNullOrWhiteSpace(ServiceUrl)) return true;
             else return false;
@@ -192,12 +194,14 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         private string GetMapUrl()
         {
             var norgeskartUrl = WebConfigurationManager.AppSettings["NorgeskartUrl"];
-            if (ShowMapLink())
+            if (ShowMaplink())
             {
+                ShowMapLink = true;
                 return norgeskartUrl + DownloadUrl + "/";
             }
-            if (ShowServiceMapLink())
+            if (ShowServiceMaplink())
             {
+                ShowServiceMapLink = true; 
                 return norgeskartUrl + ServiceUrl + "/";
             }
             return "";
