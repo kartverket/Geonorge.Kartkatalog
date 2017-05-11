@@ -81,9 +81,9 @@ var Areas = {
                             if (availableArea.code == area.code) {
                                 this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type][index].isSelected = true;
 
-                                var isAllreadyAddedInfo = this.$root.isAllreadyAdded(this.$parent.selectedAreas, area, "code");
+                                var isAllreadyAddedInfo = this.$root.isAllreadyAdded(this.$root.masterOrderLine.masterSelectedAreas, area, "code");
                                 if (!isAllreadyAddedInfo.added) {
-                                    this.$parent.selectedAreas.push(area);
+                                    this.$root.masterOrderLine.masterSelectedAreas.push(area);
                                 }
                             }
                         }.bind(this));
@@ -113,9 +113,9 @@ var Areas = {
                         this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type].forEach(function (availableArea, index) {
                             if (availableArea.code == area.code) {
                                 this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type][index].isSelected = false;
-                                this.$parent.selectedAreas.forEach(function (selectedArea, index) {
+                                this.$root.masterOrderLine.masterSelectedAreas.forEach(function (selectedArea, index) {
                                     if (selectedArea.code == area.code) {
-                                        this.$parent.selectedAreas.splice(index, 1)
+                                        this.$root.masterOrderLine.masterSelectedAreas.splice(index, 1)
                                     }
                                 }.bind(this));
                             }
@@ -168,9 +168,9 @@ var Projections = {
                             if (availableProjection.code == projection.code) {
                                 this.$root.masterOrderLine.allAvailableProjections[orderLineUuid][index].isSelected = true;
 
-                                var isAllreadyAddedInfo = this.$root.isAllreadyAdded(this.$parent.selectedProjections, projection, "code");
+                                var isAllreadyAddedInfo = this.$root.isAllreadyAdded(this.$root.masterOrderLine.masterSelectedProjections, projection, "code");
                                 if (!isAllreadyAddedInfo.added) {
-                                    this.$parent.selectedProjections.push(projection);
+                                    this.$root.masterOrderLine.masterSelectedProjections.push(projection);
                                 }
                             }
                         }.bind(this));
@@ -198,9 +198,9 @@ var Projections = {
                         this.$root.masterOrderLine.allAvailableProjections[orderLineUuid].forEach(function (availableProjection, index) {
                             if (availableProjection.code == projection.code) {
                                 this.$root.masterOrderLine.allAvailableProjections[orderLineUuid][index].isSelected = false;
-                                this.$parent.selectedProjections.forEach(function (selectedProjection, index) {
+                                this.$root.masterOrderLine.masterSelectedProjections.forEach(function (selectedProjection, index) {
                                     if (selectedProjection.code == projection.code) {
-                                        this.$parent.selectedProjections.splice(index, 1)
+                                        this.$root.masterOrderLine.masterSelectedProjections.splice(index, 1)
                                     }
                                 }.bind(this));
                             }
@@ -247,9 +247,9 @@ var Formats = {
                         this.$root.masterOrderLine.allAvailableFormats[orderLineUuid].forEach(function (availableFormat, index) {
                             if (availableFormat.name == format.name) {
                                 this.$root.masterOrderLine.allAvailableFormats[orderLineUuid][index].isSelected = true;
-                                var isAllreadyAddedInfo = this.$root.isAllreadyAdded(this.$parent.selectedFormats, format, "name");
+                                var isAllreadyAddedInfo = this.$root.isAllreadyAdded(this.$root.masterOrderLine.masterSelectedFormats, format, "name");
                                 if (!isAllreadyAddedInfo.added) {
-                                    this.$parent.selectedFormats.push(format);
+                                    this.$root.masterOrderLine.masterSelectedFormats.push(format);
                                 }
                             }
                         }.bind(this));
@@ -277,9 +277,9 @@ var Formats = {
                         this.$root.masterOrderLine.allAvailableFormats[orderLineUuid].forEach(function (availableFormat, index) {
                             if (availableFormat.name == format.name) {
                                 this.$root.masterOrderLine.allAvailableFormats[orderLineUuid][index].isSelected = false;
-                                this.$parent.selectedFormats.forEach(function (selectedFormat, index) {
+                                this.$root.masterOrderLine.masterSelectedFormats.forEach(function (selectedFormat, index) {
                                     if (selectedFormat.name == format.name) {
-                                        this.$parent.selectedFormats.splice(index, 1)
+                                        this.$root.masterOrderLine.masterSelectedFormats.splice(index, 1)
                                     }
                                 }.bind(this));
                             }
@@ -606,14 +606,10 @@ var OrderLine = {
 };
 
 var MasterOrderLine = {
-    props: ['allAvailableAreas', 'availableProjections', 'availableFormats', 'allSelectedAreas', 'allSelectedProjections', 'allSelectedFormats', 'allOrderLineErrors'],
+    props: ['allAvailableAreas', 'availableProjections', 'availableFormats', 'allSelectedAreas', 'allSelectedProjections', 'allSelectedFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'allOrderLineErrors'],
     data: function () {
         var data = {
             availableAreas: {},
-
-            selectedAreas: [],
-            selectedProjections: [],
-            selectedFormats: [],
 
             mapData: {},
             mapIsLoaded: false,
@@ -644,9 +640,6 @@ var MasterOrderLine = {
 
                     if (!areaIsAllreadyAddedInfo.added) {
                         this.availableAreas[areaType].push(area);
-                    } else {
-                        this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].orderLineUuids.push(orderLine);
-                        this.availableAreas[areaType][areaIsAllreadyAddedInfo.position].allAvailableFormats[orderLine] = area.formats;
                     }
                 }.bind(this))
             }
@@ -889,8 +882,11 @@ var mainVueModel = new Vue({
             allSelectedAreas: {},
             allSelectedProjections: {},
             allSelectedFormats: {},
-            allOrderLineErrors: {},
             allSelectedCoordinates: {},
+            masterSelectedAreas: [],
+            masterSelectedProjections: [],
+            masterSelectedFormats: [],
+            allOrderLineErrors: {},
             allDefaultProjections: {},
             allDefaultFormats: {}
         }
@@ -1002,6 +998,8 @@ var mainVueModel = new Vue({
     },
     mounted: function () {
         this.autoselectWithOrderLineValuesFromLocalStorage();
+        this.autoselectWithMasterOrderLineValuesFromLocalStorage();
+        this.validateAreas();
     },
     components: {
         'orderLine': OrderLine,
@@ -1099,6 +1097,7 @@ var mainVueModel = new Vue({
             this.emailRequired = emailRequired;
             this.updateOrderRequests();
             this.addSelectedOrderLineValuesToLocalStorage();
+            this.addSelectedMasterOrderLineValuesToLocalStorage();
             setTimeout(function () {
                 $("[data-toggle='tooltip']").tooltip();
             }, 300);
@@ -1412,6 +1411,7 @@ var mainVueModel = new Vue({
             if (!responseFailed) {
                 this.removeAllOrderLines();
                 this.removeSelectedOrderLineValuesFromLocalStorage();
+                this.removeSelectedMasterOrderLineValuesFromLocalStorage();
             }
             this.orderResponse = responseData;
         },
@@ -1506,6 +1506,8 @@ var mainVueModel = new Vue({
             var required = this.orderItemHasCoordinates(orderItem);
             return required;
         },
+
+        // Save selected order line values in local storage
         addSelectedOrderLineValuesToLocalStorage: function () {
             localStorage.setItem('allSelectedAreas', JSON.stringify(this.masterOrderLine.allSelectedAreas));
             localStorage.setItem('allSelectedProjections', JSON.stringify(this.masterOrderLine.allSelectedProjections));
@@ -1585,7 +1587,44 @@ var mainVueModel = new Vue({
 
             this.updateSelectedProjectionsForAllOrderLines();
             this.updateSelectedFormatsForAllOrderLines();
-            this.validateAreas();
-        }
+        },
+
+        // Save selected master order line values in local storage
+        addSelectedMasterOrderLineValuesToLocalStorage: function () {
+            localStorage.setItem('masterSelectedAreas', JSON.stringify(this.masterOrderLine.masterSelectedAreas));
+            localStorage.setItem('masterSelectedProjections', JSON.stringify(this.masterOrderLine.masterSelectedProjections));
+            localStorage.setItem('masterSelectedFormats', JSON.stringify(this.masterOrderLine.masterSelectedFormats));
+        },
+        getSelectedMasterOrderLineValuesFromLocalStorage: function () {
+            var selectedMasterOrderLineValues = {
+                masterSelectedAreas: localStorage.getItem('masterSelectedAreas') !== null ? JSON.parse(localStorage.getItem('masterSelectedAreas')) : null,
+                masterSelectedProjections: localStorage.getItem('masterSelectedProjections') !== null ? JSON.parse(localStorage.getItem('masterSelectedProjections')) : null,
+                masterSelectedFormats: localStorage.getItem('masterSelectedFormats') !== null ? JSON.parse(localStorage.getItem('masterSelectedFormats')) : null,
+            }
+            return selectedMasterOrderLineValues;
+        },
+        removeSelectedMasterOrderLineValuesFromLocalStorage: function () {
+            localStorage.removeItem('masterSelectedAreas');
+            localStorage.removeItem('masterSelectedProjections');
+            localStorage.removeItem('masterSelectedFormats');
+        },
+        autoselectWithMasterOrderLineValuesFromLocalStorage: function () {
+            var selectedMasterOrderLineValues = this.getSelectedMasterOrderLineValuesFromLocalStorage();
+
+            // Autoselect areas
+            if (selectedMasterOrderLineValues.masterSelectedAreas !== null && selectedMasterOrderLineValues.masterSelectedAreas.length) {
+                this.masterOrderLine.masterSelectedAreas = selectedMasterOrderLineValues.masterSelectedAreas;
+            }
+
+            // Autoselect projections
+            if (selectedMasterOrderLineValues.masterSelectedProjections !== null && selectedMasterOrderLineValues.masterSelectedProjections.length) {
+                this.masterOrderLine.masterSelectedProjections = selectedMasterOrderLineValues.masterSelectedProjections;
+            }
+
+            // Autoselect formats
+            if (selectedMasterOrderLineValues.masterSelectedFormats !== null && selectedMasterOrderLineValues.masterSelectedFormats.length) {
+                this.masterOrderLine.masterSelectedFormats = selectedMasterOrderLineValues.masterSelectedFormats;
+            }
+        },
     }
 });
