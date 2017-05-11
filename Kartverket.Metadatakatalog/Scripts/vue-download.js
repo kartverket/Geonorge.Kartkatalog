@@ -611,6 +611,10 @@ var MasterOrderLine = {
         var data = {
             availableAreas: {},
 
+            showAreaHelpText: false,
+            showProjectionHelpText: false,
+            showFormatHelpText: false,
+
             mapData: {},
             mapIsLoaded: false,
             showMap: false,

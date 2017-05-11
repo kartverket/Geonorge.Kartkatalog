@@ -189,21 +189,27 @@
         <p>Alle datasett</p>
         <div class="row">
             <div class="col-md-4">
-                <p>Område <span href="#" class="badge help-text-toggle">?</span></p>
-                <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master">
-
+                <p>Område <span href="#" v-on:click="showAreaHelpText = !showAreaHelpText" v-bind:class="{active: showAreaHelpText}" class="badge help-text-toggle clickable">?</span></p>
+                <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master"></div>
+                <div v-show="showAreaHelpText" class="help-text form-element-help-text bg-info margin-top-10">
+                    Hjelpetekst for områdevalg
                 </div>
             </div>
             <div class="col-md-4">
-                <p>Projeksjon <span href="#" class="badge help-text-toggle">?</span></p>
+                <p>Projeksjon <span href="#" v-on:click="showProjectionHelpText = !showProjectionHelpText" v-bind:class="{active: showProjectionHelpText}" class="badge help-text-toggle clickable">?</span></p>
                 <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                 <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="master"></div>
-
+                <div v-show="showProjectionHelpText" class="help-text form-element-help-text bg-info margin-top-10">
+                    Hjelpetekst for projeksjonsvalg
+                </div>
             </div>
             <div class="col-md-4">
-                <p>Format <span href="#" class="badge help-text-toggle">?</span></p>
+                <p>Format <span href="#" v-on:click="showFormatHelpText = !showFormatHelpText" v-bind:class="{active: showFormatHelpText}" class="badge help-text-toggle clickable">?</span></p>
                 <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                 <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="master"></div>
+                <div v-show="showFormatHelpText" class="help-text form-element-help-text bg-info margin-top-10">
+                    Hjelpetekst for formatvalg
+                </div>
             </div>
         </div>
     </div>
