@@ -74,6 +74,8 @@
         <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="indicator"></span>
         <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="facet-filter-title">{{ FacetName }}</span>
         <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
+            
+            @*Henter ut alle placegroups (Norge, Havområder, Jan Mayen, Svalbard)*@
             <div v-bind:class="{'selected': placeGroup.isSelected, 'is-empty': placeGroup.Count == 0}" v-for="placeGroup in PlaceGroups">
                 <span v-bind:class="{'no-indicator': !placeGroup.hasChildren}" class="indicator"></span>
                 <div class="facet-checkbox facet-link">
@@ -83,6 +85,8 @@
                     {{ placeGroup.Name }} <span class="text-muted">({{ placeGroup.Count }})</span>
                 </div>
             </div>
+            
+            @*Henter ut alle Fylker*@
             <div v-for="area in FacetResults">
                 <div v-bind:class="{'selected': area.isSelected, 'is-empty': area.Count == 0}">
                     <span v-on:click="area.isActive = !area.isActive" v-bind:class="{'active': area.isActive, 'no-indicator': !area.hasChildren}" class="indicator"></span>
@@ -94,6 +98,8 @@
                         <span class="text-muted">({{ area.Count }})</span>
                     </div>
                 </div>
+                
+                @*Henter ut alle kommuner*@
                 <div v-bind:class="{'active': area.isActive}" class="facet-filter-sub-item-list">
                     <div v-bind:class="{'selected': municipality.isSelected, 'is-empty': municipality.Count == 0}" v-for="municipality in area.municipalities">
                         <span class="indicator no-indicator"></span>

@@ -332,7 +332,7 @@
 <script>
     @foreach (var item in Model.Result.Items)
     {
-        if (item.ShowMaplink() || item.ShowServiceMaplink())
+        if (item.ShowMapLink || item.ShowServiceMapLink)
         {
             @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
                 }

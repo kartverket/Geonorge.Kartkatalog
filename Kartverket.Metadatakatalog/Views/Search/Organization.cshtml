@@ -359,14 +359,14 @@
                                 <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
                             </a>
 
-                            @if (item.ShowMapLink())
+                            @if (item.ShowMapLink)
                             {
                                 <a id="mapmacrolink-button-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
                                     <span id="mapmacro-button-@item.Uuid" class="custom-icon"></span><span class="button-text"> Vis i kart</span>
                                 </a>
 
                             }
-                            else if (item.ShowServiceMapLink())
+                            else if (item.ShowServiceMapLink)
                             {
                                 <a id="mapmacrolink-button-@item.Uuid" href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
                                     <span id="mapmacro-button-@item.Uuid" class="custom-icon"></span><span class="button-text"> Vis i kart</span>
@@ -435,13 +435,13 @@
 
 
                         <div class="col-sm-1 search-results-action-icons action-show-map">
-                            @if (item.ShowMapLink())
+                            @if (item.ShowMapLink)
                             {
                                 <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank">
                                     <span id="mapmacro-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
                                 </a>
                             }
-                            else if (item.ShowServiceMapLink())
+                            else if (item.ShowServiceMapLink)
                             {
                                 <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank">
                                     <span id="mapmacro-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span>
