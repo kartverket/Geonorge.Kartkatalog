@@ -86,7 +86,7 @@
                     <p>{{description}}</p>
                     <p>
                         Tilgjengelig som:
-                        <span v-bind:title="'Tilgjengelig som ' + resultItem.TypeTranslated" style="width:auto" v-bind:class="type">{{resultItem.TypeTranslated}}</span>
+                        <span v-bind:title="'Tilgjengelig som ' + resultItem.TypeTranslated" style="width:auto" v-bind:class="type(resultItem.Type)">{{resultItem.TypeTranslated}}</span>
                     </p>
                 </div>
 
@@ -164,7 +164,7 @@
 
                 @*Distribusjonstype tabell *@
                 <div class="col-sm-2">
-                    <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type" style="width:auto">{{resultItem.TypeTranslated}}</span>
+                    <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
                 </div>
 
                 @*Organisasjon tabell*@
@@ -524,18 +524,6 @@
                     var src = "/thumbnail?uuid=" + this.resultItem.Uuid + "&type=small";
                     return src;
                 },
-                type: function() {
-                    var className = "label ";
-                    if (this.resultItem.Type == "dataset") className += "label-datasett";
-                    else if (this.resultItem.Type == "software") className += "label-applikasjon";
-                    else if (this.resultItem.Type == "service") className += "label-tjeneste";
-                    else if (this.resultItem.Type == "servicelayer") className += "label-tjenestelag";
-                    else if (this.resultItem.Type == "series") className += "label-datasettserie";
-                    else if (this.resultItem.Type == "dimensionGroup") className += "label-datasett";
-                    else className += "lable-default";
-
-                    return className;
-                }
             },
             methods: {
                 downloadUrl: function(url) {
@@ -644,6 +632,18 @@
                     }
                     updateCartButton(addToCartButton, orderItems);
                 },
+                type: function(type) {
+                    var className = "label ";
+                    if (type == "dataset" || type == "Datasett") className += "label-datasett";
+                    else if (type == "software" || type == "Applikasjon") className += "label-applikasjon";
+                    else if (type == "service" || type == "Tjeneste") className += "label-tjeneste";
+                    else if (type == "servicelayer" || type == "Tjenestelag") className += "label-tjenestelag";
+                    else if (type == "series" || type == "Datasettserie") className += "label-datasettserie";
+                    else if (type == "dimensionGroup" || type == "Datasett") className += "label-datasett";
+                    else className += "lable-default";
+
+                    return className;
+                }
             }
         };
 
