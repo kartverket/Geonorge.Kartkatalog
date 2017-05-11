@@ -386,7 +386,7 @@
 <script>
     @foreach (var item in Model.Result.Items)
     {
-        if (item.ShowMapLink() || item.ShowServiceMapLink())
+        if (item.ShowMapLink || item.ShowServiceMapLink)
         {
             @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
                                                                             }
@@ -444,10 +444,10 @@
                         mapTitleTag: this.resultItem.MapTitleTag
                     };
 
-                    if (this.showMapLink()) {
+                    if (this.resultItem.ShowMapLink) {
                         mapLink.iconPermission += " custom-icon-kartmarkoer";
 
-                    } else if (this.showServiceMapLink()) {
+                    } else if (this.resultItem.ShowServiceMapLink) {
                         mapLink.iconPermission += restrictedServiceClass();
                     } else {
                         mapLink.mapLinkClassLink = "disabled";
@@ -513,20 +513,6 @@
                 downloadUrl: function(url) {
                     url += this.resultItem.DownloadUrl;
                     return url;
-                },
-                showMapLink: function() {
-                    if (this.resultItem.DistributionProtocol &&
-                        (this.resultItem.DistributionProtocol.indexOf("OGC:WMS") > -1 ||
-                            this.resultItem.DistributionProtocol.indexOf("OGC:WFS") > -1 ||
-                            this.resultItem.DistributionProtocol.indexOf("OGC:WCS") > -1) &&
-                        (this.resultItem.Type == "service" || this.resultItem.Type == "servicelayer") &&
-                        this.resultItem.DownloadUrl)
-                        return true;
-                    else return false;
-                },
-                showServiceMapLink: function() {
-                    if (this.resultItemServiceUrl) return true;
-                    else return false;
                 },
                 isRestrictedService: function() {
                     if (this.resultItem.ServiceDistributionAccessConstraint == "Beskyttet" ||

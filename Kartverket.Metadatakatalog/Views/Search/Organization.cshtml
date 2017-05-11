@@ -555,7 +555,7 @@
 <script>
 @foreach (var item in Model.Result.Items)
 {
-    if (item.ShowMapLink() || item.ShowServiceMapLink())
+    if (item.ShowMapLink || item.ShowServiceMapLink)
     {
         @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
                                           }

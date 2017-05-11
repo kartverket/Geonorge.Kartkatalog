@@ -413,7 +413,7 @@
 <script>
     @foreach (var item in Model.Result.Items)
     {
-        if (item.ShowMapLink() || item.ShowServiceMapLink())
+        if (item.ShowMaplink() || item.ShowServiceMaplink())
         {
             @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
         }
@@ -471,10 +471,10 @@
                         mapTitleTag: this.resultItem.MapTitleTag
                     };
 
-                    if (this.showMapLink()) {
+                    if (this.resultItem.showMapLink) {
                         mapLink.iconPermission += " custom-icon-kartmarkoer";
 
-                    } else if (this.showServiceMapLink()) {
+                    } else if (this.resultItem.showServiceMapLink) {
                         mapLink.iconPermission += restrictedServiceClass();
                     } else {
                         mapLink.mapLinkClassLink = "disabled";

@@ -524,20 +524,6 @@
                     url += this.resultItem.DownloadUrl;
                     return url;
                 },
-                //showMapLink: function() {
-                //    if (this.resultItem.DistributionProtocol &&
-                //        (this.resultItem.DistributionProtocol.indexOf("OGC:WMS") > -1 ||
-                //            this.resultItem.DistributionProtocol.indexOf("OGC:WFS") > -1 ||
-                //            this.resultItem.DistributionProtocol.indexOf("OGC:WCS") > -1) &&
-                //        (this.resultItem.Type == "service" || this.resultItem.Type == "servicelayer") &&
-                //        this.resultItem.DownloadUrl)
-                //        return true;
-                //    else return false;
-                //},
-                //showServiceMapLink: function() {
-                //    if (this.resultItemServiceUrl) return true;
-                //    else return false;
-                //},
                 isRestrictedService: function() {
                     if (this.resultItem.ServiceDistributionAccessConstraint == "Beskyttet" ||
                         this.resultItem.ServiceDistributionAccessConstraint == "restricted" ||
