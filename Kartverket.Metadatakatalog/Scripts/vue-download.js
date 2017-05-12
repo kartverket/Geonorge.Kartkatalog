@@ -394,6 +394,9 @@ var OrderLine = {
         },
         selectFromMap: function (orderItem, mapType) {
             orderItem.showMap = true;
+            if (!this.mapIsLoaded) {
+                showLoadingAnimation("Henter kart");
+            }
             var fixed = orderItem.capabilities.supportsGridSelection;
             if (mapType == "grid") { this.loadGridMap(orderItem) }
             else if (mapType == "polygon") { this.loadPolygonMap(orderItem) }
@@ -420,10 +423,12 @@ var OrderLine = {
 
             window.addEventListener('message', function (e) {
                 if (e !== undefined && e.data !== undefined && typeof (e.data) == "string") {
+                    var iframeElement = document.getElementById(orderItem.metadata.uuid + "-iframe");
+                    var modalElement = $(iframeElement).closest(".custom-modal").removeClass("hidden");
+                    hideLoadingAnimation();
                     var msg = JSON.parse(e.data);
                     if (msg.type === "mapInitialized") {
 
-                        var iframeElement = document.getElementById(orderItem.metadata.uuid + "-iframe").contentWindow;
 
                         iframeMessage = {
                             "cmd": "setCenter",
@@ -431,13 +436,13 @@ var OrderLine = {
                             "y": orderItem.mapData.defaultConfigurations.center_latitude,
                             "zoom": orderItem.mapData.defaultConfigurations.zoom_level
                         };
-                        iframeElement.postMessage(JSON.stringify(iframeMessage), '*');
+                        iframeElement.contentWindow.postMessage(JSON.stringify(iframeMessage), '*');
 
                         iframeMessage = {
                             "cmd": "setVisible",
                             "id": orderItem.mapData.defaultConfigurations.service_name
                         };
-                        iframeElement.postMessage(JSON.stringify(iframeMessage), '*');
+                        iframeElement.contentWindow.postMessage(JSON.stringify(iframeMessage), '*');
 
                     } else {
                         if (msg.cmd === "setVisible") return;
@@ -499,6 +504,9 @@ var OrderLine = {
 
             window.addEventListener('message', function (e) {
                 if (e !== undefined && e.data !== undefined && typeof (e.data) == "string") {
+                    var iframeElement = document.getElementById(orderItem.metadata.uuid + "-iframe");
+                    var modalElement = $(iframeElement).closest(".custom-modal").removeClass("hidden");
+                    hideLoadingAnimation();
                     var msg = JSON.parse(e.data);
                     if (msg.type === "mapInitialized") {
                         iframeMessage = {
@@ -507,8 +515,7 @@ var OrderLine = {
                             "y": orderItem.mapData.defaultConfigurations.center_latitude,
                             "zoom": orderItem.mapData.defaultConfigurations.zoom_level
                         };
-                        var iframeElement = document.getElementById(orderItem.metadata.uuid + "-iframe").contentWindow;
-                        iframeElement.postMessage(JSON.stringify(iframeMessage), '*');
+                        iframeElement.contentWindow.postMessage(JSON.stringify(iframeMessage), '*');
                     }
                     else if (msg.cmd === "setVisible") { return }
                     else {
@@ -709,6 +716,9 @@ var MasterOrderLine = {
         },
         selectFromMap: function (orderItem, mapType) {
             orderItem.showMap = true;
+            if (!this.mapIsLoaded) {
+                showLoadingAnimation("Henter kart");
+            }
             var firstOrderItemWithPolygonSupport = this.getFirstOrderItemWithPolygonSupport();
             this.loadPolygonMap(firstOrderItemWithPolygonSupport);
             //$('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
@@ -739,6 +749,9 @@ var MasterOrderLine = {
 
             window.addEventListener('message', function (e) {
                 if (e !== undefined && e.data !== undefined && typeof (e.data) == "string") {
+                    var iframeElement = document.getElementById("masterorderline-iframe");
+                    var modalElement = $(iframeElement).closest(".custom-modal").removeClass("hidden");
+                    hideLoadingAnimation();
                     var msg = JSON.parse(e.data);
                     if (msg.type === "mapInitialized") {
                         iframeMessage = {
@@ -747,8 +760,7 @@ var MasterOrderLine = {
                             "y": this.mapData.defaultConfigurations.center_latitude,
                             "zoom": this.mapData.defaultConfigurations.zoom_level
                         };
-                        var iframeElement = document.getElementById("masterorderline-iframe").contentWindow;
-                        iframeElement.postMessage(JSON.stringify(iframeMessage), '*');
+                        iframeElement.contentWindow.postMessage(JSON.stringify(iframeMessage), '*');
                     }
                     else if (msg.cmd === "setVisible") { return }
                     else {
