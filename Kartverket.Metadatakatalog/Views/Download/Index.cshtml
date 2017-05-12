@@ -192,7 +192,9 @@
                 <p>Område <span href="#" v-on:click="showAreaHelpText = !showAreaHelpText" v-bind:class="{active: showAreaHelpText}" class="badge help-text-toggle clickable">?</span></p>
                 <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master"></div>
                 <div v-show="showAreaHelpText" class="help-text form-element-help-text bg-info margin-top-10">
-                    Hjelpetekst for områdevalg
+                    <p>Her kan du velge ferdige filer fra faste områder fra nedtrekklista.</p>
+                    <p>For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.</p>
+                    <p>For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.</p>
                 </div>
             </div>
             <div class="col-md-4">
@@ -200,7 +202,8 @@
                 <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                 <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="master"></div>
                 <div v-show="showProjectionHelpText" class="help-text form-element-help-text bg-info margin-top-10">
-                    Hjelpetekst for projeksjonsvalg
+                    <p>Her angir du ønsket koordinatsystem for datasett som skal lastes ned.</p>
+                    <p>Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.</p>
                 </div>
             </div>
             <div class="col-md-4">
@@ -208,7 +211,9 @@
                 <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
                 <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="master"></div>
                 <div v-show="showFormatHelpText" class="help-text form-element-help-text bg-info margin-top-10">
-                    Hjelpetekst for formatvalg
+                    <p>Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.</p>
+                    <p>SOSI – norsk utvekslingsformat for stedfestet informasjon.</p>
+                    <p>GML – internasjonalt XML-format for stedfestet informasjon.</p>
                 </div>
             </div>
         </div>
@@ -230,6 +235,12 @@
     </section>
 
     <article id="orderlist" v-show="orderLines.length && !orderResponse.length">
+
+        <div class="intro-text">
+            <p>Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.</p>
+            <p>Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.</p>
+            <p>Symboler angir om data ut fra ditt valg er tilgjengelig.</p>
+        </div>
         <div id="downloadformVue" class="download-form">
             <div class="orderline orderline-master">
                 <div is="masterOrderLine"

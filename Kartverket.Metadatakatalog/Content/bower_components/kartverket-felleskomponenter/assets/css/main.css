@@ -2667,6 +2667,15 @@ button.btn {
 #responseList ul li {
   font-style: normal; }
 
+#orderlist .intro-text,
+#responseList .intro-text {
+  background-color: #f7f8f8;
+  padding: 16px; }
+  #orderlist .intro-text p,
+  #responseList .intro-text p {
+    font-size: 12pt;
+    line-height: 16pt; }
+
 #orderlist .orderlines,
 #responseList .orderlines {
   margin-bottom: 22px; }
@@ -2707,6 +2716,15 @@ button.btn {
     #orderlist .orderline .orderline-field-counter .custom-icon-checked,
     #responseList .orderline .orderline-field-counter .custom-icon-checked {
       margin-top: 5px; }
+  #orderlist .orderline .help-text p,
+  #responseList .orderline .help-text p {
+    font-size: 12pt;
+    line-height: 16pt;
+    margin: 0;
+    margin-bottom: 12px; }
+    #orderlist .orderline .help-text p:last-child,
+    #responseList .orderline .help-text p:last-child {
+      margin-bottom: 0; }
 
 .orderline-errors .custom-icon {
   width: 21px;
@@ -2753,7 +2771,9 @@ button.btn {
 .download-list-subitem {
   padding: 0 12px;
   line-height: 24pt; }
-  .download-list-subitem a.btn, .download-list-subitem a.btn:hover, .download-list-subitem a:btn:focus {
+  .download-list-subitem a.btn,
+  .download-list-subitem a.btn:hover,
+  .download-list-subitem a:btn:focus {
     line-height: 17pt;
     margin-bottom: 0;
     height: 25px;
