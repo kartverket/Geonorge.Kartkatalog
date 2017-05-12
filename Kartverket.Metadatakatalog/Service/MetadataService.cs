@@ -9,6 +9,7 @@ using System;
 using Kartverket.Metadatakatalog.Service.Application;
 using System.Linq;
 using Kartverket.Metadatakatalog.Service.Search;
+using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -19,15 +20,17 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly IGeonorgeUrlResolver _geonorgeUrlResolver;
         private readonly IOrganizationService _organizationService;
         private readonly ISearchService _searchService;
+        private readonly IServiceDirectoryService _searchServiceDirectoryService;
         RegisterFetcher register;
 
-        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService)
+        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService)
         {
             _geoNorge = geoNorge;
             _geoNetworkUtil = geoNetworkUtil;
             _geonorgeUrlResolver = geonorgeUrlResolver;
             _organizationService = organizationService;
             _searchService = searchService;
+            _searchServiceDirectoryService = searchServiceDirectoryService;
         }
         
         
@@ -77,6 +80,7 @@ namespace Kartverket.Metadatakatalog.Service
                     tmp.DownloadUrl = dist.URL;
                     tmp.CanShowDownloadService = true;
                 }
+                //TODO For andre distribusjonstyper? REST API +++
 
                 //Åpne data, begrenset, skjermet
                 if (SimpleMetadataUtil.IsOpendata(simpleMetadata)) tmp.AccessIsOpendata = true;
@@ -86,18 +90,146 @@ namespace Kartverket.Metadatakatalog.Service
                 distlist.Add(tmp);
             }
             //Hente inn indeks og relaterte services
-            distlist.AddRange(GetRelatedServices(uuid));
+            distlist.AddRange(GetMetadataRelatedDistributions(uuid));
+            //distlist.AddRange(GetServiceDirectoryRelatedDistributions(uuid));
+            return distlist;
+        }
+        
+        private List<Models.Api.Distribution> GetServiceDirectoryRelatedDistributions(string uuid)
+        {
+            List<Models.Api.Distribution> distlist = new List<Models.Api.Distribution>();
 
+            SearchParameters parameters = new SearchParameters();
+            parameters.Text = uuid;
+            SearchResult searchResult = _searchServiceDirectoryService.Services(parameters);
+            //TODO kan være 2 andre søkeindekser
+
+            if (searchResult != null && searchResult.NumFound > 0)
+            {
+                var datasetServices = searchResult.Items[0].DatasetServices;
+
+                if (datasetServices != null && datasetServices.Count > 0)
+                {
+                    foreach (var relatert in datasetServices)
+                    {
+                        var relData = relatert.Split('|');
+
+                        try
+                        {
+                            var tmp = new Models.Api.Distribution();
+                            tmp.Uuid = relData[0] != null ? relData[0] : "";
+                            tmp.Title = relData[1] != null ? relData[1] : "";
+                            tmp.Type = relData[3] != null ? relData[3] : "";
+                            tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
+                            tmp.DistributionName = relData[5] != null ? relData[5] : "";
+                            tmp.DistributionProtocol = relData[6] != null ? relData[6] : "";
+                            tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
+                            tmp.FormatName = relData[6] != null ? relData[6] : "";
+                            tmp.FormatVersion = "";
+                            tmp.Organization = relData[4];
+                            tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
+
+                            //Åpne data, begrenset, skjermet
+                            if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
+                            if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
+                            if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
+
+                            //Vis kart
+                            if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
+                            {
+                                tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
+                                tmp.CanShowMapUrl = true;
+                            }
+                            ////Last ned
+                            //if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadata))
+                            //{
+                            //    tmp.DownloadUrl = dist.URL;
+                            //    tmp.CanShowDownloadUrl = true;
+                            //}
+                            ////Handlekurv
+                            //if (SimpleMetadataUtil.ShowDownloadService(simpleMetadata))
+                            //{
+                            //    tmp.DownloadUrl = dist.URL;
+                            //    tmp.CanShowDownloadService = true;
+                            //}
+
+                            distlist.Add(tmp);
+
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                }
+
+                var serviceLayers = searchResult.Items[0].ServiceLayers;
+
+                if (serviceLayers != null && serviceLayers.Count > 0)
+                {
+
+                    foreach (var relatert in serviceLayers)
+                    {
+                        var relData = relatert.Split('|');
+
+                        try
+                        {
+                            var tmp = new Models.Api.Distribution();
+                            tmp.Uuid = relData[0] != null ? relData[0] : "";
+                            tmp.Title = relData[1] != null ? relData[1] : "";
+                            tmp.Type = relData[3] != null ? relData[3] : "";
+                            tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
+                            tmp.DistributionName = relData[5] != null ? relData[5] : "";
+                            tmp.DistributionProtocol = relData[6] != null ? relData[6] : "";
+                            tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
+                            tmp.FormatName = relData[6] != null ? relData[6] : "";
+                            tmp.FormatVersion = "";
+                            tmp.Organization = relData[4];
+                            tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
+
+                            //Åpne data, begrenset, skjermet
+                            if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
+                            if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
+                            if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
+
+                            //Vis kart
+                            if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
+                            {
+                                tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
+                                tmp.CanShowMapUrl = true;
+                            }
+                            ////Last ned
+                            //if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadata))
+                            //{
+                            //    tmp.DownloadUrl = dist.URL;
+                            //    tmp.CanShowDownloadUrl = true;
+                            //}
+                            ////Handlekurv
+                            //if (SimpleMetadataUtil.ShowDownloadService(simpleMetadata))
+                            //{
+                            //    tmp.DownloadUrl = dist.URL;
+                            //    tmp.CanShowDownloadService = true;
+                            //}
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                }
+            }
             return distlist;
         }
 
-        private List<Models.Api.Distribution> GetRelatedServices(string uuid)
+
+        private List<Models.Api.Distribution> GetMetadataRelatedDistributions(string uuid)
         {
             List<Models.Api.Distribution> distlist = new List<Models.Api.Distribution>();
 
             SearchParameters parameters = new SearchParameters();
             parameters.Text = uuid;
             SearchResult searchResult = _searchService.Search(parameters);
+            //TODO kan være 2 andre søkeindekser
 
             if (searchResult != null && searchResult.NumFound > 0)
             {
@@ -150,6 +282,62 @@ namespace Kartverket.Metadatakatalog.Service
 
                             distlist.Add(tmp);
 
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                }
+
+                var serviceLayers = searchResult.Items[0].ServiceLayers;
+
+                if (serviceLayers != null && serviceLayers.Count > 0)
+                {
+
+                    foreach (var relatert in serviceLayers)
+                    {
+                        var relData = relatert.Split('|');
+
+                        try
+                        {
+                            var tmp = new Models.Api.Distribution();
+                            tmp.Uuid = relData[0] != null ? relData[0] : "";
+                            tmp.Title = relData[1] != null ? relData[1] : "";
+                            tmp.Type = relData[3] != null ? relData[3] : "";
+                            tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
+                            tmp.DistributionName = relData[5] != null ? relData[5] : "";
+                            tmp.DistributionProtocol = relData[6] != null ? relData[6] : "";
+                            tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
+                            tmp.FormatName = relData[6] != null ? relData[6] : "";
+                            tmp.FormatVersion = "";
+                            tmp.Organization = relData[4];
+                            tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
+
+                            //Åpne data, begrenset, skjermet
+                            if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
+                            if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
+                            if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
+
+                            //Vis kart
+                            if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
+                            {
+                                tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
+                                tmp.CanShowMapUrl = true;
+                            }
+                            ////Last ned
+                            //if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadata))
+                            //{
+                            //    tmp.DownloadUrl = dist.URL;
+                            //    tmp.CanShowDownloadUrl = true;
+                            //}
+                            ////Handlekurv
+                            //if (SimpleMetadataUtil.ShowDownloadService(simpleMetadata))
+                            //{
+                            //    tmp.DownloadUrl = dist.URL;
+                            //    tmp.CanShowDownloadService = true;
+                            //}
+
+                            
                         }
                         catch (Exception ex)
                         {

@@ -72,6 +72,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 _indexerApplication.Index(_indexDocumentCreator.ConvertIndexDocToApplication(metadataIndexDoc));
                 //Unntak for applikasjoner som er koblet til datasett - må bruke gruppe tabellen
+
                 _indexer.Index(metadataIndexDoc);
             }
 
