@@ -448,7 +448,7 @@
                         mapLink.iconPermission += " custom-icon-kartmarkoer";
 
                     } else if (this.resultItem.ShowServiceMapLink) {
-                        mapLink.iconPermission += restrictedServiceClass();
+                        mapLink.iconPermission += this.restrictedServiceClass();
                     } else {
                         mapLink.mapLinkClassLink = "disabled";
                         mapLink.mapLinkClassButton += " disabled";
@@ -512,7 +512,7 @@
                 },
                 restrictedServiceClass: function() {
                     var iconPermissionClass;
-                    if (this.isRestrictedService) {
+                    if (this.isRestrictedService()) {
                         iconPermissionClass = "custom-icon-kartmarkoer-needs-permission";
                     } else {
                         iconPermissionClass = "custom-icon-kartmarkoer";
