@@ -1390,6 +1390,7 @@ var mainVueModel = new Vue({
             this.orderRequests = orderRequests;
         },
         sendRequests: function () {
+            this.updateEmailForOrderRequests();
             var responseData = [];
             var responseFailed = false;
             var orderRequests = this.orderRequests;
@@ -1521,6 +1522,14 @@ var mainVueModel = new Vue({
         projectionAndFormatIsRequired: function (orderItem) {
             var required = this.orderItemHasCoordinates(orderItem);
             return required;
+        },
+
+        updateEmailForOrderRequests: function () {
+            if (this.orderRequests !== undefined) {
+                for (orderDistributionUrl in this.orderRequests) {
+                    this.orderRequests[orderDistributionUrl].email = this.email;
+                }
+            }
         },
 
         // Save selected order line values in local storage
