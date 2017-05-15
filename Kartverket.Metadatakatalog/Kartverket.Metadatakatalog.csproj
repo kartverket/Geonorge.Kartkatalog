@@ -841,6 +841,7 @@
     <Content Include="Content\bower_components\vue\test\weex\runtime\node.spec.js" />
     <Content Include="Content\bower_components\vue\test\weex\runtime\style.spec.js" />
     <Content Include="Content\shopping-cart.css" />
+    <Content Include="Content\temp.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Helpers\SearchHelpers.cshtml" />
