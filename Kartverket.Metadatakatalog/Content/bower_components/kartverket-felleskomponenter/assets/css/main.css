@@ -2845,6 +2845,9 @@ button.btn {
   .facet-filter .is-empty.selected .facet-checkbox .facet-checkbox-icon:before {
     content: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/checkbox-checked-disabled.svg"); }
 
+footer .container-footer .block {
+  padding: 10px 15px 22px; }
+
 input[readonly] {
   cursor: default !important; }
 
