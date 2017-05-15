@@ -207,8 +207,8 @@ namespace Kartverket.Metadatakatalog.Models
                          .ToList();
 
             var facetsFylke = Facets
-            .Where(f => !string.IsNullOrWhiteSpace(f.Value) && f.Name == "area" && f.Value.Length == 4)
-            .Select(fa => fa.Value)
+            .Where(f => !string.IsNullOrWhiteSpace(f.Value) && f.Name == "area")
+            .Select(fa => fa.Value.Substring(0, 4))
             .Distinct()
             .ToList();
 
@@ -252,6 +252,8 @@ namespace Kartverket.Metadatakatalog.Models
                 }
 
             }
+
+
             foreach (var facet in facets)
             {
                 if (!facetQueries.ContainsKey(facet.Name))
