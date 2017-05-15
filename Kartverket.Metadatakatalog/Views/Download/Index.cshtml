@@ -1,22 +1,232 @@
-﻿@using Newtonsoft.Json
-
+﻿@using Kartverket.Metadatakatalog.Helpers
 @{
-    ViewBag.Title = "Nedlasting - Min kurv";
+    ViewBag.Title = "Filnedlastning";
 }
 @section breadcrumb {
-    <li class="active">Min kurv</li>
+    <li class="active">Filnedlastning</li>
 }
 <div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
 </div>
 
-<div id="vueContainer">
+<!-- Map modal -->
+<script type="text/x-template" id="map-template">
+    <div class="map">
+        <div class="custom-modal hidden">
+            <div class="custom-modal-container">
+                <iframe v-if="master" id="masterorderline-iframe" v-bind:src="mapSrc" name="iframe" style="height:100%"></iframe>
+                <iframe v-else v-bind:id="$parent.$parent.metadata.uuid + '-iframe'" v-bind:src="mapSrc" name="iframe" style="height:100%"></iframe>
+                <div class="modal-footer">
+                    <button type="button" v-on:click="$parent.$parent.showMap = false" class="btn btn-default" data-dismiss="modal">Lukk</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<!-- Area select -->
+<script type="text/x-template" id="areas-template">
+    <div>
+        <div class="custom-select-list">
+            <div class="custom-select-list-input-container">
+                <span v-for="area in selected" class="custom-select-list-selected">
+                    {{ area.name }}
+                    <span v-show="!master && !area.hasSelectedProjections" data-toggle="tooltip" data-placement="bottom" title="Støttet projeksjon er ikke valgt" class="projection-warning-icon"></span>
+                    <span v-show="!master && !area.hasSelectedFormats" data-toggle="tooltip" data-placement="bottom" title="Støttet format er ikke valgt" class="format-warning-icon"></span>
+                    <span v-on:click="removeSelectedArea(area)" class="custom-select-list-remove-button"></span>
+                </span>
+                <input v-on:keyup="$parent.filterOptionList('area-option-list', $event.target.value)" type="text" class="custom-select-list-input" />
+            </div>
+            <div class="custom-select-list-dropdown">
+                <div class="custom-select-list-dropdown-content">
+                    <div v-if="available.landsdekkende" class="custom-select-list-option-group">
+                        <p class="custom-select-list-option-group-name">Landsdekkende</p>
+                        <ul class="custom-select-list-options area-option-list">
+                            <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': area.isSelected}" v-for="area in available.landsdekkende">{{ area.name }}</li>
+                        </ul>
+                    </div>
+                    <div v-for="(areas, areaType) in available" class="custom-select-list-option-group">
+                        <div v-if="areaType !== 'landsdekkende' && (!master || $root.isSupportedType(areaType))" v-show="areas.length">
+                            <p class="custom-select-list-option-group-name">{{ areaType }}</p>
+                            <ul class="custom-select-list-options area-option-list">
+                                <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': (!master && area.isSelected) || (master && isMasterSelected(area)) }" v-for="area in areas">{{ area.name }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="custom-select-list-dropdown-additional-options">
+                    <a v-show="supportsPolygonSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
+                    <a v-show="supportsGridSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'grid')" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
+                </div>
+            </div>
+        </div>
+        <div v-if="supportsPolygonSelection && $parent.mapIsLoaded">
+            <div v-if="master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="true">
+            </div>
+        </div>
+        <div v-if="supportsPolygonSelection && $parent.mapIsLoaded">
+            <div v-if="!master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="false">
+            </div>
+        </div>
+        <div v-if="supportsGridSelection && $parent.mapIsLoaded">
+            <div v-if="!master"
+                 v-show="$parent.showMap" is="mapSelect"
+                 v-bind:map-data="$parent.mapData"
+                 v-bind:map-src="'@Html.SecureNorgeskartUrl()' + 'nedlasting.html#' + $parent.mapData.defaultConfigurations.zoom_level + '/' + $parent.mapData.defaultConfigurations.center_longitude + '/' + $parent.mapData.defaultConfigurations.center_latitude + '/' + $parent.mapData.defaultConfigurations.service_name"
+                 v-bind:master="false">
+            </div>
+
+        </div>
+    </div>
+</script>
+
+
+<!-- Projection select -->
+<script type="text/x-template" id="projections-template">
+    <div class="custom-select-list">
+        <div class="custom-select-list-input-container">
+            <span v-for="projection in selected" class="custom-select-list-selected">
+                {{ projection.name }}
+                <span v-on:click="removeSelectedProjection(projection)" class="custom-select-list-remove-button"></span>
+            </span>
+            <input v-on:keyup="$parent.filterOptionList('projection-option-list', $event.target.value)" type="text" class="custom-select-list-input" />
+        </div>
+        <div class="custom-select-list-dropdown">
+            <ul class="custom-select-list-options projection-option-list">
+                <li v-on:click="selectProjection(projection)" v-bind:class="{'is-selected': (!master && projection.isSelected) || (master && isMasterSelected(projection))}" v-for="(projection, projectionCode) in available">{{ projection.name }}</li>
+            </ul>
+        </div>
+    </div>
+</script>
+
+
+<!-- Format select -->
+<script type="text/x-template" id="formats-template">
+    <div class="custom-select-list">
+        <div class="custom-select-list-input-container">
+            <span v-for="format in selected" class="custom-select-list-selected">
+                {{ format.name }}
+                <span v-on:click="removeSelectedFormat(format)" class="custom-select-list-remove-button"></span>
+            </span>
+            <input v-on:keyup="$parent.filterOptionList('format-option-list', $event.target.value)" type="text" class="custom-select-list-input" />
+        </div>
+        <div class="custom-select-list-dropdown">
+            <ul class="custom-select-list-options format-option-list">
+                <li v-on:click="selectFormat(format)" v-bind:class="{'is-selected': (!master && format.isSelected) || (master && isMasterSelected(format))}" v-for="(format, formatName) in available">{{ format.name }}</li>
+            </ul>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="order-line-template">
+    <div v-bind:class="[expanded ? '' : 'readonly']">
+        <h2 v-on:click="expanded = !expanded" class="clickable">
+            <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span> {{ metadata.name }}
+        </h2>
+        <div class="pull-right margin-top-10">
+            <span v-show="hasErrors" class="orderline-field-counter">
+                <span v-on:click="expanded = true" class="custom-icon custom-icon-warning" data-toggle="tooltip" data-placement="bottom" title="Vis mangler">
+                    <span class="custom-icon-overlay">{{ numberOfErrors }}</span>
+                </span>
+            </span>
+            <span v-show="!hasErrors" class="orderline-field-counter">
+                <span class="custom-icon custom-icon-checked" data-toggle="tooltip" data-placement="bottom" title="Datasett er korrekt utfylt">
+                </span>
+            </span>
+            <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom" title="Gå til datasett" class="btn"><span class="fa fa-home"></span></a>
+            <span v-on:click="$root.removeOrderLine(metadata.uuid)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
+        </div>
+        <div class="clearfix"></div>
+        <div v-show="expanded">
+            <div class="row orderline-fields">
+                <div class="col-md-4 orderline-field">
+                    <p>Område</p>
+                    <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.area && orderLineErrors.area.length ? 'hasError' : '']"></div>
+                    <div v-if="orderLineErrors && orderLineErrors.area" class="orderline-errors margin-top-10">
+                        <div v-for="orderlineError in orderLineErrors.area" class="help-text form-element-help-text bg-danger">
+                            {{ orderlineError }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 orderline-field">
+                    <p>Projeksjon</p>
+                    <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
+                    <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.projection && orderLineErrors.projection.length ? 'hasError' : '']"></div>
+
+                    <div v-if="orderLineErrors && orderLineErrors.projection" class="orderline-errors margin-top-10">
+                        <div v-show="orderLineErrors.projection.length" class="help-text form-element-help-text bg-danger">
+                            <span class="custom-icon projection-warning-icon"></span> Mangler projeksjon for {{ orderLineErrors.projection.length }} {{orderLineErrors.projection.length == 1 ? "område" : "områder"}}
+                        </div>
+                        <div v-for="orderlineError in orderLineErrors.projection" class="help-text hidden form-element-help-text bg-danger">
+                            {{ orderlineError }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 orderline-fields">
+                    <p>Format</p>
+                    <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
+                    <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.format && orderLineErrors.format.length ? 'hasError' : '']"></div>
+
+                    <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
+                        <div v-show="orderLineErrors.format.length" class="help-text form-element-help-text bg-danger">
+                            <span class="custom-icon format-warning-icon"></span> Mangler støttet format for {{ orderLineErrors.format.length }} {{orderLineErrors.format.length == 1 ? "område" : "områder"}}
+                        </div>
+                        <div v-for="orderlineError in orderLineErrors.format" class="help-text hidden form-element-help-text bg-danger">
+                            {{ orderlineError }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="master-order-line-template">
+    <div>
+        <h2>Felles valg for nedlastning, vil gjelde for alle datasett</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <p>Område <span href="#" v-on:click="showAreaHelpText = !showAreaHelpText" v-bind:class="{active: showAreaHelpText}" class="badge help-text-toggle clickable">?</span></p>
+                <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master"></div>
+                <div v-show="showAreaHelpText" class="help-text form-element-help-text bg-info margin-top-10">
+                    <p>Her kan du velge ferdige filer fra faste områder fra nedtrekklista.</p>
+                    <p>For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.</p>
+                    <p>For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <p>Projeksjon <span href="#" v-on:click="showProjectionHelpText = !showProjectionHelpText" v-bind:class="{active: showProjectionHelpText}" class="badge help-text-toggle clickable">?</span></p>
+                <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
+                <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="master"></div>
+                <div v-show="showProjectionHelpText" class="help-text form-element-help-text bg-info margin-top-10">
+                    <p>Her angir du ønsket koordinatsystem for datasett som skal lastes ned.</p>
+                    <p>Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <p>Format <span href="#" v-on:click="showFormatHelpText = !showFormatHelpText" v-bind:class="{active: showFormatHelpText}" class="badge help-text-toggle clickable">?</span></p>
+                <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
+                <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="master"></div>
+                <div v-show="showFormatHelpText" class="help-text form-element-help-text bg-info margin-top-10">
+                    <p>Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.</p>
+                    <p>SOSI – norsk utvekslingsformat for stedfestet informasjon.</p>
+                    <p>GML – internasjonalt XML-format for stedfestet informasjon.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<div id="vueContainer" class="hidden">
     <section class="heading">
         <div class="row">
             <div class="col-sm-12">
-                <h1 v-show="!orderResponse.length">Min kurv</h1>
-                <h1 v-show="orderResponse.length">Min bestilling</h1>
+                <h1 v-show="!orderResponse.length">Filnedlastning - bestilling</h1>
+                <h1 v-show="orderResponse.length">Filnedlastning - nedlastning</h1>
             </div>
             <div class="col-sm-12">
                 <span class="separator-lg"></span>
@@ -24,62 +234,46 @@
         </div>
     </section>
 
-    <article id="orderlist" v-show="orderItems.length && !orderResponse.length">
+    <article id="orderlist" v-show="orderLines.length && !orderResponse.length">
+
+        <div class="intro-text">
+            <p>Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.</p>
+            <p>Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.</p>
+            <p>Symboler angir om data ut fra ditt valg er tilgjengelig.</p>
+        </div>
         <div id="downloadformVue" class="download-form">
-            <div v-for="orderItem in orderItems">
-                <div class="row">
-                    <div class="col-md-11">
-                        <h2><a v-bind:href="orderItem.metadata.url" class="list-heading order-title">{{ orderItem.metadata.name }}</a></h2>
-                        <a data-toggle="tooltip" data-placement="bottom" title="Slett datasett" v-on:click="removeOrderItem(orderItem)" class="list-btn-remove remove-item"><span class="glyphicon glyphicon-remove"></span></a>
-                    </div>
-                    <div class="col-md-1 list-icon">
-                        <img class="order-img" v-bind:src="orderItem.metadata.organizationLogoUrl" />
+            <div class="orderline orderline-master">
+                <div is="masterOrderLine"
+                     v-bind:all-available-areas="masterOrderLine.allAvailableAreas"
+                     v-bind:available-projections="masterOrderLine.masterAvailableProjections"
+                     v-bind:available-formats="masterOrderLine.masterAvailableFormats"
+                     v-bind:all-selected-areas="masterOrderLine.allSelectedAreas"
+                     v-bind:all-selected-projections="masterOrderLine.allSelectedProjections"
+                     v-bind:all-selected-formats="masterOrderLine.allSelectedFormats"
+                     v-bind:selected-areas="masterOrderLine.masterSelectedAreas"
+                     v-bind:selected-projections="masterOrderLine.masterSelectedProjections"
+                     v-bind:selected-formats="masterOrderLine.masterSelectedFormats"
+                     v-bind:all-order-line-errors="masterOrderLine.allOrderLineErrors">
+
+                </div>
+            </div>
+            <div class="orderlines">
+                <div v-for="(orderLine, index) in orderLines" class="orderline">
+                    <div is="orderLine"
+                         v-bind:metadata="orderLine.metadata"
+                         v-bind:capabilities="orderLine.capabilities"
+                         v-bind:available-areas="masterOrderLine.allAvailableAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableAreas[orderLine.metadata.uuid] : []"
+                         v-bind:available-projections="masterOrderLine.allAvailableProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableProjections[orderLine.metadata.uuid] : []"
+                         v-bind:available-formats="masterOrderLine.allAvailableFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableFormats[orderLine.metadata.uuid] : []"
+                         v-bind:selected-areas="masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] : []"
+                         v-bind:selected-projections="masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] : []"
+                         v-bind:selected-formats="masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] : []"
+                         v-bind:selected-coordinates="masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] : ''"
+                         v-bind:default-projections="masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] : []"
+                         v-bind:default-formats="masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] : []"
+                         v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <p>Område:</p>
-                        <div class="input-group chosen-input-group custom-select input-group-omraade">
-                            <v-select v-bind:id="'arealist-' + orderItem.metadata.uuid" v-bind:on-change="changeArea(orderItem)" v-bind:data-type="type" label="name" v-bind:value="orderItem.codelists.selectedAreas" v-bind:options="orderItem.codelists.areas" multiple></v-select>
-                            <span v-if="orderItem.capabilities.supportsPolygonSelection" class="input-group-btn selectPolygon" data-toggle="modal" data-target="#kartModal">
-                                <button data-placement="bottom" v-on:click="selectFromMap(orderItem)" v-bind:uuid="orderItem.uuid" title="Velg fra kart" data-toggle="tooltip" class="btn btn-nodivider btn-fullheight selectPolygon-button" type="button"><span class="glyphicon glyphicon-globe"></span></button>
-                            </span>
-                            <span v-if="orderItem.capabilities.supportsGridSelection" class="input-group-btn selectPolygon" data-toggle="modal" data-target="#kartModal">
-                                <button data-placement="bottom" v-on:click="selectFromMap(orderItem)" v-bind:uuid="orderItem.uuid" title="Velg fra kart" data-toggle="tooltip" class="btn btn-nodivider btn-fullheight selectPolygon-button" type="button"><span class="glyphicon glyphicon-globe"></span></button>
-                            </span>
-                        </div>
-                        <input class="coordinates" type="hidden" />
-                        <input class="order-url" type="hidden" />
-                    </div>
-
-                    <div class="col-md-4">
-                        <p>Projeksjon:<span v-show="orderItem.projectionAndFormatIsRequired" class="required-indicator"></span></p>
-                        <div class="help-text form-element-help-text bg-info" v-if="orderItem.capabilities.supportsProjectionSelection == false">
-                            <span>Valg av projeksjon støttes ikke</span>
-                        </div>
-                        <div v-else>
-                            <div v-show="!orderItem.codelists.selectedAreas.length" class="help-text form-element-help-text bg-info"><span>Område må velges først</span></div>
-                            <div v-show="orderItem.codelists.selectedAreas.length" class="form-group custom-select">
-                                <v-select label="name" v-bind:value="orderItem.codelists.selectedProjections" v-bind:options="orderItem.codelists.availableProjections" multiple></v-select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <p>Filformat:<span v-show="orderItem.projectionAndFormatIsRequired" class="required-indicator"></span></p>
-                        <div class="help-text form-element-help-text bg-info" v-if="orderItem.capabilities.supportsFormatSelection == false">
-                            <span>Valg av filformat støttes ikke</span>
-                        </div>
-                        <div v-else>
-                            <div v-show="!orderItem.codelists.selectedProjections.length && !orderItem.codelists.selectedAreas.length" class="help-text form-element-help-text bg-info"><span>Område og projeksjon må velges først</span></div>
-                            <div v-show="!orderItem.codelists.selectedProjections.length && orderItem.codelists.selectedAreas.length" class="help-text form-element-help-text bg-info"><span>Projeksjon må velges først</span></div>
-                            <div v-show="orderItem.codelists.selectedProjections.length && orderItem.codelists.selectedAreas.length" class="form-group custom-select">
-                                <v-select label="name" v-bind:value="orderItem.codelists.selectedFormats" v-bind:options="orderItem.codelists.availableFormats" multiple></v-select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr />
             </div>
 
 
@@ -90,8 +284,6 @@
                         <input type="text" v-model="email" name="email" class="form-control" />
                     </div>
                 </div>
-
-
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -104,22 +296,9 @@
                         </div>
                     </div>
                 </div>
-                <div id="kartModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="norgeskart" aria-hidden="true">
-                    <div class="modal-dialog" id="norgeskartmodal">
-                        <div class="modal-content">
-                            <div id="viewer" role="main" style="height:100%">
-                                <div id="container"></div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button><button id="setcoordinates" type="button" class="btn btn-default" data-dismiss="modal">Legg til område</button>
-                            </div>
 
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal fade" id="remove-all-items-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
+                <div class="modal fade" id="remove-all-items-modal">
+                    <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -130,19 +309,16 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn" data-dismiss="modal">Nei</button>
-                                <button type="button" v-on:click="removeAllOrderItems()" id="remove-all-items-submit" class="btn">Ja</button>
+                                <button type="button" v-on:click="removeAllOrderLines()" id="remove-all-items-submit" class="btn">Ja</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </article>
 
-
-    <article v-show="!orderItems.length && !orderResponse.length">
+    <article v-show="!orderLines.length && !orderResponse.length">
         <div class="row">
             <div class="col-md-12">
                 <p>Du har ingen elementer i kurven</p>
@@ -150,53 +326,60 @@
         </div>
     </article>
 
-    <article id="responseList" v-show="orderResponse.length">
+    <article id="responseList" v-show="orderResponseGrouped.length">
         <div class="row">
             <div class="col-md-12">
-                <div v-for="responseItem in orderResponse">
-                    <p>Referansenummer: {{ responseItem.data.referenceNumber }}</p>
-                    <div class="list-group download-list">
-                        <div v-if="file.status == 'ReadyForDownload'" v-for="file in responseItem.data.files" class="list-group-item">
-                            <div class="row">
-                                <div class="col-sm-6 col-md-7">
-                                    <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
-                                        <span class="custom-icon custom-icon-lastned"></span>
+                <div v-for="responseItem in orderResponseGrouped">
+                    <div class="orderlines">
+                        <div v-for="(orderLineFiles, orderLineName) in responseItem.files" class="orderline">
+                            <h2>{{ orderLineName }}</h2>
+                            <div v-if="file.status == 'ReadyForDownload'" v-for="file in orderLineFiles" class="download-list-subitem">
+                                <div class="row">
+                                    <div class="col-sm-5 col-md-6">
                                         <span class="download-list-item-name">
-                                            {{ file.metadataName }}, <span class="inline-block">{{ file.areaName }}</span>
+                                            <span class="inline-block">{{ file.areaName }}</span>
                                         </span>
-                                    </a>
-                                </div>
-                                <div class="col-sm-4 col-md-3">
-                                    <span class="label label-success auto-width">{{file.projectionName}}</span>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <span class="label label-info">{{file.format}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="file.status == 'WaitingForProcessing'" v-for="file in responseItem.data.files" class="list-group-item">
-                            <div class="row">
-                                <div class="col-sm-6 col-md-7">
-                                    <span class="custom-icon custom-icon-info"></span>
-                                    <span class="download-list-item-name">
-                                        {{ file.metadataName }}, <span class="inline-block">Valgt fra kart</span> <small class="inline-block">(Under behandling)</small>
-                                    </span>
-                                </div>
-                                <div class="col-sm-4 col-md-3">
-                                    <span class="label label-success auto-width">{{ file.projectionName }}</span>
-                                </div>
-                                <div class="col-sm-2 col-md-2">
-                                    <span class="label label-info">{{file.format}}</span>
+                                    </div>
+                                    <div class="col-sm-4 col-md-3">
+                                        <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                    </div>
+                                    <div class="col-sm-2 col-md-2">
+                                        <span class="label label-info">{{file.format}}</span>
+                                    </div>
+                                    <div class="col-sm-1 col-md-1 icon-col">
+                                        <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name" class="btn">
+                                            <span class="custom-icon custom-icon-lastned"></span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div v-if="!file.status && file.name" v-for="file in responseItem.data.files" class="list-group-item">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12">
-                                    <span class="custom-icon custom-icon-info"></span>
-                                    <span class="download-list-item-name">
-                                        {{ file.name }}
-                                    </span>
+                            <div v-if="file.status == 'WaitingForProcessing'" v-for="file in orderLineFiles" class="download-list-subitem">
+                                <div class="row">
+                                    <div class="col-sm-5 col-md-6">
+
+                                        <span class="download-list-item-name">
+                                            {{ file.metadataName }}, <span class="inline-block">Valgt fra kart</span> <small class="inline-block">(Under behandling)</small>
+                                        </span>
+                                    </div>
+                                    <div class="col-sm-4 col-md-3">
+                                        <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                    </div>
+                                    <div class="col-sm-2 col-md-2">
+                                        <span class="label label-info">{{file.format}}</span>
+                                    </div>
+                                    <div class="col-sm-1 col-md-1 icon-col">
+                                        <span class="custom-icon custom-icon-info"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="!file.status && file.name" v-for="file in orderLineFiles" class="list-group-subitem">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12">
+                                        <span class="custom-icon custom-icon-info"></span>
+                                        <span class="download-list-item-name">
+                                            {{ file.name }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -206,7 +389,4 @@
         </div>
     </article>
 </div>
-<script type="text/javascript" src="~/Scripts/vue-select.js"></script>
-
 <script type="text/javascript" src="~/Scripts/vue-download.js"></script>
-@Html.Partial("_Norgeskart")
