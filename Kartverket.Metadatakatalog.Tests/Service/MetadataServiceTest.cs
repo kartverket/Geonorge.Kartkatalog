@@ -6,6 +6,7 @@ using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Search;
+using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 using Moq;
 using NUnit.Framework;
 using www.opengis.net;
@@ -23,7 +24,8 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             var geonorgeUrlResolverMock = new Mock<IGeonorgeUrlResolver>();
             var organizationServiceMock = new Mock<IOrganizationService>();
             var searchServiceMock = new Mock<ISearchService>();
-            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"), geonorgeUrlResolverMock.Object, organizationServiceMock.Object, searchServiceMock.Object);
+            var searchServiceDirectoryServiceMock = new Mock<IServiceDirectoryService>();
+            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"), geonorgeUrlResolverMock.Object, organizationServiceMock.Object, searchServiceMock.Object, searchServiceDirectoryServiceMock.Object);
 
             MetadataViewModel metadata = metadataService.GetMetadataByUuid(Uuid);
             
@@ -39,7 +41,8 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             var geonorgeUrlResolverMock = new Mock<IGeonorgeUrlResolver>();
             var organizationServiceMock = new Mock<IOrganizationService>();
             var searchServiceMock = new Mock<ISearchService>();
-            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"), geonorgeUrlResolverMock.Object, organizationServiceMock.Object, searchServiceMock.Object);
+            var searchServiceDirectoryServiceMock = new Mock<IServiceDirectoryService>();
+            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"), geonorgeUrlResolverMock.Object, organizationServiceMock.Object, searchServiceMock.Object, searchServiceDirectoryServiceMock.Object);
             
             MetadataViewModel metadata = metadataService.GetMetadataByUuid(Uuid);
 
