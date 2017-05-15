@@ -13,7 +13,6 @@ import {
   query,
   mustUseProp,
   isReservedTag,
-  isReservedAttr,
   getTagNamespace,
   isUnknownElement
 } from 'web/util/index'
@@ -21,7 +20,6 @@ import {
 // install platform specific utils
 Vue.config.mustUseProp = mustUseProp
 Vue.config.isReservedTag = isReservedTag
-Vue.config.isReservedAttr = isReservedAttr
 Vue.config.getTagNamespace = getTagNamespace
 Vue.config.isUnknownElement = isUnknownElement
 

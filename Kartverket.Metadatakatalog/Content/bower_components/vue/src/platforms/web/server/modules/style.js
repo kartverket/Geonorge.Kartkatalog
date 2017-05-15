@@ -1,6 +1,4 @@
 /* @flow */
-
-import { escape } from 'he'
 import { hyphenate } from 'shared/util'
 import { getStyle } from 'web/util/style'
 
@@ -16,6 +14,6 @@ function genStyleText (vnode: VNode): string {
 export default function renderStyle (vnode: VNodeWithData): ?string {
   const styleText = genStyleText(vnode)
   if (styleText) {
-    return ` style=${JSON.stringify(escape(styleText))}`
+    return ` style=${JSON.stringify(styleText)}`
   }
 }

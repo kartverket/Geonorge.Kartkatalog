@@ -1,28 +1,38 @@
-import { VueSSRServerPlugin } from 'vue-ssr-webpack-plugin'
-import { compileWithWebpack } from './compile-with-webpack'
+import path from 'path'
+import webpack from 'webpack'
+import MemoeryFS from 'memory-fs'
+import VueSSRPlugin from 'vue-ssr-webpack-plugin'
 import { createBundleRenderer } from '../../packages/vue-server-renderer'
 
-export function createRenderer (file, options, cb) {
-  if (typeof options === 'function') {
-    cb = options
-    options = undefined
-  }
+function createRenderer (file, cb, options) {
   const asBundle = !!(options && options.asBundle)
   if (options) delete options.asBundle
 
-  compileWithWebpack(file, {
+  const config = {
     target: 'node',
+    entry: path.resolve(__dirname, 'fixtures', file),
     devtool: asBundle ? '#source-map' : false,
     output: {
       path: '/',
       filename: 'bundle.js',
       libraryTarget: 'commonjs2'
     },
+    module: {
+      rules: [{ test: /\.js$/, loader: 'babel-loader' }]
+    },
     externals: [require.resolve('../../dist/vue.runtime.common.js')],
     plugins: asBundle
-      ? [new VueSSRServerPlugin()]
+      ? [new VueSSRPlugin()]
       : []
-  }, fs => {
+  }
+
+  const compiler = webpack(config)
+  const fs = new MemoeryFS()
+  compiler.outputFileSystem = fs
+
+  compiler.run((err, stats) => {
+    expect(err).toBeFalsy()
+    expect(stats.errors).toBeFalsy()
     const bundle = asBundle
       ? JSON.parse(fs.readFileSync('/vue-ssr-bundle.json', 'utf-8'))
       : fs.readFileSync('/bundle.js', 'utf-8')
@@ -37,7 +47,7 @@ describe('SSR: bundle renderer', () => {
       const context = { url: '/test' }
       renderer.renderToString(context, (err, res) => {
         expect(err).toBeNull()
-        expect(res).toBe('<div data-server-rendered="true">/test</div>')
+        expect(res).toBe('<div server-rendered="true">/test</div>')
         expect(context.msg).toBe('hello')
         done()
       })
@@ -53,7 +63,7 @@ describe('SSR: bundle renderer', () => {
         res += chunk.toString()
       })
       stream.on('end', () => {
-        expect(res).toBe('<div data-server-rendered="true">/test</div>')
+        expect(res).toBe('<div server-rendered="true">/test</div>')
         expect(context.msg).toBe('hello')
         done()
       })
@@ -98,8 +108,8 @@ describe('SSR: bundle renderer', () => {
         }
       }
     }
-    createRenderer('cache.js', options, renderer => {
-      const expected = '<div data-server-rendered="true">/test</div>'
+    createRenderer('cache.js', renderer => {
+      const expected = '<div server-rendered="true">/test</div>'
       const key = 'app::1'
       renderer.renderToString((err, res) => {
         expect(err).toBeNull()
@@ -115,7 +125,7 @@ describe('SSR: bundle renderer', () => {
           done()
         })
       })
-    })
+    }, options)
   })
 
   it('render with cache (get/set/has)', done => {
@@ -141,8 +151,8 @@ describe('SSR: bundle renderer', () => {
         }
       }
     }
-    createRenderer('cache.js', options, renderer => {
-      const expected = '<div data-server-rendered="true">/test</div>'
+    createRenderer('cache.js', renderer => {
+      const expected = '<div server-rendered="true">/test</div>'
       const key = 'app::1'
       renderer.renderToString((err, res) => {
         expect(err).toBeNull()
@@ -160,22 +170,22 @@ describe('SSR: bundle renderer', () => {
           done()
         })
       })
-    })
+    }, options)
   })
 
   it('renderToString (bundle format with code split)', done => {
-    createRenderer('split.js', { asBundle: true }, renderer => {
+    createRenderer('split.js', renderer => {
       const context = { url: '/test' }
       renderer.renderToString(context, (err, res) => {
         expect(err).toBeNull()
-        expect(res).toBe('<div data-server-rendered="true">/test<div>async test.woff2 test.png</div></div>')
+        expect(res).toBe('<div server-rendered="true">/test<div>async</div></div>')
         done()
       })
-    })
+    }, { asBundle: true })
   })
 
   it('renderToStream (bundle format with code split)', done => {
-    createRenderer('split.js', { asBundle: true }, renderer => {
+    createRenderer('split.js', renderer => {
       const context = { url: '/test' }
       const stream = renderer.renderToStream(context)
       let res = ''
@@ -183,30 +193,82 @@ describe('SSR: bundle renderer', () => {
         res += chunk.toString()
       })
       stream.on('end', () => {
-        expect(res).toBe('<div data-server-rendered="true">/test<div>async test.woff2 test.png</div></div>')
+        expect(res).toBe('<div server-rendered="true">/test<div>async</div></div>')
         done()
       })
-    })
+    }, { asBundle: true })
   })
 
   it('renderToString catch error (bundle format with source map)', done => {
-    createRenderer('error.js', { asBundle: true }, renderer => {
+    createRenderer('error.js', renderer => {
       renderer.renderToString(err => {
         expect(err.stack).toContain('test/ssr/fixtures/error.js:1:6')
         expect(err.message).toBe('foo')
         done()
       })
-    })
+    }, { asBundle: true })
   })
 
   it('renderToString catch error (bundle format with source map)', done => {
-    createRenderer('error.js', { asBundle: true }, renderer => {
+    createRenderer('error.js', renderer => {
       const stream = renderer.renderToStream()
       stream.on('error', err => {
         expect(err.stack).toContain('test/ssr/fixtures/error.js:1:6')
         expect(err.message).toBe('foo')
         done()
       })
+    }, { asBundle: true })
+  })
+
+  it('renderToString with template', done => {
+    createRenderer('app.js', renderer => {
+      const context = {
+        head: '<meta name="viewport" content="width=device-width">',
+        styles: '<style>h1 { color: red }</style>',
+        state: { a: 1 },
+        url: '/test'
+      }
+      renderer.renderToString(context, (err, res) => {
+        expect(err).toBeNull()
+        expect(res).toContain(
+          `<html><head>${context.head}${context.styles}</head><body>` +
+          `<div server-rendered="true">/test</div>` +
+          `<script>window.__INITIAL_STATE__={"a":1}</script>` +
+          `</body></html>`
+        )
+        expect(context.msg).toBe('hello')
+        done()
+      })
+    }, {
+      template: `<html><head></head><body><!--vue-ssr-outlet--></body></html>`
+    })
+  })
+
+  it('renderToStream with template', done => {
+    createRenderer('app.js', renderer => {
+      const context = {
+        head: '<meta name="viewport" content="width=device-width">',
+        styles: '<style>h1 { color: red }</style>',
+        state: { a: 1 },
+        url: '/test'
+      }
+      const stream = renderer.renderToStream(context)
+      let res = ''
+      stream.on('data', chunk => {
+        res += chunk.toString()
+      })
+      stream.on('end', () => {
+        expect(res).toContain(
+          `<html><head>${context.head}${context.styles}</head><body>` +
+          `<div server-rendered="true">/test</div>` +
+          `<script>window.__INITIAL_STATE__={"a":1}</script>` +
+          `</body></html>`
+        )
+        expect(context.msg).toBe('hello')
+        done()
+      })
+    }, {
+      template: `<html><head></head><body><!--vue-ssr-outlet--></body></html>`
     })
   })
 })

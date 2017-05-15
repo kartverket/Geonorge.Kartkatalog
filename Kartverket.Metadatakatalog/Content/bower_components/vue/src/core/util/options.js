@@ -4,19 +4,13 @@ import Vue from '../instance/index'
 import config from '../config'
 import { warn } from './debug'
 import { set } from '../observer/index'
-
-import {
-  ASSET_TYPES,
-  LIFECYCLE_HOOKS
-} from 'shared/constants'
-
 import {
   extend,
+  isPlainObject,
   hasOwn,
   camelize,
   capitalize,
-  isBuiltInTag,
-  isPlainObject
+  isBuiltInTag
 } from 'shared/util'
 
 /**
@@ -131,7 +125,7 @@ function mergeHook (
     : parentVal
 }
 
-LIFECYCLE_HOOKS.forEach(hook => {
+config._lifecycleHooks.forEach(hook => {
   strats[hook] = mergeHook
 })
 
@@ -149,7 +143,7 @@ function mergeAssets (parentVal: ?Object, childVal: ?Object): Object {
     : res
 }
 
-ASSET_TYPES.forEach(function (type) {
+config._assetTypes.forEach(function (type) {
   strats[type + 's'] = mergeAssets
 })
 

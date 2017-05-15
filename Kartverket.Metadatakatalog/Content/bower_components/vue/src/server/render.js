@@ -1,7 +1,6 @@
 /* @flow */
 
 import { escape } from 'he'
-import { SSR_ATTR } from 'shared/constants'
 import { RenderContext } from './render-context'
 import { compileToFunctions } from 'web/compiler/index'
 import { createComponentInstanceForVnode } from 'core/vdom/create-component'
@@ -119,7 +118,7 @@ function renderElement (el, isRoot, context) {
   if (isRoot) {
     if (!el.data) el.data = {}
     if (!el.data.attrs) el.data.attrs = {}
-    el.data.attrs[SSR_ATTR] = 'true'
+    el.data.attrs['server-rendered'] = 'true'
   }
   const startTag = renderStartingTag(el, context)
   const endTag = `</${el.tag}>`

@@ -12,24 +12,27 @@
  * of making flow understand it is not worth it.
  */
 
-import VNode from './vnode'
 import config from '../config'
-import { SSR_ATTR } from 'shared/constants'
-import { registerRef } from './modules/ref'
+import VNode from './vnode'
+import { makeMap, isPrimitive, warn } from '../util/index'
 import { activeInstance } from '../instance/lifecycle'
-
-import {
-  warn,
-  isDef,
-  isUndef,
-  isTrue,
-  makeMap,
-  isPrimitive
-} from '../util/index'
+import { registerRef } from './modules/ref'
 
 export const emptyNode = new VNode('', {}, [])
 
 const hooks = ['create', 'activate', 'update', 'remove', 'destroy']
+
+function isUndef (v) {
+  return v === undefined || v === null
+}
+
+function isDef (v) {
+  return v !== undefined && v !== null
+}
+
+function isTrue (v) {
+  return v === true
+}
 
 function sameVnode (a, b) {
   return (
@@ -234,9 +237,7 @@ export function createPatchFunction (backend) {
   function insert (parent, elm, ref) {
     if (isDef(parent)) {
       if (isDef(ref)) {
-        if (ref.parentNode === parent) {
-          nodeOps.insertBefore(parent, elm, ref)
-        }
+        nodeOps.insertBefore(parent, elm, ref)
       } else {
         nodeOps.appendChild(parent, elm)
       }
@@ -586,8 +587,8 @@ export function createPatchFunction (backend) {
           // mounting to a real element
           // check if this is server-rendered content and if we can perform
           // a successful hydration.
-          if (oldVnode.nodeType === 1 && oldVnode.hasAttribute(SSR_ATTR)) {
-            oldVnode.removeAttribute(SSR_ATTR)
+          if (oldVnode.nodeType === 1 && oldVnode.hasAttribute('server-rendered')) {
+            oldVnode.removeAttribute('server-rendered')
             hydrating = true
           }
           if (isTrue(hydrating)) {

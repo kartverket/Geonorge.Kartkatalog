@@ -38,9 +38,9 @@ function compileModule (files, basedir) {
     return script
   }
 
-  function evaluateModule (filename, context, evaluatedFiles) {
-    if (evaluatedFiles[filename]) {
-      return evaluatedFiles[filename]
+  function evaluateModule (filename, context, evaluatedModules) {
+    if (evaluatedModules[filename]) {
+      return evaluatedModules[filename]
     }
 
     const script = getCompiledScript(filename)
@@ -49,7 +49,7 @@ function compileModule (files, basedir) {
     const r = file => {
       file = path.join('.', file)
       if (files[file]) {
-        return evaluateModule(file, context, evaluatedFiles)
+        return evaluateModule(file, context, evaluatedModules)
       } else if (basedir) {
         return require(
           resolvedModules[file] ||
@@ -64,7 +64,7 @@ function compileModule (files, basedir) {
     const res = Object.prototype.hasOwnProperty.call(m.exports, 'default')
       ? m.exports.default
       : m.exports
-    evaluatedFiles[filename] = res
+    evaluatedModules[filename] = res
     return res
   }
   return evaluateModule
@@ -74,8 +74,7 @@ export function createBundleRunner (entry, files, basedir) {
   const evaluate = compileModule(files, basedir)
   return (_context = {}) => new Promise((resolve, reject) => {
     const context = createContext(_context)
-    const evaluatedFiles = _context._evaluatedFiles = {}
-    const res = evaluate(entry, context, evaluatedFiles)
+    const res = evaluate(entry, context, {})
     resolve(typeof res === 'function' ? res(_context) : res)
   })
 }

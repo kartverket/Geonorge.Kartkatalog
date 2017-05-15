@@ -1,6 +1,5 @@
 /* @flow */
 
-import config from '../config'
 import Dep from '../observer/dep'
 import Watcher from '../observer/watcher'
 
@@ -54,11 +53,7 @@ export function initState (vm: Component) {
   if (opts.watch) initWatch(vm, opts.watch)
 }
 
-const isReservedProp = {
-  key: 1,
-  ref: 1,
-  slot: 1
-}
+const isReservedProp = { key: 1, ref: 1, slot: 1 }
 
 function initProps (vm: Component, propsOptions: Object) {
   const propsData = vm.$options.propsData || {}
@@ -74,7 +69,7 @@ function initProps (vm: Component, propsOptions: Object) {
     const value = validateProp(key, propsOptions, propsData, vm)
     /* istanbul ignore else */
     if (process.env.NODE_ENV !== 'production') {
-      if (isReservedProp[key] || config.isReservedAttr(key)) {
+      if (isReservedProp[key]) {
         warn(
           `"${key}" is a reserved attribute and cannot be used as component prop.`,
           vm
@@ -170,12 +165,6 @@ function initComputed (vm: Component, computed: Object) {
     // at instantiation here.
     if (!(key in vm)) {
       defineComputed(vm, key, userDef)
-    } else if (process.env.NODE_ENV !== 'production') {
-      if (key in vm.$data) {
-        warn(`The computed property "${key}" is already defined in data.`, vm)
-      } else if (vm.$options.props && key in vm.$options.props) {
-        warn(`The computed property "${key}" is already defined as a prop.`, vm)
-      }
     }
   }
 }

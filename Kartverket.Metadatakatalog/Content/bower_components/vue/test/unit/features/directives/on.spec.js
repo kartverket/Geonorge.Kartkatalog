@@ -4,16 +4,13 @@ describe('Directive v-on', () => {
   let vm, spy, el
 
   beforeEach(() => {
-    vm = null
     spy = jasmine.createSpy()
     el = document.createElement('div')
     document.body.appendChild(el)
   })
 
   afterEach(() => {
-    if (vm) {
-      document.body.removeChild(vm.$el)
-    }
+    document.body.removeChild(vm.$el)
   })
 
   it('should bind event to a method', () => {
@@ -550,14 +547,5 @@ describe('Directive v-on', () => {
     expect(prevented).toBe(false)
     triggerEvent(vm.$refs.input, 'keydown', e => { e.keyCode = 13 })
     expect(prevented).toBe(true)
-  })
-
-  it('should warn click.right', () => {
-    new Vue({
-      template: `<div @click.right="foo"></div>`,
-      methods: { foo () {} }
-    }).$mount()
-
-    expect(`Use "contextmenu" instead`).toHaveBeenWarned()
   })
 })

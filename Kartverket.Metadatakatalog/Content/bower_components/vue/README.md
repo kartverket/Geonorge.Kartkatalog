@@ -21,10 +21,6 @@ Vue.js is an MIT-licensed open source project. Its ongoing development is made p
     <img width="240px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/stdlib.png">
   </a>
   <br><br>
-  <a href="https://deepstreamhub.com" target="_blank">
-    <img width="140px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/deepstream.png">
-  </a>
-  <br><br>
   <a href="https://jsfiddle.net/">
     <img width="120px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/jsfiddle.png">
   </a>
@@ -63,14 +59,6 @@ Vue.js is an MIT-licensed open source project. Its ongoing development is made p
   <br><br>
   <a href="https://leanpub.com/vuejs2" target="_blank">
     <img width="120px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/tmvuejs2.png">
-  </a>
-  <br><br>
-  <a href="https://fancygrid.com" target="_blank">
-    <img width="120px" src="http://fancygrid.com/logo/logo.png">
-  </a>
-  <br><br>
-  <a href="https://component.io/" target="_blank">
-    <img width="130px" src="https://raw.githubusercontent.com/vuejs/vuejs.org/master/themes/vue/source/images/component_io.png">
   </a>
 </p>
 
