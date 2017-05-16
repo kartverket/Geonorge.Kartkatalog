@@ -486,6 +486,16 @@
             Metadata updated
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.Index">
+            <summary>
+            Run metadata indexing
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.ReIndex">
+            <summary>
+            Run metadata re-indexing
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Get(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
             <summary>
             Catalogue search

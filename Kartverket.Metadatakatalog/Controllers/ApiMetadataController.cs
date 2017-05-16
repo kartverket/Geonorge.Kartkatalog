@@ -70,5 +70,70 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             return StatusCode(statusCode);
         }
+
+        /// <summary>
+        /// Run metadata indexing
+        /// </summary>
+        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [System.Web.Http.Route("api/index-metadata")]
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult Index()
+        {
+            HttpStatusCode statusCode;
+
+            try
+            {
+                Log.Info("Run indexing of entire metadata catalogue.");
+                DateTime start = DateTime.Now;
+
+                _indexer.RunIndexing();
+
+                DateTime stop = DateTime.Now;
+                double seconds = stop.Subtract(start).TotalSeconds;
+                Log.Info(string.Format("Indexing fininshed after {0} seconds.", seconds));
+
+                statusCode = HttpStatusCode.OK;
+
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception while indexing metadata.", e);
+                statusCode = HttpStatusCode.BadRequest;
+            }
+            return StatusCode(statusCode);
+        }
+
+        /// <summary>
+        /// Run metadata re-indexing
+        /// </summary>
+        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [System.Web.Http.Route("api/reindex-metadata")]
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult ReIndex()
+        {
+            HttpStatusCode statusCode;
+
+            try
+            {
+                Log.Info("Run re-indexing of entire metadata catalogue.");
+                DateTime start = DateTime.Now;
+
+                _indexer.RunIndexing();
+
+                DateTime stop = DateTime.Now;
+                double seconds = stop.Subtract(start).TotalSeconds;
+                Log.Info(string.Format("Indexing fininshed after {0} seconds.", seconds));
+
+                statusCode = HttpStatusCode.OK;
+
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception while re-indexing metadata.", e);
+                statusCode = HttpStatusCode.BadRequest;
+            }
+            return StatusCode(statusCode);
+        }
+
     }
 }
