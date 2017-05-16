@@ -72,10 +72,9 @@
                 };
 
                 if (this.resultItem.IsRestricted || this.resultItem.IsOffline) {
-                    itemAddToCart.buttonClass += " add-to-cart-btn prevent-action"
+                    itemAddToCart.buttonClass += " add-to-cart-btn prevent-action";
                 }
                 return itemAddToCart;
-
             },
             organizationUrl: function () {
                 url = "/metadata/" + this.resultItem.OrganizationSeoName;

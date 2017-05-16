@@ -1100,7 +1100,6 @@
     <Content Include="Views\Search\Area.cshtml" />
     <Content Include="Views\Shared\_FilterPages.cshtml" />
     <Content Include="Views\Shared\_UnderlayingDistributions.cshtml" />
-    <Content Include="Views\Metadata\Organization - Copy.cshtml" />
     <Content Include="Views\Shared\_resultItemRow.cshtml" />
   </ItemGroup>
   <ItemGroup>
