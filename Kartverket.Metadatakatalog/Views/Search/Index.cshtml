@@ -156,7 +156,7 @@
 @Html.Partial("_resultItemRow")
 <script type="text/x-template" id="resultItemRow">
     <div>
-        <div v-bind:style="{backgroundColor: backgroundColor}" style="padding: 10px 0px;">
+        <div v-bind:style="{backgroundColor: backgroundColor}">
 
             @* **** LISTE **** *@
             <div v-if="$root.viewType == 'listView'">
@@ -237,77 +237,86 @@
 
             @* *** TABELL *** *@
             <div v-if="$root.viewType == 'tableView'">
-                @*Pil underliggende distribusjoner i tabellvisning*@
-                <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-sm-1" title="Vis underliggende distribusjoner">
-                    <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
+
+                <div class="resultItemRow" v-bind:class="{expanded: expanded}">
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <div class="resultItemRowTitle">
+
+                                @*Pil underliggende distribusjoner i tabellvisning*@
+                                <div class="expand-arrow-container">
+                                    <span data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" title="Vis underliggende distribusjoner" class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
+                                </div>
+                                @*Tittel*@
+                                <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                                    <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        @*Distribusjonstype tabell *@
+                        <div class="col-sm-2">
+                            <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
+                        </div>
+
+                        @*Organisasjon tabell*@
+                        <div class="col-sm-3">
+                            <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                                {{resultItem.Organization}}
+                            </a>
+                        </div>
+
+                        @*Åpne data*@
+                        <div class="col-sm-1">
+                            <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                        </div>
+
+
+                        @*Kart*@
+                        <div class="col-xs-1">
+                            <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                                <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
+                            </a>
+                        </div>
+
+                        @*Last ned*@
+                        <div class="col-xs-1">
+                            <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
+                               v-bind:href='resultItem.AddToCartUrl'
+                               data-toggle='tooltip'
+                               data-placement='bottom'
+                               onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                               v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                               class="add-to-cart-btn"
+                               v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
+                                <span class="custom-icon custom-icon-handlekurv"></span>
+                                {{resultItem.addedToCart}}
+                            </a>
+
+
+                            <a v-else-if="resultItem.ShowDownloadLink"
+                               v-bind:href="resultItem.DownloadUrl"
+                               onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                               data-toggle='tooltip'
+                               data-placement='bottom'
+                               v:bind:title='"Last ned datasett for " + resultItem.Title'
+                               target="_blank">
+                                <span class="custom-icon custom-icon-lastned"></span>
+                            </a>
+
+                            <a v-else
+                               v-bind:title='"Last ned datasett for " + resultItem.Title'
+                               class="disabled">
+                                <span class="custom-icon custom-icon-lastned"></span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="col-sm-3">
-                    @*Tittel*@
-                    <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                        <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
-                    </a>
-                </div>
-
-                @*Distribusjonstype tabell *@
-                <div class="col-sm-2">
-                    <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
-                </div>
-
-                @*Organisasjon tabell*@
-                <div class="col-sm-3">
-                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
-                        {{resultItem.Organization}}
-                    </a>
-                </div>
-
-                @*Åpne data*@
-                <div class="col-sm-1">
-                    <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
-                </div>
-
-
-                @*Kart*@
-                <div class="col-xs-1">
-                    <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
-                        <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
-                    </a>
-                </div>
-
-                @*Last ned*@
-                <div class="col-xs-1">
-                    <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                       v-bind:href='resultItem.AddToCartUrl'
-                       data-toggle='tooltip'
-                       data-placement='bottom'
-                       onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                       v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                       class="add-to-cart-btn"
-                       v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
-                        <span class="custom-icon custom-icon-handlekurv"></span>
-                        {{resultItem.addedToCart}}
-                    </a>
-                    
-
-                    <a v-else-if="resultItem.ShowDownloadLink"
-                       v-bind:href="resultItem.DownloadUrl"
-                       onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                       data-toggle='tooltip'
-                       data-placement='bottom'
-                       v:bind:title='"Last ned datasett for " + resultItem.Title'
-                       target="_blank">
-                        <span class="custom-icon custom-icon-lastned"></span>
-                    </a>
-
-                    <a v-else
-                       v-bind:title='"Last ned datasett for " + resultItem.Title'
-                       class="disabled">
-                        <span class="custom-icon custom-icon-lastned"></span>
-                    </a>
-                </div>
-
-
             </div>
+
+
+
 
             @* *** GALLERI *** *@
             <div v-if="$root.viewType == 'galleryView'" class="search-results-gallery-image layoutblock">
@@ -338,7 +347,7 @@
 
 <span class="separator-small separator-gray margin-bottom-10"></span>
 
-<div class="row">
+<div class="row resultItemTitleRow">
     <div id="searchResultTable" class="col-md-9">
         <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
         <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
@@ -348,7 +357,12 @@
             {
             <div>
                 <div v-if="$root.viewType == 'tableView'" class="row">
-                    <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id"><p><a href="@Url.Action("Index", "Search", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
+                    <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
+                        <div class="resultItemRowTitle">
+                            <div class="expand-arrow-container"></div>
+                            <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a>
+                        </div>
+                    </div>
                     <div class="col-sm-2"><p>Type</p></div>
                     <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id"><p><a href="@Url.Action("Index", "Search", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
                     <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
@@ -385,111 +399,111 @@
         if (item.ShowMaplink() || item.ShowServiceMaplink())
         {
             @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-        }
+                }
     }
 </script>
 
 @section scripts {
     @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
-    
-    <script>
-    //Main vue model
-    var vueModel = new Vue({
-        el: '#searchResultTable',
-        data: {
-            viewModel: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
-            ResultItems: [],
-            currentOrderByParameter: getParameterByName("orderby"),
-            viewType: "tableView",
-            columns: "",
-            orderByUrl: "@Html.Raw(HttpUtility.HtmlDecode(HttpContext.Current.Request.Url.AbsoluteUri)).ToString()",
-            orderByTitle: {
-                className: "orderby orderby-title orderby-asc",
-                id: "orderby-title-asc",
-                url: "",
-            },
-            backgroundColor: "#fff",
-            orderByOwner: {
-                className: "orderby orderby-organization orderby-asc",
-                id: "orderby-organization-asc",
-                url: "",
-            },
-            tableBorder: "table-border-bottom"
-        },
-        components: {
-            ResultItem: ResultItemComponent
-        },
-        created: function() {
-            if (this.currentOrderByParameter == "title") {
-                this.orderByTitle.id = "orderby-title-asc";
-                this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                this.orderByOwner.id = "orderby-organization-asc";
-                this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-            } else if (this.currentOrderByParameter == "organization") {
-                this.orderByTitle.id = "orderby-title-asc";
-                this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                this.orderByOwner.id = "orderby-organization-desc";
-                this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-            } else if (this.currentOrderByParameter == "") {
-                this.orderByTitle.id = "orderby-title-asc";
-                this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                this.orderByOwner.id = "orderby-organization-asc";
-                this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-            } else if (this.currentOrderByParameter == "organization_desc") {
-                this.orderByTitle.id = "orderby-title-asc";
-                this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                this.orderByOwner.id = "orderby-organization-desc";
-                this.orderByOwner.className = "orderby orderby-organization orderby-desc";
-            } else if (this.currentOrderByParameter == "title_desc") {
-                this.orderByTitle.id = "orderby-title-desc";
-                this.orderByTitle.className = "orderby orderby-title orderby-desc";
-                this.orderByOwner.id = "orderby-organization-asc";
-                this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-            }
 
-            this.viewType = this.getSelectedViewType();
-        },
-        methods: {
-            orderByExists: function() {
-                return this.orderByUrl.includes("orderby");
+    <script>
+        //Main vue model
+        var vueModel = new Vue({
+            el: '#searchResultTable',
+            data: {
+                viewModel: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
+                ResultItems: [],
+                currentOrderByParameter: getParameterByName("orderby"),
+                viewType: "tableView",
+                columns: "",
+                orderByUrl: "@Html.Raw(HttpUtility.HtmlDecode(HttpContext.Current.Request.Url.AbsoluteUri)).ToString()",
+                orderByTitle: {
+                    className: "orderby orderby-title orderby-asc",
+                    id: "orderby-title-asc",
+                    url: "",
+                },
+                backgroundColor: "#fff",
+                orderByOwner: {
+                    className: "orderby orderby-organization orderby-asc",
+                    id: "orderby-organization-asc",
+                    url: "",
+                },
+                tableBorder: "table-border-bottom"
             },
-            isNotFirstParameterInUrl: function() {
-                return this.orderByUrl.includes("?");
+            components: {
+                ResultItem: ResultItemComponent
             },
-            getOrderByUrl: function(param) {
-                if (this.orderByExists()) {
-                    return this.orderByUrl.replace("orderby=" + this.currentOrderByParameter, "orderby=" + param);
-                } else {
-                    if (this.isNotFirstParameterInUrl()) {
-                        return this.orderByUrl + "&orderby=" + param;
+            created: function() {
+                if (this.currentOrderByParameter == "title") {
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.id = "orderby-organization-asc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                } else if (this.currentOrderByParameter == "organization") {
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.id = "orderby-organization-desc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                } else if (this.currentOrderByParameter == "") {
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.id = "orderby-organization-asc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                } else if (this.currentOrderByParameter == "organization_desc") {
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.id = "orderby-organization-desc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-desc";
+                } else if (this.currentOrderByParameter == "title_desc") {
+                    this.orderByTitle.id = "orderby-title-desc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-desc";
+                    this.orderByOwner.id = "orderby-organization-asc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                }
+
+                this.viewType = this.getSelectedViewType();
+            },
+            methods: {
+                orderByExists: function() {
+                    return this.orderByUrl.includes("orderby");
+                },
+                isNotFirstParameterInUrl: function() {
+                    return this.orderByUrl.includes("?");
+                },
+                getOrderByUrl: function(param) {
+                    if (this.orderByExists()) {
+                        return this.orderByUrl.replace("orderby=" + this.currentOrderByParameter, "orderby=" + param);
                     } else {
-                        return this.orderByUrl + "?orderby=" + param;
+                        if (this.isNotFirstParameterInUrl()) {
+                            return this.orderByUrl + "&orderby=" + param;
+                        } else {
+                            return this.orderByUrl + "?orderby=" + param;
+                        }
                     }
+                },
+                view: function(type) {
+                    this.viewType = type;
+                    localStorage.setItem("layout", this.viewType);
+                    if (type == "galleryView") {
+                        this.columns = 'col-sm-4';
+                        this.tableBorder = "";
+                    } else {
+                        this.columns = "";
+                        this.tableBorder = "table-border-bottom";
+                    }
+                },
+                getSelectedViewType: function() {
+                    var viewType = "tableView";
+                    if (localStorage.getItem("layout")) {
+                        viewType = localStorage.getItem("layout");
+                        this.view(viewType);
+                    }
+                    return viewType;
                 }
-            },
-            view: function(type) {
-                this.viewType = type;
-                localStorage.setItem("layout", this.viewType);
-                if (type == "galleryView") {
-                    this.columns = 'col-sm-4';
-                    this.tableBorder = "";
-                } else {
-                    this.columns = "";
-                    this.tableBorder = "table-border-bottom";
-                }
-            },
-            getSelectedViewType: function() {
-                var viewType = "tableView";
-                if (localStorage.getItem("layout")) {
-                    viewType = localStorage.getItem("layout");
-                    this.view(viewType);
-                }
-                return viewType;
-            }           
-        }
-    });
+            }
+        });
     </script>
-    
+
     <script>
         function showAlert(message, colorClass) {
             $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);

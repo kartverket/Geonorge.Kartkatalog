@@ -1,3 +1,30 @@
 ﻿.table-border-bottom {
     border-bottom: 1px solid rgb(109, 110, 112);
 }
+
+.resultItemRow {
+    padding: 10px 0;
+}
+
+    .resultItemRow.expanded {
+        background-color: #f4f4f4;
+    }
+
+    .resultItemRow .resultItemRowTitle {
+        display: table;
+    }
+
+        .resultItemRow .resultItemRowTitle > * {
+            display: table-cell;
+        }
+
+        .resultItemTitleRow .resultItemRowTitle .expand-arrow-container,
+        .resultItemRow .resultItemRowTitle .expand-arrow-container {
+            width: 24px;
+            text-align: center;
+            display: inline-block;
+        }
+
+            .resultItemRow .resultItemRowTitle .expand-arrow-container .expand-arrow {
+                margin-bottom: 0;
+            }
