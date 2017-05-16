@@ -1061,7 +1061,6 @@
     <Content Include="Scripts\visninger.js" />
     <Content Include="Scripts\vue-download.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\Shared\Vue\_resultItems.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1102,7 +1101,7 @@
     <Content Include="Views\Shared\_FilterPages.cshtml" />
     <Content Include="Views\Shared\_UnderlayingDistributions.cshtml" />
     <Content Include="Views\Metadata\Organization - Copy.cshtml" />
-    <Content Include="Views\Shared\Vue\_resultItemRow.cshtml" />
+    <Content Include="Views\Shared\_resultItemRow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
