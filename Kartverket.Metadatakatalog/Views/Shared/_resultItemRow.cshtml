@@ -11,11 +11,15 @@
                 underlayingDistributions: {},
                 underlayingDistributionsRequested: false,
                 backgroundColor: "#fff",
+                addedToCart: false
             };
             return data;
         },
         components: {
             distributionRows: distributionRows
+        },
+        created: function () {
+            this.getCartButtonStatus();
         },
         computed: {
             openData: function () {
@@ -158,14 +162,16 @@
                 this.underlayingDistributionsRequested = true;
             },
             addToCart: function () {
+                var orderItems = [];
+                var added = false;
                 var item = {
                     name: this.resultItem.Title,
                     uuid: this.resultItem.Uuid,
                     url: "/metadata/uuid/" + this.resultItem.Uuid,
-                    organizationLogoUrl: resultItem.OrganizationLogoUrl,
-                    distributionUrl: resultItem.DownloadUrl,
-                    theme: resultItem.Theme,
-                    organizationName: resultItem.Organization
+                    organizationLogoUrl: this.resultItem.OrganizationLogoUrl,
+                    distributionUrl: this.resultItem.DownloadUrl,
+                    theme: this.resultItem.Theme,
+                    organizationName: this.resultItem.Organization
                 }
 
                 if (localStorage.getItem('orderItems') != null) {
@@ -173,7 +179,7 @@
                 }
                 $.map(orderItems,
                     function (elementOfArray, indexInArray) {
-                        if (elementOfArray == item.itemuuid) {
+                        if (elementOfArray == item.uuid) {
                             added = true;
                         }
                     });
@@ -193,7 +199,7 @@
                     orderItemCount += 1;
                     $('#orderitem-count').text(orderItemCount);
                     updateShoppingCart();
-
+                    this.addedToCart = true;
                 } else {
                     var index = orderItems.indexOf(item.uuid);
                     if (index > -1) {
@@ -205,8 +211,8 @@
                     updateShoppingCart();
 
                     showAlert(item.name + ' er fjernet fra <a href="/Download">kurven</a>', 'warning');
+                    this.addedToCart = false;
                 }
-                updateCartButton(addToCartButton, orderItems);
             },
             type: function (type) {
                 var className = "label ";
@@ -219,6 +225,21 @@
                 else className += "lable-default";
 
                 return className;
+            },
+            getCartButtonStatus: function () {
+                var addedOrderitems = localStorage.getItem('orderItems');
+                if (addedOrderitems !== null && addedOrderitems !== "[]" && addedOrderitems !== "[null]" && addedOrderitems !== "") {
+                    addedOrderitems = JSON.parse(addedOrderitems);
+                    var addedToCart = false;
+                    addedOrderitems.forEach(function (addedOrderItemUuid) {
+                        if (addedOrderItemUuid !== null) {
+                            if (this.resultItem.Uuid == addedOrderItemUuid) {
+                                addedToCart = true;
+                            }
+                        }
+                    }.bind(this));
+                    this.addedToCart = addedToCart;
+                }
             }
         }
     };

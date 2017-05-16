@@ -186,14 +186,13 @@
 
                     <a style="width: 130px"
                        v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                       v-bind:id="'addToCart-' + resultItem.Uuid"
                        v-bind:href='resultItem.AddToCartUrl'
                        data-toggle='tooltip'
                        data-placement='bottom'
                        onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                        v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
                        class="btn btn-default add-to-cart-btn"
-                       v-bind:class="[resultItem.IsRestricted || resultItem.IsOffline ? 'prevent-action' : '']">
+                       v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
                         <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
                     </a>
 
@@ -278,16 +277,17 @@
                 @*Last ned*@
                 <div class="col-xs-1">
                     <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                       v-bind:id="'addToCart-' + resultItem.Uuid"
                        v-bind:href='resultItem.AddToCartUrl'
                        data-toggle='tooltip'
                        data-placement='bottom'
                        onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                        v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
                        class="add-to-cart-btn"
-                       v-bind:class="[resultItem.IsRestricted || resultItem.IsOffline ? 'prevent-action' : '']">
+                       v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
                         <span class="custom-icon custom-icon-handlekurv"></span>
+                        {{resultItem.addedToCart}}
                     </a>
+                    
 
                     <a v-else-if="resultItem.ShowDownloadLink"
                        v-bind:href="resultItem.DownloadUrl"
@@ -485,7 +485,7 @@
                     this.view(viewType);
                 }
                 return viewType;
-            }
+            }           
         }
     });
     </script>
@@ -526,27 +526,6 @@
             }
             </text>
             }
-        });
-
-
-        $(window).load(function () {
-            @if (Html.DownloadServiceEnabled())
-            {
-         <text>
-            if (typeof Storage !== "undefined") {
-
-                console.log('window.localStorage is available!');
-                var orderItems = [];
-                $('.add-to-cart-btn:not(.prevent-action)').click(function () {
-                    addToCartButtonClick($(this));
-                });
-            } else {
-                console.log('no native support for HTML5 storage :(');
-            }
-
-            </text>
-            }
-
         });
     </script>
 }
