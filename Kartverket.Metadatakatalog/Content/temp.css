@@ -28,3 +28,9 @@
             .resultItemRow .resultItemRowTitle .expand-arrow-container .expand-arrow {
                 margin-bottom: 0;
             }
+
+
+.expand-arrow,
+.facet-filter .indicator {
+    cursor: pointer;
+}
