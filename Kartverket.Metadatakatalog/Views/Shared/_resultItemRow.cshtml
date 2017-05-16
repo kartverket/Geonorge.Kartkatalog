@@ -1,0 +1,409 @@
+﻿@*Template for a table row*@
+<script type="text/x-template" id="resultItemRow">
+    <div>
+        <div v-bind:style="{backgroundColor: backgroundColor}" style="padding: 10px 0px;">
+
+            @* **** LISTE **** *@
+            <div v-if="$root.viewType == 'listView'">
+
+                <div class="col-sm-1">
+                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-loading-message="Henter innhold">
+                        <img v-bind:src="resultItem.OrganizationLogoUrl" class="img-responsive center-block" v-bind:alt="resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization" />
+                    </a>
+                </div>
+
+                <div class="col-sm-6">
+                    <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                        <p style="font-size:14pt" class="role-button search-results-name" role="button">{{resultItem.Title}}</p>
+                    </a>
+                    <p>{{description}}</p>
+                    <p>
+                        Tilgjengelig som:
+                        <span v-bind:title="'Tilgjengelig som ' + resultItem.TypeTranslated" style="width:auto" v-bind:class="type(resultItem.Type)">{{resultItem.TypeTranslated}}</span>
+                    </p>
+                </div>
+
+                <div class="col-sm-2">
+
+                    <a style="width: 130px" v-bind:id="mapLink.mapLinkButtonId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
+                        <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
+                    </a>
+
+                    <a style="width: 130px"
+                       v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
+                       v-bind:id="'addToCart-' + resultItem.Uuid"
+                       v-bind:href='resultItem.AddToCartUrl'
+                       data-toggle='tooltip'
+                       data-placement='bottom'
+                       onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                       v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                       class="btn btn-default add-to-cart-btn"
+                       v-bind:class="[resultItem.IsRestricted || resultItem.IsOffline ? 'prevent-action' : '']">
+                        <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
+                    </a>
+
+                    <a style="width: 130px"
+                       v-else-if="resultItem.ShowDownloadLink"
+                       v-bind:href="resultItem.DownloadUrl"
+                       onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                       data-toggle='tooltip'
+                       data-placement='bottom'
+                       v:bind:title='"Last ned datasett for " + resultItem.Title'
+                       target="_blank"
+                       class="btn btn-default">
+                        <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
+                    </a>
+
+                    <a style="width: 130px"
+                       v-else
+                       v-bind:title='"Last ned datasett for " + resultItem.Title'
+                       class="disabled btn btn-default">
+                        <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
+                    </a>
+                </div>
+
+                <div class="col-sm-3">
+                    <a v-if="thumbnailSrc" v-bind:href="readMoreUrl">
+                        <img v-bind:src="thumbnailSrc" />
+                    </a>
+                </div>
+
+                <div class="clearfix"></div>
+                @* Underliggende distribusjoner *@
+
+                <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-md-12" title="Vis underliggende distribusjoner">
+                    <div style="padding: 10px 10px 1px; background-color:#f4f4f4">
+                        <p><b>Underliggende distribusjoner   </b><span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span></p>
+                        <div v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* *** TABELL *** *@
+            <div v-if="$root.viewType == 'tableView'">
+                @*Pil underliggende distribusjoner i tabellvisning*@
+                <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-sm-1" title="Vis underliggende distribusjoner">
+                    <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
+                </div>
+
+                <div class="col-sm-3">
+                    @*Tittel*@
+                    <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                        <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+                    </a>
+                </div>
+
+                @*Distribusjonstype tabell *@
+                <div class="col-sm-2">
+                    <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
+                </div>
+
+                @*Organisasjon tabell*@
+                <div class="col-sm-3">
+                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                        {{resultItem.Organization}}
+                    </a>
+                </div>
+
+                @*Åpne data*@
+                <div class="col-sm-1">
+                    <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                </div>
+
+
+                @*Kart*@
+                <div class="col-xs-1">
+                    <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                        <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
+                    </a>
+                </div>
+
+                @*Last ned*@
+                <div class="col-xs-1">
+                    <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
+                       v-bind:id="'addToCart-' + resultItem.Uuid"
+                       v-bind:href='resultItem.AddToCartUrl'
+                       data-toggle='tooltip'
+                       data-placement='bottom'
+                       onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                       v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                       class="add-to-cart-btn"
+                       v-bind:class="[resultItem.IsRestricted || resultItem.IsOffline ? 'prevent-action' : '']">
+                        <span class="custom-icon custom-icon-handlekurv"></span>
+                    </a>
+
+                    <a v-else-if="resultItem.ShowDownloadLink"
+                       v-bind:href="resultItem.DownloadUrl"
+                       onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                       data-toggle='tooltip'
+                       data-placement='bottom'
+                       v:bind:title='"Last ned datasett for " + resultItem.Title'
+                       target="_blank">
+                        <span class="custom-icon custom-icon-lastned"></span>
+                    </a>
+
+                    <a v-else
+                       v-bind:title='"Last ned datasett for " + resultItem.Title'
+                       class="disabled">
+                        <span class="custom-icon custom-icon-lastned"></span>
+                    </a>
+                </div>
+
+
+            </div>
+
+            @* *** GALLERI *** *@
+            <div v-if="$root.viewType == 'galleryView'" class="search-results-gallery-image layoutblock">
+                <div class="block shortcutpageteaserblock size-4 col-sm-4">
+                    <div class="teaser-with-background-image">
+                        <a v-bind:href="readMoreUrl">
+                            <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
+                                <div class="teaser-overlay">
+                                    <div class="teaser-caption">
+                                        <div class="teaser-heading">{{resultItem.Title}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
+        </div>
+
+        <div v-if="$root.viewType == 'tableView'" v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
+
+        </div>
+    </div>
+
+</script>
+
+@{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
+
+<script>
+    //Component
+    var ResultItemComponent = {
+        template: "#resultItemRow",
+        props: ["resultItem"],
+        data: function () {
+            var data = {
+                expanded: false,
+                underlayingDistributions: {},
+                underlayingDistributionsRequested: false,
+                backgroundColor: "#fff",
+            };
+            return data;
+        },
+        components: {
+            distributionRows: distributionRows
+        },
+        computed: {
+            openData: function () {
+                var openData = {
+                    className: "",
+                    title: ""
+                };
+                if (this.resultItem.IsRestricted) {
+                    openData.className = "custom-icon custom-icon-hengelaas-closed-yellow";
+                    openData.title = "Tilgangsbegrensede data";
+                } else if (this.resultItem.IsOffline) {
+                    openData.className = "custom-icon custom-icon-hengelaas-closed-red";
+                    openData.title = "Skjermede data";
+                } else if (this.resultItem.IsOpendata) {
+                    openData.className = "custom-icon custom-icon-hengelaas-open-green";
+                    openData.title = "Åpne data";
+                }
+                return openData;
+            },
+            mapLink: function () {
+                var mapLink = {
+                    mapLinkButtonId: "mapmacrolink-button-" + this.resultItem.Uuid,
+                    mapMacroButtonId: "mapmacro-button-" + this.resultItem.Uuid,
+                    mapLinkId: "mapmacrolink-" + this.resultItem.Uuid,
+                    mapMacroId: "mapmacro-" + this.resultItem.Uuid,
+                    onClick: "ga('send', 'event', 'Nedlasting', 'viskart')",
+                    mapLinkClassButton: "btn btn-default",
+                    mapLinkClassLink: "",
+                    iconPermission: "custom-icon",
+                    mapTitleTag: this.resultItem.MapTitleTag
+                };
+
+                if (this.resultItem.ShowMapLink) {
+                    mapLink.iconPermission += " custom-icon-kartmarkoer";
+
+                } else if (this.resultItem.ShowServiceMapLink) {
+                    mapLink.iconPermission += this.restrictedServiceClass();
+                } else {
+                    mapLink.mapLinkClassLink = "disabled";
+                    mapLink.mapLinkClassButton += " disabled";
+                    mapLink.iconPermission += " custom-icon-kartmarkoer";
+                    mapLink.mapLinkButtonId = "";
+                    mapLink.mapMacroButtonId = "";
+                    mapLink.mapLinkId = "";
+                    mapLink.mapMacroId = "";
+                    mapLink.onClick = "";
+                    mapLink.mapTitleTag = "Vis " + this.resultItem.Title + " i kart";
+                }
+                return mapLink;
+            },
+            itemAddToCart: function () {
+                var itemAddToCart = {
+                    buttonClass: "btn btn-default add-to-cart-btn",
+                };
+
+                if (this.resultItem.IsRestricted || this.resultItem.IsOffline) {
+                    itemAddToCart.buttonClass += " add-to-cart-btn prevent-action"
+                }
+                return itemAddToCart;
+
+            },
+            organizationUrl: function () {
+                url = "/metadata/" + this.resultItem.OrganizationSeoName;
+                return url;
+            },
+            readMoreUrl: function () {
+                var organization = this.resultItem.OrganizationSeoName;
+                var title = this.resultItem.TitleSeo;
+                var uuid = this.resultItem.Uuid;
+                var url = "/metadata/" + organization + "/" + title + "/" + uuid;
+                return url;
+            },
+            description: function () {
+                var description;
+                if (this.resultItem.Abstract.length > 250) {
+                    description = this.resultItem.Abstract.substring(0, 251) + " ...";
+                } else {
+                    description = this.resultItem.Abstract;
+                }
+                return description;
+            },
+            thumbnailSrc: function () {
+                var src = "/thumbnail?uuid=" + this.resultItem.Uuid + "&type=small";
+                return src;
+            },
+        },
+        methods: {
+            downloadUrl: function (url) {
+                url += this.resultItem.DownloadUrl;
+                return url;
+            },
+            showMapLink: function () {
+                if (this.resultItem.DistributionProtocol &&
+                    (this.resultItem.DistributionProtocol.indexOf("OGC:WMS") > -1 ||
+                        this.resultItem.DistributionProtocol.indexOf("OGC:WFS") > -1 ||
+                        this.resultItem.DistributionProtocol.indexOf("OGC:WCS") > -1) &&
+                    (this.resultItem.Type == "service" || this.resultItem.Type == "servicelayer") &&
+                    this.resultItem.DownloadUrl)
+                    return true;
+                else return false;
+            },
+            showServiceMapLink: function () {
+                if (this.resultItemServiceUrl) return true;
+                else return false;
+            },
+            isRestrictedService: function () {
+                if (this.resultItem.ServiceDistributionAccessConstraint == "Beskyttet" ||
+                    this.resultItem.ServiceDistributionAccessConstraint == "restricted" ||
+                    this.resultItem.ServiceDistributionAccessConstraint == "norway digital restricted") return true;
+                else {
+                    return false;
+                }
+            },
+            restrictedServiceClass: function () {
+                var iconPermissionClass;
+                if (this.isRestrictedService()) {
+                    iconPermissionClass = " custom-icon-kartmarkoer-needs-permission";
+                } else {
+                    iconPermissionClass = " custom-icon-kartmarkoer";
+                }
+                return iconPermissionClass;
+            },
+            getUnderlyingDistributions: function () {
+                this.expanded = !this.expanded;
+                if (!this.underlayingDistributionsRequested) {
+                    showLoadingAnimation("Henter underliggende distribusjoner");
+                    axios.get('/api/distributions/' + this.resultItem.Uuid).then(function (response) {
+                        this.underlayingDistributions = response.data;
+                        hideLoadingAnimation();
+                    }.bind(this));
+                }
+                if (this.$root.viewType == "galleryView") {
+                    this.backgroundColor = "#fff";
+                } else {
+                    if (this.expanded) {
+                        this.backgroundColor = "#f4f4f4";
+                    } else {
+                        this.backgroundColor = "#fff";
+                    }
+                }
+                this.underlayingDistributionsRequested = true;
+            },
+            addToCart: function () {
+                var item = {
+                    name: this.resultItem.Title,
+                    uuid: this.resultItem.Uuid,
+                    url: "/metadata/uuid/" + this.resultItem.Uuid,
+                    organizationLogoUrl: resultItem.OrganizationLogoUrl,
+                    distributionUrl: resultItem.DownloadUrl,
+                    theme: resultItem.Theme,
+                    organizationName: resultItem.Organization
+                }
+
+                if (localStorage.getItem('orderItems') != null) {
+                    orderItems = (JSON.parse(localStorage.getItem('orderItems')));
+                }
+                $.map(orderItems,
+                    function (elementOfArray, indexInArray) {
+                        if (elementOfArray == item.itemuuid) {
+                            added = true;
+                        }
+                    });
+                if (!added) {
+                    orderItems.push(item.uuid);
+                    localStorage["orderItems"] = JSON.stringify(orderItems);
+                    localStorage[item.uuid + ".metadata"] = JSON.stringify(item);
+                    showAlert(item.name + ' er lagt til i <a href="/Download">kurven</a>', 'success');
+
+                    var orderItemCount = $('#orderitem-count').text();
+                    if (orderItemCount == null || orderItemCount == '') {
+                        orderItemCount = 0;
+                        $('#orderitem-count-text').text(' datasett');
+                    } else {
+                        orderItemCount = parseInt($('#orderitem-count').text());
+                    }
+                    orderItemCount += 1;
+                    $('#orderitem-count').text(orderItemCount);
+                    updateShoppingCart();
+
+                } else {
+                    var index = orderItems.indexOf(item.uuid);
+                    if (index > -1) {
+                        orderItems.splice(index, 1);
+                    }
+                    localStorage.removeItem(item.uuid + ".metadata");
+                    localStorage["orderItems"] = JSON.stringify(orderItems);
+
+                    updateShoppingCart();
+
+                    showAlert(item.name + ' er fjernet fra <a href="/Download">kurven</a>', 'warning');
+                }
+                updateCartButton(addToCartButton, orderItems);
+            },
+            type: function (type) {
+                var className = "label ";
+                if (type == "dataset" || type == "Datasett") className += "label-datasett";
+                else if (type == "software" || type == "Applikasjon") className += "label-applikasjon";
+                else if (type == "service" || type == "Tjeneste") className += "label-tjeneste";
+                else if (type == "servicelayer" || type == "Tjenestelag") className += "label-tjenestelag";
+                else if (type == "series" || type == "Datasettserie") className += "label-datasettserie";
+                else if (type == "dimensionGroup" || type == "Datasett") className += "label-datasett";
+                else className += "lable-default";
+
+                return className;
+            }
+        }
+    };
+</script>
