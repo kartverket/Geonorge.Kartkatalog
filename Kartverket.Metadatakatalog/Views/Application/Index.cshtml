@@ -80,7 +80,7 @@
                        onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                        v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
                        class="btn btn-default add-to-cart-btn"
-                       v-bind:class="[resultItem.IsRestricted || resultItem.IsOffline ? 'prevent-action' : '']">
+                       v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
                         <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
                     </a>
 
@@ -172,8 +172,9 @@
                        onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                        v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
                        class="add-to-cart-btn"
-                       v-bind:class="[resultItem.IsRestricted || resultItem.IsOffline ? 'prevent-action' : '']">
+                       v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
                         <span class="custom-icon custom-icon-handlekurv"></span>
+                        {{resultItem.addedToCart}}
                     </a>
 
                     <a v-else-if="resultItem.ShowDownloadLink"
