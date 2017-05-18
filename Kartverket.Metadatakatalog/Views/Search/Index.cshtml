@@ -370,7 +370,7 @@
                     <div class="col-sm-1 no-padding text-center"><p>Last ned</p></div>
                 </div>
 
-                <div class="menu-separator search-results-table-heading"></div>
+                <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
                 <div v-for="item in viewModel.Result.Items" v-bind:class="tableBorder">
                     <div is="resultItem" v-bind:result-item="item"></div>
                 </div>
