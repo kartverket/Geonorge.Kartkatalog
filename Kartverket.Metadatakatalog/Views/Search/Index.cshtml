@@ -356,18 +356,21 @@
         @if (Model.Result != null)
             {
             <div>
-                <div v-if="$root.viewType == 'tableView'" class="row">
+                <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
                     <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
                         <div class="resultItemRowTitle">
-                            <div class="expand-arrow-container"></div>
-                            <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a>
+                            <p>
+                                <span class="expand-arrow-conatiner"></span>
+                                <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span>
+                                </a>
+                            </p>
                         </div>
                     </div>
                     <div class="col-sm-2"><p>Type</p></div>
                     <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id"><p><a href="@Url.Action("Index", "Search", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Kart</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Last ned</p></div>
+                    <div class="col-sm-1"><p>Åpne data</p></div>
+                    <div class="col-sm-1"><p>Kart</p></div>
+                    <div class="col-sm-1"><p>Last ned</p></div>
                 </div>
 
                 <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>

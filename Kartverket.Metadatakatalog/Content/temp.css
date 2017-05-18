@@ -2,6 +2,18 @@
     border-bottom: 1px solid rgb(109, 110, 112);
 }
 
+.resultItemRowTableHeader {
+}
+
+    .resultItemRowTableHeader > div {
+        height: 60px;
+    }
+
+        .resultItemRowTableHeader > div p {
+            position: absolute;
+            bottom: 0;
+        }
+
 .resultItemRow {
     padding: 10px 0;
 }
@@ -10,24 +22,24 @@
         background-color: #f4f4f4;
     }
 
-    .resultItemRow .resultItemRowTitle {
-        display: table;
+.resultItemRowTitle {
+    display: table;
+}
+
+    .resultItemRowTitle > * {
+        display: table-cell;
     }
 
-        .resultItemRow .resultItemRowTitle > * {
-            display: table-cell;
-        }
+    .resultItemRowTitle .expand-arrow-conatiner,
+    .resultItemRowTitle .expand-arrow-container {
+        width: 24px;
+        text-align: center;
+        display: inline-block;
+    }
 
-        .resultItemTitleRow .resultItemRowTitle .expand-arrow-container,
-        .resultItemRow .resultItemRowTitle .expand-arrow-container {
-            width: 24px;
-            text-align: center;
-            display: inline-block;
-        }
-
-            .resultItemRow .resultItemRowTitle .expand-arrow-container .expand-arrow {
-                margin-bottom: 0;
-            }
+.resultItemRow .resultItemRowTitle .expand-arrow-container .expand-arrow {
+    margin-bottom: 0;
+}
 
 
 .expand-arrow,
