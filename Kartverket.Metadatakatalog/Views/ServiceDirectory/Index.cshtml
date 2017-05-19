@@ -21,6 +21,7 @@
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
 </div>
+
 <section class="heading">
     <div class="row">
         <div class="col-sm-12">
@@ -97,47 +98,55 @@
 
             @* *** TABELL *** *@
             <div v-if="$root.viewType == 'tableView'" id="tableView">
-                @*Pil underliggende distribusjoner i tabellvisning*@
-                <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-sm-1" title="Vis underliggende distribusjoner">
-                    <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
-                </div>
 
-                <div class="col-sm-3">
-                    @*Tittel*@
-                    <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                        <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
-                    </a>
-                </div>
+                <div class="resultItemRow" v-bind:class="{expanded: expanded}">
+                    <div class="row">
 
-                @*Distribusjonstype tabell *@
-                <div class="col-sm-2">
-                    <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
-                </div>
+                        <div class="col-sm-4">
+                            <div class="resultItemRowTitle">
+                                @*Pil underliggende distribusjoner i tabellvisning*@
+                                <div class="expand-arrow-container">
+                                    <span data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" title="Vis underliggende distribusjoner" class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
+                                </div>
+                                @*Tittel*@
+                                <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                                    <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+                                </a>
+                            </div>
+                        </div>
 
-                @*Organisasjon tabell*@
-                <div class="col-sm-3">
-                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
-                        {{resultItem.Organization}}
-                    </a>
-                </div>
+                        @*Distribusjonstype *@
+                        <div class="col-sm-2">
+                            <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
+                        </div>
 
-                @*Åpne data*@
-                <div class="col-sm-1">
-                    <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
-                </div>
+                        @*Organisasjon*@
+                        <div class="col-sm-3">
+                            <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                                {{resultItem.Organization}}
+                            </a>
+                        </div>
 
-                @*Kopier url*@
-                <div class="col-xs-1 search-results-action-icons">
-                    <span class="btn btn-copy input-group-addon" data-toggle="tooltip" data-placement="bottom" v-bind:data-clipboard-text="resultItem.GetCapabilitiesUrl" alt="Kopier til utklippstavle" onclick="">
-                        <i class="fa fa-clipboard"></i>
-                    </span>
-                </div>
+                        @*Åpne data*@
+                        <div class="col-sm-1">
+                            <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                        </div>
 
-                @*Kart*@
-                <div class="col-xs-1">
-                    <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
-                        <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
-                    </a>
+                        @*Kopier url*@
+                        <div class="col-xs-1 search-results-action-icons">
+                            <span class="btn btn-copy input-group-addon" data-toggle="tooltip" data-placement="bottom" v-bind:data-clipboard-text="resultItem.GetCapabilitiesUrl" alt="Kopier til utklippstavle" onclick="">
+                                <i class="fa fa-clipboard"></i>
+                            </span>
+                        </div>
+
+                        @*Kart*@
+                        <div class="col-xs-1">
+                            <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                                <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
+                            </a>
+                        </div>
+
+                    </div>
                 </div>
 
             </div>
@@ -177,39 +186,38 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
+                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
+                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
                 }
             </ul>
         </div>
     </div>
 }
-
 
 @{
 
@@ -237,33 +245,33 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
+                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
+                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
                 }
             </ul>
         </div>
@@ -290,34 +298,45 @@
 
 <span class="separator-small separator-gray margin-bottom-10"></span>
 
-<div class="row">
-    <div id="searchResultTable" class="col-md-9">
+<div class="row resultItemTitleRow">
 
+    <div id="searchResultTable" class="col-md-9">
         <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
         <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
         <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
         <div class="clearfix"></div>
         @if (Model.Result != null)
-            {
-            <div>
-                <div v-if="$root.viewType == 'tableView'" class="row">
-                    <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>                    
-                    <div class="col-sm-2"><p>Type</p></div>
-                    <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>URL til tjeneste</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Kart</p></div>
+        {
+        <div>
+            <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
+                <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
+                    <div class="resultItemRowTitle">
+                        <p>
+                            <span class="expand-arrow-conatiner"></span>
+                            <a href="@Url.Action("Index", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a>
+                        </p>
+                    </div>
                 </div>
-
-                <div class="menu-separator search-results-table-heading"></div>
-                <div v-for="item in viewModel.Result.Items" v-bind:class="tableBorder">
-                    <div is="resultItem" v-bind:result-item="item"></div>
+                <div class="col-sm-2"><p>Type</p></div>
+                <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
+                    <p>
+                        <a href="@Url.Action("Index", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
+                    </p>
                 </div>
-
-                <div class="clearfix"></div>
+                <div class="col-sm-1"><p>Åpne data</p></div>
+                <div class="col-sm-1"><p>URL til tjeneste</p></div>
+                <div class="col-sm-1"><p>Kart</p></div>
             </div>
 
-            @DisplayPaginationBottom()
+            <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
+            <div v-for="item in viewModel.Result.Items" v-bind:class="tableBorder">
+                <div is="resultItem" v-bind:result-item="item"></div>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+
+        @DisplayPaginationBottom()
 
         }
     </div>
@@ -492,7 +511,6 @@
             );
         });
 
-
         $(document).ready(function() {
             @if (Html.DownloadServiceEnabled())
             {
@@ -514,27 +532,6 @@
             }
             </text>
             }
-        });
-
-
-        $(window).load(function() {
-            @if (Html.DownloadServiceEnabled())
-            {
-                <text>
-            if (typeof Storage !== "undefined") {
-
-                console.log('window.localStorage is available!');
-                var orderItems = [];
-                $('.add-to-cart-btn:not(.prevent-action)').click(function() {
-                    addToCartButtonClick($(this));
-                });
-            } else {
-                console.log('no native support for HTML5 storage :(');
-            }
-
-            </text>
-            }
-
         });
     </script>
 }

@@ -13,8 +13,7 @@
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
 </div>
-<div class="row">
-</div>
+
 <section class="heading">
     <div class="row">
         <div class="col-sm-12">
@@ -36,11 +35,11 @@
                         {
                             if (Model.AreaCode == countie.Code)
                             {
-                                <option selected value="@countie.Code">@countie.Name</option>
+                        <option selected value="@countie.Code">@countie.Name</option>
                             }
                             else
                             {
-                                <option value="@countie.Code">@countie.Name</option>
+                        <option value="@countie.Code">@countie.Name</option>
                             }
                         }
                     </optgroup>
@@ -49,11 +48,11 @@
                         {
                             if (Model.AreaCode == municipal.Code)
                             {
-                                <option selected value="@municipal.Code">@municipal.Name</option>
+                        <option selected value="@municipal.Code">@municipal.Name</option>
                             }
                             else
                             {
-                                <option value="@municipal.Code">@municipal.Name</option>
+                        <option value="@municipal.Code">@municipal.Name</option>
                             }
                         }
                     </optgroup>
@@ -67,7 +66,9 @@
 @Html.Partial("_UnderlayingDistributions")
 
 @* Vue code for resultitem*@
-@Html.Partial("_resultItemRow")@*Template for a table row*@
+@Html.Partial("_resultItemRow")
+
+@*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
     <div>
         <div v-bind:style="{backgroundColor: backgroundColor}" style="padding: 10px 0px;">
@@ -151,75 +152,80 @@
 
             @* *** TABELL *** *@
             <div v-if="$root.viewType == 'tableView'">
-                @*Pil underliggende distribusjoner i tabellvisning*@
-                <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-sm-1" title="Vis underliggende distribusjoner">
-                    <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
+
+                <div class="resultItemRow" v-bind:class="{expanded: expanded}">
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <div class="resultItemRowTitle">
+                                @*Pil underliggende distribusjoner i tabellvisning*@
+                                <div class="expand-arrow-container">
+                                    <span data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" title="Vis underliggende distribusjoner" class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
+                                </div>
+                                @*Tittel*@
+                                <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                                    <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        @*Distribusjonstype *@
+                        <div class="col-sm-2">
+                            <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
+                        </div>
+
+                        @*Organisasjon*@
+                        <div class="col-sm-3">
+                            <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                                {{resultItem.Organization}}
+                            </a>
+                        </div>
+
+                        @*Åpne data*@
+                        <div class="col-sm-1">
+                            <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                        </div>
+
+                        @*Kart*@
+                        <div class="col-xs-1">
+                            <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                                <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
+                            </a>
+                        </div>
+
+                        @*Last ned*@
+                        <div class="col-xs-1">
+                            <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
+                               v-bind:href='resultItem.AddToCartUrl'
+                               data-toggle='tooltip'
+                               data-placement='bottom'
+                               onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                               v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                               class="add-to-cart-btn"
+                               v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
+                                <span class="custom-icon custom-icon-handlekurv"></span>
+                                {{resultItem.addedToCart}}
+                            </a>
+
+                            <a v-else-if="resultItem.ShowDownloadLink"
+                               v-bind:href="resultItem.DownloadUrl"
+                               onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                               data-toggle='tooltip'
+                               data-placement='bottom'
+                               v:bind:title='"Last ned datasett for " + resultItem.Title'
+                               target="_blank">
+                                <span class="custom-icon custom-icon-lastned"></span>
+                            </a>
+
+                            <a v-else
+                               v-bind:title='"Last ned datasett for " + resultItem.Title'
+                               class="disabled">
+                                <span class="custom-icon custom-icon-lastned"></span>
+                            </a>
+                        </div>
+
+                    </div>
                 </div>
-
-                <div class="col-sm-3">
-                    @*Tittel*@
-                    <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                        <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
-                    </a>
-                </div>
-
-                @*Distribusjonstype tabell *@
-                <div class="col-sm-2">
-                    <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
-                </div>
-
-                @*Organisasjon tabell*@
-                <div class="col-sm-3">
-                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
-                        {{resultItem.Organization}}
-                    </a>
-                </div>
-
-                @*Åpne data*@
-                <div class="col-sm-1">
-                    <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
-                </div>
-
-
-                @*Kart*@
-                <div class="col-xs-1">
-                    <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
-                        <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
-                    </a>
-                </div>
-
-                @*Last ned*@
-                <div class="col-xs-1">
-                    <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                       v-bind:href='resultItem.AddToCartUrl'
-                       data-toggle='tooltip'
-                       data-placement='bottom'
-                       onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                       v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                       class="add-to-cart-btn"
-                       v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
-                       <span class="custom-icon custom-icon-handlekurv"></span>
-                       {{resultItem.addedToCart}}
-                    </a>
-
-                    <a v-else-if="resultItem.ShowDownloadLink"
-                       v-bind:href="resultItem.DownloadUrl"
-                       onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                       data-toggle='tooltip'
-                       data-placement='bottom'
-                       v:bind:title='"Last ned datasett for " + resultItem.Title'
-                       target="_blank">
-                       <span class="custom-icon custom-icon-lastned"></span>
-                    </a>
-
-                    <a v-else
-                       v-bind:title='"Last ned datasett for " + resultItem.Title'
-                       class="disabled">
-                        <span class="custom-icon custom-icon-lastned"></span>
-                    </a>
-                </div>
-
-
             </div>
 
             @* *** GALLERI *** *@
@@ -257,40 +263,38 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForFirstLink()))">&laquo;</a></li>
+                <li><a aria-label="Første" title="Første" href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForFirstLink()))">&laquo;</a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                    <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPreviousLink()))">&laquo; Forrige</a></li>
+                <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPreviousLink()))">&laquo; Forrige</a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                        <li class="active"><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
+                <li class="active"><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
+                <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                    <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForNextLink()))">Neste &raquo;</a></li>
+                <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForNextLink()))">Neste &raquo;</a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForLastLink()))"> &raquo;</a></li>
+                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForLastLink()))"> &raquo;</a></li>
                 }
             </ul>
         </div>
     </div>
 }
-
-
 
 @{
             string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("metadata/" + Model.AreaCode, "api/search");
@@ -309,6 +313,8 @@
             qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
             string query = qs.ToString(); string urlCSV = path + "?" + query;
 }
+
+
 <div class="row search-result-navigation">
     <div class="col-md-4">
         Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
@@ -316,33 +322,33 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
             {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForFirstLink()))"><span class="fa fa-angle-double-left"></span></a></li>
+                <li><a aria-label="Første" title="Første" href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForFirstLink()))"><span class="fa fa-angle-double-left"></span></a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
             {
-                    <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPreviousLink()))"><span class="fa fa-angle-left"></span> Forrige</a></li>
+                <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPreviousLink()))"><span class="fa fa-angle-left"></span> Forrige</a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
             {
                 if (Model.IsActivePage(i))
                 {
-                        <li class="active"><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
+                <li class="active"><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
+                <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
             {
-                    <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForNextLink()))"> Neste <span class="fa fa-angle-right"></span></a></li>
+                <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForNextLink()))"> Neste <span class="fa fa-angle-right"></span></a></li>
                 }
                 @if (Model.IsLastButtonActive())
             {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForLastLink()))"> <span class="fa fa-angle-double-right"></span></a></li>
+                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForLastLink()))"> <span class="fa fa-angle-double-right"></span></a></li>
                 }
             </ul>
         </div>
@@ -369,37 +375,48 @@
 <span class="separator-small separator-gray margin-bottom-10"></span>
 
 
-<div class="row">
-    <div id="searchResultTable" class="col-md-9">
+<div class="row resultItemTitleRow">
 
+    <div id="searchResultTable" class="col-md-9">
         <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
         <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
         <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
         <div class="clearfix"></div>
         @if (Model.Result != null)
-            {
-            <div>
-                <div v-if="$root.viewType == 'tableView'" class="row">
-                    <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id"><p><a href="@Url.Action("Area", "Search", Model.AreaRouteValues(Model.ParamsForOrderByTitle()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-2"><p>Type</p></div>
-                    <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id"><p><a href="@Url.Action("Area", "Search", Model.AreaRouteValues(Model.ParamsForOrderByOrganization()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Kart</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Last ned</p></div>
+        {
+        <div>
+            <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
+                <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
+                    <div class="resultItemRowTitle">
+                        <p>
+                            <span class="expand-arrow-conatiner"></span>
+                            <a href="@Url.Action("Area", "Search", Model.AreaRouteValues(Model.ParamsForOrderByTitle()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a>
+                        </p>
+                    </div>
                 </div>
-
-                <div class="menu-separator search-results-table-heading"></div>
-                <div v-for="item in viewModel.Result.Items" v-bind:class="tableBorder">
-                    <div is="resultItem" v-bind:result-item="item"></div>
+                <div class="col-sm-2"><p>Type</p></div>
+                <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
+                    <p>
+                        <a href="@Url.Action("Area", "Search", Model.AreaRouteValues(Model.ParamsForOrderByOrganization()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
+                    </p>
                 </div>
-
-                <div class="clearfix"></div>
+                <div class="col-sm-1"><p>Åpne data</p></div>
+                <div class="col-sm-1"><p>Kart</p></div>
+                <div class="col-sm-1"><p>Last ned</p></div>
             </div>
 
-            @DisplayPaginationBottom()
+            <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
+            <div v-for="item in viewModel.Result.Items" v-bind:class="tableBorder">
+                <div is="resultItem" v-bind:result-item="item"></div>
+            </div>
 
+            <div class="clearfix"></div>
+        </div>
+
+        @DisplayPaginationBottom()
         }
     </div>
+
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
         <aside class="facet-filter-container">
             <h3 class="">Filtrer søket på:</h3>
@@ -411,6 +428,7 @@
         </aside>
     </div>
 </div>
+
 <script>
     @foreach (var item in Model.Result.Items)
     {
@@ -536,7 +554,6 @@
                 }
             );
         });
-
 
         $(document).ready(function() {
             @if (Html.DownloadServiceEnabled())
