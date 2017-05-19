@@ -1,13 +1,13 @@
 ﻿<script type="text/x-template" id="distributionRows">
     @* *** Liste *** *@
     <div v-if="$root.viewType == 'listView'">
-        <div>
+        <div class="row resultItemRowTableHeaderListView">
             <div class="col-sm-5"><p>Tittel</p></div>
             <div class="col-sm-2"><p>Type</p></div>
             <div class="col-sm-5"><p>Dataeier</p></div>
             <div class="clearfix"></div>
         </div>
-        <hr class="menu-separator" />
+        <div class="menu-separator search-results-table-heading"></div>
 
         <div style="padding: 10px 0px;" v-for="resultItemDistribution in underlayingDistributions">
             @*Tittel*@
