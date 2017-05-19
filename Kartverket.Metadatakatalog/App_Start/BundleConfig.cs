@@ -27,6 +27,10 @@ namespace Kartverket.Metadatakatalog
                "~/Scripts/visninger.js"
            ));
 
+            bundles.Add(new ScriptBundle("~/Content/download").Include(
+               "~/Scripts/vue-download.js"
+           ));
+
             //***************** separate bundles - used in www.geonorge.no/www.test.geonorge.no ****************//
 
             bundles.Add(new StyleBundle("~/Content/shopping-cart").Include(
