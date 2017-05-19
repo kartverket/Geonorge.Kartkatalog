@@ -1015,6 +1015,8 @@ var mainVueModel = new Vue({
     mounted: function () {
         this.autoselectWithOrderLineValuesFromLocalStorage();
         this.autoselectWithMasterOrderLineValuesFromLocalStorage();
+        this.autoSelectAreasForAllOrderLines();
+        this.updateSelectedAreasForAllOrderLines(true);
         this.validateAreas();
     },
     components: {
@@ -1279,6 +1281,37 @@ var mainVueModel = new Vue({
             this.orderLines.forEach(function (orderLine) {
                 if (orderLine.metadata !== undefined && orderLine.metadata.uuid !== undefined) {
                     this.updateSelectedFormatsForSingleOrderLine(orderLine.metadata.uuid);
+                }
+            }.bind(this));
+        },
+
+        autoSelectAreasForSingleOrderLine: function (orderLineUuid) {
+            for (areaType in this.masterOrderLine.allAvailableAreas[orderLineUuid]) {
+                if (this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].length) {
+                    this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
+                        if (this.masterOrderLine.masterSelectedAreas.length) {
+                            this.masterOrderLine.masterSelectedAreas.forEach(function (masterSelectedArea) {
+                                if (masterSelectedArea.type == "polygon") {
+                                    this.masterOrderLine.allSelectedCoordinates[orderLineUuid] = masterSelectedArea.coordinates;
+                                    if (this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'] == undefined) {
+                                        this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'] = [];
+                                        this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'].push(masterSelectedArea);
+                                    }
+                                }
+                                if (masterSelectedArea.code == availableArea.code) {
+                                    this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
+                                }
+                            }.bind(this));
+                        }
+                    }.bind(this))
+                }
+            }
+        },
+
+        autoSelectAreasForAllOrderLines: function () {
+            this.orderLines.forEach(function (orderLine) {
+                if (orderLine.metadata !== undefined && orderLine.metadata.uuid !== undefined) {
+                    this.autoSelectAreasForSingleOrderLine(orderLine.metadata.uuid);
                 }
             }.bind(this));
         },
