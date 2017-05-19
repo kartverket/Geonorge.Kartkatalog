@@ -72,7 +72,6 @@
 
                     <a style="width: 130px"
                        v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                       v-bind:id="'addToCart-' + resultItem.Uuid"
                        v-bind:href='resultItem.AddToCartUrl'
                        data-toggle='tooltip'
                        data-placement='bottom'
@@ -164,7 +163,6 @@
                 @*Last ned*@
                 <div class="col-xs-1">
                     <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                       v-bind:id="'addToCart-' + resultItem.Uuid"
                        v-bind:href='resultItem.AddToCartUrl'
                        data-toggle='tooltip'
                        data-placement='bottom'
@@ -172,8 +170,8 @@
                        v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
                        class="add-to-cart-btn"
                        v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
-                        <span class="custom-icon custom-icon-handlekurv"></span>
-                        {{resultItem.addedToCart}}
+                       <span class="custom-icon custom-icon-handlekurv"></span>
+                       {{resultItem.addedToCart}}
                     </a>
 
                     <a v-else-if="resultItem.ShowDownloadLink"
@@ -353,14 +351,16 @@
             <div>
                 <div v-if="$root.viewType == 'tableView'" class="row">
                     <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
-                        <p><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByTitle()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a>
+                        <p>
+                            <a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByTitle()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a>
                         </p>
                     </div>
                     <div class="col-sm-2">
                         <p>Type</p>
                     </div>
                     <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
-                        <p><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByOrganization()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
+                        <p>
+                            <a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByOrganization()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
                         </p>
                     </div>
                     <div class="col-sm-1 no-padding text-center">
@@ -391,9 +391,9 @@
             <span class="separator-small"></span>
             @Html.Partial("_FacetFilter", Model)
 
-        <h3 class="" style="padding-top: 40px;">Sider</h3>
-        <span class="separator-small"></span>
-        @Html.Partial("_FilterPages")
+            <h3 class="" style="padding-top: 40px;">Sider</h3>
+            <span class="separator-small"></span>
+            @Html.Partial("_FilterPages")
         </aside>
     </div>
 </div>
@@ -403,7 +403,7 @@
     if (item.ShowMapLink || item.ShowServiceMapLink)
     {
         @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                  }
+                      }
 }
 </script>
 
@@ -523,7 +523,7 @@
             }
         });
     </script>
-    
+
     <script>
         function showAlert(message, colorClass) {
             $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
@@ -570,29 +570,5 @@
             </text>
             }
         });
-
-        $(window).load(function () {
-            @if (Html.DownloadServiceEnabled())
-            {
-         <text>
-
-
-            if (typeof Storage !== "undefined") {
-
-                console.log('window.localStorage is available!');
-                var orderItems = [];
-                $('.add-to-cart-btn:not(.prevent-action)').click(function () {
-                    addToCartButtonClick($(this));
-                });
-            } else {
-                console.log('no native support for HTML5 storage :(');
-            }
-
-            </text>
-            }
-
-        });
-
-
     </script>
 }
