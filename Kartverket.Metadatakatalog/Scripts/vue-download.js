@@ -110,17 +110,21 @@ var Areas = {
             if (this.master) {
                 for (orderLineUuid in this.$root.masterOrderLine.allAvailableAreas) {
                     if (this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type] !== undefined) {
+                        // Unselect from order lines
                         this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type].forEach(function (availableArea, index) {
                             if (availableArea.code == area.code) {
                                 this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type][index].isSelected = false;
-                                this.$root.masterOrderLine.masterSelectedAreas.forEach(function (selectedArea, index) {
-                                    if (selectedArea.code == area.code) {
-                                        this.$root.masterOrderLine.masterSelectedAreas.splice(index, 1)
-                                    }
-                                }.bind(this));
+
                             }
                         }.bind(this));
                     }
+                    // Unselect from master order line
+                    this.$root.masterOrderLine.masterSelectedAreas.forEach(function (selectedArea, index) {
+                        if (selectedArea.code == area.code) {
+                            this.$root.masterOrderLine.masterSelectedAreas.splice(index, 1)
+                        }
+                    }.bind(this));
+
                 }
                 this.$root.updateSelectedAreasForAllOrderLines(false);
 
@@ -195,17 +199,19 @@ var Projections = {
             if (this.master) {
                 for (orderLineUuid in this.$root.masterOrderLine.allAvailableProjections) {
                     if (this.$root.masterOrderLine.allAvailableProjections[orderLineUuid].length) {
+                        // Unselect from order lines
                         this.$root.masterOrderLine.allAvailableProjections[orderLineUuid].forEach(function (availableProjection, index) {
                             if (availableProjection.code == projection.code) {
                                 this.$root.masterOrderLine.allAvailableProjections[orderLineUuid][index].isSelected = false;
-                                this.$root.masterOrderLine.masterSelectedProjections.forEach(function (selectedProjection, index) {
-                                    if (selectedProjection.code == projection.code) {
-                                        this.$root.masterOrderLine.masterSelectedProjections.splice(index, 1)
-                                    }
-                                }.bind(this));
                             }
                         }.bind(this));
                     }
+                    // Unselect from master order line
+                    this.$root.masterOrderLine.masterSelectedProjections.forEach(function (selectedProjection, index) {
+                        if (selectedProjection.code == projection.code) {
+                            this.$root.masterOrderLine.masterSelectedProjections.splice(index, 1)
+                        }
+                    }.bind(this));
                 }
                 this.$root.updateSelectedProjectionsForAllOrderLines();
 
@@ -274,17 +280,21 @@ var Formats = {
             if (this.master) {
                 for (orderLineUuid in this.$root.masterOrderLine.allAvailableFormats) {
                     if (this.$root.masterOrderLine.allAvailableFormats[orderLineUuid].length) {
+                        // Unselect from order lines
                         this.$root.masterOrderLine.allAvailableFormats[orderLineUuid].forEach(function (availableFormat, index) {
                             if (availableFormat.name == format.name) {
                                 this.$root.masterOrderLine.allAvailableFormats[orderLineUuid][index].isSelected = false;
-                                this.$root.masterOrderLine.masterSelectedFormats.forEach(function (selectedFormat, index) {
-                                    if (selectedFormat.name == format.name) {
-                                        this.$root.masterOrderLine.masterSelectedFormats.splice(index, 1)
-                                    }
-                                }.bind(this));
+
                             }
                         }.bind(this));
                     }
+                    // Unselect from master order line
+                    this.$root.masterOrderLine.masterSelectedFormats.forEach(function (selectedFormat, index) {
+                        if (selectedFormat.name == format.name) {
+                            this.$root.masterOrderLine.masterSelectedFormats.splice(index, 1)
+                        }
+                    }.bind(this));
+
                 }
                 this.$root.updateSelectedFormatsForAllOrderLines();
             } else {
