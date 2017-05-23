@@ -58,3 +58,6 @@
 .facet-filter .indicator {
     cursor: pointer;
 }
+
+.search-result-navigation .save-as-menu .save-as-dropdown .custom-select {
+      width: 186px; }
