@@ -302,12 +302,12 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         public List<string> FacetsServiceDirectory()
         {
-            return new List<string> { "themes", "organizations", "nationalinitiatives", "areas", "distributionProtocols", "dataAccesses" };
+            return new List<string> { "themes", "types", "organizations", "nationalinitiatives", "areas", "distributionProtocols", "dataAccesses" };
         }
 
         public List<string> FacetApplications()
         {
-            return new List<string> { "themes", "organizations", "nationalinitiatives", "areas", "distributionProtocols", "dataAccesses" };
+            return new List<string> { "organizations", "areas"};
         }
     }
 
