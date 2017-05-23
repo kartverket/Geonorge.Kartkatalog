@@ -40,186 +40,183 @@
 @*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
     <div>
-        <div v-bind:style="{backgroundColor: backgroundColor}" style="padding: 10px 0px">
+        @* **** LISTE **** *@
+        <div v-if="$root.viewType == 'listView'" v-bind:style="{backgroundColor: backgroundColor}" style="padding: 10px 0px" class="row">
 
-            @* **** LISTE **** *@
-            <div v-if="$root.viewType == 'listView'">
+            <div class="col-sm-1">
+                <a v-bind:href="organizationUrl" class="show-loading-animation" data-loading-message="Henter innhold">
+                    <img v-bind:src="resultItem.OrganizationLogoUrl" class="img-responsive center-block" v-bind:alt="resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization" />
+                </a>
+            </div>
 
-                <div class="col-sm-1">
-                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-loading-message="Henter innhold">
-                        <img v-bind:src="resultItem.OrganizationLogoUrl" class="img-responsive center-block" v-bind:alt="resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization" />
-                    </a>
-                </div>
+            <div class="col-sm-6">
+                <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                    <p style="font-size:14pt" class="role-button search-results-name" role="button">{{resultItem.Title}}</p>
+                </a>
+                <p>{{description}}</p>
+                <p>
+                    Tilgjengelig som:
+                    <span v-bind:title="'Tilgjengelig som ' + resultItem.TypeTranslated" style="width:auto" v-bind:class="type(resultItem.Type)">{{resultItem.TypeTranslated}}</span>
+                </p>
+            </div>
 
-                <div class="col-sm-6">
-                    <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                        <p style="font-size:14pt" class="role-button search-results-name" role="button">{{resultItem.Title}}</p>
-                    </a>
-                    <p>{{description}}</p>
-                    <p>
-                        Tilgjengelig som:
-                        <span v-bind:title="'Tilgjengelig som ' + resultItem.TypeTranslated" style="width:auto" v-bind:class="type(resultItem.Type)">{{resultItem.TypeTranslated}}</span>
-                    </p>
-                </div>
+            <div class="col-sm-2">
 
-                <div class="col-sm-2">
+                <a style="width: 130px" v-bind:id="mapLink.mapLinkButtonId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
+                    <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
+                </a>
 
-                    <a style="width: 130px" v-bind:id="mapLink.mapLinkButtonId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
-                        <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
-                    </a>
+                <a style="width: 130px"
+                   v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
+                   v-bind:href='resultItem.AddToCartUrl'
+                   data-toggle='tooltip'
+                   data-placement='bottom'
+                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                   v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                   class="btn btn-default add-to-cart-btn"
+                   v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
+                    <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
+                </a>
 
-                    <a style="width: 130px"
-                       v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                       v-bind:href='resultItem.AddToCartUrl'
-                       data-toggle='tooltip'
-                       data-placement='bottom'
-                       onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                       v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                       class="btn btn-default add-to-cart-btn"
-                       v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
-                        <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
-                    </a>
+                <a style="width: 130px"
+                   v-else-if="resultItem.ShowDownloadLink"
+                   v-bind:href="resultItem.DownloadUrl"
+                   onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                   data-toggle='tooltip'
+                   data-placement='bottom'
+                   v:bind:title='"Last ned datasett for " + resultItem.Title'
+                   target="_blank"
+                   class="btn btn-default">
+                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
+                </a>
 
-                    <a style="width: 130px"
-                       v-else-if="resultItem.ShowDownloadLink"
-                       v-bind:href="resultItem.DownloadUrl"
-                       onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                       data-toggle='tooltip'
-                       data-placement='bottom'
-                       v:bind:title='"Last ned datasett for " + resultItem.Title'
-                       target="_blank"
-                       class="btn btn-default">
-                        <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                    </a>
+                <a style="width: 130px"
+                   v-else
+                   v-bind:title='"Last ned datasett for " + resultItem.Title'
+                   class="disabled btn btn-default">
+                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
+                </a>
+            </div>
 
-                    <a style="width: 130px"
-                       v-else
-                       v-bind:title='"Last ned datasett for " + resultItem.Title'
-                       class="disabled btn btn-default">
-                        <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                    </a>
-                </div>
+            <div class="col-sm-3">
+                <a v-if="thumbnailSrc" v-bind:href="readMoreUrl">
+                    <img v-bind:src="thumbnailSrc" />
+                </a>
+            </div>
 
-                <div class="col-sm-3">
-                    <a v-if="thumbnailSrc" v-bind:href="readMoreUrl">
-                        <img v-bind:src="thumbnailSrc" />
-                    </a>
-                </div>
+            <div class="clearfix"></div>
+            @* Underliggende distribusjoner *@
 
-                <div class="clearfix"></div>
-                @* Underliggende distribusjoner *@
+            <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-md-12" title="Vis underliggende distribusjoner">
+                <div style="padding: 10px 10px 1px; background-color:#f4f4f4">
+                    <p><b>Underliggende distribusjoner   </b><span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span></p>
+                    <div v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
 
-                <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-md-12" title="Vis underliggende distribusjoner">
-                    <div style="padding: 10px 10px 1px; background-color:#f4f4f4">
-                        <p><b>Underliggende distribusjoner   </b><span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span></p>
-                        <div v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
-
-                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            @* *** TABELL *** *@
-            <div v-if="$root.viewType == 'tableView'">
+        @* *** TABELL *** *@
+        <div v-if="$root.viewType == 'tableView'" v-bind:style="{backgroundColor: backgroundColor}" style="padding: 10px 0px">
 
-                <div class="resultItemRow" v-bind:class="{expanded: expanded}">
-                    <div class="row">
+            <div class="resultItemRow" v-bind:class="{expanded: expanded}">
+                <div class="row">
 
-                        <div class="col-sm-4">
-                            <div class="resultItemRowTitle">
-                                @*Pil underliggende distribusjoner i tabellvisning*@
-                                <div class="expand-arrow-container">
-                                    <span data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" title="Vis underliggende distribusjoner" class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
-                                </div>
-                                @*Tittel*@
-                                <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                                    <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
-                                </a>
+                    <div class="col-sm-4">
+                        <div class="resultItemRowTitle">
+                            @*Pil underliggende distribusjoner i tabellvisning*@
+                            <div class="expand-arrow-container">
+                                <span data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" title="Vis underliggende distribusjoner" class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
                             </div>
-                        </div>
-
-                        @*Distribusjonstype *@
-                        <div class="col-sm-2">
-                            <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
-                        </div>
-
-                        @*Organisasjon*@
-                        <div class="col-sm-3">
-                            <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
-                                {{resultItem.Organization}}
-                            </a>
-                        </div>
-
-                        @*Åpne data*@
-                        <div class="col-sm-1">
-                            <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
-                        </div>
-
-                        @*Kart*@
-                        <div class="col-xs-1">
-                            <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
-                                <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
-                            </a>
-                        </div>
-
-                        @*Last ned*@
-                        <div class="col-xs-1">
-                            <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                               v-bind:href='resultItem.AddToCartUrl'
-                               data-toggle='tooltip'
-                               data-placement='bottom'
-                               onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                               v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                               class="add-to-cart-btn"
-                               v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
-                                <span class="custom-icon custom-icon-handlekurv"></span>
-                                {{resultItem.addedToCart}}
-                            </a>
-
-
-                            <a v-else-if="resultItem.ShowDownloadLink"
-                               v-bind:href="resultItem.DownloadUrl"
-                               onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                               data-toggle='tooltip'
-                               data-placement='bottom'
-                               v:bind:title='"Last ned datasett for " + resultItem.Title'
-                               target="_blank">
-                                <span class="custom-icon custom-icon-lastned"></span>
-                            </a>
-
-                            <a v-else
-                               v-bind:title='"Last ned datasett for " + resultItem.Title'
-                               class="disabled">
-                                <span class="custom-icon custom-icon-lastned"></span>
+                            @*Tittel*@
+                            <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                                <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
                             </a>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            @* *** GALLERI *** *@
-            <div v-if="$root.viewType == 'galleryView'" class="search-results-gallery-image layoutblock">
-                <div class="block shortcutpageteaserblock size-4 col-sm-4">
-                    <div class="teaser-with-background-image">
-                        <a v-bind:href="readMoreUrl">
-                            <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
-                                <div class="teaser-overlay">
-                                    <div class="teaser-caption">
-                                        <div class="teaser-heading">{{resultItem.Title}}</div>
-                                    </div>
-                                </div>
-                            </div>
+                    @*Distribusjonstype *@
+                    <div class="col-sm-2">
+                        <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
+                    </div>
+
+                    @*Organisasjon*@
+                    <div class="col-sm-3">
+                        <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                            {{resultItem.Organization}}
+                        </a>
+                    </div>
+
+                    @*Åpne data*@
+                    <div class="col-sm-1">
+                        <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                    </div>
+
+                    @*Kart*@
+                    <div class="col-xs-1">
+                        <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                            <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
+                        </a>
+                    </div>
+
+                    @*Last ned*@
+                    <div class="col-xs-1">
+                        <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
+                           v-bind:href='resultItem.AddToCartUrl'
+                           data-toggle='tooltip'
+                           data-placement='bottom'
+                           onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                           v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                           class="add-to-cart-btn"
+                           v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
+                            <span class="custom-icon custom-icon-handlekurv"></span>
+                            {{resultItem.addedToCart}}
+                        </a>
+
+
+                        <a v-else-if="resultItem.ShowDownloadLink"
+                           v-bind:href="resultItem.DownloadUrl"
+                           onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                           data-toggle='tooltip'
+                           data-placement='bottom'
+                           v:bind:title='"Last ned datasett for " + resultItem.Title'
+                           target="_blank">
+                            <span class="custom-icon custom-icon-lastned"></span>
+                        </a>
+
+                        <a v-else
+                           v-bind:title='"Last ned datasett for " + resultItem.Title'
+                           class="disabled">
+                            <span class="custom-icon custom-icon-lastned"></span>
                         </a>
                     </div>
                 </div>
             </div>
-
-            <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
         </div>
+
+        @* *** GALLERI *** *@
+        <div v-if="$root.viewType == 'galleryView'" class="search-results-gallery-image layoutblock">
+            <div class="block shortcutpageteaserblock size-4 col-sm-4">
+                <div class="teaser-with-background-image">
+                    <a v-bind:href="readMoreUrl">
+                        <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
+                            <div class="teaser-overlay">
+                                <div class="teaser-caption">
+                                    <div class="teaser-heading">{{resultItem.Title}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
 
         <div v-if="$root.viewType == 'tableView'" v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
-
-        </div>
+        
+    </div>
     </div>
 
 </script>
@@ -232,33 +229,33 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
+                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
+                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
                 }
             </ul>
         </div>
@@ -291,33 +288,33 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
+                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
+                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
                 }
             </ul>
         </div>
@@ -345,7 +342,7 @@
 <span class="separator-small separator-gray margin-bottom-10"></span>
 
 <div class="row resultItemTitleRow">
-    
+
     <div id="searchResultTable" class="col-md-9">
         <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
         <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
@@ -367,7 +364,8 @@
                     </div>
                     <div class="col-sm-2"><p>Type</p></div>
                     <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
-                        <p><a href="@Url.Action("Index", "Search", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
+                        <p>
+                            <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
                         </p>
                     </div>
                     <div class="col-sm-1"><p>Åpne data</p></div>

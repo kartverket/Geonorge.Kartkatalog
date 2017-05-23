@@ -44,10 +44,8 @@
 @*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
     <div>
-        <div v-bind:style="{backgroundColor: backgroundColor}" style="padding: 10px 0px;">
-
             @* **** LISTE **** *@
-            <div v-if="$root.viewType == 'listView'">
+            <div v-if="$root.viewType == 'listView'" v-bind:style="{backgroundColor: backgroundColor}" style="padding: 10px 0px;" class="row">
 
                 <div class="col-sm-1">
                     <a v-bind:href="organizationUrl" class="show-loading-animation" data-loading-message="Henter innhold">
@@ -219,7 +217,6 @@
             </div>
 
             <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
-        </div>
 
         <div v-if="$root.viewType == 'tableView'" v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
 
