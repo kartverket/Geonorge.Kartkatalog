@@ -41,7 +41,7 @@
 <script type="text/x-template" id="resultItemRow">
     <div>
         @* **** LISTE **** *@
-        <div v-if="$root.viewType == 'listView'" v-bind:style="{backgroundColor: backgroundColor}" style="padding: 10px 0px" class="row">
+        <div v-if="$root.viewType == 'listView'" style="padding: 10px 0px" class="row">
 
             <div class="col-sm-1">
                 <a v-bind:href="organizationUrl" class="show-loading-animation" data-loading-message="Henter innhold">
@@ -105,30 +105,16 @@
             </div>
 
             <div class="clearfix"></div>
-            @* Underliggende distribusjoner *@
-
-            <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-md-12" title="Vis underliggende distribusjoner">
-                <div style="padding: 10px 10px 1px; background-color:#f4f4f4">
-                    <p><b>Underliggende distribusjoner   </b><span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span></p>
-                    <div v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
-
-                    </div>
-                </div>
-            </div>
         </div>
 
         @* *** TABELL *** *@
-        <div v-if="$root.viewType == 'tableView'" v-bind:style="{backgroundColor: backgroundColor}" style="padding: 10px 0px">
+        <div v-if="$root.viewType == 'tableView'">
 
             <div class="resultItemRow" v-bind:class="{expanded: expanded}">
                 <div class="row">
 
                     <div class="col-sm-4">
                         <div class="resultItemRowTitle">
-                            @*Pil underliggende distribusjoner i tabellvisning*@
-                            <div class="expand-arrow-container">
-                                <span data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" title="Vis underliggende distribusjoner" class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
-                            </div>
                             @*Tittel*@
                             <a v-bind:href="readMoreUrl" class="show-loading-animation">
                                 <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
@@ -214,9 +200,6 @@
 
         <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
 
-        <div v-if="$root.viewType == 'tableView'" v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
-        
-    </div>
     </div>
 
 </script>
