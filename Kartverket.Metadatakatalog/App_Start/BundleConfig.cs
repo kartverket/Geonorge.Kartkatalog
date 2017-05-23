@@ -15,8 +15,7 @@ namespace Kartverket.Metadatakatalog
             bundles.Add(new StyleBundle("~/Content/bower_components/kartverket-felleskomponenter/assets/css/styles").Include(
                 "~/Content/bower_components/kartverket-felleskomponenter/assets/css/vendor.min.css",
                 "~/Content/bower_components/kartverket-felleskomponenter/assets/css/vendorfonts.min.css",
-                "~/Content/bower_components/kartverket-felleskomponenter/assets/css/main.min.css",
-                "~/Content/temp.css"
+                "~/Content/bower_components/kartverket-felleskomponenter/assets/css/main.min.css"
                 ));
 
             bundles.Add(new ScriptBundle("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts").Include(
@@ -27,6 +26,10 @@ namespace Kartverket.Metadatakatalog
                "~/Content/bower_components/axios/dist/axios.min.js",
                "~/Scripts/site.js",
                "~/Scripts/visninger.js"
+           ));
+
+            bundles.Add(new ScriptBundle("~/Content/download").Include(
+               "~/Scripts/vue-download.js"
            ));
 
             //***************** separate bundles - used in www.geonorge.no/www.test.geonorge.no ****************//

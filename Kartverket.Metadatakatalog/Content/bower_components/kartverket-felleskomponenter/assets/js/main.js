@@ -94,7 +94,9 @@ $(window).load(function() {
         search_contains: true
     };
     $(".chosen-select").chosen(options);
-    $("[data-toggle='tooltip']").tooltip();
+    $("[data-toggle='tooltip']").tooltip({
+        trigger: 'hover'
+    });
     $("li.has-error[data-toggle='tooltip']").tooltip("option", "position", { my: "center", at: "center bottom+30" });
     $("li[data-toggle='tooltip']").mouseleave(function() {
         $(".ui-helper-hidden-accessible").remove();
