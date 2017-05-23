@@ -955,11 +955,6 @@
     <Content Include="bower.json" />
     <Content Include="authentication.default.config" />
     <Content Include="authentication.config" />
-    <Content Include="Content\bower_components\clipboard\.bower.json" />
-    <Content Include="Content\bower_components\clipboard\bower.json" />
-    <Content Include="Content\bower_components\clipboard\contributing.md" />
-    <Content Include="Content\bower_components\clipboard\package.json" />
-    <Content Include="Content\bower_components\clipboard\readme.md" />
     <Content Include="Content\bower_components\axios\.bower.json" />
     <Content Include="Content\bower_components\axios\bower.json" />
     <Content Include="Content\bower_components\axios\CHANGELOG.md" />
@@ -971,6 +966,11 @@
     <Content Include="Content\bower_components\axios\LICENSE" />
     <Content Include="Content\bower_components\axios\README.md" />
     <Content Include="Content\bower_components\axios\UPGRADE_GUIDE.md" />
+    <Content Include="Content\bower_components\clipboard\.bower.json" />
+    <Content Include="Content\bower_components\clipboard\bower.json" />
+    <Content Include="Content\bower_components\clipboard\contributing.md" />
+    <Content Include="Content\bower_components\clipboard\package.json" />
+    <Content Include="Content\bower_components\clipboard\readme.md" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\.bower.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\702ZOKiLJc3WVjuplzInF5uFdDttMLvmWuJdhhgs.ttf" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.eot" />
