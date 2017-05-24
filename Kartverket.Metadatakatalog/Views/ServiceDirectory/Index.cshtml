@@ -84,9 +84,9 @@
             <div class="clearfix"></div>
             @* Underliggende distribusjoner *@
 
-            <div data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" class="col-md-12" title="Vis underliggende distribusjoner">
+            <div v-on:click="getUnderlyingDistributions()" class="col-md-12">
                 <div style="padding: 10px 10px 1px; background-color:#f4f4f4">
-                    <p><b>Underliggende distribusjoner   </b><span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span></p>
+                    <p><b data-toggle='tooltip' data-placement='bottom' title="Vis underliggende distribusjoner">Underliggende distribusjoner   </b><span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span></p>
                     <div v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
 
                     </div>
