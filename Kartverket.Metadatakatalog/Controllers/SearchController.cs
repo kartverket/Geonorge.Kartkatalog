@@ -28,18 +28,6 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View(model);
         }
 
-
-        //[System.Web.Http.HttpGet]
-        //[Route("search/organization")]
-        public ActionResult Organization(SearchByOrganizationParameters parameters)
-        {
-            parameters.AddDefaultFacetsIfMissing();
-            var searchResult = _searchService.SearchByOrganization(parameters);      
-            var model = new SearchByOrganizationViewModel(parameters, searchResult);
-            return View(model);
-        }
-
-
         public ActionResult Area(SearchByAreaParameters parameters)
         {
             parameters.AddDefaultFacetsIfMissing();

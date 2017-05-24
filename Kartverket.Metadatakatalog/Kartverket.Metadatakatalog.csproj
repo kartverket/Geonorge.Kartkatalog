@@ -1096,7 +1096,6 @@
     <Content Include="Views\ServiceDirectory\Index.cshtml" />
     <Content Include="Views\Application\Index.cshtml" />
     <Content Include="settings.config" />
-    <Content Include="Views\Search\Organization.cshtml" />
     <Content Include="Views\Search\Area.cshtml" />
     <Content Include="Views\Shared\_FilterPages.cshtml" />
     <Content Include="Views\Shared\_UnderlayingDistributions.cshtml" />
