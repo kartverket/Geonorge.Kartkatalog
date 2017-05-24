@@ -46,7 +46,10 @@
                             <div class="expand-arrow-container"></div>
                             @*Tittel*@
                             <a v-if="resultItemDistribution.ShowDetailsUrl" v-bind:href="resultItemDistribution.ShowDetailsUrl" class="show-loading-animation">
-                                <span v-if="resultItemDistribution.Title" class="role-button search-results-name" role="button">{{resultItemDistribution.Title}}</span>
+                                <span v-if="resultItemDistribution.Title" class="role-button search-results-name" role="button">
+                                    {{resultItemDistribution.Title}} ({{resultItemDistribution.FormatName}} {{resultItemDistribution.FormatVersion}})
+                                </span>
+
                             </a>
                         </div>
                     </div>
