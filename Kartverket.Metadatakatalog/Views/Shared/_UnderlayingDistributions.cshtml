@@ -1,35 +1,39 @@
 ﻿<script type="text/x-template" id="distributionRows">
     @* *** Liste *** *@
     <div v-if="$root.viewType == 'listView'">
-        <div class="row resultItemRowTableHeaderListView">
-            <div class="col-sm-5"><p>Tittel</p></div>
-            <div class="col-sm-2"><p>Type</p></div>
-            <div class="col-sm-5"><p>Dataeier</p></div>
-            <div class="clearfix"></div>
+        <div v-if="underlayingDistributions">
+            <div class="row resultItemRowTableHeaderListView">
+                <div class="col-sm-5"><p>Tittel</p></div>
+                <div class="col-sm-2"><p>Type</p></div>
+                <div class="col-sm-5"><p>Dataeier</p></div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="menu-separator search-results-table-heading"></div>
+
+            <div style="padding: 10px 0px;" v-for="resultItemDistribution in underlayingDistributions">
+                @*Tittel*@
+                <div class="col-sm-5">
+                    <a v-if="resultItemDistribution.ShowDetailsUrl" v-bind:href="resultItemDistribution.ShowDetailsUrl" class="show-loading-animation">
+                        <span v-if="resultItemDistribution.Title" class="role-button search-results-name" role="button">{{resultItemDistribution.Title}}</span>
+                    </a>
+                </div>
+
+                @*Distribusjonstype *@
+                <div class="col-sm-2">
+                    <span v-if="resultItemDistribution.Type" v-bind:title="resultItemDistribution.Type" v-bind:class="$parent.type(resultItemDistribution.Type)" style="width:auto">{{resultItemDistribution.Type}}</span>
+                </div>
+
+                @*Organisasjon*@
+                <div class="col-sm-5">
+                    {{resultItemDistribution.Organization}}
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            </div>
+        <div v-else class="resultItemRow col-sm-offset-1">
+            <span class="role-button search-results-name" role="button">Ingen underliggende distribusjoner...</span>
         </div>
-        <div class="menu-separator search-results-table-heading"></div>
-
-        <div style="padding: 10px 0px;" v-for="resultItemDistribution in underlayingDistributions">
-            @*Tittel*@
-            <div class="col-sm-5">
-                <a v-if="resultItemDistribution.ShowDetailsUrl" v-bind:href="resultItemDistribution.ShowDetailsUrl" class="show-loading-animation">
-                    <span v-if="resultItemDistribution.Title" class="role-button search-results-name" role="button">{{resultItemDistribution.Title}}</span>
-                </a>
-            </div>
-
-            @*Distribusjonstype *@
-            <div class="col-sm-2">
-                <span v-if="resultItemDistribution.Type" v-bind:title="resultItemDistribution.Type" v-bind:class="$parent.type(resultItemDistribution.Type)" style="width:auto">{{resultItemDistribution.Type}}</span>
-            </div>
-
-            @*Organisasjon*@
-            <div class="col-sm-5">
-                {{resultItemDistribution.Organization}}
-            </div>
-            <div class="clearfix"></div>
         </div>
-
-    </div>
 
     @* **** TABELL **** *@
     <div v-else-if="$root.viewType == 'tableView'">
