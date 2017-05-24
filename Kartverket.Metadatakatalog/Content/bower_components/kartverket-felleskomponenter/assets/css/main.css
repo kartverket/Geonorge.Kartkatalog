@@ -1794,7 +1794,9 @@ aside ul li,
 
 .btn,
 a.btn,
-button.btn {
+button.btn,
+input[type="button"].btn,
+input[type="submit"].btn {
   font-family: "Open Sans", sans-serif;
   font-weight: normal;
   font-size: 12pt;
@@ -1816,7 +1818,11 @@ button.btn {
   a.btn:hover,
   a.btn:focus,
   button.btn:hover,
-  button.btn:focus {
+  button.btn:focus,
+  input[type="button"].btn:hover,
+  input[type="button"].btn:focus,
+  input[type="submit"].btn:hover,
+  input[type="submit"].btn:focus {
     background-color: #fe5000;
     color: #FFFFFF !important;
     border: 1px solid transparent;
@@ -1827,13 +1833,21 @@ button.btn {
     a.btn:hover span,
     a.btn:focus span,
     button.btn:hover span,
-    button.btn:focus span {
+    button.btn:focus span,
+    input[type="button"].btn:hover span,
+    input[type="button"].btn:focus span,
+    input[type="submit"].btn:hover span,
+    input[type="submit"].btn:focus span {
       color: #FFFFFF; }
   .btn.disabled, .btn[disabled],
   a.btn.disabled,
   a.btn[disabled],
   button.btn.disabled,
-  button.btn[disabled] {
+  button.btn[disabled],
+  input[type="button"].btn.disabled,
+  input[type="button"].btn[disabled],
+  input[type="submit"].btn.disabled,
+  input[type="submit"].btn[disabled] {
     background-color: #FFFFFF;
     color: #CFCFCF;
     border: 1px solid #CFCFCF;
@@ -1843,41 +1857,65 @@ button.btn {
     a.btn.disabled:hover,
     a.btn[disabled]:hover,
     button.btn.disabled:hover,
-    button.btn[disabled]:hover {
+    button.btn[disabled]:hover,
+    input[type="button"].btn.disabled:hover,
+    input[type="button"].btn[disabled]:hover,
+    input[type="submit"].btn.disabled:hover,
+    input[type="submit"].btn[disabled]:hover {
       border: 1px solid #CFCFCF;
       color: #CFCFCF; }
       .btn.disabled:hover span, .btn[disabled]:hover span,
       a.btn.disabled:hover span,
       a.btn[disabled]:hover span,
       button.btn.disabled:hover span,
-      button.btn[disabled]:hover span {
+      button.btn[disabled]:hover span,
+      input[type="button"].btn.disabled:hover span,
+      input[type="button"].btn[disabled]:hover span,
+      input[type="submit"].btn.disabled:hover span,
+      input[type="submit"].btn[disabled]:hover span {
         color: #CFCFCF; }
     .btn.disabled span:hover, .btn[disabled] span:hover,
     a.btn.disabled span:hover,
     a.btn[disabled] span:hover,
     button.btn.disabled span:hover,
-    button.btn[disabled] span:hover {
+    button.btn[disabled] span:hover,
+    input[type="button"].btn.disabled span:hover,
+    input[type="button"].btn[disabled] span:hover,
+    input[type="submit"].btn.disabled span:hover,
+    input[type="submit"].btn[disabled] span:hover {
       color: #CFCFCF; }
     .btn.disabled:focus, .btn[disabled]:focus,
     a.btn.disabled:focus,
     a.btn[disabled]:focus,
     button.btn.disabled:focus,
-    button.btn[disabled]:focus {
+    button.btn[disabled]:focus,
+    input[type="button"].btn.disabled:focus,
+    input[type="button"].btn[disabled]:focus,
+    input[type="submit"].btn.disabled:focus,
+    input[type="submit"].btn[disabled]:focus {
       border: 1px solid #CFCFCF;
       color: #CFCFCF !important; }
       .btn.disabled:focus span, .btn[disabled]:focus span,
       a.btn.disabled:focus span,
       a.btn[disabled]:focus span,
       button.btn.disabled:focus span,
-      button.btn[disabled]:focus span {
+      button.btn[disabled]:focus span,
+      input[type="button"].btn.disabled:focus span,
+      input[type="button"].btn[disabled]:focus span,
+      input[type="submit"].btn.disabled:focus span,
+      input[type="submit"].btn[disabled]:focus span {
         color: #CFCFCF !important; }
   .btn span:hover,
   a.btn span:hover,
-  button.btn span:hover {
+  button.btn span:hover,
+  input[type="button"].btn span:hover,
+  input[type="submit"].btn span:hover {
     color: #FFFFFF; }
   .btn.btn-purple,
   a.btn.btn-purple,
-  button.btn.btn-purple {
+  button.btn.btn-purple,
+  input[type="button"].btn.btn-purple,
+  input[type="submit"].btn.btn-purple {
     background-color: #5d4777; }
 
 .btn-file {
@@ -2709,6 +2747,10 @@ button.btn {
     margin-right: 6px;
     padding-right: 6px;
     border-right: 1px solid #eaebeb; }
+    #orderlist .orderline .orderline-field-counter .custom-icon-danger,
+    #responseList .orderline .orderline-field-counter .custom-icon-danger {
+      margin-top: 5px;
+      cursor: pointer; }
     #orderlist .orderline .orderline-field-counter .custom-icon-warning,
     #responseList .orderline .orderline-field-counter .custom-icon-warning {
       margin-top: 3px;
@@ -3601,6 +3643,20 @@ ul#thumbnailsCoverage {
         height: 34px !important;
         padding: 6px 12px; } }
 
+/* Striped list */
+.striped-list h2 {
+  font-size: 18pt;
+  line-height: 31pt;
+  margin-top: 0;
+  margin-bottom: 0; }
+
+.striped-list .list-item {
+  padding: 12px; }
+  .striped-list .list-item:nth-child(odd) {
+    background-color: #fbfcfc; }
+  .striped-list .list-item:nth-child(even) {
+    background-color: #f7f8f8; }
+
 .menu {
   margin-bottom: 20px; }
 
@@ -4137,6 +4193,30 @@ header.main-header {
 
 .table-heading .sorted-desc:after {
   background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/arrow-down.svg"); }
+
+span.select2-container {
+  width: 100%; }
+  span.select2-container .select2-selection--single {
+    border-radius: 0;
+    border: 1px solid #cfcfcf;
+    font-size: 12pt !important;
+    min-height: 34px;
+    padding: 0 15px; }
+    span.select2-container .select2-selection--single .select2-selection__rendered {
+      padding: 0;
+      line-height: 32px; }
+    span.select2-container .select2-selection--single .select2-selection__arrow {
+      background-color: #fff;
+      content: "";
+      background-repeat: no-repeat;
+      background-image: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/arrow-down.svg");
+      background-size: 16px 16px;
+      background-position: right 8px center;
+      border-radius: 0;
+      width: 32px;
+      height: 32px; }
+      span.select2-container .select2-selection--single .select2-selection__arrow b {
+        display: none; }
 
 .container .shopping-cart {
   top: initial;
