@@ -40,6 +40,7 @@
 @*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
     <div>
+
         @* **** LISTE **** *@
         <div v-if="$root.viewType == 'listView'" style="padding: 10px 0px" class="row">
 
@@ -182,22 +183,23 @@
         </div>
 
         @* *** GALLERI *** *@
-        <div v-if="$root.viewType == 'galleryView'" class="search-results-gallery-image layoutblock">
-            <div class="block shortcutpageteaserblock size-4 col-sm-4">
-                <div class="teaser-with-background-image">
-                    <a v-bind:href="readMoreUrl">
-                        <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
-                            <div class="teaser-overlay">
-                                <div class="teaser-caption">
-                                    <div class="teaser-heading">{{resultItem.Title}}</div>
+        <div v-if="$root.viewType == 'galleryView'" class="resultItemRowGallery">
+            <div class="search-results-gallery-image layoutblock">
+                <div class="block shortcutpageteaserblock size-4 col-sm-4">
+                    <div class="teaser-with-background-image">
+                        <a v-bind:href="readMoreUrl">
+                            <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
+                                <div class="teaser-overlay">
+                                    <div class="teaser-caption">
+                                        <div class="teaser-heading">{{resultItem.Title}}</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-
         <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
 
     </div>
@@ -212,33 +214,33 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
+                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                     else
                     {
-                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
+                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
                 }
             </ul>
         </div>
@@ -271,33 +273,33 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
+                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
+                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                     else
                     {
-                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
+                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
+                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
                 }
             </ul>
         </div>
@@ -338,7 +340,6 @@
                     <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
                         <div class="resultItemRowTitle">
                             <p>
-                                <span class="expand-arrow-conatiner"></span>
                                 <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
                                     Tittel<span class="orderby-indicator"></span>
                                 </a>
@@ -387,7 +388,7 @@
         if (item.ShowMaplink() || item.ShowServiceMaplink())
         {
             @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                }
+                    }
     }
 </script>
 

@@ -43,7 +43,7 @@
 
 @*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
-    <div class="search-results">
+    <div>
         @* **** LISTE **** *@
         <div v-if="$root.viewType == 'listView'" style="padding: 10px 0px;" class="row">
 
@@ -183,18 +183,20 @@
         </div>
 
         @* *** GALLERI *** *@
-        <div v-if="$root.viewType == 'galleryView'" class="search-results-gallery-image layoutblock" v-bind:style="{backgroundColor: backgroundColor}">
-            <div class="block shortcutpageteaserblock size-4 col-sm-4">
-                <div class="teaser-with-background-image">
-                    <a v-bind:href="readMoreUrl">
-                        <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
-                            <div class="teaser-overlay">
-                                <div class="teaser-caption">
-                                    <div class="teaser-heading">{{resultItem.Title}}</div>
+        <div v-if="$root.viewType == 'galleryView'" class="resultItemRowGallery">
+            <div class="search-results-gallery-image layoutblock" v-bind:style="{backgroundColor: backgroundColor}">
+                <div class="block shortcutpageteaserblock size-4 col-sm-4">
+                    <div class="teaser-with-background-image">
+                        <a v-bind:href="readMoreUrl">
+                            <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
+                                <div class="teaser-overlay">
+                                    <div class="teaser-caption">
+                                        <div class="teaser-heading">{{resultItem.Title}}</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -337,11 +339,11 @@
             <div>
                 <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
                     <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
-                            <p>
-                                <a href="@Url.Action("Index", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
-                                    Tittel<span class="orderby-indicator"></span>
-                                </a>
-                            </p>
+                        <p>
+                            <a href="@Url.Action("Index", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
+                                Tittel<span class="orderby-indicator"></span>
+                            </a>
+                        </p>
                     </div>
                     <div class="col-sm-2"><p>Type</p></div>
                     <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">

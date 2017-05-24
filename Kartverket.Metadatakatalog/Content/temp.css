@@ -26,6 +26,10 @@
             bottom: 0;
         }
 
+.resultItemRowGallery {
+    margin: 15px 0 10px -15px;
+}
+
 .resultItemRow {
     padding: 10px 0;
 }
@@ -61,3 +65,7 @@
 
 .search-result-navigation .save-as-menu .save-as-dropdown .custom-select {
       width: 186px; }
+
+.teaser-with-background-image .teaser-heading {
+    font-size: 14pt;
+}

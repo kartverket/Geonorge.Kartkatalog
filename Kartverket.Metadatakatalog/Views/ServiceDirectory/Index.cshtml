@@ -43,7 +43,7 @@
 
 @*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
-    <div class="search-results">
+    <div>
         @* **** LISTE **** *@
         <div v-if="$root.viewType == 'listView'" v-bind:style="{backgroundColor: backgroundColor}" style="padding: 10px 0px;" class="row">
 
@@ -150,28 +150,30 @@
         </div>
 
         @* *** GALLERI *** *@
-        <div v-if="$root.viewType == 'galleryView'" class="search-results-gallery-image layoutblock">
-            <div class="block shortcutpageteaserblock size-4 col-sm-4">
-                <div class="teaser-with-background-image">
-                    <a v-bind:href="readMoreUrl">
-                        <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
-                            <div class="teaser-overlay">
-                                <div class="teaser-caption">
-                                    <div class="teaser-heading">{{resultItem.Title}}</div>
+        <div v-if="$root.viewType == 'galleryView'" class="resultItemRowGallery">
+            <div class="search-results-gallery-image layoutblock">
+                <div class="block shortcutpageteaserblock size-4 col-sm-4">
+                    <div class="teaser-with-background-image">
+                        <a v-bind:href="readMoreUrl">
+                            <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
+                                <div class="teaser-overlay">
+                                    <div class="teaser-caption">
+                                        <div class="teaser-heading">{{resultItem.Title}}</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
+            <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
 
-        <div v-if="$root.viewType == 'tableView'" v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
+            <div v-if="$root.viewType == 'tableView'" v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
 
+            </div>
         </div>
-    </div>
 
 </script>
 
