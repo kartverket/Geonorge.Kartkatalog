@@ -69,3 +69,7 @@
 .teaser-with-background-image .teaser-heading {
     font-size: 14pt;
 }
+
+.resultItemRowList {
+    padding: 20px 0;
+}
