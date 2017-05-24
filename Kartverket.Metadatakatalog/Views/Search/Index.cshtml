@@ -39,7 +39,7 @@
 
 @*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
-    <div class="search-results">
+    <div>
         @* **** LISTE **** *@
         <div v-if="$root.viewType == 'listView'" style="padding: 10px 0px" class="row">
 
@@ -212,33 +212,33 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
+                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
+                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
                 }
             </ul>
         </div>
@@ -271,47 +271,37 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
+                <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
+                <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
+                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
                 }
             </ul>
         </div>
     </div>
-    @*<div class="col-md-3">
-        Velg visningsform:
-        <div class="custom-select">
-            <select id="layoutSelect" onchange="SetSelectedViewType(this.value)" class="form-control">
-                <option value="tableView" id="button-tableView">Tabell</option>
-                <option value="listView" id="button-listView">Liste</option>
-                <option value="galleryView" id="button-galleryView">Galleri</option>
-            </select>
-        </div>
-    </div>*@
     <div class="col-md-4 pull-right">
         <div class="save-as-menu pull-right">
             <label>Lagre som:</label>
@@ -346,11 +336,14 @@
             <div>
                 <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
                     <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
-                        <p>
-                            <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
-                                Tittel<span class="orderby-indicator"></span>
-                            </a>
-                        </p>
+                        <div class="resultItemRowTitle">
+                            <p>
+                                <span class="expand-arrow-conatiner"></span>
+                                <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
+                                    Tittel<span class="orderby-indicator"></span>
+                                </a>
+                            </p>
+                        </div>
                     </div>
                     <div class="col-sm-2"><p>Type</p></div>
                     <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
@@ -506,41 +499,35 @@
             $('#feedback-alert').show();
         }
 
-            function SetSelectedViewType(type) {
-                localStorage.setItem("layout", type);
-                location.reload();
-            }
-
-        $(document).ready(function() {
+        $(document).ready(function () {
             $("#orderby").change(
-                function() {
-                    location.href = $(this).val();
-                }
-            );
+                 function () {
+                     location.href = $(this).val();
+                 }
+             );
         });
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             @if (Html.DownloadServiceEnabled())
             {
-                <text>
-                    if (localStorage.getItem("orderItems") != null) {
-                        var storedOrderItems = JSON.parse(localStorage["orderItems"]);
-                        var orderitemCount = storedOrderItems.length;
-                        if (orderitemCount > 0) {
-                            $('#orderitem-count').text(orderitemCount);
-                            $('#orderitem-count-text').text(' datasett');
-                            updateAllCartButtons(storedOrderItems);
-                        } else {
-                            $('#orderitem-count').text('');
-                            $('#orderitem-count-text').text('Kurven er tom');
-                        }
-                    } else {
-                        $('#orderitem-count').text('');
-                        $('#orderitem-count-text').text('Kurven er tom');
-                    }
-                </text>
+            <text>
+            if (localStorage.getItem("orderItems") != null) {
+                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+                var orderitemCount = storedOrderItems.length;
+                if (orderitemCount > 0) {
+                    $('#orderitem-count').text(orderitemCount);
+                    $('#orderitem-count-text').text(' datasett');
+                    updateAllCartButtons(storedOrderItems);
+                } else {
+                    $('#orderitem-count').text('');
+                    $('#orderitem-count-text').text('Kurven er tom');
+                }
+            } else {
+                $('#orderitem-count').text('');
+                $('#orderitem-count-text').text('Kurven er tom');
+            }
+            </text>
             }
         });
-
     </script>
 }
