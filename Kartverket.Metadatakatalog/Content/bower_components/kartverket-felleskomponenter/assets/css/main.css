@@ -1776,6 +1776,10 @@ aside ul li,
 .help-text-toggle,
 .panel-default > .panel-heading .help-text-toggle {
   background-color: #3867C8;
+  width: 19px;
+  height: 19px;
+  line-height: 13px;
+  margin-top: -2px;
   -moz-transition: all 0.35s linear 0s;
   -o-transition: all 0.35s linear 0s;
   -webkit-transition: all 0.35s linear 0s;
