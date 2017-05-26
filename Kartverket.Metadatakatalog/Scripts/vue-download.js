@@ -339,6 +339,17 @@ var OrderLine = {
         return data;
     },
     computed: {
+        hasAreas: function () {
+            if (this.capabilities.supportsPolygonSelection) {
+                return true;
+            }
+            for (var prop in this.availableAreas) {
+                if (this.availableAreas.hasOwnProperty(prop)) {
+                    return true;
+                }
+            }
+            return false;
+        },
         hasErrors: function () {
             var hasErrors = false;
             if (this.orderLineErrors !== undefined && Object.keys(this.orderLineErrors).length) {
