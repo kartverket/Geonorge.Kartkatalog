@@ -92,5 +92,9 @@ namespace Kartverket.Metadatakatalog.Helpers
             }
         }
 
+        public static string HierarchyLevelLabel(string hierarchyLevelLabelText)
+        {
+            return "label-" + hierarchyLevelLabelText.ToLower();
+        }
     }
 }

@@ -448,6 +448,18 @@ namespace Kartverket.Metadatakatalog.Models
             return routeValues;
         }
 
+        public string HierarchyLevelTranslated()
+        {
+            if (IsDataset()) return "Datasett";
+            if (IsServiceLayer()) return "Tjenestelag";
+            if (IsService()) return "Tjeneste";
+            if (IsApplication()) return "Applikasjon";
+            if (IsDatasetSeries()) return "Datasettserie";
+            if (IsDatasetBundle()) return "Datapakke";
+
+            return HierarchyLevel;
+        }
+
     }
 
     public class BoundingBox
