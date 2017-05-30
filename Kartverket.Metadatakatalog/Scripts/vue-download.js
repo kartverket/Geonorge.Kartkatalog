@@ -962,7 +962,7 @@ var mainVueModel = new Vue({
                     var apiUrl = (metadata.distributionUrl !== undefined) ? metadata.distributionUrl : defaultUrl;
                     var capabilities = getJsonData(apiUrl + val);
                     if (capabilities == "error" && metadata !== "") {
-                        this.removeOrderLine(metadata.uuid);
+                        this.removeOrderLine(metadata.uuid, true);
                     }
                     else if (capabilities !== "") {
                         orderLines[key] = {
@@ -1503,10 +1503,11 @@ var mainVueModel = new Vue({
             updateShoppingCart();
             updateShoppingCartCookie();
         },
-        removeOrderLine: function (orderLineUuid) {
+        removeOrderLine: function (orderLineUuid, triggerRequestUpdate) {
             for (property in this.masterOrderLine) {
                 if (this.masterOrderLine[property][orderLineUuid] !== undefined) {
                     delete this.masterOrderLine[property][orderLineUuid];
+
                 }
             }
 
@@ -1517,6 +1518,9 @@ var mainVueModel = new Vue({
             }.bind(this));
 
             this.removeFromLocalStorage(orderLineUuid);
+            if (triggerRequestUpdate) {
+                this.updateOrderRequests();
+            }
         },
         removeAllOrderLines: function () {
             var orderLineUuids = [];
@@ -1525,10 +1529,11 @@ var mainVueModel = new Vue({
                     orderLineUuids.push(orderLine.metadata.uuid)
                 });
                 orderLineUuids.forEach(function (orderLineUuid) {
-                    this.removeOrderLine(orderLineUuid);
+                    this.removeOrderLine(orderLineUuid, false);
                 }.bind(this));
             }
             $('#remove-all-items-modal').modal('hide');
+            this.updateOrderRequests();
         },
 
         orderItemHasCoordinates: function (orderItem) {
