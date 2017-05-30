@@ -1776,24 +1776,7 @@ var mainVueModel = new Vue({
 
             // Autoselect projections
             if (selectedMasterOrderLineValues.masterSelectedProjections !== null && selectedMasterOrderLineValues.masterSelectedProjections.length) {
-                /*var masterSelectedProjections = [];
-
-                selectedMasterOrderLineValues.masterSelectedProjections.forEach(function (masterSelectedProjection) {
-                    var isAvailable = false;
-                    this.masterOrderLine.masterAvailableProjections.forEach(function (masterAvailableProjection) {
-                        if (masterSelectedProjection.code == masterAvailableProjection.code) {
-                            isAvailable = true;
-                        }
-                        if (isAvailable) {
-                            masterSelectedProjections.push(masterSelectedProjection);
-                        }
-                    });
-                }.bind(this));
-
-                this.masterOrderLine.masterSelectedProjections = masterSelectedProjections;*/
-
                 this.masterOrderLine.masterSelectedProjections = selectedMasterOrderLineValues.masterSelectedProjections;
-
             }
 
             // Autoselect formats
