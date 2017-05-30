@@ -962,7 +962,7 @@ var mainVueModel = new Vue({
                     var apiUrl = (metadata.distributionUrl !== undefined) ? metadata.distributionUrl : defaultUrl;
                     var capabilities = getJsonData(apiUrl + val);
                     if (capabilities == "error" && metadata !== "") {
-                        this.removeOrderLine(metadata.uuid, true);
+                        this.removeOrderLine(metadata.uuid, false);
                     }
                     else if (capabilities !== "") {
                         orderLines[key] = {
@@ -1503,7 +1503,7 @@ var mainVueModel = new Vue({
             updateShoppingCart();
             updateShoppingCartCookie();
         },
-        removeOrderLine: function (orderLineUuid, triggerRequestUpdate) {
+        removeOrderLine: function (orderLineUuid, insideLoop) {
             for (property in this.masterOrderLine) {
                 if (this.masterOrderLine[property][orderLineUuid] !== undefined) {
                     delete this.masterOrderLine[property][orderLineUuid];
@@ -1518,8 +1518,10 @@ var mainVueModel = new Vue({
             }.bind(this));
 
             this.removeFromLocalStorage(orderLineUuid);
-            if (triggerRequestUpdate) {
+            if (!insideLoop) {
                 this.updateOrderRequests();
+                this.addSelectedOrderLineValuesToLocalStorage();
+                this.addSelectedMasterOrderLineValuesToLocalStorage();
             }
         },
         removeAllOrderLines: function () {
@@ -1529,11 +1531,13 @@ var mainVueModel = new Vue({
                     orderLineUuids.push(orderLine.metadata.uuid)
                 });
                 orderLineUuids.forEach(function (orderLineUuid) {
-                    this.removeOrderLine(orderLineUuid, false);
+                    this.removeOrderLine(orderLineUuid, true);
                 }.bind(this));
             }
             $('#remove-all-items-modal').modal('hide');
             this.updateOrderRequests();
+            this.addSelectedOrderLineValuesToLocalStorage();
+            this.addSelectedMasterOrderLineValuesToLocalStorage();
         },
 
         orderItemHasCoordinates: function (orderItem) {

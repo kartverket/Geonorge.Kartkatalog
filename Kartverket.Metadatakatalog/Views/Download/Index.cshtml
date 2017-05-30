@@ -141,7 +141,7 @@
                 </span>
             </span>
             <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom" title="Gå til datasett" class="btn"><span class="fa fa-home"></span></a>
-            <span v-on:click="$root.removeOrderLine(metadata.uuid, true)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
+            <span v-on:click="$root.removeOrderLine(metadata.uuid, false)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
         </div>
         <div class="clearfix"></div>
         <div v-show="expanded">
