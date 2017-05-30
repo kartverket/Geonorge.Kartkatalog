@@ -954,6 +954,7 @@ $(document).on('blur', '.custom-select-list-input', function() {
     var inputElement = this;
     var customSelectListElement = $(this).closest('.custom-select-list');
     var dropdownElement = customSelectListElement.find('.custom-select-list-dropdown');
+    $(this).val('');
     dropdownElement.addClass("transparent");
     setTimeout(function() {
         if (inputElement !== document.activeElement) {
