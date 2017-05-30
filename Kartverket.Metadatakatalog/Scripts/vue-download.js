@@ -365,7 +365,11 @@ var OrderLine = {
             var numberOfErrors = 0;
             if (this.orderLineErrors !== undefined && Object.keys(this.orderLineErrors).length) {
                 for (errorType in this.orderLineErrors) {
-                    numberOfErrors += this.orderLineErrors[errorType].length;
+                    if (errorType == 'area' && this.orderLineErrors[errorType].length) {
+                        return 3;
+                    } else if (this.orderLineErrors[errorType].length) {
+                        numberOfErrors++;
+                    }
                 }
             }
             return numberOfErrors;
