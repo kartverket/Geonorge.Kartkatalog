@@ -261,7 +261,7 @@
                     string addToCartUrl = "";
                     string addToCartClass = "add-to-cart-btn";
                     string baseUrl = Request.Url.AbsoluteUri;
-                    baseUrl.Replace("http://", "https://");
+                    baseUrl = baseUrl.Replace("http://", "https://");
                     if (item.ShowDownloadService())
                     {
                         if (item.IsRestricted || item.IsOffline)

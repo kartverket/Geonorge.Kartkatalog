@@ -129,7 +129,7 @@ if (contact != null)
             string addToCartUrl = "";
             string addToCartClass = "add-to-cart-btn";
             string baseUrl = Request.Url.AbsoluteUri;
-            baseUrl.Replace("http://", "https://");
+            baseUrl = baseUrl.Replace("http://", "https://");
 
             if (Model.IsRestricted() || Model.IsOffline())
             {
@@ -512,7 +512,7 @@ if (contact != null)
                                                     string addToCartUrl = "";
                                                     string addToCartClass = "add-to-cart-btn";
                                                     string baseUrl = Request.Url.AbsoluteUri;
-                                                    baseUrl.Replace("http://", "https://");
+                                                    baseUrl = baseUrl.Replace("http://", "https://");
 
                                                     if (relatedContent.IsRestricted() || relatedContent.IsOffline())
                                                     {
