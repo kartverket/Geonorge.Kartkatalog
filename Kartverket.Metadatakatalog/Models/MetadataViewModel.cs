@@ -101,6 +101,15 @@ namespace Kartverket.Metadatakatalog.Models
         public string ServiceWfsDistributionUrlForDataset { get; set; }
         public string ServiceDistributionAccessConstraint { get; set; }
         public string ServiceWfsDistributionAccessConstraint { get; set; }
+        public bool AccessIsOpendata { get; set; }
+        public bool AccessIsRestricted { get; set; }
+        public bool AccessIsProtected { get; set; }
+        public bool CanShowMapUrl { get; set; }
+        public bool CanShowDownloadService { get; set; }
+        public bool CanShowDownloadUrl { get; set; }
+
+
+
 
         public SeoUrl CreateSeoUrl()
         {
@@ -115,7 +124,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public String MapUrl()
         {
-            if (HierarchyLevel == "service" || HierarchyLevel == "servicelayer")
+            if (IsService() || IsServiceLayer())
             {
                 if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:WMS")))
                 {
@@ -148,7 +157,7 @@ namespace Kartverket.Metadatakatalog.Models
         {
             string url = "";
 
-            if (HierarchyLevel == "dataset")
+            if (IsDataset())
             {
                 if (!string.IsNullOrWhiteSpace(ServiceDistributionProtocolForDataset) && ServiceDistributionProtocolForDataset.Contains(("OGC:WMS")))
                 {
@@ -187,7 +196,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowDownloadLink()
         {
-            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("WWW:DOWNLOAD") || DistributionDetails.Protocol.Contains("GEONORGE:FILEDOWNLOAD")) && (HierarchyLevel == "dataset" || HierarchyLevel == "series")) return true;
+            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("WWW:DOWNLOAD") || DistributionDetails.Protocol.Contains("GEONORGE:FILEDOWNLOAD")) && (IsDataset() || IsDatasetSeries())) return true;
             else return false;
         }
 
@@ -204,7 +213,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowMapLink()
         {
-            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("OGC:WMS") || DistributionDetails.Protocol.Contains("OGC:WFS")) && (HierarchyLevel == "service" || HierarchyLevel == "servicelayer")) return true;
+            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("OGC:WMS") || DistributionDetails.Protocol.Contains("OGC:WFS")) && (IsService() || IsServiceLayer())) return true;
             else return false;
         }
 
@@ -448,7 +457,7 @@ namespace Kartverket.Metadatakatalog.Models
             return routeValues;
         }
 
-        public string HierarchyLevelTranslated()
+        public string GetHierarchyLevelTranslated()
         {
             if (IsDataset()) return "Datasett";
             if (IsServiceLayer()) return "Tjenestelag";

@@ -1,5 +1,10 @@
 ﻿@{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
+@* Template for Underliggende distribusjoner *@
+@Html.Partial("_UnderlayingDistributions")
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 <script>
     //Component
     var ResultItemComponent = {
@@ -11,7 +16,8 @@
                 underlayingDistributions: {},
                 underlayingDistributionsRequested: false,
                 backgroundColor: "#fff",
-                addedToCart: false
+                addedToCart: false,
+                itemType: this.resultItem.type,
             };
             return data;
         },
@@ -27,13 +33,13 @@
                     className: "",
                     title: ""
                 };
-                if (this.resultItem.IsRestricted) {
+                if (this.resultItem.IsRestricted || this.resultItem.AccessIsRestricted) {
                     openData.className = "custom-icon custom-icon-hengelaas-closed-yellow";
                     openData.title = "Tilgangsbegrensede data";
-                } else if (this.resultItem.IsOffline) {
+                } else if (this.resultItem.IsOffline || this.resultItem.AccessIsProtected) {
                     openData.className = "custom-icon custom-icon-hengelaas-closed-red";
                     openData.title = "Skjermede data";
-                } else if (this.resultItem.IsOpendata) {
+                } else if (this.resultItem.IsOpendata || this.resultItem.AccessIsOpendata) {
                     openData.className = "custom-icon custom-icon-hengelaas-open-green";
                     openData.title = "Åpne data";
                 }
