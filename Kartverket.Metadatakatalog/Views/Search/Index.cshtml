@@ -277,14 +277,21 @@
                                 addToCartEventParamater = "&addtocart_event_id=addToCart-" + item.Uuid;
                             }
 
+                            string urlProtocol = HttpContext.Current.Request.Url.Scheme.ToLower();
+
+                            if (urlProtocol == "https" && baseUrl.Contains("http://"))
+                            {
+                                baseUrl.Replace("http://", "https://");
+                            }
+
                             string downloadSignInUrl = Html.DownloadUrl()
                                                      + "AuthServices/SignIn?ReturnUrl="
                                                      + Url.Encode(baseUrl)
                                                      + Url.Encode(addToCartEventParamater);
 
                             addToCartUrl = Html.KartkatalogenUrl()
-                                                                 + "AuthServices/SignIn?ReturnUrl="
-                                                                 + Url.Encode(downloadSignInUrl);
+                                         + "AuthServices/SignIn?ReturnUrl="
+                                         + Url.Encode(downloadSignInUrl);
 
 
                             addToCartClass = "add-to-cart-btn prevent-action";
