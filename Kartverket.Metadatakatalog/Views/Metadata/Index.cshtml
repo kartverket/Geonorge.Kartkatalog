@@ -128,10 +128,18 @@ if (contact != null)
 
             string addToCartUrl = "";
             string addToCartClass = "add-to-cart-btn";
+            string baseUrl = Request.Url.AbsoluteUri;
+            baseUrl = baseUrl.Replace("http://", "https://");
 
             if (Model.IsRestricted() || Model.IsOffline())
             {
+                if (baseUrl.Contains("addtocart_event_id"))
+                {
+                    baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
+                }
+
                 string addToCartEventParamater = "?addtocart_event_id=addToCart-" + Model.Uuid;
+
                 if (Request.Url.AbsoluteUri.Contains("?"))
                 {
                     addToCartEventParamater = "&addtocart_event_id=addToCart-" + Model.Uuid;
@@ -139,7 +147,7 @@ if (contact != null)
 
                 string downloadSignInUrl = Html.DownloadUrl()
                                          + "AuthServices/SignIn?ReturnUrl="
-                                         + Url.Encode(Request.Url.AbsoluteUri)
+                                         + Url.Encode(baseUrl)
                                          + Url.Encode(addToCartEventParamater);
 
                 addToCartUrl = Html.KartkatalogenUrl()
@@ -503,17 +511,27 @@ if (contact != null)
 
                                                     string addToCartUrl = "";
                                                     string addToCartClass = "add-to-cart-btn";
+                                                    string baseUrl = Request.Url.AbsoluteUri;
+                                                    baseUrl = baseUrl.Replace("http://", "https://");
+
                                                     if (relatedContent.IsRestricted() || relatedContent.IsOffline())
                                                     {
+                                                        if (baseUrl.Contains("addtocart_event_id"))
+                                                        {
+                                                            baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
+                                                        }
+
                                                         string addToCartEventParamater = "?addtocart_event_id=addToCart-" + relatedContent.Uuid;
+
                                                         if (Request.Url.AbsoluteUri.Contains("?"))
                                                         {
                                                             addToCartEventParamater = "&addtocart_event_id=addToCart-" + relatedContent.Uuid;
                                                         }
 
+
                                                         string downloadSignInUrl = Html.DownloadUrl()
                                                                                  + "AuthServices/SignIn?ReturnUrl="
-                                                                                 + Url.Encode(Request.Url.AbsoluteUri)
+                                                                                 + Url.Encode(baseUrl)
                                                                                  + Url.Encode(addToCartEventParamater);
 
                                                         addToCartUrl = Html.KartkatalogenUrl()

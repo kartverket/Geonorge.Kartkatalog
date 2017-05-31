@@ -241,19 +241,28 @@
                 {
                     string addToCartUrl = "";
                     string addToCartClass = "add-to-cart-btn";
+                    string baseUrl = Request.Url.AbsoluteUri;
+                    baseUrl = baseUrl.Replace("http://", "https://");
                     if (item.ShowDownloadService())
                     {
                         if (item.IsRestricted || item.IsOffline)
                         {
-                            string addToCartEventParamater = "?addtocart_event_id=addToCart-" + item.Uuid;
-                            if (Request.Url.AbsoluteUri.Contains("?"))
+                            if (baseUrl.Contains("addtocart_event_id"))
                             {
+                                baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
+                            }
+
+                            string addToCartEventParamater = "?addtocart_event_id=addToCart-" + item.Uuid;
+                            if (baseUrl.Contains("?"))
+                            {
+
                                 addToCartEventParamater = "&addtocart_event_id=addToCart-" + item.Uuid;
                             }
 
+
                             string downloadSignInUrl = Html.DownloadUrl()
                                                      + "AuthServices/SignIn?ReturnUrl="
-                                                     + Url.Encode(Request.Url.AbsoluteUri)
+                                                     + Url.Encode(baseUrl)
                                                      + Url.Encode(addToCartEventParamater);
 
                             addToCartUrl = Html.KartkatalogenUrl()

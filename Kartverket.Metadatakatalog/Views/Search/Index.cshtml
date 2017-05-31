@@ -261,6 +261,7 @@
                     string addToCartUrl = "";
                     string addToCartClass = "add-to-cart-btn";
                     string baseUrl = Request.Url.AbsoluteUri;
+                    baseUrl = baseUrl.Replace("http://", "https://");
                     if (item.ShowDownloadService())
                     {
                         if (item.IsRestricted || item.IsOffline)
@@ -283,8 +284,8 @@
                                                      + Url.Encode(addToCartEventParamater);
 
                             addToCartUrl = Html.KartkatalogenUrl()
-                                                                 + "AuthServices/SignIn?ReturnUrl="
-                                                                 + Url.Encode(downloadSignInUrl);
+                                         + "AuthServices/SignIn?ReturnUrl="
+                                         + Url.Encode(downloadSignInUrl);
 
 
                             addToCartClass = "add-to-cart-btn prevent-action";
