@@ -279,7 +279,7 @@
 
                             string urlProtocol = HttpContext.Current.Request.Url.Scheme.ToLower();
 
-                            if (urlProtocol == "https" && baseUrl.Contains("http://"))
+                            if (baseUrl.Contains("http://"))
                             {
                                 baseUrl.Replace("http://", "https://");
                             }
