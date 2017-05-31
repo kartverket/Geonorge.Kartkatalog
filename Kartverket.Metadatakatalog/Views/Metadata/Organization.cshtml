@@ -242,6 +242,7 @@
                     string addToCartUrl = "";
                     string addToCartClass = "add-to-cart-btn";
                     string baseUrl = Request.Url.AbsoluteUri;
+                    baseUrl.Replace("http://", "https://");
                     if (item.ShowDownloadService())
                     {
                         if (item.IsRestricted || item.IsOffline)
@@ -258,12 +259,6 @@
                                 addToCartEventParamater = "&addtocart_event_id=addToCart-" + item.Uuid;
                             }
 
-                            string urlProtocol = HttpContext.Current.Request.Url.Scheme.ToLower();
-
-                            if (baseUrl.Contains("http://"))
-                            {
-                                baseUrl.Replace("http://", "https://");
-                            }
 
                             string downloadSignInUrl = Html.DownloadUrl()
                                                      + "AuthServices/SignIn?ReturnUrl="

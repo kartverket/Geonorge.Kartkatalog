@@ -129,6 +129,7 @@ if (contact != null)
             string addToCartUrl = "";
             string addToCartClass = "add-to-cart-btn";
             string baseUrl = Request.Url.AbsoluteUri;
+            baseUrl.Replace("http://", "https://");
 
             if (Model.IsRestricted() || Model.IsOffline())
             {
@@ -142,13 +143,6 @@ if (contact != null)
                 if (Request.Url.AbsoluteUri.Contains("?"))
                 {
                     addToCartEventParamater = "&addtocart_event_id=addToCart-" + Model.Uuid;
-                }
-
-                string urlProtocol = HttpContext.Current.Request.Url.Scheme.ToLower();
-
-                if (baseUrl.Contains("http://"))
-                {
-                    baseUrl.Replace("http://", "https://");
                 }
 
                 string downloadSignInUrl = Html.DownloadUrl()
@@ -518,6 +512,8 @@ if (contact != null)
                                                     string addToCartUrl = "";
                                                     string addToCartClass = "add-to-cart-btn";
                                                     string baseUrl = Request.Url.AbsoluteUri;
+                                                    baseUrl.Replace("http://", "https://");
+
                                                     if (relatedContent.IsRestricted() || relatedContent.IsOffline())
                                                     {
                                                         if (baseUrl.Contains("addtocart_event_id"))
@@ -532,12 +528,6 @@ if (contact != null)
                                                             addToCartEventParamater = "&addtocart_event_id=addToCart-" + relatedContent.Uuid;
                                                         }
 
-                                                        string urlProtocol = HttpContext.Current.Request.Url.Scheme.ToLower();
-
-                                                        if (baseUrl.Contains("http://"))
-                                                        {
-                                                            baseUrl.Replace("http://", "https://");
-                                                        }
 
                                                         string downloadSignInUrl = Html.DownloadUrl()
                                                                                  + "AuthServices/SignIn?ReturnUrl="
