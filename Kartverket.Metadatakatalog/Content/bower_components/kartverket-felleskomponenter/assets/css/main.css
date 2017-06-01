@@ -4374,11 +4374,11 @@ a.status-icon-link:hover {
 
 .ui-datepicker .ui-datepicker-next-hover {
   right: 2px;
-  top: 2px; }
+  top: 0; }
 
 .ui-datepicker .ui-datepicker-prev-hover {
   left: 2px;
-  top: 2px; }
+  top: 0; }
 
 .ui-corner-all .ui-icon.ui-icon-circle-triangle-e,
 .ui-corner-all .ui-icon.ui-icon-circle-triangle-w {

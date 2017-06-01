@@ -141,7 +141,7 @@
                 </span>
             </span>
             <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom" title="Gå til datasett" class="btn"><span class="fa fa-home"></span></a>
-            <span v-on:click="$root.removeOrderLine(metadata.uuid)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
+            <span v-on:click="$root.removeOrderLine(metadata.uuid, false)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
         </div>
         <div class="clearfix"></div>
         <div v-show="expanded">
@@ -177,7 +177,7 @@
 
                     <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
                         <div v-show="orderLineErrors.format.length" class="help-text form-element-help-text bg-danger">
-                            <span class="custom-icon format-warning-icon"></span> Mangler støttet format for {{ orderLineErrors.format.length }} {{orderLineErrors.format.length == 1 ? "område" : "områder"}}
+                            <span class="custom-icon format-warning-icon"></span> Mangler format for {{ orderLineErrors.format.length }} {{orderLineErrors.format.length == 1 ? "område" : "områder"}}
                         </div>
                         <div v-for="orderlineError in orderLineErrors.format" class="help-text hidden form-element-help-text bg-danger">
                             {{ orderlineError }}
@@ -250,6 +250,7 @@
             <div class="orderline orderline-master">
                 <div is="masterOrderLine"
                      v-bind:all-available-areas="masterOrderLine.allAvailableAreas"
+                     v-bind:available-areas="masterOrderLine.masterAvailableAreas"
                      v-bind:available-projections="masterOrderLine.masterAvailableProjections"
                      v-bind:available-formats="masterOrderLine.masterAvailableFormats"
                      v-bind:all-selected-areas="masterOrderLine.allSelectedAreas"

@@ -92,23 +92,31 @@ if (contact != null)
 
             var addToCartUrl = "";
             var addToCartClass = "add-to-cart-btn";
+            string baseUrl = Request.Url.AbsoluteUri;
+            baseUrl = baseUrl.Replace("http://", "https://");
 
             if (Model.IsRestricted() || Model.IsOffline())
             {
+                if (baseUrl.Contains("addtocart_event_id"))
+                {
+                    baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
+                }
+
                 var addToCartEventParamater = "?addtocart_event_id=addToCart-" + Model.Uuid;
+
                 if (Request.Url.AbsoluteUri.Contains("?"))
                 {
                     addToCartEventParamater = "&addtocart_event_id=addToCart-" + Model.Uuid;
                 }
 
-                var downloadSignInUrl = Html.DownloadUrl()
-                                        + "AuthServices/SignIn?ReturnUrl="
-                                        + Url.Encode(Request.Url.AbsoluteUri)
-                                        + Url.Encode(addToCartEventParamater);
-
+                string downloadSignInUrl = Html.DownloadUrl()
+                    + "AuthServices/SignIn?ReturnUrl="
+                    + Url.Encode(baseUrl)
+                    + Url.Encode(addToCartEventParamater);
+                
                 addToCartUrl = Html.KartkatalogenUrl()
-                               + "AuthServices/SignIn?ReturnUrl="
-                               + Url.Encode(downloadSignInUrl);
+                     + "AuthServices/SignIn?ReturnUrl="
+                     + Url.Encode(downloadSignInUrl);
 
 
                 addToCartClass = "add-to-cart-btn prevent-action";
