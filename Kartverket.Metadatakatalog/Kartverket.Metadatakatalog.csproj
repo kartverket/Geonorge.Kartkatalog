@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -25,7 +24,6 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
-    <TypeScriptToolsVersion>1.7</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -352,6 +350,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Content\bower_components\axios\dist\axios.js" />
+    <Content Include="Content\bower_components\axios\dist\axios.min.js" />
+    <Content Include="Content\bower_components\clipboard\dist\clipboard.js" />
+    <Content Include="Content\bower_components\clipboard\dist\clipboard.min.js" />
+    <Content Include="Content\bower_components\clipboard\package.js" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\chosen-sprite%402x.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\chosen-sprite.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -1021,6 +1024,22 @@
     <Content Include="Content\bower_components\vue\test\weex\.eslintrc" />
     <Content Include="Content\bower_components\vue\test\weex\jasmine.json" />
     <Content Include="Content\bower_components\vue\yarn.lock" />
+    <Content Include="Content\bower_components\axios\.bower.json" />
+    <Content Include="Content\bower_components\axios\bower.json" />
+    <Content Include="Content\bower_components\axios\CHANGELOG.md" />
+    <Content Include="Content\bower_components\axios\CODE_OF_CONDUCT.md" />
+    <Content Include="Content\bower_components\axios\COLLABORATOR_GUIDE.md" />
+    <Content Include="Content\bower_components\axios\dist\axios.map" />
+    <Content Include="Content\bower_components\axios\dist\axios.min.map" />
+    <Content Include="Content\bower_components\axios\ECOSYSTEM.md" />
+    <Content Include="Content\bower_components\axios\LICENSE" />
+    <Content Include="Content\bower_components\axios\README.md" />
+    <Content Include="Content\bower_components\axios\UPGRADE_GUIDE.md" />
+    <Content Include="Content\bower_components\clipboard\.bower.json" />
+    <Content Include="Content\bower_components\clipboard\bower.json" />
+    <Content Include="Content\bower_components\clipboard\contributing.md" />
+    <Content Include="Content\bower_components\clipboard\package.json" />
+    <Content Include="Content\bower_components\clipboard\readme.md" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
@@ -1128,7 +1147,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
