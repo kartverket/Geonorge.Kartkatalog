@@ -357,7 +357,7 @@ if (contact != null)
                         @*Last ned*@
                         <div class="col-xs-1">
                             <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                               v-bind:href='resultItem.AddToCartUrl'
+                               v-bind:href='[itemAddToCart.href ? itemAddToCart.href : "" ]'
                                data-toggle='tooltip'
                                data-placement='bottom'
                                onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
