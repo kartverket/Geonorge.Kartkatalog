@@ -39,8 +39,7 @@ function getServiceStatus(uuid, id) {
             var statusOK = result.connect.vurdering != "no";
             var numLayers = parseInt(result.numLayers.svar);
             console.log("numLayers:" + numLayers);
-            if (!statusOK)
-            {
+            if (!statusOK) {
                 $('#mapmacro-' + id + ', #mapmacro-button-' + id).attr("class", "custom-icon custom-icon-kartmarkoer-unavailable");
                 $('#mapmacrolink-' + id + ', #mapmacrolink-button-' + id).attr("title", "Tjenesten er utilgjengelig for øyeblikket");
                 $('#mapmacrolink-' + id + ', #mapmacrolink-button-' + id).removeAttr("href");
@@ -58,19 +57,6 @@ function getServiceStatus(uuid, id) {
         }
     });
 };
-
-
-
-function getParameterByName(name) {
-    console.log(location.search);
-    var url = location.search.toLowerCase();
-    console.log(url);
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-
-        results = regex.exec(url);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
 
 
 
