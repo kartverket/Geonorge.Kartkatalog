@@ -1,4 +1,7 @@
-﻿@{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
+﻿@using Kartverket.Metadatakatalog.Helpers
+
+
+@{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
 @* Template for Underliggende distribusjoner *@
 @Html.Partial("_UnderlayingDistributions")
@@ -76,6 +79,8 @@
                 }
                 return mapLink;
             },
+            
+            
             itemAddToCart: function () {
                 var itemAddToCart = {
                     buttonClass: "btn btn-default add-to-cart-btn",
@@ -83,6 +88,32 @@
 
                 if (this.resultItem.IsRestricted || this.resultItem.IsOffline) {
                     itemAddToCart.buttonClass += " add-to-cart-btn prevent-action";
+                }
+                if (this.resultItem.IsRestricted) {
+                    @{
+                        string baseUrl = Request.Url.AbsoluteUri;
+                        baseUrl = baseUrl.Replace("http://", "https://");
+                        if (baseUrl.Contains("addtocart_event_id"))
+                        {
+                            baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
+                        }
+                    }
+                    var baseUrl = '@baseUrl';
+                    var addToCartEventParamater = "?addtocart_event_id=addToCart-" + this.resultItem.Uuid;
+
+                    if (baseUrl.indexOf("?") !== -1) {
+                        addToCartEventParamater = "&addtocart_event_id=addToCart-" + this.resultItem.Uuid;
+                    }
+
+                    var downloadSignInUrl = '@Html.DownloadUrl()'
+                   + 'AuthServices/SignIn?ReturnUrl='
+                   + encodeURIComponent(baseUrl)
+                   + encodeURIComponent(addToCartEventParamater);
+                
+                    var addToCartUrl = '@Html.KartkatalogenUrl()'
+                         + 'AuthServices/SignIn?ReturnUrl='
+                         + encodeURIComponent(downloadSignInUrl);
+                    itemAddToCart.href = addToCartUrl;
                 }
                 return itemAddToCart;
             },
