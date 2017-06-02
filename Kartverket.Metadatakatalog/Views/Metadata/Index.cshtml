@@ -1017,7 +1017,7 @@ if (keywords != null && keywords.Any())
         }
 
         $(document).ready(function() {
-            new Clipboard('.btn-copy');
+            var clipboard = new Clipboard('.btn-copy');
 
             clipboard.on('success',
                 function(e) {
