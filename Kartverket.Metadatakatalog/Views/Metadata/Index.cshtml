@@ -368,7 +368,6 @@ if (contact != null)
                                 {{resultItem.addedToCart}}
                             </a>
 
-
                             <a v-else-if="resultItem.ShowDownloadLink"
                                v-bind:href="resultItem.DownloadUrl"
                                onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
@@ -442,74 +441,6 @@ if (contact != null)
     <div class="clearfix"></div>
 </article>
 
-@* *** Relaterte data ****@
-<article class="col-md-12">
-@if (Model.Related != null)
-{
-    if (Model.Related.Count > 0)
-    {
-        <div class="row search-result-navigation">
-            <div class="col-sm-8">
-                <h3 class="article-h3">Relaterte data</h3>
-            </div>
-            <div class="col-md-4 pull-right">
-                <div class="save-as-menu pull-right" style="margin-top: 50px">
-                    <div class="no-padding-bottom save-as-dropdown">
-                        <div class="custom-select">
-                            <select onchange="additionalView(this.value)" class="form-control">
-                                <option value="csvUrl" selected="selected">CSV</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div id="saveButtons" class="no-padding-bottom save-as-buttons">
-                        <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="clearfix"></div>
-        <div class="row resultItemRowTableHeader">
-            <div v-bind:class="orderByTitle.className" class="col-sm-3" v-bind:id="orderByTitle.id">
-                <div class="resultItemRowTitle">
-                    <p>
-                        <a href="@Url.Action("Index", "Metadata" @*,Model.ParamsForOrderByTitle()*@)" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
-                            Tittel<span class="orderby-indicator"></span>
-                        </a>
-                    </p>
-                </div>
-            </div>
-            <div class="col-sm-2">
-                <p>Type</p>
-            </div>
-            <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
-                <p>
-                    <a href="@Url.Action("Index", "Search"@*, Model.ParamsForOrderByOrganization()*@)" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
-                </p>
-            </div>
-            <div class="col-sm-1">
-                <p>Åpne data</p>
-            </div>
-            <div class="col-sm-1">
-                <p>Kart</p>
-            </div>
-            <div class="col-sm-1">
-                <p>Last ned</p>
-            </div>
-            <div class="col-sm-1">
-                <p>Format</p>
-            </div>
-        </div>
-
-        <div class="menu-separator search-results-table-heading"></div>
-
-        <div v-for="item in relatedDataList" v-bind:class="tableBorder">
-            <div is="resultItem" v-bind:result-item="item"></div>
-        </div>
-        <div class="clearfix"></div>
-    }
-}
-</article>
 </div>
 
     @* *** Generell info *** *@
@@ -830,7 +761,6 @@ if (keywords != null && keywords.Any())
         var vueModel = new Vue({
             el: '#metadata',
             data: {
-                relatedData: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.Related))),
                 currentOrderByParameter: getParameterByName("orderby"),
                 viewType: "tableView",
                 columns: "",
@@ -848,7 +778,6 @@ if (keywords != null && keywords.Any())
                 },
                 tableBorder: "table-border-bottom",
                 distributionlist: [],
-                relatedDataList: [],
 
             },
             components: {
@@ -884,11 +813,8 @@ if (keywords != null && keywords.Any())
 
                 this.viewType = this.getSelectedViewType();
                 axios.get(`/api/distributions/${uuid}`).then(function(response) {
-                    this.distributionlist = response.data;
+                    this.distributionlist = this.convertDistributionList(response.data);
                 }.bind(this));
-
-                this.relatedDataList = this.getRelatedData();
-
             },
             methods: {
                 orderByExists: function() {
@@ -927,38 +853,62 @@ if (keywords != null && keywords.Any())
                     }
                     return viewType;
                 },
-                getRelatedData: function() {
-                    var relatedDataArray = new Array();
-                    var format = this.getFormat("test");
-                    this.relatedData.forEach(function(data) {
+                convertDistributionList: function(distributionList) {
+                    var distributionArray = new Array();
+                    distributionList.forEach(function(distribution) {
                         var format = "";
-                        if (data.DistributionFormat != null) {
-                            format = data.DistributionFormat.Name + " " + data.DistributionFormat.Version;
+                        if (distribution.DistributionFormat != null) {
+                            format = distribution.FormatName + " " + distribution.FormatVersion;
                         }
                         var resultItem =
                         {
-                            ShowDetailsUrl: "",
-                            AccessIsProtected: data.AccessIsProtected,
-                            AccessIsOpendata: data.AccessIsOpendata,
-                            AccessIsRestricted: data.AccessIsRestricted,
-                            CanShowDownloadService: data.CanShowDownloadService,
-                            CanShowDownloadUrl: data.CanShowDownloadUrl,
-                            CanShowMapUrl: data.CanShowMapUrl,
-                            DistributionProtocol: "",
+                            AccessIsProtected: distribution.AccessIsProtected,
+                            AccessIsOpendata: distribution.AccessIsOpendata,
+                            AccessIsRestricted: distribution.AccessIsRestricted,
+                            CanShowDownloadService: distribution.CanShowDownloadService,
+                            CanShowDownloadUrl: distribution.CanShowDownloadUrl,
+                            CanShowMapUrl: distribution.CanShowMapUrl,
+                            DistributionProtocol: distribution.DistributionProtocol,
                             FormatName: format,
-                            Organization: data.ContactOwner.Organization,
-                            Title: data.Title,
-                            Type: data.HierarchyLevel,
-                            Uuid: data.Uuid
+                            Organization: distribution.Organization,
+                            OrganizationSeoName: this.makeSeoFriendlyString(distribution.Organization),
+                            Title: distribution.Title,
+                            TitleSeo: this.makeSeoFriendlyString(distribution.Title),
+                            Type: distribution.Type,
+                            Uuid: distribution.Uuid
                         }
-                        relatedDataArray.push(resultItem);
-                    });
-                    return relatedDataArray;
+                        distributionArray.push(resultItem);
+                    }.bind(this));
+                    return distributionArray;
                 },
                 getFormat: function(distributionFormat) {
                     if (distributionFormat != null) {
                         return distributionFormat.Name + " " + distributionFormat.Version;
-                    }   
+                    };
+                },
+                makeSeoFriendlyString: function(text) {
+                    if (text != null) {
+                        text = text.toLowerCase();
+
+                        // replace & with and
+                        text = text.replace(/\&+/g, "and");
+
+                        // remove characters
+                        text = text.replace("'", "");
+
+                        // replace norwegian characters
+                        text = text.replace("å", "a").replace("æ", "ae").replace("ø", "o");
+
+                        // remove invalid characters
+                        text = text.replace(/[^a-z0-9]/g, "-");
+
+                        // remove duplicates
+                        text = text.replace(/-+/g, "-");
+
+                        // trim leading & trailing characters
+                        text = text.trim('-');
+                    }
+                    return text;
                 }
             }
 

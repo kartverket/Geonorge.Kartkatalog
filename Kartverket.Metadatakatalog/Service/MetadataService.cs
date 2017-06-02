@@ -551,6 +551,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 }
                             }
 
+
                             SearchParameters parametersRelated = new SearchParameters();
                             parametersRelated.Text = md.Uuid;
                             SearchResult searchResultRelated = _searchService.Search(parametersRelated);
@@ -562,14 +563,6 @@ namespace Kartverket.Metadatakatalog.Service
                                         ? searchResult.Items[0].ServiceDistributionUuidForDataset
                                         : null;
                             }
-
-                            md.AccessIsRestricted = md.IsRestricted();
-                            md.AccessIsOpendata = md.IsOpendata();
-                            md.AccessIsProtected = md.IsOffline();
-
-                            metadata.CanShowMapUrl = metadata.ShowMapLink();
-                            metadata.CanShowDownloadService = md.ShowDownloadService();
-                            metadata.CanShowDownloadUrl = md.ShowDownloadLink();
 
                             metadata.Related.Add(md);
                         }
@@ -641,14 +634,6 @@ namespace Kartverket.Metadatakatalog.Service
                             if (relData.ElementAtOrDefault(19) != null)
                                 md.ServiceWfsDistributionAccessConstraint = relData[19];
 
-                            md.AccessIsRestricted = md.IsRestricted();
-                            md.AccessIsOpendata = md.IsOpendata();
-                            md.AccessIsProtected = md.IsOffline();
-                            metadata.CanShowMapUrl = md.ShowMapLink();
-
-                            metadata.CanShowDownloadService = md.ShowDownloadService();
-                            metadata.CanShowDownloadUrl = md.ShowDownloadLink();
-
                             metadata.Related.Add(md);
                         }
                         catch (Exception ex)
@@ -704,14 +689,6 @@ namespace Kartverket.Metadatakatalog.Service
                                 AccessConstraints = relData[11],
                                 OtherConstraintsAccess = relData[12]
                             };
-
-                            md.AccessIsRestricted = md.IsRestricted();
-                            md.AccessIsOpendata = md.IsOpendata();
-                            md.AccessIsProtected = md.IsOffline();
-                            metadata.CanShowMapUrl = md.ShowMapLink();
-
-                            metadata.CanShowDownloadService = md.ShowDownloadService();
-                            metadata.CanShowDownloadUrl = md.ShowDownloadLink();
 
                             metadata.Related.Add(md);
                         }
@@ -771,13 +748,7 @@ namespace Kartverket.Metadatakatalog.Service
                                     OtherConstraintsAccess = relData[12]
                                 };
                             }
-                            md.AccessIsRestricted = md.IsRestricted();
-                            md.AccessIsOpendata = md.IsOpendata();
-                            md.AccessIsProtected = md.IsOffline();
-                            metadata.CanShowMapUrl = md.ShowMapLink();
 
-                            metadata.CanShowDownloadService = md.ShowDownloadService();
-                            metadata.CanShowDownloadUrl = md.ShowDownloadLink();
                             metadata.Related.Add(md);
                         }
                         catch (Exception ex)
@@ -787,16 +758,6 @@ namespace Kartverket.Metadatakatalog.Service
                 }
 
             }
-
-            metadata.AccessIsOpendata = metadata.IsOpendata();
-            metadata.AccessIsProtected = metadata.IsOffline();
-            metadata.AccessIsRestricted = metadata.IsRestricted();
-
-            metadata.CanShowMapUrl = metadata.ShowMapLink();
-
-            metadata.CanShowDownloadService = metadata.ShowDownloadService();
-            metadata.CanShowDownloadUrl = metadata.ShowDownloadLink();
-
 
             return metadata;
         }
