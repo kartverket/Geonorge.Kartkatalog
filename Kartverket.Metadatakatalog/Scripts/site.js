@@ -34,11 +34,12 @@
 
 function getServiceStatus(uuid, id) {
     $.getJSON(statusApi + "monitorApi/serviceDetail?uuid=" + uuid, function (result) {
-        console.log(result);
         try {
-            var statusOK = result.connect.vurdering != "no";
-            var numLayers = parseInt(result.numLayers.svar);
-            console.log("numLayers:" + numLayers);
+            var vurderingIsDefined = result.connect !== undefined && result.connect.vurdering !== undefined;
+            var numLayersIsDefined = result.numLayers !== undefined && result.numLayers.svar !== undefined;
+            var statusOK =  vurderingIsDefined && result.connect.vurdering != "no";
+            var numLayers = parseInt(numLayersIsDefined ? result.numLayers.svar : 0);
+            console.log(numLayers);
             if (!statusOK) {
                 $('#mapmacro-' + id + ', #mapmacro-button-' + id).attr("class", "custom-icon custom-icon-kartmarkoer-unavailable");
                 $('#mapmacrolink-' + id + ', #mapmacrolink-button-' + id).attr("title", "Tjenesten er utilgjengelig for øyeblikket");
