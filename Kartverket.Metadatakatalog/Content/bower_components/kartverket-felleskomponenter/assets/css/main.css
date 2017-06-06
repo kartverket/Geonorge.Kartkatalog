@@ -3232,6 +3232,24 @@ input[type="radio"]:checked.custom-radio.disabled:after,
 .disabled input[type="radio"]:checked.custom-radio:after {
   content: url("/Content/bower_components/kartverket-felleskomponenter/assets/images/svg/radio-checked-disabled.svg") !important; }
 
+/* 'Save as'-dropdown */
+.save-as-menu label {
+  display: block;
+  font-weight: normal;
+  margin-bottom: 0; }
+
+.save-as-menu .save-as-dropdown {
+  padding-left: 0;
+  display: inline-block; }
+  .save-as-menu .save-as-dropdown .custom-select {
+    width: 218px; }
+
+.save-as-menu .save-as-buttons {
+  padding-left: 5px;
+  text-align: right;
+  display: inline-block;
+  vertical-align: top; }
+
 .help-page h1,
 .help-page .h1 {
   font-size: 24pt;
@@ -3885,20 +3903,6 @@ header.main-header {
     position: relative;
     bottom: -5px;
     line-height: 25pt; }
-  .search-result-navigation .save-as-menu label {
-    display: block;
-    font-weight: normal;
-    margin-bottom: 0; }
-  .search-result-navigation .save-as-menu .save-as-dropdown {
-    padding-left: 0;
-    display: inline-block; }
-    .search-result-navigation .save-as-menu .save-as-dropdown .custom-select {
-      width: 218px; }
-  .search-result-navigation .save-as-menu .save-as-buttons {
-    padding-left: 5px;
-    text-align: right;
-    display: inline-block;
-    vertical-align: top; }
 
 @media (max-width: 991px) {
   .search-result-navigation .custom-select {
