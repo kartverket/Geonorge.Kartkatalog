@@ -316,7 +316,7 @@ if (contact != null)
     @Html.Partial("_resultItemRow")
     
     @*Template for a table row*@
-    <script type="text/x-template" id="resultItemRow">
+<script type="text/x-template" id="resultItemRow">
         <div>
                 <div class="resultItemRow">
                     <div class="row">
@@ -756,16 +756,15 @@ if (keywords != null && keywords.Any())
             el: '#metadata',
             data: {
                 currentOrderByParameter: getParameterByName("orderby"),
-                viewType: "tableView",
-                columns: "",
                 orderByUrl: "@Html.Raw(HttpUtility.HtmlDecode(HttpContext.Current.Request.Url.AbsoluteUri)).ToString()",
                 orderByTitle: {
+                    orderByParam: "title",
                     className: "orderby orderby-title orderby-asc",
                     id: "orderby-title-asc",
                     url: "",
                 },
-                backgroundColor: "#fff",
                 orderByOwner: {
+                    orderByParam: "organization",
                     className: "orderby orderby-organization orderby-asc",
                     id: "orderby-organization-asc",
                     url: "",
@@ -805,10 +804,12 @@ if (keywords != null && keywords.Any())
                     this.orderByOwner.className = "orderby orderby-organization orderby-asc";
                 }
 
-                this.viewType = this.getSelectedViewType();
                 axios.get(`/api/distributions/${uuid}`).then(function(response) {
                     this.distributionlist = this.convertDistributionList(response.data);
                 }.bind(this));
+
+                this.orderByTitle.url = this.getOrderByUrl(this.orderByTitle.orderByParam);
+                this.orderByOwner.url = this.getOrderByUrl(this.orderByOwner.orderByParam);
             },
             methods: {
                 orderByExists: function() {
@@ -828,25 +829,6 @@ if (keywords != null && keywords.Any())
                         }
                     }
                 },
-                view: function(type) {
-                    this.viewType = type;
-                    localStorage.setItem("layout", this.viewType);
-                    if (type == "galleryView") {
-                        this.columns = 'col-sm-4';
-                        this.tableBorder = "";
-                    } else {
-                        this.columns = "";
-                        this.tableBorder = "table-border-bottom";
-                    }
-                },
-                getSelectedViewType: function() {
-                    var viewType = "tableView";
-                    if (localStorage.getItem("layout")) {
-                        viewType = localStorage.getItem("layout");
-                        this.view(viewType);
-                    }
-                    return viewType;
-                },
                 convertDistributionList: function(distributionList) {
                     var distributionArray = new Array();
                     distributionList.forEach(function(distribution) {
@@ -856,13 +838,18 @@ if (keywords != null && keywords.Any())
                         }
                         var resultItem =
                         {
-                            AccessIsProtected: distribution.AccessIsProtected,
-                            AccessIsOpendata: distribution.AccessIsOpendata,
-                            AccessIsRestricted: distribution.AccessIsRestricted,
-                            CanShowDownloadService: distribution.CanShowDownloadService,
-                            CanShowDownloadUrl: distribution.CanShowDownloadUrl,
-                            CanShowMapUrl: distribution.CanShowMapUrl,
-                            DistributionProtocol: distribution.DistributionProtocol,
+                            ShowMapLink: distribution.CanShowMapUrl,
+                            ShowServiceMapLink: distribution.AccessIsRestricted,
+                            MapUrl: distribution.MapUrl,
+
+                            ShowDownloadService: distribution.CanShowDownloadService,
+                            ShowDownloadLink: distribution.CanShowDownloadUrl,
+                            DownloadUrl: distribution.DistributionUrl,
+                            
+                            IsRestricted: distribution.AccessIsRestricted,
+                            IsOffline: distribution.AccessIsProtected,
+                            IsOpendata: distribution.AccessIsOpendata,
+
                             FormatName: format,
                             Organization: distribution.Organization,
                             OrganizationSeoName: this.makeSeoFriendlyString(distribution.Organization),
@@ -941,15 +928,9 @@ if (keywords != null && keywords.Any())
         }
 
         $(document).ready(function() {
-
-            changeLayout("tableView");
-
-            //getServiceFeed();
-
             $("#details-button").click(function() {
                 $("#metadata-text-details").toggle();
             });
-
 
             if (typeof Storage !== "undefined") {
                 if (localStorage.getItem('orderItems') != null) {

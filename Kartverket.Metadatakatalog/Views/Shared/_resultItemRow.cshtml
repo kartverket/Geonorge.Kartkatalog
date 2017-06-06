@@ -34,13 +34,13 @@
                     className: "",
                     title: ""
                 };
-                if (this.resultItem.IsRestricted || this.resultItem.AccessIsRestricted) {
+                if (this.resultItem.IsRestricted) {
                     openData.className = "custom-icon custom-icon-hengelaas-closed-yellow";
                     openData.title = "Tilgangsbegrensede data";
-                } else if (this.resultItem.IsOffline || this.resultItem.AccessIsProtected) {
+                } else if (this.resultItem.IsOffline) {
                     openData.className = "custom-icon custom-icon-hengelaas-closed-red";
                     openData.title = "Skjermede data";
-                } else if (this.resultItem.IsOpendata || this.resultItem.AccessIsOpendata) {
+                } else if (this.resultItem.IsOpendata) {
                     openData.className = "custom-icon custom-icon-hengelaas-open-green";
                     openData.title = "Åpne data";
                 }
@@ -156,7 +156,7 @@
                 else return false;
             },
             showServiceMapLink: function () {
-                if (this.resultItemServiceUrl) return true;
+                if (this.resultItem.ServiceUrl) return true;
                 else return false;
             },
             isRestrictedService: function () {
