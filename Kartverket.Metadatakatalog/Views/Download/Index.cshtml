@@ -127,25 +127,30 @@
             <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span> {{ metadata.name }}
         </h2>
         <div class="pull-right margin-top-10">
-            <span v-show="hasErrors" class="orderline-field-counter">
+            <span v-if="!hasAreas" class="orderline-field-counter">
+                <span v-on:click="expanded = true" class="custom-icon custom-icon-danger" data-toggle="tooltip" data-placement="bottom" title="Vis mangler">
+                </span>
+            </span>
+            <span v-else-if="hasErrors" class="orderline-field-counter">
                 <span v-on:click="expanded = true" class="custom-icon custom-icon-warning" data-toggle="tooltip" data-placement="bottom" title="Vis mangler">
                     <span class="custom-icon-overlay">{{ numberOfErrors }}</span>
                 </span>
             </span>
-            <span v-show="!hasErrors" class="orderline-field-counter">
+            <span v-else class="orderline-field-counter">
                 <span class="custom-icon custom-icon-checked" data-toggle="tooltip" data-placement="bottom" title="Datasett er korrekt utfylt">
                 </span>
             </span>
             <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom" title="Gå til datasett" class="btn"><span class="fa fa-home"></span></a>
-            <span v-on:click="$root.removeOrderLine(metadata.uuid)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
+            <span v-on:click="$root.removeOrderLine(metadata.uuid, false)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn"><span class="fa fa-trash"></span></span>
         </div>
         <div class="clearfix"></div>
         <div v-show="expanded">
             <div class="row orderline-fields">
                 <div class="col-md-4 orderline-field">
                     <p>Område</p>
-                    <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.area && orderLineErrors.area.length ? 'hasError' : '']"></div>
-                    <div v-if="orderLineErrors && orderLineErrors.area" class="orderline-errors margin-top-10">
+                    <div v-if="!hasAreas" class="help-text form-element-help-text bg-danger"><span>Ingen områder er tilgjengelig</span></div>
+                    <div v-else is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.area && orderLineErrors.area.length ? 'hasError' : '']"></div>
+                    <div v-if="orderLineErrors && orderLineErrors.area && hasAreas" class="orderline-errors margin-top-10">
                         <div v-for="orderlineError in orderLineErrors.area" class="help-text form-element-help-text bg-danger">
                             {{ orderlineError }}
                         </div>
@@ -172,7 +177,7 @@
 
                     <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
                         <div v-show="orderLineErrors.format.length" class="help-text form-element-help-text bg-danger">
-                            <span class="custom-icon format-warning-icon"></span> Mangler støttet format for {{ orderLineErrors.format.length }} {{orderLineErrors.format.length == 1 ? "område" : "områder"}}
+                            <span class="custom-icon format-warning-icon"></span> Mangler format for {{ orderLineErrors.format.length }} {{orderLineErrors.format.length == 1 ? "område" : "områder"}}
                         </div>
                         <div v-for="orderlineError in orderLineErrors.format" class="help-text hidden form-element-help-text bg-danger">
                             {{ orderlineError }}
@@ -245,6 +250,7 @@
             <div class="orderline orderline-master">
                 <div is="masterOrderLine"
                      v-bind:all-available-areas="masterOrderLine.allAvailableAreas"
+                     v-bind:available-areas="masterOrderLine.masterAvailableAreas"
                      v-bind:available-projections="masterOrderLine.masterAvailableProjections"
                      v-bind:available-formats="masterOrderLine.masterAvailableFormats"
                      v-bind:all-selected-areas="masterOrderLine.allSelectedAreas"
