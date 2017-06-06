@@ -402,40 +402,18 @@ if (contact != null)
     <h3>Distribusjoner</h3>
 
     <div class="row resultItemRowTableHeader">
-        <div v-bind:class="orderByTitle.className" class="col-sm-3" v-bind:id="orderByTitle.id">
-            <div class="resultItemRowTitle">
-                <p>
-                    <a href="@Url.Action("Index", "Metadata" @*,Model.ParamsForOrderByTitle()*@)" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
-                        Tittel<span class="orderby-indicator"></span>
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="col-sm-2">
-            <p>Type</p>
-        </div>
-        <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
-            <p>
-                <a href="@Url.Action("Index", "Search"@*, Model.ParamsForOrderByOrganization()*@)" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
-            </p>
-        </div>
-        <div class="col-sm-1">
-            <p>Åpne data</p>
-        </div>
-        <div class="col-sm-1">
-            <p>Kart</p>
-        </div>
-        <div class="col-sm-1">
-            <p>Last ned</p>
-        </div>
-        <div class="col-sm-1">
-            <p>Format</p>
-        </div>
+        <div class="col-sm-3"><p>Tittel</p></div>
+        <div class="col-sm-2"><p>Type</p></div>
+        <div class="col-sm-3"><p>Dataeier</p></div>
+        <div class="col-sm-1"><p>Åpne data</p></div>
+        <div class="col-sm-1"><p>Kart</p></div>
+        <div class="col-sm-1"><p>Last ned</p></div>
+        <div class="col-sm-1"><p>Format</p></div>
     </div>
 
     <div class="menu-separator search-results-table-heading"></div>
 
-    <div v-for="item in distributionlist" v-bind:class="tableBorder">
+    <div v-for="item in distributionlist" class="table-border-bottom">
         <div is="resultItem" v-bind:result-item="item"></div>
     </div>
     <div class="clearfix"></div>
@@ -755,87 +733,22 @@ if (keywords != null && keywords.Any())
         var vueModel = new Vue({
             el: '#metadata',
             data: {
-                currentOrderByParameter: getParameterByName("orderby"),
-                orderByUrl: "@Html.Raw(HttpUtility.HtmlDecode(HttpContext.Current.Request.Url.AbsoluteUri)).ToString()",
-                orderByTitle: {
-                    orderByParam: "title",
-                    className: "orderby orderby-title orderby-asc",
-                    id: "orderby-title-asc",
-                    url: "",
-                },
-                orderByOwner: {
-                    orderByParam: "organization",
-                    className: "orderby orderby-organization orderby-asc",
-                    id: "orderby-organization-asc",
-                    url: "",
-                },
-                tableBorder: "table-border-bottom",
+                tableBorder: "",
                 distributionlist: [],
-
             },
             components: {
                 ResultItem: ResultItemComponent
             },
             created: function() {
-                if (this.currentOrderByParameter == "title") {
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                    this.orderByOwner.id = "orderby-organization-asc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                } else if (this.currentOrderByParameter == "organization") {
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                    this.orderByOwner.id = "orderby-organization-desc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                } else if (this.currentOrderByParameter == "") {
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                    this.orderByOwner.id = "orderby-organization-asc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                } else if (this.currentOrderByParameter == "organization_desc") {
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                    this.orderByOwner.id = "orderby-organization-desc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-desc";
-                } else if (this.currentOrderByParameter == "title_desc") {
-                    this.orderByTitle.id = "orderby-title-desc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-desc";
-                    this.orderByOwner.id = "orderby-organization-asc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                }
-
                 axios.get(`/api/distributions/${uuid}`).then(function(response) {
                     this.distributionlist = this.convertDistributionList(response.data);
                 }.bind(this));
-
-                this.orderByTitle.url = this.getOrderByUrl(this.orderByTitle.orderByParam);
-                this.orderByOwner.url = this.getOrderByUrl(this.orderByOwner.orderByParam);
             },
             methods: {
-                orderByExists: function() {
-                    return this.orderByUrl.includes("orderby");
-                },
-                isNotFirstParameterInUrl: function() {
-                    return this.orderByUrl.includes("?");
-                },
-                getOrderByUrl: function(param) {
-                    if (this.orderByExists()) {
-                        return this.orderByUrl.replace("orderby=" + this.currentOrderByParameter, "orderby=" + param);
-                    } else {
-                        if (this.isNotFirstParameterInUrl()) {
-                            return this.orderByUrl + "&orderby=" + param;
-                        } else {
-                            return this.orderByUrl + "?orderby=" + param;
-                        }
-                    }
-                },
                 convertDistributionList: function(distributionList) {
                     var distributionArray = new Array();
                     distributionList.forEach(function(distribution) {
-                        var format = "";
-                        if (distribution.DistributionFormat != null) {
-                            format = distribution.FormatName + " " + distribution.FormatVersion;
-                        }
+                        var format = distribution.FormatName + " " + distribution.FormatVersion;
                         var resultItem =
                         {
                             ShowMapLink: distribution.CanShowMapUrl,
@@ -862,11 +775,7 @@ if (keywords != null && keywords.Any())
                     }.bind(this));
                     return distributionArray;
                 },
-                getFormat: function(distributionFormat) {
-                    if (distributionFormat != null) {
-                        return distributionFormat.Name + " " + distributionFormat.Version;
-                    };
-                },
+                
                 makeSeoFriendlyString: function(text) {
                     if (text != null) {
                         text = text.toLowerCase();
