@@ -62,41 +62,15 @@
             </div>
 
             <div class="col-sm-2">
-
-                <a style="width: 130px" v-bind:id="mapLink.mapLinkButtonId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
-                    <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
+                
+                <a v-if="resultItem.DistributionUrl" style="width: 130px" v-bind:href="resultItem.DistributionUrl" data-toggle='tooltip' data-placement='bottom' title="Besøk nettside" class="btn btn-default">
+                    <span class="custom-icon custom-icon-eksternlink"></span><span class="button-text">Nettside</span>
                 </a>
+                
+                <span v-else style="width: 130px" class="btn btn-default disabled">
+                    <span class="custom-icon custom-icon-eksternlink"></span><span class="button-text">Nettside</span>
+                </span>
 
-                <a style="width: 130px"
-                   v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                   v-bind:href='resultItem.AddToCartUrl'
-                   data-toggle='tooltip'
-                   data-placement='bottom'
-                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                   v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                   class="btn btn-default add-to-cart-btn"
-                   v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
-                    <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
-                </a>
-
-                <a style="width: 130px"
-                   v-else-if="resultItem.ShowDownloadLink"
-                   v-bind:href="resultItem.DownloadUrl"
-                   onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                   data-toggle='tooltip'
-                   data-placement='bottom'
-                   v:bind:title='"Last ned datasett for " + resultItem.Title'
-                   target="_blank"
-                   class="btn btn-default">
-                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                </a>
-
-                <a style="width: 130px"
-                   v-else
-                   v-bind:title='"Last ned datasett for " + resultItem.Title'
-                   class="disabled btn btn-default">
-                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                </a>
             </div>
 
             <div class="col-sm-3">
@@ -138,41 +112,10 @@
                         <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
                     </div>
 
-                    @*Kart*@
-                    <div class="col-xs-1">
-                        <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
-                            <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
-                        </a>
-                    </div>
-
-                    @*Last ned*@
-                    <div class="col-xs-1">
-                        <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                           v-bind:href='resultItem.AddToCartUrl'
-                           data-toggle='tooltip'
-                           data-placement='bottom'
-                           onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                           v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                           class="add-to-cart-btn"
-                           v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
-                            <span class="custom-icon custom-icon-handlekurv"></span>
-                            {{resultItem.addedToCart}}
-                        </a>
-
-                        <a v-else-if="resultItem.ShowDownloadLink"
-                           v-bind:href="resultItem.DownloadUrl"
-                           onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                           data-toggle='tooltip'
-                           data-placement='bottom'
-                           v:bind:title='"Last ned datasett for " + resultItem.Title'
-                           target="_blank">
-                            <span class="custom-icon custom-icon-lastned"></span>
-                        </a>
-
-                        <a v-else
-                           v-bind:title='"Last ned datasett for " + resultItem.Title'
-                           class="disabled">
-                            <span class="custom-icon custom-icon-lastned"></span>
+                    @*Besøk nettsiden*@
+                    <div class="col-xs-1 text-center">
+                        <a v-bind:href="resultItem.DistributionUrl">
+                            <span class="custom-icon custom-icon-eksternlink"></span>
                         </a>
                     </div>
                 </div>
@@ -349,8 +292,7 @@
                         </p>
                     </div>
                     <div class="col-sm-1"><p>Åpne data</p></div>
-                    <div class="col-sm-1"><p>Kart</p></div>
-                    <div class="col-sm-1"><p>Last ned</p></div>
+                    <div class="col-sm-1 text-center"><p>Nettside</p></div>
                 </div>
 
                 <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
