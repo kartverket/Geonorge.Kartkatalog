@@ -78,17 +78,6 @@
                 </a>
             </div>
 
-            <div class="clearfix"></div>
-            @* Underliggende distribusjoner *@
-
-            <div v-on:click="getUnderlyingDistributions()" class="col-md-12">
-                <div style="padding: 10px 10px 1px; background-color:#f4f4f4">
-                    <p><b data-toggle='tooltip' data-placement='bottom' title="Vis underliggende distribusjoner">Underliggende distribusjoner   </b><span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span></p>
-                    <div v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
-
-                    </div>
-                </div>
-            </div>
         </div>
 
         @* *** TABELL *** *@
@@ -99,10 +88,6 @@
 
                     <div class="col-sm-4">
                         <div class="resultItemRowTitle">
-                            @*Pil underliggende distribusjoner i tabellvisning*@
-                            <div class="expand-arrow-container">
-                                <span data-toggle='tooltip' data-placement='bottom' v-on:click="getUnderlyingDistributions()" title="Vis underliggende distribusjoner" class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span>
-                            </div>
                             @*Tittel*@
                             <a v-bind:href="readMoreUrl" class="show-loading-animation">
                                 <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
@@ -167,9 +152,6 @@
 
             <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
 
-            <div v-if="$root.viewType == 'tableView'" v-show="expanded" is="distributionRows" v-bind:underlaying-distributions="underlayingDistributions">
-
-            </div>
         </div>
 
 </script>
