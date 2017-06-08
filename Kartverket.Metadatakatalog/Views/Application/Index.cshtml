@@ -63,7 +63,7 @@
 
             <div class="col-sm-2">
                 
-                <a v-if="resultItem.DistributionUrl" style="width: 130px" v-bind:href="resultItem.DistributionUrl" data-toggle='tooltip' data-placement='bottom' title="Besøk nettside" class="btn btn-default">
+                <a v-if="resultItem.DistributionUrl" style="width: 130px" v-bind:href="resultItem.DistributionUrl" target="_blank" data-toggle='tooltip' data-placement='bottom' title="Besøk nettside" class="btn btn-default">
                     <span class="custom-icon custom-icon-eksternlink"></span><span class="button-text">Nettside</span>
                 </a>
                 
@@ -113,8 +113,8 @@
                     </div>
 
                     @*Besøk nettsiden*@
-                    <div class="col-xs-1 text-center">
-                        <a v-bind:href="resultItem.DistributionUrl">
+                    <div class="col-xs-2 text-center">
+                        <a v-bind:href="resultItem.DistributionUrl" target="_blank">
                             <span class="custom-icon custom-icon-eksternlink"></span>
                         </a>
                     </div>
@@ -292,7 +292,7 @@
                         </p>
                     </div>
                     <div class="col-sm-1"><p>Åpne data</p></div>
-                    <div class="col-sm-1 text-center"><p>Nettside</p></div>
+                    <div class="col-sm-2 text-center" style="bottom:-30px"><span>Nettside</span></div>
                 </div>
 
                 <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
