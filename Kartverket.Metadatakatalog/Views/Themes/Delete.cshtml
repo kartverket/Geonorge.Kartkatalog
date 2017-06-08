@@ -1,0 +1,58 @@
+﻿@model Kartverket.Metadatakatalog.Models.Theme
+
+@{
+    ViewBag.Title = "Slett tema";
+}
+@section breadcrumb {
+    <li><a href="/Themes">Temaer</a></li>
+    <li class="active">Slett</li>
+}
+<h2>Slett tema</h2>
+
+<h3>Er du sikker på at du vil slette tema</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            Tilknyttet tema
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Parent.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ThumbnailUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ThumbnailUrl)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Slett" class="btn btn-default pull-right" />
+            @Html.ActionLink("Tilbake", "Index")
+        </div>
+    }
+</div>

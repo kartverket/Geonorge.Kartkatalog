@@ -1,0 +1,31 @@
+﻿@model List<Kartverket.Metadatakatalog.Models.Theme>
+
+@helper BuildMenu(List<Theme> data, int? parentId = null)
+{
+var items = data.Where(d => d.ParentId == parentId);
+    if (items.Any())
+    {
+            <ul>
+                @foreach (var item in items)
+                {
+                    <li>
+                        @Html.ActionLink(item.Name, "Edit", new { id = item.Id })
+                        @BuildMenu(data, item.Id)
+                    </li>
+                }
+            </ul>
+    }
+}
+
+@{
+    ViewBag.Title = "Temaer";
+}
+@section breadcrumb {
+    <li class="active">Temaer</li>
+}
+<h2>Temaer</h2>
+
+<p>
+    @Html.ActionLink("Nytt tema", "Create")
+</p>
+@BuildMenu(Model, null)
