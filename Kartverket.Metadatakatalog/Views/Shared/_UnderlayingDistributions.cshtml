@@ -20,7 +20,7 @@
 
                 @*Distribusjonstype *@
                 <div class="col-sm-2">
-                    <span v-if="resultItemDistribution.Type" v-bind:title="resultItemDistribution.Type" v-bind:class="$parent.type(resultItemDistribution.Type)" style="width:auto">{{resultItemDistribution.Type}}</span>
+                    <span v-if="resultItemDistribution.Type" v-bind:title="resultItemDistribution.Type" v-bind:class="$parent.type('Tjeneste')" style="width:auto">{{resultItemDistribution.Type}}</span>
                 </div>
 
                 @*Organisasjon*@
@@ -56,7 +56,7 @@
 
                     @*Distribusjonstype *@
                     <div class="col-sm-2">
-                        <span v-if="resultItemDistribution.Type" v-bind:title="resultItemDistribution.Type" v-bind:class="$parent.type(resultItemDistribution.Type)" style="width:auto">{{resultItemDistribution.Type}}</span>
+                        <span v-if="resultItemDistribution.Type" v-bind:title="resultItemDistribution.Type" v-bind:class="$parent.type('Tjeneste')" style="width:auto">{{resultItemDistribution.Type}}</span>
                     </div>
 
                     @*Organisasjon*@

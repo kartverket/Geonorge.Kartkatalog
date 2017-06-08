@@ -57,7 +57,7 @@
                 <p>{{description}}</p>
                 <p>
                     Tilgjengelig som:
-                    <span v-bind:title="'Tilgjengelig som ' + resultItem.TypeTranslated" style="width:auto" v-bind:class="type(resultItem.Type)">{{resultItem.TypeTranslated}}</span>
+                    <span v-bind:title="'Tilgjengelig som ' + resultItem.DistributionType" style="width:auto" class="label label-tjeneste">{{resultItem.DistributionType}}</span>
                 </p>
             </div>
 
@@ -112,7 +112,7 @@
 
                     @*Distribusjonstype *@
                     <div class="col-sm-2">
-                        <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
+                        <span v-bind:title="resultItem.DistributionType" data-toggle='tooltip' data-placement='bottom' class="label label-tjeneste" style="width:auto">{{resultItem.DistributionType}}</span>
                     </div>
 
                     @*Organisasjon*@
