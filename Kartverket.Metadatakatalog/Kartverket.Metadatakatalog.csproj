@@ -264,7 +264,13 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ThemesController.cs" />
+    <Compile Include="Migrations\201706090621035_AddTheme.cs" />
+    <Compile Include="Migrations\201706090621035_AddTheme.Designer.cs">
+      <DependentUpon>201706090621035_AddTheme.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Api\Distribution.cs" />
+    <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\SearchByAreaParameters.cs" />
     <Compile Include="Models\SearchIndex\SearchIndexDoc.cs" />
     <Compile Include="Models\ViewModels\SearchByAreaViewModel.cs" />
@@ -1101,6 +1107,11 @@
     <Content Include="Views\Shared\_FilterPages.cshtml" />
     <Content Include="Views\Shared\_UnderlayingDistributions.cshtml" />
     <Content Include="Views\Shared\_resultItemRow.cshtml" />
+    <Content Include="Views\Themes\Create.cshtml" />
+    <Content Include="Views\Themes\Delete.cshtml" />
+    <Content Include="Views\Themes\Edit.cshtml" />
+    <Content Include="Views\Themes\Index.cshtml" />
+    <Content Include="Views\Themes\_OperatesOn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
@@ -1112,6 +1123,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\201706090621035_AddTheme.resx">
+      <DependentUpon>201706090621035_AddTheme.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\UI.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UI.Designer.cs</LastGenOutput>
