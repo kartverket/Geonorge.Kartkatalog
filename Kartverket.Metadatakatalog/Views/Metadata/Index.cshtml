@@ -113,7 +113,7 @@ if (contact != null)
                     + "AuthServices/SignIn?ReturnUrl="
                     + Url.Encode(baseUrl)
                     + Url.Encode(addToCartEventParamater);
-                
+
                 addToCartUrl = Html.KartkatalogenUrl()
                      + "AuthServices/SignIn?ReturnUrl="
                      + Url.Encode(downloadSignInUrl);
@@ -309,85 +309,83 @@ if (contact != null)
         }
         </div>
     </aside>
-    
-    @* *** Distribusjonstyper *** *@
 
     @* Vue code for resultitem*@
     @Html.Partial("_resultItemRow")
-    
+
     @*Template for a table row*@
-<script type="text/x-template" id="resultItemRow">
+    <script type="text/x-template" id="resultItemRow">
         <div>
-                <div class="resultItemRow">
-                    <div class="row">
-                        
-                        @*Tittel*@
-                        <div class="col-sm-3">
-                            <div class="resultItemRowTitle">
-                                <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                                    <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
-                                </a>
-                            </div>
-                        </div>
+            <div class="resultItemRow">
+                <div class="row">
 
-                        @*Distribusjonstype *@
-                        <div class="col-sm-2">
-                            <span v-bind:title="resultItem.Type" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.Type}}</span>
-                        </div>
-
-                        @*Organisasjon*@
-                        <div class="col-sm-3">
-                            <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
-                                {{resultItem.Organization}}
+                    @*Tittel*@
+                    <div class="col-sm-3">
+                        <div class="resultItemRowTitle">
+                            <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                                <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
                             </a>
-                        </div>
-
-                        @*Åpne data*@
-                        <div class="col-sm-1">
-                            <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
-                        </div>
-
-                        @*Kart*@
-                        <div class="col-xs-1">
-                            <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
-                                <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
-                            </a>
-                        </div>
-
-                        @*Last ned*@
-                        <div class="col-xs-1">
-                            <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                               v-bind:href='[itemAddToCart.href ? itemAddToCart.href : "" ]'
-                               data-toggle='tooltip'
-                               data-placement='bottom'
-                               onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                               v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                               class="add-to-cart-btn"
-                               v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
-                                <span class="custom-icon custom-icon-handlekurv"></span>
-                                {{resultItem.addedToCart}}
-                            </a>
-
-                            <a v-else-if="resultItem.ShowDownloadLink"
-                               v-bind:href="resultItem.DownloadUrl"
-                               onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                               data-toggle='tooltip'
-                               data-placement='bottom'
-                               v:bind:title='"Last ned datasett for " + resultItem.Title'
-                               target="_blank">
-                                <span class="custom-icon custom-icon-lastned"></span>
-                            </a>
-
-                            <a v-else
-                               v-bind:title='"Last ned datasett for " + resultItem.Title'
-                               class="disabled">
-                                <span class="custom-icon custom-icon-lastned"></span>
-                            </a>
-                        </div>
-                        <div class="col-xs-1">
-                            {{resultItem.FormatName}} {{resultItem.FormatVersion}}
                         </div>
                     </div>
+
+                    @*Distribusjonstype *@
+                    <div class="col-sm-2">
+                        <span v-bind:title="resultItem.Type" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.Type}}</span>
+                    </div>
+
+                    @*Organisasjon*@
+                    <div class="col-sm-3">
+                        <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                            {{resultItem.Organization}}
+                        </a>
+                    </div>
+
+                    @*Åpne data*@
+                    <div class="col-sm-1">
+                        <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                    </div>
+
+                    @*Kart*@
+                    <div class="col-xs-1">
+                        <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                            <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
+                        </a>
+                    </div>
+
+                    @*Last ned*@
+                    <div class="col-xs-1">
+                        <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
+                           v-bind:href='[itemAddToCart.href ? itemAddToCart.href : "" ]'
+                           data-toggle='tooltip'
+                           data-placement='bottom'
+                           onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                           v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                           class="add-to-cart-btn"
+                           v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
+                            <span class="custom-icon custom-icon-handlekurv"></span>
+                            {{resultItem.addedToCart}}
+                        </a>
+
+                        <a v-else-if="resultItem.ShowDownloadLink"
+                           v-bind:href="resultItem.DownloadUrl"
+                           onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                           data-toggle='tooltip'
+                           data-placement='bottom'
+                           v:bind:title='"Last ned datasett for " + resultItem.Title'
+                           target="_blank">
+                            <span class="custom-icon custom-icon-lastned"></span>
+                        </a>
+
+                        <a v-else
+                           v-bind:title='"Last ned datasett for " + resultItem.Title'
+                           class="disabled">
+                            <span class="custom-icon custom-icon-lastned"></span>
+                        </a>
+                    </div>
+                    <div class="col-xs-1">
+                        {{resultItem.FormatName}} {{resultItem.FormatVersion}}
+                    </div>
+                </div>
             </div>
 
             <div class="clearfix"></div>
@@ -395,31 +393,77 @@ if (contact != null)
         </div>
 
     </script>
-    
-<div id="metadata">
 
-<article class="col-md-12">
-    <h3>Distribusjoner</h3>
+    <div id="metadata">
 
-    <div class="row resultItemRowTableHeader">
-        <div class="col-sm-3"><p>Tittel</p></div>
-        <div class="col-sm-2"><p>Type</p></div>
-        <div class="col-sm-3"><p>Dataeier</p></div>
-        <div class="col-sm-1"><p>Åpne data</p></div>
-        <div class="col-sm-1"><p>Kart</p></div>
-        <div class="col-sm-1"><p>Last ned</p></div>
-        <div class="col-sm-1"><p>Format</p></div>
+        @* *** Distribusjoner ****@
+        <article class="col-md-12">
+            <h3>Distribusjoner</h3>
+
+            <div class="row resultItemRowTableHeader">
+                <div class="col-sm-3"><p>Tittel</p></div>
+                <div class="col-sm-2"><p>Type</p></div>
+                <div class="col-sm-3"><p>Dataeier</p></div>
+                <div class="col-sm-1"><p>Åpne data</p></div>
+                <div class="col-sm-1"><p>Kart</p></div>
+                <div class="col-sm-1"><p>Last ned</p></div>
+                <div class="col-sm-1"><p>Format</p></div>
+            </div>
+
+            <div class="menu-separator search-results-table-heading"></div>
+
+            <div v-for="item in distributionlist" class="table-border-bottom">
+                <div is="resultItem" v-bind:result-item="item"></div>
+            </div>
+            <div class="clearfix"></div>
+        </article>
+
+        @* *** Relaterte data ****@
+        <article @*v-if="model.HierarchyLevel == 'service'"*@ class="col-md-12">
+            @if (Model.Related != null && Model.Related.Count > 0)
+            {
+                <div class="row search-result-navigation">
+                    <div class="col-sm-8">
+                        <h3 class="article-h3">Relaterte data</h3>
+                    </div>
+                    <div class="col-md-4 pull-right">
+                        <div class="save-as-menu pull-right" style="margin-top: 50px">
+                            <div class="no-padding-bottom save-as-dropdown">
+                                <div class="custom-select">
+                                    <select onchange="additionalView(this.value)" class="form-control">
+                                        <option value="csvUrl" selected="selected">CSV</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="saveButtons" class="no-padding-bottom save-as-buttons">
+                                <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="row resultItemRowTableHeader">
+                    <div class="col-sm-3"><p>Tittel</p></div>
+                    <div class="col-sm-2"><p>Type</p></div>
+                    <div class="col-sm-3"><p>Dataeier</p></div>
+                    <div class="col-sm-1"><p>Åpne data</p></div>
+                    <div class="col-sm-1"><p>Kart</p></div>
+                    <div class="col-sm-1"><p>Last ned</p></div>
+                    <div class="col-sm-1"><p>Format</p></div>
+                </div>
+
+                <div class="menu-separator search-results-table-heading"></div>
+
+                <div v-for="item in relatedDataList" v-bind:class="tableBorder">
+                    <div is="resultItem" v-bind:result-item="item"></div>
+                </div>
+                <div class="clearfix"></div>
+            }
+        </article>
+
     </div>
-
-    <div class="menu-separator search-results-table-heading"></div>
-
-    <div v-for="item in distributionlist" class="table-border-bottom">
-        <div is="resultItem" v-bind:result-item="item"></div>
-    </div>
-    <div class="clearfix"></div>
-</article>
-
-</div>
 
     @* *** Generell info *** *@
     <article>
@@ -430,12 +474,12 @@ if (contact != null)
                 <h3>Kontaktinformasjon</h3>
 
                 @if (Model.ContactOwner != null)
-                    {
+                {
                     <a href="@Url.Action("Organization", "Metadata", new {OrganizationSeoName = Model.OrganizationSeoName()})" title="Vis alle geografiske tjenester og datasett fra @Model.ContactOwner.Organization">
                         @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
-                            {
-                    <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactOwner.Organization" width="100" class="image-margin-bottom" />
-                            }
+                        {
+                            <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactOwner.Organization" width="100" class="image-margin-bottom" />
+                        }
                     </a>                    }
 
                 @ShowContact("Metadatakontakt", Model.ContactMetadata)
@@ -448,61 +492,61 @@ if (contact != null)
                 <h3>Distribusjon</h3>
                 @DisplayValue("Representasjonsform", Model.SpatialRepresentation)
                 @if (Model.DistributionFormats != null)
+                {
+                    if (Model.DistributionFormats.Any())
                     {
-                        if (Model.DistributionFormats.Any())
-                        {
-            <strong>Format: </strong>
-            <ul>
-                @foreach (var format in Model.DistributionFormats)
-                                {
-                                    if (!string.IsNullOrWhiteSpace(format.Version))
-                                    {
-                                <li>@format.Name @format.Version</li>
-                                    }
-                                    else
-                                    {
-                                <li>@format.Name</li>
-                                    }
-                                }
-            </ul>
-                        }
-                    }
-                @if (Model.DistributionDetails != null && Model.DistributionDetails.Protocol != null && Model.DistributionDetails.Protocol != "GEONORGE:OFFLINE")
-                    {
-            <text>@DisplayValue("Distribusjonstype", Model.DistributionDetails.ProtocolName)</text>
-                        if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
-                        {
-                            if (Model.IsService() || Model.IsServiceLayer())
+                        <strong>Format: </strong>
+                        <ul>
+                            @foreach (var format in Model.DistributionFormats)
                             {
-            <p>
-                <strong>Get Capabilities Url:</strong> <a href="@Model.DistributionDetails.DistributionDetailsGetCapabilitiesUrl()">
-                    @Model.DistributionDetails.URL <i class="custom-icon-sm custom-icon-eksternlink"></i>
-                </a>
-            </p>
+                                if (!string.IsNullOrWhiteSpace(format.Version))
+                                {
+                                    <li>@format.Name @format.Version</li>
+                                }
+                                else
+                                {
+                                    <li>@format.Name</li>
+                                }
                             }
-                        }
-            <text>@DisplayValue("Geografisk distribusjonsinndeling", Model.UnitsOfDistribution)</text>
-            <text>@DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
+                        </ul>
                     }
+                }
+                @if (Model.DistributionDetails != null && Model.DistributionDetails.Protocol != null && Model.DistributionDetails.Protocol != "GEONORGE:OFFLINE")
+                {
+                    <text>@DisplayValue("Distribusjonstype", Model.DistributionDetails.ProtocolName)</text>
+                    if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
+                    {
+                        if (Model.IsService() || Model.IsServiceLayer())
+                        {
+                            <p>
+                                <strong>Get Capabilities Url:</strong> <a href="@Model.DistributionDetails.DistributionDetailsGetCapabilitiesUrl()">
+                                    @Model.DistributionDetails.URL <i class="custom-icon-sm custom-icon-eksternlink"></i>
+                                </a>
+                            </p>
+                        }
+                    }
+                    <text>@DisplayValue("Geografisk distribusjonsinndeling", Model.UnitsOfDistribution)</text>
+                    <text>@DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
+                }
 
                 @if (Model.ReferenceSystems != null)
+                {
+                    if (Model.ReferenceSystems.Any())
                     {
-                        if (Model.ReferenceSystems.Any())
-                        {
-            <strong>Romlig referansesystem: </strong>
-            <ul>
-                @foreach (var refsys in Model.ReferenceSystems)
-                                {
+                        <strong>Romlig referansesystem: </strong>
+                        <ul>
+                            @foreach (var refsys in Model.ReferenceSystems)
+                            {
                                 <li>@refsys.CoordinateSystem</li>
-                                }
-            </ul>
-                        }
+                            }
+                        </ul>
                     }
+                }
             </div>
 
             @* *** Restriksjoner *** *@
-            if (Model.Constraints != null)
-            {
+        if (Model.Constraints != null)
+        {
             <div class="col-sm-6">
                 <h3>Restriksjoner</h3>
                 @DisplayValue("Bruksbegrensninger", Model.Constraints.UseLimitations)
@@ -514,15 +558,15 @@ if (contact != null)
                     <p>
                         <strong>Lisens: </strong> <a href="@Model.Constraints.OtherConstraintsLink" target="_blank">@Model.Constraints.OtherConstraintsLinkText</a><i class="custom-icon-sm custom-icon-eksternlink"></i>
                     </p>
-                    }
+                }
                 @DisplayValue("Sikkerhetsnivå", Model.Constraints.SecurityConstraints)
                 @DisplayValue("Lovhenvisning", Model.Constraints.SecurityConstraintsNote)
             </div>
-            }
+        }
 
-            @* *** Hjelp *** *@
-            if (!string.IsNullOrEmpty(Model.SupplementalDescription) || !string.IsNullOrEmpty(Model.HelpUrl))
-            {
+        @* *** Hjelp *** *@
+        if (!string.IsNullOrEmpty(Model.SupplementalDescription) || !string.IsNullOrEmpty(Model.HelpUrl))
+        {
             <div id="help" class="col-sm-12">
                 <h2>Hjelp</h2>
             </div>
@@ -530,15 +574,15 @@ if (contact != null)
                 @if (!string.IsNullOrEmpty(Model.SupplementalDescription))
                     {
                     <p>@Model.SupplementalDescription</p>
-                    }
+                }
                 @if (!string.IsNullOrEmpty(Model.HelpUrl))
                     {
                     <a href="@Model.HelpUrl" class="btn" target="_blank"><span class="custom-icon custom-icon-eksternlink"></span> Vis hjelp</a>
-                    }
+                }
             </div>
-            }
+        }
 
-            @* *** Detaljert informasjon *** *@
+        @* *** Detaljert informasjon *** *@
             <div class="col-sm-12">
                 <a href="#" data-content-toggle="detailed-info" class="toggle-content">
                     <h2>
@@ -555,79 +599,79 @@ if (contact != null)
                     @DisplayValue("Prosesshistorie", Model.ProcessHistory)
 
                     @if (Model.QualitySpecifications != null)
-                        {
+                    {
                         <h3>Konformitet</h3>
-                            for (var s = 0; s < Model.QualitySpecifications.Count; s++)
+                        for (var s = 0; s < Model.QualitySpecifications.Count; s++)
+                        {
+                            <p>
+                                <strong>Standard: </strong>@Model.QualitySpecifications[s].Title
+                            </p>
+                            <p>
+                                <strong>Dato: </strong>@Html.DisplayFor(m => Model.QualitySpecifications[s].Date) (@Model.QualitySpecifications[s].DateType)
+                            </p>
+                            <p>
+                                <strong>Forklaring av resultat: </strong>@Model.QualitySpecifications[s].Explanation
+                            </p>
+                            <p> @(Model.QualitySpecifications[s].Result ? "Godkjent" : "Ikke godkjent") </p>
+                            if (Model.QualitySpecifications.Count > 1 && s != Model.QualitySpecifications.Count - 1)
                             {
-                        <p>
-                            <strong>Standard: </strong>@Model.QualitySpecifications[s].Title
-                        </p>
-                        <p>
-                            <strong>Dato: </strong>@Html.DisplayFor(m => Model.QualitySpecifications[s].Date) (@Model.QualitySpecifications[s].DateType)
-                        </p>
-                        <p>
-                            <strong>Forklaring av resultat: </strong>@Model.QualitySpecifications[s].Explanation
-                        </p>
-                        <p> @(Model.QualitySpecifications[s].Result ? "Godkjent" : "Ikke godkjent") </p>
-                                if (Model.QualitySpecifications.Count > 1 && s != Model.QualitySpecifications.Count - 1)
-                                {
-                        <hr />
-                                }
+                                <hr />
                             }
                         }
+                    }
                     @if (!string.IsNullOrWhiteSpace(Model.Purpose))
-                        {
+                    {
                         <h3>Formål</h3>
                         <p>@Model.Purpose</p>
-                        }
+                    }
                 </div>
 
                 @* ** Tid og rom ** *@
                 <div class="col-sm-6">
                     <h3>Tid og rom</h3>
                     @if (Model.DateUpdated != null)
-                        {
+                    {
                         <p>
                             <strong>Oppdatert(Ressurs):</strong> @Html.DisplayFor(m => m.DateUpdated)
                         </p>
-                        }
+                    }
                     @if (Model.DateMetadataUpdated != null)
-                        {
+                    {
                         <p>
                             <strong>Oppdatert(Metadata):</strong> @Html.DisplayFor(m => m.DateMetadataUpdated)
                         </p>
-                        }
+                    }
                     @if (Model.DatePublished != null)
-                        {
+                    {
                         <p>
                             <strong>Publisert:</strong> @Html.DisplayFor(m => m.DatePublished)
                         </p>
-                        }
+                    }
                     @if (Model.DateCreated != null)
-                        {
+                    {
                         <p>
                             <strong>Opprettet:</strong> @Html.DisplayFor(m => m.DateCreated)
                         </p>
-                        }
+                    }
                     @if (Model.DateMetadataValidFrom != null)
-                        {
+                    {
                         <p>
                             <strong>Gyldighetsperiode:</strong> @Html.DisplayFor(m => m.DateMetadataValidFrom) - @Html.DisplayFor(m => m.DateMetadataValidTo)
                         </p>
-                        }
+                    }
                     @if (Model.MaintenanceFrequency != null)
-                        {
+                    {
                         <p>
                             <strong>Oppdateringshyppighet:</strong> @Model.MaintenanceFrequency
                         </p>
-                        }
+                    }
                     @if (Model.KeywordsPlace != null && Model.KeywordsPlace.Count > 0)
-                        {
+                    {
                         @DisplayKeywords("Geografisk område", Model.KeywordsPlace)
-                        }
+                    }
 
                     @if (Model.BoundingBox != null)
-                        {
+                    {
                         <p>
                             <strong>Geografisk utstrekning:</strong>
                             <ul>
@@ -637,7 +681,7 @@ if (contact != null)
                                 <li>Vest: @Model.BoundingBox.WestBoundLongitude</li>
                             </ul>
                         </p>
-                        }
+                    }
 
                 </div>
 
@@ -652,11 +696,11 @@ if (contact != null)
                     @DisplayKeywords("Begreper", Model.KeywordsConcept)
 
                     @if (!string.IsNullOrWhiteSpace(Model.TopicCategory))
-                        {
+                    {
                         <p>
                             <strong>Tematisk hovedkategori:</strong> @Model.TopicCategory
                         </p>
-                        }
+                    }
 
                 </div>
 
@@ -735,6 +779,8 @@ if (keywords != null && keywords.Any())
             data: {
                 tableBorder: "",
                 distributionlist: [],
+                relatedDataList: [],
+                model: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
             },
             components: {
                 ResultItem: ResultItemComponent
@@ -743,6 +789,9 @@ if (keywords != null && keywords.Any())
                 axios.get(`/api/distributions/${uuid}`).then(function(response) {
                     this.distributionlist = this.convertDistributionList(response.data);
                 }.bind(this));
+                this.relatedDataList = this.convertRelatedDataList();
+                //this.relatedDataList = this.model.Related;
+
             },
             methods: {
                 convertDistributionList: function(distributionList) {
@@ -758,7 +807,7 @@ if (keywords != null && keywords.Any())
                             ShowDownloadService: distribution.CanShowDownloadService,
                             ShowDownloadLink: distribution.CanShowDownloadUrl,
                             DownloadUrl: distribution.DistributionUrl,
-                            
+
                             IsRestricted: distribution.AccessIsRestricted,
                             IsOffline: distribution.AccessIsProtected,
                             IsOpendata: distribution.AccessIsOpendata,
@@ -775,7 +824,7 @@ if (keywords != null && keywords.Any())
                     }.bind(this));
                     return distributionArray;
                 },
-                
+
                 makeSeoFriendlyString: function(text) {
                     if (text != null) {
                         text = text.toLowerCase();
@@ -799,8 +848,51 @@ if (keywords != null && keywords.Any())
                         text = text.trim('-');
                     }
                     return text;
+                },
+                convertRelatedDataList: function() {
+                    this.model.Related.forEach(function(item) {
+
+                        var resultItem =
+                        {
+                            ShowMapLink: item.CanShowMapUrl,
+                            ShowServiceMapLink: item.AccessIsRestricted,
+                            MapUrl: item.MapUrl,
+
+                            ShowDownloadService: item.CanShowDownloadService,
+                            ShowDownloadLink: item.CanShowDownloadUrl,
+                            DownloadUrl: item.DistributionUrl,
+
+                            IsRestricted: item.AccessIsRestricted,
+                            IsOffline: item.AccessIsProtected,
+                            IsOpendata: item.AccessIsOpendata,
+
+                            Organization: item.ContactOwner.Organization,
+                            OrganizationSeoName: this.makeSeoFriendlyString(item.ContactOwner.Organization),
+                            Title: item.Title,
+                            TitleSeo: this.makeSeoFriendlyString(item.Title),
+                            //Type: item.HierarchyLevel,
+                            Type: this.translateDistributionType(item.DistributionDetails.Protocol),
+                            Type2: item.DistributionDetails.Protocol,
+
+                            Uuid: item.Uuid
+                        }
+                        this.relatedDataList.push(resultItem);
+                    }.bind(this));
+                    return this.relatedDataList;
+                },
+                translateDistributionType: function(type) {
+                    axios.get('@Html.RegistryUrl()' + "api/subregister/metadata-kodelister/kartverket/distribusjonstyper")
+                        .then(function(response) {
+                            response.data.containeditems.forEach(function(item) {
+                                if (item.codevalue == type) {
+                                    type = item.label;
+                                }
+                            }.bind(this));
+                            return type;
+                        }.bind(this));
                 }
-            }
+            },
+
 
         });
 

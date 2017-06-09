@@ -563,6 +563,14 @@ namespace Kartverket.Metadatakatalog.Service
                                         ? searchResult.Items[0].ServiceDistributionUuidForDataset
                                         : null;
                             }
+                            md.AccessIsRestricted = md.IsRestricted();
+                            md.AccessIsOpendata = md.IsOpendata();
+                            md.AccessIsProtected = md.IsOffline();
+
+                            metadata.CanShowMapUrl = metadata.ShowMapLink();
+                            metadata.CanShowDownloadService = md.ShowDownloadService();
+                            metadata.CanShowDownloadUrl = md.ShowDownloadLink();
+
 
                             metadata.Related.Add(md);
                         }
@@ -690,6 +698,14 @@ namespace Kartverket.Metadatakatalog.Service
                                 OtherConstraintsAccess = relData[12]
                             };
 
+                            md.AccessIsRestricted = md.IsRestricted();
+                            md.AccessIsOpendata = md.IsOpendata();
+                            md.AccessIsProtected = md.IsOffline();
+
+                            metadata.CanShowMapUrl = metadata.ShowMapLink();
+                            metadata.CanShowDownloadService = md.ShowDownloadService();
+                            metadata.CanShowDownloadUrl = md.ShowDownloadLink();
+
                             metadata.Related.Add(md);
                         }
                         catch (Exception ex)
@@ -749,6 +765,14 @@ namespace Kartverket.Metadatakatalog.Service
                                 };
                             }
 
+                            md.AccessIsRestricted = md.IsRestricted();
+                            md.AccessIsOpendata = md.IsOpendata();
+                            md.AccessIsProtected = md.IsOffline();
+
+                            metadata.CanShowMapUrl = metadata.ShowMapLink();
+                            metadata.CanShowDownloadService = md.ShowDownloadService();
+                            metadata.CanShowDownloadUrl = md.ShowDownloadLink();
+
                             metadata.Related.Add(md);
                         }
                         catch (Exception ex)
@@ -758,6 +782,14 @@ namespace Kartverket.Metadatakatalog.Service
                 }
 
             }
+
+            metadata.AccessIsRestricted = metadata.IsRestricted();
+            metadata.AccessIsOpendata = metadata.IsOpendata();
+            metadata.AccessIsProtected = metadata.IsOffline();
+
+            metadata.CanShowMapUrl = metadata.ShowMapLink();
+            metadata.CanShowDownloadService = metadata.ShowDownloadService();
+            metadata.CanShowDownloadUrl = metadata.ShowDownloadLink();
 
             return metadata;
         }

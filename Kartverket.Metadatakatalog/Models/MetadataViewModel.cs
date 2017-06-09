@@ -101,6 +101,13 @@ namespace Kartverket.Metadatakatalog.Models
         public string ServiceWfsDistributionUrlForDataset { get; set; }
         public string ServiceDistributionAccessConstraint { get; set; }
         public string ServiceWfsDistributionAccessConstraint { get; set; }
+        public bool AccessIsOpendata { get; set; }
+        public bool AccessIsRestricted { get; set; }
+        public bool AccessIsProtected { get; set; }
+        public bool CanShowMapUrl { get; set; }
+        public bool CanShowDownloadService { get; set; }
+        public bool CanShowDownloadUrl { get; set; }
+
 
         public SeoUrl CreateSeoUrl()
         {
