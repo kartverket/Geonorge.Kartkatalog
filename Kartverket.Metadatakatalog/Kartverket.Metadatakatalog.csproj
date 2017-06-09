@@ -265,9 +265,9 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ThemesController.cs" />
-    <Compile Include="Migrations\201706081126498_AddThemes.cs" />
-    <Compile Include="Migrations\201706081126498_AddThemes.Designer.cs">
-      <DependentUpon>201706081126498_AddThemes.cs</DependentUpon>
+    <Compile Include="Migrations\201706090621035_AddTheme.cs" />
+    <Compile Include="Migrations\201706090621035_AddTheme.Designer.cs">
+      <DependentUpon>201706090621035_AddTheme.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Api\Distribution.cs" />
     <Compile Include="Models\Theme.cs" />
@@ -1111,6 +1111,7 @@
     <Content Include="Views\Themes\Delete.cshtml" />
     <Content Include="Views\Themes\Edit.cshtml" />
     <Content Include="Views\Themes\Index.cshtml" />
+    <Content Include="Views\Themes\_OperatesOn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
@@ -1122,8 +1123,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201706081126498_AddThemes.resx">
-      <DependentUpon>201706081126498_AddThemes.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201706090621035_AddTheme.resx">
+      <DependentUpon>201706090621035_AddTheme.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UI.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

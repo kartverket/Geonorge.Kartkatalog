@@ -26,6 +26,6 @@ var items = data.Where(d => d.ParentId == parentId);
 <h2>Temaer</h2>
 
 <p>
-    @Html.ActionLink("Nytt tema", "Create")
+    @Html.ActionLink("Opprett tema", "Create", null, new { @class = "btn btn-sm btn-default" })
 </p>
 @BuildMenu(Model, null)

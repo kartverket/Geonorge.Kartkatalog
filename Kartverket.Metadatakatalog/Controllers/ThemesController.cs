@@ -69,10 +69,25 @@ namespace Kartverket.Metadatakatalog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,ThumbnailUrl,ParentId")] Theme theme)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,ThumbnailUrl,ParentId")] Theme theme, string[] operatesOn)
         {
             if (ModelState.IsValid)
             {
+                db.Database.ExecuteSqlCommand("DELETE FROM ThemeMetadatas WHERE Theme_Id = {0}", theme.Id);
+
+                foreach (var uuid in operatesOn)
+                {
+                    var metadata = db.Metadatas.Where(m => m.Uuid == uuid).FirstOrDefault();
+
+                    if (metadata == null)
+                    {
+                        db.Metadatas.Add(new Metadata { Uuid = uuid });
+                        db.SaveChanges();
+                    }
+
+                    db.Database.ExecuteSqlCommand("INSERT INTO ThemeMetadatas(Theme_Id, Metadata_Uuid) VALUES({0}, {1})", theme.Id, uuid);
+                }
+
                 db.Entry(theme).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

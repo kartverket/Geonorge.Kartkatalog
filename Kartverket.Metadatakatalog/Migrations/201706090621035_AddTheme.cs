@@ -3,10 +3,19 @@ namespace Kartverket.Metadatakatalog.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddThemes : DbMigration
+    public partial class AddTheme : DbMigration
     {
         public override void Up()
         {
+            CreateTable(
+                "dbo.Metadatas",
+                c => new
+                    {
+                        Uuid = c.String(nullable: false, maxLength: 128),
+                        Title = c.String(),
+                    })
+                .PrimaryKey(t => t.Uuid);
+            
             CreateTable(
                 "dbo.Themes",
                 c => new
@@ -22,40 +31,31 @@ namespace Kartverket.Metadatakatalog.Migrations
                 .Index(t => t.ParentId);
             
             CreateTable(
-                "dbo.Metadatas",
+                "dbo.ThemeMetadatas",
                 c => new
                     {
-                        Uuid = c.String(nullable: false, maxLength: 128),
-                        Title = c.String(),
-                    })
-                .PrimaryKey(t => t.Uuid);
-            
-            CreateTable(
-                "dbo.MetadataThemes",
-                c => new
-                    {
-                        Metadata_Uuid = c.String(nullable: false, maxLength: 128),
                         Theme_Id = c.Int(nullable: false),
+                        Metadata_Uuid = c.String(nullable: false, maxLength: 128),
                     })
-                .PrimaryKey(t => new { t.Metadata_Uuid, t.Theme_Id })
-                .ForeignKey("dbo.Metadatas", t => t.Metadata_Uuid, cascadeDelete: true)
+                .PrimaryKey(t => new { t.Theme_Id, t.Metadata_Uuid })
                 .ForeignKey("dbo.Themes", t => t.Theme_Id, cascadeDelete: true)
-                .Index(t => t.Metadata_Uuid)
-                .Index(t => t.Theme_Id);
+                .ForeignKey("dbo.Metadatas", t => t.Metadata_Uuid, cascadeDelete: true)
+                .Index(t => t.Theme_Id)
+                .Index(t => t.Metadata_Uuid);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.MetadataThemes", "Theme_Id", "dbo.Themes");
-            DropForeignKey("dbo.MetadataThemes", "Metadata_Uuid", "dbo.Metadatas");
+            DropForeignKey("dbo.ThemeMetadatas", "Metadata_Uuid", "dbo.Metadatas");
+            DropForeignKey("dbo.ThemeMetadatas", "Theme_Id", "dbo.Themes");
             DropForeignKey("dbo.Themes", "ParentId", "dbo.Themes");
-            DropIndex("dbo.MetadataThemes", new[] { "Theme_Id" });
-            DropIndex("dbo.MetadataThemes", new[] { "Metadata_Uuid" });
+            DropIndex("dbo.ThemeMetadatas", new[] { "Metadata_Uuid" });
+            DropIndex("dbo.ThemeMetadatas", new[] { "Theme_Id" });
             DropIndex("dbo.Themes", new[] { "ParentId" });
-            DropTable("dbo.MetadataThemes");
-            DropTable("dbo.Metadatas");
+            DropTable("dbo.ThemeMetadatas");
             DropTable("dbo.Themes");
+            DropTable("dbo.Metadatas");
         }
     }
 }
