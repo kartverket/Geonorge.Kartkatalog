@@ -326,7 +326,7 @@ var Formats = {
 
 
 var OrderLine = {
-    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'selectedCoordinates', 'defaultProjections', 'defaultFormats', 'orderLineErrors'],
+    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'selectedCoordinates', 'defaultProjections', 'defaultFormats', 'orderLineErrors', 'orderLineInfoMessages'],
     template: '#order-line-template',
     data: function () {
         var data = {
@@ -373,6 +373,28 @@ var OrderLine = {
                 }
             }
             return numberOfErrors;
+        },
+        hasInfoMessages: function () {
+            var hasInfoMessages = false;
+            if (this.orderLineInfoMessages !== undefined && Object.keys(this.orderLineInfoMessages).length) {
+                for (infoMessageType in this.orderLineInfoMessages) {
+                    if (this.orderLineInfoMessages[infoMessageType].length) {
+                        hasInfoMessages = true;
+                    }
+                }
+            }
+            return hasInfoMessages;
+        },
+        numberOfInfoMessages: function () {
+            var numberOfInfoMessages = 0;
+            if (this.orderLineInfoMessages !== undefined && Object.keys(this.orderLineInfoMessages).length) {
+                for (infoMessageType in this.orderLineInfoMessages) {
+                    if (this.orderLineInfoMessages[infoMessageType].length) {
+                        numberOfInfoMessages++;
+                    }
+                }
+            }
+            return numberOfInfoMessages;
         }
     },
     methods: {
@@ -905,6 +927,7 @@ var mainVueModel = new Vue({
             masterSelectedProjections: [],
             masterSelectedFormats: [],
             allOrderLineErrors: {},
+            allOrderLineInfoMessages: {},
             allDefaultProjections: {},
             allDefaultFormats: {}
         }
@@ -1093,6 +1116,45 @@ var mainVueModel = new Vue({
             }
             return hasSelectedFormats;
         },
+        hasSelectedProjectionsDifferentFromMasterSelectedProjections: function (orderLineUuid) {
+            this.masterOrderLine.allSelectedProjections[orderLineUuid].forEach(function (selectedProjection) {
+                var isMasterSelected = false;
+                this.masterOrderLine.masterSelectedProjections.forEach(function (masterSelectedProjection) {
+                    if (masterSelectedProjection.code == selectedProjection.code) {
+                        isMasterSelected = true;
+                    }
+                }.bind(this));
+                if (!isMasterSelected) {
+                    var infoMessage = "" + selectedProjection.name + " er ikke valgt som fellesvalg";
+                    this.masterOrderLine.allOrderLineInfoMessages[orderLineUuid]["projection"].push(infoMessage);
+                }
+            }.bind(this));
+        },
+        hasSelectedFormatsDifferentFromMasterSelectedFormats: function (orderLineUuid) {
+            this.masterOrderLine.allSelectedFormats[orderLineUuid].forEach(function (selectedFormat) {
+                var isMasterSelected = false;
+                this.masterOrderLine.masterSelectedFormats.forEach(function (masterSelectedFormat) {
+                    if (masterSelectedFormat.name == selectedFormat.name) {
+                        isMasterSelected = true;
+                    }
+                }.bind(this));
+                if (!isMasterSelected) {
+                    var infoMessage = "" + selectedFormat.name + " er ikke valgt som fellesvalg";
+                    this.masterOrderLine.allOrderLineInfoMessages[orderLineUuid]["format"].push(infoMessage);
+                }
+            }.bind(this));
+        },
+
+        updateInfoMessagesForOrderLine: function (orderLineUuid) {
+            this.masterOrderLine.allOrderLineInfoMessages[orderLineUuid] = {};
+            this.masterOrderLine.allOrderLineInfoMessages[orderLineUuid]["projection"] = [];
+            this.masterOrderLine.allOrderLineInfoMessages[orderLineUuid]["format"] = [];
+            this.masterOrderLine.allOrderLineInfoMessages[orderLineUuid]["area"] = [];
+
+            this.hasSelectedProjectionsDifferentFromMasterSelectedProjections(orderLineUuid);
+            this.hasSelectedFormatsDifferentFromMasterSelectedFormats(orderLineUuid);
+
+        },
         validateAreas: function () {
             var emailRequired = false;
             for (orderLineUuid in this.masterOrderLine.allAvailableAreas) {
@@ -1113,6 +1175,7 @@ var mainVueModel = new Vue({
                 } else {
                     this.masterOrderLine.allOrderLineErrors[orderLineUuid]["area"] = ["Datasett mangler valgt område"];
                 }
+                this.updateInfoMessagesForOrderLine(orderLineUuid);
                 this.updateSelectedAreasForSingleOrderLine(orderLineUuid, false);
             }
             this.emailRequired = emailRequired;

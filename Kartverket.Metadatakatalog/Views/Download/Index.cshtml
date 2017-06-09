@@ -127,16 +127,21 @@
             <span class="expand-arrow" v-bind:class="[expanded ? 'active' : '']"></span> {{ metadata.name }}
         </h2>
         <div class="pull-right margin-top-10">
-            <span v-if="!hasAreas" class="orderline-field-counter">
+            <span v-show="hasInfoMessages" class="orderline-field-counter">
+                <span v-on:click="expanded = true" class="custom-icon custom-icon-info" data-toggle="tooltip" data-placement="bottom" title="Vis meldinger">
+                    <span class="custom-icon-overlay">{{ numberOfInfoMessages }}</span>
+                </span>
+            </span>
+            <span v-show="!hasAreas" class="orderline-field-counter">
                 <span v-on:click="expanded = true" class="custom-icon custom-icon-danger" data-toggle="tooltip" data-placement="bottom" title="Vis mangler">
                 </span>
             </span>
-            <span v-else-if="hasErrors" class="orderline-field-counter">
+            <span v-show="hasErrors" class="orderline-field-counter">
                 <span v-on:click="expanded = true" class="custom-icon custom-icon-warning" data-toggle="tooltip" data-placement="bottom" title="Vis mangler">
                     <span class="custom-icon-overlay">{{ numberOfErrors }}</span>
                 </span>
             </span>
-            <span v-else class="orderline-field-counter">
+            <span v-show="!hasErrors" class="orderline-field-counter">
                 <span class="custom-icon custom-icon-checked" data-toggle="tooltip" data-placement="bottom" title="Datasett er korrekt utfylt">
                 </span>
             </span>
@@ -165,8 +170,10 @@
                         <div v-show="orderLineErrors.projection.length" class="help-text form-element-help-text bg-danger">
                             <span class="custom-icon projection-warning-icon"></span> Mangler projeksjon for {{ orderLineErrors.projection.length }} {{orderLineErrors.projection.length == 1 ? "område" : "områder"}}
                         </div>
-                        <div v-for="orderlineError in orderLineErrors.projection" class="help-text hidden form-element-help-text bg-danger">
-                            {{ orderlineError }}
+                    </div>
+                    <div v-if="orderLineInfoMessages && orderLineInfoMessages.projection" class="orderline-errors margin-top-10">
+                        <div v-show="orderLineInfoMessages.projection.length" class="help-text form-element-help-text bg-info">
+                            {{ orderLineInfoMessages.projection.length }} {{orderLineInfoMessages.projection.length == 1 ? "projeksjon" : "projeksjoner"}} er ikke valgt som fellesvalg
                         </div>
                     </div>
                 </div>
@@ -179,8 +186,10 @@
                         <div v-show="orderLineErrors.format.length" class="help-text form-element-help-text bg-danger">
                             <span class="custom-icon format-warning-icon"></span> Mangler format for {{ orderLineErrors.format.length }} {{orderLineErrors.format.length == 1 ? "område" : "områder"}}
                         </div>
-                        <div v-for="orderlineError in orderLineErrors.format" class="help-text hidden form-element-help-text bg-danger">
-                            {{ orderlineError }}
+                    </div>
+                    <div v-if="orderLineInfoMessages && orderLineInfoMessages.format" class="orderline-errors margin-top-10">
+                        <div v-show="orderLineInfoMessages.format.length" class="help-text form-element-help-text bg-info">
+                            {{ orderLineInfoMessages.format.length }} {{orderLineInfoMessages.format.length == 1 ? "format" : "formater"}} er ikke valgt som fellesvalg
                         </div>
                     </div>
                 </div>
@@ -277,7 +286,8 @@
                          v-bind:selected-coordinates="masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] : ''"
                          v-bind:default-projections="masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] : []"
                          v-bind:default-formats="masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] : []"
-                         v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}">
+                         v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}"
+                         v-bind:order-line-info-messages="masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] : {}">
                     </div>
                 </div>
             </div>
