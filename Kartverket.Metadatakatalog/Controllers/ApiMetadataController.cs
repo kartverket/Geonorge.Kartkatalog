@@ -118,7 +118,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Log.Info("Run re-indexing of entire metadata catalogue.");
                 DateTime start = DateTime.Now;
 
-                _indexer.RunIndexing();
+                _indexer.RunReIndexing();
 
                 DateTime stop = DateTime.Now;
                 double seconds = stop.Subtract(start).TotalSeconds;
