@@ -314,13 +314,13 @@ if (contact != null)
     @Html.Partial("_resultItemRow")
 
     @*Template for a table row*@
-    <script type="text/x-template" id="resultItemRow">
+<script type="text/x-template" id="resultItemRow">
         <div>
             <div class="resultItemRow">
                 <div class="row">
 
                     @*Tittel*@
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <div class="resultItemRowTitle">
                             <a v-bind:href="readMoreUrl" class="show-loading-animation">
                                 <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
@@ -346,11 +346,13 @@ if (contact != null)
                     </div>
 
                     @*Kart*@
-                    <div class="col-xs-1">
-                        <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                    <div class="col-xs-1">                           
+                        <a v-bind:id="mapLink.mapLinkId" v-bind:href="mapLink.url" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
                             <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
                         </a>
                     </div>
+                   
+
 
                     @*Last ned*@
                     <div class="col-xs-1">
@@ -382,9 +384,6 @@ if (contact != null)
                             <span class="custom-icon custom-icon-lastned"></span>
                         </a>
                     </div>
-                    <div class="col-xs-1">
-                        {{resultItem.FormatName}} {{resultItem.FormatVersion}}
-                    </div>
                 </div>
             </div>
 
@@ -401,13 +400,12 @@ if (contact != null)
             <h3>Distribusjoner</h3>
 
             <div class="row resultItemRowTableHeader">
-                <div class="col-sm-3"><p>Tittel</p></div>
+                <div class="col-sm-4"><p>Tittel</p></div>
                 <div class="col-sm-2"><p>Type</p></div>
                 <div class="col-sm-3"><p>Dataeier</p></div>
                 <div class="col-sm-1"><p>Åpne data</p></div>
                 <div class="col-sm-1"><p>Kart</p></div>
                 <div class="col-sm-1"><p>Last ned</p></div>
-                <div class="col-sm-1"><p>Format</p></div>
             </div>
 
             <div class="menu-separator search-results-table-heading"></div>
@@ -445,13 +443,12 @@ if (contact != null)
                 <div class="clearfix"></div>
 
                 <div class="row resultItemRowTableHeader">
-                    <div class="col-sm-3"><p>Tittel</p></div>
+                    <div class="col-sm-4"><p>Tittel</p></div>
                     <div class="col-sm-2"><p>Type</p></div>
                     <div class="col-sm-3"><p>Dataeier</p></div>
                     <div class="col-sm-1"><p>Åpne data</p></div>
                     <div class="col-sm-1"><p>Kart</p></div>
                     <div class="col-sm-1"><p>Last ned</p></div>
-                    <div class="col-sm-1"><p>Format</p></div>
                 </div>
 
                 <div class="menu-separator search-results-table-heading"></div>
@@ -779,6 +776,7 @@ if (keywords != null && keywords.Any())
             data: {
                 tableBorder: "",
                 distributionlist: [],
+                relatedDataRaw: [],
                 relatedDataList: [],
                 model: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
             },
@@ -790,19 +788,18 @@ if (keywords != null && keywords.Any())
                     this.distributionlist = this.convertDistributionList(response.data);
                 }.bind(this));
                 this.relatedDataList = this.convertRelatedDataList();
-                //this.relatedDataList = this.model.Related;
 
             },
             methods: {
                 convertDistributionList: function(distributionList) {
                     var distributionArray = new Array();
                     distributionList.forEach(function(distribution) {
-                        var format = distribution.FormatName + " " + distribution.FormatVersion;
                         var resultItem =
                         {
                             ShowMapLink: distribution.CanShowMapUrl,
-                            ShowServiceMapLink: distribution.AccessIsRestricted,
-                            MapUrl: distribution.MapUrl,
+                            ShowServiceMapLink: distribution.CanShowServiceMapUrl,
+                            MapUrl: distribution.MapLink,
+                            ServiceUrl: distribution.ServiceLink,
 
                             ShowDownloadService: distribution.CanShowDownloadService,
                             ShowDownloadLink: distribution.CanShowDownloadUrl,
@@ -812,7 +809,6 @@ if (keywords != null && keywords.Any())
                             IsOffline: distribution.AccessIsProtected,
                             IsOpendata: distribution.AccessIsOpendata,
 
-                            FormatName: format,
                             Organization: distribution.Organization,
                             OrganizationSeoName: this.makeSeoFriendlyString(distribution.Organization),
                             Title: distribution.Title,
@@ -855,8 +851,9 @@ if (keywords != null && keywords.Any())
                         var resultItem =
                         {
                             ShowMapLink: item.CanShowMapUrl,
-                            ShowServiceMapLink: item.AccessIsRestricted,
-                            MapUrl: item.MapUrl,
+                            ShowServiceMapLink: item.CanShowServiceMapUrl,
+                            MapUrl: item.MapLink,
+                            ServiceUrl: item.ServiceLink,
 
                             ShowDownloadService: item.CanShowDownloadService,
                             ShowDownloadLink: item.CanShowDownloadUrl,
@@ -870,27 +867,15 @@ if (keywords != null && keywords.Any())
                             OrganizationSeoName: this.makeSeoFriendlyString(item.ContactOwner.Organization),
                             Title: item.Title,
                             TitleSeo: this.makeSeoFriendlyString(item.Title),
-                            //Type: item.HierarchyLevel,
-                            Type: this.translateDistributionType(item.DistributionDetails.Protocol),
-                            Type2: item.DistributionDetails.Protocol,
+                            Type: item.DistributionDetails.ProtocolName,
 
                             Uuid: item.Uuid
                         }
+
                         this.relatedDataList.push(resultItem);
                     }.bind(this));
                     return this.relatedDataList;
                 },
-                translateDistributionType: function(type) {
-                    axios.get('@Html.RegistryUrl()' + "api/subregister/metadata-kodelister/kartverket/distribusjonstyper")
-                        .then(function(response) {
-                            response.data.containeditems.forEach(function(item) {
-                                if (item.codevalue == type) {
-                                    type = item.label;
-                                }
-                            }.bind(this));
-                            return type;
-                        }.bind(this));
-                }
             },
 
 

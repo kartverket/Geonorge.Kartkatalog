@@ -105,8 +105,11 @@ namespace Kartverket.Metadatakatalog.Models
         public bool AccessIsRestricted { get; set; }
         public bool AccessIsProtected { get; set; }
         public bool CanShowMapUrl { get; set; }
+        public bool CanShowServiceMapUrl { get; set; }
         public bool CanShowDownloadService { get; set; }
         public bool CanShowDownloadUrl { get; set; }
+        public string MapLink { get; set; }
+        public string ServiceLink { get; set; }
 
 
         public SeoUrl CreateSeoUrl()
@@ -229,17 +232,17 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsService()
         {
-            return HierarchyLevel == "service";
+            return HierarchyLevel == "service" || HierarchyLevel == "Tjeneste";
         }
 
         public bool IsServiceLayer()
         {
-            return HierarchyLevel == "service" && (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.Name));
+            return HierarchyLevel == "service" || HierarchyLevel == "Tjeneste" && (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.Name));
         }
 
         public bool IsDataset()
         {
-            return HierarchyLevel == "dataset";
+            return HierarchyLevel == "dataset" || HierarchyLevel == "Datasett";
         }
 
         public bool IsDatasetSeries()
@@ -249,12 +252,12 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsApplication()
         {
-            return HierarchyLevel == "software";
+            return HierarchyLevel == "software" || HierarchyLevel == "Applikasjon";
         }
 
         public bool IsDatasetBundle()
         {
-            return HierarchyLevel == "dimensionGroup";
+            return HierarchyLevel == "dimensionGroup" || HierarchyLevel == "Datapakke";
         }
 
         public bool IsOpendata()

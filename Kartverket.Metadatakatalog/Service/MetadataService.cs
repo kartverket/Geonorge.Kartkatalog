@@ -512,6 +512,7 @@ namespace Kartverket.Metadatakatalog.Service
                             {
                                 Name = relData[5] != null ? relData[5] : "",
                                 Protocol = relData[6] != null ? relData[6] : "",
+                                ProtocolName = relData[6] != null ? register.GetDistributionType(relData[6]) : "",
                                 URL = relData[7] != null ? relData[7] : ""
                             };
                             if (!string.IsNullOrEmpty(relData[8]))
@@ -536,7 +537,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 OtherConstraintsAccess = relData[12]
                             };
 
-                            if (md.HierarchyLevel == "service")
+                            if (md.IsService())
                             {
                                 md.ServiceUuid = md.Uuid;
                                 md.ServiceDistributionAccessConstraint = relData[12];
@@ -567,9 +568,13 @@ namespace Kartverket.Metadatakatalog.Service
                             md.AccessIsOpendata = md.IsOpendata();
                             md.AccessIsProtected = md.IsOffline();
 
-                            metadata.CanShowMapUrl = metadata.ShowMapLink();
-                            metadata.CanShowDownloadService = md.ShowDownloadService();
-                            metadata.CanShowDownloadUrl = md.ShowDownloadLink();
+                            md.CanShowMapUrl = md.ShowMapLink();
+                            md.CanShowServiceMapUrl = md.ShowServiceMapLink();
+                            md.CanShowDownloadService = md.ShowDownloadService();
+                            md.CanShowDownloadUrl = md.ShowDownloadLink();
+                            md.MapLink = md.MapUrl();
+                            md.ServiceLink = md.ServiceUrl();
+
 
 
                             metadata.Related.Add(md);
@@ -605,6 +610,7 @@ namespace Kartverket.Metadatakatalog.Service
                             {
                                 Name = relData[5] != null ? relData[5] : "",
                                 Protocol = relData[6] != null ? relData[6] : "",
+                                ProtocolName = relData[6] != null ? register.GetDistributionType(relData[6]) : "",
                                 URL = relData[7] != null ? relData[7] : ""
                             };
                             if (!string.IsNullOrEmpty(relData[8]))
@@ -675,6 +681,7 @@ namespace Kartverket.Metadatakatalog.Service
                             {
                                 Name = relData[5] != null ? relData[5] : "",
                                 Protocol = relData[6] != null ? relData[6] : "",
+                                ProtocolName = relData[6] != null ? register.GetDistributionType(relData[6]) : "",
                                 URL = relData[7] != null ? relData[7] : ""
                             };
                             if (!string.IsNullOrEmpty(relData[8]))
@@ -702,9 +709,13 @@ namespace Kartverket.Metadatakatalog.Service
                             md.AccessIsOpendata = md.IsOpendata();
                             md.AccessIsProtected = md.IsOffline();
 
-                            metadata.CanShowMapUrl = metadata.ShowMapLink();
-                            metadata.CanShowDownloadService = md.ShowDownloadService();
-                            metadata.CanShowDownloadUrl = md.ShowDownloadLink();
+                            md.CanShowMapUrl = md.ShowMapLink();
+                            md.CanShowServiceMapUrl = md.ShowServiceMapLink();
+                            md.CanShowDownloadService = md.ShowDownloadService();
+                            md.CanShowDownloadUrl = md.ShowDownloadLink();
+
+                            md.MapLink = md.MapUrl();
+                            md.ServiceLink = md.ServiceUrl();
 
                             metadata.Related.Add(md);
                         }
@@ -739,6 +750,7 @@ namespace Kartverket.Metadatakatalog.Service
                             {
                                 Name = relData[5] != null ? relData[5] : "",
                                 Protocol = relData[6] != null ? relData[6] : "",
+                                ProtocolName = relData[6] != null ? register.GetDistributionType(relData[6]) : "",
                                 URL = relData[7] != null ? relData[7] : ""
                             };
                             if (!string.IsNullOrEmpty(relData[8]))
@@ -769,9 +781,12 @@ namespace Kartverket.Metadatakatalog.Service
                             md.AccessIsOpendata = md.IsOpendata();
                             md.AccessIsProtected = md.IsOffline();
 
-                            metadata.CanShowMapUrl = metadata.ShowMapLink();
-                            metadata.CanShowDownloadService = md.ShowDownloadService();
-                            metadata.CanShowDownloadUrl = md.ShowDownloadLink();
+                            md.CanShowMapUrl = md.ShowMapLink();
+                            md.CanShowDownloadService = md.ShowDownloadService();
+                            md.CanShowDownloadUrl = md.ShowDownloadLink();
+
+                            md.MapLink = md.MapUrl();
+                            md.ServiceLink = md.ServiceUrl();
 
                             metadata.Related.Add(md);
                         }
@@ -788,8 +803,12 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.AccessIsProtected = metadata.IsOffline();
 
             metadata.CanShowMapUrl = metadata.ShowMapLink();
+            metadata.CanShowServiceMapUrl = metadata.ShowServiceMapLink();
             metadata.CanShowDownloadService = metadata.ShowDownloadService();
             metadata.CanShowDownloadUrl = metadata.ShowDownloadLink();
+
+            metadata.MapLink = metadata.MapUrl();
+            metadata.ServiceLink = metadata.ServiceUrl();
 
             return metadata;
         }
