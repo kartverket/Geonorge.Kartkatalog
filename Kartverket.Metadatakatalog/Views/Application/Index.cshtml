@@ -101,7 +101,7 @@
                     </div>
 
                     @*Organisasjon*@
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
                             {{resultItem.Organization}}
                         </a>
@@ -113,7 +113,7 @@
                     </div>
 
                     @*Besøk nettsiden*@
-                    <div class="col-xs-2 text-center">
+                    <div class="col-xs-1 text-center">
                         <a v-bind:href="resultItem.DistributionUrl" target="_blank">
                             <span class="custom-icon custom-icon-eksternlink"></span>
                         </a>
@@ -286,13 +286,13 @@
                         </p>
                     </div>
                     <div class="col-sm-2"><p>Type</p></div>
-                    <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
+                    <div v-bind:class="orderByOwner.className" class="col-sm-4" v-bind:id="orderByOwner.id">
                         <p>
                             <a href="@Url.Action("Index", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
                         </p>
                     </div>
                     <div class="col-sm-1"><p>Åpne data</p></div>
-                    <div class="col-sm-2 text-center" style="bottom:-30px"><span>Nettside</span></div>
+                    <div class="col-sm-1"><p>Nett-side</p></div>
                 </div>
 
                 <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
