@@ -416,29 +416,6 @@ var OrderLine = {
         readProperty: function (obj, prop) {
             return obj[prop];
         },
-        filterOptionList: function (optionListId, inputValue) {
-            var dropdownListElements = document.getElementsByClassName(optionListId);
-            var filter = inputValue.toUpperCase();
-            for (var listIndex = 0; listIndex < dropdownListElements.length; listIndex++) {
-                var listItems = dropdownListElements[listIndex].getElementsByTagName('li');
-                var hasResults = false;
-                for (var i = 0; i < listItems.length; i++) {
-                    if (listItems[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                        listItems[i].style.display = "";
-                        hasResults = true;
-                    } else {
-                        listItems[i].style.display = "none";
-                    }
-                }
-
-                var optionGroupNameElement = $(dropdownListElements[listIndex]).closest("div").find(".custom-select-list-option-group-name");
-                if (!hasResults) {
-                    optionGroupNameElement.hide();
-                } else {
-                    optionGroupNameElement.show();
-                }
-            }
-        },
         selectFromMap: function (orderItem, mapType) {
             orderItem.showMap = true;
             if (!this.mapIsLoaded) {
@@ -695,29 +672,6 @@ var MasterOrderLine = {
         },
         readProperty: function (obj, prop) {
             return obj[prop];
-        },
-        filterOptionList: function (optionListId, inputValue) {
-            var dropdownListElements = document.getElementsByClassName(optionListId);
-            var filter = inputValue.toUpperCase();
-            for (var listIndex = 0; listIndex < dropdownListElements.length; listIndex++) {
-                var listItems = dropdownListElements[listIndex].getElementsByTagName('li');
-                var hasResults = false;
-                for (var i = 0; i < listItems.length; i++) {
-                    if (listItems[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
-                        listItems[i].style.display = "";
-                        hasResults = true;
-                    } else {
-                        listItems[i].style.display = "none";
-                    }
-                }
-
-                var optionGroupNameElement = $(dropdownListElements[listIndex]).closest("div").find(".custom-select-list-option-group-name");
-                if (!hasResults) {
-                    optionGroupNameElement.hide();
-                } else {
-                    optionGroupNameElement.show();
-                }
-            }
         },
         masterSupportsPolygonSelection: function () {
             var masterSupportsPolygonSelection = false;

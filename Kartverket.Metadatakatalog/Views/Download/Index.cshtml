@@ -37,28 +37,30 @@
                     <span v-show="!master && !area.hasSelectedFormats" data-toggle="tooltip" data-placement="bottom" title="Støttet format er ikke valgt" class="format-warning-icon"></span>
                     <span v-on:click="removeSelectedArea(area)" class="custom-select-list-remove-button"></span>
                 </span>
-                <input v-on:keyup="$parent.filterOptionList('area-option-list', $event.target.value)" type="text" class="custom-select-list-input" />
+                <input type="text" class="custom-select-list-input" />
             </div>
-            <div class="custom-select-list-dropdown">
-                <div class="custom-select-list-dropdown-content">
-                    <div v-if="available.landsdekkende" class="custom-select-list-option-group">
-                        <p class="custom-select-list-option-group-name">Landsdekkende</p>
-                        <ul class="custom-select-list-options area-option-list">
-                            <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': area.isSelected}" v-for="area in available.landsdekkende">{{ area.name }}</li>
-                        </ul>
-                    </div>
-                    <div v-for="(areas, areaType) in available" class="custom-select-list-option-group">
-                        <div v-if="areaType !== 'landsdekkende' && (!master || $root.isSupportedType(areaType))" v-show="areas.length">
-                            <p class="custom-select-list-option-group-name">{{ areaType }}</p>
+            <div class="custom-select-list-dropdown-container">
+                <div class="custom-select-list-dropdown">
+                    <div class="custom-select-list-dropdown-content">
+                        <div v-if="available.landsdekkende" class="custom-select-list-option-group">
+                            <p class="custom-select-list-option-group-name">Landsdekkende</p>
                             <ul class="custom-select-list-options area-option-list">
-                                <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': (!master && area.isSelected) || (master && isMasterSelected(area)) }" v-for="area in areas">{{ area.name }}</li>
+                                <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': area.isSelected}" v-for="area in available.landsdekkende">{{ area.name }}</li>
                             </ul>
                         </div>
+                        <div v-for="(areas, areaType) in available" class="custom-select-list-option-group">
+                            <div v-if="areaType !== 'landsdekkende' && (!master || $root.isSupportedType(areaType))" v-show="areas.length">
+                                <p class="custom-select-list-option-group-name">{{ areaType }}</p>
+                                <ul class="custom-select-list-options area-option-list">
+                                    <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': (!master && area.isSelected) || (master && isMasterSelected(area)) }" v-for="area in areas">{{ area.name }}</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="custom-select-list-dropdown-additional-options">
-                    <a v-show="supportsPolygonSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
-                    <a v-show="supportsGridSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'grid')" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
+                    <div class="custom-select-list-dropdown-additional-options">
+                        <a v-show="supportsPolygonSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
+                        <a v-show="supportsGridSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'grid')" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,12 +93,16 @@
                 {{ projection.name }}
                 <span v-on:click="removeSelectedProjection(projection)" class="custom-select-list-remove-button"></span>
             </span>
-            <input v-on:keyup="$parent.filterOptionList('projection-option-list', $event.target.value)" type="text" class="custom-select-list-input" />
+            <input type="text" class="custom-select-list-input" />
         </div>
-        <div class="custom-select-list-dropdown">
-            <ul class="custom-select-list-options projection-option-list">
-                <li v-on:click="selectProjection(projection)" v-bind:class="{'is-selected': (!master && projection.isSelected) || (master && isMasterSelected(projection))}" v-for="(projection, projectionCode) in available">{{ projection.name }}</li>
-            </ul>
+        <div class="custom-select-list-dropdown-container">
+            <div class="custom-select-list-dropdown">
+                <div class="custom-select-list-dropdown-content">
+                    <ul class="custom-select-list-options projection-option-list">
+                        <li v-on:click="selectProjection(projection)" v-bind:class="{'is-selected': (!master && projection.isSelected) || (master && isMasterSelected(projection))}" v-for="(projection, projectionCode) in available">{{ projection.name }}</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </script>
@@ -110,12 +116,16 @@
                 {{ format.name }}
                 <span v-on:click="removeSelectedFormat(format)" class="custom-select-list-remove-button"></span>
             </span>
-            <input v-on:keyup="$parent.filterOptionList('format-option-list', $event.target.value)" type="text" class="custom-select-list-input" />
+            <input type="text" class="custom-select-list-input" />
         </div>
-        <div class="custom-select-list-dropdown">
-            <ul class="custom-select-list-options format-option-list">
-                <li v-on:click="selectFormat(format)" v-bind:class="{'is-selected': (!master && format.isSelected) || (master && isMasterSelected(format))}" v-for="(format, formatName) in available">{{ format.name }}</li>
-            </ul>
+        <div class="custom-select-list-dropdown-container">
+            <div class="custom-select-list-dropdown">
+                <div class="custom-select-list-dropdown-content">
+                    <ul class="custom-select-list-options format-option-list">
+                        <li v-on:click="selectFormat(format)" v-bind:class="{'is-selected': (!master && format.isSelected) || (master && isMasterSelected(format))}" v-for="(format, formatName) in available">{{ format.name }}</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </script>
