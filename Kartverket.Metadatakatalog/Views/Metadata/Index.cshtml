@@ -417,7 +417,7 @@ if (contact != null)
         </article>
 
         @* *** Relaterte data ****@
-        <article @*v-if="model.HierarchyLevel == 'service'"*@ class="col-md-12">
+        <article v-if="model.HierarchyLevel == 'service' && model.Related && model.Related.length > 0" class="col-md-12">
             @if (Model.Related != null && Model.Related.Count > 0)
             {
                 <div class="row search-result-navigation">
