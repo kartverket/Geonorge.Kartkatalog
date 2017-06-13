@@ -67,7 +67,7 @@
                     <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
                 </a>
 
-                <button class="btn btn-copy" v-bind:data-clipboard-text="resultItem.GetCapabilitiesUrl" alt="Kopier til utklippstavle">
+                <button v-bind:class="copyClass.btn" v-bind:data-clipboard-text="resultItem.GetCapabilitiesUrl" alt="Kopier til utklippstavle">
                     Url til tjeneste
                 </button>
             </div>
@@ -114,7 +114,7 @@
 
                     @*Kopier url*@
                     <div class="col-xs-1 search-results-action-icons">
-                        <span class="btn btn-copy input-group-addon" data-toggle="tooltip" data-placement="bottom" v-bind:data-clipboard-text="resultItem.GetCapabilitiesUrl" alt="Kopier til utklippstavle" onclick="">
+                        <span v-bind:class="copyClass.icon" data-toggle="tooltip" data-placement="bottom" v-bind:data-clipboard-text="resultItem.GetCapabilitiesUrl" alt="Kopier til utklippstavle" onclick="">
                             <i class="fa fa-clipboard"></i>
                         </span>
                     </div>

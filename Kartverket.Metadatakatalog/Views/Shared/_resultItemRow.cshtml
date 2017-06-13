@@ -80,8 +80,6 @@
                 }
                 return mapLink;
             },
-
-
             itemAddToCart: function() {
                 var itemAddToCart = {
                     buttonClass: "btn btn-default add-to-cart-btn",
@@ -142,6 +140,17 @@
                 var src = "/thumbnail?uuid=" + this.resultItem.Uuid + "&type=small";
                 return src;
             },
+            copyClass: function() {
+                copyClass = {
+                    btn: "btn btn-copy",
+                    icon: "btn btn-copy input-group-addon"
+                };
+                if (this.resultItem.GetCapabilitiesUrl.length == 0) {
+                    copyClass.btn = "btn disabled";
+                    copyClass.icon = "btn input-group-addon disabled";
+                }
+                return copyClass;
+            }
         },
         methods: {
             downloadUrl: function(url) {
