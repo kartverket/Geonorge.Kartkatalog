@@ -76,9 +76,11 @@ var Areas = {
         selectArea: function (area) {
             if (this.master) {
                 for (orderLineUuid in this.$root.masterOrderLine.allAvailableAreas) {
+                    var notAvailableForOrderLine = true;
                     if (this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type] !== undefined) {
                         this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type].forEach(function (availableArea, index) {
                             if (availableArea.code == area.code) {
+                                notAvailableForOrderLine = false;
                                 this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type][index].isSelected = true;
 
                                 var isAllreadyAddedInfo = this.$root.isAllreadyAdded(this.$root.masterOrderLine.masterSelectedAreas, area, "code");
@@ -87,6 +89,12 @@ var Areas = {
                                 }
                             }
                         }.bind(this));
+                    }
+                    if (notAvailableForOrderLine) {
+                        if (this.$root.masterOrderLine.allNotAvailableSelectedAreas[orderLineUuid] == undefined) {
+                            this.$root.masterOrderLine.allNotAvailableSelectedAreas[orderLineUuid] = [];
+                        }
+                        this.$root.masterOrderLine.allNotAvailableSelectedAreas[orderLineUuid].push(area);
                     }
                 }
                 this.$root.updateSelectedAreasForAllOrderLines(true);
@@ -97,7 +105,6 @@ var Areas = {
                     this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type].forEach(function (availableArea, index) {
                         if (availableArea.code == area.code) {
                             this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type][index].isSelected = true;
-
                         }
                     }.bind(this));
                 }
@@ -109,14 +116,25 @@ var Areas = {
         removeSelectedArea: function (area) {
             if (this.master) {
                 for (orderLineUuid in this.$root.masterOrderLine.allAvailableAreas) {
+                    var notAvailableForOrderLine = true;
                     if (this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type] !== undefined) {
                         // Unselect from order lines
                         this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type].forEach(function (availableArea, index) {
                             if (availableArea.code == area.code) {
+                                notAvailableForOrderLine = false;
                                 this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type][index].isSelected = false;
 
                             }
                         }.bind(this));
+                    }
+                    if (notAvailableForOrderLine) {
+                        if (this.$root.masterOrderLine.allNotAvailableSelectedAreas[orderLineUuid] !== undefined) {
+                            this.$root.masterOrderLine.allNotAvailableSelectedAreas[orderLineUuid].forEach(function (notAvailableSelectedArea, index) {
+                                if (notAvailableSelectedArea.code == area.code) {
+                                    this.$root.masterOrderLine.allNotAvailableSelectedAreas[orderLineUuid].splice(index, 1);
+                                }
+                            }.bind(this));
+                        }
                     }
                     // Unselect from master order line
                     this.$root.masterOrderLine.masterSelectedAreas.forEach(function (selectedArea, index) {
@@ -326,7 +344,7 @@ var Formats = {
 
 
 var OrderLine = {
-    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'selectedCoordinates', 'defaultProjections', 'defaultFormats', 'orderLineErrors', 'orderLineInfoMessages'],
+    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'selectedCoordinates', 'defaultProjections', 'defaultFormats', 'orderLineErrors', 'orderLineInfoMessages', 'notAvailableSelectedAreas'],
     template: '#order-line-template',
     data: function () {
         var data = {
@@ -383,6 +401,7 @@ var OrderLine = {
                     }
                 }
             }
+            if (this.notAvailableSelectedAreas.length) hasInfoMessages = true;
             return hasInfoMessages;
         },
         numberOfInfoMessages: function () {
@@ -394,8 +413,9 @@ var OrderLine = {
                     }
                 }
             }
+            if (this.notAvailableSelectedAreas.length) numberOfInfoMessages++;
             return numberOfInfoMessages;
-        }
+        },
     },
     methods: {
         isAllreadyAdded: function (array, item, propertyToCompare) {
@@ -883,7 +903,8 @@ var mainVueModel = new Vue({
             allOrderLineErrors: {},
             allOrderLineInfoMessages: {},
             allDefaultProjections: {},
-            allDefaultFormats: {}
+            allDefaultFormats: {},
+            allNotAvailableSelectedAreas: {}
         }
     },
     computed: {

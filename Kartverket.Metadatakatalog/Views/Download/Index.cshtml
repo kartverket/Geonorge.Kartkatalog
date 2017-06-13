@@ -170,6 +170,11 @@
                             {{ orderlineError }}
                         </div>
                     </div>
+                    <div v-if="notAvailableSelectedAreas && notAvailableSelectedAreas.length" class="orderline-errors margin-top-10">
+                        <div class="help-text form-element-help-text bg-info">
+                            {{ notAvailableSelectedAreas.length }} {{notAvailableSelectedAreas.length == 1 ? "valgt område" : "valgte områder"}} er ikke tilgjengelig
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4 orderline-field">
                     <p>Projeksjon</p>
@@ -297,7 +302,8 @@
                          v-bind:default-projections="masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] : []"
                          v-bind:default-formats="masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] : []"
                          v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}"
-                         v-bind:order-line-info-messages="masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] : {}">
+                         v-bind:order-line-info-messages="masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] : {}"
+                         v-bind:not-available-selected-areas="masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] : []">
                     </div>
                 </div>
             </div>
