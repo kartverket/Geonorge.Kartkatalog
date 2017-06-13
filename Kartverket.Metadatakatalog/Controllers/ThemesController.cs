@@ -7,27 +7,32 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Models;
+using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
     [Authorize]
     public class ThemesController : Controller
     {
-        private MetadataContext db = new MetadataContext();
+        private IThemeService _themeService;
+
+        public ThemesController(IThemeService themeService)
+        {
+            _themeService = themeService;
+        }
 
         // GET: Themes
         public ActionResult Index()
         {
-            var model = new List<Theme>();
+            var model = _themeService.GetThemes();
 
-                model = db.Themes.ToList();
             return View(model);
         }
 
         // GET: Themes/Create
         public ActionResult Create()
         {
-            ViewBag.ParentId = new SelectList(db.Themes, "Id", "Name");
+            ViewBag.ParentId = new SelectList(_themeService.GetThemes(), "Id", "Name");
             return View();
         }
 
@@ -40,12 +45,11 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Themes.Add(theme);
-                db.SaveChanges();
+                _themeService.AddTheme(theme);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ParentId = new SelectList(db.Themes, "Id", "Name", theme.ParentId);
+            ViewBag.ParentId = new SelectList(_themeService.GetThemes(), "Id", "Name", theme.ParentId);
             return View(theme);
         }
 
@@ -56,12 +60,12 @@ namespace Kartverket.Metadatakatalog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Theme theme = db.Themes.Find(id);
+            Theme theme = _themeService.GetTheme(id);
             if (theme == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ParentId = new SelectList(db.Themes, "Id", "Name", theme.ParentId);
+            ViewBag.ParentId = new SelectList(_themeService.GetThemes(), "Id", "Name", theme.ParentId);
             return View(theme);
         }
 
@@ -74,26 +78,10 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Database.ExecuteSqlCommand("DELETE FROM ThemeMetadatas WHERE Theme_Id = {0}", theme.Id);
-
-                foreach (var uuid in operatesOn)
-                {
-                    var metadata = db.Metadatas.Where(m => m.Uuid == uuid).FirstOrDefault();
-
-                    if (metadata == null)
-                    {
-                        db.Metadatas.Add(new Metadata { Uuid = uuid });
-                        db.SaveChanges();
-                    }
-
-                    db.Database.ExecuteSqlCommand("INSERT INTO ThemeMetadatas(Theme_Id, Metadata_Uuid) VALUES({0}, {1})", theme.Id, uuid);
-                }
-
-                db.Entry(theme).State = EntityState.Modified;
-                db.SaveChanges();
+                _themeService.UpdateTheme(theme, operatesOn);
                 return RedirectToAction("Index");
             }
-            ViewBag.ParentId = new SelectList(db.Themes, "Id", "Name", theme.ParentId);
+            ViewBag.ParentId = new SelectList(_themeService.GetThemes(), "Id", "Name", theme.ParentId);
             return View(theme);
         }
 
@@ -104,7 +92,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Theme theme = db.Themes.Find(id);
+            Theme theme = _themeService.GetTheme(id);
             if (theme == null)
             {
                 return HttpNotFound();
@@ -117,19 +105,9 @@ namespace Kartverket.Metadatakatalog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Theme theme = db.Themes.Find(id);
-            db.Themes.Remove(theme);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+            _themeService.RemoveTheme(id);
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            return RedirectToAction("Index");
         }
     }
 }

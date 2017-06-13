@@ -277,6 +277,7 @@
     <Compile Include="Service\Application\IApplicationService.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Service\Application\ApplicationService.cs" />
+    <Compile Include="Service\IThemeService.cs" />
     <Compile Include="Service\ServiceDirectory\IServiceDirectoryService.cs" />
     <Compile Include="Controllers\MetadataController.cs" />
     <Compile Include="Controllers\ApiSearchController.cs" />
@@ -350,6 +351,7 @@
     <Compile Include="Service\SolrMetadataIndexer.cs" />
     <Compile Include="Service\PlaceResolver.cs" />
     <Compile Include="Service\ThemeResolver.cs" />
+    <Compile Include="Service\ThemeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\XmlDocument.xml">
