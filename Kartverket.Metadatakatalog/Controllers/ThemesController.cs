@@ -10,6 +10,7 @@ using Kartverket.Metadatakatalog.Models;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
+    [Authorize]
     public class ThemesController : Controller
     {
         private MetadataContext db = new MetadataContext();
