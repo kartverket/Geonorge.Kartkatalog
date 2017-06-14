@@ -11,7 +11,6 @@ using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
-    [Authorize]
     public class ThemesController : Controller
     {
         private IThemeService _themeService;
