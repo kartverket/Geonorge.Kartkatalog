@@ -1,0 +1,78 @@
+﻿@using Kartverket.Metadatakatalog.Models.ViewModels
+@using Kartverket.Metadatakatalog.Helpers
+@model SearchViewModel
+@{
+    List<SearchResultItemViewModel> result = Model.Result.Items.ToList();
+    MetadataContext db = new MetadataContext();
+    var themes = db.Themes.ToList();
+    var metadatas = db.Metadatas.ToList();
+
+    //Finn temaer som er tilknyttet metadata.
+    var themeList = (from metadata in metadatas
+                     join metadataResult in result on metadata.Uuid equals metadataResult.Uuid
+                     select metadata.Themes).ToList();
+
+    //Finn toppnivåer
+    var topLevelThemes = new List<Theme>();
+    foreach (var themeItem in themeList)
+    {
+        foreach (var theme in themeItem)
+        {
+            var parent = theme.Parent;
+            while (parent != null)
+            {
+                topLevelThemes.Add(parent);
+                parent = parent.Parent;
+            }
+        }
+    }
+
+    //Fjern toppnivåer som ikke er tilknyttet metadata
+    var topLevelThemesAvailable = themes.Where(p => p.ParentId == null).ToList();
+
+    foreach (var topLevelThemeAvailable in topLevelThemesAvailable)
+    {
+        if (!topLevelThemes.Contains(topLevelThemeAvailable)) {
+            themes.Remove(topLevelThemeAvailable);
+        }
+    }
+}
+
+@helper BuildMenu(List<Theme> data, int? parentId = null)
+{
+var items = data.Where(d => d.ParentId == parentId);
+if (items.Any())
+{
+        <ul>
+            @foreach (var item in items)
+            {
+                <li>
+                    <b><a href="/themes/edit/@item.Id">@item.Name</a></b>
+                    <ul>
+                        @foreach (var d in item.Metadata)
+                        {
+                            
+                            <li><a id="href-uuid-@d.Uuid" href="/metadata/uuid/@d.Uuid"></a></li>
+                            <script>
+                                $.getJSON(`/api/search?text=@d.Uuid`,
+                                    function (result) {
+                                        if (result.length != 0) {
+                                            if (result.Results[0] != null) {
+                                                const title = result.Results[0].Title;
+                                                $(`#href-uuid-@d.Uuid`).text(title);
+                                            }
+                                        }
+                                    });
+                            </script>
+                        }
+                    </ul>
+                    @BuildMenu(data, item.Id)
+                </li>
+            }
+        </ul>
+}
+
+}
+<div>
+    @BuildMenu(themes, null)
+</div>
