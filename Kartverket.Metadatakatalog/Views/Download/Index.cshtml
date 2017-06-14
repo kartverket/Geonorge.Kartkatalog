@@ -303,7 +303,9 @@
                          v-bind:default-formats="masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] : []"
                          v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}"
                          v-bind:order-line-info-messages="masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] : {}"
-                         v-bind:not-available-selected-areas="masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] : []">
+                         v-bind:not-available-selected-areas="masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] : []"
+                         v-bind:not-available-selected-projections="masterOrderLine.allNotAvailableSelectedProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedProjections[orderLine.metadata.uuid] : []"
+                         v-bind:not-available-selected-formats="masterOrderLine.allNotAvailableSelectedFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedFormats[orderLine.metadata.uuid] : []">
                     </div>
                 </div>
             </div>
