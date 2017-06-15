@@ -184,6 +184,7 @@ var Projections = {
                     }
                 }
                 this.$root.updateSelectedProjectionsForAllOrderLines();
+                this.$root.updateNotAvailableSelectedProjectionsForAllOrderLines();
 
             } else {
                 var orderLineUuid = this.$parent.metadata.uuid;
@@ -217,7 +218,7 @@ var Projections = {
                     }.bind(this));
                 }
                 this.$root.updateSelectedProjectionsForAllOrderLines();
-
+                this.$root.updateNotAvailableSelectedProjectionsForAllOrderLines();
             } else {
                 var orderLineUuid = this.$parent.metadata.uuid;
                 if (this.$root.masterOrderLine.allAvailableProjections[orderLineUuid] !== undefined && this.$root.masterOrderLine.allAvailableProjections[orderLineUuid].length) {
@@ -265,7 +266,7 @@ var Formats = {
                     }
                 }
                 this.$root.updateSelectedFormatsForAllOrderLines();
-
+                this.$root.updateNotAvailableSelectedFormatsForAllOrderLines();
             } else {
                 var orderLineUuid = this.$parent.metadata.uuid;
                 if (this.$root.masterOrderLine.allAvailableFormats[orderLineUuid] !== undefined && this.$root.masterOrderLine.allAvailableFormats[orderLineUuid].length) {
@@ -300,6 +301,7 @@ var Formats = {
 
                 }
                 this.$root.updateSelectedFormatsForAllOrderLines();
+                this.$root.updateNotAvailableSelectedFormatsForAllOrderLines();
             } else {
                 var orderLineUuid = this.$parent.metadata.uuid;
                 if (this.$root.masterOrderLine.allAvailableFormats[orderLineUuid] !== undefined && this.$root.masterOrderLine.allAvailableFormats[orderLineUuid].length) {
@@ -399,6 +401,8 @@ var OrderLine = {
                 }
             }
             if (this.notAvailableSelectedAreas.length) numberOfInfoMessages++;
+            if (this.notAvailableSelectedProjections.length) numberOfInfoMessages++;
+            if (this.notAvailableSelectedFormats.length) numberOfInfoMessages++;
             return numberOfInfoMessages;
         },
     },
@@ -1524,6 +1528,8 @@ var mainVueModel = new Vue({
                     }.bind(this));
                 }
             }.bind(this));
+            this.updateNotAvailableSelectedProjectionsForSingleOrderLine(orderLineUuid);
+            this.updateNotAvailableSelectedFormatsForSingleOrderLine(orderLineUuid);
         },
         updateOrderRequests: function () {
             var orderRequests = {};

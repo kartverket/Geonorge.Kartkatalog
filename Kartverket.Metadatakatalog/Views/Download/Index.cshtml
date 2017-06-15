@@ -191,6 +191,11 @@
                             {{ orderLineInfoMessages.projection.length }} {{orderLineInfoMessages.projection.length == 1 ? "valgt projeksjon" : "valgte projeksjoner"}} er ikke lik fellesvalget
                         </div>
                     </div>
+                    <div v-if="notAvailableSelectedProjections && notAvailableSelectedProjections.length" class="orderline-errors margin-top-10">
+                        <div class="help-text form-element-help-text bg-info">
+                            {{ notAvailableSelectedProjections.length }} {{notAvailableSelectedProjections.length == 1 ? "valgt projeksjon" : "valgte projeksjoner"}} er ikke tilgjengelig
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4 orderline-fields">
                     <p>Format</p>
@@ -205,6 +210,11 @@
                     <div v-if="orderLineInfoMessages && orderLineInfoMessages.format" class="orderline-errors margin-top-10">
                         <div v-show="orderLineInfoMessages.format.length" class="help-text form-element-help-text bg-info">
                             {{ orderLineInfoMessages.format.length }} {{orderLineInfoMessages.format.length == 1 ? "valgt format" : "valgte formater"}} er ikke lik som fellesvalget
+                        </div>
+                    </div>
+                    <div v-if="notAvailableSelectedFormats && notAvailableSelectedFormats.length" class="orderline-errors margin-top-10">
+                        <div class="help-text form-element-help-text bg-info">
+                            {{ notAvailableSelectedFormats.length }} {{notAvailableSelectedFormats.length == 1 ? "valgt format" : "valgte formater"}} er ikke tilgjengelig
                         </div>
                     </div>
                 </div>
