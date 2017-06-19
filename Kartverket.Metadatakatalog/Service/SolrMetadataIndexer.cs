@@ -71,9 +71,9 @@ namespace Kartverket.Metadatakatalog.Service
             else if (metadataIndexDoc.Type.ToLower() == "software")
             {
                 _indexerApplication.Index(_indexDocumentCreator.ConvertIndexDocToApplication(metadataIndexDoc));
-                //Unntak for applikasjoner som er koblet til datasett - må bruke gruppe tabellen
-
-                _indexer.Index(metadataIndexDoc);
+                //Unntak for applikasjoner som er koblet til datasett - GEOPORTAL-2170 (GEOPORTAL-2214)
+                if (metadataIndexDoc.ApplicationDatasets == null || metadataIndexDoc.ApplicationDatasets.Count == 0) //Hvis application ikke har "crossReference" noen datasett
+                    _indexer.Index(metadataIndexDoc);
             }
 
             else

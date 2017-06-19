@@ -369,6 +369,72 @@ namespace Kartverket.Metadatakatalog.Service
                 //    indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.ServiceDistributionProtocolForDataset));
                 //}
 
+                if (simpleMetadata.CrossReference != null)
+                {
+
+                    List<MetaDataEntry> applicationDatasets = new List<MetaDataEntry>();
+
+                    foreach (var rel in simpleMetadata.CrossReference)
+                    {
+                        try
+                        {
+                            MD_Metadata_Type md = geoNorge.GetRecordByUuid(rel);
+                            var simpleMd = new SimpleMetadata(md);
+
+                            SimpleKeyword nationalTheme = SimpleKeyword.Filter(simpleMd.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME).FirstOrDefault();
+                            string keywordNationalTheme = "";
+                            if (nationalTheme != null)
+                                keywordNationalTheme = nationalTheme.Keyword;
+
+                            string OrganizationLogoUrl = "";
+                            if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
+                            {
+                                Task<Organization> organizationTaskRel =
+                                _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
+                                Organization organizationRel = organizationTaskRel.Result;
+                                if (organizationRel != null)
+                                {
+                                    OrganizationLogoUrl = organizationRel.LogoUrl;
+                                }
+                            }
+
+                            string thumbnailsUrl = "";
+                            List<SimpleThumbnail> thumbnailsRel = simpleMd.Thumbnails;
+                            if (thumbnailsRel != null && thumbnailsRel.Count > 0)
+                            {
+                                thumbnailsUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMd.Uuid, thumbnailsRel[thumbnailsRel.Count - 1].URL);
+                            }
+
+                            applicationDatasets.Add(new MetaDataEntry
+                            {
+                                Uuid = simpleMd.Uuid,
+                                Title = simpleMd.Title,
+                                ParentIdentifier = simpleMd.ParentIdentifier,
+                                HierarchyLevel = simpleMd.HierarchyLevel,
+                                ContactOwnerOrganization = (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null) ? simpleMd.ContactOwner.Organization : "",
+                                DistributionDetailsName = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Name != null) ? simpleMd.DistributionDetails.Name : "",
+                                DistributionDetailsProtocol = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
+                                DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
+                                KeywordNationalTheme = keywordNationalTheme,
+                                OrganizationLogoUrl = OrganizationLogoUrl,
+                                ThumbnailUrl = thumbnailsUrl
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+
+                    List<string> applicationDatasetsNewList = new List<string>();
+                    foreach (var applicationDataset in applicationDatasets)
+                    {
+                        applicationDatasetsNewList.Add(applicationDataset.Uuid + "|" + applicationDataset.Title + "|" + applicationDataset.ParentIdentifier + "|" + applicationDataset.HierarchyLevel + "|" + applicationDataset.ContactOwnerOrganization + "|" + applicationDataset.DistributionDetailsName + "|" + applicationDataset.DistributionDetailsProtocol + "|" + applicationDataset.DistributionDetailsUrl + "|" + applicationDataset.KeywordNationalTheme + "|" + applicationDataset.OrganizationLogoUrl + "|" + applicationDataset.ThumbnailUrl);
+                    }
+
+                    indexDoc.ApplicationDatasets = applicationDatasetsNewList.ToList();
+
+                }
+
                 Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid,
                     indexDoc.Title));
                 
