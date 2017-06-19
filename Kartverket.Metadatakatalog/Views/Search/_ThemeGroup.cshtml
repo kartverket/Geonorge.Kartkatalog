@@ -1,6 +1,9 @@
 ﻿@using Kartverket.Metadatakatalog.Models.ViewModels
 @using Kartverket.Metadatakatalog.Helpers
 @model SearchViewModel
+
+
+
 @{
     List<SearchResultItemViewModel> result = Model.Result.Items.ToList();
     MetadataContext db = new MetadataContext();
@@ -32,47 +35,77 @@
 
     foreach (var topLevelThemeAvailable in topLevelThemesAvailable)
     {
-        if (!topLevelThemes.Contains(topLevelThemeAvailable)) {
+        if (!topLevelThemes.Contains(topLevelThemeAvailable))
+        {
             themes.Remove(topLevelThemeAvailable);
         }
     }
 }
+
+
 
 @helper BuildMenu(List<Theme> data, int? parentId = null)
 {
 var items = data.Where(d => d.ParentId == parentId);
 if (items.Any())
 {
-        <ul>
+        <div>
             @foreach (var item in items)
             {
-                <li>
-                    <b><a href="/themes/edit/@item.Id">@item.Name</a></b>
-                    <ul>
-                        @foreach (var d in item.Metadata)
-                        {
-                            
-                            <li><a id="href-uuid-@d.Uuid" href="/metadata/uuid/@d.Uuid"></a></li>
-                            <script>
-                                $.getJSON(`/api/search?text=@d.Uuid`,
-                                    function (result) {
-                                        if (result.length != 0) {
-                                            if (result.Results[0] != null) {
-                                                const title = result.Results[0].Title;
-                                                $(`#href-uuid-@d.Uuid`).text(title);
-                                            }
-                                        }
-                                    });
-                            </script>
-                        }
-                    </ul>
+                <div style="padding-left: 12px;">
+                    <div style="font-size: 16pt;"><span class="expand-arrow active"></span> <a style="line-height: 32pt" href="/themes/edit/@item.Id">@item.Name</a></div>
+                    @foreach (var d in item.Metadata)
+                    {
+                        <div is="theme-item" v-bind:parent-id="@Json.Encode(item.Id)" v-bind:uuid="@Json.Encode(d.Uuid)"></div>
+                    }
                     @BuildMenu(data, item.Id)
-                </li>
+                </div>
             }
-        </ul>
+        </div>
+}
 }
 
-}
-<div>
+<div id="themesVueList">
     @BuildMenu(themes, null)
 </div>
+
+
+<script type="text/x-template" id="theme-item-template">
+    <div style="padding-left: 12px;">
+        <div><a v-bind:href="metadata.ShowDetailsUrl" style="line-height: 24pt">{{metadata.Title}}</a></div>
+    </div>
+</script>
+
+
+<script>
+
+    var ThemeItem = {
+        template: '#theme-item-template',
+        props: ['parentId', 'uuid'],
+        data: function () {
+            var data = {
+                metadata: {}
+            }
+            return data;
+        },
+        mounted: function () {
+            $.getJSON('/api/search?text=' + this.uuid, function (result) {
+                if (result.length != 0) {
+                    if (result.Results[0] != null) {
+                        this.metadata = result.Results[0];
+                    }
+                }
+            }.bind(this));
+        }
+    }
+
+    var themesVueModel = new Vue({
+        el: "#themesVueList",
+        components: {
+            themeItem: ThemeItem
+        }
+    })
+</script>
+
+
+
