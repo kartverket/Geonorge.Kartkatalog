@@ -27,6 +27,12 @@
         },
         created: function() {
             this.getCartButtonStatus();
+
+            var addToCartId = getParameterByName('addtocart_event_id');
+            if (addToCartId && this.resultItem.Uuid == addToCartId) {
+                this.addToCart();
+            }
+
         },
         computed: {
             openData: function() {
@@ -98,20 +104,20 @@
                         }
                     }
                     var baseUrl = '@baseUrl';
-                    var addToCartEventParamater = "?addtocart_event_id=addToCart-" + this.resultItem.Uuid;
+                    var addToCartEventParamater = "?addtocart_event_id=" + this.resultItem.Uuid;
 
                     if (baseUrl.indexOf("?") !== -1) {
-                        addToCartEventParamater = "&addtocart_event_id=addToCart-" + this.resultItem.Uuid;
+                        addToCartEventParamater = "&addtocart_event_id=" + this.resultItem.Uuid;
                     }
 
-                    var downloadSignInUrl = '@Html.DownloadUrl()' +
-                        'AuthServices/SignIn?ReturnUrl=' +
-                        encodeURIComponent(baseUrl) +
-                        encodeURIComponent(addToCartEventParamater);
+                    var downloadSignInUrl = '@Html.DownloadUrl()'
+                   + 'AuthServices/SignIn?ReturnUrl='
+                   + encodeURIComponent(baseUrl)
+                   + encodeURIComponent(addToCartEventParamater);
 
-                    var addToCartUrl = '@Html.KartkatalogenUrl()' +
-                        'AuthServices/SignIn?ReturnUrl=' +
-                        encodeURIComponent(downloadSignInUrl);
+                    var addToCartUrl = '@Html.KartkatalogenUrl()'
+                         + 'AuthServices/SignIn?ReturnUrl='
+                         + encodeURIComponent(downloadSignInUrl);
                     itemAddToCart.href = addToCartUrl;
                 }
                 return itemAddToCart;
