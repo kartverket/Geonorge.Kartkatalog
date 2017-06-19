@@ -1114,6 +1114,7 @@
     <Content Include="Views\Themes\Edit.cshtml" />
     <Content Include="Views\Themes\Index.cshtml" />
     <Content Include="Views\Themes\_OperatesOn.cshtml" />
+    <Content Include="Views\Shared\_Metadata.cshtml" />
     <Content Include="Views\Search\_ThemeGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>

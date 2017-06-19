@@ -48,6 +48,8 @@ if (contact != null)
     </div>
 </section>
 
+@Html.Partial("_Metadata")
+
 
 @* *** HANDLINGSKNAPPER *** *@
 <div class="btn-table-row-5">
@@ -394,7 +396,7 @@ if (contact != null)
     </script>
 
     <div id="metadata">
-
+        <div is="Metadata" v-bind:metadata="@Json.Encode(Model)"></div>
         @* *** Distribusjoner ****@
         <article class="col-md-12">
             <h3>Distribusjoner</h3>
@@ -781,7 +783,8 @@ if (keywords != null && keywords.Any())
                 model: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
             },
             components: {
-                ResultItem: ResultItemComponent
+                ResultItem: ResultItemComponent,
+                Metadata: Metadata
             },
             created: function() {
                 axios.get(`/api/distributions/${uuid}`).then(function(response) {
