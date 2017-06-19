@@ -11,7 +11,7 @@
     var ResultItemComponent = {
         template: "#resultItemRow",
         props: ["resultItem"],
-        data: function() {
+        data: function () {
             var data = {
                 expanded: false,
                 underlayingDistributions: [],
@@ -25,7 +25,7 @@
         components: {
             distributionRows: distributionRows
         },
-        created: function() {
+        created: function () {
             this.getCartButtonStatus();
 
             var addToCartId = getParameterByName('addtocart_event_id');
@@ -35,7 +35,7 @@
 
         },
         computed: {
-            openData: function() {
+            openData: function () {
                 var openData = {
                     className: "",
                     title: ""
@@ -52,7 +52,7 @@
                 }
                 return openData;
             },
-            mapLink: function() {
+            mapLink: function () {
                 var mapLink = {
                     mapLinkButtonId: "mapmacrolink-button-" + this.resultItem.Uuid,
                     mapMacroButtonId: "mapmacro-button-" + this.resultItem.Uuid,
@@ -64,7 +64,7 @@
                     iconPermission: "custom-icon",
                     mapTitleTag: this.resultItem.MapTitleTag,
                     url: ""
-            };
+                };
 
                 if (this.resultItem.ShowMapLink) {
                     mapLink.iconPermission += " custom-icon-kartmarkoer";
@@ -86,7 +86,7 @@
                 }
                 return mapLink;
             },
-            itemAddToCart: function() {
+            itemAddToCart: function () {
                 var itemAddToCart = {
                     buttonClass: "btn btn-default add-to-cart-btn",
                 };
@@ -122,18 +122,18 @@
                 }
                 return itemAddToCart;
             },
-            organizationUrl: function() {
+            organizationUrl: function () {
                 url = "/metadata/" + this.resultItem.OrganizationSeoName;
                 return url;
             },
-            readMoreUrl: function() {
+            readMoreUrl: function () {
                 var organization = this.resultItem.OrganizationSeoName;
                 var title = this.resultItem.TitleSeo;
                 var uuid = this.resultItem.Uuid;
                 var url = "/metadata/" + organization + "/" + title + "/" + uuid;
                 return url;
             },
-            description: function() {
+            description: function () {
                 var description;
                 if (this.resultItem.Abstract.length > 250) {
                     description = this.resultItem.Abstract.substring(0, 251) + " ...";
@@ -142,11 +142,11 @@
                 }
                 return description;
             },
-            thumbnailSrc: function() {
+            thumbnailSrc: function () {
                 var src = "/thumbnail?uuid=" + this.resultItem.Uuid + "&type=small";
                 return src;
             },
-            copyClass: function() {
+            copyClass: function () {
                 copyClass = {
                     btn: "btn btn-copy",
                     icon: "btn btn-copy input-group-addon"
@@ -159,11 +159,11 @@
             }
         },
         methods: {
-            downloadUrl: function(url) {
+            downloadUrl: function (url) {
                 url += this.resultItem.DownloadUrl;
                 return url;
             },
-            showMapLink: function() {
+            showMapLink: function () {
                 if (this.resultItem.DistributionProtocol &&
                     (this.resultItem.DistributionProtocol.indexOf("OGC:WMS") > -1 ||
                         this.resultItem.DistributionProtocol.indexOf("OGC:WFS") > -1 ||
@@ -173,11 +173,11 @@
                     return true;
                 else return false;
             },
-            showServiceMapLink: function() {
+            showServiceMapLink: function () {
                 if (this.resultItem.ServiceUrl) return true;
                 else return false;
             },
-            isRestrictedService: function() {
+            isRestrictedService: function () {
                 if (this.resultItem.ServiceDistributionAccessConstraint == "Beskyttet" ||
                     this.resultItem.ServiceDistributionAccessConstraint == "restricted" ||
                     this.resultItem.ServiceDistributionAccessConstraint == "norway digital restricted") return true;
@@ -185,7 +185,7 @@
                     return false;
                 }
             },
-            restrictedServiceClass: function() {
+            restrictedServiceClass: function () {
                 var iconPermissionClass;
                 if (this.isRestrictedService()) {
                     iconPermissionClass = " custom-icon-kartmarkoer-needs-permission";
@@ -194,11 +194,11 @@
                 }
                 return iconPermissionClass;
             },
-            getUnderlyingDistributions: function() {
+            getUnderlyingDistributions: function () {
                 this.expanded = !this.expanded;
                 if (!this.underlayingDistributionsRequested) {
                     showLoadingAnimation("Henter underliggende distribusjoner");
-                    axios.get('/api/distributions/' + this.resultItem.Uuid).then(function(response) {
+                    axios.get('/api/distributions/' + this.resultItem.Uuid).then(function (response) {
                         this.underlayingDistributions = response.data;
                         this.underlayingDistributions.forEach(function (dis, index) {
                             dis.Type = this.translateDistributionType(dis.DistributionProtocol, index);
@@ -217,7 +217,7 @@
                 }
                 this.underlayingDistributionsRequested = true;
             },
-            addToCart: function() {
+            addToCart: function () {
                 var orderItems = [];
                 var added = false;
                 var item = {
@@ -234,7 +234,7 @@
                     orderItems = (JSON.parse(localStorage.getItem('orderItems')));
                 }
                 $.map(orderItems,
-                    function(elementOfArray, indexInArray) {
+                    function (elementOfArray, indexInArray) {
                         if (elementOfArray == item.uuid) {
                             added = true;
                         }
@@ -270,7 +270,7 @@
                     this.addedToCart = false;
                 }
             },
-            type: function(type) {
+            type: function (type) {
                 var className = "label ";
                 if (type == "dataset" || type == "Datasett") className += "label-datasett";
                 else if (type == "software" || type == "Applikasjon") className += "label-applikasjon";
@@ -283,7 +283,7 @@
 
                 return className;
             },
-            getCartButtonStatus: function() {
+            getCartButtonStatus: function () {
                 var addedOrderitems = localStorage.getItem('orderItems');
                 if (addedOrderitems !== null &&
                     addedOrderitems !== "[]" &&
@@ -291,7 +291,7 @@
                     addedOrderitems !== "") {
                     addedOrderitems = JSON.parse(addedOrderitems);
                     var addedToCart = false;
-                    addedOrderitems.forEach(function(addedOrderItemUuid) {
+                    addedOrderitems.forEach(function (addedOrderItemUuid) {
                         if (addedOrderItemUuid !== null) {
                             if (this.resultItem.Uuid == addedOrderItemUuid) {
                                 addedToCart = true;
@@ -301,7 +301,7 @@
                     this.addedToCart = addedToCart;
                 }
             },
-            translateDistributionType: function(Type, index) {
+            translateDistributionType: function (Type, index) {
 
                 axios.get('@Html.RegistryUrl()' + "api/subregister/metadata-kodelister/kartverket/distribusjonstyper")
                     .then(function (response) {
