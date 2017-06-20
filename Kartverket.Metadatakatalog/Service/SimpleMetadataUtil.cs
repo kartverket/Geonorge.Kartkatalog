@@ -23,7 +23,7 @@ namespace Kartverket.Metadatakatalog.Service
                     res = "Tjeneste";
                     break;
                 case "servicelayer":
-                    res = "Tjeneste";
+                    res = "Tjenestelag";
                     break;
                 case "datasetserie":
                     res = "Datasettserie";

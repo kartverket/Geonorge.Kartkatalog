@@ -294,7 +294,10 @@ namespace Kartverket.Metadatakatalog.Service
                             var tmp = new Models.Api.Distribution();
                             tmp.Uuid = relData[0] != null ? relData[0] : "";
                             tmp.Title = relData[1] != null ? relData[1] : "";
+                            string parentIdentifier = relData[2] != null ? relData[2] : "";
                             tmp.Type = relData[3] != null ? relData[3] : "";
+                            if (tmp.Type == "service" && !string.IsNullOrEmpty(parentIdentifier))
+                                tmp.Type = "servicelayer";
                             tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
                             tmp.DistributionName = relData[5] != null ? relData[5] : "";
                             tmp.DistributionProtocol = relData[6] != null ? relData[6] : "";
