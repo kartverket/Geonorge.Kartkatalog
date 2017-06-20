@@ -150,6 +150,7 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.license = simpleMetadata.license;
             indexDoc.Type = simpleMetadata.Type;
             indexDoc.typenumber = simpleMetadata.typenumber;
+            indexDoc.ApplicationDatasets = simpleMetadata.ApplicationDatasets;
 
             return indexDoc;
 
