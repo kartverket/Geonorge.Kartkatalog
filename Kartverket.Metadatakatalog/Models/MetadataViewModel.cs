@@ -237,7 +237,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsServiceLayer()
         {
-            return HierarchyLevel == "service" || HierarchyLevel == "Tjeneste" && (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.Name));
+            return (HierarchyLevel == "service" || HierarchyLevel == "Tjeneste") && (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.Name));
         }
 
         public bool IsDataset()
