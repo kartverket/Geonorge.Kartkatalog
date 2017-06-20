@@ -170,6 +170,11 @@
                             {{ orderlineError }}
                         </div>
                     </div>
+                    <div v-if="notAvailableSelectedAreas && notAvailableSelectedAreas.length" class="orderline-errors margin-top-10">
+                        <div class="help-text form-element-help-text bg-info">
+                            {{ notAvailableSelectedAreas.length }} {{notAvailableSelectedAreas.length == 1 ? "valgt område" : "valgte områder"}} er ikke tilgjengelig
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4 orderline-field">
                     <p>Projeksjon</p>
@@ -183,7 +188,12 @@
                     </div>
                     <div v-if="orderLineInfoMessages && orderLineInfoMessages.projection" class="orderline-errors margin-top-10">
                         <div v-show="orderLineInfoMessages.projection.length" class="help-text form-element-help-text bg-info">
-                            {{ orderLineInfoMessages.projection.length }} {{orderLineInfoMessages.projection.length == 1 ? "projeksjon" : "projeksjoner"}} er ikke valgt som fellesvalg
+                            {{ orderLineInfoMessages.projection.length }} {{orderLineInfoMessages.projection.length == 1 ? "valgt projeksjon" : "valgte projeksjoner"}} er ikke lik fellesvalget
+                        </div>
+                    </div>
+                    <div v-if="notAvailableSelectedProjections && notAvailableSelectedProjections.length" class="orderline-errors margin-top-10">
+                        <div class="help-text form-element-help-text bg-info">
+                            {{ notAvailableSelectedProjections.length }} {{notAvailableSelectedProjections.length == 1 ? "valgt projeksjon" : "valgte projeksjoner"}} er ikke tilgjengelig
                         </div>
                     </div>
                 </div>
@@ -199,7 +209,12 @@
                     </div>
                     <div v-if="orderLineInfoMessages && orderLineInfoMessages.format" class="orderline-errors margin-top-10">
                         <div v-show="orderLineInfoMessages.format.length" class="help-text form-element-help-text bg-info">
-                            {{ orderLineInfoMessages.format.length }} {{orderLineInfoMessages.format.length == 1 ? "format" : "formater"}} er ikke valgt som fellesvalg
+                            {{ orderLineInfoMessages.format.length }} {{orderLineInfoMessages.format.length == 1 ? "valgt format" : "valgte formater"}} er ikke lik som fellesvalget
+                        </div>
+                    </div>
+                    <div v-if="notAvailableSelectedFormats && notAvailableSelectedFormats.length" class="orderline-errors margin-top-10">
+                        <div class="help-text form-element-help-text bg-info">
+                            {{ notAvailableSelectedFormats.length }} {{notAvailableSelectedFormats.length == 1 ? "valgt format" : "valgte formater"}} er ikke tilgjengelig
                         </div>
                     </div>
                 </div>
@@ -297,7 +312,10 @@
                          v-bind:default-projections="masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] : []"
                          v-bind:default-formats="masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] : []"
                          v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}"
-                         v-bind:order-line-info-messages="masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] : {}">
+                         v-bind:order-line-info-messages="masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] : {}"
+                         v-bind:not-available-selected-areas="masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] : []"
+                         v-bind:not-available-selected-projections="masterOrderLine.allNotAvailableSelectedProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedProjections[orderLine.metadata.uuid] : []"
+                         v-bind:not-available-selected-formats="masterOrderLine.allNotAvailableSelectedFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedFormats[orderLine.metadata.uuid] : []">
                     </div>
                 </div>
             </div>
