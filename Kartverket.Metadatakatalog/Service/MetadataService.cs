@@ -92,9 +92,57 @@ namespace Kartverket.Metadatakatalog.Service
             //Hente inn indeks og relaterte services
             distlist.AddRange(GetMetadataRelatedDistributions(uuid));
             //distlist.AddRange(GetServiceDirectoryRelatedDistributions(uuid));
+            distlist.AddRange(GetApplicationRelatedDistributions(uuid));
             return distlist;
         }
-        
+
+        private List<Models.Api.Distribution> GetApplicationRelatedDistributions(string uuid)
+        {
+            List<Models.Api.Distribution> distlist = new List<Models.Api.Distribution>();
+
+            SolrNet.ISolrOperations<ApplicationIndexDoc> _solrInstance;
+            _solrInstance = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<SolrNet.ISolrOperations<ApplicationIndexDoc>>();
+
+            SolrNet.ISolrQuery query = new SolrNet.SolrQuery("applicationdataset:" + uuid + "*");
+            try
+            {
+                SolrNet.SolrQueryResults<ApplicationIndexDoc> queryResults = _solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                {
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier" }
+
+                });
+
+                foreach (var result in queryResults)
+                {
+                   var md = new Models.Api.Distribution();
+                    try
+                    {
+                        md.Uuid = result.Uuid;
+                        md.Title = result.Title;
+                        md.Type = "Applikasjon";
+                        md.Organization = result.Organization;
+
+                        md.DownloadUrl = result.DistributionUrl;
+
+                        //Åpne data, begrenset, skjermet
+                        if (SimpleMetadataUtil.IsOpendata(result.OtherConstraintsAccess)) md.AccessIsOpendata = true;
+                        if (SimpleMetadataUtil.IsRestricted(result.OtherConstraintsAccess)) md.AccessIsRestricted = true;
+                        if (SimpleMetadataUtil.IsProtected(result.AccessConstraint)) md.AccessIsProtected = true;
+
+                        distlist.Add(md);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+            }
+            catch (Exception ex) { }
+
+            return distlist;
+        }
+
         private List<Models.Api.Distribution> GetServiceDirectoryRelatedDistributions(string uuid)
         {
             List<Models.Api.Distribution> distlist = new List<Models.Api.Distribution>();
