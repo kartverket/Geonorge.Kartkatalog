@@ -316,7 +316,7 @@ if (contact != null)
     @Html.Partial("_resultItemRow")
 
     @*Template for a table row*@
-    <script type="text/x-template" id="resultItemRow">
+<script type="text/x-template" id="resultItemRow">
         <div>
             <div class="resultItemRow">
                 <div class="row">
@@ -348,13 +348,11 @@ if (contact != null)
                     </div>
 
                     @*Kart*@
-                    <div class="col-xs-1">
+                    <div class="col-xs-1">                                
                         <a v-bind:id="mapLink.mapLinkId" v-bind:href="mapLink.url" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
                             <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
                         </a>
                     </div>
-
-
 
                     @*Last ned*@
                     <div class="col-xs-1">
@@ -756,7 +754,6 @@ if (keywords != null && keywords.Any())
             data: {
                 tableBorder: "",
                 distributionlist: [],
-                relatedDataRaw: [],
                 relatedDataList: [],
                 model: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
             },
@@ -770,6 +767,7 @@ if (keywords != null && keywords.Any())
                 }.bind(this));
                 this.relatedDataList = this.convertRelatedDataList();
 
+
             },
             methods: {
                 convertDistributionList: function(distributionList) {
@@ -779,20 +777,25 @@ if (keywords != null && keywords.Any())
                         {
                             ShowMapLink: distribution.CanShowMapUrl,
                             ShowServiceMapLink: distribution.CanShowServiceMapUrl,
-                            MapUrl: distribution.MapLink,
-                            ServiceUrl: distribution.ServiceLink,
+                            MapUrl: distribution.MapUrl,
+                            ServiceUrl: distribution.ServiceUrl,
+                            ServiceDistributionAccessConstraint: distribution.ServiceDistributionAccessConstraint,
+                            DistributionProtocol: distribution.DistributionProtocol,
+                            DistributionName: distribution.DistributionName,
+                            DistributionUrl: distribution.DistributionUrl,
 
                             ShowDownloadService: distribution.CanShowDownloadService,
                             ShowDownloadLink: distribution.CanShowDownloadUrl,
-                            DownloadUrl: distribution.DistributionUrl,
+                            DownloadUrl: distribution.DownloadUrl,
 
                             IsRestricted: distribution.AccessIsRestricted,
                             IsOffline: distribution.AccessIsProtected,
                             IsOpendata: distribution.AccessIsOpendata,
-
+                            FormatName: distribution.FormatName,
+                            FormatVersion: distribution.FormatVersion,
                             Organization: distribution.Organization,
                             OrganizationSeoName: this.makeSeoFriendlyString(distribution.Organization),
-                            Title: distribution.Title,
+                            Title: distribution.Title + this.getVersion(distribution.FormatName, distribution.FormatVersion),
                             TitleSeo: this.makeSeoFriendlyString(distribution.Title),
                             Type: distribution.Type,
                             Uuid: distribution.Uuid
@@ -801,7 +804,15 @@ if (keywords != null && keywords.Any())
                     }.bind(this));
                     return distributionArray;
                 },
+                getVersion: function(name, format) {
+                    var version = name;
 
+                    if (format) {
+                        version += `' '${format}`;
+                    }
+                    //return version ? " " : "(" + version + ")";
+                    return ` (${version})`;
+                },
                 makeSeoFriendlyString: function(text) {
                     if (text != null) {
                         text = text.toLowerCase();
@@ -835,6 +846,7 @@ if (keywords != null && keywords.Any())
                             ShowServiceMapLink: item.CanShowServiceMapUrl,
                             MapUrl: item.MapLink,
                             ServiceUrl: item.ServiceLink,
+                            ServiceDistributionAccessConstraint: item.ServiceDistributionAccessConstraint,
 
                             ShowDownloadService: item.CanShowDownloadService,
                             ShowDownloadLink: item.CanShowDownloadUrl,
@@ -914,17 +926,17 @@ if (keywords != null && keywords.Any())
             @if (Html.DownloadServiceEnabled())
             {
                 <text>
-            if (typeof Storage !== "undefined") {
+                    if (typeof Storage !== "undefined") {
 
-                console.log('window.localStorage is available!');
-                const orderItems = [];
-                $('.add-to-cart-btn:not(.prevent-action)').click(function() {
-                    addToCartButtonClick($(this));
-                });
-            } else {
-                console.log('no native support for HTML5 storage :(');
-            }
-            </text>
+                        console.log('window.localStorage is available!');
+                        const orderItems = [];
+                        $('.add-to-cart-btn:not(.prevent-action)').click(function() {
+                            addToCartButtonClick($(this));
+                        });
+                    } else {
+                        console.log('no native support for HTML5 storage :(');
+                    }
+                </text>
             }
 
         });
@@ -932,7 +944,7 @@ if (keywords != null && keywords.Any())
         @if (Model.ShowMapLink() || Model.ShowServiceMapLink())
         {
             @:getServiceStatus("@Model.ServiceUuid", "@Model.Uuid");
-                }
+        }
 
         @if (Model.Related != null)
         {
@@ -941,7 +953,7 @@ if (keywords != null && keywords.Any())
                 if (relatedContent.ShowMapLink() || relatedContent.ShowServiceMapLink())
                 {
                     @:getServiceStatus("@relatedContent.ServiceUuid", "@relatedContent.Uuid");
-                        }
+                }
             }
         }
 
@@ -959,8 +971,8 @@ if (keywords != null && keywords.Any())
 
         function hideTooltip(btn) {
             setTimeout(function() {
-                btn.tooltip('hide');
-            },
+                    btn.tooltip('hide');
+                },
                 1000);
         }
 

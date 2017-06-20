@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Kartverket.Metadatakatalog.Models;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -57,7 +58,8 @@ namespace Kartverket.Metadatakatalog.Service
         }
         public static bool IsRestricted(string OtherConstraintsAccess)
         {
-            if (!string.IsNullOrEmpty(OtherConstraintsAccess) && OtherConstraintsAccess.ToLower() == "norway digital restricted")
+            if (!string.IsNullOrEmpty(OtherConstraintsAccess) && OtherConstraintsAccess.ToLower() == "norway digital restricted"
+                || OtherConstraintsAccess.ToLower() == "Beskyttet" || OtherConstraintsAccess.ToLower() == "restricted")
                 return true;
             else
                 return false;
@@ -99,6 +101,13 @@ namespace Kartverket.Metadatakatalog.Service
             else return false;
         }
 
+
+        public static bool ShowServiceMapLink(SimpleMetadata simpleMetadata)
+        {
+            if (!string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.URL) && simpleMetadata.DistributionDetails.Protocol != "GEONORGE:DOWNLOAD") return true;
+            else return false;
+        }
+
         public static String GetCapabilitiesUrl(string URL, string Protocol)
         {
             
@@ -134,6 +143,16 @@ namespace Kartverket.Metadatakatalog.Service
                 }
                 else return "";
         }
+
+        public static String ServiceUrl(SimpleMetadata simpleMetadata)
+        {
+            if (simpleMetadata.DistributionDetails != null)
+            {
+                return ServiceUrl(simpleMetadata.DistributionDetails.URL, simpleMetadata.HierarchyLevel, simpleMetadata.DistributionDetails.Protocol, simpleMetadata.DistributionDetails.Name, simpleMetadata.DistributionDetails);
+            }
+            else return "";
+        }
+
         public static String MapUrl(string URL, string HierarchyLevel, string Protocol, string Name)
         {
             if (HierarchyLevel == "service" || HierarchyLevel == "servicelayer")
@@ -164,6 +183,30 @@ namespace Kartverket.Metadatakatalog.Service
             }
             else return "";
         }
+
+        public static string ServiceUrl(string url, string hierarchyLevel, string protocol, string name, SimpleDistributionDetails distributionDetails)
+        {
+            if (hierarchyLevel == "dataset" || hierarchyLevel == "datasett")
+            {
+                if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WMS")))
+                {
+                    if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(url))
+                        url = "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(url) + "]/+" + name;
+                    else if (!string.IsNullOrWhiteSpace(url))
+                        url = "#5/355422/6668909/l/wms/[" + RemoveQueryString(url) + "]";
+                }
+                else if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WFS")))
+                {
+                    if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(url))
+                        url = "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(url) + "]/+" + name;
+                    else if (distributionDetails != null && !string.IsNullOrWhiteSpace(distributionDetails.URL))
+                        url = "#5/355422/6668909/l/wfs/[" + RemoveQueryString(url) + "]";
+                }
+
+            }
+            return System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + url;
+        }
+
         private static string RemoveQueryString(string URL)
         {
             int startQueryString = URL.IndexOf("?");

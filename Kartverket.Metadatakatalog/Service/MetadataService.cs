@@ -21,9 +21,10 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly IOrganizationService _organizationService;
         private readonly ISearchService _searchService;
         private readonly IServiceDirectoryService _searchServiceDirectoryService;
+        private readonly ThemeResolver _themeResolver;
         RegisterFetcher register;
 
-        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService)
+        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService, ThemeResolver themeResolver)
         {
             _geoNorge = geoNorge;
             _geoNetworkUtil = geoNetworkUtil;
@@ -31,6 +32,7 @@ namespace Kartverket.Metadatakatalog.Service
             _organizationService = organizationService;
             _searchService = searchService;
             _searchServiceDirectoryService = searchServiceDirectoryService;
+            _themeResolver = themeResolver;
         }
         
         
@@ -61,11 +63,18 @@ namespace Kartverket.Metadatakatalog.Service
                 if (String.IsNullOrEmpty(tmp.Organization))
                     tmp.Organization = simpleMetadata.ContactMetadata.Organization;
                 tmp.ShowDetailsUrl = "/metadata/org/title/" + uuid;
+                tmp.ServiceDistributionAccessConstraint = simpleMetadata.Constraints.AccessConstraints;
                 //Vis kart
                 if (SimpleMetadataUtil.ShowMapLink(simpleMetadata)) {
                     tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(simpleMetadata);
                     tmp.CanShowMapUrl = true;
                     tmp.DistributionUrl = SimpleMetadataUtil.GetCapabilitiesUrl(dist.URL,dist.Protocol);
+                }
+
+                if (SimpleMetadataUtil.ShowServiceMapLink(simpleMetadata))
+                {
+                    tmp.CanShowServiceMapUrl = true;
+                    tmp.ServiceUrl = SimpleMetadataUtil.ServiceUrl(simpleMetadata);
                 }
 
                 //Last ned
@@ -238,6 +247,7 @@ namespace Kartverket.Metadatakatalog.Service
                             if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
                             if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
                             if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
+                            tmp.ServiceDistributionAccessConstraint = !string.IsNullOrWhiteSpace(relData[12]) ? relData[12] : relData[11];
 
                             //Vis kart
                             if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
@@ -364,6 +374,7 @@ namespace Kartverket.Metadatakatalog.Service
                             if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
                             if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
                             if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
+                            tmp.ServiceDistributionAccessConstraint = !string.IsNullOrWhiteSpace(relData[12]) ? relData[12] : relData[11];
 
                             //Vis kart
                             if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
