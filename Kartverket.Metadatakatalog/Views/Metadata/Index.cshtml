@@ -800,8 +800,7 @@ if (keywords != null && keywords.Any())
                             FormatVersion: distribution.FormatVersion,
                             Organization: distribution.Organization,
                             OrganizationSeoName: this.makeSeoFriendlyString(distribution.Organization),
-                            Title: distribution.Title +
-                                this.getVersion(distribution.FormatName, distribution.FormatVersion),
+                            Title: distribution.Title,
                             TitleSeo: this.makeSeoFriendlyString(distribution.Title),
                             Type: distribution.Type,
                             Uuid: distribution.Uuid
@@ -854,10 +853,11 @@ if (keywords != null && keywords.Any())
                                 MapUrl: item.MapLink,
                                 ServiceUrl: item.ServiceLink,
                                 ServiceDistributionAccessConstraint: item.ServiceDistributionAccessConstraint,
+                                DistributionUrl: item.DistributionUrl,
 
                                 ShowDownloadService: item.CanShowDownloadService,
                                 ShowDownloadLink: item.CanShowDownloadUrl,
-                                DownloadUrl: item.DistributionUrl,
+                                DownloadUrl: item.DownloadUrl,
 
                                 IsRestricted: item.AccessIsRestricted,
                                 IsOffline: item.AccessIsProtected,

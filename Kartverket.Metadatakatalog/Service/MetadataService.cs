@@ -68,7 +68,6 @@ namespace Kartverket.Metadatakatalog.Service
                 if (SimpleMetadataUtil.ShowMapLink(simpleMetadata)) {
                     tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(simpleMetadata);
                     tmp.CanShowMapUrl = true;
-                    tmp.DistributionUrl = SimpleMetadataUtil.GetCapabilitiesUrl(dist.URL,dist.Protocol);
                 }
 
                 if (SimpleMetadataUtil.ShowServiceMapLink(simpleMetadata))

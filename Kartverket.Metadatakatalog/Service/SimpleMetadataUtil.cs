@@ -58,11 +58,9 @@ namespace Kartverket.Metadatakatalog.Service
         }
         public static bool IsRestricted(string OtherConstraintsAccess)
         {
-            if (!string.IsNullOrEmpty(OtherConstraintsAccess) && OtherConstraintsAccess.ToLower() == "norway digital restricted"
-                || OtherConstraintsAccess.ToLower() == "Beskyttet" || OtherConstraintsAccess.ToLower() == "restricted")
-                return true;
-            else
-                return false;
+            if (string.IsNullOrEmpty(OtherConstraintsAccess)) return false;
+            return OtherConstraintsAccess.ToLower() == "norway digital restricted" ||
+                   OtherConstraintsAccess.ToLower() == "Beskyttet" || OtherConstraintsAccess.ToLower() == "restricted";
         }
         public static bool IsProtected(SimpleMetadata simpleMetadata)
         {
