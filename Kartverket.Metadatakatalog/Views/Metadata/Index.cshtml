@@ -322,7 +322,7 @@ if (contact != null)
                 <div class="row">
 
                     @*Tittel*@
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="resultItemRowTitle">
                             <a v-bind:href="readMoreUrl" class="show-loading-animation">
                                 <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
@@ -385,6 +385,9 @@ if (contact != null)
                             <span class="custom-icon custom-icon-lastned"></span>
                         </a>
                     </div>
+                    <div class="col-xs-1">
+                        {{resultItem.FormatName}} {{resultItem.FormatVersion}}
+                    </div>
                 </div>
             </div>
 
@@ -401,12 +404,13 @@ if (contact != null)
             <h3>Distribusjoner</h3>
 
             <div class="row resultItemRowTableHeader">
-                <div class="col-sm-4"><p>Tittel</p></div>
+                <div class="col-sm-3"><p>Tittel</p></div>
                 <div class="col-sm-2"><p>Type</p></div>
                 <div class="col-sm-3"><p>Dataeier</p></div>
                 <div class="col-sm-1"><p>Åpne data</p></div>
                 <div class="col-sm-1"><p>Kart</p></div>
                 <div class="col-sm-1"><p>Last ned</p></div>
+                <div class="col-sm-1"><p>Format</p></div>
             </div>
             <div class="menu-separator search-results-table-heading"></div>
             <div v-for="item in distributionlist" class="table-border-bottom">
@@ -440,12 +444,13 @@ if (contact != null)
                 </div>
                 <div class="clearfix"></div>
                 <div class="row resultItemRowTableHeader">
-                    <div class="col-sm-4"><p>Tittel</p></div>
+                    <div class="col-sm-3"><p>Tittel</p></div>
                     <div class="col-sm-2"><p>Type</p></div>
                     <div class="col-sm-3"><p>Dataeier</p></div>
                     <div class="col-sm-1"><p>Åpne data</p></div>
                     <div class="col-sm-1"><p>Kart</p></div>
                     <div class="col-sm-1"><p>Last ned</p></div>
+                    <div class="col-sm-1"><p>Format</p></div>
                 </div>
 
                 <div class="menu-separator search-results-table-heading"></div>
@@ -795,7 +800,8 @@ if (keywords != null && keywords.Any())
                             FormatVersion: distribution.FormatVersion,
                             Organization: distribution.Organization,
                             OrganizationSeoName: this.makeSeoFriendlyString(distribution.Organization),
-                            Title: distribution.Title + this.getVersion(distribution.FormatName, distribution.FormatVersion),
+                            Title: distribution.Title +
+                                this.getVersion(distribution.FormatName, distribution.FormatVersion),
                             TitleSeo: this.makeSeoFriendlyString(distribution.Title),
                             Type: distribution.Type,
                             Uuid: distribution.Uuid
@@ -838,36 +844,42 @@ if (keywords != null && keywords.Any())
                     return text;
                 },
                 convertRelatedDataList: function() {
-                    this.model.Related.forEach(function(item) {
+                    if (this.model.Related) {
+                        this.model.Related.forEach(function(item) {
 
-                        var resultItem =
-                        {
-                            ShowMapLink: item.CanShowMapUrl,
-                            ShowServiceMapLink: item.CanShowServiceMapUrl,
-                            MapUrl: item.MapLink,
-                            ServiceUrl: item.ServiceLink,
-                            ServiceDistributionAccessConstraint: item.ServiceDistributionAccessConstraint,
+                            var resultItem =
+                            {
+                                ShowMapLink: item.CanShowMapUrl,
+                                ShowServiceMapLink: item.CanShowServiceMapUrl,
+                                MapUrl: item.MapLink,
+                                ServiceUrl: item.ServiceLink,
+                                ServiceDistributionAccessConstraint: item.ServiceDistributionAccessConstraint,
 
-                            ShowDownloadService: item.CanShowDownloadService,
-                            ShowDownloadLink: item.CanShowDownloadUrl,
-                            DownloadUrl: item.DistributionUrl,
+                                ShowDownloadService: item.CanShowDownloadService,
+                                ShowDownloadLink: item.CanShowDownloadUrl,
+                                DownloadUrl: item.DistributionUrl,
 
-                            IsRestricted: item.AccessIsRestricted,
-                            IsOffline: item.AccessIsProtected,
-                            IsOpendata: item.AccessIsOpendata,
+                                IsRestricted: item.AccessIsRestricted,
+                                IsOffline: item.AccessIsProtected,
+                                IsOpendata: item.AccessIsOpendata,
 
-                            Organization: item.ContactOwner.Organization,
-                            OrganizationSeoName: this.makeSeoFriendlyString(item.ContactOwner.Organization),
-                            Title: item.Title,
-                            TitleSeo: this.makeSeoFriendlyString(item.Title),
-                            Type: item.DistributionDetails.ProtocolName,
+                                FormatName: item.FormatName,
+                                FormatVersion: item.FormatVersion,
 
-                            Uuid: item.Uuid
-                        }
+                                Organization: item.ContactOwner.Organization,
+                                OrganizationSeoName: this.makeSeoFriendlyString(item.ContactOwner.Organization),
+                                Title: item.Title,
+                                TitleSeo: this.makeSeoFriendlyString(item.Title),
+                                Type: item.DistributionDetails.ProtocolName,
 
-                        this.relatedDataList.push(resultItem);
-                    }.bind(this));
-                    return this.relatedDataList;
+                                Uuid: item.Uuid
+                            }
+
+                            this.relatedDataList.push(resultItem);
+                    }.
+                    bind(this));
+                    }
+                        return this.relatedDataList;
                 },
             },
 
