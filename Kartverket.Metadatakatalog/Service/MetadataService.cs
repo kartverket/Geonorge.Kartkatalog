@@ -70,11 +70,11 @@ namespace Kartverket.Metadatakatalog.Service
                     tmp.CanShowMapUrl = true;
                 }
 
-                if (SimpleMetadataUtil.ShowServiceMapLink(simpleMetadata))
-                {
-                    tmp.CanShowServiceMapUrl = true;
-                    tmp.ServiceUrl = SimpleMetadataUtil.ServiceUrl(simpleMetadata);
-                }
+                //if (SimpleMetadataUtil.ShowServiceMapLink(simpleMetadata))
+                //{
+                //    tmp.CanShowServiceMapUrl = true;
+                //    tmp.ServiceUrl = SimpleMetadataUtil.ServiceUrl(simpleMetadata);
+                //}
 
                 //Last ned
                 if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadata))
