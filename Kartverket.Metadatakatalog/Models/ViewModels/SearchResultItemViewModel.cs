@@ -238,8 +238,10 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(DownloadUrl))
             {
-                Uri downloadUrl = new Uri(DownloadUrl);
-                return "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
+                if (Uri.IsWellFormedUriString(DownloadUrl, UriKind.Absolute)){ 
+                    Uri downloadUrl = new Uri(DownloadUrl);
+                    return "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
+                }
             }
             return null;
         }
