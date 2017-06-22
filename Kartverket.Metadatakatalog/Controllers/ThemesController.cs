@@ -78,8 +78,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             return Request.Url.Scheme + System.Uri.SchemeDelimiter
                  + Request.Url.Host +
-                 (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port)
-                 + (!Request.Url.Host.Contains("localhost") ? "/themes" : "");
+                 (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port);
         }
 
         // GET: Themes/Edit/5
