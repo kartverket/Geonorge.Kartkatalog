@@ -86,7 +86,7 @@ function addToCartButtonClick(addToCartButton) {
         var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl, 'theme': itemtheme, 'organizationName': itemorgname };
         localStorage["orderItems"] = JSON.stringify(orderItems);
         localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
-        showAlert(itemname + ' er lagt til i <a href="/Download">kurven</a>', 'success');
+        showAlert(itemname + ' er lagt til i <a href="/nedlasting">kurven</a>', 'success');
 
         var orderItemCount = $('#orderitem-count').text();
         if (orderItemCount == null || orderItemCount == '') {
@@ -109,7 +109,7 @@ function addToCartButtonClick(addToCartButton) {
 
         updateShoppingCart();
 
-        showAlert(itemname + ' er fjernet fra <a href="/Download">kurven</a>', 'warning');
+        showAlert(itemname + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
     }
 
     updateCartButton(addToCartButton, orderItems);

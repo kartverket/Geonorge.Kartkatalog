@@ -63,6 +63,17 @@ namespace Kartverket.Metadatakatalog
             );
 
             routes.MapRoute(
+                name: "DownloadRoute",
+                url: "nedlasting",
+                defaults: new
+                {
+                    controller = "Download",
+                    action = "Index",
+                    id = UrlParameter.Optional
+                }
+             );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

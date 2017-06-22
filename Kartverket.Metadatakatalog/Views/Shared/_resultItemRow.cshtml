@@ -243,7 +243,7 @@
                     orderItems.push(item.uuid);
                     localStorage["orderItems"] = JSON.stringify(orderItems);
                     localStorage[item.uuid + ".metadata"] = JSON.stringify(item);
-                    showAlert(item.name + ' er lagt til i <a href="/Download">kurven</a>', 'success');
+                    showAlert(item.name + ' er lagt til i <a href="/nedlasting">kurven</a>', 'success');
 
                     var orderItemCount = $('#orderitem-count').text();
                     if (orderItemCount == null || orderItemCount == '') {
@@ -266,7 +266,7 @@
 
                     updateShoppingCart();
 
-                    showAlert(item.name + ' er fjernet fra <a href="/Download">kurven</a>', 'warning');
+                    showAlert(item.name + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
                     this.addedToCart = false;
                 }
             },
