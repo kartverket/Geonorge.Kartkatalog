@@ -1009,6 +1009,7 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\bower.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\package-lock.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\README.md" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\yarn.lock" />
     <Content Include="Content\bower_components\vue\.babelrc" />
     <Content Include="Content\bower_components\vue\.bower.json" />
     <Content Include="Content\bower_components\vue\.eslintignore" />
