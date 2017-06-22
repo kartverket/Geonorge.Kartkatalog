@@ -29,6 +29,15 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View(model);
         }
 
+        // GET: Themes
+        public ActionResult Details(int id)
+        {
+            var theme = _themeService.GetTheme(id);
+            if (theme == null) return HttpNotFound();
+
+            return View(theme);
+        }
+
         // GET: Themes/Create
         public ActionResult Create()
         {
