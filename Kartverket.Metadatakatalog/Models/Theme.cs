@@ -23,6 +23,8 @@ namespace Kartverket.Metadatakatalog.Models
         public virtual Theme Parent { get; set; }
         public virtual List<Theme> Children { get; set; }
         public virtual List<Metadata> Metadata { get; set; }
+        [NotMapped]
+        public string ShowDetailsUrl { get; set; }
     }
 
     public class Metadata
