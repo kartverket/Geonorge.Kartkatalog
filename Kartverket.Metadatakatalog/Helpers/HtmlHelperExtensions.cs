@@ -2,11 +2,14 @@
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Kartverket.Metadatakatalog.Models;
 
 namespace Kartverket.Metadatakatalog.Helpers
 {
     public static class HtmlHelperExtensions
     {
+        static readonly SeoFriendly Seo = new SeoFriendly();
+
         public static string ApplicationVersionNumber(this HtmlHelper helper)
         {
             string versionNumber = WebConfigurationManager.AppSettings["BuildVersionNumber"];
@@ -95,6 +98,11 @@ namespace Kartverket.Metadatakatalog.Helpers
         public static string HierarchyLevelLabel(string hierarchyLevelLabelText)
         {
             return "label-" + hierarchyLevelLabelText.ToLower();
+        }
+
+        public static string SeoFriendlyString(string text)
+        {
+            return Seo.MakeSeoFriendlyString(text);
         }
     }
 }

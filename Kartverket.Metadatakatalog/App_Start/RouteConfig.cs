@@ -49,7 +49,12 @@ namespace Kartverket.Metadatakatalog
             // Kartløsninger i norge
             routes.MapRoute("SearchByApplication", "kartlosninger-i-norge",
                new { controller = "Application", action = "Index" }
-           );
+            );
+
+            // Tema detaljside 
+            routes.MapRoute("Tema", "tema/{ThemeSeoName}/{id}",
+               new { controller = "Themes", action = "Details" }
+            );
 
             routes.MapRoute(
             name: "ThemesRoute",

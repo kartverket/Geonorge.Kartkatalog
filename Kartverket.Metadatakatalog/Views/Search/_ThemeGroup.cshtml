@@ -53,7 +53,10 @@ if (items.Any())
             @foreach (var item in items)
             {
                 <div style="padding-left: 18px;">
-                    <div style="font-size: 16pt;"><span class="expand-arrow active"></span> <a href="/temaer/edit/@item.Id">@item.Name</a></div>
+                    <a style="font-size: 16pt;" href="@Url.Action("Details", "Themes" ,new { id= @item.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(item.Name) })">
+                        <span class="expand-arrow active"></span>
+                        @item.Name
+                    </a>
                     @foreach (var d in item.Metadata)
                     {
                         <div is="theme-item" v-bind:parent-id="@Json.Encode(item.Id)" v-bind:uuid="@Json.Encode(d.Uuid)"></div>

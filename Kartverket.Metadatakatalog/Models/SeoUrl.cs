@@ -6,15 +6,16 @@ namespace Kartverket.Metadatakatalog.Models
     {
         private readonly string _seoOrganization;
         private readonly string _seoTitle;
+        SeoFriendly _seo = new SeoFriendly();
 
         public SeoUrl(string organization, string title)
         {
-            _seoOrganization = MakeSeoFriendlyString(organization);
-            _seoTitle = MakeSeoFriendlyString(title);
+            _seoOrganization = _seo.MakeSeoFriendlyString(organization);
+            _seoTitle = _seo.MakeSeoFriendlyString(title);
         }
 
         public SeoUrl(string organization) {
-            _seoOrganization = MakeSeoFriendlyString(organization);
+            _seoOrganization = _seo.MakeSeoFriendlyString(organization);
         }
 
         public string Organization
@@ -27,7 +28,21 @@ namespace Kartverket.Metadatakatalog.Models
             get { return _seoTitle; }
         }
 
-        private string MakeSeoFriendlyString(string input)
+        public bool Matches(string organization, string title)
+        {
+            return _seoOrganization == organization && _seoTitle == title;
+        }
+    }
+
+    public class SeoFriendly
+    {
+
+        public SeoFriendly()
+        {
+            
+        }
+
+        public string MakeSeoFriendlyString(string input)
         {
             string encodedUrl = (input ?? "").ToLower();
 
@@ -50,11 +65,6 @@ namespace Kartverket.Metadatakatalog.Models
             encodedUrl = encodedUrl.Trim('-');
 
             return encodedUrl;
-        }
-
-        public bool Matches(string organization, string title)
-        {
-            return _seoOrganization == organization && _seoTitle == title;
         }
     }
 }

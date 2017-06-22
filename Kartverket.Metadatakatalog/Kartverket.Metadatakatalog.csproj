@@ -1116,6 +1116,7 @@
     <Content Include="Views\Themes\_OperatesOn.cshtml" />
     <Content Include="Views\Shared\_Metadata.cshtml" />
     <Content Include="Views\Search\_ThemeGroup.cshtml" />
+    <Content Include="Views\Themes\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
