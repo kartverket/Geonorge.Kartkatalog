@@ -50,8 +50,9 @@ namespace Kartverket.Metadatakatalog.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "Thumnail må være bilde format");
                 }
-
+                else { 
                 theme.ThumbnailUrl = SaveFile(theme, uploadFile);
+                }
             }
 
             if (ModelState.IsValid)
@@ -111,8 +112,9 @@ namespace Kartverket.Metadatakatalog.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "Thumnail må være bilde format");
                 }
-
+                else { 
                 theme.ThumbnailUrl = SaveFile(theme, uploadFile);
+                }
             }
 
             if (ModelState.IsValid)
