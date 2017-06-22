@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -103,6 +105,22 @@ namespace Kartverket.Metadatakatalog.Helpers
         public static string SeoFriendlyString(string text)
         {
             return Seo.MakeSeoFriendlyString(text);
+        }
+
+        public static List<Theme> Parents(Theme theme)
+        {
+            var parentsTheme = new List<Theme>();
+            if (theme.Parent != null)
+            {
+                var parent = theme.Parent;
+                while (parent != null)
+                {
+                    parentsTheme.Add(parent);
+                    parent = parent.Parent;
+                }             
+            }
+            return parentsTheme;
+
         }
     }
 }

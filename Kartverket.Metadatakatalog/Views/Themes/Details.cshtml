@@ -1,8 +1,36 @@
 ﻿@model Kartverket.Metadatakatalog.Models.Theme
+@using Kartverket.Metadatakatalog.Helpers
+
+@{
+    ViewBag.Title = "Tema - " + Model.Name;
+}
+
+@section breadcrumb {
+    <li><a href="@Url.Action("Index", "Themes")">Tema</a></li>
+    <li class="active">@Model.Name</li>
+}
+
+<section class="heading">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>@Model.Name</h1>
+            <span class="label label-default">Tema</span>
+        </div>
+        <div class="col-sm-12">
+            <span class="separator-lg"></span>
+        </div>
+    </div>
+</section>
 
 <div>
+    @foreach (var parent in HtmlHelperExtensions.Parents(Model))
+    {
+        <a href="@Url.Action("Details", "Themes", new { id = @parent.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(parent.Name) })"><span class="label label-default">@parent.Name</span></a>
+    }
+    <span class="label label-default">@Model.Name</span>
+
     <h4>Theme</h4>
-    <hr />
+    <hr/>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
