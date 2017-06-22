@@ -52,6 +52,17 @@ namespace Kartverket.Metadatakatalog
            );
 
             routes.MapRoute(
+            name: "ThemesRoute",
+            url: "temaer/{action}/{id}",
+            defaults: new
+            {
+                controller = "Themes",
+                action = "Index",
+                id = UrlParameter.Optional
+            }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

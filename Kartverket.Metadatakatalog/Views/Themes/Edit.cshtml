@@ -4,7 +4,7 @@
     ViewBag.Title = "Rediger tema";
 }
 @section breadcrumb {
-    <li><a href="/Themes">Temaer</a></li>
+    <li><a href="/temaer">Temaer</a></li>
     <li class="active">Rediger: @Model.Name</li>
 }
 <h2>Rediger tema</h2>
@@ -57,7 +57,7 @@
         </div>
         <div class="form-group pull-right">
             <div class="col-md-12">
-                <a class="btn btn-default" href="~/themes/delete/@Model.Id">Slett</a>
+                <a class="btn btn-default" href="~/temaer/delete/@Model.Id">Slett</a>
                 <input type="submit" value="Lagre" class="btn btn-default" />
             </div>
         </div>
