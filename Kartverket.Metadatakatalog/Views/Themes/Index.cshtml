@@ -1,4 +1,5 @@
-﻿@model List<Kartverket.Metadatakatalog.Models.Theme>
+﻿@using Kartverket.Metadatakatalog.Helpers
+@model List<Kartverket.Metadatakatalog.Models.Theme>
 
 @helper BuildMenu(List<Theme> data, int? parentId = null)
 {
@@ -9,7 +10,7 @@ var items = data.Where(d => d.ParentId == parentId);
                 @foreach (var item in items)
                 {
                     <li>
-                        @Html.ActionLink(item.Name, "Edit", new { id = item.Id })
+                        <a href="@Url.Action("Details", "Themes", new { id = @item.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(item.Name) })">@item.Name</a>
                         @BuildMenu(data, item.Id)
                     </li>
                 }
