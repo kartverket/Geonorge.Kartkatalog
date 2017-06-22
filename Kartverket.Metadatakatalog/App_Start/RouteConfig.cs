@@ -53,7 +53,7 @@ namespace Kartverket.Metadatakatalog
 
             // Tema detaljside 
             routes.MapRoute("Tema", "tema/{ThemeSeoName}/{id}",
-               new { controller = "Themes", action = "Details" }
+               new { controller = "Themes", action = "Details", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(

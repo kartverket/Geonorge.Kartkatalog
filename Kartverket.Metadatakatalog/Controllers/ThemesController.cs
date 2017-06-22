@@ -30,7 +30,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         // GET: Themes
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
             var theme = _themeService.GetTheme(id);
             if (theme == null) return HttpNotFound();
@@ -129,10 +129,10 @@ namespace Kartverket.Metadatakatalog.Controllers
             if (ModelState.IsValid)
             {
                 _themeService.UpdateTheme(theme, operatesOn);
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Themes", new { Id = theme.Id, ThemeSeoName = theme.Name });
             }
             ViewBag.ParentId = new SelectList(_themeService.GetThemes(), "Id", "Name", theme.ParentId);
-            return View(theme);
+            return RedirectToAction("Details", "Themes", new { Id = theme.Id, ThemeSeoName = theme.Name });
         }
 
         // GET: Themes/Delete/5
