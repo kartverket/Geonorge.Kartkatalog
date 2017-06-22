@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
+using System.IO;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -40,8 +41,19 @@ namespace Kartverket.Metadatakatalog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,ThumbnailUrl,ParentId")] Theme theme)
+        public ActionResult Create([Bind(Include = "Id,Name,Description,ThumbnailUrl,ParentId")] Theme theme, HttpPostedFileBase uploadFile)
         {
+            if (uploadFile != null)
+            {
+                if (!(uploadFile.ContentType == "image/jpeg" || uploadFile.ContentType == "image/gif"
+                    || uploadFile.ContentType == "image/png" || uploadFile.ContentType == "image/svg+xml"))
+                {
+                    ModelState.AddModelError(string.Empty, "Thumnail må være bilde format");
+                }
+
+                theme.ThumbnailUrl = SaveFile(theme, uploadFile);
+            }
+
             if (ModelState.IsValid)
             {
                 _themeService.AddTheme(theme);
@@ -50,6 +62,24 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             ViewBag.ParentId = new SelectList(_themeService.GetThemes(), "Id", "Name", theme.ParentId);
             return View(theme);
+        }
+
+        private string SaveFile(Theme theme, HttpPostedFileBase uploadFile)
+        {
+            string targetFolder = System.Web.HttpContext.Current.Server.MapPath("~/temafiler");
+            string targetPath = Path.Combine(targetFolder, uploadFile.FileName);
+            uploadFile.SaveAs(targetPath);
+
+            return CurrentDomain() + "/temafiler/" + uploadFile.FileName;
+
+        }
+
+        string CurrentDomain()
+        {
+            return Request.Url.Scheme + System.Uri.SchemeDelimiter
+                 + Request.Url.Host +
+                 (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port)
+                 + (!Request.Url.Host.Contains("localhost") ? "/themes" : "");
         }
 
         // GET: Themes/Edit/5
@@ -73,8 +103,19 @@ namespace Kartverket.Metadatakatalog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,ThumbnailUrl,ParentId")] Theme theme, string[] operatesOn)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,ThumbnailUrl,ParentId")] Theme theme, string[] operatesOn, HttpPostedFileBase uploadFile)
         {
+            if (uploadFile != null)
+            {
+                if (!(uploadFile.ContentType == "image/jpeg" || uploadFile.ContentType == "image/gif"
+                    || uploadFile.ContentType == "image/png" || uploadFile.ContentType == "image/svg+xml"))
+                {
+                    ModelState.AddModelError(string.Empty, "Thumnail må være bilde format");
+                }
+
+                theme.ThumbnailUrl = SaveFile(theme, uploadFile);
+            }
+
             if (ModelState.IsValid)
             {
                 _themeService.UpdateTheme(theme, operatesOn);
