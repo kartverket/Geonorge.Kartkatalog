@@ -1,4 +1,5 @@
 ﻿@using Kartverket.Metadatakatalog.Models.ViewModels
+@using Newtonsoft.Json
 @using Kartverket.Metadatakatalog.Helpers
 @model SearchViewModel
 
@@ -26,7 +27,10 @@
             {
                 topLevelThemes.Add(parent);
                 parent = parent.Parent;
+
             }
+
+            theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
         }
     }
 
@@ -42,73 +46,128 @@
     }
 }
 
+@{
+    var themesObject = JsonConvert.SerializeObject(topLevelThemesAvailable,
+        Formatting.None,
+        new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+        });
+}
 
-
-@helper BuildMenu(List<Theme> data, int? parentId = null)
-{
-var items = data.Where(d => d.ParentId == parentId);
-if (items.Any())
-{
-        <div>
-            @foreach (var item in items)
-            {
-                <div style="padding-left: 18px;">
-                    <a style="font-size: 16pt;" href="@Url.Action("Details", "Themes" ,new { id= @item.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(item.Name) })">
-                        <span class="expand-arrow active"></span>
-                        @item.Name
-                    </a>
-                    @foreach (var d in item.Metadata)
-                    {
-                        <div is="theme-item" v-bind:parent-id="@Json.Encode(item.Id)" v-bind:uuid="@Json.Encode(d.Uuid)"></div>
-                    }
-                    @BuildMenu(data, item.Id)
-                </div>
-            }
+    <div id="themesVueList">
+        <div v-for="theme in items">
+            <div is="theme-item" v-bind:theme="theme"></div>
         </div>
-}
-}
-
-<div id="themesVueList">
-    @BuildMenu(themes, null)
-</div>
-
-
-<script type="text/x-template" id="theme-item-template">
-    <div style="padding-left: 18px;">
-        <div><a v-bind:href="metadata.ShowDetailsUrl" style="line-height: 24pt">{{metadata.Title}}</a></div>
     </div>
-</script>
+
+    <script type="text/x-template" id="metadata-item-template">
 
 
-<script>
 
-    var ThemeItem = {
-        template: '#theme-item-template',
-        props: ['parentId', 'uuid'],
-        data: function () {
-            var data = {
-                metadata: {}
-            }
-            return data;
-        },
-        mounted: function () {
-            $.getJSON('/api/search?text=' + this.uuid, function (result) {
-                if (result.length != 0) {
-                    if (result.Results[0] != null) {
-                        this.metadata = result.Results[0];
-                    }
+        <div class="row">
+            <div class="col-sm-4"><a v-bind:href="apiData.ShowDetailsUrl">{{apiData.Title}}</a></div>
+            <div class="col-sm-2">{{apiData.Type}}</div>
+            <div class="col-sm-3">{{apiData.Organization}}</div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-1"></div>
+        </div>
+
+    </script>
+
+
+    <script type="text/x-template" id="theme-item-template">
+        <div>
+            <div>
+                <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']"></span>
+                <a style="line-height: 24pt; font-size: 16pt;">{{ theme.Name }}</a>
+            </div>
+
+            <div v-show="expanded" style="padding-left: 18px;">
+                <div class="row">
+                    <div class="col-sm-4">Tittel</div>
+                    <div class="col-sm-2">Type</div>
+                    <div class="col-sm-3">Dataeier</div>
+                    <div class="col-sm-1">Åpne data</div>
+                    <div class="col-sm-1">Kart</div>
+                    <div class="col-sm-1">Last ned</div>
+                </div>
+                <div class="menu-separator search-results-table-heading"></div>
+                <div v-for="subItem in theme.Metadata">
+                    <div is="metadata-item" v-bind:metadata="subItem"></div>
+                </div>
+                <hr style="margin-top: 5px; margin-bottom: 5px;" />
+                <div v-if="theme.Children.length">
+                    <div v-for="child in theme.Children">
+                        <div is="theme-item" v-bind:theme="child"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+
+    <script>
+
+        var MetadataItem = {
+            name: 'metadataItem',
+            template: '#metadata-item-template',
+            props: ['metadata'],
+            data: function () {
+                return {
+                    apiData: {}
                 }
-            }.bind(this));
-        }
-    }
+            },
+            mounted: function () {
+                $.getJSON('/api/search?text=' + this.metadata.Uuid, function (result) {
+                    if (result.length != 0) {
+                        if (result.Results[0] != null) {
+                            this.apiData = result.Results[0];
+                        }
+                    }
+                }.bind(this));
+            }
+        };
 
-    var themesVueModel = new Vue({
-        el: "#themesVueList",
-        components: {
-            themeItem: ThemeItem
-        }
-    })
-</script>
+        var themesArray = "@themesObject";
+        themesArray = themesArray.replace(/&quot;/g, '"');
+        themesArray = JSON.parse(themesArray);
 
+        var ThemeItem = {
+            name: 'themeItem',
+            template: '#theme-item-template',
+            props: ['theme'],
+            data: function () {
+                return {
+                    expanded: false
+                }
+            },
+            components: {
+                metadataItem: MetadataItem
+            }
+        };
+
+
+
+        var themesVueModel = new Vue({
+            el: "#themesVueList",
+            data: {
+                items: themesArray
+            },
+            created: function () {
+                var themes = [];
+                themesArray.forEach(function (theme) {
+                    if (theme.ParentId == null) {
+                        themes.push(theme);
+                    }
+                });
+                this.items = themes;
+            },
+            components: {
+                themeItem: ThemeItem
+            }
+        })
+    </script>
 
 
