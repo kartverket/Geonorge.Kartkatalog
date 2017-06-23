@@ -44,9 +44,9 @@
     @* *** Beskrivelse bilde *** *@
     <aside class="col-sm-4  size-12 col-sm-12 ">
         <div class="block listblock">
-            @if (string.IsNullOrWhiteSpace(Model.ThumbnailUrl))
+            @if (!string.IsNullOrWhiteSpace(Model.ThumbnailUrl))
             {
-                <img src="@Url.Action("Index", "Thumbnail", new {uuid = Model.Id, type = "small"})" w width="300" class="pull-right" alt="Forhåndsvisning av data." />
+                <img src="@Model.ThumbnailUrl" class="pull-right" alt="Forhåndsvisning av data." />
             }
         </div>
     </aside>
