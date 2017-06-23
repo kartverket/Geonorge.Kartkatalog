@@ -22,15 +22,17 @@
     {
         foreach (var theme in themeItem)
         {
+            theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+            theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
             var parent = theme.Parent;
             while (parent != null)
             {
+                parent.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @parent.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(parent.Name) });
+                parent.Description = string.IsNullOrEmpty(parent.Description) ? "" : parent.Description.Replace(System.Environment.NewLine, "<br/>");
                 topLevelThemes.Add(parent);
                 parent = parent.Parent;
-
             }
-            theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
-            theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+
         }
     }
 
@@ -43,16 +45,11 @@
         {
             themes.Remove(topLevelThemeAvailable);
         }
-        else
-        {
-            topLevelThemeAvailable.Description = string.IsNullOrEmpty(topLevelThemeAvailable.Description) ? "" : topLevelThemeAvailable.Description.Replace(System.Environment.NewLine, "<br/>");
-            topLevelThemeAvailable.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @topLevelThemeAvailable.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(topLevelThemeAvailable.Name) });
-        }
     }
 }
 
 @{
-    var themesObject = JsonConvert.SerializeObject(topLevelThemesAvailable,
+    var themesObject = JsonConvert.SerializeObject(themes,
         Formatting.None,
         new JsonSerializerSettings()
         {
