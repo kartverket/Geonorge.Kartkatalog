@@ -150,11 +150,9 @@ if (items.Any())
             }
         },
         mounted: function () {
-            $.getJSON('/api/search?text=' + this.metadata.Uuid, function (result) {
+            $.getJSON('/api/getdata/' + this.metadata.Uuid, function (result) {
                 if (result.length != 0) {
-                    if (result.Results[0] != null) {
-                        this.apiData = result.Results[0];
-                    }
+                    this.apiData = result;
                 }
             }.bind(this));
         }
