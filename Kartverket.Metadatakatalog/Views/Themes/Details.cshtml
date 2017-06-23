@@ -56,12 +56,21 @@
 <div>
     @if (Model.Metadata.Any())
     {
-        <h3>Metadata</h3>
+        <h3>Datasett</h3>
         foreach (var metadata in Model.Metadata)
         {
-            <p>
-                <a href="@Url.Action("Details", "Themes", new { id = metadata.Uuid, ThemeSeoName = "temanavn"})">@metadata.Title  @metadata.Uuid</a>
-            </p>
+            <p><a id="href-uuid-@metadata.Uuid" href="/metadata/uuid/@metadata.Uuid"></a></p>
+                            <script>
+                                $.getJSON(`/api/search?text=@metadata.Uuid`,
+                                    function (result) {
+                                        if (result.length != 0) {
+                                            if (result.Results[0] != null) {
+                                                const title = result.Results[0].Title;
+                                                $(`#href-uuid-@metadata.Uuid`).text(title);
+                                            }
+                                        }
+                                    });
+                            </script>
         }
     }
 </div>
