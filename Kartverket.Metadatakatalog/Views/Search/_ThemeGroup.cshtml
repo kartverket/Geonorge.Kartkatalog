@@ -85,19 +85,21 @@
             </div>
 
             <div v-show="expanded" style="padding-left: 18px;">
-                <div class="row">
-                    <div class="col-sm-4">Tittel</div>
-                    <div class="col-sm-2">Type</div>
-                    <div class="col-sm-3">Dataeier</div>
-                    <div class="col-sm-1">Åpne data</div>
-                    <div class="col-sm-1">Kart</div>
-                    <div class="col-sm-1">Last ned</div>
+                <div v-if="theme.Metadata.length">
+                    <div class="row">
+                        <div class="col-sm-4">Tittel</div>
+                        <div class="col-sm-2">Type</div>
+                        <div class="col-sm-3">Dataeier</div>
+                        <div class="col-sm-1">Åpne data</div>
+                        <div class="col-sm-1">Kart</div>
+                        <div class="col-sm-1">Last ned</div>
+                    </div>
+                    <div class="menu-separator search-results-table-heading"></div>
+                    <div v-for="subItem in theme.Metadata">
+                        <div is="metadata-item" v-bind:metadata="subItem"></div>
+                    </div>
+                    <hr style="margin-top: 5px; margin-bottom: 5px;" />
                 </div>
-                <div class="menu-separator search-results-table-heading"></div>
-                <div v-for="subItem in theme.Metadata">
-                    <div is="metadata-item" v-bind:metadata="subItem"></div>
-                </div>
-                <hr style="margin-top: 5px; margin-bottom: 5px;" />
                 <div v-if="theme.Children.length">
                     <div v-for="child in theme.Children">
                         <div is="theme-item" v-bind:theme="child"></div>
