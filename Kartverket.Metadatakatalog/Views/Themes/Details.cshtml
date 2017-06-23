@@ -7,6 +7,10 @@
 
 @section breadcrumb {
     <li><a href="@Url.Action("Index", "Themes")">Temaer</a></li>
+        @foreach (var parent in HtmlHelperExtensions.Parents(Model))
+        {
+            <li><a href="@Url.Action("Details", "Themes", new { id = @parent.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(parent.Name) })">@parent.Name</a></li>
+        }
     <li class="active">@Model.Name</li>
 }
 
@@ -21,15 +25,6 @@
         </div>
     </div>
 </section>
-
-@* Hierarki *@
-<div>
-    @foreach (var parent in HtmlHelperExtensions.Parents(Model))
-    {
-        <a href="@Url.Action("Details", "Themes", new { id = @parent.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(parent.Name) })"><span class="label label-default">@parent.Name</span></a>
-    }
-    <span class="label label-default">@Model.Name</span>
-</div>
 
 @* Beskrivelse og thumbnail*@
 <div class="row">
