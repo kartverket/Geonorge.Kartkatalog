@@ -76,7 +76,7 @@
             </div>
         </div>
     </div>
-    <div class="menu-separator search-results-table-heading"></div> 
+    <div class="menu-separator search-results-table-heading"></div>
 
     <div v-for="theme in items">
         <div is="theme-item" v-bind:theme="theme" v-bind:parent-hierarchy-level="0"></div>
@@ -102,17 +102,17 @@
 
 <script type="text/x-template" id="theme-item-template">
     <div>
-        <div class="row">
+        <div class="row" style="padding: 4px 0">
             <div class="col-sm-4" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
                 <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']"></span>
-                <a v-bind:href="theme.ShowDetailsUrl" style="line-height: 24pt; font-size: 16pt;">{{ theme.Name }}</a>
+                <a v-bind:href="theme.ShowDetailsUrl" style="font-size: 14pt;">{{ theme.Name }}</a>
             </div>
             <div class="col-sm-8">
             </div>
         </div>
         <div v-show="expanded" style="">
             <div v-if="theme.Metadata.length">
-                <div v-for="subItem in theme.Metadata">
+                <div v-for="subItem in theme.Metadata" class="metadata-item-list">
                     <div is="metadata-item" v-bind:metadata="subItem"></div>
                 </div>
             </div>

@@ -76,3 +76,15 @@
 
 .label-datapakke {
   border-color: #5d4777; }
+
+.metadata-item-list{
+    padding: 8px 0;
+}
+
+.metadata-item-list:nth-child(odd){
+    background-color: #fbfcfc;
+}
+
+.metadata-item-list:nth-child(even){
+    background-color: #f7f8f8;
+}
