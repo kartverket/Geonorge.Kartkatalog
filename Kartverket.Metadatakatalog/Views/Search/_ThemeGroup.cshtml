@@ -44,7 +44,7 @@
     }
 }
 
-@* Sett url og fiks linjeskift i data for themes *@  
+@* Sett url og fiks linjeskift i data for themes *@
 @helper BuildMenu(List<Theme> data, int? parentId = null)
 {
 var items = data.Where(d => d.ParentId == parentId);
@@ -95,15 +95,23 @@ if (items.Any())
 </div>
 
 <script type="text/x-template" id="metadata-item-template">
-    <div class="row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-9">
-            <div class="row">
-                <div class="col-sm-5"><a v-bind:href="apiData.ShowDetailsUrl">{{apiData.Title}}</a></div>
-                <div class="col-sm-3">{{apiData.Organization}}</div>
-                <div class="col-sm-1"></div>
-                <div class="col-sm-1"></div>
-                <div class="col-sm-1"></div>
+    <div>
+        <!--<div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+                <div class="row">
+                    <div class="col-sm-5"><a v-bind:href="apiData.ShowDetailsUrl">{{apiData.Title}}</a></div>
+                    <div class="col-sm-3">{{apiData.Organization}}</div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-1"></div>
+                </div>
+            </div>
+        </div>-->
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+                <div is="resultItem" v-bind:result-item="apiData"></div>
             </div>
         </div>
     </div>
@@ -124,6 +132,7 @@ if (items.Any())
             <div v-if="theme.Metadata.length">
                 <div v-for="subItem in theme.Metadata" class="metadata-item-list">
                     <div is="metadata-item" v-bind:metadata="subItem"></div>
+
                 </div>
             </div>
             <div v-if="theme.Children.length">
@@ -155,6 +164,9 @@ if (items.Any())
                     this.apiData = result;
                 }
             }.bind(this));
+        },
+        components: {
+            ResultItem: ResultItemComponent
         }
     };
 
@@ -186,7 +198,8 @@ if (items.Any())
     var themesVueModel = new Vue({
         el: "#themesVueList",
         data: {
-            items: themesArray
+            items: themesArray,
+            viewType: 'tableView'
         },
         created: function () {
             var themes = [];

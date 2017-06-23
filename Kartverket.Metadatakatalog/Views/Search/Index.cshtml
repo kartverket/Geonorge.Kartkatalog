@@ -113,7 +113,7 @@
             <div class="resultItemRow" v-bind:class="{expanded: expanded}">
                 <div class="row">
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                         <div class="resultItemRowTitle">
                             @*Tittel*@
                             <a v-bind:href="readMoreUrl" class="show-loading-animation">
@@ -123,9 +123,9 @@
                     </div>
 
                     @*Distribusjonstype *@
-                    <div class="col-sm-2">
+                   <!-- <div class="col-sm-2">
                         <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
-                    </div>
+                    </div>-->
 
                     @*Organisasjon*@
                     <div class="col-sm-3">
@@ -340,7 +340,7 @@
                 {
                     <div>
                         <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
-                            <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
+                            <div v-bind:class="orderByTitle.className" class="col-sm-5" v-bind:id="orderByTitle.id">
                                 <div class="resultItemRowTitle">
                                     <p>
                                         <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
@@ -349,7 +349,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="col-sm-2"><p>Type</p></div>
+                           <!-- <div class="col-sm-2"><p>Type</p></div>-->
                             <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
                                 <p>
                                     <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
