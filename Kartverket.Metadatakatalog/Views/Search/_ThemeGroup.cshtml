@@ -42,6 +42,10 @@
         if (!topLevelThemes.Contains(topLevelThemeAvailable))
         {
             themes.Remove(topLevelThemeAvailable);
+        }else
+        {
+            topLevelThemeAvailable.Description = string.IsNullOrEmpty(topLevelThemeAvailable.Description) ? "" : topLevelThemeAvailable.Description.Replace(System.Environment.NewLine, "<br/>");
+            topLevelThemeAvailable.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @topLevelThemeAvailable.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(topLevelThemeAvailable.Name) });
         }
     }
 }
@@ -81,7 +85,7 @@
         <div>
             <div>
                 <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']"></span>
-                <a style="line-height: 24pt; font-size: 16pt;">{{ theme.Name }}</a>
+                <a v-bind:href="theme.ShowDetailsUrl" style="line-height: 24pt; font-size: 16pt;">{{ theme.Name }}</a>
             </div>
 
             <div v-show="expanded" style="padding-left: 18px;">
