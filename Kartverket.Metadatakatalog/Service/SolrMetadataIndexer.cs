@@ -65,15 +65,15 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 _indexerService.Index(_indexDocumentCreator.ConvertIndexDocToService(metadataIndexDoc));
                 //Unntak for services som er koblet til datasett - GEOPORTAL-2169
-                if (metadataIndexDoc.ServiceDatasets == null || metadataIndexDoc.ServiceDatasets.Count == 0) //Hvis service ikke "operatesOn" noen datasett
-                    _indexer.Index(metadataIndexDoc);
+                //if (metadataIndexDoc.ServiceDatasets == null || metadataIndexDoc.ServiceDatasets.Count == 0) //Hvis service ikke "operatesOn" noen datasett
+                //    _indexer.Index(metadataIndexDoc);
             }
             else if (metadataIndexDoc.Type.ToLower() == "software")
             {
                 _indexerApplication.Index(_indexDocumentCreator.ConvertIndexDocToApplication(metadataIndexDoc));
                 //Unntak for applikasjoner som er koblet til datasett - GEOPORTAL-2170 (GEOPORTAL-2214)
-                if (metadataIndexDoc.ApplicationDatasets == null || metadataIndexDoc.ApplicationDatasets.Count == 0) //Hvis application ikke har "crossReference" noen datasett
-                    _indexer.Index(metadataIndexDoc);
+                //if (metadataIndexDoc.ApplicationDatasets == null || metadataIndexDoc.ApplicationDatasets.Count == 0) //Hvis application ikke har "crossReference" noen datasett
+                //    _indexer.Index(metadataIndexDoc);
             }
 
             else
