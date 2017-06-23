@@ -42,7 +42,8 @@
         if (!topLevelThemes.Contains(topLevelThemeAvailable))
         {
             themes.Remove(topLevelThemeAvailable);
-        }else
+        }
+        else
         {
             topLevelThemeAvailable.Description = string.IsNullOrEmpty(topLevelThemeAvailable.Description) ? "" : topLevelThemeAvailable.Description.Replace(System.Environment.NewLine, "<br/>");
             topLevelThemeAvailable.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @topLevelThemeAvailable.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(topLevelThemeAvailable.Name) });
@@ -59,121 +60,139 @@
         });
 }
 
-    <div id="themesVueList">
-        <div v-for="theme in items">
-            <div is="theme-item" v-bind:theme="theme"></div>
+<div id="themesVueList">
+    <div class="row">
+        <div class="col-sm-4">
+            Tema
+        </div>
+        <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-4">Tittel</div>
+                <div class="col-sm-2">Type</div>
+                <div class="col-sm-3">Dataeier</div>
+                <div class="col-sm-1">Åpne data</div>
+                <div class="col-sm-1">Kart</div>
+                <div class="col-sm-1">Last ned</div>
+            </div>
         </div>
     </div>
+    <div class="menu-separator search-results-table-heading"></div> 
 
-    <script type="text/x-template" id="metadata-item-template">
+    <div v-for="theme in items">
+        <div is="theme-item" v-bind:theme="theme" v-bind:parent-hierarchy-level="0"></div>
+    </div>
+</div>
 
-
-
-        <div class="row">
-            <div class="col-sm-4"><a v-bind:href="apiData.ShowDetailsUrl">{{apiData.Title}}</a></div>
-            <div class="col-sm-2">{{apiData.Type}}</div>
-            <div class="col-sm-3">{{apiData.Organization}}</div>
-            <div class="col-sm-1"></div>
-            <div class="col-sm-1"></div>
-            <div class="col-sm-1"></div>
+<script type="text/x-template" id="metadata-item-template">
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-4"><a v-bind:href="apiData.ShowDetailsUrl">{{apiData.Title}}</a></div>
+                <div class="col-sm-2">{{apiData.Type}}</div>
+                <div class="col-sm-3">{{apiData.Organization}}</div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-1"></div>
+            </div>
         </div>
+    </div>
+</script>
 
-    </script>
 
-
-    <script type="text/x-template" id="theme-item-template">
-        <div>
-            <div>
+<script type="text/x-template" id="theme-item-template">
+    <div>
+        <div class="row">
+            <div class="col-sm-4" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
                 <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']"></span>
                 <a v-bind:href="theme.ShowDetailsUrl" style="line-height: 24pt; font-size: 16pt;">{{ theme.Name }}</a>
             </div>
-
-            <div v-show="expanded" style="padding-left: 18px;">
-                <div v-if="theme.Metadata.length">
-                    <div class="row">
-                        <div class="col-sm-4">Tittel</div>
-                        <div class="col-sm-2">Type</div>
-                        <div class="col-sm-3">Dataeier</div>
-                        <div class="col-sm-1">Åpne data</div>
-                        <div class="col-sm-1">Kart</div>
-                        <div class="col-sm-1">Last ned</div>
-                    </div>
-                    <div class="menu-separator search-results-table-heading"></div>
-                    <div v-for="subItem in theme.Metadata">
-                        <div is="metadata-item" v-bind:metadata="subItem"></div>
-                    </div>
-                    <hr style="margin-top: 5px; margin-bottom: 5px;" />
+            <div class="col-sm-8">
+            </div>
+        </div>
+        <div v-show="expanded" style="">
+            <div v-if="theme.Metadata.length">
+                <div v-for="subItem in theme.Metadata">
+                    <div is="metadata-item" v-bind:metadata="subItem"></div>
                 </div>
-                <div v-if="theme.Children.length">
-                    <div v-for="child in theme.Children">
-                        <div is="theme-item" v-bind:theme="child"></div>
-                    </div>
+            </div>
+            <div v-if="theme.Children.length">
+                <div v-for="child in theme.Children">
+                    <div is="theme-item" v-bind:theme="child" v-bind:parent-hierarchy-level="hierarchyLevel"></div>
                 </div>
             </div>
         </div>
-    </script>
 
 
-    <script>
+    </div>
+</script>
 
-        var MetadataItem = {
-            name: 'metadataItem',
-            template: '#metadata-item-template',
-            props: ['metadata'],
-            data: function () {
-                return {
-                    apiData: {}
-                }
-            },
-            mounted: function () {
-                $.getJSON('/api/search?text=' + this.metadata.Uuid, function (result) {
-                    if (result.length != 0) {
-                        if (result.Results[0] != null) {
-                            this.apiData = result.Results[0];
-                        }
+
+<script>
+
+    var MetadataItem = {
+        name: 'metadataItem',
+        template: '#metadata-item-template',
+        props: ['metadata'],
+        data: function () {
+            return {
+                apiData: {}
+            }
+        },
+        mounted: function () {
+            $.getJSON('/api/search?text=' + this.metadata.Uuid, function (result) {
+                if (result.length != 0) {
+                    if (result.Results[0] != null) {
+                        this.apiData = result.Results[0];
                     }
-                }.bind(this));
-            }
-        };
-
-        var themesArray = "@themesObject";
-        themesArray = themesArray.replace(/&quot;/g, '"');
-        themesArray = JSON.parse(themesArray);
-
-        var ThemeItem = {
-            name: 'themeItem',
-            template: '#theme-item-template',
-            props: ['theme'],
-            data: function () {
-                return {
-                    expanded: false
                 }
-            },
-            components: {
-                metadataItem: MetadataItem
+            }.bind(this));
+        }
+    };
+
+    var themesArray = "@themesObject";
+    themesArray = themesArray.replace(/&quot;/g, '"');
+    themesArray = JSON.parse(themesArray);
+
+    var ThemeItem = {
+        name: 'themeItem',
+        template: '#theme-item-template',
+        props: ['theme', 'parentHierarchyLevel'],
+        data: function () {
+            return {
+                expanded: false
             }
-        };
-
-
-
-        var themesVueModel = new Vue({
-            el: "#themesVueList",
-            data: {
-                items: themesArray
-            },
-            created: function () {
-                var themes = [];
-                themesArray.forEach(function (theme) {
-                    if (theme.ParentId == null) {
-                        themes.push(theme);
-                    }
-                });
-                this.items = themes;
-            },
-            components: {
-                themeItem: ThemeItem
+        },
+        computed: {
+            hierarchyLevel: function () {
+                return this.parentHierarchyLevel + 1;
             }
-        })
-    </script>
+        },
+        components: {
+            metadataItem: MetadataItem
+        }
+    };
+
+
+
+    var themesVueModel = new Vue({
+        el: "#themesVueList",
+        data: {
+            items: themesArray
+        },
+        created: function () {
+            var themes = [];
+            themesArray.forEach(function (theme) {
+                if (theme.ParentId == null) {
+                    themes.push(theme);
+                }
+            });
+            this.items = themes;
+        },
+        components: {
+            themeItem: ThemeItem
+        }
+    })
+</script>
 
 
