@@ -22,13 +22,9 @@
     {
         foreach (var theme in themeItem)
         {
-            theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
-            theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
             var parent = theme.Parent;
             while (parent != null)
             {
-                parent.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @parent.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(parent.Name) });
-                parent.Description = string.IsNullOrEmpty(parent.Description) ? "" : parent.Description.Replace(System.Environment.NewLine, "<br/>");
                 topLevelThemes.Add(parent);
                 parent = parent.Parent;
             }
@@ -47,6 +43,25 @@
         }
     }
 }
+
+@* Sett url og fiks linjeskift i data for themes *@  
+@helper BuildMenu(List<Theme> data, int? parentId = null)
+{
+var items = data.Where(d => d.ParentId == parentId);
+if (items.Any())
+{
+    foreach (var item in items)
+    {
+        item.Description = string.IsNullOrEmpty(item.Description) ? "" : item.Description.Replace(System.Environment.NewLine, "<br/>");
+        item.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @item.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(item.Name) });
+            @BuildMenu(data, item.Id)
+    }
+}
+}
+
+@BuildMenu(themes, null)
+
+
 
 @{
     var themesObject = JsonConvert.SerializeObject(themes,
