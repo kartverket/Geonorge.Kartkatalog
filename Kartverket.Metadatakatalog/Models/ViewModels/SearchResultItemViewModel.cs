@@ -106,7 +106,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             else return false;
         }
 
-        private SearchResultItemViewModel(SearchResultItem item)
+        public SearchResultItemViewModel(SearchResultItem item)
         {
             Uuid = item.Uuid;
             Title = item.Title;

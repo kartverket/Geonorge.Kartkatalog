@@ -13,6 +13,8 @@ using System;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
+using Kartverket.Metadatakatalog.Models.ViewModels;
+using System.Web.Http.Description;
 
 
 // Metadata search api examples
@@ -124,6 +126,31 @@ namespace Kartverket.Metadatakatalog.Controllers
                 var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
 
                 return new SearchResult(searchResult, urlHelper);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return null;
+            }
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [System.Web.Http.Route("api/metadata")]
+        [System.Web.Http.HttpGet]
+        public List<Models.ViewModels.SearchResultItemViewModel> Metadata([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
+        {
+            try
+            {
+                if (parameters == null)
+                    parameters = new SearchParameters();
+
+                Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
+                searchParameters.AddDefaultFacetsIfMissing();
+                Models.SearchResult searchResult = _searchService.Search(searchParameters);
+
+                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+                return searchResult.Items.Select(item => new SearchResultItemViewModel(item)).ToList();
             }
             catch (Exception ex)
             {
