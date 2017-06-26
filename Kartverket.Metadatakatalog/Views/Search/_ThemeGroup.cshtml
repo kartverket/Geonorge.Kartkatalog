@@ -73,7 +73,7 @@ if (items.Any())
 }
 
 <div id="themesVueList">
-    <div class="row">
+    <div class="row resultItemRowTableHeader">
         <div class="col-sm-3">
             Tema
         </div>
@@ -108,9 +108,9 @@ if (items.Any())
 
 <script type="text/x-template" id="theme-item-template">
     <div>
-        <div class="row" style="padding: 8px 0">
+        <div class="row" style="padding: 2px 0">
             <div class="col-sm-3" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
-                <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']"></span>
+                <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']" style="vertical-align: middle;"></span>
                 <a v-bind:href="theme.ShowDetailsUrl">{{ theme.Name }}</a>
             </div>
             <div class="col-sm-9">
