@@ -25,7 +25,7 @@
         components: {
             distributionRows: distributionRows
         },
-        created: function () {
+        mounted: function () {
             this.getCartButtonStatus();
 
             var addToCartId = getParameterByName('addtocart_event_id');
@@ -293,8 +293,16 @@
                     var addedToCart = false;
                     addedOrderitems.forEach(function (addedOrderItemUuid) {
                         if (addedOrderItemUuid !== null) {
-                            if (this.resultItem.Uuid == addedOrderItemUuid) {
-                                addedToCart = true;
+                            if (this.$parent.metadata !== undefined) {
+                                // Temainndelte datasett
+                                if (this.$parent.metadata.Uuid == addedOrderItemUuid) {
+                                    addedToCart = true;
+                                }
+                            } else if (this.resultItem !== undefined) {
+                                // Løse datasett
+                                if (this.resultItem.Uuid == addedOrderItemUuid) {
+                                    addedToCart = true;
+                                }
                             }
                         }
                     }.bind(this));

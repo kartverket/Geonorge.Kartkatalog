@@ -66,7 +66,7 @@
                 </a>
 
                 <a style="width: 130px"
-                   v-on:click="!resultItem.IsRestricted ? addToCart() : null" 
+                   v-on:click="!resultItem.IsRestricted ? addToCart() : null"
                    v-if="resultItem.ShowDownloadService"
                    v-bind:href='[itemAddToCart.href ? itemAddToCart.href : "" ]'
                    data-toggle='tooltip'
@@ -123,10 +123,9 @@
                     </div>
 
                     @*Distribusjonstype *@
-                   <!-- <div class="col-sm-2">
-                        <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
-                    </div>-->
-
+                    <!-- <div class="col-sm-2">
+                         <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
+                     </div>-->
                     @*Organisasjon*@
                     <div class="col-sm-3">
                         <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
@@ -148,7 +147,7 @@
 
                     @*Last ned*@
                     <div class="col-xs-1">
-                        <a v-on:click="!resultItem.IsRestricted ? addToCart() : null" 
+                        <a v-on:click="!resultItem.IsRestricted ? addToCart() : null"
                            v-if="resultItem.ShowDownloadService"
                            v-bind:href='[itemAddToCart.href ? itemAddToCart.href : "" ]'
                            data-toggle='tooltip'
@@ -329,50 +328,56 @@
 <div class="row resultItemTitleRow">
 
     <div class="col-md-9">
-        @Html.Partial("_ThemeGroup", Model)
+        @if (Model.Result != null)
+        {
+            @Html.Partial("_ThemeGroup", Model)
 
-            <div id="searchResultTable">
-                <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
-                <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
-                <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
-                <div class="clearfix"></div>
-                @if (Model.Result != null)
-                {
-                    <div>
-                        <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
-                            <div v-bind:class="orderByTitle.className" class="col-sm-5" v-bind:id="orderByTitle.id">
-                                <div class="resultItemRowTitle">
-                                    <p>
-                                        <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
-                                            Tittel<span class="orderby-indicator"></span>
-                                        </a>
-                                    </p>
-                                </div>
-                            </div>
-                           <!-- <div class="col-sm-2"><p>Type</p></div>-->
-                            <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
+        }
+        <div id="searchResultTable">
+            <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
+            <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
+            <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
+            <div class="clearfix"></div>
+
+
+            @if (Model.Result != null)
+            {
+                <div>
+                    <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
+                        <div v-bind:class="orderByTitle.className" class="col-sm-5" v-bind:id="orderByTitle.id">
+                            <div class="resultItemRowTitle">
                                 <p>
-                                    <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
+                                    <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
+                                        Tittel<span class="orderby-indicator"></span>
+                                    </a>
                                 </p>
                             </div>
-                            <div class="col-sm-1"><p>Åpne data</p></div>
-                            <div class="col-sm-1"><p>Kart</p></div>
-                            <div class="col-sm-1"><p>Last ned</p></div>
                         </div>
-
-                        <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
-                        <div v-for="item in viewModel.Result.Items" v-bind:class="tableBorder">
-                            <div is="resultItem" v-bind:result-item="item"></div>
+                        <!-- <div class="col-sm-2"><p>Type</p></div>-->
+                        <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
+                            <p>
+                                <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
+                            </p>
                         </div>
-
-                        <div class="clearfix"></div>
+                        <div class="col-sm-1"><p>Åpne data</p></div>
+                        <div class="col-sm-1"><p>Kart</p></div>
+                        <div class="col-sm-1"><p>Last ned</p></div>
                     </div>
 
-                    @DisplayPaginationBottom()
+                    <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
+                    <div v-for="item in viewModel.Result.Items" v-bind:class="tableBorder">
+                        <div is="resultItem" v-bind:result-item="item"></div>
+                    </div>
 
-                }
-            </div>
-        
+                    <div class="clearfix"></div>
+                </div>
+
+                @DisplayPaginationBottom()
+
+            }
+
+        </div>
+
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
         <aside class="facet-filter-container">
@@ -392,7 +397,7 @@
         if (item.ShowMaplink() || item.ShowServiceMaplink())
         {
             @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                    }
+                        }
     }
 </script>
 
