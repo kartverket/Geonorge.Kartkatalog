@@ -169,12 +169,14 @@
 </div>
 
 @{
+    Model.Description = Model.Description.Replace(System.Environment.NewLine, "<br/>");
     var MetadataObject = JsonConvert.SerializeObject(Model.Metadata,
-        Formatting.None,
-        new JsonSerializerSettings()
-        {
-            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-        });
+Formatting.None,
+new JsonSerializerSettings()
+{
+    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+});
+
 }
 
 @section scripts {
@@ -191,7 +193,7 @@
             data: {
                 items: metadataArray,
                 viewType: 'tableView',
-                metadataArray: []
+                metadataArray: [],
             },
             created: function() {
                 this.getApiData();
@@ -201,9 +203,9 @@
             },
             methods: {
                 getApiData: function() {
-                    this.items.forEach(function (metadata, index) {
+                    this.items.forEach(function(metadata, index) {
                         $.getJSON('/api/metadata/' + metadata.Uuid,
-                            function (result) {
+                            function(result) {
                                 console.log(result);
                                 if (result.length != 0) {
                                     this.metadataArray.push(result);
