@@ -47,13 +47,18 @@
 @* Sett url og fiks linjeskift i data for themes *@
 @helper BuildMenu(List<Theme> data, int? parentId = null)
 {
+
+foreach (var theme in data)
+{
+    theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+    theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+}
+
 var items = data.Where(d => d.ParentId == parentId);
 if (items.Any())
 {
     foreach (var item in items)
     {
-        item.Description = string.IsNullOrEmpty(item.Description) ? "" : item.Description.Replace(System.Environment.NewLine, "<br/>");
-        item.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @item.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(item.Name) });
             @BuildMenu(data, item.Id)
     }
 }
