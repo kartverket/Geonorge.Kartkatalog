@@ -1,5 +1,6 @@
 ﻿using Kartverket.Metadatakatalog.Models;
 using System.Collections.Generic;
+using Kartverket.Metadatakatalog.Models.ViewModels;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -8,5 +9,6 @@ namespace Kartverket.Metadatakatalog.Service
         MetadataViewModel GetMetadataByUuid(string uuid);
 
         List<Models.Api.Distribution> GetRelatedDistributionsForUuid(string uuid);
+        SearchResultItemViewModel Metadata(string uuid);
     }
 }

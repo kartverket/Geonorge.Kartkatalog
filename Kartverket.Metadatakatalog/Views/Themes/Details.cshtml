@@ -1,5 +1,6 @@
 ﻿@model Kartverket.Metadatakatalog.Models.Theme
 @using Kartverket.Metadatakatalog.Helpers
+@using Newtonsoft.Json
 
 @{
     ViewBag.Title = "Tema - " + Model.Name;
@@ -38,37 +39,180 @@
 
     @* *** Beskrivelse bilde *** *@
     <aside class="col-sm-4  size-12 col-sm-12 ">
-        <div class="block listblock">
-            @if (!string.IsNullOrWhiteSpace(Model.ThumbnailUrl))
-            {
-                <img src="@Model.ThumbnailUrl" class="pull-right" alt="Forhåndsvisning av data." />
-            }
-        </div>
+        @if (!string.IsNullOrWhiteSpace(Model.ThumbnailUrl))
+        {
+            <div class="block listblock">
+
+                <img src="@Model.ThumbnailUrl" class="pull-right" alt="Forhåndsvisning av data."/>
+            </div>
+        }
     </aside>
 </div>
 
 @* Metadata*@
-<div>
-    @if (Model.Metadata.Any())
-    {
-        <h3>Datasett</h3>
-        foreach (var metadata in Model.Metadata)
-        {
-            <p><a id="href-uuid-@metadata.Uuid" href="/metadata/uuid/@metadata.Uuid"></a></p>
-                            <script>
-                                $.getJSON(`/api/search?text=@metadata.Uuid`,
-                                    function (result) {
-                                        if (result.length != 0) {
-                                            if (result.Results[0] != null) {
-                                                const title = result.Results[0].Title;
-                                                $(`#href-uuid-@metadata.Uuid`).text(title);
-                                            }
-                                        }
-                                    });
-                            </script>
-        }
-    }
+@* Vue code for resultitem*@
+@Html.Partial("_resultItemRow")
+
+@*Template for a table row*@
+<script type="text/x-template" id="resultItemRow">
+    <div>
+        <div class="resultItemRow">
+            <div class="row">
+
+                @*Tittel*@
+                <div class="col-sm-4">
+                    <div class="resultItemRowTitle">
+                        <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                            <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+                        </a>
+                    </div>
+                </div>
+
+                @*Distribusjonstype *@
+                <div class="col-sm-2">
+                    <span v-bind:title="resultItem.Type" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.Type}}</span>
+                </div>
+
+                @*Organisasjon*@
+                <div class="col-sm-3">
+                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                        {{resultItem.Organization}}
+                    </a>
+                </div>
+
+                @*Åpne data*@
+                <div class="col-sm-1">
+                    <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                </div>
+
+                @*Kart*@
+                <div class="col-xs-1">
+                    <a v-bind:id="mapLink.mapLinkId" v-bind:href="mapLink.url" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                        <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
+                    </a>
+                </div>
+
+                @*Last ned*@
+                <div class="col-xs-1">
+                    <a v-on:click="!resultItem.IsRestricted ? addToCart() : null"
+                       v-if="resultItem.ShowDownloadService"
+                       v-bind:href='[itemAddToCart.href ? itemAddToCart.href : "" ]'
+                       data-toggle='tooltip'
+                       data-placement='bottom'
+                       onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                       v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                       class="add-to-cart-btn"
+                       v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
+                        <span class="custom-icon custom-icon-handlekurv"></span>
+                        {{resultItem.addedToCart}}
+                    </a>
+
+                    <a v-else-if="resultItem.ShowDownloadLink"
+                       v-bind:href="resultItem.DownloadUrl"
+                       onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                       data-toggle='tooltip'
+                       data-placement='bottom'
+                       v:bind:title='"Last ned datasett for " + resultItem.Title'
+                       target="_blank">
+                        <span class="custom-icon custom-icon-lastned"></span>
+                    </a>
+
+                    <a v-else
+                       v-bind:title='"Last ned datasett for " + resultItem.Title'
+                       class="disabled">
+                        <span class="custom-icon custom-icon-lastned"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+    </div>
+
+</script>
+
+<div id="metadataList">
+    <div v-if="metadataArray.length > 0">
+    <h3>Datasett</h3>
+    <p>Datasett innenfor tema @Model.Name</p>
+    <div class="row resultItemRowTableHeader">
+        <div class="col-sm-4">
+            <p>Tittel</p>
+        </div>
+        <div class="col-sm-2">
+            <p>Type</p>
+        </div>
+        <div class="col-sm-3">
+            <p>Dataeier</p>
+        </div>
+        <div class="col-sm-1">
+            <p>Åpne data</p>
+        </div>
+        <div class="col-sm-1">
+            <p>Kart</p>
+        </div>
+        <div class="col-sm-1">
+            <p>Last ned</p>
+        </div>
+    </div>
+    <div class="menu-separator search-results-table-heading"></div>
+    <div v-for="item in metadataArray" class="table-border-bottom">
+        <div is="resultItem" v-bind:result-item="item"></div>
+    </div>
+        <div class="clearfix"></div>
+        </div>
 </div>
 
-<a href="@Url.Action("Edit", "Themes", new { id = Model.Id })" class="btn btn-default pull-right">Rediger</a>
+<div class="form-group pull-right top-padding">
+    <a href="@Url.Action("Edit", "Themes", new {id = Model.Id})" class="btn btn-default margin-top-10">Rediger</a>
+</div>
 
+@{
+    var MetadataObject = JsonConvert.SerializeObject(Model.Metadata,
+        Formatting.None,
+        new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+        });
+}
+
+@section scripts {
+    @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
+
+    <script>
+
+        var metadataArray = "@MetadataObject";
+        metadataArray = metadataArray.replace(/&quot;/g, '"');
+        metadataArray = JSON.parse(metadataArray);
+
+        var themesVueModel = new Vue({
+            el: "#metadataList",
+            data: {
+                items: metadataArray,
+                viewType: 'tableView',
+                metadataArray: []
+            },
+            created: function() {
+                this.getApiData();
+            },
+            components: {
+                ResultItem: ResultItemComponent,
+            },
+            methods: {
+                getApiData: function() {
+                    this.items.forEach(function (metadata, index) {
+                        $.getJSON('/api/metadata/' + metadata.Uuid,
+                            function (result) {
+                                console.log(result);
+                                if (result.length != 0) {
+                                    this.metadataArray.push(result);
+                                }
+                            }.bind(this));
+                    }.bind(this));
+
+                }
+            }
+        })
+    </script>
+}

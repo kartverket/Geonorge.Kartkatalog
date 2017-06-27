@@ -8,6 +8,7 @@ using www.opengis.net;
 using System;
 using Kartverket.Metadatakatalog.Service.Application;
 using System.Linq;
+using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 
@@ -149,6 +150,32 @@ namespace Kartverket.Metadatakatalog.Service
             catch (Exception ex) { }
 
             return distlist;
+        }
+
+        public SearchResultItemViewModel Metadata(string uuid)
+        {
+            SearchResultItem metadata = null;
+
+            SolrNet.ISolrOperations<MetadataIndexDoc> _solrInstance;
+            _solrInstance = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<SolrNet.ISolrOperations<MetadataIndexDoc>>();
+
+            SolrNet.ISolrQuery query = new SolrNet.SolrQuery("uuid:" + uuid);
+            try
+            {
+                SolrNet.SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                {
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier" }
+
+                });
+
+                metadata = new SearchResultItem(queryResults.FirstOrDefault());
+
+            }
+            catch (Exception ex) { }
+
+            return new SearchResultItemViewModel(metadata);
         }
 
         private List<Models.Api.Distribution> GetServiceDirectoryRelatedDistributions(string uuid)
@@ -1035,5 +1062,6 @@ namespace Kartverket.Metadatakatalog.Service
             }
             return output;
         }
+
     }
 }
