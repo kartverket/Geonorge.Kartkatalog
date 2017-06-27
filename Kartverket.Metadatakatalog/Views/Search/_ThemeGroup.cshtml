@@ -147,9 +147,9 @@ if (items.Any())
             }
         },
         mounted: function () {
-            $.getJSON('/api/metadata?text=' + this.metadata.Uuid, function (result) {
+            $.getJSON('/api/metadata/' + this.metadata.Uuid, function (result) {
                 if (result.length != 0) {
-                    this.apiData = result[0];
+                    this.apiData = result;
                 }
             }.bind(this));
         },
