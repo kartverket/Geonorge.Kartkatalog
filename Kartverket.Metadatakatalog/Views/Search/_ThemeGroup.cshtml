@@ -80,7 +80,7 @@ if (items.Any())
         <div class="col-sm-9">
             <div class="row">
                 <div class="col-sm-5">Tittel</div>
-                <div class="col-sm-3">Dataeier</div>
+                <div class="col-sm-4">Dataeier</div>
                 <div class="col-sm-1">Åpne data</div>
                 <div class="col-sm-1">Kart</div>
                 <div class="col-sm-1">Last ned</div>
@@ -108,7 +108,7 @@ if (items.Any())
 
 <script type="text/x-template" id="theme-item-template">
     <div>
-        <div class="row" style="padding: 2px 0">
+        <div class="row" style="padding: 2px 15px">
             <div class="col-sm-3" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
                 <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']" style="vertical-align: middle;"></span>
                 <a v-bind:href="theme.ShowDetailsUrl">{{ theme.Name }}</a>
@@ -117,8 +117,8 @@ if (items.Any())
             </div>
         </div>
         <div v-show="expanded" style="">
-            <div v-if="theme.Metadata.length">
-                <div v-for="subItem in theme.Metadata" class="metadata-item-list">
+            <div v-if="theme.Metadata.length" class="striped-list">
+                <div v-for="subItem in theme.Metadata" class="list-item">
                     <div is="metadata-item" v-bind:metadata="subItem"></div>
 
                 </div>
