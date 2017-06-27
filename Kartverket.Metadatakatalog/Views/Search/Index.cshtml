@@ -110,7 +110,7 @@
         @* *** TABELL *** *@
         <div v-if="$root.viewType == 'tableView'">
 
-            <div v-bind:class="{expanded: expanded}">
+            <div v-bind:class="{expanded: expanded}" class="resultItemRow">
                 <div class="row">
 
                     <div class="col-sm-5">
@@ -366,11 +366,9 @@
                     </div>
 
                     <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
-                    <div class="striped-list">
-                        <div v-for="item in viewModel.Result.Items" class="list-item">
+                        <div v-for="item in viewModel.Result.Items" class="table-border-bottom">
                             <div is="resultItem" v-bind:result-item="item"></div>
                         </div>
-                    </div>
 
                     <div class="clearfix"></div>
                 </div>

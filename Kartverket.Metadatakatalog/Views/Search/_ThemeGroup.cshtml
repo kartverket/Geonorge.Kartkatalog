@@ -79,10 +79,10 @@ if (items.Any())
 
 <div id="themesVueList">
     <div class="row resultItemRowTableHeader">
-        <div class="col-sm-3">
+        <div class="col-sm-2">
             Tema
         </div>
-        <div class="col-sm-9">
+        <div class="col-sm-10">
             <div class="row">
                 <div class="col-sm-5">Tittel</div>
                 <div class="col-sm-4">Dataeier</div>
@@ -102,8 +102,8 @@ if (items.Any())
 <script type="text/x-template" id="metadata-item-template">
     <div>
         <div class="row">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-9">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-10 table-border-bottom">
                 <div is="resultItem" v-bind:result-item="apiData"></div>
             </div>
         </div>
@@ -114,16 +114,16 @@ if (items.Any())
 <script type="text/x-template" id="theme-item-template">
     <div>
         <div class="row" style="padding: 2px 15px">
-            <div class="col-sm-3" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
+            <div class="col-sm-12" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
                 <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']" style="vertical-align: middle;"></span>
-                <a v-bind:href="theme.ShowDetailsUrl">{{ theme.Name }}</a>
+                <a v-bind:href="theme.ShowDetailsUrl" style="font-size: 14pt;">{{ theme.Name }}</a>
             </div>
-            <div class="col-sm-9">
-            </div>
+           <!-- <div class="col-sm-9">
+            </div>-->
         </div>
         <div v-show="expanded" style="">
-            <div v-if="theme.Metadata.length" class="striped-list">
-                <div v-for="subItem in theme.Metadata" class="list-item">
+            <div v-if="theme.Metadata.length" style="margin-bottom: 18px;">
+                <div v-for="subItem in theme.Metadata" class="">
                     <div is="metadata-item" v-bind:metadata="subItem"></div>
 
                 </div>
