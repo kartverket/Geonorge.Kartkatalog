@@ -163,11 +163,11 @@
         <div class="clearfix"></div>
         </div>
 </div>
-
+@if (ViewBag.IsAdmin) {
 <div class="form-group pull-right top-padding">
     <a href="@Url.Action("Edit", "Themes", new {id = Model.Id})" class="btn btn-default margin-top-10">Rediger</a>
 </div>
-
+}
 @{
     Model.Description = Model.Description != null ? Model.Description.Replace(System.Environment.NewLine, "<br/>") : "";
     var MetadataObject = JsonConvert.SerializeObject(Model.Metadata,

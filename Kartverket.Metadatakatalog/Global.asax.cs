@@ -11,6 +11,8 @@ using log4net;
 using System;
 using System.Data.Entity;
 using System.Web.Configuration;
+using System.Web.Helpers;
+using System.Security.Claims;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -27,6 +29,8 @@ namespace Kartverket.Metadatakatalog
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             DependencyConfig.Configure(new ContainerBuilder());
+
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
 
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<MetadataContext, Migrations.Configuration>());
 
