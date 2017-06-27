@@ -3,10 +3,9 @@ using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service;
-using Kartverket.Metadatakatalog.Service.Search;
-using System.Collections.Generic;
+using Kartverket.Metadatakatalog.Service.Application;
 using System.Linq;
-using System.Web;
+using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -73,12 +72,22 @@ namespace Kartverket.Metadatakatalog.Controllers
         public ActionResult Organization(SearchByOrganizationParameters parameters)
         {
             parameters.AddDefaultFacetsIfMissing();
-            //parameters.Limit = 30;
-            //parameters.orderby = OrderBy.title;
+            FixOrganizationParameters(parameters);
             SearchResultForOrganization searchResult = _searchService.SearchByOrganization(parameters);
             var model = new SearchByOrganizationViewModel(parameters, searchResult);
             return View(model);
         }
+
+
+        private static void FixOrganizationParameters(SearchByOrganizationParameters parameters)
+        {
+            if (parameters.OrganizationSeoName == "organisasjon")
+            {
+                parameters.OrganizationSeoName = null;
+            }
+        }
+
+        
 
         protected override void OnException(ExceptionContext filterContext)
         {

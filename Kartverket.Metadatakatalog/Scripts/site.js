@@ -34,13 +34,12 @@
 
 function getServiceStatus(uuid, id) {
     $.getJSON(statusApi + "monitorApi/serviceDetail?uuid=" + uuid, function (result) {
-        console.log(result);
         try {
-            var statusOK = result.connect.vurdering != "no";
-            var numLayers = parseInt(result.numLayers.svar);
-            console.log("numLayers:" + numLayers);
-            if (!statusOK)
-            {
+            var vurderingIsDefined = result.connect !== undefined && result.connect.vurdering !== undefined;
+            var numLayersIsDefined = result.numLayers !== undefined && result.numLayers.svar !== undefined;
+            var statusOK =  vurderingIsDefined && result.connect.vurdering != "no";
+            var numLayers = parseInt(numLayersIsDefined ? result.numLayers.svar : 0);
+            if (!statusOK) {
                 $('#mapmacro-' + id + ', #mapmacro-button-' + id).attr("class", "custom-icon custom-icon-kartmarkoer-unavailable");
                 $('#mapmacrolink-' + id + ', #mapmacrolink-button-' + id).attr("title", "Tjenesten er utilgjengelig for øyeblikket");
                 $('#mapmacrolink-' + id + ', #mapmacrolink-button-' + id).removeAttr("href");
@@ -58,15 +57,6 @@ function getServiceStatus(uuid, id) {
         }
     });
 };
-
-
-
-function getParameterByName(name) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
 
 
 
@@ -96,7 +86,7 @@ function addToCartButtonClick(addToCartButton) {
         var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl, 'theme': itemtheme, 'organizationName': itemorgname };
         localStorage["orderItems"] = JSON.stringify(orderItems);
         localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
-        showAlert(itemname + ' er lagt til i <a href="/Download">kurven</a>', 'success');
+        showAlert(itemname + ' er lagt til i <a href="/nedlasting">kurven</a>', 'success');
 
         var orderItemCount = $('#orderitem-count').text();
         if (orderItemCount == null || orderItemCount == '') {
@@ -119,7 +109,7 @@ function addToCartButtonClick(addToCartButton) {
 
         updateShoppingCart();
 
-        showAlert(itemname + ' er fjernet fra <a href="/Download">kurven</a>', 'warning');
+        showAlert(itemname + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
     }
 
     updateCartButton(addToCartButton, orderItems);

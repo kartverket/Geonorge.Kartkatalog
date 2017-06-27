@@ -1,0 +1,32 @@
+﻿@using Kartverket.Metadatakatalog.Helpers
+@model List<Kartverket.Metadatakatalog.Models.Theme>
+
+@helper BuildMenu(List<Theme> data, int? parentId = null)
+{
+var items = data.Where(d => d.ParentId == parentId);
+    if (items.Any())
+    {
+            <ul>
+                @foreach (var item in items)
+                {
+                    <li>
+                        <a href="@Url.Action("Details", "Themes", new { id = @item.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(item.Name) })">@item.Name</a>
+                        @BuildMenu(data, item.Id)
+                    </li>
+                }
+            </ul>
+    }
+}
+
+@{
+    ViewBag.Title = "Temaer";
+}
+@section breadcrumb {
+    <li class="active">Temaer</li>
+}
+<h2>Temaer</h2>
+
+<p>
+    @Html.ActionLink("Opprett tema", "Create", null, new { @class = "btn btn-sm btn-default" })
+</p>
+@BuildMenu(Model, null)

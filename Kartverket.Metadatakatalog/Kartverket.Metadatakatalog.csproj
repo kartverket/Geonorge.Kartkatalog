@@ -72,8 +72,8 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="GeoNorgeAPI, Version=3.0.31.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GeoNorgeAPI.3.0.31.0\lib\net40\GeoNorgeAPI.dll</HintPath>
+    <Reference Include="GeoNorgeAPI, Version=3.0.37.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GeoNorgeAPI.3.0.37.0\lib\net40\GeoNorgeAPI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Kartverket.Geonorge.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -260,13 +260,29 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\ApiMetadataController.cs" />
+    <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ThemesController.cs" />
+    <Compile Include="Migrations\201706090621035_AddTheme.cs" />
+    <Compile Include="Migrations\201706090621035_AddTheme.Designer.cs">
+      <DependentUpon>201706090621035_AddTheme.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Api\Distribution.cs" />
+    <Compile Include="Models\Theme.cs" />
+    <Compile Include="Models\SearchByAreaParameters.cs" />
+    <Compile Include="Models\SearchIndex\SearchIndexDoc.cs" />
+    <Compile Include="Models\ViewModels\SearchByAreaViewModel.cs" />
+    <Compile Include="Service\Application\IApplicationService.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Service\Application\ApplicationService.cs" />
+    <Compile Include="Service\IThemeService.cs" />
+    <Compile Include="Service\ServiceDirectory\IServiceDirectoryService.cs" />
     <Compile Include="Controllers\MetadataController.cs" />
     <Compile Include="Controllers\ApiSearchController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\ServiceDirectoryController.cs" />
     <Compile Include="Controllers\ThumbnailController.cs" />
     <Compile Include="Formatter\CsvFormatter.cs" />
     <Compile Include="Global.asax.cs">
@@ -288,6 +304,8 @@
     <Compile Include="Models\MetadataContext.cs" />
     <Compile Include="Models\OrderLineTypeExt.cs" />
     <Compile Include="Models\OrderTypeExt.cs" />
+    <Compile Include="Models\SearchIndex\ApplicationIndexDoc.cs" />
+    <Compile Include="Models\SearchIndex\ServiceIndexDoc.cs" />
     <Compile Include="Models\SearchIndex\MetadataIndexDoc.cs" />
     <Compile Include="Models\MetadataViewModel.cs" />
     <Compile Include="Models\Api\SearchResult.cs" />
@@ -315,6 +333,8 @@
     <Compile Include="Service\IErrorService.cs" />
     <Compile Include="Service\IMetadataService.cs" />
     <Compile Include="Service\IndexDocumentCreator.cs" />
+    <Compile Include="Service\IndexerService.cs" />
+    <Compile Include="Service\IndexerApplication.cs" />
     <Compile Include="Service\Indexer.cs" />
     <Compile Include="Service\MemoryCacher.cs" />
     <Compile Include="Service\MetadataIndexer.cs" />
@@ -322,17 +342,27 @@
     <Compile Include="Service\RegisterFetcher.cs" />
     <Compile Include="Service\Search\ISearchService.cs" />
     <Compile Include="Service\Search\SearchService.cs" />
+    <Compile Include="Service\ServiceDirectory\ServiceDirectoryService.cs" />
+    <Compile Include="Service\SimpleMetadataUtil.cs" />
     <Compile Include="Service\SolrIndexDocumentCreator.cs" />
-    <Compile Include="Service\SolrIndexer.cs" />
+    <Compile Include="Service\SolrIndexerApplication.cs" />
+    <Compile Include="Service\SolrIndexerServices.cs" />
+    <Compile Include="Service\SolrIndexerMetadata.cs" />
     <Compile Include="Service\SolrMetadataIndexer.cs" />
     <Compile Include="Service\PlaceResolver.cs" />
     <Compile Include="Service\ThemeResolver.cs" />
+    <Compile Include="Service\ThemeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\XmlDocument.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Content\bower_components\axios\dist\axios.js" />
+    <Content Include="Content\bower_components\axios\dist\axios.min.js" />
+    <Content Include="Content\bower_components\clipboard\dist\clipboard.js" />
+    <Content Include="Content\bower_components\clipboard\dist\clipboard.min.js" />
+    <Content Include="Content\bower_components\clipboard\package.js" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\chosen-sprite%402x.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\chosen-sprite.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -842,6 +872,7 @@
     <Content Include="Content\bower_components\vue\test\weex\runtime\node.spec.js" />
     <Content Include="Content\bower_components\vue\test\weex\runtime\style.spec.js" />
     <Content Include="Content\shopping-cart.css" />
+    <Content Include="Content\temp.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Helpers\SearchHelpers.cshtml" />
@@ -932,6 +963,22 @@
     <Content Include="bower.json" />
     <Content Include="authentication.default.config" />
     <Content Include="authentication.config" />
+    <Content Include="Content\bower_components\axios\.bower.json" />
+    <Content Include="Content\bower_components\axios\bower.json" />
+    <Content Include="Content\bower_components\axios\CHANGELOG.md" />
+    <Content Include="Content\bower_components\axios\CODE_OF_CONDUCT.md" />
+    <Content Include="Content\bower_components\axios\COLLABORATOR_GUIDE.md" />
+    <Content Include="Content\bower_components\axios\dist\axios.map" />
+    <Content Include="Content\bower_components\axios\dist\axios.min.map" />
+    <Content Include="Content\bower_components\axios\ECOSYSTEM.md" />
+    <Content Include="Content\bower_components\axios\LICENSE" />
+    <Content Include="Content\bower_components\axios\README.md" />
+    <Content Include="Content\bower_components\axios\UPGRADE_GUIDE.md" />
+    <Content Include="Content\bower_components\clipboard\.bower.json" />
+    <Content Include="Content\bower_components\clipboard\bower.json" />
+    <Content Include="Content\bower_components\clipboard\contributing.md" />
+    <Content Include="Content\bower_components\clipboard\package.json" />
+    <Content Include="Content\bower_components\clipboard\readme.md" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\.bower.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\702ZOKiLJc3WVjuplzInF5uFdDttMLvmWuJdhhgs.ttf" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.eot" />
@@ -962,6 +1009,7 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\bower.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\package-lock.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\README.md" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\yarn.lock" />
     <Content Include="Content\bower_components\vue\.babelrc" />
     <Content Include="Content\bower_components\vue\.bower.json" />
     <Content Include="Content\bower_components\vue\.eslintignore" />
@@ -1053,9 +1101,23 @@
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Download\Index.cshtml" />
     <Content Include="Views\Shared\_SharedMenu.cshtml" />
-    <Content Include="settings.config" />
     <Content Include="settings.default.config" />
     <Content Include="Views\Shared\_FacetFilter.cshtml" />
+    <Content Include="Views\ServiceDirectory\Index.cshtml" />
+    <Content Include="Views\Application\Index.cshtml" />
+    <Content Include="settings.config" />
+    <Content Include="Views\Search\Area.cshtml" />
+    <Content Include="Views\Shared\_FilterPages.cshtml" />
+    <Content Include="Views\Shared\_UnderlayingDistributions.cshtml" />
+    <Content Include="Views\Shared\_resultItemRow.cshtml" />
+    <Content Include="Views\Themes\Create.cshtml" />
+    <Content Include="Views\Themes\Delete.cshtml" />
+    <Content Include="Views\Themes\Edit.cshtml" />
+    <Content Include="Views\Themes\Index.cshtml" />
+    <Content Include="Views\Themes\_OperatesOn.cshtml" />
+    <Content Include="Views\Shared\_Metadata.cshtml" />
+    <Content Include="Views\Search\_ThemeGroup.cshtml" />
+    <Content Include="Views\Themes\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
@@ -1067,10 +1129,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\201706090621035_AddTheme.resx">
+      <DependentUpon>201706090621035_AddTheme.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\UI.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UI.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

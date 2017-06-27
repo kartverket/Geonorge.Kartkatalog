@@ -10,6 +10,7 @@ using SolrNet;
 using log4net;
 using System;
 using System.Data.Entity;
+using System.Web.Configuration;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -38,7 +39,10 @@ namespace Kartverket.Metadatakatalog
 
             log4net.Config.XmlConfigurator.Configure();
 
-            Startup.Init<MetadataIndexDoc>("http://localhost:8983/solr/metadata");
+            Startup.Init<MetadataIndexDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata");
+            Startup.Init<ServiceIndexDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/services");
+            Startup.Init<ApplicationIndexDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications");
+            //https://github.com/mausch/SolrNet/blob/master/Documentation/Multi-core-instance.md
 
         }
 

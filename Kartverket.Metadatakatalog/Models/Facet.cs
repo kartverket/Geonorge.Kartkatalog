@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -14,6 +11,28 @@ namespace Kartverket.Metadatakatalog.Models
         {
             public string Name { get; set; }
             public int Count { get; set; }
+
+            public FacetValue(KeyValuePair<string, int> facetValueResult)
+            {
+                Name = facetValueResult.Key;
+                Count = facetValueResult.Value;
+            }
+
+            public FacetValue()
+            {
+                
+            }
+        }
+
+
+        public Facet()
+        {
+        }
+
+        public Facet(string key)
+        {
+            FacetField = key;
+            FacetResults = new List<FacetValue>();
         }
     }
 }

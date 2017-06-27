@@ -29,7 +29,55 @@ namespace Kartverket.Metadatakatalog
             routes.MapRoute("DisplayOrganizationMetadata", "metadata/{OrganizationSeoName}",
                 new { controller = "Metadata", action = "Organization" }
             );
-            
+
+            // Tjenestekatalog
+            routes.MapRoute("DisplayServiceDirectory", "tjenestekatalogen",
+                new { controller = "ServiceDirectory", action = "Index" }
+            );
+
+            // Hva finnes i kommunen/Fylke
+            routes.MapRoute("SearchByArea", "hva-finnes-i-kommunen-fylke",
+                new { controller = "Search", action = "Area" }
+            );
+
+
+            // Etatvis oversikt
+            routes.MapRoute("SearchByOrganizationMetadata", "etatvis-oversikt/{OrganizationSeoName}",
+                new { controller = "Metadata", action = "Organization" }
+            );
+
+            // Kartløsninger i norge
+            routes.MapRoute("SearchByApplication", "kartlosninger-i-norge",
+               new { controller = "Application", action = "Index" }
+            );
+
+            // Tema detaljside 
+            routes.MapRoute("Tema", "tema/{ThemeSeoName}/{id}",
+               new { controller = "Themes", action = "Details", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+            name: "ThemesRoute",
+            url: "temaer/{action}/{id}",
+            defaults: new
+            {
+                controller = "Themes",
+                action = "Index",
+                id = UrlParameter.Optional
+            }
+            );
+
+            routes.MapRoute(
+                name: "DownloadRoute",
+                url: "nedlasting",
+                defaults: new
+                {
+                    controller = "Download",
+                    action = "Index",
+                    id = UrlParameter.Optional
+                }
+             );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

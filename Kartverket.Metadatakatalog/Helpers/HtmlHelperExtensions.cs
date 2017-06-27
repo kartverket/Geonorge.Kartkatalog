@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using Kartverket.Metadatakatalog.Models;
 
 namespace Kartverket.Metadatakatalog.Helpers
 {
     public static class HtmlHelperExtensions
     {
+        static readonly SeoFriendly Seo = new SeoFriendly();
+
         public static string ApplicationVersionNumber(this HtmlHelper helper)
         {
             string versionNumber = WebConfigurationManager.AppSettings["BuildVersionNumber"];
@@ -82,5 +87,40 @@ namespace Kartverket.Metadatakatalog.Helpers
                 : pagePathWithoutQueryString;
         }
 
+	public static string GetOrganizationNameOrDefault(string organizationName){
+            if (organizationName == null)
+            {
+                return "Etatsvis oversikt over data";
+            }
+            else {
+                return organizationName;
+            }
+        }
+
+        public static string HierarchyLevelLabel(string hierarchyLevelLabelText)
+        {
+            return "label-" + hierarchyLevelLabelText.ToLower();
+        }
+
+        public static string SeoFriendlyString(string text)
+        {
+            return Seo.MakeSeoFriendlyString(text);
+        }
+
+        public static List<Theme> Parents(Theme theme)
+        {
+            var parentsTheme = new List<Theme>();
+            if (theme.Parent != null)
+            {
+                var parent = theme.Parent;
+                while (parent != null)
+                {
+                    parentsTheme.Add(parent);
+                    parent = parent.Parent;
+                }             
+            }
+            return parentsTheme;
+
+        }
     }
 }

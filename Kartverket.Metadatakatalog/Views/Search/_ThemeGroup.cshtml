@@ -1,0 +1,212 @@
+﻿@using Kartverket.Metadatakatalog.Models.ViewModels
+@using Newtonsoft.Json
+@using Kartverket.Metadatakatalog.Helpers
+@model SearchViewModel
+
+
+
+@{
+    List<SearchResultItemViewModel> result = Model.Result.Items.ToList();
+    MetadataContext db = new MetadataContext();
+    var themes = db.Themes.ToList();
+    var metadatas = db.Metadatas.ToList();
+
+    //Finn temaer som er tilknyttet metadata.
+    var themeList = (from metadata in metadatas
+                     join metadataResult in result on metadata.Uuid equals metadataResult.Uuid
+                     select metadata.Themes).ToList();
+
+    //Finn toppnivåer
+    var topLevelThemes = new List<Theme>();
+    foreach (var themeItem in themeList)
+    {
+        foreach (var theme in themeItem)
+        {
+            var parent = theme.Parent;
+            while (parent != null)
+            {
+                topLevelThemes.Add(parent);
+                parent = parent.Parent;
+            }
+
+        }
+    }
+
+    //Fjern toppnivåer som ikke er tilknyttet metadata
+    var topLevelThemesAvailable = themes.Where(p => p.ParentId == null).ToList();
+
+    foreach (var topLevelThemeAvailable in topLevelThemesAvailable)
+    {
+        if (!topLevelThemes.Contains(topLevelThemeAvailable))
+        {
+            themes.Remove(topLevelThemeAvailable);
+        }
+    }
+}
+
+@* Sett url og fiks linjeskift i data for themes *@
+@helper BuildMenu(List<Theme> data, int? parentId = null)
+{
+
+foreach (var theme in data)
+{
+    theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+    theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+}
+
+var items = data.Where(d => d.ParentId == parentId);
+if (items.Any())
+{
+    foreach (var item in items)
+    {
+            @BuildMenu(data, item.Id)
+    }
+}
+}
+
+@BuildMenu(themes, null)
+
+
+
+@{
+    var themesObject = JsonConvert.SerializeObject(themes,
+        Formatting.None,
+        new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+        });
+}
+
+<div id="themesVueList">
+    <div class="row resultItemRowTableHeader">
+        <div class="col-sm-2">
+            Tema
+        </div>
+        <div class="col-sm-10">
+            <div class="row">
+                <div class="col-sm-5">Tittel</div>
+                <div class="col-sm-4">Dataeier</div>
+                <div class="col-sm-1">Åpne data</div>
+                <div class="col-sm-1">Kart</div>
+                <div class="col-sm-1">Last ned</div>
+            </div>
+        </div>
+    </div>
+    <div class="menu-separator search-results-table-heading"></div>
+
+    <div v-for="theme in items">
+        <div is="theme-item" v-bind:theme="theme" v-bind:parent-hierarchy-level="0"></div>
+    </div>
+</div>
+
+<script type="text/x-template" id="metadata-item-template">
+    <div>
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-10 table-border-bottom">
+                <div is="resultItem" v-bind:result-item="apiData"></div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="theme-item-template">
+    <div>
+        <div class="row" style="padding: 2px 15px">
+            <div class="col-sm-12" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
+                <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']" style="vertical-align: middle;"></span>
+                <a v-bind:href="theme.ShowDetailsUrl" style="font-size: 14pt;">{{ theme.Name }}</a>
+            </div>
+           <!-- <div class="col-sm-9">
+            </div>-->
+        </div>
+        <div v-show="expanded" style="">
+            <div v-if="theme.Metadata.length" style="margin-bottom: 18px;">
+                <div v-for="subItem in theme.Metadata" class="">
+                    <div is="metadata-item" v-bind:metadata="subItem"></div>
+
+                </div>
+            </div>
+            <div v-if="theme.Children.length">
+                <div v-for="child in theme.Children">
+                    <div is="theme-item" v-bind:theme="child" v-bind:parent-hierarchy-level="hierarchyLevel"></div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</script>
+
+
+<script>
+
+    var MetadataItem = {
+        name: 'metadataItem',
+        template: '#metadata-item-template',
+        props: ['metadata'],
+        data: function () {
+            return {
+                apiData: {}
+            }
+        },
+        mounted: function () {
+            $.getJSON('/api/metadata/' + this.metadata.Uuid, function (result) {
+                if (result.length != 0) {
+                    this.apiData = result;
+                }
+            }.bind(this));
+        },
+        components: {
+            ResultItem: ResultItemComponent
+        }
+    };
+
+    var themesArray = "@themesObject";
+    themesArray = themesArray.replace(/&quot;/g, '"');
+    themesArray = JSON.parse(themesArray);
+
+    var ThemeItem = {
+        name: 'themeItem',
+        template: '#theme-item-template',
+        props: ['theme', 'parentHierarchyLevel'],
+        data: function () {
+            return {
+                expanded: false
+            }
+        },
+        computed: {
+            hierarchyLevel: function () {
+                return this.parentHierarchyLevel + 1;
+            }
+        },
+        components: {
+            metadataItem: MetadataItem
+        }
+    };
+
+
+
+    var themesVueModel = new Vue({
+        el: "#themesVueList",
+        data: {
+            items: themesArray,
+            viewType: 'tableView'
+        },
+        created: function () {
+            var themes = [];
+            themesArray.forEach(function (theme) {
+                if (theme.ParentId == null) {
+                    themes.push(theme);
+                }
+            });
+            this.items = themes;
+        },
+        components: {
+            themeItem: ThemeItem
+        }
+    })
+</script>
+
+

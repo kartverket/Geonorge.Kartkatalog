@@ -69,9 +69,9 @@ $(document).ready(function() {
 
 
     // Shopping cart
-    var downloadUrl = "https://kartkatalog.geonorge.no/Download";
+    var downloadUrl = "https://kartkatalog.geonorge.no/nedlasting";
     if (applicationEnvironment !== "") {
-        downloadUrl = "https://kartkatalog." + applicationEnvironment + ".geonorge.no/Download";
+        downloadUrl = "https://kartkatalog." + applicationEnvironment + ".geonorge.no/nedlasting";
     }
     $("#shopping-cart-url").prop("href", downloadUrl);
 

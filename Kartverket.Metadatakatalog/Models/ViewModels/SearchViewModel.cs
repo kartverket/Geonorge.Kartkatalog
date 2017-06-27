@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Routing;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
@@ -18,6 +19,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public int startPage { get; set; }
         public int endPage { get; set; }
         public Dictionary<string, string> areaDictionary { get; set; }
+        public List<string> EnabledFacets { get; set; }
 
         public SearchViewModel(SearchParameters parameters, SearchResult searchResult)
         {
@@ -46,26 +48,6 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 pages = pages + 1;
             }
 
-            //Hvilke sider som skal være synlige
-            /*if (pages > 5)
-            {
-                startPage = 1;
-                endPage = 5;
-
-                if (page > 3 && page <= (pages-2))
-                {
-                    startPage = page - 2;
-                    endPage = page + 2;
-                }
-                if (page > (pages-2) && page > 3) {
-                    startPage = pages - 4;
-                    endPage = pages;
-                }
-            }
-            else { 
-                startPage = 1;
-                endPage = pages;
-            }*/
             startPage = page;
             endPage = page;
         }
@@ -206,6 +188,27 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return routeValues;
         }
 
+        public RouteValueDictionary ParamsForOrderByLink(string name)
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+
+            if (orderby.Contains(name))
+            {
+                if (orderby.Contains("_desc"))
+                {
+                    routeValues["orderby"] = name;
+                }
+                else {
+                    routeValues["orderby"] = name + "_desc";
+                }
+            }
+            else {
+                routeValues["orderby"] = name;
+            }
+            return routeValues;
+        }
+
         public RouteValueDictionary ParamsForOrderByTitleLink()
         {
             var routeValues = new RouteValueDictionary();
@@ -229,6 +232,37 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             routeValues["orderby"] = "organization";
             return routeValues;
         }
+
+        public RouteValueDictionary ParamsForOrderByTitle()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            if (orderby == "title")
+            {
+                routeValues["orderby"] = "title_desc";
+            }
+            else
+            {
+                routeValues["orderby"] = "title";
+            }
+            return routeValues;
+        }
+
+        public RouteValueDictionary ParamsForOrderByOrganization()
+        {
+            var routeValues = new RouteValueDictionary();
+            routeValues = CreateLinkWithParameters(routeValues, FacetParameters);
+            if (orderby == "organization")
+            {
+                routeValues["orderby"] = "organization_desc";
+            }
+            else
+            {
+                routeValues["orderby"] = "organization";
+            }
+            return routeValues;
+        }
+
 
         public RouteValueDictionary ParamsForOrderByOrganizationDescLink()
         {
@@ -264,6 +298,16 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             }
 
             return string.Format("{0} - {1}", from, to);
+        }
+
+        public List<string> FacetsServiceDirectory()
+        {
+            return new List<string> { "themes", "types", "organizations", "nationalinitiatives", "areas", "distributionProtocols", "dataAccesses" };
+        }
+
+        public List<string> FacetApplications()
+        {
+            return new List<string> { "organizations", "areas"};
         }
     }
 
