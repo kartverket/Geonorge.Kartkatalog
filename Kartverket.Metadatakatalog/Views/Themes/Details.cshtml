@@ -169,7 +169,7 @@
 </div>
 
 @{
-    Model.Description = Model.Description.Replace(System.Environment.NewLine, "<br/>");
+    Model.Description = Model.Description != null ? Model.Description.Replace(System.Environment.NewLine, "<br/>") : "";
     var MetadataObject = JsonConvert.SerializeObject(Model.Metadata,
 Formatting.None,
 new JsonSerializerSettings()
