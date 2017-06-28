@@ -40,7 +40,7 @@
     <div>
 
         @* **** LISTE **** *@
-        <div v-if="$root.viewType == 'listView'" class="row resultItemRowList">
+        <div v-if="$root.viewType == 'listView'" class="resultItemRowList table-border-bottom">
 
             <div class="col-sm-1">
                 <a v-bind:href="organizationUrl" class="show-loading-animation" data-loading-message="Henter innhold">
@@ -108,7 +108,7 @@
         </div>
 
         @* *** TABELL *** *@
-        <div v-if="$root.viewType == 'tableView'">
+        <div v-if="$root.viewType == 'tableView'" class="table-border-bottom">
 
             <div v-bind:class="{expanded: expanded}" class="resultItemRow">
                 <div class="row">
@@ -366,7 +366,7 @@
                     </div>
 
                     <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
-                        <div v-for="item in viewModel.Result.Items" class="table-border-bottom">
+                        <div v-for="item in viewModel.Result.Items">
                             <div is="resultItem" v-bind:result-item="item"></div>
                         </div>
 
