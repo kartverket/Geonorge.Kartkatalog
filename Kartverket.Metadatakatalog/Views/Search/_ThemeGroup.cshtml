@@ -165,6 +165,7 @@ if (items.Any())
 
     var themesArray = "@themesObject";
     themesArray = themesArray.replace(/&quot;/g, '"');
+    themesArray = themesArray.replace(/(?:\r\n|\r|\n)/g, '<br />');
     themesArray = JSON.parse(themesArray);
 
     var ThemeItem = {

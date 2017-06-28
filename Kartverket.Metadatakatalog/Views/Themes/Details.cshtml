@@ -185,6 +185,7 @@ new JsonSerializerSettings()
 
         var metadataArray = "@MetadataObject";
         metadataArray = metadataArray.replace(/&quot;/g, '"');
+        metadataArray = metadataArray.replace(/(?:\r\n|\r|\n)/g, '<br />');
         metadataArray = JSON.parse(metadataArray);
 
         var themesVueModel = new Vue({
