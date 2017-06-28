@@ -118,8 +118,6 @@ if (items.Any())
                 <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']" style="vertical-align: middle;"></span>
                 <a v-bind:href="theme.ShowDetailsUrl" style="font-size: 14pt;">{{ theme.Name }}</a>
             </div>
-           <!-- <div class="col-sm-9">
-            </div>-->
         </div>
         <div v-show="expanded" style="">
             <div v-if="theme.Metadata.length" style="margin-bottom: 18px;">
