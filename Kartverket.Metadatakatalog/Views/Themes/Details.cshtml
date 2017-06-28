@@ -176,7 +176,7 @@ new JsonSerializerSettings()
 {
     ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 });
-
+    MetadataObject = MetadataObject != null ? MetadataObject.Replace(System.Environment.NewLine, "<br/>") : "";
 }
 
 @section scripts {
