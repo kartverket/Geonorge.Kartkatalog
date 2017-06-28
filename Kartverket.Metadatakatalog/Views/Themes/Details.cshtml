@@ -8,10 +8,10 @@
 
 @section breadcrumb {
     <li><a href="@Url.Action("Index", "Themes")">Temaer</a></li>
-        @foreach (var parent in HtmlHelperExtensions.Parents(Model))
-        {
-            <li><a href="@Url.Action("Details", "Themes", new { id = @parent.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(parent.Name) })">@parent.Name</a></li>
-        }
+    @foreach (var parent in HtmlHelperExtensions.Parents(Model))
+    {
+        <li><a href="@Url.Action("Details", "Themes", new { id = @parent.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(parent.Name) })">@parent.Name</a></li>
+    }
     <li class="active">@Model.Name</li>
 }
 
@@ -33,7 +33,7 @@
     @* *** Beskrivelse tekst *** *@
     <div>
         <div class="col-md-8  size-12 col-sm-12 ">
-                <p>@Model.Description</p>
+            <p>@Model.Description</p>
         </div>
     </div>
 
@@ -43,7 +43,7 @@
         {
             <div class="block listblock">
 
-                <img src="@Model.ThumbnailUrl" class="pull-right" alt="Forhåndsvisning av data."/>
+                <img src="@Model.ThumbnailUrl" class="pull-right" alt="Forhåndsvisning av data." />
             </div>
         }
     </aside>
@@ -134,58 +134,58 @@
 
 <div id="metadataList">
     <div v-if="metadataArray.length > 0">
-    <h3>Datasett</h3>
-    <p>Datasett innenfor tema @Model.Name</p>
-    <div class="row resultItemRowTableHeader">
-        <div class="col-sm-4">
-            <p>Tittel</p>
+        <h3>Datasett</h3>
+        <p>Datasett innenfor tema @Model.Name</p>
+        <div class="row resultItemRowTableHeader">
+            <div class="col-sm-4">
+                <p>Tittel</p>
+            </div>
+            <div class="col-sm-2">
+                <p>Type</p>
+            </div>
+            <div class="col-sm-3">
+                <p>Dataeier</p>
+            </div>
+            <div class="col-sm-1">
+                <p>Åpne data</p>
+            </div>
+            <div class="col-sm-1">
+                <p>Kart</p>
+            </div>
+            <div class="col-sm-1">
+                <p>Last ned</p>
+            </div>
         </div>
-        <div class="col-sm-2">
-            <p>Type</p>
+        <div class="menu-separator search-results-table-heading"></div>
+        <div v-for="item in metadataArray" class="table-border-bottom">
+            <div is="resultItem" v-bind:result-item="item"></div>
         </div>
-        <div class="col-sm-3">
-            <p>Dataeier</p>
-        </div>
-        <div class="col-sm-1">
-            <p>Åpne data</p>
-        </div>
-        <div class="col-sm-1">
-            <p>Kart</p>
-        </div>
-        <div class="col-sm-1">
-            <p>Last ned</p>
-        </div>
-    </div>
-    <div class="menu-separator search-results-table-heading"></div>
-    <div v-for="item in metadataArray" class="table-border-bottom">
-        <div is="resultItem" v-bind:result-item="item"></div>
-    </div>
         <div class="clearfix"></div>
-        </div>
+    </div>
 </div>
-
-<div class="form-group pull-right top-padding">
-    <a href="@Url.Action("Edit", "Themes", new {id = Model.Id})" class="btn btn-default margin-top-10">Rediger</a>
-</div>
-
+@if (ViewBag.IsAdmin)
+{
+    <div class="form-group pull-right top-padding">
+        <a href="@Url.Action("Edit", "Themes", new {id = Model.Id})" class="btn btn-default margin-top-10">Rediger</a>
+    </div>
+}
 @{
-    Model.Description = Model.Description.Replace(System.Environment.NewLine, "<br/>");
+    Model.Description = Model.Description != null ? Model.Description.Replace(System.Environment.NewLine, "<br/>") : "";
     var MetadataObject = JsonConvert.SerializeObject(Model.Metadata,
 Formatting.None,
 new JsonSerializerSettings()
 {
     ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 });
-
+    MetadataObject = MetadataObject != null ? MetadataObject.Replace(System.Environment.NewLine, "<br/>") : "";
 }
 
 @section scripts {
-    @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
     <script>
-
         var metadataArray = "@MetadataObject";
         metadataArray = metadataArray.replace(/&quot;/g, '"');
+        metadataArray = metadataArray.replace(/(?:\r\n|\r|\n)/g, '<br />');
         metadataArray = JSON.parse(metadataArray);
 
         var themesVueModel = new Vue({
@@ -195,18 +195,17 @@ new JsonSerializerSettings()
                 viewType: 'tableView',
                 metadataArray: [],
             },
-            created: function() {
+            created: function () {
                 this.getApiData();
             },
             components: {
                 ResultItem: ResultItemComponent,
             },
             methods: {
-                getApiData: function() {
-                    this.items.forEach(function(metadata, index) {
+                getApiData: function () {
+                    this.items.forEach(function (metadata, index) {
                         $.getJSON('/api/metadata/' + metadata.Uuid,
-                            function(result) {
-                                console.log(result);
+                            function (result) {
                                 if (result.length != 0) {
                                     this.metadataArray.push(result);
                                 }

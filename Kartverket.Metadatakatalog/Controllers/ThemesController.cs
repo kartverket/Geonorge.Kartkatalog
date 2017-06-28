@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
 using System.IO;
+using System.Security.Claims;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -22,6 +23,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         // GET: Themes
+        [Authorize]
         public ActionResult Index()
         {
             var model = _themeService.GetThemes();
@@ -35,10 +37,13 @@ namespace Kartverket.Metadatakatalog.Controllers
             var theme = _themeService.GetTheme(id);
             if (theme == null) return HttpNotFound();
 
+            ViewBag.IsAdmin = IsAdmin();
+
             return View(theme);
         }
 
         // GET: Themes/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.ParentId = new SelectList(_themeService.GetThemes(), "Id", "Name");
@@ -48,10 +53,14 @@ namespace Kartverket.Metadatakatalog.Controllers
         // POST: Themes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,Description,ThumbnailUrl,ParentId")] Theme theme, HttpPostedFileBase uploadFile)
         {
+            if (!IsAdmin())
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+
             if (uploadFile != null)
             {
                 if (!(uploadFile.ContentType == "image/jpeg" || uploadFile.ContentType == "image/gif"
@@ -92,6 +101,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         // GET: Themes/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -110,10 +120,15 @@ namespace Kartverket.Metadatakatalog.Controllers
         // POST: Themes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,ThumbnailUrl,ParentId")] Theme theme, string[] operatesOn, HttpPostedFileBase uploadFile)
         {
+
+            if (!IsAdmin())
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+
             if (uploadFile != null)
             {
                 if (!(uploadFile.ContentType == "image/jpeg" || uploadFile.ContentType == "image/gif"
@@ -136,6 +151,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         // GET: Themes/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -151,13 +167,51 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         // POST: Themes/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if(!IsAdmin())
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+
             _themeService.RemoveTheme(id);
 
             return RedirectToAction("Index");
         }
+
+        public bool IsAdmin()
+        {
+            List<string> roles = GetSecurityClaim("role");
+            foreach (string role in roles)
+            {
+                if (role == "nd.metadata_admin")
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public List<string> GetSecurityClaim(string type)
+        {
+            List<string> result = new List<string>();
+            foreach (var claim in ClaimsPrincipal.Current.Claims)
+            {
+                if (claim.Type == type && !string.IsNullOrWhiteSpace(claim.Value))
+                {
+                    result.Add(claim.Value);
+                }
+            }
+
+            // bad hack, must fix BAAT
+            if (result.Count == 0 && type.Equals("organization") && result.Equals("Statens kartverk"))
+            {
+                result.Add("Kartverket");
+            }
+
+            return result;
+        }
+
     }
 }
