@@ -19,6 +19,7 @@
                 backgroundColor: "#fff",
                 addedToCart: false,
                 itemType: this.resultItem.type,
+                hierarchyLevel: this.$parent.hierarchyLevel !== undefined ? this.$parent.hierarchyLevel : 0
             };
             return data;
         },
@@ -27,12 +28,10 @@
         },
         mounted: function () {
             this.getCartButtonStatus();
-
             var addToCartId = getParameterByName('addtocart_event_id');
             if (addToCartId && this.resultItem.Uuid == addToCartId) {
                 this.addToCart();
             }
-
         },
         computed: {
             openData: function () {
