@@ -84,9 +84,11 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.ProductSheetUrl = simpleMetadata.ProductSheetUrl;
             indexDoc.ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl;
             indexDoc.DistributionProtocol = simpleMetadata.DistributionProtocol;
-            List<string> distributionProtocols = new List<string>();
-            distributionProtocols.Add(simpleMetadata.DistributionProtocol);
-            indexDoc.DistributionProtocols = distributionProtocols;
+            if(simpleMetadata.DistributionProtocols != null && simpleMetadata.DistributionProtocols.Count > 0) {
+                List<string> distributionProtocols = new List<string>();
+                distributionProtocols.Add(simpleMetadata.DistributionProtocols[0]);
+                indexDoc.DistributionProtocols = distributionProtocols;
+            }
             indexDoc.DistributionUrl = simpleMetadata.DistributionUrl;
             indexDoc.DistributionName = simpleMetadata.DistributionName;
             indexDoc.ThumbnailUrl = simpleMetadata.ThumbnailUrl;
