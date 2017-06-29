@@ -16,6 +16,10 @@
                      join metadataResult in result on metadata.Uuid equals metadataResult.Uuid
                      select metadata.Themes).ToList();
 
+    var metadataWithThemes = (from metadata in metadatas
+                              join metadataResult in result on metadata.Uuid equals metadataResult.Uuid
+                              select metadata).ToList();
+
     //Finn toppnivåer
     var topLevelThemes = new List<Theme>();
     foreach (var themeItem in themeList)
@@ -75,55 +79,53 @@ if (items.Any())
         {
             ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
         });
+
+    var metadatasWithThemes = JsonConvert.SerializeObject(metadataWithThemes,
+        Formatting.None,
+        new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+        });
+
+
 }
 
 <div id="themesVueList">
     <div class="row resultItemRowTableHeader">
-        <div class="col-sm-2">
-            Tema
-        </div>
-        <div class="col-sm-10">
-            <div class="row">
-                <div class="col-sm-5">Tittel</div>
-                <div class="col-sm-4">Dataeier</div>
-                <div class="col-sm-1">Åpne data</div>
-                <div class="col-sm-1">Kart</div>
-                <div class="col-sm-1">Last ned</div>
-            </div>
-        </div>
+        <div class="col-sm-5">Tittel</div>
+        <div class="col-sm-4">Dataeier</div>
+        <div class="col-sm-1">Åpne data</div>
+        <div class="col-sm-1">Kart</div>
+        <div class="col-sm-1">Last ned</div>
     </div>
     <div class="menu-separator search-results-table-heading"></div>
-
-    <div v-for="theme in items">
-        <div is="theme-item" v-bind:theme="theme" v-bind:parent-hierarchy-level="0"></div>
+    <div v-for="resultItem in searchResults">
+        <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes" style="margin: 8px 0;">
+            <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="0" class="resultItemRow"></div>
+        </div>
+        <div is="resultItem" v-bind:result-item="resultItem"></div>
     </div>
 </div>
 
 <script type="text/x-template" id="metadata-item-template">
     <div>
-        <div class="row">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-10">
-                <div is="resultItem" v-bind:result-item="apiData"></div>
-            </div>
-        </div>
+        <div is="resultItem" v-bind:result-item="apiData"></div>
     </div>
 </script>
 
 
 <script type="text/x-template" id="theme-item-template">
     <div>
-        <div class="row" style="padding: 2px 15px">
+        <div class="row">
             <div class="col-sm-12" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
                 <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']" style="vertical-align: middle;"></span>
                 <a v-bind:href="theme.ShowDetailsUrl" style="font-size: 14pt;">{{ theme.Name }}</a>
             </div>
         </div>
-        <div v-show="expanded" style="">
+        <div v-show="expanded">
             <div v-if="theme.Metadata.length" style="margin-bottom: 18px;">
                 <div v-for="subItem in theme.Metadata" class="">
                     <div is="metadata-item" v-bind:metadata="subItem"></div>
-
                 </div>
             </div>
             <div v-if="theme.Children.length">
@@ -132,8 +134,6 @@ if (items.Any())
                 </div>
             </div>
         </div>
-
-
     </div>
 </script>
 
@@ -146,7 +146,8 @@ if (items.Any())
         props: ['metadata'],
         data: function () {
             return {
-                apiData: {}
+                apiData: {},
+                hierarchyLevel: this.$parent.hierarchyLevel !== undefined ? this.$parent.hierarchyLevel : 0
             }
         },
         mounted: function () {
@@ -165,6 +166,11 @@ if (items.Any())
     themesArray = themesArray.replace(/&quot;/g, '"');
     themesArray = themesArray.replace(/(?:\r\n|\r|\n)/g, '<br />');
     themesArray = JSON.parse(themesArray);
+
+    var searchResults = @Html.Raw(JsonConvert.SerializeObject(Model.Result.Items));
+    var metadatasWithThemes = @Html.Raw(metadatasWithThemes);
+
+
 
     var ThemeItem = {
         name: 'themeItem',
@@ -185,13 +191,14 @@ if (items.Any())
         }
     };
 
-
-
     var themesVueModel = new Vue({
         el: "#themesVueList",
         data: {
-            items: themesArray,
-            viewType: 'tableView'
+            themes: themesArray,
+            viewType: 'tableView',
+            searchResults: searchResults,
+            metadatasWithThemes: metadatasWithThemes,
+            addedTopLevelThemeIds: []
         },
         created: function () {
             var themes = [];
@@ -200,10 +207,78 @@ if (items.Any())
                     themes.push(theme);
                 }
             });
-            this.items = themes;
+            this.themes = themes;
+
+            this.searchResults.forEach(function(searchResultItem, index){
+                var topLevelThemes = this.topLevelThemes(searchResultItem);
+                this.searchResults[index].topLevelThemes = topLevelThemes;
+            }.bind(this));
+
+        },
+        methods: {
+
+            localTopLevelThemeAllreadyAdded: function (topLevelThemes, theme){
+                var topLevelThemeAllreadyAdded = false;
+                topLevelThemes.forEach(function(addedTheme){
+                    if (addedTheme.Id == theme.Id){
+                        topLevelThemeAllreadyAdded = true;
+                    }
+                })
+                return topLevelThemeAllreadyAdded;
+            },
+            topLevelThemes: function (searchResultItem){
+                var topLevelThemes = [];
+                this.metadatasWithThemes.forEach(function(metadataWithThemes){
+                    if (searchResultItem.Uuid == metadataWithThemes.Uuid){
+                        metadataWithThemes.Themes.forEach(function(theme){
+                            var topLevelTheme = this.getTopLevelTheme(theme);
+                            if (topLevelTheme !== null){
+                                if (!this.localTopLevelThemeAllreadyAdded(topLevelThemes, topLevelTheme)){
+                                    console.log("topLevelTheme");
+                                    console.log(topLevelTheme);
+                                    console.log("---");
+                                    topLevelThemes.push(topLevelTheme);
+                                }
+                            }
+                        }.bind(this));
+                    }
+                }.bind(this));
+                return topLevelThemes;
+            },
+            rootTopLevelThemeIsAllreadyAdded: function(topLevelTheme) {
+                var topLevelThemeIsAllreadyAdded = false;
+                this.$root.addedTopLevelThemeIds.forEach(function(addedTopLevelThemeId){
+                    if (addedTopLevelThemeId == topLevelTheme.Id){
+                        topLevelThemeIsAllreadyAdded = true;
+                    }
+                })
+                return topLevelThemeIsAllreadyAdded;
+            },
+            getTopLevelTheme: function (theme){
+                var topLevelTheme = null;
+                if (theme.ParentId == null){
+                    if (!this.rootTopLevelThemeIsAllreadyAdded(theme)){
+                        topLevelTheme = theme;
+                        this.$root.addedTopLevelThemeIds.push(theme.Id);
+                    }
+                }else{
+                    var childIsAdded = false;
+                    theme.Parent.Children.forEach(function(child){
+                        if (child.Id == theme.Id){
+                            childIsAdded = true;
+                        }
+                    });
+                    if (!childIsAdded){
+                        theme.Parent.Children.push(theme);
+                    }
+                    topLevelTheme = this.getTopLevelTheme(theme.Parent);
+                }
+                return topLevelTheme;
+            }
         },
         components: {
-            themeItem: ThemeItem
+            themeItem: ThemeItem,
+            ResultItem: ResultItemComponent
         }
     })
 </script>
