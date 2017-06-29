@@ -7,7 +7,6 @@
 }
 
 @section breadcrumb {
-    <li><a href="@Url.Action("Index", "Themes")">Temaer</a></li>
     @foreach (var parent in HtmlHelperExtensions.Parents(Model))
     {
         <li><a href="@Url.Action("Details", "Themes", new { id = @parent.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(parent.Name) })">@parent.Name</a></li>
