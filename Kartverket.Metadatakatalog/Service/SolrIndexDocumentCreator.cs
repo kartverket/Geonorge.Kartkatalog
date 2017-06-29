@@ -84,6 +84,9 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.ProductSheetUrl = simpleMetadata.ProductSheetUrl;
             indexDoc.ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl;
             indexDoc.DistributionProtocol = simpleMetadata.DistributionProtocol;
+            List<string> distributionProtocols = new List<string>();
+            distributionProtocols.Add(simpleMetadata.DistributionProtocol);
+            indexDoc.DistributionProtocols = distributionProtocols;
             indexDoc.DistributionUrl = simpleMetadata.DistributionUrl;
             indexDoc.DistributionName = simpleMetadata.DistributionName;
             indexDoc.ThumbnailUrl = simpleMetadata.ThumbnailUrl;
