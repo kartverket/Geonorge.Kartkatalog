@@ -36,7 +36,7 @@ namespace Kartverket.Metadatakatalog
             );
 
             // Hva finnes i kommunen/Fylke
-            routes.MapRoute("SearchByArea", "hva-finnes-i-kommunen-fylke",
+            routes.MapRoute("SearchByArea", "hva-finnes-i-kommunen-eller-fylket",
                 new { controller = "Search", action = "Area" }
             );
 
