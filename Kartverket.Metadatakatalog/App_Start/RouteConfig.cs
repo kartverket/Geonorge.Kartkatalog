@@ -47,7 +47,7 @@ namespace Kartverket.Metadatakatalog
             );
 
             // Kartløsninger i norge
-            routes.MapRoute("SearchByApplication", "kartlosninger-i-norge",
+            routes.MapRoute("SearchByApplication", "kartlosninger",
                new { controller = "Application", action = "Index" }
             );
 
