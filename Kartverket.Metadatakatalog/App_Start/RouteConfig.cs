@@ -30,8 +30,8 @@ namespace Kartverket.Metadatakatalog
                 new { controller = "Metadata", action = "Organization" }
             );
 
-            // Tjenestekatalog
-            routes.MapRoute("DisplayServiceDirectory", "tjenestekatalogen",
+            // apier-og-tjenester
+            routes.MapRoute("DisplayServiceDirectory", "apier-og-tjenester",
                 new { controller = "ServiceDirectory", action = "Index" }
             );
 
@@ -46,7 +46,7 @@ namespace Kartverket.Metadatakatalog
                 new { controller = "Metadata", action = "Organization" }
             );
 
-            // Kartløsninger i norge
+            // Kartløsninger
             routes.MapRoute("SearchByApplication", "kartlosninger",
                new { controller = "Application", action = "Index" }
             );
