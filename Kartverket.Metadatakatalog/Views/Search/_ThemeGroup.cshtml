@@ -12,40 +12,9 @@
     var metadatas = db.Metadatas.ToList();
 
     //Finn temaer som er tilknyttet metadata.
-    var themeList = (from metadata in metadatas
-                     join metadataResult in result on metadata.Uuid equals metadataResult.Uuid
-                     select metadata.Themes).ToList();
-
     var metadataWithThemes = (from metadata in metadatas
                               join metadataResult in result on metadata.Uuid equals metadataResult.Uuid
-                              select metadata).ToList();
-
-    //Finn toppnivåer
-    var topLevelThemes = new List<Theme>();
-    foreach (var themeItem in themeList)
-    {
-        foreach (var theme in themeItem)
-        {
-            var parent = theme.Parent;
-            while (parent != null)
-            {
-                topLevelThemes.Add(parent);
-                parent = parent.Parent;
-            }
-
-        }
-    }
-
-    //Fjern toppnivåer som ikke er tilknyttet metadata
-    var topLevelThemesAvailable = themes.Where(p => p.ParentId == null).ToList();
-
-    foreach (var topLevelThemeAvailable in topLevelThemesAvailable)
-    {
-        if (!topLevelThemes.Contains(topLevelThemeAvailable))
-        {
-            themes.Remove(topLevelThemeAvailable);
-        }
-    }
+                              select metadata).ToList();   
 }
 
 @* Sett url og fiks linjeskift i data for themes *@
@@ -70,16 +39,7 @@ if (items.Any())
 
 @BuildMenu(themes, null)
 
-
-
 @{
-    var themesObject = JsonConvert.SerializeObject(themes,
-        Formatting.None,
-        new JsonSerializerSettings()
-        {
-            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-        });
-
     var metadatasWithThemes = JsonConvert.SerializeObject(metadataWithThemes,
         Formatting.None,
         new JsonSerializerSettings()
@@ -162,11 +122,6 @@ if (items.Any())
         }
     };
 
-    var themesArray = "@themesObject";
-    themesArray = themesArray.replace(/&quot;/g, '"');
-    themesArray = themesArray.replace(/(?:\r\n|\r|\n)/g, '<br />');
-    themesArray = JSON.parse(themesArray);
-
     var searchResults = @Html.Raw(JsonConvert.SerializeObject(Model.Result.Items));
     var metadatasWithThemes = @Html.Raw(metadatasWithThemes);
 
@@ -194,21 +149,12 @@ if (items.Any())
     var themesVueModel = new Vue({
         el: "#themesVueList",
         data: {
-            themes: themesArray,
             viewType: 'tableView',
             searchResults: searchResults,
             metadatasWithThemes: metadatasWithThemes,
             addedTopLevelThemeIds: []
         },
         created: function () {
-            var themes = [];
-            themesArray.forEach(function (theme) {
-                if (theme.ParentId == null) {
-                    themes.push(theme);
-                }
-            });
-            this.themes = themes;
-
             this.searchResults.forEach(function(searchResultItem, index){
                 var topLevelThemes = this.topLevelThemes(searchResultItem);
                 this.searchResults[index].topLevelThemes = topLevelThemes;
