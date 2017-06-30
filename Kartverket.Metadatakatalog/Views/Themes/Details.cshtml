@@ -170,12 +170,20 @@
 }
 @{
     Model.Description = Model.Description != null ? Model.Description.Replace(System.Environment.NewLine, "<br/>") : "";
+    var ThemesObject = JsonConvert.SerializeObject(Model.Children,
+        Formatting.None,
+        new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+        });
+    ThemesObject = ThemesObject != null ? ThemesObject.Replace(System.Environment.NewLine, "<br/>") : "";
+
     var MetadataObject = JsonConvert.SerializeObject(Model.Metadata,
-Formatting.None,
-new JsonSerializerSettings()
-{
-    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-});
+    Formatting.None,
+    new JsonSerializerSettings()
+    {
+        ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+    });
     MetadataObject = MetadataObject != null ? MetadataObject.Replace(System.Environment.NewLine, "<br/>") : "";
 }
 
@@ -187,10 +195,17 @@ new JsonSerializerSettings()
         metadataArray = metadataArray.replace(/(?:\r\n|\r|\n)/g, '<br />');
         metadataArray = JSON.parse(metadataArray);
 
+        var themesArray = "@ThemesObject";
+        themesArray = themesArray.replace(/&quot;/g, '"');
+        themesArray = themesArray.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        themesArray = JSON.parse(themesArray);
+
+
         var themesVueModel = new Vue({
             el: "#metadataList",
             data: {
                 items: metadataArray,
+                children: themesArray,
                 viewType: 'tableView',
                 metadataArray: [],
             },
