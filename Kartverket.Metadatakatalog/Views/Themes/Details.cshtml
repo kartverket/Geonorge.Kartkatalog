@@ -48,120 +48,138 @@
     </aside>
 </div>
 
-@* Metadata*@
-@* Vue code for resultitem*@
-@Html.Partial("_resultItemRow")
 
 @*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
     <div>
-        <div class="resultItemRow">
-            <div class="row">
 
-                @*Tittel*@
-                <div class="col-sm-4">
-                    <div class="resultItemRowTitle">
-                        <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                            <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+        @* *** TABELL *** *@
+        <div v-if="$root.viewType == 'tableView'" class="table-border-bottom">
+
+            <div v-bind:class="{expanded: expanded}" class="resultItemRow">
+                <div class="row">
+
+                    <div class="col-sm-5">
+                        <div class="resultItemRowTitle" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
+                            @*Tittel*@
+                            <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                                <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    @*Distribusjonstype *@
+                    <!-- <div class="col-sm-2">
+                         <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
+                     </div>-->
+                    @*Organisasjon*@
+                    <div class="col-sm-4">
+                        <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                            {{resultItem.Organization}}
+                        </a>
+                    </div>
+
+                    @*Åpne data*@
+                    <div class="col-xs-1 text-center">
+                        <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                    </div>
+
+                    @*Kart*@
+                    <div class="col-xs-1 text-center">
+                        <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                            <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
+                        </a>
+                    </div>
+
+                    @*Last ned*@
+                    <div class="col-xs-1 text-center">
+                        <a v-on:click="!resultItem.IsRestricted ? addToCart() : null"
+                           v-if="resultItem.ShowDownloadService"
+                           v-bind:href='[itemAddToCart.href ? itemAddToCart.href : "" ]'
+                           data-toggle='tooltip'
+                           data-placement='bottom'
+                           onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                           v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                           class="add-to-cart-btn"
+                           v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
+                            <span class="custom-icon custom-icon-handlekurv"></span>
+                            {{resultItem.addedToCart}}
+                        </a>
+
+                        <a v-else-if="resultItem.ShowDownloadLink"
+                           v-bind:href="resultItem.DownloadUrl"
+                           onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                           data-toggle='tooltip'
+                           data-placement='bottom'
+                           v:bind:title='"Last ned datasett for " + resultItem.Title'
+                           target="_blank">
+                            <span class="custom-icon custom-icon-lastned"></span>
+                        </a>
+
+                        <a v-else
+                           v-bind:title='"Last ned datasett for " + resultItem.Title'
+                           class="disabled">
+                            <span class="custom-icon custom-icon-lastned"></span>
                         </a>
                     </div>
                 </div>
-
-                @*Distribusjonstype *@
-                <div class="col-sm-2">
-                    <span v-bind:title="resultItem.Type" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.Type}}</span>
-                </div>
-
-                @*Organisasjon*@
-                <div class="col-sm-3">
-                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
-                        {{resultItem.Organization}}
-                    </a>
-                </div>
-
-                @*Åpne data*@
-                <div class="col-sm-1">
-                    <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
-                </div>
-
-                @*Kart*@
-                <div class="col-xs-1">
-                    <a v-bind:id="mapLink.mapLinkId" v-bind:href="mapLink.url" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
-                        <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
-                    </a>
-                </div>
-
-                @*Last ned*@
-                <div class="col-xs-1">
-                    <a v-on:click="!resultItem.IsRestricted ? addToCart() : null"
-                       v-if="resultItem.ShowDownloadService"
-                       v-bind:href='[itemAddToCart.href ? itemAddToCart.href : "" ]'
-                       data-toggle='tooltip'
-                       data-placement='bottom'
-                       onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                       v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                       class="add-to-cart-btn"
-                       v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
-                        <span class="custom-icon custom-icon-handlekurv"></span>
-                        {{resultItem.addedToCart}}
-                    </a>
-
-                    <a v-else-if="resultItem.ShowDownloadLink"
-                       v-bind:href="resultItem.DownloadUrl"
-                       onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                       data-toggle='tooltip'
-                       data-placement='bottom'
-                       v:bind:title='"Last ned datasett for " + resultItem.Title'
-                       target="_blank">
-                        <span class="custom-icon custom-icon-lastned"></span>
-                    </a>
-
-                    <a v-else
-                       v-bind:title='"Last ned datasett for " + resultItem.Title'
-                       class="disabled">
-                        <span class="custom-icon custom-icon-lastned"></span>
-                    </a>
-                </div>
             </div>
         </div>
-
-        <div class="clearfix"></div>
-
     </div>
-
 </script>
 
-<div id="metadataList">
-    <div v-if="metadataArray.length > 0">
-        <h3>Datasett</h3>
-        <p>Datasett innenfor tema @Model.Name</p>
-        <div class="row resultItemRowTableHeader">
-            <div class="col-sm-4">
-                <p>Tittel</p>
-            </div>
-            <div class="col-sm-2">
-                <p>Type</p>
-            </div>
-            <div class="col-sm-3">
-                <p>Dataeier</p>
-            </div>
-            <div class="col-sm-1">
-                <p>Åpne data</p>
-            </div>
-            <div class="col-sm-1">
-                <p>Kart</p>
-            </div>
-            <div class="col-sm-1">
-                <p>Last ned</p>
-            </div>
-        </div>
-        <div class="menu-separator search-results-table-heading"></div>
-        <div v-for="item in metadataArray" class="table-border-bottom">
-            <div is="resultItem" v-bind:result-item="item"></div>
-        </div>
-        <div class="clearfix"></div>
+
+@* Metadata*@
+@* Vue code for resultitem*@
+@Html.Partial("_resultItemRow")
+
+
+<div id="themesVueList">
+    <div class="row resultItemRowTableHeader">
+        <div class="col-sm-5">Tittel</div>
+        <div class="col-sm-4">Dataeier</div>
+        <div class="col-sm-1">Åpne data</div>
+        <div class="col-sm-1">Kart</div>
+        <div class="col-sm-1">Last ned</div>
+    </div>
+    <div class="menu-separator search-results-table-heading"></div>
+    <div v-if="children.length" v-for="theme in children" style="margin: 8px 0;">
+        <div is="theme-item" v-bind:theme="theme" v-bind:parent-hierarchy-level="0" class="resultItemRow"></div>
+    </div>
+    <div v-for="metadataItem in metadataArray">
+        <div is="resultItem" v-bind:result-item="metadataItem"></div>
     </div>
 </div>
+
+<script type="text/x-template" id="metadata-item-template">
+    <div>
+        <div is="resultItem" v-bind:result-item="apiData"></div>
+    </div>
+</script>
+
+<script type="text/x-template" id="theme-item-template">
+    <div>
+        <div class="row">
+            <div class="col-sm-12" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
+                <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']" style="vertical-align: middle;"></span>
+                <a v-bind:href="theme.ShowDetailsUrl" style="font-size: 14pt;">{{ theme.Name }}</a>
+            </div>
+        </div>
+        <div v-show="expanded">
+            <div v-if="theme.Metadata.length" style="margin-bottom: 18px;">
+                <div v-for="subItem in theme.Metadata" class="">
+                    <div is="metadata-item" v-bind:metadata="subItem"></div>
+                </div>
+            </div>
+            <div v-if="theme.Children.length">
+                <div v-for="child in theme.Children">
+                    <div is="theme-item" v-bind:theme="child" v-bind:parent-hierarchy-level="hierarchyLevel"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
 @if (ViewBag.IsAdmin)
 {
     <div class="form-group pull-right top-padding">
@@ -190,6 +208,30 @@
 @section scripts {
 
     <script>
+
+        var MetadataItem = {
+            name: 'metadataItem',
+            template: '#metadata-item-template',
+            props: ['metadata'],
+            data: function () {
+                return {
+                    apiData: {},
+                    hierarchyLevel: this.$parent.hierarchyLevel !== undefined ? this.$parent.hierarchyLevel : 0
+                }
+            },
+            mounted: function () {
+                $.getJSON('/api/metadata/' + this.metadata.Uuid, function (result) {
+                    if (result.length != 0) {
+                        this.apiData = result;
+                    }
+                }.bind(this));
+            },
+            components: {
+                ResultItem: ResultItemComponent
+            }
+        };
+
+
         var metadataArray = "@MetadataObject";
         metadataArray = metadataArray.replace(/&quot;/g, '"');
         metadataArray = metadataArray.replace(/(?:\r\n|\r|\n)/g, '<br />');
@@ -201,8 +243,28 @@
         themesArray = JSON.parse(themesArray);
 
 
+        var ThemeItem = {
+            name: 'themeItem',
+            template: '#theme-item-template',
+            props: ['theme', 'parentHierarchyLevel'],
+            data: function () {
+                return {
+                    expanded: false
+                }
+            },
+            computed: {
+                hierarchyLevel: function () {
+                    return this.parentHierarchyLevel + 1;
+                }
+            },
+            components: {
+                metadataItem: MetadataItem
+            }
+        };
+
+
         var themesVueModel = new Vue({
-            el: "#metadataList",
+            el: "#themesVueList",
             data: {
                 items: metadataArray,
                 children: themesArray,
@@ -213,7 +275,8 @@
                 this.getApiData();
             },
             components: {
-                ResultItem: ResultItemComponent,
+                themeItem: ThemeItem,
+                ResultItem: ResultItemComponent
             },
             methods: {
                 getApiData: function () {
