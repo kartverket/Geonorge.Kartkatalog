@@ -14,6 +14,20 @@
     <li class="active">@Model.Name</li>
 }
 
+@{
+    @* Sett url og fiks linjeskift i data for themes *@
+    @helper BuildMenu(Theme theme)
+    {
+        theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+        theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+        foreach (var item in theme.Children)
+        {
+            @BuildMenu(item)
+        }
+    }
+    @BuildMenu(Model)
+}
+
 <section class="heading">
     <div class="row">
         <div class="col-sm-12">
