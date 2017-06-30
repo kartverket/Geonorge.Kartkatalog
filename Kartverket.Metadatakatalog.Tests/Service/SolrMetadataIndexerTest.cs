@@ -44,6 +44,8 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
             var indexDocumentCreator = new Mock<IndexDocumentCreator>();
             var indexDocs = new List<MetadataIndexDoc>();
+            indexDocs.Add(new MetadataIndexDoc { Uuid = "12345-123545-1231245-1231230" });
+            indexDocs.Add(new MetadataIndexDoc { Uuid = "12345-123545-1231245-1231231" });
             indexDocumentCreator.Setup(i => i.CreateIndexDocs(It.IsAny<object[]>(), geoNorgeMock.Object)).Returns(indexDocs);
 
             var errorMock = new Mock<IErrorService>();
@@ -53,8 +55,9 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             indexer.RunIndexing();
 
             geoNorgeMock.Verify(g => g.SearchIso("", 1, 50, false));
-
-            indexerMock.Verify(i => i.Index(indexDocs));
+            //Indexer.Index(IEnumerable<MetadataIndexDoc> docs); //Not in use since need to put metadata in different indexes(cores)
+            indexerMock.Verify(i => i.Index(indexDocs[0]));
+            indexerMock.Verify(i => i.Index(indexDocs[1]));
         }
 
         [Test]
@@ -85,6 +88,8 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
             var indexDocumentCreator = new Mock<IndexDocumentCreator>();
             var indexDocs = new List<MetadataIndexDoc>();
+            indexDocs.Add(new MetadataIndexDoc { Uuid = "12345-123545-1231245-1231238" });
+            indexDocs.Add(new MetadataIndexDoc { Uuid = "12345-123545-1231245-1231239" });
 
             var errorMock = new Mock<IErrorService>();
 
@@ -97,8 +102,8 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             geoNorgeMock.Verify(g => g.SearchIso("", 1, 50, false));
             geoNorgeMock.Verify(g => g.SearchIso("", 51, 50, false));
 
-            indexerMock.Verify(i => i.Index(indexDocs));
-            indexerMock.Verify(i => i.Index(indexDocs));
+            indexerMock.Verify(i => i.Index(indexDocs[0]));
+            indexerMock.Verify(i => i.Index(indexDocs[1]));
         }
 
         [Test]
