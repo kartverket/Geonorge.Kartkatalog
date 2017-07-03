@@ -46,7 +46,7 @@
     @* *** Beskrivelse tekst *** *@
     <div>
         <div class="col-md-8  size-12 col-sm-12 ">
-            <p>@Model.Description</p>
+            <p>@Html.Raw(Model.Description)</p>
         </div>
     </div>
 
@@ -201,14 +201,12 @@
     </div>
 }
 @{
-    Model.Description = Model.Description != null ? Model.Description.Replace(System.Environment.NewLine, "<br/>") : "";
     var ThemesObject = JsonConvert.SerializeObject(Model.Children,
         Formatting.None,
         new JsonSerializerSettings()
         {
             ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
         });
-    ThemesObject = ThemesObject != null ? ThemesObject.Replace(System.Environment.NewLine, "<br/>") : "";
 
     var MetadataObject = JsonConvert.SerializeObject(Model.Metadata,
     Formatting.None,
@@ -216,7 +214,6 @@
     {
         ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
     });
-    MetadataObject = MetadataObject != null ? MetadataObject.Replace(System.Environment.NewLine, "<br/>") : "";
 }
 
 @section scripts {
