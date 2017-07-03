@@ -12,7 +12,7 @@
     var metadatas = db.Metadatas.ToList();
 
     //Finn temaer som er tilknyttet metadata.
-    var metadataWithThemes = (from metadata in metadatas
+    var metadataWithThemesList = (from metadata in metadatas
                               join metadataResult in result on metadata.Uuid equals metadataResult.Uuid
                               select metadata).ToList();   
 }
@@ -40,14 +40,13 @@ if (items.Any())
 @BuildMenu(themes, null)
 
 @{
-    var metadatasWithThemes = JsonConvert.SerializeObject(metadataWithThemes,
+    
+    var metadatasWithThemes = JsonConvert.SerializeObject(metadataWithThemesList,
         Formatting.None,
         new JsonSerializerSettings()
         {
-            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         });
-
-
 }
 
 <div id="themesVueList">
@@ -125,8 +124,6 @@ if (items.Any())
     var searchResults = @Html.Raw(JsonConvert.SerializeObject(Model.Result.Items));
     var metadatasWithThemes = @Html.Raw(metadatasWithThemes);
 
-
-
     var ThemeItem = {
         name: 'themeItem',
         template: '#theme-item-template',
@@ -177,6 +174,7 @@ if (items.Any())
                 this.metadatasWithThemes.forEach(function(metadataWithThemes){
                     if (searchResultItem.Uuid == metadataWithThemes.Uuid){
                         metadataWithThemes.Themes.forEach(function(theme){
+                            theme.Metadata.push(searchResultItem);
                             var topLevelTheme = this.getTopLevelTheme(theme);
                             if (topLevelTheme !== null){
                                 if (!this.localTopLevelThemeAllreadyAdded(topLevelThemes, topLevelTheme)){
