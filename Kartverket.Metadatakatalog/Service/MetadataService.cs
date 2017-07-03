@@ -8,9 +8,16 @@ using www.opengis.net;
 using System;
 using Kartverket.Metadatakatalog.Service.Application;
 using System.Linq;
+using Kartverket.Metadatakatalog.Models.Api;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
+using static System.String;
+using Contact = Kartverket.Metadatakatalog.Models.Contact;
+using DistributionFormat = Kartverket.Metadatakatalog.Models.DistributionFormat;
+using Keyword = Kartverket.Metadatakatalog.Models.Keyword;
+using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
+using SearchResult = Kartverket.Metadatakatalog.Models.SearchResult;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -48,48 +55,37 @@ namespace Kartverket.Metadatakatalog.Service
                 return null;
 
             var simpleMetadata = new SimpleMetadata(mdMetadataType);
-
-            foreach (var dist in simpleMetadata.DistributionsFormats)
+            if (simpleMetadata.DistributionsFormats != null)
             {
                 var tmp = new Models.Api.Distribution();
                 tmp.Uuid = uuid;
                 tmp.Title = simpleMetadata.Title;
                 tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(simpleMetadata.HierarchyLevel);
-                tmp.DistributionName = dist.Name;
-                tmp.DistributionProtocol = dist.Protocol;
-                tmp.DistributionUrl = dist.URL;
-                tmp.FormatName = dist.FormatName;
-                tmp.FormatVersion = dist.FormatVersion;
-                tmp.Organization = dist.Organization; //TOM?
-                if (String.IsNullOrEmpty(tmp.Organization))
-                    tmp.Organization = simpleMetadata.ContactMetadata.Organization;
+                tmp.DistributionFormats = GetDistributionTypes(simpleMetadata.DistributionsFormats);
+                tmp.Organization = simpleMetadata.ContactMetadata.Organization;
                 tmp.ShowDetailsUrl = "/metadata/org/title/" + uuid;
                 tmp.ServiceDistributionAccessConstraint = simpleMetadata.Constraints.AccessConstraints;
+                tmp.Protocol = simpleMetadata.DistributionDetails.Protocol;
+                
                 //Vis kart
-                if (SimpleMetadataUtil.ShowMapLink(simpleMetadata)) {
+                if (SimpleMetadataUtil.ShowMapLink(simpleMetadata))
+                {
                     tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(simpleMetadata);
                     tmp.CanShowMapUrl = true;
                 }
 
-                //if (SimpleMetadataUtil.ShowServiceMapLink(simpleMetadata))
-                //{
-                //    tmp.CanShowServiceMapUrl = true;
-                //    tmp.ServiceUrl = SimpleMetadataUtil.ServiceUrl(simpleMetadata);
-                //}
-
                 //Last ned
                 if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadata))
                 {
-                    tmp.DownloadUrl = dist.URL;
+                    tmp.DownloadUrl = simpleMetadata.DistributionDetails.URL; // TODO sjekk om det er liktig url!
                     tmp.CanShowDownloadUrl = true;
                 }
                 //Handlekurv
                 if (SimpleMetadataUtil.ShowDownloadService(simpleMetadata))
                 {
-                    tmp.DownloadUrl = dist.URL;
+                    tmp.DownloadUrl = simpleMetadata.DistributionDetails.URL; // TODO sjekk om det er liktig url!
                     tmp.CanShowDownloadService = true;
                 }
-                //TODO For andre distribusjonstyper? REST API +++
 
                 //Åpne data, begrenset, skjermet
                 if (SimpleMetadataUtil.IsOpendata(simpleMetadata)) tmp.AccessIsOpendata = true;
@@ -98,12 +94,33 @@ namespace Kartverket.Metadatakatalog.Service
 
                 distlist.Add(tmp);
             }
+            
             //Hente inn indeks og relaterte services
             distlist.AddRange(GetMetadataRelatedDistributions(uuid));
             //distlist.AddRange(GetServiceDirectoryRelatedDistributions(uuid));
             distlist.AddRange(GetApplicationRelatedDistributions(uuid));
             return distlist;
         }
+
+        private List<DistributionFormat> GetDistributionTypes(List<SimpleDistribution> simpleMetadataDistributionsFormats)
+        {
+            if (simpleMetadataDistributionsFormats == null)
+                throw new ArgumentNullException(nameof(simpleMetadataDistributionsFormats));
+
+            var distributionFormats = new List<DistributionFormat>();
+            foreach (var distribution in simpleMetadataDistributionsFormats)
+            {
+                register = new RegisterFetcher();
+                var format = new DistributionFormat
+                {
+                    Name = register.GetDistributionType(distribution.FormatName),
+                    Version= distribution.FormatVersion
+                };
+                distributionFormats.Add(format);
+            }
+            return distributionFormats;
+        }
+
 
         private List<Models.Api.Distribution> GetApplicationRelatedDistributions(string uuid)
         {
@@ -204,11 +221,14 @@ namespace Kartverket.Metadatakatalog.Service
                             tmp.Title = relData[1] != null ? relData[1] : "";
                             tmp.Type = relData[3] != null ? relData[3] : "";
                             tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
+                            tmp.DistributionFormats.Add(new DistributionFormat()
+                            {
+                                Name = relData[6] != null ? register.GetDistributionType(relData[6]) : "",
+                                Version = ""
+                            });
                             tmp.DistributionName = relData[5] != null ? relData[5] : "";
-                            tmp.DistributionProtocol = relData[6] != null ? relData[6] : "";
+                            tmp.Protocol = relData[6] != null ? relData[6] : "";
                             tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
-                            tmp.FormatName = relData[6] != null ? relData[6] : "";
-                            tmp.FormatVersion = "";
                             tmp.Organization = relData[4];
                             tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
 
@@ -223,19 +243,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
                                 tmp.CanShowMapUrl = true;
                             }
-                            ////Last ned
-                            //if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadata))
-                            //{
-                            //    tmp.DownloadUrl = dist.URL;
-                            //    tmp.CanShowDownloadUrl = true;
-                            //}
-                            ////Handlekurv
-                            //if (SimpleMetadataUtil.ShowDownloadService(simpleMetadata))
-                            //{
-                            //    tmp.DownloadUrl = dist.URL;
-                            //    tmp.CanShowDownloadService = true;
-                            //}
-
+                            
                             distlist.Add(tmp);
 
                         }
@@ -261,11 +269,14 @@ namespace Kartverket.Metadatakatalog.Service
                             tmp.Title = relData[1] != null ? relData[1] : "";
                             tmp.Type = relData[3] != null ? relData[3] : "";
                             tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
+                            tmp.DistributionFormats.Add(new DistributionFormat()
+                            {
+                                Name = relData[6] != null ? register.GetDistributionType(relData[6]) : "",
+                                Version = ""
+                            });
                             tmp.DistributionName = relData[5] != null ? relData[5] : "";
-                            tmp.DistributionProtocol = relData[6] != null ? relData[6] : "";
+                            tmp.Protocol = relData[6] != null ? relData[6] : "";
                             tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
-                            tmp.FormatName = relData[6] != null ? relData[6] : "";
-                            tmp.FormatVersion = "";
                             tmp.Organization = relData[4];
                             tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
 
@@ -273,7 +284,7 @@ namespace Kartverket.Metadatakatalog.Service
                             if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
                             if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
                             if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
-                            tmp.ServiceDistributionAccessConstraint = !string.IsNullOrWhiteSpace(relData[12]) ? relData[12] : relData[11];
+                            tmp.ServiceDistributionAccessConstraint = !IsNullOrWhiteSpace(relData[12]) ? relData[12] : relData[11];
 
                             //Vis kart
                             if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
@@ -281,20 +292,6 @@ namespace Kartverket.Metadatakatalog.Service
                                 tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
                                 tmp.CanShowMapUrl = true;
                             }
-                            ////Last ned
-                            //if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadata))
-                            //{
-                            //    tmp.DownloadUrl = dist.URL;
-                            //    tmp.CanShowDownloadUrl = true;
-                            //}
-                            ////Handlekurv
-                            //if (SimpleMetadataUtil.ShowDownloadService(simpleMetadata))
-                            //{
-                            //    tmp.DownloadUrl = dist.URL;
-                            //    tmp.CanShowDownloadService = true;
-                            //}
-
-
                         }
                         catch (Exception ex)
                         {
@@ -361,6 +358,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         private List<Models.Api.Distribution> GetMetadataRelatedDistributions(string uuid)
         {
+            register = new RegisterFetcher();
             List<Models.Api.Distribution> distlist = new List<Models.Api.Distribution>();
 
             SearchParameters parameters = new SearchParameters();
@@ -385,14 +383,17 @@ namespace Kartverket.Metadatakatalog.Service
                             tmp.Title = relData[1] != null ? relData[1] : "";
                             string parentIdentifier = relData[2] != null ? relData[2] : "";
                             tmp.Type = relData[3] != null ? relData[3] : "";
-                            if (tmp.Type == "service" && !string.IsNullOrEmpty(parentIdentifier))
+                            if (tmp.Type == "service" && !IsNullOrEmpty(parentIdentifier))
                                 tmp.Type = "servicelayer";
                             tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
-                            tmp.DistributionName = relData[5] != null ? relData[5] : "";
-                            tmp.DistributionProtocol = relData[6] != null ? relData[6] : "";
-                            tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
-                            tmp.FormatName = relData[6] != null ? relData[6] : "";
-                            tmp.FormatVersion = "";
+                            tmp.DistributionFormats.Add(new DistributionFormat()
+                            {
+                                Name = relData[6] != null ? register.GetDistributionType(relData[6]) : "",
+                                Version = ""
+                            });
+                            //tmp.DistributionName = relData[5] != null ? relData[5] : "";
+                            tmp.Protocol = relData[6] != null ? register.GetDistributionType(relData[6]) : "";
+                            //tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
                             tmp.Organization = relData[4];
                             tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
 
@@ -400,7 +401,7 @@ namespace Kartverket.Metadatakatalog.Service
                             if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
                             if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
                             if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
-                            tmp.ServiceDistributionAccessConstraint = !string.IsNullOrWhiteSpace(relData[12]) ? relData[12] : relData[11];
+                            tmp.ServiceDistributionAccessConstraint = !IsNullOrWhiteSpace(relData[12]) ? relData[12] : relData[11];
 
                             //Vis kart
                             if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
@@ -408,19 +409,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]) ;
                                 tmp.CanShowMapUrl = true;
                             }
-                            ////Last ned
-                            //if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadata))
-                            //{
-                            //    tmp.DownloadUrl = dist.URL;
-                            //    tmp.CanShowDownloadUrl = true;
-                            //}
-                            ////Handlekurv
-                            //if (SimpleMetadataUtil.ShowDownloadService(simpleMetadata))
-                            //{
-                            //    tmp.DownloadUrl = dist.URL;
-                            //    tmp.CanShowDownloadService = true;
-                            //}
-
+                            
                             distlist.Add(tmp);
 
                         }
@@ -510,11 +499,11 @@ namespace Kartverket.Metadatakatalog.Service
                 MetadataEditUrl = _geonorgeUrlResolver.EditMetadata(simpleMetadata.Uuid),
                 ParentIdentifier = simpleMetadata.ParentIdentifier,
                 DateMetadataValidFrom =
-                    string.IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidFrom)
+                    IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidFrom)
                         ? (DateTime?) null
                         : DateTime.Parse(simpleMetadata.ValidTimePeriod.ValidFrom),
                 DateMetadataValidTo =
-                    string.IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidTo)
+                    IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidTo)
                         ? (DateTime?) null
                         : DateTime.Parse(simpleMetadata.ValidTimePeriod.ValidTo),
                 DistributionFormats = simpleMetadata.DistributionFormats,
@@ -526,7 +515,7 @@ namespace Kartverket.Metadatakatalog.Service
                     simpleMetadata.ReferenceSystems != null ? Convert(simpleMetadata.ReferenceSystems) : null,
             };
 
-            if (!string.IsNullOrEmpty(metadata.ParentIdentifier) && metadata.HierarchyLevel == "service")
+            if (!IsNullOrEmpty(metadata.ParentIdentifier) && metadata.HierarchyLevel == "service")
                 metadata.ServiceUuid = metadata.ParentIdentifier;
 
             if (simpleMetadata.ResourceReference != null)
@@ -603,7 +592,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 ProtocolName = relData[6] != null ? register.GetDistributionType(relData[6]) : "",
                                 URL = relData[7] != null ? relData[7] : ""
                             };
-                            if (!string.IsNullOrEmpty(relData[8]))
+                            if (!IsNullOrEmpty(relData[8]))
                                 md.KeywordsNationalTheme = new List<Keyword>
                                 {
                                     new Keyword
@@ -613,7 +602,7 @@ namespace Kartverket.Metadatakatalog.Service
                                     }
                                 };
                             md.OrganizationLogoUrl = relData[9];
-                            if (!string.IsNullOrEmpty(relData[10]))
+                            if (!IsNullOrEmpty(relData[10]))
                             {
                                 md.Thumbnails = new List<Thumbnail>();
                                 md.Thumbnails.Add(new Thumbnail {Type = "miniatyrbilde", URL = relData[10]});
@@ -701,7 +690,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 ProtocolName = relData[6] != null ? register.GetDistributionType(relData[6]) : "",
                                 URL = relData[7] != null ? relData[7] : ""
                             };
-                            if (!string.IsNullOrEmpty(relData[8]))
+                            if (!IsNullOrEmpty(relData[8]))
                                 md.KeywordsNationalTheme = new List<Keyword>
                                 {
                                     new Keyword
@@ -711,7 +700,7 @@ namespace Kartverket.Metadatakatalog.Service
                                     }
                                 };
                             md.OrganizationLogoUrl = relData[9];
-                            if (!string.IsNullOrEmpty(relData[10]))
+                            if (!IsNullOrEmpty(relData[10]))
                             {
                                 md.Thumbnails = new List<Thumbnail>();
                                 md.Thumbnails.Add(new Thumbnail {Type = "miniatyrbilde", URL = relData[10]});
@@ -772,7 +761,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 ProtocolName = relData[6] != null ? register.GetDistributionType(relData[6]) : "",
                                 URL = relData[7] != null ? relData[7] : ""
                             };
-                            if (!string.IsNullOrEmpty(relData[8]))
+                            if (!IsNullOrEmpty(relData[8]))
                                 md.KeywordsNationalTheme = new List<Keyword>
                                 {
                                     new Keyword
@@ -782,7 +771,7 @@ namespace Kartverket.Metadatakatalog.Service
                                     }
                                 };
                             md.OrganizationLogoUrl = relData[9];
-                            if (!string.IsNullOrEmpty(relData[10]))
+                            if (!IsNullOrEmpty(relData[10]))
                             {
                                 md.Thumbnails = new List<Thumbnail>();
                                 md.Thumbnails.Add(new Thumbnail {Type = "miniatyrbilde", URL = relData[10]});
@@ -841,7 +830,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 ProtocolName = relData[6] != null ? register.GetDistributionType(relData[6]) : "",
                                 URL = relData[7] != null ? relData[7] : ""
                             };
-                            if (!string.IsNullOrEmpty(relData[8]))
+                            if (!IsNullOrEmpty(relData[8]))
                                 md.KeywordsNationalTheme = new List<Keyword>
                                 {
                                     new Keyword
@@ -851,12 +840,12 @@ namespace Kartverket.Metadatakatalog.Service
                                     }
                                 };
                             md.OrganizationLogoUrl = relData[9];
-                            if (!string.IsNullOrEmpty(relData[10]))
+                            if (!IsNullOrEmpty(relData[10]))
                             {
                                 md.Thumbnails = new List<Thumbnail>();
                                 md.Thumbnails.Add(new Thumbnail {Type = "miniatyrbilde", URL = relData[10]});
                             }
-                            if (!string.IsNullOrEmpty(relData[11]) && !string.IsNullOrEmpty(relData[12]))
+                            if (!IsNullOrEmpty(relData[11]) && !IsNullOrEmpty(relData[12]))
                             {
                                 md.Constraints = new Constraints
                                 {
@@ -967,7 +956,7 @@ namespace Kartverket.Metadatakatalog.Service
                     output.Add(new QualitySpecification
                     {
                         Title = spec.Title,
-                        Date = (spec.Date != null && !string.IsNullOrWhiteSpace(spec.Date)) ? DateTime.Parse(spec.Date) : (DateTime?)null,
+                        Date = (spec.Date != null && !IsNullOrWhiteSpace(spec.Date)) ? DateTime.Parse(spec.Date) : (DateTime?)null,
                         //Date = simpleQualitySpecification.Date,
                         DateType = spec.DateType,
                         Explanation = spec.Explanation,

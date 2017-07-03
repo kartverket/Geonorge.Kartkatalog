@@ -316,7 +316,7 @@ if (contact != null)
     @Html.Partial("_resultItemRow")
 
     @*Template for a table row*@
-<script type="text/x-template" id="resultItemRow">
+    <script type="text/x-template" id="resultItemRow">
         <div>
             <div class="resultItemRow">
                 <div class="row">
@@ -336,7 +336,7 @@ if (contact != null)
                     </div>
 
                     @*Organisasjon*@
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
                             {{resultItem.Organization}}
                         </a>
@@ -385,8 +385,10 @@ if (contact != null)
                             <span class="custom-icon custom-icon-lastned"></span>
                         </a>
                     </div>
-                    <div class="col-xs-1">
-                        {{resultItem.FormatName}} {{resultItem.FormatVersion}}
+                    <div class="col-xs-2">
+                        <div v-for="format in resultItem.DistributionFormats">
+                            <span class="label label-default">{{format.Name}}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -406,11 +408,11 @@ if (contact != null)
             <div class="row resultItemRowTableHeader">
                 <div class="col-sm-3"><p>Tittel</p></div>
                 <div class="col-sm-2"><p>Type</p></div>
-                <div class="col-sm-3"><p>Dataeier</p></div>
+                <div class="col-sm-2"><p>Dataeier</p></div>
                 <div class="col-sm-1"><p>Åpne data</p></div>
                 <div class="col-sm-1"><p>Kart</p></div>
                 <div class="col-sm-1"><p>Last ned</p></div>
-                <div class="col-sm-1"><p>Format</p></div>
+                <div class="col-sm-2"><p>Format</p></div>
             </div>
             <div class="menu-separator search-results-table-heading"></div>
             <div v-for="item in distributionlist" class="table-border-bottom">
@@ -446,11 +448,11 @@ if (contact != null)
                 <div class="row resultItemRowTableHeader">
                     <div class="col-sm-3"><p>Tittel</p></div>
                     <div class="col-sm-2"><p>Type</p></div>
-                    <div class="col-sm-3"><p>Dataeier</p></div>
+                    <div class="col-sm-2"><p>Dataeier</p></div>
                     <div class="col-sm-1"><p>Åpne data</p></div>
                     <div class="col-sm-1"><p>Kart</p></div>
                     <div class="col-sm-1"><p>Last ned</p></div>
-                    <div class="col-sm-1"><p>Format</p></div>
+                    <div class="col-sm-2"><p>Format</p></div>
                 </div>
 
                 <div class="menu-separator search-results-table-heading"></div>
@@ -768,7 +770,9 @@ if (keywords != null && keywords.Any())
             },
             created: function() {
                 axios.get(`/api/distributions/${uuid}`).then(function(response) {
+                    console.log(response.data);
                     this.distributionlist = this.convertDistributionList(response.data);
+                    //this.distributionlist = response.data;
                 }.bind(this));
                 this.relatedDataList = this.convertRelatedDataList();
 
@@ -778,16 +782,14 @@ if (keywords != null && keywords.Any())
                 convertDistributionList: function(distributionList) {
                     var distributionArray = new Array();
                     distributionList.forEach(function(distribution) {
+
                         var resultItem =
                         {
                             ShowMapLink: distribution.CanShowMapUrl,
                             ShowServiceMapLink: distribution.CanShowServiceMapUrl,
                             MapUrl: distribution.MapUrl,
-                            ServiceUrl: distribution.ServiceUrl,
                             ServiceDistributionAccessConstraint: distribution.ServiceDistributionAccessConstraint,
-                            DistributionProtocol: distribution.DistributionProtocol,
-                            DistributionName: distribution.DistributionName,
-                            DistributionUrl: distribution.DistributionUrl,
+                            DistributionProtocol: distribution.Protocol,
 
                             ShowDownloadService: distribution.CanShowDownloadService,
                             ShowDownloadLink: distribution.CanShowDownloadUrl,
@@ -796,8 +798,7 @@ if (keywords != null && keywords.Any())
                             IsRestricted: distribution.AccessIsRestricted,
                             IsOffline: distribution.AccessIsProtected,
                             IsOpendata: distribution.AccessIsOpendata,
-                            FormatName: distribution.FormatName,
-                            FormatVersion: distribution.FormatVersion,
+                            DistributionFormats: distribution.DistributionFormats,
                             Organization: distribution.Organization,
                             OrganizationSeoName: this.makeSeoFriendlyString(distribution.Organization),
                             Title: distribution.Title,
@@ -863,14 +864,13 @@ if (keywords != null && keywords.Any())
                                 IsOffline: item.AccessIsProtected,
                                 IsOpendata: item.AccessIsOpendata,
 
-                                FormatName: item.FormatName,
-                                FormatVersion: item.FormatVersion,
+                                DistributionFormats: item.DistributionFormats,
 
-                                Organization: item.ContactOwner.Organization,
+                                Organization: item.Organization,
                                 OrganizationSeoName: this.makeSeoFriendlyString(item.ContactOwner.Organization),
                                 Title: item.Title,
                                 TitleSeo: this.makeSeoFriendlyString(item.Title),
-                                Type: item.DistributionDetails.ProtocolName,
+                                Type: item.Protocol,
 
                                 Uuid: item.Uuid
                             }
