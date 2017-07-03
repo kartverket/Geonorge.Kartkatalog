@@ -120,12 +120,21 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public string ServiceWfsDistributionUrlForDataset { get; set; }
 
+        /// <summary>
+        /// DistributionType
+        /// </summary>
+        //public string DistributionType { get; set; } 
+        public string DistributionType { get; set; }
+        /// <summary>
+        /// URL for Get Capabilities
+        /// </summary>
+        public string GetCapabilitiesUrl { get; set; }
+
+
         public Metadata() { 
         }
         public Metadata(SearchResultItem item, UrlHelper urlHelper)
         {
-
-
             Uuid = item.Uuid;
             Title = item.Title;
             Abstract = item.Abstract;
@@ -137,13 +146,15 @@ namespace Kartverket.Metadatakatalog.Models.Api
             DistributionUrl = item.DistributionUrl;
             DistributionProtocol = item.DistributionProtocol;
             DistributionName = item.DistributionName;
+            DistributionType = item.DistributionType;
+            GetCapabilitiesUrl = GetGetCapabilitiesUrl(item);
             if (urlHelper != null)
             {
                 ShowDetailsUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/uuid/" + item.Uuid;
                 string s = new SeoUrl(item.Organization, "").Organization;
                 OrganizationUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/" + s;
             }
-           
+
             if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data"))
                 IsOpenData = true;
             else IsOpenData = false;
@@ -164,7 +175,13 @@ namespace Kartverket.Metadatakatalog.Models.Api
             OtherConstraintsAccess = item.OtherConstraintsAccess;
             DataAccess = item.DataAccess;
             ServiceDistributionUrlForDataset = item.ServiceDistributionUrlForDataset;
-            ServiceWfsDistributionUrlForDataset = item.ServiceWfsDistributionUrlForDataset != null ? item.ServiceWfsDistributionUrlForDataset  : WfsServiceUrl();
+            ServiceWfsDistributionUrlForDataset = item.ServiceWfsDistributionUrlForDataset != null ? item.ServiceWfsDistributionUrlForDataset : WfsServiceUrl();
+        }
+
+        private string GetGetCapabilitiesUrl(SearchResultItem item)
+        {
+            DistributionDetails distributionDetails = new DistributionDetails(null, item.DistributionProtocol, null, item.DistributionUrl);
+            return distributionDetails.DistributionDetailsGetCapabilitiesUrl();
         }
 
         public static List<Metadata> CreateFromList(IEnumerable<SearchResultItem> items, UrlHelper urlHelper)

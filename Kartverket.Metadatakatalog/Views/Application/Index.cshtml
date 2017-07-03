@@ -1,0 +1,489 @@
+﻿@using Kartverket.Metadatakatalog.Models.ViewModels
+@using Kartverket.Metadatakatalog.Helpers
+@model SearchViewModel
+
+@{
+    if (!string.IsNullOrWhiteSpace(Model.Text))
+    {
+        ViewBag.Title = "Søk etter " + Model.Text;
+    }
+    else
+    {
+        ViewBag.Title = "Søk";
+    }
+}
+
+@section breadcrumb {
+    <li>Kartløsninger</li>
+}
+
+<div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <span class="message"></span>
+</div>
+
+<section class="heading">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 class="small-h1">
+                Kartløsninger
+            </h1>
+        </div>
+        <div class="col-sm-12">
+            <span class="separator-lg"></span>
+        </div>
+        <div class="col-sm-9">
+            <p>Mange fagetater, fylkesetater og kommuner tilbyr nettkart til bruk for publikum. Her kan du utforske for eksempel flyfoto, høydedata, arealplaner eller ulike temakart.</p>
+        </div>
+    </div>
+</section>
+
+@* Vue code for resultitem*@
+@Html.Partial("_resultItemRow")
+
+@*Template for a table row*@
+<script type="text/x-template" id="resultItemRow">
+    <div>
+        @* **** LISTE **** *@
+        <div v-if="$root.viewType == 'listView'" class="row resultItemRowList">
+
+            <div class="col-sm-1">
+                <a v-bind:href="organizationUrl" class="show-loading-animation" data-loading-message="Henter innhold">
+                    <img v-bind:src="resultItem.OrganizationLogoUrl" class="img-responsive center-block" v-bind:alt="resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization" />
+                </a>
+            </div>
+
+            <div class="col-sm-6">
+                <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                    <p style="font-size:14pt" class="role-button search-results-name" role="button">{{resultItem.Title}}</p>
+                </a>
+                <p>{{description}}</p>
+                <p>
+                    Tilgjengelig som:
+                    <span v-bind:title="'Tilgjengelig som ' + resultItem.TypeTranslated" style="width:auto" v-bind:class="type(resultItem.Type)">{{resultItem.TypeTranslated}}</span>
+                </p>
+            </div>
+
+            <div class="col-sm-2">
+                
+                <a v-if="resultItem.DistributionUrl" style="width: 130px" v-bind:href="resultItem.DistributionUrl" target="_blank" data-toggle='tooltip' data-placement='bottom' title="Besøk nettside" class="btn btn-default">
+                    <span class="custom-icon custom-icon-eksternlink"></span><span class="button-text">Nettside</span>
+                </a>
+                
+                <span v-else style="width: 130px" class="btn btn-default disabled">
+                    <span class="custom-icon custom-icon-eksternlink"></span><span class="button-text">Nettside</span>
+                </span>
+
+            </div>
+
+            <div class="col-sm-3">
+                <a v-if="thumbnailSrc" v-bind:href="readMoreUrl">
+                    <img v-bind:src="thumbnailSrc" />
+                </a>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+
+        @* *** TABELL *** *@
+        <div v-if="$root.viewType == 'tableView'">
+            <div class="resultItemRow" v-bind:class="{expanded: expanded}">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="resultItemRowTitle">
+                            @*Tittel*@
+                            <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                                <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    @*Distribusjonstype *@
+                    <div class="col-sm-2">
+                        <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
+                    </div>
+
+                    @*Organisasjon*@
+                    <div class="col-sm-4">
+                        <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                            {{resultItem.Organization}}
+                        </a>
+                    </div>
+
+                    @*Åpne data*@
+                    <div class="col-sm-1">
+                        <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                    </div>
+
+                    @*Besøk nettsiden*@
+                    <div class="col-xs-1 text-center">
+                        <a v-bind:href="resultItem.DistributionUrl" target="_blank">
+                            <span class="custom-icon custom-icon-eksternlink"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* *** GALLERI *** *@
+        <div v-if="$root.viewType == 'galleryView'" class="resultItemRowGallery">
+            <div class="search-results-gallery-image layoutblock" v-bind:style="{backgroundColor: backgroundColor}">
+                <div class="block shortcutpageteaserblock size-4 col-sm-4">
+                    <div class="teaser-with-background-image">
+                        <a v-bind:href="readMoreUrl">
+                            <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
+                                <div class="teaser-overlay">
+                                    <div class="teaser-caption">
+                                        <div class="teaser-heading">{{resultItem.Title}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
+
+    </div>
+
+</script>
+
+@helper DisplayPaginationBottom()
+{
+    <div class="search-result-navigation">
+        Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
+        <div class="pagination-container">
+            <ul class="pagination pagination-sm btn-group inline-block">
+                @if (Model.IsFirstButtonActive())
+                {
+                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
+                }
+
+                @if (Model.IsPreviousButtonActive())
+                {
+                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
+                }
+
+                @for (int i = Model.startPage; i <= Model.endPage; i++)
+                {
+                    if (Model.IsActivePage(i))
+                    {
+                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                    }
+                }
+
+                @if (Model.IsNextButtonActive())
+                {
+                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
+                }
+                @if (Model.IsLastButtonActive())
+                {
+                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@{
+
+    string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.ToLower().Replace("kartlosninger-i-norge", "api/kartlosninger-i-norge");
+    Uri uri = new Uri(url);
+    string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
+    Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
+    string querystring = Request.QueryString.ToString();
+    querystring = querystring.Replace(".name", "name"); querystring = querystring.Replace(".value", "value");
+    var qs = HttpUtility.ParseQueryString(querystring);
+    System.Collections.Specialized.NameValueCollection qsCol = new System.Collections.Specialized.NameValueCollection(qs);
+    qs.Clear();
+    foreach (string key in qsCol)
+    {
+        qs.Add(key.ToLower(), qsCol[key]);
+    }
+    qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
+    string query = qs.ToString(); string urlCSV = path + "?" + query;
+}
+
+<div class="row search-result-navigation">
+    <div class="col-md-4">
+        Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
+        <div class="pagination-container">
+            <ul class="pagination pagination-sm btn-group inline-block">
+                @if (Model.IsFirstButtonActive())
+                {
+                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
+                }
+
+                @if (Model.IsPreviousButtonActive())
+                {
+                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
+                }
+
+                @for (int i = Model.startPage; i <= Model.endPage; i++)
+                {
+                    if (Model.IsActivePage(i))
+                    {
+                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                    }
+                }
+
+                @if (Model.IsNextButtonActive())
+                {
+                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
+                }
+                @if (Model.IsLastButtonActive())
+                {
+                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-4 pull-right">
+        <div class="save-as-menu pull-right">
+            <label>Lagre som:</label>
+            <div class="no-padding-bottom save-as-dropdown">
+                <div class="custom-select">
+                    <select onchange="additionalView(this.value)" class="form-control">
+                        <option value="csvUrl" selected="selected">CSV</option>
+                    </select>
+                </div>
+            </div>
+            <div id="saveButtons" class="no-padding-bottom save-as-buttons">
+                <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+
+</div>
+
+<span class="separator-small separator-gray margin-bottom-10"></span>
+
+<div class="row resultItemTitleRow">
+
+    <div id="searchResultTable" class="col-md-9">
+        <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
+        <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
+        <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
+        <div class="clearfix"></div>
+        @if (Model.Result != null)
+        {
+            <div>
+                <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
+                    <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
+                        <p>
+                            <a href="@Url.Action("Index", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
+                                Tittel<span class="orderby-indicator"></span>
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-sm-2"><p>Type</p></div>
+                    <div v-bind:class="orderByOwner.className" class="col-sm-4" v-bind:id="orderByOwner.id">
+                        <p>
+                            <a href="@Url.Action("Index", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
+                        </p>
+                    </div>
+                    <div class="col-sm-1"><p>Åpne data</p></div>
+                    <div class="col-sm-1"><p>Nett-side</p></div>
+                </div>
+
+                <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
+                <div v-for="item in viewModel.Result.Items" v-bind:class="tableBorder">
+                    <div is="resultItem" v-bind:result-item="item"></div>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+            @DisplayPaginationBottom()
+
+        }
+    </div>
+    <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
+        <aside class="facet-filter-container">
+            <h3 class="">Filtrer søket på:</h3>
+            <span class="separator-small"></span>
+            @Html.Partial("_FacetFilter", Model)
+            <h3 class="" style="padding-top: 40px;">Sider</h3>
+            <span class="separator-small"></span>
+            @Html.Partial("_FilterPages")
+        </aside>
+    </div>
+</div>
+
+<script>
+    @foreach (var item in Model.Result.Items)
+    {
+        if (item.ShowMapLink || item.ShowServiceMapLink)
+        {
+            @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
+                                                                            }
+    }
+</script>
+
+@section scripts {
+    @{ var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
+
+    <script>
+        //Main vue model
+        var vueModel = new Vue({
+            el: '#searchResultTable',
+            data: {
+                viewModel: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
+                ResultItems: [],
+                currentOrderByParameter: getParameterByName("orderby"),
+                viewType: "tableView",
+                columns: "",
+                orderByUrl: "@Html.Raw(HttpUtility.HtmlDecode(HttpContext.Current.Request.Url.AbsoluteUri)).ToString()",
+                orderByTitle: {
+                    orderByParam: "title",
+                    className: "orderby orderby-title orderby-asc",
+                    id: "orderby-title-asc",
+                    url: "",
+                },
+                backgroundColor: "#fff",
+                orderByOwner: {
+                    orderByParam: "organization",
+                    className: "orderby orderby-organization orderby-asc",
+                    id: "orderby-organization-asc",
+                    url: "",
+                },
+                tableBorder: "table-border-bottom"
+            },
+            components: {
+                ResultItem: ResultItemComponent
+            },
+            created: function() {
+                if (this.currentOrderByParameter == "title") {
+                    this.orderByTitle.orderByParam = "title_desc";
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.orderByParam = "organization";
+                    this.orderByOwner.id = "orderby-organization-asc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                } else if (this.currentOrderByParameter == "organization") {
+                    this.orderByTitle.orderByParam = "title";
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.orderByParam = "organization_desc";
+                    this.orderByOwner.id = "orderby-organization-desc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                } else if (this.currentOrderByParameter == "") {
+                    this.orderByTitle.orderByParam = "title";
+                    this.orderByOwner.orderByParam = "organization";
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.id = "orderby-organization-asc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                } else if (this.currentOrderByParameter == "organization_desc") {
+                    this.orderByTitle.orderByParam = "title";
+                    this.orderByOwner.orderByParam = "organization";
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.id = "orderby-organization-desc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-desc";
+                } else if (this.currentOrderByParameter == "title_desc") {
+                    this.orderByTitle.orderByParam = "title";
+                    this.orderByOwner.orderByParam = "organization";
+                    this.orderByTitle.id = "orderby-title-desc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-desc";
+                    this.orderByOwner.id = "orderby-organization-asc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                }
+
+                this.viewType = this.getSelectedViewType();
+
+                this.orderByTitle.url = this.getOrderByUrl(this.orderByTitle.orderByParam);
+                this.orderByOwner.url = this.getOrderByUrl(this.orderByOwner.orderByParam);
+            },
+            methods: {
+                orderByExists: function() {
+                    return this.orderByUrl.includes("orderby");
+                },
+                isNotFirstParameterInUrl: function() {
+                    return this.orderByUrl.includes("?");
+                },
+                getOrderByUrl: function(param) {
+                    if (this.orderByExists()) {
+                        return this.orderByUrl.replace("orderby=" + this.currentOrderByParameter, "orderby=" + param);
+                    } else {
+                        if (this.isNotFirstParameterInUrl()) {
+                            return this.orderByUrl + "&orderby=" + param;
+                        } else {
+                            return this.orderByUrl + "?orderby=" + param;
+                        }
+                    }
+                },
+                view: function(type) {
+                    this.viewType = type;
+                    localStorage.setItem("layout", this.viewType);
+                    if (type == "galleryView") {
+                        this.columns = 'col-sm-4';
+                        this.tableBorder = "";
+                    } else {
+                        this.columns = "";
+                        this.tableBorder = "table-border-bottom";
+                    }
+                },
+                getSelectedViewType: function() {
+                    var viewType = "tableView";
+                    if (localStorage.getItem("layout")) {
+                        viewType = localStorage.getItem("layout");
+                        this.view(viewType);
+                    }
+                    return viewType;
+                }
+            }
+        });
+    </script>
+
+    <script>
+        function showAlert(message, colorClass) {
+            $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
+            $('#feedback-alert .message').html(message);
+            $('#feedback-alert').show();
+        }
+
+        $(document).ready(function() {
+            $("#orderby").change(
+                function() {
+                    location.href = $(this).val();
+                }
+            );
+        });
+
+        $(document).ready(function() {
+            @if (Html.DownloadServiceEnabled())
+            {
+                <text>
+            if (localStorage.getItem("orderItems") != null) {
+                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+                var orderitemCount = storedOrderItems.length;
+                if (orderitemCount > 0) {
+                    $('#orderitem-count').text(orderitemCount);
+                    $('#orderitem-count-text').text(' datasett');
+                    updateAllCartButtons(storedOrderItems);
+                } else {
+                    $('#orderitem-count').text('');
+                    $('#orderitem-count-text').text('Kurven er tom');
+                }
+            } else {
+                $('#orderitem-count').text('');
+                $('#orderitem-count-text').text('Kurven er tom');
+            }
+            </text>
+            }
+        });
+    </script>
+}

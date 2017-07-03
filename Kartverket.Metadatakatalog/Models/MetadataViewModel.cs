@@ -1,4 +1,5 @@
 ﻿using GeoNorgeAPI;
+using Kartverket.Metadatakatalog.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -100,6 +101,16 @@ namespace Kartverket.Metadatakatalog.Models
         public string ServiceWfsDistributionUrlForDataset { get; set; }
         public string ServiceDistributionAccessConstraint { get; set; }
         public string ServiceWfsDistributionAccessConstraint { get; set; }
+        public bool AccessIsOpendata { get; set; }
+        public bool AccessIsRestricted { get; set; }
+        public bool AccessIsProtected { get; set; }
+        public bool CanShowMapUrl { get; set; }
+        public bool CanShowServiceMapUrl { get; set; }
+        public bool CanShowDownloadService { get; set; }
+        public bool CanShowDownloadUrl { get; set; }
+        public string MapLink { get; set; }
+        public string ServiceLink { get; set; }
+
 
         public SeoUrl CreateSeoUrl()
         {
@@ -110,36 +121,11 @@ namespace Kartverket.Metadatakatalog.Models
             else
                 return new SeoUrl("", Title);
         }
-        public String DistributionDetailsGetCapabilitiesUrl()
-        {
-            if (!string.IsNullOrWhiteSpace(DistributionDetails.URL))
-            {
-                string tmp = DistributionDetails.URL;
-                int startQueryString = tmp.IndexOf("?");
-                
-                if (startQueryString != -1)
-                    tmp = tmp.Substring(0, startQueryString + 1);
-                else
-                    tmp = tmp + "?";
-
-                if (DistributionDetails.IsWmsUrl())
-                    return tmp + "request=GetCapabilities&service=WMS";
-                else if (DistributionDetails.IsWfsUrl())
-                    return tmp + "request=GetCapabilities&service=WFS";
-                else if (!string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:WCS")))
-                    return tmp + "request=GetCapabilities&service=WCS";
-                else if (!string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:CSW")))
-                    return tmp + "request=GetCapabilities&service=CSW";
-                else return tmp;
-            }
-            else return "";
-            
-
-        }
+        
 
         public String MapUrl()
         {
-            if (HierarchyLevel == "service" || HierarchyLevel == "servicelayer")
+            if (IsService() || IsServiceLayer())
             {
                 if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:WMS")))
                 {
@@ -172,7 +158,7 @@ namespace Kartverket.Metadatakatalog.Models
         {
             string url = "";
 
-            if (HierarchyLevel == "dataset")
+            if (IsDataset())
             {
                 if (!string.IsNullOrWhiteSpace(ServiceDistributionProtocolForDataset) && ServiceDistributionProtocolForDataset.Contains(("OGC:WMS")))
                 {
@@ -211,7 +197,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowDownloadLink()
         {
-            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("WWW:DOWNLOAD") || DistributionDetails.Protocol.Contains("GEONORGE:FILEDOWNLOAD")) && (HierarchyLevel == "dataset" || HierarchyLevel == "series")) return true;
+            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("WWW:DOWNLOAD") || DistributionDetails.Protocol.Contains("GEONORGE:FILEDOWNLOAD")) && (IsDataset() || IsDatasetSeries())) return true;
             else return false;
         }
 
@@ -228,7 +214,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowMapLink()
         {
-            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("OGC:WMS") || DistributionDetails.Protocol.Contains("OGC:WFS")) && (HierarchyLevel == "service" || HierarchyLevel == "servicelayer")) return true;
+            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("OGC:WMS") || DistributionDetails.Protocol.Contains("OGC:WFS")) && (IsService() || IsServiceLayer())) return true;
             else return false;
         }
 
@@ -246,17 +232,17 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsService()
         {
-            return HierarchyLevel == "service";
+            return HierarchyLevel == "service" || HierarchyLevel == "Tjeneste";
         }
 
         public bool IsServiceLayer()
         {
-            return HierarchyLevel == "service" && (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.Name));
+            return (HierarchyLevel == "service" || HierarchyLevel == "Tjeneste") && (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.Name));
         }
 
         public bool IsDataset()
         {
-            return HierarchyLevel == "dataset";
+            return HierarchyLevel == "dataset" || HierarchyLevel == "Datasett";
         }
 
         public bool IsDatasetSeries()
@@ -266,12 +252,12 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsApplication()
         {
-            return HierarchyLevel == "software";
+            return HierarchyLevel == "software" || HierarchyLevel == "Applikasjon";
         }
 
         public bool IsDatasetBundle()
         {
-            return HierarchyLevel == "dimensionGroup";
+            return HierarchyLevel == "dimensionGroup" || HierarchyLevel == "Datapakke";
         }
 
         public bool IsOpendata()
@@ -472,6 +458,18 @@ namespace Kartverket.Metadatakatalog.Models
             return routeValues;
         }
 
+        public string GetHierarchyLevelTranslated()
+        {
+            if (IsDataset()) return "Datasett";
+            if (IsServiceLayer()) return "Tjenestelag";
+            if (IsService()) return "Tjeneste";
+            if (IsApplication()) return "Applikasjon";
+            if (IsDatasetSeries()) return "Datasettserie";
+            if (IsDatasetBundle()) return "Datapakke";
+
+            return HierarchyLevel;
+        }
+
     }
 
     public class BoundingBox
@@ -512,6 +510,18 @@ namespace Kartverket.Metadatakatalog.Models
         public string ProtocolName { get; set; }
         public string URL { get; set; }
 
+        public DistributionDetails() {
+
+        }
+
+        public DistributionDetails(string name, string protocol, string protocolName, string url)
+        {
+            Name = name;
+            Protocol = protocol;
+            ProtocolName = protocolName;
+            URL = url;
+        }
+
         public bool IsWmsUrl()
         {
             return !string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains("OGC:WMS");
@@ -521,6 +531,15 @@ namespace Kartverket.Metadatakatalog.Models
         {
             return !string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains("OGC:WFS");
         }
+
+
+        public string DistributionDetailsGetCapabilitiesUrl()
+        {
+            return this != null ? SimpleMetadataUtil.GetCapabilitiesUrl(URL, Protocol) : "";
+        }
+
+
+
     }
 
     public class DistributionFormat

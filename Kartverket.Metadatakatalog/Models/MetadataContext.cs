@@ -12,5 +12,9 @@ namespace Kartverket.Metadatakatalog.Models
             : base("DefaultConnection")
         {
         }
+
+        public virtual DbSet<Theme> Themes { get; set; }
+        public virtual DbSet<Metadata> Metadatas { get; set; }
+
     }
 }

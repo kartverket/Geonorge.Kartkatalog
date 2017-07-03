@@ -3,21 +3,22 @@ using System.Linq;
 using Kartverket.Metadatakatalog.Models;
 using Microsoft.Practices.ServiceLocation;
 using SolrNet;
+using System;
 
 namespace Kartverket.Metadatakatalog.Service
 {
-    public class SolrIndexer : Indexer
+    public class SolrIndexerApplication : IndexerApplication
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly ISolrOperations<MetadataIndexDoc> _solr;
+        private readonly ISolrOperations<ApplicationIndexDoc> _solr;
 
-        public SolrIndexer()
+        public SolrIndexerApplication()
         {
-            _solr = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
+            _solr = ServiceLocator.Current.GetInstance<ISolrOperations<ApplicationIndexDoc>>();
         }
 
-        public void Index(IEnumerable<MetadataIndexDoc> docs)
+        public void Index(IEnumerable<ApplicationIndexDoc> docs)
         {
             Log.Info(string.Format("Indexing {0} docs", docs.Count()));
             _solr.AddRange(docs);
@@ -32,7 +33,7 @@ namespace Kartverket.Metadatakatalog.Service
             _solr.Commit();
         }
 
-        public void Index(MetadataIndexDoc doc)
+        public void Index(ApplicationIndexDoc doc)
         {
             Log.Info(string.Format("Indexing single document uuid={0} title={1}", doc.Uuid, doc.Title));
             _solr.Add(doc);
@@ -42,9 +43,15 @@ namespace Kartverket.Metadatakatalog.Service
 
         public void RemoveIndexDocument(string uuid)
         {
-            Log.Info(string.Format("Removes document uuid={0} from index", uuid));
-            _solr.Delete(uuid);
-            _solr.Commit();
+            try {
+                Log.Info(string.Format("Removes document uuid={0} from index", uuid));
+                _solr.Delete(uuid);
+                _solr.Commit();
+            }
+            catch (Exception exception)
+            {
+                Log.Error("Error removing UUID: " + uuid + "", exception);
+            }
         }
     }
 }

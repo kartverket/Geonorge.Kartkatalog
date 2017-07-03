@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SolrNet;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Models
@@ -10,10 +11,11 @@ namespace Kartverket.Metadatakatalog.Models
         public int NumFound { get; set; }
         public int Limit { get; set; }
         public int Offset { get; set; }
+        public string Type { get; set; }
 
         public SearchResult()
         {
-            
+
         }
 
         public SearchResult(SearchResult otherResult)
@@ -23,6 +25,7 @@ namespace Kartverket.Metadatakatalog.Models
             NumFound = otherResult.NumFound;
             Limit = otherResult.Limit;
             Offset = otherResult.Offset;
+            Type = otherResult.Type;
         }
 
         public string GetOrganizationNameFromFirstItem()
@@ -37,6 +40,30 @@ namespace Kartverket.Metadatakatalog.Models
             }
             return null;
         }
-        
+
+        public Dictionary<string, string> Organizations()
+        {
+            var organizationList = new Dictionary<string, string>();
+            var organizationFacets = Facets.First(f => f.FacetField == "organization");
+            var organizations = organizationFacets.FacetResults;
+
+            foreach (var organization in organizations)
+            {
+                if (OrganizationFacet(organization))
+                {
+                    SeoUrl seoName = new SeoUrl(organization.Name);
+                    if (!organizationList.ContainsKey(seoName.Organization))
+                    {
+                        organizationList.Add(seoName.Organization, organization.Name);
+                    }
+                }
+            }
+            return organizationList;
+        }
+
+        private static bool OrganizationFacet(Facet.FacetValue organization)
+        {
+            return organization.Name != "Kommune" && organization.Name != "Fylke" && organization.Name != "Kommunesamarbeid";
+        }
     }
 }

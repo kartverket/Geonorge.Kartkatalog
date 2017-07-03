@@ -11,8 +11,11 @@ using Autofac.Integration.WebApi;
 using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Service;
-using Kartverket.Metadatakatalog.Service.Search;
+using Kartverket.Metadatakatalog.Service.Application;
 using GeoNorgeAPI;
+using Kartverket.Metadatakatalog.Service.ServiceDirectory;
+using Kartverket.Metadatakatalog.Service.Search;
+using Kartverket.Metadatakatalog.Models;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -82,9 +85,15 @@ namespace Kartverket.Metadatakatalog
             builder.RegisterType<MetadataService>().As<IMetadataService>();
             builder.RegisterType<SolrMetadataIndexer>().As<MetadataIndexer>();
             builder.RegisterType<SolrIndexer>().As<Indexer>();
+            builder.RegisterType<SolrIndexerServices>().As<IndexerService>();
+            builder.RegisterType<SolrIndexerApplication>().As<IndexerApplication>();
             builder.RegisterType<SolrIndexDocumentCreator>().As<IndexDocumentCreator>();
             builder.RegisterType<ThemeResolver>().AsSelf();
             builder.RegisterType<SearchService>().As<ISearchService>();
+            builder.RegisterType<ServiceDirectoryService>().As<IServiceDirectoryService>();
+            builder.RegisterType<ApplicationService>().As<IApplicationService>();
+            builder.RegisterType<MetadataContext>().InstancePerRequest().AsSelf();
+            builder.RegisterType<ThemeService>().As<IThemeService>();
 
 
         }

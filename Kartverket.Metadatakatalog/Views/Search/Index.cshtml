@@ -1,8 +1,5 @@
 ﻿@using Kartverket.Metadatakatalog.Models.ViewModels
-@using Resources
-
 @using Kartverket.Metadatakatalog.Helpers
-@using System;
 @model SearchViewModel
 
 @{
@@ -20,6 +17,7 @@
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
 </div>
+
 <section class="heading">
     <div class="row">
         <div class="col-sm-12">
@@ -32,6 +30,180 @@
         </div>
     </div>
 </section>
+
+
+@* Vue code for resultitem*@
+@Html.Partial("_resultItemRow")
+
+@*Template for a table row*@
+<script type="text/x-template" id="resultItemRow">
+    <div>
+
+        @* **** LISTE **** *@
+        <div v-if="$root.viewType == 'listView'" class="resultItemRowList table-border-bottom">
+
+            <div class="col-sm-1">
+                <a v-bind:href="organizationUrl" class="show-loading-animation" data-loading-message="Henter innhold">
+                    <img v-bind:src="resultItem.OrganizationLogoUrl" class="img-responsive center-block" v-bind:alt="resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization" />
+                </a>
+            </div>
+
+            <div class="col-sm-6">
+                <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                    <p style="font-size:14pt" class="role-button search-results-name" role="button">{{resultItem.Title}}</p>
+                </a>
+                <p>{{description}}</p>
+                <p>
+                    Tilgjengelig som:
+                    <span v-bind:title="'Tilgjengelig som ' + resultItem.TypeTranslated" style="width:auto" v-bind:class="type(resultItem.Type)">{{resultItem.TypeTranslated}}</span>
+                </p>
+            </div>
+
+            <div class="col-sm-2">
+
+                <a style="width: 130px" v-bind:id="mapLink.mapLinkButtonId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
+                    <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
+                </a>
+
+                <a style="width: 130px"
+                   v-on:click="!resultItem.IsRestricted ? addToCart() : null"
+                   v-if="resultItem.ShowDownloadService"
+                   v-bind:href='[itemAddToCart.href ? itemAddToCart.href : "" ]'
+                   data-toggle='tooltip'
+                   data-placement='bottom'
+                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                   v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                   class="btn btn-default add-to-cart-btn"
+                   v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
+                    <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
+                </a>
+
+                <a style="width: 130px"
+                   v-else-if="resultItem.ShowDownloadLink"
+                   v-bind:href="resultItem.DownloadUrl"
+                   onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                   data-toggle='tooltip'
+                   data-placement='bottom'
+                   v:bind:title='"Last ned datasett for " + resultItem.Title'
+                   target="_blank"
+                   class="btn btn-default">
+                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
+                </a>
+
+                <a style="width: 130px"
+                   v-else
+                   v-bind:title='"Last ned datasett for " + resultItem.Title'
+                   class="disabled btn btn-default">
+                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
+                </a>
+            </div>
+
+            <div class="col-sm-3">
+                <a v-if="thumbnailSrc" v-bind:href="readMoreUrl">
+                    <img v-bind:src="thumbnailSrc" />
+                </a>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+
+        @* *** TABELL *** *@
+        <div v-if="$root.viewType == 'tableView'" class="table-border-bottom">
+
+            <div v-bind:class="{expanded: expanded}" class="resultItemRow">
+                <div class="row">
+
+                    <div class="col-sm-5">
+                        <div class="resultItemRowTitle" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
+                            @*Tittel*@
+                            <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                                <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    @*Distribusjonstype *@
+                    <!-- <div class="col-sm-2">
+                         <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
+                     </div>-->
+                    @*Organisasjon*@
+                    <div class="col-sm-4">
+                        <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                            {{resultItem.Organization}}
+                        </a>
+                    </div>
+
+                    @*Åpne data*@
+                    <div class="col-xs-1 text-center">
+                        <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                    </div>
+
+                    @*Kart*@
+                    <div class="col-xs-1 text-center">
+                        <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                            <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
+                        </a>
+                    </div>
+
+                    @*Last ned*@
+                    <div class="col-xs-1 text-center">
+                        <a v-on:click="!resultItem.IsRestricted ? addToCart() : null"
+                           v-if="resultItem.ShowDownloadService"
+                           v-bind:href='[itemAddToCart.href ? itemAddToCart.href : "" ]'
+                           data-toggle='tooltip'
+                           data-placement='bottom'
+                           onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                           v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                           class="add-to-cart-btn"
+                           v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
+                            <span class="custom-icon custom-icon-handlekurv"></span>
+                            {{resultItem.addedToCart}}
+                        </a>
+
+
+                        <a v-else-if="resultItem.ShowDownloadLink"
+                           v-bind:href="resultItem.DownloadUrl"
+                           onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                           data-toggle='tooltip'
+                           data-placement='bottom'
+                           v:bind:title='"Last ned datasett for " + resultItem.Title'
+                           target="_blank">
+                            <span class="custom-icon custom-icon-lastned"></span>
+                        </a>
+
+                        <a v-else
+                           v-bind:title='"Last ned datasett for " + resultItem.Title'
+                           class="disabled">
+                            <span class="custom-icon custom-icon-lastned"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* *** GALLERI *** *@
+        <div v-if="$root.viewType == 'galleryView'" class="resultItemRowGallery">
+            <div class="search-results-gallery-image layoutblock">
+                <div class="block shortcutpageteaserblock size-4 col-sm-4">
+                    <div class="teaser-with-background-image">
+                        <a v-bind:href="readMoreUrl">
+                            <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
+                                <div class="teaser-overlay">
+                                    <div class="teaser-caption">
+                                        <div class="teaser-heading">{{resultItem.Title}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
+
+    </div>
+
+</script>
 
 @helper DisplayPaginationBottom()
 {
@@ -73,76 +245,6 @@
         </div>
     </div>
 }
-
-
-
-@section scripts {
-    <script>
-        function showAlert(message, colorClass) {
-            $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
-            $('#feedback-alert .message').html(message);
-            $('#feedback-alert').show();
-        }
-        $(document).ready(function () {
-            $("#orderby").change(
-                 function () {
-                     location.href = $(this).val();
-                 }
-             );
-        });
-
-
-        $(document).ready(function () {
-            @if (Html.DownloadServiceEnabled())
-            {
-            <text>
-            if (localStorage.getItem("orderItems") != null) {
-                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
-                var orderitemCount = storedOrderItems.length;
-                if (orderitemCount > 0) {
-                    $('#orderitem-count').text(orderitemCount);
-                    $('#orderitem-count-text').text(' datasett');
-                    updateAllCartButtons(storedOrderItems);
-                } else {
-                    $('#orderitem-count').text('');
-                    $('#orderitem-count-text').text('Kurven er tom');
-                }
-            } else {
-                $('#orderitem-count').text('');
-                $('#orderitem-count-text').text('Kurven er tom');
-            }
-            </text>
-            }
-        });
-
-
-        $(window).load(function () {
-            @if (Html.DownloadServiceEnabled())
-            {
-         <text>
-            if (typeof Storage !== "undefined") {
-
-                console.log('window.localStorage is available!');
-                var orderItems = [];
-                $('.add-to-cart-btn:not(.prevent-action)').click(function () {
-                    addToCartButtonClick($(this));
-                });
-            } else {
-                console.log('no native support for HTML5 storage :(');
-            }
-
-            </text>
-            }
-
-        });
-    </script>
-}
-
-@*
-    <article class="row">
-        @Html.Partial("_SearchBarPartial", Model)
-    </article>
-*@
 
 @{
     string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("search", "api/search");
@@ -201,8 +303,8 @@
             </ul>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="save-as-menu">
+    <div class="col-md-4 pull-right">
+        <div class="save-as-menu pull-right">
             <label>Lagre som:</label>
             <div class="no-padding-bottom save-as-dropdown">
                 <div class="custom-select">
@@ -216,16 +318,6 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-md-offset-1">
-        Velg visningsform:
-        <div class="custom-select">
-            <select id="layoutSelect" onchange="changeLayout(this.value)" class="form-control">
-                <option value="tableView" id="button-tableView">Tabell</option>
-                <option value="listView" id="button-listView">Liste</option>
-                <option value="galleryView" id="button-galleryView">Galleri</option>
-            </select>
-        </div>
-    </div>
     <div class="clearfix"></div>
 
 
@@ -233,346 +325,216 @@
 
 <span class="separator-small separator-gray margin-bottom-10"></span>
 
+<div class="row resultItemTitleRow">
 
-
-
-<div class="row">
-    <div class="col-sm-12 col-md-9">
-
+    <div class="col-md-9">
         @if (Model.Result != null)
         {
-            <div id="tableView" class="search-results">
-                <div class="row search-results-table-heading">
-                    <div class="col-sm-3 orderby orderby-title orderby-asc" id="orderby-title-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-3 orderby orderby-title orderby-desc" id="orderby-title-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByTitleDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a></p></div>
+            @Html.Partial("_ThemeGroup", Model)
 
-                    <div class="col-sm-2"><p>Type</p></div>
-                    <div class="col-sm-3 orderby orderby-organization orderby-asc" id="orderby-organization-asc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-3 orderby orderby-organization orderby-desc" id="orderby-organization-desc"><p><a href="@Url.Action("Index", Model.ParamsForOrderByOrganizationDescLink())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a></p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Åpne data</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Les mer</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Vis i kart</p></div>
-                    <div class="col-sm-1 no-padding text-center"><p>Last ned</p></div>
+        }
+        <div id="searchResultTable">
+           @* <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
+    <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
+    <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
+    <div class="clearfix"></div>
+        *@
+
+            @if (Model.Result != null)
+            {
+                @*
+    <div>
+        <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
+            <div v-bind:class="orderByTitle.className" class="col-sm-5" v-bind:id="orderByTitle.id">
+                <div class="resultItemRowTitle">
+                    <p>
+                        <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
+                            Tittel<span class="orderby-indicator"></span>
+                        </a>
+                    </p>
                 </div>
-                <div class="menu-separator search-results-table-heading"></div>
-                @foreach (var item in Model.Result.Items)
-                {
-
-                    string addToCartUrl = "";
-                    string addToCartClass = "add-to-cart-btn";
-                    string baseUrl = Request.Url.AbsoluteUri;
-                    baseUrl = baseUrl.Replace("http://", "https://");
-                    if (item.ShowDownloadService())
-                    {
-                        if (item.IsRestricted || item.IsOffline)
-                        {
-                            if (baseUrl.Contains("addtocart_event_id"))
-                            {
-                                baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
-                            }
-
-                            string addToCartEventParamater = "?addtocart_event_id=addToCart-" + item.Uuid;
-                            if (baseUrl.Contains("?"))
-                            {
-
-                                addToCartEventParamater = "&addtocart_event_id=addToCart-" + item.Uuid;
-                            }
-
-                            string downloadSignInUrl = Html.DownloadUrl()
-                                                     + "AuthServices/SignIn?ReturnUrl="
-                                                     + Url.Encode(baseUrl)
-                                                     + Url.Encode(addToCartEventParamater);
-
-                            addToCartUrl = Html.KartkatalogenUrl()
-                                         + "AuthServices/SignIn?ReturnUrl="
-                                         + Url.Encode(downloadSignInUrl);
-
-
-                            addToCartClass = "add-to-cart-btn prevent-action";
-
-
-                        }
-                    }
-                    <div class="row result-row metadata">
-
-                        <div class="col-sm-1 search-results-logo">
-                            @if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
-                            {
-                                System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
-                                string relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold">
-                                    <img src="@relativeOrganizationLogoUrl" class="img-responsive center-block" alt="Logo @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization" />
-                                </a>
-                            }
-                        </div>
-
-                        <div class="col-sm-3 search-results-title">
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" class="show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
-                                <p class="role-button search-results-name" role="button">@item.Title</p>
-                            </a>
-                            <div class="search-results-description">
-                                <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
-                                    @if (item.Organization != null)
-                                    {
-                                        <p>  @item.Organization</p>
-                                    }
-
-                                </a>
-                                <p>
-                                    @if (item.Abstract != null)
-                                    {
-                                        if (item.Abstract.Length > 250)
-                                        {
-                                            @item.Abstract.Substring(0, 251)<text>...</text>
-                                        }
-                                        else
-                                        {
-                                            @item.Abstract
-                                        }
-                                    }
-
-                                </p>
-                                <p>
-                                    Tilgjengelig som:
-                                    <span title="Tilgjengelig som @item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 search-results-type">
-                            <span title="@item.GetInnholdstype()" class="label @item.GetInnholdstypeCSS()">@item.GetInnholdstype()</span>
-                        </div>
-                        <div class="col-sm-3 search-results-organization">
-                            <a href="@Url.Action("Organization", "Metadata", new { OrganizationSeoName = @item.OrganizationSeoName() })" class="show-loading-animation" data-loading-message="Henter innhold fra @item.Organization" title="Vis alle tjenester og datasett fra @item.Organization">
-                                @if (item.Organization != null)
-                                {
-                                    <p>  @item.Organization</p>
-                                }
-
-                            </a>
-                        </div>
-
-                        <div class="col-sm-1 search-results-action-icons search-results-open-data">
-                            @if (item.IsOpendata)
-                            {
-                                <span data-toggle='tooltip' data-placement='bottom' title="Åpne data" class="custom-icon custom-icon-hengelaas-open-green"></span>
-                            }
-                            else if (item.IsOffline)
-                            {
-                                <span data-toggle='tooltip' data-placement='bottom' title="Skjermede data" class="custom-icon custom-icon-hengelaas-closed-red"></span>
-                            }
-                            else if (item.IsRestricted)
-                            {
-                                <span data-toggle='tooltip' data-placement='bottom' title="Tilgangsbegrensede data" class="custom-icon custom-icon-hengelaas-closed-yellow"></span>
-                            }
-                        </div>
-
-                        <div class="col-sm-2 search-results-action-buttons">
-
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="btn btn-default show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
-                                <span class="custom-icon custom-icon-info"></span><span class="button-text"> Les mer</span>
-                            </a>
-                            @if (item.ShowMapLink())
-                            {
-                                <a id="mapmacrolink-button-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
-                                    <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
-                                </a>
-                            }
-                            else if (item.ShowServiceMapLink())
-                            {
-                                <a id="mapmacrolink-button-@item.Uuid" href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="" target="_blank" class="btn btn-default">
-                                    <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a id="mapmacrolink-button-@item.Uuid" title="Vis @item.Title i kart" class="disabled btn btn-default">
-                                    <span id="mapmacro-button-@item.Uuid" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text"> Vis i kart</span>
-                                </a>
-                            }
-
-
-                            @if (item.ShowDownloadService())
-                            {
-                                string relativeOrganizationLogoUrl = "";
-                                string relativeDowloadUrl = "";
-
-                                if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
-                                {
-                                    System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
-                                    relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                }
-
-                                if (!string.IsNullOrWhiteSpace(item.DownloadUrl))
-                                {
-                                    System.Uri downloadUrl = new Uri(item.DownloadUrl);
-                                    relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
-                                }
-
-                                <a id='addToCart-@item.Uuid'
-                                   href='@addToCartUrl'
-                                   data-toggle='tooltip'
-                                   data-placement='bottom'
-                                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                                   title='Legg til @item.Title i kurv'
-                                   class='@addToCartClass btn btn-default'
-                                   itemname='@item.Title'
-                                   itemuuid='@item.Uuid'
-                                   itemurl='/metadata/uuid/@item.Uuid'
-                                   itemorglogo='@relativeOrganizationLogoUrl'
-                                   itemdisturl='@relativeDowloadUrl'
-                                   itemtheme='@item.Theme'
-                                   itemorgname='@item.Organization'>
-                                    <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
-                                </a>
-                            }
-                            else if (item.ShowDownloadLink())
-                            {
-                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @item.Title" target="_blank" class="btn btn-default">
-                                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a title="Last ned datasett for @item.Title" class="disabled btn btn-default">
-                                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                                </a>
-                            }
-
-                        </div>
-
-                        <div class="col-xs-1 search-results-action-icons">
-                            <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())" data-toggle='tooltip' data-placement='bottom' title="Les mer om @item.Title" class="show-loading-animation" data-loading-message="Henter @item.GetInnholdstype().ToLower()">
-                                <span class="custom-icon custom-icon-info"></span>
-                            </a>
-                        </div>
-
-
-                        <div class="col-xs-1 search-results-action-icons action-show-map">
-                            @if (item.ShowMapLink())
-                            {
-                                <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.DownloadUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(item.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank">
-                                    <span id="mapmacro-@item.Uuid" class="custom-icon @(item.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span>
-                                </a>
-                            }
-                            else if (item.ShowServiceMapLink())
-                            {
-                                <a id="mapmacrolink-@item.Uuid" href="@Html.NorgeskartUrl()@item.ServiceUrl/" onclick="ga('send', 'event', 'Nedlasting', 'viskart');" data-toggle='tooltip' data-placement='bottom' title="@(item.IsRestrictedService() ? UI.Service_need_permission : "")" target="_blank">
-                                    <span id="mapmacro-@item.Uuid" class="custom-icon @(item.IsRestrictedService() ? "custom-icon-kartmarkoer-needs-permission" : "custom-icon-kartmarkoer")"></span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a title="Vis @item.Title i kart" class="disabled">
-                                    <span class="custom-icon custom-icon-kartmarkoer"></span>
-                                </a>
-                            }
-                        </div>
-                        <div class="col-xs-1 search-results-action-icons action-download">
-                            @if (item.ShowDownloadService())
-                            {
-                                string relativeOrganizationLogoUrl = "";
-                                string relativeDowloadUrl = "";
-
-                                if (!string.IsNullOrWhiteSpace(item.OrganizationLogoUrl))
-                                {
-                                    System.Uri organizationLogoUrl = new Uri(item.OrganizationLogoUrl);
-                                    relativeOrganizationLogoUrl = "//" + organizationLogoUrl.Host + organizationLogoUrl.PathAndQuery;
-                                }
-
-                                if (!string.IsNullOrWhiteSpace(item.DownloadUrl))
-                                {
-                                    System.Uri downloadUrl = new Uri(item.DownloadUrl);
-                                    relativeDowloadUrl = "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
-                                }
-
-                                <a id='addToCart-@item.Uuid'
-                                   href='@addToCartUrl'
-                                   data-toggle='tooltip'
-                                   data-placement='bottom'
-                                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                                   title='Legg til @item.Title i kurv'
-                                   class='@addToCartClass'
-                                   itemname='@item.Title'
-                                   itemuuid='@item.Uuid'
-                                   itemurl='/metadata/uuid/@item.Uuid'
-                                   itemorglogo='@relativeOrganizationLogoUrl'
-                                   itemdisturl='@relativeDowloadUrl'
-                                   itemtheme='@item.Theme'
-                                   itemorgname='@item.Organization'>
-                                    <span class="custom-icon custom-icon-handlekurv"></span>
-                                </a>
-                            }
-                            else if (item.ShowDownloadLink())
-                            {
-                                <a href="@item.DownloadUrl" onclick="ga('send', 'event', 'Nedlasting', 'lastned');" data-toggle='tooltip' data-placement='bottom' title="Last ned datasett for @item.Title" target="_blank">
-                                    <span class="custom-icon custom-icon-lastned"></span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a title="Last ned datasett for @item.Title" class="disabled">
-                                    <span class="custom-icon custom-icon-lastned"></span>
-                                </a>
-                            }
-                        </div>
-
-
-                        <div class="col-sm-2 search-results-list-image">
-                            @if (!string.IsNullOrWhiteSpace(item.ThumbnailUrl))
-                            {
-                                <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                    <img src="@Url.Action("Index", "Thumbnail", new { uuid = item.Uuid, type = "small" })" />
-                                </a>
-                            }
-
-                        </div>
-                    </div>
-
-                    <div class="search-results-gallery-image layoutblock">
-                        <div class="block shortcutpageteaserblock size-4 col-sm-4">
-                            <div class="teaser-with-background-image">
-                                <a href="@Url.Action("Index", "Metadata", item.ShowMetadataLinkRouteValueDictionary())">
-                                    @{
-                                        String thumbnailUrl = (!string.IsNullOrWhiteSpace(item.ThumbnailUrl)) ? Url.Action("Index", "Thumbnail", new { uuid = item.Uuid, type = "small" }) : "";
-                                    }
-                                    <div class="teaser-background-image" style="background: url(@thumbnailUrl) no-repeat center;">
-                                        <div class="teaser-background-image">
-                                            <div class="teaser-overlay">
-                                                <div class="teaser-caption">
-                                                    <div class="teaser-heading">@item.Title</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-
-                    <hr />
-                                        }
-                <div class="clearfix"></div>
             </div>
+            <!-- <div class="col-sm-2"><p>Type</p></div>-->
+            <div v-bind:class="orderByOwner.className" class="col-sm-4" v-bind:id="orderByOwner.id">
+                <p>
+                    <a href="@Url.Action("Index", "Search", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
+                </p>
+            </div>
+            <div class="col-sm-1"><p>Åpne data</p></div>
+            <div class="col-sm-1"><p>Kart</p></div>
+            <div class="col-sm-1"><p>Last ned</p></div>
+        </div>
 
-            @DisplayPaginationBottom()
+        <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
 
-                                        }
+    </div>
+                *@
+                @DisplayPaginationBottom()
+
+            }
+
+        </div>
+
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
         <aside class="facet-filter-container">
             <h3 class="">Filtrer søket på:</h3>
             <span class="separator-small"></span>
             @Html.Partial("_FacetFilter", Model)
+            <h3 class="" style="padding-top: 40px;">Sider</h3>
+            <span class="separator-small"></span>
+            @Html.Partial("_FilterPages")
         </aside>
     </div>
 </div>
+
 <script>
-@foreach (var item in Model.Result.Items)
+    @foreach (var item in Model.Result.Items)
+    {
+        if (item.ShowMaplink() || item.ShowServiceMaplink())
         {
-            if (item.ShowMapLink() || item.ShowServiceMapLink())
-            {
-      @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                                      }
-}
+            @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
+                        }
+    }
 </script>
+
+@section scripts {
+    @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
+
+    <script>
+        //Main vue model
+        var vueModel = new Vue({
+            el: '#searchResultTable',
+            data: {
+                viewModel: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
+                ResultItems: [],
+                currentOrderByParameter: getParameterByName("orderby"),
+                viewType: "tableView",
+                columns: "",
+                orderByUrl: "@Html.Raw(HttpUtility.HtmlDecode(HttpContext.Current.Request.Url.AbsoluteUri)).ToString()",
+                orderByTitle: {
+                    className: "orderby orderby-title orderby-asc",
+                    id: "orderby-title-asc",
+                    url: "",
+                },
+                backgroundColor: "#fff",
+                orderByOwner: {
+                    className: "orderby orderby-organization orderby-asc",
+                    id: "orderby-organization-asc",
+                    url: "",
+                },
+                tableBorder: "table-border-bottom"
+            },
+            components: {
+                ResultItem: ResultItemComponent
+            },
+            created: function() {
+                if (this.currentOrderByParameter == "title") {
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.id = "orderby-organization-asc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                } else if (this.currentOrderByParameter == "organization") {
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.id = "orderby-organization-desc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                } else if (this.currentOrderByParameter == "") {
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.id = "orderby-organization-asc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                } else if (this.currentOrderByParameter == "organization_desc") {
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                    this.orderByOwner.id = "orderby-organization-desc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-desc";
+                } else if (this.currentOrderByParameter == "title_desc") {
+                    this.orderByTitle.id = "orderby-title-desc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-desc";
+                    this.orderByOwner.id = "orderby-organization-asc";
+                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
+                }
+
+                this.viewType = this.getSelectedViewType();
+            },
+            methods: {
+                orderByExists: function() {
+                    return this.orderByUrl.includes("orderby");
+                },
+                isNotFirstParameterInUrl: function() {
+                    return this.orderByUrl.includes("?");
+                },
+                getOrderByUrl: function(param) {
+                    if (this.orderByExists()) {
+                        return this.orderByUrl.replace("orderby=" + this.currentOrderByParameter, "orderby=" + param);
+                    } else {
+                        if (this.isNotFirstParameterInUrl()) {
+                            return this.orderByUrl + "&orderby=" + param;
+                        } else {
+                            return this.orderByUrl + "?orderby=" + param;
+                        }
+                    }
+                },
+                view: function(type) {
+                    this.viewType = type;
+                    localStorage.setItem("layout", this.viewType);
+                    if (type == "galleryView") {
+                        this.columns = 'col-sm-4';
+                        this.tableBorder = "";
+                    } else {
+                        this.columns = "";
+                        this.tableBorder = "table-border-bottom";
+                    }
+                },
+                getSelectedViewType: function() {
+                    var viewType = "tableView";
+                    if (localStorage.getItem("layout")) {
+                        viewType = localStorage.getItem("layout");
+                        this.view(viewType);
+                    }
+                    return viewType;
+                }
+            }
+        });
+    </script>
+
+    <script>
+        function showAlert(message, colorClass) {
+            $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
+            $('#feedback-alert .message').html(message);
+            $('#feedback-alert').show();
+        }
+
+        $(document).ready(function () {
+            $("#orderby").change(
+                 function () {
+                     location.href = $(this).val();
+                 }
+             );
+        });
+
+        $(document).ready(function () {
+            @if (Html.DownloadServiceEnabled())
+            {
+            <text>
+            if (localStorage.getItem("orderItems") != null) {
+                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+                var orderitemCount = storedOrderItems.length;
+                if (orderitemCount > 0) {
+                    $('#orderitem-count').text(orderitemCount);
+                    $('#orderitem-count-text').text(' datasett');
+                    updateAllCartButtons(storedOrderItems);
+                } else {
+                    $('#orderitem-count').text('');
+                    $('#orderitem-count-text').text('Kurven er tom');
+                }
+            } else {
+                $('#orderitem-count').text('');
+                $('#orderitem-count-text').text('Kurven er tom');
+            }
+            </text>
+            }
+        });
+    </script>
+}

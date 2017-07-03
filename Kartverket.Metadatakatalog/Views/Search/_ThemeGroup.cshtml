@@ -1,0 +1,227 @@
+﻿@using Kartverket.Metadatakatalog.Models.ViewModels
+@using Newtonsoft.Json
+@using Kartverket.Metadatakatalog.Helpers
+@model SearchViewModel
+
+
+
+@{
+    List<SearchResultItemViewModel> result = Model.Result.Items.ToList();
+    MetadataContext db = new MetadataContext();
+    var themes = db.Themes.ToList();
+    var metadatas = db.Metadatas.ToList();
+
+    //Finn temaer som er tilknyttet metadata.
+    var metadataWithThemesList = (from metadata in metadatas
+                              join metadataResult in result on metadata.Uuid equals metadataResult.Uuid
+                              select metadata).ToList();   
+}
+
+@* Sett url og fiks linjeskift i data for themes *@
+@helper BuildMenu(List<Theme> data, int? parentId = null)
+{
+
+foreach (var theme in data)
+{
+    theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+    theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+}
+
+var items = data.Where(d => d.ParentId == parentId);
+if (items.Any())
+{
+    foreach (var item in items)
+    {
+            @BuildMenu(data, item.Id)
+    }
+}
+}
+
+@BuildMenu(themes, null)
+
+@{
+    
+    var metadatasWithThemes = JsonConvert.SerializeObject(metadataWithThemesList,
+        Formatting.None,
+        new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
+}
+
+<div id="themesVueList">
+    <div class="row resultItemRowTableHeader">
+        <div class="col-sm-5">Tittel</div>
+        <div class="col-sm-4">Dataeier</div>
+        <div class="col-sm-1">Åpne data</div>
+        <div class="col-sm-1">Kart</div>
+        <div class="col-sm-1">Last ned</div>
+    </div>
+    <div class="menu-separator search-results-table-heading"></div>
+    <div v-for="resultItem in searchResults">
+        <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes" style="margin: 8px 0;">
+            <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="0" class="resultItemRow"></div>
+        </div>
+        <div is="resultItem" v-bind:result-item="resultItem"></div>
+    </div>
+</div>
+
+<script type="text/x-template" id="metadata-item-template">
+    <div>
+        <div is="resultItem" v-bind:result-item="apiData"></div>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="theme-item-template">
+    <div>
+        <div class="row">
+            <div class="col-sm-12" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
+                <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']" style="vertical-align: middle;"></span>
+                <a v-bind:href="theme.ShowDetailsUrl" style="font-size: 14pt;">{{ theme.Name }}</a>
+            </div>
+        </div>
+        <div v-show="expanded">
+            <div v-if="theme.Metadata.length" style="margin-bottom: 18px;">
+                <div v-for="subItem in theme.Metadata" class="">
+                    <div is="metadata-item" v-bind:metadata="subItem"></div>
+                </div>
+            </div>
+            <div v-if="theme.Children.length">
+                <div v-for="child in theme.Children">
+                    <div is="theme-item" v-bind:theme="child" v-bind:parent-hierarchy-level="hierarchyLevel"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script>
+
+    var MetadataItem = {
+        name: 'metadataItem',
+        template: '#metadata-item-template',
+        props: ['metadata'],
+        data: function () {
+            return {
+                apiData: {},
+                hierarchyLevel: this.$parent.hierarchyLevel !== undefined ? this.$parent.hierarchyLevel : 0
+            }
+        },
+        mounted: function () {
+            $.getJSON('/api/metadata/' + this.metadata.Uuid, function (result) {
+                if (result.length != 0) {
+                    this.apiData = result;
+                }
+            }.bind(this));
+        },
+        components: {
+            ResultItem: ResultItemComponent
+        }
+    };
+
+    var searchResults = @Html.Raw(JsonConvert.SerializeObject(Model.Result.Items));
+    var metadatasWithThemes = @Html.Raw(metadatasWithThemes);
+
+    var ThemeItem = {
+        name: 'themeItem',
+        template: '#theme-item-template',
+        props: ['theme', 'parentHierarchyLevel'],
+        data: function () {
+            return {
+                expanded: false
+            }
+        },
+        computed: {
+            hierarchyLevel: function () {
+                return this.parentHierarchyLevel + 1;
+            }
+        },
+        components: {
+            metadataItem: MetadataItem
+        }
+    };
+
+    var themesVueModel = new Vue({
+        el: "#themesVueList",
+        data: {
+            viewType: 'tableView',
+            searchResults: searchResults,
+            metadatasWithThemes: metadatasWithThemes,
+            addedTopLevelThemeIds: []
+        },
+        created: function () {
+            this.searchResults.forEach(function(searchResultItem, index){
+                var topLevelThemes = this.topLevelThemes(searchResultItem);
+                this.searchResults[index].topLevelThemes = topLevelThemes;
+            }.bind(this));
+
+        },
+        methods: {
+
+            localTopLevelThemeAllreadyAdded: function (topLevelThemes, theme){
+                var topLevelThemeAllreadyAdded = false;
+                topLevelThemes.forEach(function(addedTheme){
+                    if (addedTheme.Id == theme.Id){
+                        topLevelThemeAllreadyAdded = true;
+                    }
+                })
+                return topLevelThemeAllreadyAdded;
+            },
+            topLevelThemes: function (searchResultItem){
+                var topLevelThemes = [];
+                this.metadatasWithThemes.forEach(function(metadataWithThemes){
+                    if (searchResultItem.Uuid == metadataWithThemes.Uuid){
+                        metadataWithThemes.Themes.forEach(function(theme){
+                            theme.Metadata.push(searchResultItem);
+                            var topLevelTheme = this.getTopLevelTheme(theme);
+                            if (topLevelTheme !== null){
+                                if (!this.localTopLevelThemeAllreadyAdded(topLevelThemes, topLevelTheme)){
+                                    topLevelThemes.push(topLevelTheme);
+                                }
+                            }
+                        }.bind(this));
+                    }
+                }.bind(this));
+                return topLevelThemes;
+            },
+            rootTopLevelThemeIsAllreadyAdded: function(topLevelTheme) {
+                var topLevelThemeIsAllreadyAdded = false;
+                this.$root.addedTopLevelThemeIds.forEach(function(addedTopLevelThemeId){
+                    if (addedTopLevelThemeId == topLevelTheme.Id){
+                        topLevelThemeIsAllreadyAdded = true;
+                    }
+                })
+                return topLevelThemeIsAllreadyAdded;
+            },
+            getTopLevelTheme: function (theme){
+                var topLevelTheme = null;
+                if (theme.ParentId == null){
+                    if (!this.rootTopLevelThemeIsAllreadyAdded(theme)){
+                        topLevelTheme = theme;
+                        this.$root.addedTopLevelThemeIds.push(theme.Id);
+                    }
+                }else{
+                    var childIsAdded = false;
+                    theme.Parent.Children.forEach(function(child){
+                        if (child.Id == theme.Id){
+                            childIsAdded = true;
+                        }
+                    });
+                    if (!childIsAdded){
+                        theme.Parent.Children.push(theme);
+                    }
+                    topLevelTheme = this.getTopLevelTheme(theme.Parent);
+                }
+                return topLevelTheme;
+            }
+        },
+        components: {
+            themeItem: ThemeItem,
+            ResultItem: ResultItemComponent
+        }
+    })
+</script>
+
+

@@ -8,5 +8,7 @@ namespace Kartverket.Metadatakatalog.Service
     {
         List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems, IGeoNorge geoNorge);
         MetadataIndexDoc CreateIndexDoc(SimpleMetadata metadata, IGeoNorge geoNorge);
+        ServiceIndexDoc ConvertIndexDocToService(MetadataIndexDoc simpleMetadata);
+        ApplicationIndexDoc ConvertIndexDocToApplication(MetadataIndexDoc simpleMetadata);
     }
 }

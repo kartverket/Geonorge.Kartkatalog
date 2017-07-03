@@ -28,7 +28,7 @@
     var organizations = organizationFacets.FacetResults;
 
     var distributionProtocolFacets = Facets.First(f => f.FacetField == "DistributionProtocols");
-    var distributionProtocols = distributionProtocolFacets.FacetResults.Where(r => r.Name!= "GEONORGE:OFFLINE");
+    var distributionProtocols = distributionProtocolFacets.FacetResults.Where(r => r.Name != "GEONORGE:OFFLINE");
 
     var dataAccessFacets = Facets.First(f => f.FacetField == "dataaccess");
     var dataAccesses = dataAccessFacets.FacetResults;
@@ -41,13 +41,12 @@
 
 <div id="facet-filter" class="facet-filter">
     <div class="facet-filter-item">
-        <div is="themes"></div>
-        <div is="types"></div>
-        <div is="nationalinitiatives"></div>
-        <div is="areas"></div>
-        <div is="distributionProtocols"></div>
-        <div is="organizations"></div>
-        <div is="dataAccesses"></div>
+        <div v-if="EnableFacet('themes')" is="themes"></div>
+        <div v-if="EnableFacet('nationalinitiatives')" is="nationalinitiatives"></div>
+        <div v-if="EnableFacet('areas')" is="areas"></div>
+        <div v-if="EnableFacet('distributionProtocols')" is="distributionProtocols"></div>
+        <div v-if="EnableFacet('organizations')" is="organizations"></div>
+        <div v-if="EnableFacet('dataAccesses')" is="dataAccesses"></div>
     </div>
 </div>
 
@@ -74,6 +73,8 @@
         <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="indicator"></span>
         <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="facet-filter-title">{{ FacetName }}</span>
         <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
+            
+            @*Henter ut alle placegroups (Norge, Havområder, Jan Mayen, Svalbard)*@
             <div v-bind:class="{'selected': placeGroup.isSelected, 'is-empty': placeGroup.Count == 0}" v-for="placeGroup in PlaceGroups">
                 <span v-bind:class="{'no-indicator': !placeGroup.hasChildren}" class="indicator"></span>
                 <div class="facet-checkbox facet-link">
@@ -83,6 +84,8 @@
                     {{ placeGroup.Name }} <span class="text-muted">({{ placeGroup.Count }})</span>
                 </div>
             </div>
+            
+            @*Henter ut alle Fylker*@
             <div v-for="area in FacetResults">
                 <div v-bind:class="{'selected': area.isSelected, 'is-empty': area.Count == 0}">
                     <span v-on:click="area.isActive = !area.isActive" v-bind:class="{'active': area.isActive, 'no-indicator': !area.hasChildren}" class="indicator"></span>
@@ -94,6 +97,8 @@
                         <span class="text-muted">({{ area.Count }})</span>
                     </div>
                 </div>
+                
+                @*Henter ut alle kommuner*@
                 <div v-bind:class="{'active': area.isActive}" class="facet-filter-sub-item-list">
                     <div v-bind:class="{'selected': municipality.isSelected, 'is-empty': municipality.Count == 0}" v-for="municipality in area.municipalities">
                         <span class="indicator no-indicator"></span>
@@ -261,9 +266,9 @@
                 foreach (var distributionProtocol in distributionProtocols)
                 {
                     @:data.FacetResults[@distributionProtocolIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(distributionProtocol.LinkName()))";
-                    @:data.FacetResults[@distributionProtocolIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@distributionProtocolIndex])
-                    @:data.FacetResults[@distributionProtocolIndex].hasChildren = false;
-                    distributionProtocolIndex++;
+                                                        @:data.FacetResults[@distributionProtocolIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@distributionProtocolIndex]);
+                                                        @:data.FacetResults[@distributionProtocolIndex].hasChildren = false;
+                                                        distributionProtocolIndex++;
                 }
 
                 @:data.hasChildren = data.FacetResults.length > 0;
@@ -441,11 +446,11 @@
             return data;
         },
         computed: {
-            hasSelected: function(){
+            hasSelected: function() {
                 return this.$parent.hasSelected(this.FacetResults) || this.$parent.hasSelected(this.PlaceGroups);
             }
         },
-        created: function(){
+        created: function() {
             this.isActive = this.hasSelected;
         }
     };
@@ -456,13 +461,15 @@
         el: '#facet-filter',
         data: {
             selectedFacets: [],
-            urlParameters: []
-        },
+            urlParameters: [],
+            enabledFacetsArray: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.EnabledFacets)))
+            },
         computed: {
+
         },
-        created: function(){
+        created: function() {
             this.getSelectedFacets();
-            if (this.selectedFacets.length > 0){
+            if (this.selectedFacets.length > 0) {
                 var scrollTopOffset = localStorage.getItem("scrollTopOffset")
                 $(window).scrollTop(scrollTopOffset);
             }
@@ -477,16 +484,17 @@
             'distributionProtocols': DistributionProtocols
         },
         methods: {
-            toggleActive: function(vueObject){
+            toggleActive: function(vueObject) {
                 vueObject.isActive = !vueObject.isActive;
             },
-            isSelected: function(facetField, facetValue){
+            isSelected: function(facetField, facetValue) {
                 var isSelected = false;
-                this.selectedFacets.forEach(function(selectedFacet){
-                    if (selectedFacet.name == encodeURIComponent(facetField) && selectedFacet.value == encodeURIComponent(facetValue.Name)){
+                this.selectedFacets.forEach(function(selectedFacet) {
+                    if (selectedFacet.name == encodeURIComponent(facetField) &&
+                        selectedFacet.value == encodeURIComponent(facetValue.Name)) {
                         isSelected = true;
                         return;
-                    }else if (selectedFacet.name == facetField && selectedFacet.value == facetValue.Name){
+                    } else if (selectedFacet.name == facetField && selectedFacet.value == facetValue.Name) {
                         isSelected = true;
                         return;
                     }
@@ -494,17 +502,17 @@
 
                 return isSelected;
             },
-            hasSelected: function(facetResults){
+            hasSelected: function(facetResults) {
                 var hasSelected = false;
-                facetResults.forEach(function (facetResult){
-                    if (facetResult.isSelected){
+                facetResults.forEach(function(facetResult) {
+                    if (facetResult.isSelected) {
                         hasSelected = true;
                         return;
                     }
                 })
                 return hasSelected;
             },
-            getAllUrlParameters: function(){
+            getAllUrlParameters: function() {
                 var url = location.search;
                 // get query string from url (optional) or window
                 var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
@@ -517,10 +525,11 @@
                     for (var i = 0; i < arr.length; i++) {
                         var a = arr[i].split('=');
                         var paramNum = undefined;
-                        var paramName = a[0].replace(/\[\d*\]/, function (v) {
-                            paramNum = v.slice(1, -1);
-                            return '';
-                        });
+                        var paramName = a[0].replace(/\[\d*\]/,
+                            function(v) {
+                                paramNum = v.slice(1, -1);
+                                return '';
+                            });
                         var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
                         if (obj[paramName]) {
                             if (typeof obj[paramName] === 'string') {
@@ -528,8 +537,7 @@
                             }
                             if (typeof paramNum === 'undefined') {
                                 obj[paramName].push(paramValue);
-                            }
-                            else {
+                            } else {
                                 obj[paramName][paramNum] = paramValue;
                             }
                         }
@@ -572,23 +580,33 @@
                     }
                 }
             },
-            createUrlWithParameters: function(){
+            createUrlWithParameters: function() {
                 var urlParameters = [];
                 var urlParametersString = "?";
                 var searchParameter = getParameterByName('text');
-                if (searchParameter !== ''){
+                var areaCodeParameter = getParameterByName('areacode');
+                if (searchParameter !== '') {
                     urlParameters.push("text=" + searchParameter);
                 }
-                this.selectedFacets.forEach(function(selectedFacet, index){
+                if (areaCodeParameter !== '') {
+                    urlParameters.push("areacode=" + areaCodeParameter);
+                }
+                this.selectedFacets.forEach(function(selectedFacet, index) {
 
-                    var parameterString = escape('Facets[' + index + '].name') + '=' + selectedFacet.name + '&' + escape('Facets[' + index + '].value') + '=' + selectedFacet.value;
+                    var parameterString = escape('Facets[' + index + '].name') +
+                        '=' +
+                        selectedFacet.name +
+                        '&' +
+                        escape('Facets[' + index + '].value') +
+                        '=' +
+                        selectedFacet.value;
                     urlParameters.push(parameterString);
                 })
 
-                urlParameters.forEach(function(urlParameter, index){
-                    var lastIndex = urlParameters.length-1;
+                urlParameters.forEach(function(urlParameter, index) {
+                    var lastIndex = urlParameters.length - 1;
                     urlParametersString += urlParameter;
-                    if (index < lastIndex){
+                    if (index < lastIndex) {
                         urlParametersString += "&";
                     }
                 });
@@ -600,13 +618,13 @@
                     name: FacetField,
                     value: facet.Name
                 }
-                this.selectedFacets.forEach(function(selectedFacet, index){
-                    if (selectedFacet.name == facetUrlObject.name && selectedFacet.value == facetUrlObject.value){
+                this.selectedFacets.forEach(function(selectedFacet, index) {
+                    if (selectedFacet.name == facetUrlObject.name && selectedFacet.value == facetUrlObject.value) {
                         this.selectedFacets.splice(index, 1);
                         facet.isSelected = false;
                         return false;
-                    }
-                    else if(selectedFacet.name == encodeURIComponent(facetUrlObject.name) && selectedFacet.value == encodeURIComponent(facetUrlObject.value)){
+                    } else if (selectedFacet.name == encodeURIComponent(facetUrlObject.name) &&
+                        selectedFacet.value == encodeURIComponent(facetUrlObject.value)) {
                         this.selectedFacets.splice(index, 1);
                         facet.isSelected = false;
                         return false;
@@ -643,13 +661,25 @@
 
                 var url = this.createUrlWithParameters();
                 var doc = document.documentElement;
-                var scrollTopOffset = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+                var scrollTopOffset = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
                 localStorage.setItem("scrollTopOffset", scrollTopOffset)
                 window.location.href = url;
+            },
+
+            EnableFacet: function(facetText) {
+                var isEnabled = true;
+                if (this.enabledFacetsArray) {
+                    isEnabled = false;
+                    this.enabledFacetsArray.forEach(function(facet) {
+                        if (facet == facetText) {
+                            isEnabled = true;
+                        }
+                    });
+                }
+                return isEnabled;
             }
 
-
-        },
+        }
 
     });
 </script>

@@ -1,6 +1,8 @@
 namespace Kartverket.Metadatakatalog.Migrations
 {
+    using Models;
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -16,16 +18,18 @@ namespace Kartverket.Metadatakatalog.Migrations
         {
             //  This method will be called after migrating to the latest version.
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            //Catalog catalog = new Catalog();
+
+            //var catalogItems = new List<CatalogItem>
+            //{
+            //new CatalogItem{CatalogText = "Plandata", CatalogOrder = 1},
+            //new CatalogItem{CatalogText = "Kommuneplaner", CatalogOrder = 1, ParentCatalogItemId = 1},
+            //new CatalogItem{CatalogText = "Reguleringsplaner",  CatalogOrder = 1, ParentCatalogItemId = 2},
+            //new CatalogItem{CatalogText = "Statlige planer",  CatalogOrder = 2, ParentCatalogItemId = 3},
+            //};
+            //catalog.CatalogItems = catalogItems;
+            //context.Catalogs.AddOrUpdate(catalog);
+            //context.SaveChanges();
         }
     }
 }

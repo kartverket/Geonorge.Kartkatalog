@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
-using System;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
+using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog.Controllers
@@ -21,17 +21,37 @@ namespace Kartverket.Metadatakatalog.Controllers
         public ActionResult Index(SearchParameters parameters)
         {
             parameters.AddComplexFacetsIfMissing();
-            SearchResult searchResult = _searchService.Search(parameters);
+            var searchResult = _searchService.Search(parameters);
 
-            SearchViewModel model = new SearchViewModel(parameters, searchResult);
+            var model = new SearchViewModel(parameters, searchResult);
 
             return View(model);
         }
-        
+
+        public ActionResult Area(SearchByAreaParameters parameters)
+        {
+            parameters.AddDefaultFacetsIfMissing();
+            parameters.CreateFacetOfArea();
+            parameters.AddComplexFacetsIfMissing();
+            FixAreaParameters(parameters);
+
+            var searchResult = _searchService.Search(parameters);
+            var model = new SearchByAreaViewModel(parameters, searchResult);
+
+            return View(model);
+        }
+
         protected override void OnException(ExceptionContext filterContext)
         {
             Log.Error("Error", filterContext.Exception);
         }
 
+        private static void FixAreaParameters(SearchByAreaParameters parameters)
+        {
+            if (parameters.AreaCode == "omrade")
+            {
+                parameters.AreaCode = null;
+            }
+        }
     }
 }

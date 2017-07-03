@@ -511,6 +511,11 @@
             Get related services, datasets and bundles for uuid
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetDistributions(System.String)">
+            <summary>
+            Get distributions for uuid
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Facet.FacetField">
             <summary>
             The name of the facet field
@@ -672,6 +677,16 @@
             Url for service mapped to dataset (wfs)
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.DistributionType">
+            <summary>
+            DistributionType
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.GetCapabilitiesUrl">
+            <summary>
+            URL for Get Capabilities
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.text">
             <summary>
             The text to search for
@@ -719,6 +734,24 @@
             <summary>
             Result grouped by facets
             </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Models.SearchParameters.OrderBy">
+            <summary>
+            Gets a sort order based on "Orderby" parameter
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Models.SearchParameters.BuildQuery">
+            <summary>
+            Builds a Solr query based on "Text" parameter
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Models.SearchParameters.BuildFilterQueries">
+            <summary>
+            Builds a solr Filter query based on "Facets" parameter
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Kartverket.Metadatakatalog.Service.PlaceResolver.GetAreas">
             <summary>
