@@ -268,16 +268,16 @@ if (contact != null)
             <div class="col-sm-12">
                 <script>
                     function getMetadata(uuid) {
-                        $.getJSON(`/api/search?text=${uuid}`,
+                        $.getJSON('/api/search?text=${uuid}',
                             function(result) {
                                 if (result.length != 0) {
                                     if (result.Results[0] != null) {
                                         const title = result.Results[0].Title;
-                                        $(`#related-${uuid}`).text(title);
+                                        $('#related-${uuid}').text(title);
                                     } else
-                                        $(`#related-${uuid}`).text("Tittel mangler");
+                                        $('#related-${uuid}').text("Tittel mangler");
                                 } else {
-                                    $(`#related-${uuid}`).text("Tittel mangler");
+                                    $('#related-${uuid}').text("Tittel mangler");
                                 }
                             });
                     };
@@ -769,11 +769,13 @@ if (keywords != null && keywords.Any())
                 Metadata: Metadata
             },
             created: function() {
-                axios.get(`/api/distributions/${uuid}`).then(function(response) {
-                    console.log(response.data);
-                    this.distributionlist = this.convertDistributionList(response.data);
-                    //this.distributionlist = response.data;
-                }.bind(this));
+                $.ajax({
+                    type: "GET",
+                    url: "/api/distributions/" + uuid,
+                    success: function (response) {
+                        vueModel.distributionlist = vueModel.convertDistributionList(response);
+                    }
+                });
                 this.relatedDataList = this.convertRelatedDataList();
 
 
@@ -814,10 +816,10 @@ if (keywords != null && keywords.Any())
                     var version = name;
 
                     if (format) {
-                        version += ` ${format}`;
+                        version += ' ${format}';
                     }
                     //return version ? " " : "(" + version + ")";
-                    return ` (${version})`;
+                    return ' (${version})';
                 },
                 makeSeoFriendlyString: function(text) {
                     if (text != null) {
@@ -888,7 +890,7 @@ if (keywords != null && keywords.Any())
 
 
         function showAlert(message, colorClass) {
-            $('#feedback-alert').attr('class', `alert alert-dismissible alert-${colorClass}`);
+            $('#feedback-alert').attr('class', 'alert alert-dismissible alert-${colorClass}');
             $('#feedback-alert .message').html(message);
             $('#feedback-alert').show();
         }

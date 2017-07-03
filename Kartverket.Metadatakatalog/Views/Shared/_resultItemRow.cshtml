@@ -197,13 +197,26 @@
                 this.expanded = !this.expanded;
                 if (!this.underlayingDistributionsRequested) {
                     showLoadingAnimation("Henter underliggende distribusjoner");
-                    axios.get('/api/distributions/' + this.resultItem.Uuid).then(function (response) {
-                        this.underlayingDistributions = response.data;
-                        this.underlayingDistributions.forEach(function (dis, index) {
-                            dis.Type = this.translateDistributionType(dis.DistributionProtocol, index);
-                        }.bind(this));
-                        hideLoadingAnimation();
-                    }.bind(this));
+                    $.ajax({
+                        type: "GET",
+                        url: "/api/distributions/" + uuid,
+                        success: function (response) {
+                            ResultItemComponent.distributionlist = ResultItemComponent.convertDistributionList(response);
+                        }
+                    });
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/api/distributions/" + this.resultItem.Uuid,
+                        success: function (response) {
+                            ResultItemComponent.underlayingDistributions = response;
+                            ResultItemComponent.underlayingDistributions.forEach(function (dis, index) {
+                                dis.Type = ResultItemComponent.translateDistributionType(dis.DistributionProtocol, index);
+                            });
+                            hideLoadingAnimation();
+                        }
+                    });
+                    this.relatedDataList = this.convertRelatedDataList();
                 }
                 if (this.$root.viewType == "galleryView") {
                     this.backgroundColor = "#fff";
@@ -310,14 +323,17 @@
             },
             translateDistributionType: function (Type, index) {
 
-                axios.get('@Html.RegistryUrl()' + "api/subregister/metadata-kodelister/kartverket/distribusjonstyper")
-                    .then(function (response) {
-                        response.data.containeditems.forEach(function (item) {
+                $.ajax({
+                    type: "GET",
+                    url: "/api/distributions/" + uuid,
+                    success: function (response) {
+                        response.containeditems.forEach(function (item) {
                             if (item.codevalue == Type) {
-                                this.underlayingDistributions[index].Type = item.label;
+                                ResultItemComponent.underlayingDistributions[index].Type = item.label;
                             }
                         }.bind(this));
-                    }.bind(this));
+                    }
+                });
             }
         }
     }
