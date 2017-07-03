@@ -59,7 +59,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         /// <summary>
-        /// Catalogue search
+        /// Catalogue search for dataset
         /// </summary>
 
         public SearchResult Get([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
@@ -85,7 +85,9 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         }
 
-
+        /// <summary>
+        /// Catalogue search for applications
+        /// </summary>
         [System.Web.Http.Route("api/kartlosninger-i-norge")]
         [System.Web.Http.HttpGet]
         public SearchResult applications([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
@@ -110,6 +112,9 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
         }
 
+        /// <summary>
+        /// Catalogue search for services
+        /// </summary>
         [System.Web.Http.Route("api/servicedirectory")]
         [System.Web.Http.HttpGet]
         public SearchResult servicedirectory([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)

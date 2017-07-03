@@ -498,7 +498,17 @@
         </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Get(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
             <summary>
-            Catalogue search
+            Catalogue search for dataset
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.applications(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
+            <summary>
+            Catalogue search for applications
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.servicedirectory(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
+            <summary>
+            Catalogue search for services
             </summary>
         </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetData(System.String)">
