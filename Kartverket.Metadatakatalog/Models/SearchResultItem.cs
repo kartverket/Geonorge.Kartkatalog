@@ -52,6 +52,11 @@ namespace Kartverket.Metadatakatalog.Models
                 MetadataIndexDoc metadataIndexDoc = (MetadataIndexDoc)doc;
                 SetSearchIndexDoc(metadataIndexDoc);
             }
+            else if (doc is MetadataIndexAllDoc)
+            {
+                MetadataIndexAllDoc metadataIndexAllDoc = (MetadataIndexAllDoc)doc;
+                SetSearchIndexDoc(metadataIndexAllDoc);
+            }
             else if (doc is ServiceIndexDoc)
             {
                 ServiceIndexDoc serviceIndexDoc = (ServiceIndexDoc)doc;

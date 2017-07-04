@@ -1014,6 +1014,62 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
+        public MetadataIndexAllDoc ConvertIndexDocToMetadataAll(MetadataIndexDoc simpleMetadata)
+        {
+            var indexDoc = new MetadataIndexAllDoc();
+
+            indexDoc.Uuid = simpleMetadata.Uuid;
+            indexDoc.Title = simpleMetadata.Title;
+            indexDoc.Abstract = simpleMetadata.Abstract;
+            indexDoc.Purpose = simpleMetadata.Purpose;
+            indexDoc.Type = simpleMetadata.Type;
+            indexDoc.ParentIdentifier = simpleMetadata.ParentIdentifier;
+            indexDoc.Organizationgroup = simpleMetadata.Organizationgroup;
+            indexDoc.Organization = simpleMetadata.Organization;
+            indexDoc.OrganizationContactname = simpleMetadata.OrganizationContactname;
+            indexDoc.OrganizationSeoName = simpleMetadata.OrganizationSeoName;
+            indexDoc.OrganizationShortName = simpleMetadata.OrganizationShortName;
+            indexDoc.OrganizationLogoUrl = simpleMetadata.OrganizationLogoUrl;
+            indexDoc.Organization2 = simpleMetadata.Organization2;
+            indexDoc.Organization2Contactname = simpleMetadata.Organization2Contactname;
+            indexDoc.Organization3 = simpleMetadata.Organization3;
+            indexDoc.Organization3Contactname = simpleMetadata.Organization3Contactname;
+            indexDoc.Theme = simpleMetadata.Theme;
+            indexDoc.DatePublished = simpleMetadata.DatePublished;
+            indexDoc.DateUpdated = simpleMetadata.DateUpdated;
+            indexDoc.LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl;
+            indexDoc.ProductPageUrl = simpleMetadata.ProductPageUrl;
+            indexDoc.ProductSheetUrl = simpleMetadata.ProductSheetUrl;
+            indexDoc.ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl;
+            indexDoc.DistributionProtocol = simpleMetadata.DistributionProtocol;
+            if (simpleMetadata.DistributionProtocols != null && simpleMetadata.DistributionProtocols.Count > 0)
+            {
+                List<string> distributionProtocols = new List<string>();
+                distributionProtocols.Add(simpleMetadata.DistributionProtocols[0]);
+                indexDoc.DistributionProtocols = distributionProtocols;
+            }
+            indexDoc.DistributionUrl = simpleMetadata.DistributionUrl;
+            indexDoc.DistributionName = simpleMetadata.DistributionName;
+            indexDoc.ThumbnailUrl = simpleMetadata.ThumbnailUrl;
+            indexDoc.MaintenanceFrequency = simpleMetadata.MaintenanceFrequency;
+            indexDoc.TopicCategory = simpleMetadata.TopicCategory;
+            indexDoc.Keywords = simpleMetadata.Keywords;
+            indexDoc.NationalInitiative = simpleMetadata.NationalInitiative;
+            indexDoc.Place = simpleMetadata.Place;
+            indexDoc.Placegroups = simpleMetadata.Placegroups;
+            indexDoc.AccessConstraint = simpleMetadata.AccessConstraint;
+            indexDoc.OtherConstraintsAccess = simpleMetadata.OtherConstraintsAccess;
+            indexDoc.ServiceDistributionAccessConstraint = simpleMetadata.ServiceDistributionAccessConstraint;
+            indexDoc.DataAccess = simpleMetadata.DataAccess;
+            indexDoc.Area = simpleMetadata.Area;
+            indexDoc.license = simpleMetadata.license;
+            indexDoc.Type = simpleMetadata.Type;
+            indexDoc.typenumber = simpleMetadata.typenumber;
+            indexDoc.DatasetServices = simpleMetadata.DatasetServices;
+
+            return indexDoc;
+        }
+
         private static List<string> blackList = new List<string> { "Arctic SDI", "Barentswatch", "Åpne data" };
 
     }

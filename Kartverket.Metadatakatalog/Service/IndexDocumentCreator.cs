@@ -10,5 +10,6 @@ namespace Kartverket.Metadatakatalog.Service
         MetadataIndexDoc CreateIndexDoc(SimpleMetadata metadata, IGeoNorge geoNorge);
         ServiceIndexDoc ConvertIndexDocToService(MetadataIndexDoc simpleMetadata);
         ApplicationIndexDoc ConvertIndexDocToApplication(MetadataIndexDoc simpleMetadata);
+        MetadataIndexAllDoc ConvertIndexDocToMetadataAll(MetadataIndexDoc metadataIndexDoc);
     }
 }

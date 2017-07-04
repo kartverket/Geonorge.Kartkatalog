@@ -85,11 +85,13 @@ namespace Kartverket.Metadatakatalog
             builder.RegisterType<MetadataService>().As<IMetadataService>();
             builder.RegisterType<SolrMetadataIndexer>().As<MetadataIndexer>();
             builder.RegisterType<SolrIndexer>().As<Indexer>();
+            builder.RegisterType<SolrIndexerAll>().As<IndexerAll>();
             builder.RegisterType<SolrIndexerServices>().As<IndexerService>();
             builder.RegisterType<SolrIndexerApplication>().As<IndexerApplication>();
             builder.RegisterType<SolrIndexDocumentCreator>().As<IndexDocumentCreator>();
             builder.RegisterType<ThemeResolver>().AsSelf();
             builder.RegisterType<SearchService>().As<ISearchService>();
+            builder.RegisterType<SearchServiceAll>().As<ISearchServiceAll>();
             builder.RegisterType<ServiceDirectoryService>().As<IServiceDirectoryService>();
             builder.RegisterType<ApplicationService>().As<IApplicationService>();
             builder.RegisterType<MetadataContext>().InstancePerRequest().AsSelf();

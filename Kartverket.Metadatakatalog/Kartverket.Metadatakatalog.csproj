@@ -270,6 +270,7 @@
       <DependentUpon>201706090621035_AddTheme.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Api\Distribution.cs" />
+    <Compile Include="Models\SearchIndex\MetadataIndexAllDoc.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\SearchByAreaParameters.cs" />
     <Compile Include="Models\SearchIndex\SearchIndexDoc.cs" />
@@ -277,7 +278,10 @@
     <Compile Include="Service\Application\IApplicationService.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Service\Application\ApplicationService.cs" />
+    <Compile Include="Service\IndexerAll.cs" />
     <Compile Include="Service\IThemeService.cs" />
+    <Compile Include="Service\Search\ISearchServiceAll.cs" />
+    <Compile Include="Service\Search\SearchServiceAll.cs" />
     <Compile Include="Service\ServiceDirectory\IServiceDirectoryService.cs" />
     <Compile Include="Controllers\MetadataController.cs" />
     <Compile Include="Controllers\ApiSearchController.cs" />
@@ -346,6 +350,7 @@
     <Compile Include="Service\SimpleMetadataUtil.cs" />
     <Compile Include="Service\SolrIndexDocumentCreator.cs" />
     <Compile Include="Service\SolrIndexerApplication.cs" />
+    <Compile Include="Service\SolrIndexerMetadataAll.cs" />
     <Compile Include="Service\SolrIndexerServices.cs" />
     <Compile Include="Service\SolrIndexerMetadata.cs" />
     <Compile Include="Service\SolrMetadataIndexer.cs" />

@@ -44,22 +44,24 @@ namespace Kartverket.Metadatakatalog.Controllers
     public class ApiSearchController : ApiController
     {
         private readonly ISearchService _searchService;
+        private readonly ISearchServiceAll _searchServiceAll;
         private readonly IApplicationService _applicationService;
         private readonly IServiceDirectoryService _serviceDirectoryService;
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IMetadataService _metadataService;
 
-        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService)
+        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll)
         {
             _searchService = searchService;
             _metadataService = metadataService;
             _applicationService = applicationService;
             _serviceDirectoryService = serviceDirectoryService;
+            _searchServiceAll = searchServiceAll;
         }
 
         /// <summary>
-        /// Catalogue search for dataset
+        /// Catalogue search
         /// </summary>
 
         public SearchResult Get([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
@@ -68,20 +70,11 @@ namespace Kartverket.Metadatakatalog.Controllers
             {            
                 if (parameters == null)
                     parameters = new SearchParameters();
-
-                Models.SearchResult searchResult = null;
-
+            
                 Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
-                if (FacetIsService(searchParameters))
-                {
-                    searchParameters.AddDefaultFacetsIfMissing();
-                    searchResult = _serviceDirectoryService.Services(searchParameters);
-                }
-                else
-                {
-                    searchParameters.AddDefaultFacetsIfMissing();
-                    searchResult = _searchService.Search(searchParameters);
-                }
+
+                searchParameters.AddDefaultFacetsIfMissing();
+                Models.SearchResult searchResult   = _searchServiceAll.Search(searchParameters);
 
                 var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
 
@@ -95,21 +88,33 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         }
 
-        private bool FacetIsService(Models.SearchParameters searchParameters)
+        /// <summary>
+        /// Catalogue search for dataset
+        /// </summary>
+        [System.Web.Http.Route("api/datasets")]
+        [System.Web.Http.HttpGet]
+        public SearchResult Datasets([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
         {
-            foreach (var facet in searchParameters.Facets)
+            try
             {
-                if (facet.Name == "type" && facet.Value == "service")
-                    return true;
+                if (parameters == null)
+                    parameters = new SearchParameters();
 
-                if (facet.Name == "DistributionProtocols" && facet.Value == "WMS-tjeneste")
-                    return true;
+                Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
 
-                if (facet.Name == "DistributionProtocols" && facet.Value == "WFS-tjeneste")
-                    return true;
+                searchParameters.AddDefaultFacetsIfMissing();
+                Models.SearchResult searchResult = _searchService.Search(searchParameters);
+
+                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+                return new SearchResult(searchResult, urlHelper);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return null;
             }
 
-            return false;
         }
 
         /// <summary>

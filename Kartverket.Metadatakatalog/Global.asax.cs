@@ -44,6 +44,7 @@ namespace Kartverket.Metadatakatalog
             log4net.Config.XmlConfigurator.Configure();
 
             Startup.Init<MetadataIndexDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata");
+            Startup.Init<MetadataIndexAllDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata_all");
             Startup.Init<ServiceIndexDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/services");
             Startup.Init<ApplicationIndexDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications");
             //https://github.com/mausch/SolrNet/blob/master/Documentation/Multi-core-instance.md

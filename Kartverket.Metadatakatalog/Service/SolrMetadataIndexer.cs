@@ -12,12 +12,13 @@ namespace Kartverket.Metadatakatalog.Service
 
         private readonly IGeoNorge _geoNorge;
         private readonly Indexer _indexer;
+        private readonly IndexerAll _indexerAll;
         private readonly IndexerApplication _indexerApplication;
         private readonly IndexerService _indexerService;
         private readonly IndexDocumentCreator _indexDocumentCreator;
         private readonly IErrorService _errorService;
 
-        public SolrMetadataIndexer(IGeoNorge geoNorge, Indexer indexer, IndexerApplication indexerApp, IndexerService indexerService, IndexDocumentCreator indexDocumentCreator, IErrorService errorService)
+        public SolrMetadataIndexer(IGeoNorge geoNorge, Indexer indexer, IndexerApplication indexerApp, IndexerService indexerService, IndexDocumentCreator indexDocumentCreator, IErrorService errorService, IndexerAll indexerAll)
         {
             _geoNorge = geoNorge;
             _indexer = indexer;
@@ -25,6 +26,7 @@ namespace Kartverket.Metadatakatalog.Service
             _indexerService = indexerService;
             _indexDocumentCreator = indexDocumentCreator;
             _errorService = errorService;
+            _indexerAll = indexerAll;
         }
 
         public void RunIndexing()
@@ -42,8 +44,9 @@ namespace Kartverket.Metadatakatalog.Service
                 _indexer.RemoveIndexDocument(uuid);
                 _indexerApplication.RemoveIndexDocument(uuid);
                 _indexerService.RemoveIndexDocument(uuid);
+                _indexerAll.RemoveIndexDocument(uuid);
 
-               
+
                 if (metadata != null)
                 {
 
@@ -78,6 +81,8 @@ namespace Kartverket.Metadatakatalog.Service
 
             else
                 _indexer.Index(metadataIndexDoc);
+
+            _indexerAll.Index(_indexDocumentCreator.ConvertIndexDocToMetadataAll(metadataIndexDoc));
         }
 
         private void RunSearch(int startPosition)
@@ -158,6 +163,7 @@ namespace Kartverket.Metadatakatalog.Service
         public void RunReIndexing()
         {
             _indexer.DeleteIndex();
+            _indexerAll.DeleteIndex();
             _indexerApplication.DeleteIndex();
             _indexerService.DeleteIndex();
 
