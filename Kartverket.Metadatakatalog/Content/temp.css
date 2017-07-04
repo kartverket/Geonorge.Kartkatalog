@@ -21,9 +21,14 @@
         height: 60px;
     }
 
-        .resultItemRowTableHeader > div p {
+        .resultItemRowTableHeader > div p,
+        .resultItemRowTableHeader > div a {
             position: absolute;
             bottom: 0;
+            margin-bottom: 4px;
+            font-size: 12pt;
+            line-height: 14pt;
+            text-transform: uppercase;
         }
 
 .resultItemRowGallery {
@@ -64,7 +69,8 @@
 }
 
 .search-result-navigation .save-as-menu .save-as-dropdown .custom-select {
-      width: 186px; }
+    width: 186px;
+}
 
 .teaser-with-background-image .teaser-heading {
     font-size: 14pt;
@@ -75,4 +81,5 @@
 }
 
 .label-datapakke {
-  border-color: #5d4777; }
+    border-color: #5d4777;
+}
