@@ -69,9 +69,19 @@ namespace Kartverket.Metadatakatalog.Controllers
                 if (parameters == null)
                     parameters = new SearchParameters();
 
+                Models.SearchResult searchResult = null;
+
                 Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
-                searchParameters.AddDefaultFacetsIfMissing();
-                Models.SearchResult searchResult = _searchService.Search(searchParameters);
+                if (FacetIsService(searchParameters))
+                {
+                    searchParameters.AddDefaultFacetsIfMissing();
+                    searchResult = _serviceDirectoryService.Services(searchParameters);
+                }
+                else
+                {
+                    searchParameters.AddDefaultFacetsIfMissing();
+                    searchResult = _searchService.Search(searchParameters);
+                }
 
                 var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
 
@@ -83,6 +93,23 @@ namespace Kartverket.Metadatakatalog.Controllers
                 return null;
             }
 
+        }
+
+        private bool FacetIsService(Models.SearchParameters searchParameters)
+        {
+            foreach (var facet in searchParameters.Facets)
+            {
+                if (facet.Name == "type" && facet.Value == "service")
+                    return true;
+
+                if (facet.Name == "DistributionProtocols" && facet.Value == "WMS-tjeneste")
+                    return true;
+
+                if (facet.Name == "DistributionProtocols" && facet.Value == "WFS-tjeneste")
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
