@@ -59,8 +59,8 @@ if (items.Any())
     </div>
     <div class="menu-separator search-results-table-heading"></div>
     <div v-for="resultItem in searchResults">
-        <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes" style="margin: 8px 0;">
-            <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="0" class="resultItemRow"></div>
+        <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes">
+            <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="0"></div>
         </div>
         <div is="resultItem" v-bind:result-item="resultItem"></div>
     </div>
@@ -75,15 +75,15 @@ if (items.Any())
 
 <script type="text/x-template" id="theme-item-template">
     <div>
-        <div class="row">
-            <div class="col-sm-12" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
+        <div class="table-border-bottom">
+            <div class="resultItemRow" style="margin-left: -18px;" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
                 <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']" style="vertical-align: middle;"></span>
-                <a v-bind:href="theme.ShowDetailsUrl" style="font-size: 14pt;">{{ theme.Name }}</a>
+                <a v-bind:href="theme.ShowDetailsUrl">{{ theme.Name }}</a>
             </div>
         </div>
         <div v-show="expanded">
-            <div v-if="theme.Metadata.length" style="margin-bottom: 18px;">
-                <div v-for="subItem in theme.Metadata" class="">
+            <div v-if="theme.Metadata.length">
+                <div v-for="subItem in theme.Metadata">
                     <div is="metadata-item" v-bind:metadata="subItem"></div>
                 </div>
             </div>
