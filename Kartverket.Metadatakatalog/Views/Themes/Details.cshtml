@@ -239,17 +239,8 @@
             }
         };
 
-
-        var metadataArray = "@MetadataObject";
-        metadataArray = metadataArray.replace(/&quot;/g, '"');
-        metadataArray = metadataArray.replace(/(?:\r\n|\r|\n)/g, '<br />');
-        metadataArray = JSON.parse(metadataArray);
-
-        var themesArray = "@ThemesObject";
-        themesArray = themesArray.replace(/&quot;/g, '"');
-        themesArray = themesArray.replace(/(?:\r\n|\r|\n)/g, '<br />');
-        themesArray = JSON.parse(themesArray);
-
+        var metadataArray = @Html.Raw(MetadataObject);
+        var themesArray = @Html.Raw(ThemesObject);
 
         var ThemeItem = {
             name: 'themeItem',
