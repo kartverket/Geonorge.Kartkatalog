@@ -135,5 +135,15 @@ namespace Kartverket.Metadatakatalog.Controllers
             return StatusCode(statusCode);
         }
 
+        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Route("metadata/flushcache")]
+        public ActionResult FlushCache()
+        {
+            MemoryCacher memCacher = new MemoryCacher();
+            memCacher.DeleteAll();
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
     }
 }
