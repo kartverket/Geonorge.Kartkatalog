@@ -284,6 +284,7 @@
                             function (result) {
                                 if (result.length != 0) {
                                     this.metadataArray.push(result);
+                                    this.metadataArray.sort(compareTitle);
                                 }
                             }.bind(this));
                     }.bind(this));
@@ -291,5 +292,13 @@
                 }
             }
         })
+
+        function compareTitle(a,b) {
+            if (a.Title < b.Title)
+                return -1;
+            if (a.Title > b.Title)
+                return 1;
+            return 0;
+        }
     </script>
 }
