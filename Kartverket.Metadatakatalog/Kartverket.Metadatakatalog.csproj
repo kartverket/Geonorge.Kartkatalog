@@ -264,6 +264,7 @@
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OpenDataController.cs" />
     <Compile Include="Controllers\ThemesController.cs" />
     <Compile Include="Migrations\201706090621035_AddTheme.cs" />
     <Compile Include="Migrations\201706090621035_AddTheme.Designer.cs">
@@ -1123,6 +1124,7 @@
     <Content Include="Views\Shared\_Metadata.cshtml" />
     <Content Include="Views\Search\_ThemeGroup.cshtml" />
     <Content Include="Views\Themes\Details.cshtml" />
+    <Content Include="Views\OpenData\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

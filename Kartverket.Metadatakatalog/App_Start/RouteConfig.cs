@@ -56,6 +56,11 @@ namespace Kartverket.Metadatakatalog
                new { controller = "Themes", action = "Details", id = UrlParameter.Optional }
             );
 
+            // åpne-data
+            routes.MapRoute("DisplayOpenData", "aapne-data",
+                new { controller = "OpenData", action = "Index" }
+            );
+
             routes.MapRoute(
             name: "ThemesRoute",
             url: "temaer/{action}/{id}",
