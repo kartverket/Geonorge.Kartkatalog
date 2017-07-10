@@ -506,6 +506,11 @@
             Catalogue search for dataset
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Opendata(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
+            <summary>
+            Catalogue search for opendata
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.applications(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
             <summary>
             Catalogue search for applications

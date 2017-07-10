@@ -191,6 +191,15 @@ namespace Kartverket.Metadatakatalog.Models
             return query;
         }
 
+        public void SetFacetOpenData()
+        {
+            FacetParameter dataAccess = Facets.Where(v => v.Name == "dataaccess").FirstOrDefault();
+            if (dataAccess != null)
+                Facets.Remove(dataAccess);
+
+            Facets.Add(new FacetParameter { Name = "dataaccess", Value = "Åpne data" });
+        }
+
 
         /// <summary>
         /// Builds a solr Filter query based on "Facets" parameter

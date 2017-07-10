@@ -118,6 +118,36 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         /// <summary>
+        /// Catalogue search for opendata
+        /// </summary>
+        [System.Web.Http.Route("api/aapnedata")]
+        [System.Web.Http.HttpGet]
+        public SearchResult Opendata([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
+        {
+            try
+            {
+                if (parameters == null)
+                    parameters = new SearchParameters();
+
+                Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
+
+                searchParameters.SetFacetOpenData();
+                searchParameters.AddDefaultFacetsIfMissing();
+                Models.SearchResult searchResult = _searchService.Search(searchParameters);
+
+                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+                return new SearchResult(searchResult, urlHelper);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return null;
+            }
+
+        }
+
+        /// <summary>
         /// Catalogue search for applications
         /// </summary>
         [System.Web.Http.Route("api/kartlosninger-i-norge")]
