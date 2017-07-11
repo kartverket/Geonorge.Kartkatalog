@@ -125,13 +125,29 @@ function setMainSearchUrl(urlSlug, environment){
     }
     if (environmentIsSet){
         searchOptionsArray[environment].url = "//kartkatalog" + environmentSlug + ".geonorge.no/" + urlSlug;
-        searchOptionsArray[environment].api = "//kartkatalog" + environmentSlug + ".geonorge.no/api/" + urlSlug;
     }else{
         searchOptionsArray.dev.url = "//kartkatalog.dev.geonorge.no/" + urlSlug;
-        searchOptionsArray.dev.api = "//kartkatalog.dev.geonorge.no/api/" + urlSlug;
         searchOptionsArray.test.url = "//kartkatalog.test.geonorge.no/" + urlSlug;
-        searchOptionsArray.test.api = "//kartkatalog.test.geonorge.no/api/" + urlSlug;
         searchOptionsArray.prod.url = "//kartkatalog.geonorge.no/" + urlSlug;
+    }
+}
+
+function setMainSearchApiUrl(urlSlug, environment){
+    environmentIsSet = false;
+    var environmentSlug = '';
+    if (typeof environment !== 'undefined'){
+        if (environment == 'dev' || environment == 'test' || environment == 'prod'){
+            environmentIsSet = true;
+            environmentSlug = environment == 'prod' ? '' : '.' + environment;
+        }else{
+            console.error("incorrect value for environment. Use 'dev', 'test' or 'prod'");
+        }
+    }
+    if (environmentIsSet){
+        searchOptionsArray[environment].api = "//kartkatalog" + environmentSlug + ".geonorge.no/api/" + urlSlug;
+    }else{
+        searchOptionsArray.dev.api = "//kartkatalog.dev.geonorge.no/api/" + urlSlug;
+        searchOptionsArray.test.api = "//kartkatalog.test.geonorge.no/api/" + urlSlug;
         searchOptionsArray.prod.api = "//kartkatalog.geonorge.no/api/" + urlSlug;
     }
 }

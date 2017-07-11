@@ -43,14 +43,14 @@
     "openSans": "https://google-fonts.azurewebsites.net/googleFonts/openSans?family=Open+Sans:400,400italic,600,700",
     "raleway": "https://google-fonts.azurewebsites.net/googleFonts/Raleway?family=Raleway:400,100,300,500,600,700"
   },
-  "version": "7.1.3",
-  "_release": "7.1.3",
+  "version": "7.1.4",
+  "_release": "7.1.4",
   "_resolution": {
     "type": "version",
-    "tag": "v7.1.3",
-    "commit": "9b13869eb90391dc11f155816c1bee869b0f587d"
+    "tag": "v7.1.4",
+    "commit": "5c0f4f90961cd809645990776c8632a59d382b46"
   },
   "_source": "https://github.com/kartverket/felleskomponenter.git",
-  "_target": "7.1.3",
+  "_target": "7.1.4",
   "_originalSource": "kartverket-felleskomponenter"
 }
