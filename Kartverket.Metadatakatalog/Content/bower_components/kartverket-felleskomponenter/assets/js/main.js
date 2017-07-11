@@ -112,6 +112,42 @@ $(window).load(function() {
     doc.setAttribute('data-useragent', navigator.userAgent);
 });
 
+function setMainSearchApiUrl(apiUrl, environment){
+    environmentIsSet = false;
+    if (typeof environment !== 'undefined'){
+        if (environment == 'dev' || environment == 'test' || environment == 'prod'){
+            environmentIsSet = true;
+        }else{
+            console.error("incorrect value for environment. Use 'dev', 'test' or 'prod'");
+        }
+    }
+    if (environmentIsSet){
+        searchOptionsArray[environment].api = "//kartkatalog."+ environment +".geonorge.no/" + apiUrl;
+    }else{
+        searchOptionsArray.dev.api = "//kartkatalog.dev.geonorge.no/" + apiUrl;
+        searchOptionsArray.test.api = "//kartkatalog.test.geonorge.no/" + apiUrl;
+        searchOptionsArray.prod.api = "//kartkatalog.prod.geonorge.no/" + apiUrl;
+    }
+}
+
+function setMainSearchApiAbsoluteUrl(apiUrl, environment){
+    environmentIsSet = false;
+    if (typeof environment !== 'undefined'){
+        if (environment == 'dev' || environment == 'test' || environment == 'prod'){
+            environmentIsSet = true;
+        }else{
+            console.error("incorrect value for environment. Use 'dev', 'test' or 'prod'");
+        }
+    }
+    if (environmentIsSet){
+        searchOptionsArray[environment].api = apiUrl;
+    }else{
+        searchOptionsArray.dev.api = apiUrl;
+        searchOptionsArray.test.api = apiUrl;
+        searchOptionsArray.prod.api = apiUrl;
+    }
+}
+
 angular.module('geonorge', ['ui.bootstrap']);
 
 angular.module('geonorge').config(["$sceDelegateProvider", function ($sceDelegateProvider) {
@@ -493,7 +529,7 @@ var baseurl_local = searchOption.baseUrl;
                       for (var x = 0; x < list.length; x++) {
                         var item = {};
                         var curr = list[x];
-                        if (curr.data.Results.length === 0) continue;
+                        if (curr.data == null || curr.data.Results.length === 0) continue;
                         item.type = curr.Section;
 
                         item.title = curr.SectionName;
