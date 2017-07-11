@@ -392,6 +392,14 @@
     @{ var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
     <script>
+
+        // Setter url for søkeresultat
+        @if (Model.OrganizationSeoName != null) {
+            @:setMainSearchUrl('etatvis-oversikt/@Model.OrganizationSeoName');
+        }else
+        {
+            @:setMainSearchUrl('etatvis-oversikt/organisasjon');
+        }
         //Main vue model
         var vueModel = new Vue({
             el: '#searchResultTable',
