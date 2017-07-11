@@ -379,6 +379,11 @@
     @{ var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
     <script>
+
+        // Setter api url for søkeresultat
+        setMainSearchApiUrl('api/servicedirectory');
+
+
         //Main vue model
         var vueModel = new Vue({
             el: '#searchResultTable',
