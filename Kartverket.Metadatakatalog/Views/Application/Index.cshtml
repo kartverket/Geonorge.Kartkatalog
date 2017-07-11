@@ -336,6 +336,10 @@
     @{ var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
     <script>
+
+        // Setter api url for søkeresultat
+        setMainSearchUrl('kartlosninger-i-norge');
+
         //Main vue model
         var vueModel = new Vue({
             el: '#searchResultTable',

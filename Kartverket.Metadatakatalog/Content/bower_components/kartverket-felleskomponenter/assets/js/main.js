@@ -112,39 +112,27 @@ $(window).load(function() {
     doc.setAttribute('data-useragent', navigator.userAgent);
 });
 
-function setMainSearchApiUrl(apiUrl, environment){
+function setMainSearchUrl(urlSlug, environment){
     environmentIsSet = false;
+    var environmentSlug = '';
     if (typeof environment !== 'undefined'){
         if (environment == 'dev' || environment == 'test' || environment == 'prod'){
             environmentIsSet = true;
+            environmentSlug = environment == 'prod' ? '' : '.' + environment;
         }else{
             console.error("incorrect value for environment. Use 'dev', 'test' or 'prod'");
         }
     }
     if (environmentIsSet){
-        searchOptionsArray[environment].api = "//kartkatalog."+ environment +".geonorge.no/" + apiUrl;
+        searchOptionsArray[environment].url = "//kartkatalog" + environmentSlug + ".geonorge.no/" + urlSlug;
+        searchOptionsArray[environment].api = "//kartkatalog" + environmentSlug + ".geonorge.no/api/" + urlSlug;
     }else{
-        searchOptionsArray.dev.api = "//kartkatalog.dev.geonorge.no/" + apiUrl;
-        searchOptionsArray.test.api = "//kartkatalog.test.geonorge.no/" + apiUrl;
-        searchOptionsArray.prod.api = "//kartkatalog.prod.geonorge.no/" + apiUrl;
-    }
-}
-
-function setMainSearchApiAbsoluteUrl(apiUrl, environment){
-    environmentIsSet = false;
-    if (typeof environment !== 'undefined'){
-        if (environment == 'dev' || environment == 'test' || environment == 'prod'){
-            environmentIsSet = true;
-        }else{
-            console.error("incorrect value for environment. Use 'dev', 'test' or 'prod'");
-        }
-    }
-    if (environmentIsSet){
-        searchOptionsArray[environment].api = apiUrl;
-    }else{
-        searchOptionsArray.dev.api = apiUrl;
-        searchOptionsArray.test.api = apiUrl;
-        searchOptionsArray.prod.api = apiUrl;
+        searchOptionsArray.dev.url = "//kartkatalog.dev.geonorge.no/" + urlSlug;
+        searchOptionsArray.dev.api = "//kartkatalog.dev.geonorge.no/api/" + urlSlug;
+        searchOptionsArray.test.url = "//kartkatalog.test.geonorge.no/" + urlSlug;
+        searchOptionsArray.test.api = "//kartkatalog.test.geonorge.no/api/" + urlSlug;
+        searchOptionsArray.prod.url = "//kartkatalog.geonorge.no/" + urlSlug;
+        searchOptionsArray.prod.api = "//kartkatalog.geonorge.no/api/" + urlSlug;
     }
 }
 
