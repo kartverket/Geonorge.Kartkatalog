@@ -424,7 +424,7 @@
 
         // Setter url for søkeresultat
         setMainSearchUrl('hva-finnes-i-kommunen-eller-fylket');
-        
+        setMainSearchApiUrl('search?facets[0]name=area&facets[0]value=@Model.AreaCode');
 
         //Main vue model
         var vueModel = new Vue({

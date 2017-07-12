@@ -408,6 +408,7 @@
         // Setter url for søkeresultat
         @if (Model.OrganizationSeoName != null) {
             @:setMainSearchUrl('etatvis-oversikt/@Model.OrganizationSeoName');
+            @:setMainSearchApiUrl('search?facets[0]name=organization&facets[0]value=@Model.OrganizationName');
         }else
         {
             @:setMainSearchUrl('etatvis-oversikt/organisasjon');
