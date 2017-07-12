@@ -247,7 +247,19 @@
 }
 
 @{
-    string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("metadata/" + Model.OrganizationSeoName, "api/search");
+    string url = HttpContext.Current.Request.Url.AbsoluteUri;
+    if (url.Contains("etatvis-oversikt/organisasjon"))
+    {
+        url = url.Replace("etatvis-oversikt/organisasjon", "api/search");
+    }
+    else if (url.Contains("etatvis-oversikt"))
+    {
+        url = url.Replace("etatvis-oversikt/" + Model.OrganizationSeoName, "api/search");
+    }
+    else
+    {
+        url = url.Replace("metadata/" + Model.OrganizationSeoName, "api/search");
+    }
     Uri uri = new Uri(url);
     string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
     Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
