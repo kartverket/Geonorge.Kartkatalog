@@ -204,7 +204,7 @@
 
 @{
 
-    string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.ToLower().Replace("kartlosninger-i-norge", "api/kartlosninger-i-norge");
+    string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.ToLower().Replace("apier-og-tjenester", "api/servicedirectory");
     Uri uri = new Uri(url);
     string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
     Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
