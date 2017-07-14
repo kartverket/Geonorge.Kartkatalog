@@ -309,6 +309,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         {
             return new List<string> { "organizations", "areas"};
         }
+
+        public List<string> FacetsOpenData()
+        {
+            return new List<string> { "themes", "types", "organizations", "nationalinitiatives", "areas", "distributionProtocols" };
+        }
     }
 
 }

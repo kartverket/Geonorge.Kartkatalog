@@ -25,6 +25,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             var searchResult = _searchService.Search(parameters);
 
             var model = new SearchViewModel(parameters, searchResult);
+            model.EnabledFacets = model.FacetsOpenData();
 
             return View(model);
         }
