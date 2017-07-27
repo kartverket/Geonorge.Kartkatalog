@@ -1125,6 +1125,17 @@
     <Content Include="Views\Search\_ThemeGroup.cshtml" />
     <Content Include="Views\Themes\Details.cshtml" />
     <Content Include="Views\OpenData\Index.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Buttons\_ShowInMapButton.cshtml" />
+    <Content Include="Views\Shared\VueComponents\_Buttons.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Buttons\_AddToCartButton.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Buttons\_ShowCoverageButton.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Buttons\_HelpButton.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Buttons\_ContactOwnerButton.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Buttons\_ShowProductSheetButton.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Buttons\_ShowProductSpecificationButton.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Buttons\_ShowLegendDescriptionButton.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Buttons\_ShowWebsiteButton.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Buttons\_ShowProductPageButton.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

@@ -1,0 +1,41 @@
+﻿<script type="text/x-template" id="contactOwnerButtonTemplate">
+    <div v-html="htmlElement"></div>
+</script>
+
+<script>
+    function getContactOwnerButton(resultItem) {
+        var ContactOwnerButton = {
+            name: "contactOwnerButton",
+            template: "#contactOwnerButtonTemplate",
+            props: ["resultItem"],
+            data: function () {
+                return {
+                    button: {
+                        content: "Kontakt dataeier",
+                        className: "btn",
+                        url: this.resultItem.ContactOwner.Email !== undefined ? "mailto:" + this.resultItem.ContactOwner.Email : null,
+                        title: "Kontakt dataeier for " + this.resultItem.Title,
+                        icon: {
+                            className: "fa fa-envelope"
+                        },
+                        attributes: [
+                            { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'kontaktdataeier')" },
+                            { key: "target", value: "_blank" }
+                        ]
+                    },
+                    htmlElement: null
+                }
+            },
+            created: function () {
+                if (this.button.url == null) {
+                    this.button.attributes.push({ key: 'disabled', value: 'disabled' });
+                    this.button.className += " disabled";
+                }
+                this.htmlElement = this.$parent.createButtonElement(this.button);
+            }
+        };
+        return ContactOwnerButton;
+    }
+</script>
+
+

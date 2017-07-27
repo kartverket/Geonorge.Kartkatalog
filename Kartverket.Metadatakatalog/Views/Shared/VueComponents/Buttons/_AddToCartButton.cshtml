@@ -1,0 +1,177 @@
+﻿@using Kartverket.Metadatakatalog.Helpers
+
+<script type="text/x-template" id="addToCartButtonTemplate">
+    <div>
+        <div v-if="resultItem.ShowDownloadService" v-on:click="addToCart()" v-html="htmlElement"></div>
+        <div v-else v-html="htmlElement"></div>
+    </div>
+</script>
+
+<script>
+    function getAddToCartButton(resultItem) {
+        var ShowInMapButton = {
+            name: "addToCartButton",
+            template: "#addToCartButtonTemplate",
+            props: ["resultItem", "defaultButtonClass"],
+            data: function () {
+                return {
+                    button: {
+                        id: "",
+                        content: "Legg i kurv",
+                        className: "btn",
+                        url: null,
+                        title: "Legg " + this.resultItem.Title + " i kurv",
+                        icon: {
+                            className: "custom-icon custom-icon-handlekurv"
+                        },
+                        attributes: [
+                            { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'leggikurv')" }
+                        ]
+                    },
+                    htmlElement: null
+                }
+            },
+            created: function () {
+                if (this.resultItem.ShowDownloadService) {
+                    this.getCartButtonStatus();
+
+                    if (this.resultItem.IsRestricted || this.resultItem.IsOffline) {
+                        this.button.className += " add-to-cart-btn prevent-action";
+                        if (this.resultItem.IsRestricted) {
+                            @{
+                                string baseUrl = Request.Url.AbsoluteUri;
+                                baseUrl = baseUrl.Replace("http://", "https://");
+                                if (baseUrl.Contains("addtocart_event_id"))
+                                {
+                                    baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
+                                }
+                            }
+                            var baseUrl = '@baseUrl';
+                            var addToCartEventParamater = "?addtocart_event_id=" + this.resultItem.Uuid;
+
+                            if (baseUrl.indexOf("?") !== -1) {
+                                addToCartEventParamater = "&addtocart_event_id=" + this.resultItem.Uuid;
+                            }
+
+                            var downloadSignInUrl = '@Html.DownloadUrl()'
+                           + 'AuthServices/SignIn?ReturnUrl='
+                           + encodeURIComponent(baseUrl)
+                           + encodeURIComponent(addToCartEventParamater);
+
+                            this.button.url = addToCartUrl = '@Html.KartkatalogenUrl()'
+                                 + 'AuthServices/SignIn?ReturnUrl='
+                                 + encodeURIComponent(downloadSignInUrl);
+                        }
+                    }
+                } else if (this.resultItem.ShowDownloadLink) {
+                    this.button.url = this.resultItem.DistributionUrl;
+                    this.button.attributes = [
+                            { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'lastned')" },
+                            { key: "target", value: "_blank" }
+                    ];
+                    this.button.content = "Last ned";
+                    this.button.icon.className = "custom-icon custom-icon-lastned";
+                } else {
+                    this.button.className = "btn disabled";
+                    this.button.url = null;
+                    this.button.attributes = [
+                            { key: "disabled", value: "disabled" }
+                    ];
+                    this.button.content = "Last ned";
+                }
+                this.htmlElement = this.$parent.createButtonElement(this.button);
+            },
+            methods: {
+                getCartButtonStatus: function () {
+                    var addedOrderitems = localStorage.getItem('orderItems');
+                    if (addedOrderitems !== null &&
+                        addedOrderitems !== "[]" &&
+                        addedOrderitems !== "[null]" &&
+                        addedOrderitems !== "") {
+                        addedOrderitems = JSON.parse(addedOrderitems);
+                        var addedToCart = false;
+                        addedOrderitems.forEach(function (addedOrderItemUuid) {
+                            if (addedOrderItemUuid !== null) {
+                                if (this.resultItem !== undefined) {
+                                    // Temainndelte datasett
+                                    if (this.resultItem.Uuid == addedOrderItemUuid) {
+                                        this.button.className = "btn added";
+                                        this.button.content = "Lagt i kurv";
+                                        this.button.title = "Allerede lagt i kurv";
+                                    }
+                                } else if (this.resultItem !== undefined) {
+                                    // Løse datasett
+                                    if (this.resultItem.Uuid == addedOrderItemUuid) {
+                                        this.button.className = "btn";
+                                        this.button.content = "Legg i kurv";
+                                        this.button.title = "Legg " + this.resultItem.Title + " i kurv";
+                                    }
+                                }
+                            }
+                        }.bind(this));
+                        this.$parent.addedToCart = addedToCart;
+                    }
+                },
+                addToCart: function () {
+                    var orderItems = [];
+                    var added = false;
+                    var item = {
+                        name: this.resultItem.Title,
+                        uuid: this.resultItem.Uuid,
+                        url: "/metadata/uuid/" + this.resultItem.Uuid,
+                        organizationLogoUrl: this.organizationLogoUrl,
+                        distributionUrl: this.resultItem.DownloadUrl,
+                        theme: this.resultItem.Theme,
+                        organizationName: this.resultItem.Organization
+                    };
+
+                    if (localStorage.getItem('orderItems') != null) {
+                        orderItems = (JSON.parse(localStorage.getItem('orderItems')));
+                    }
+                    $.map(orderItems, function (elementOfArray, indexInArray) {
+                        if (elementOfArray == item.uuid) {
+                            added = true;
+                        }
+                    });
+                    if (!added) {
+                        orderItems.push(item.uuid);
+                        localStorage["orderItems"] = JSON.stringify(orderItems);
+                        localStorage[item.uuid + ".metadata"] = JSON.stringify(item);
+                        clearAlertMessage();
+                        showAlert(item.name + ' er lagt til i <a href="/nedlasting">kurven</a>', 'success');
+
+                        var orderItemCount = $('#orderitem-count').text();
+                        if (orderItemCount == null || orderItemCount == '') {
+                            orderItemCount = 0;
+                            $('#orderitem-count-text').text(' datasett');
+                        } else {
+                            orderItemCount = parseInt($('#orderitem-count').text());
+                        }
+                        orderItemCount += 1;
+                        $('#orderitem-count').text(orderItemCount);
+                        updateShoppingCart();
+                        this.button.className = "btn added";
+                        this.button.content = "Lagt i kurv";
+                        this.button.title = "Allerede lagt i kurv";
+                    } else {
+                        var index = orderItems.indexOf(item.uuid);
+                        if (index > -1) {
+                            orderItems.splice(index, 1);
+                        }
+                        localStorage.removeItem(item.uuid + ".metadata");
+                        localStorage["orderItems"] = JSON.stringify(orderItems);
+
+                        updateShoppingCart();
+                        clearAlertMessage();
+                        showAlert(item.name + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
+                        this.button.className = "btn";
+                        this.button.content = "Legg i kurv";
+                        this.button.title = "Legg " + this.resultItem.Title + " i kurv";
+                    }
+                    this.htmlElement = this.$parent.createButtonElement(this.button);
+                }
+            }
+        };
+        return ShowInMapButton;
+    }
+</script>

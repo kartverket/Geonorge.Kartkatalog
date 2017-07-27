@@ -1,0 +1,103 @@
+﻿@Html.Partial("VueComponents/Buttons/_ShowInMapButton")
+@Html.Partial("VueComponents/Buttons/_ShowCoverageButton")
+@Html.Partial("VueComponents/Buttons/_AddToCartButton")
+@Html.Partial("VueComponents/Buttons/_HelpButton")
+@Html.Partial("VueComponents/Buttons/_ContactOwnerButton")
+@Html.Partial("VueComponents/Buttons/_ShowProductSheetButton")
+@Html.Partial("VueComponents/Buttons/_ShowProductSpecificationButton")
+@Html.Partial("VueComponents/Buttons/_ShowLegendDescriptionButton")
+@Html.Partial("VueComponents/Buttons/_ShowWebsiteButton")
+@Html.Partial("VueComponents/Buttons/_ShowProductPageButton")
+
+<script type="text/x-template" id="buttonsTemplate">
+    <div>
+        <div v-if="hasComponentContainer">
+            <div v-bind:class="componentContainerClassName">
+                <div v-if="isSelected('showInMapButton')" is="show-in-map-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('addToCartButton')" is="add-to-cart-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showCoverageButton')" is="show-coverage-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('helpButton')" is="help-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('contactOwnerButton')" is="contact-owner-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showProductSheetButton')" is="show-product-sheet-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showProductSpecificationButton')" is="show-product-specification-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showLegendDescriptionButton')" is="show-legend-description-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showWebsiteButton')" is="show-website-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showProductPageButton')" is="show-product-page-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+            </div>
+        </div>
+        <div v-else>
+            <div v-if="isSelected('showInMapButton')" is="show-in-map-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('addToCartButton')" is="add-to-cart-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showCoverageButton')" is="show-coverage-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('helpButton')" is="help-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('contactOwnerButton')" is="contact-owner-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showProductSheetButton')" is="show-product-sheet-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showProductSpecificationButton')" is="show-product-specification-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showLegendDescriptionButton')" is="show-legend-description-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showWebsiteButton')" is="show-website-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showProductPageButton')" is="show-product-page-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+        </div>
+    </div>
+</script>
+
+<script>
+
+    var Buttons = {
+        name: "buttons",
+        template: "#buttonsTemplate",
+        props: ["resultItem", "selectedButtons", "buttonType"],
+        components: {
+            ShowInMapButton: getShowInMapButton(this.resultItem),
+            AddToCartButton: getAddToCartButton(this.resultItem),
+            ShowCoverageButton: getShowCoverageButton(this.resultItem),
+            HelpButton: getHelpButton(this.resultItem),
+            ContactOwnerButton: getContactOwnerButton(this.resultItem),
+            ShowProductSheetButton: getShowProductSheetButton(this.resultItem),
+            ShowProductSpecificationButton: getShowProductSpecificationButton(this.resultItem),
+            ShowLegendDescriptionButton: getShowLegendDescriptionButton(this.resultItem),
+            ShowWebsiteButton: getShowWebsiteButton(this.resultItem),
+            ShowProductPageButton: getShowProductPageButton(this.resultItem)
+        },
+        computed: {
+            hasComponentContainer: function () {
+                hasComponentContainer = false;
+                if (this.buttonType == 'topRow') { hasComponentContainer = true }
+                return hasComponentContainer;
+            },
+            componentContainerClassName: function () {
+                var componentContainerClassName = "";
+                if (this.buttonType == 'topRow') { componentContainerClassName = "btn-table-row-5" }
+                if (this.buttonType == 'tableRow') { componentContainerClassName = "" }
+                return componentContainerClassName;
+            },
+            componentClassName: function () {
+                var componentClassName = "";
+                if (this.buttonType == 'topRow') { componentClassName = "table-btn-container" }
+                if (this.buttonType == 'tableRow') { componentClassName = "col-xs-1" }
+                return componentClassName;
+            }
+        },
+        methods: {
+            isSelected: function (buttonName) {
+                var isSelected = false;
+                this.selectedButtons.forEach(function (selectedButtonName) {
+                    if (selectedButtonName == buttonName) isSelected = true;
+                });
+                return isSelected;
+            },
+            createButtonElement: function (button) {
+                var attributes = '';
+                if (button.attributes !== undefined && button.attributes.length) {
+                    button.attributes.forEach(function (buttonAttribute) {
+                        attributes += buttonAttribute.key + "='" + buttonAttribute.value + "' ";
+                    });
+                }
+                var hrefAttribute = button.url !== null ? "href='" + button.url + "'" : "";
+                var iconElement = "<span class='" + button.icon.className + "'></span>";
+                var buttonElement = "<a " + hrefAttribute + " data-toggle='tooltip' data-placement='bottom' title='' class='" + button.className + "' " + attributes + ">" + iconElement + button.content + "</a>";
+                return buttonElement;
+            }
+
+        }
+    };
+</script>

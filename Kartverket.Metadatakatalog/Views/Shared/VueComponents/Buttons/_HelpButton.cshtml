@@ -1,0 +1,36 @@
+﻿<script type="text/x-template" id="helpButtonTemplate">
+    <div v-html="htmlElement"></div>
+</script>
+
+<script>
+    function getHelpButton(resultItem) {
+        var HelpButton = {
+            name: "helpButton",
+            template: "#helpButtonTemplate",
+            props: ["resultItem"],
+            data: function () {
+                return {
+                    button: {
+                        content: "Hjelp",
+                        className: "btn",
+                        url: "#help",
+                        title: "",
+                        icon: {
+                            className: "glyphicon glyphicon-question-sign"
+                        },
+                        attributes: []
+                    },
+                    htmlElement: null
+                }
+            },
+            created: function () {
+                if (this.button.url == null) {
+                    this.button.attributes.push({ key: 'disabled', value: 'disabled' });
+                    this.button.className += " disabled";
+                }
+                this.htmlElement = this.$parent.createButtonElement(this.button);
+            }
+        };
+        return HelpButton;
+    }
+</script>

@@ -1,0 +1,39 @@
+﻿<script type="text/x-template" id="showCoverageButtonTemplate">
+    <div v-html="htmlElement"></div>
+</script>
+
+<script>
+    function getShowCoverageButton(resultItem) {
+        var ShowCoverageButton = {
+            name: "showCoverageButton",
+            template: "#showCoverageButtonTemplate",
+            props: ["resultItem"],
+            data: function () {
+                return {
+                    button: {
+                        content: "Vis dekningskart",
+                        className: "btn",
+                        url: this.resultItem.CoverageUrl,
+                        title: "Vis dekningskart for " + this.resultItem.Title,
+                        icon: {
+                            className: "fa fa-globe"
+                        },
+                        attributes: [
+                            { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'visdekningskart')" }
+                        ]
+                    },
+                    htmlElement: null
+                }
+            },
+            created: function () {
+                if (this.button.url == null) {
+                    this.button.attributes.push({ key: 'disabled', value: 'disabled' });
+                    this.button.className += " disabled";
+                }
+                this.htmlElement = this.$parent.createButtonElement(this.button);
+            }
+        };
+        return ShowCoverageButton;
+    }
+</script>
+

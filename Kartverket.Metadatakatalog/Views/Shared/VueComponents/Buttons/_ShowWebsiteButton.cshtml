@@ -1,0 +1,43 @@
+﻿<script type="text/x-template" id="showWebsiteButtonTemplate">
+    <div v-html="htmlElement"></div>
+</script>
+
+<script>
+    function getShowWebsiteButton(resultItem) {
+        var ShowWebsiteButton = {
+            name: "showWebsiteButton",
+            template: "#showWebsiteButtonTemplate",
+            props: ["resultItem"],
+            data: function () {
+                return {
+                    button: {
+                        content: "Besøk nettside",
+                        className: "btn",
+                        url: this.resultItem.ShowWebsiteUrl !== undefined ? this.resultItem.ShowWebsiteUrl : null,
+                        title: "Besøk nettside for " + this.resultItem.Title,
+                        icon: {
+                            className: "custom-icon custom-icon-eksternlink"
+                        },
+                        attributes: [
+                            { key: "onClick", value: "ga('send', 'event', 'MerInfo', 'nettside')" }
+                        ]
+                    },
+                    htmlElement: null
+                }
+            },
+            created: function () {
+                if (this.button.url == null) {
+                    this.button.attributes.push({ key: 'disabled', value: 'disabled' });
+                    this.button.className += " disabled";
+                }
+                this.htmlElement = this.$parent.createButtonElement(this.button);
+            }
+        };
+        return ShowWebsiteButton;
+    }
+</script>
+
+
+
+
+
