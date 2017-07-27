@@ -6,10 +6,104 @@
 @* Template for Underliggende distribusjoner *@
 @Html.Partial("_UnderlayingDistributions")
 
+@Html.Partial("VueComponents/_TableRowButtons")
+
+
+@*Template for a table row*@
+
+<script type="text/x-template" id="resultItemRow">
+    <div>
+        <div class="resultItemRow">
+            <div class="row">
+
+                @*Tittel*@
+                <div class="col-sm-3">
+                    <div class="resultItemRowTitle">
+                        <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                            <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+                        </a>
+                    </div>
+                </div>
+
+                @*Distribusjonstype *@
+                <div class="col-sm-2">
+                    <span v-bind:title="resultItem.Type" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.Type}}</span>
+                </div>
+
+                @*Organisasjon*@
+                <div class="col-sm-2">
+                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                        {{resultItem.Organization}}
+                    </a>
+                </div>
+
+                @*Åpne data*@
+                <div class="col-sm-1">
+                    <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                </div>
+
+                <div is="table-row-buttons" v-bind:metadata="resultItem"></div>
+
+
+                @*Kart*@
+                <div class="col-xs-1">
+                    <a v-bind:id="mapLink.mapLinkId" v-bind:href="mapLink.url" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
+                        <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
+                    </a>
+                </div>
+
+                @*Last ned*@
+                <div class="col-xs-1">
+                    <a v-on:click="!resultItem.IsRestricted ? addToCart() : null"
+                       v-if="resultItem.ShowDownloadService"
+                       v-bind:href='[itemAddToCart.href ? itemAddToCart.href : "" ]'
+                       data-toggle='tooltip'
+                       data-placement='bottom'
+                       onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
+                       v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
+                       class="add-to-cart-btn"
+                       v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
+                        <span class="custom-icon custom-icon-handlekurv"></span>
+                        {{resultItem.addedToCart}}
+                    </a>
+
+                    <a v-else-if="resultItem.ShowDownloadLink"
+                       v-bind:href="resultItem.DownloadUrl"
+                       onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
+                       data-toggle='tooltip'
+                       data-placement='bottom'
+                       v:bind:title='"Last ned datasett for " + resultItem.Title'
+                       target="_blank">
+                        <span class="custom-icon custom-icon-lastned"></span>
+                    </a>
+
+                    <a v-else
+                       v-bind:title='"Last ned datasett for " + resultItem.Title'
+                       class="disabled">
+                        <span class="custom-icon custom-icon-lastned"></span>
+                    </a>
+                </div>
+                <div class="col-xs-2">
+                    <div v-for="format in resultItem.DistributionFormats">
+                        <span class="label label-default" style="margin-bottom: 1px; width:auto">{{format.Name}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+    </div>
+
+</script>
+
+
+
 <script>
     //Component
     var ResultItemComponent = {
         template: "#resultItemRow",
+        name: "resultItem",
         props: ["resultItem"],
         data: function () {
             var data = {
@@ -24,7 +118,8 @@
             return data;
         },
         components: {
-            distributionRows: distributionRows
+            distributionRows: distributionRows,
+            TableRowButtons: TableRowButtons
         },
         mounted: function () {
             this.getCartButtonStatus();
