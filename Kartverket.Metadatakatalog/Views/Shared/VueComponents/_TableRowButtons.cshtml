@@ -1,0 +1,36 @@
+﻿@Html.Partial("VueComponents/_Buttons")
+@Html.Partial("VueComponents/Helpers/_ConvertModelToResultItem")
+
+<script type="text/x-template" id="table-row-buttons-template">
+    <div>
+        <div is="Buttons"
+             v-bind:result-item="resultItem"
+             v-bind:button-type="'tableRow'"
+             v-bind:selected-buttons="[
+             'showInMapButton',
+             'addToCartButton'
+             ]">
+        </div>
+    </div>
+</script>
+
+<script>
+    var TableRowButtons = {
+        template: "#table-row-buttons-template",
+        name: "table-row-buttons",
+        props: ["metadata"],
+        data: function () {
+            var data = {
+                buttons: [],
+                buttonElements: [],
+                resultItem: this.metadata
+            };
+            return data;
+        },
+        components: {
+            Buttons: Buttons
+        }
+    };
+
+</script>
+
