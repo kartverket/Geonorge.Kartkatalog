@@ -18,7 +18,7 @@
                     button: {
                         id: "",
                         content: "Legg i kurv",
-                        className: "btn",
+                        className: this.defaultButtonClass,
                         url: null,
                         title: "Legg " + this.resultItem.Title + " i kurv",
                         icon: {
@@ -72,7 +72,7 @@
                     this.button.content = "Last ned";
                     this.button.icon.className = "custom-icon custom-icon-lastned";
                 } else {
-                    this.button.className = "btn disabled";
+                    this.button.className = this.defaultButtonClass + " disabled";
                     this.button.url = null;
                     this.button.attributes = [
                             { key: "disabled", value: "disabled" }
@@ -95,14 +95,14 @@
                                 if (this.resultItem !== undefined) {
                                     // Temainndelte datasett
                                     if (this.resultItem.Uuid == addedOrderItemUuid) {
-                                        this.button.className = "btn added";
+                                        this.button.className = this.defaultButtonClass + " added";
                                         this.button.content = "Lagt i kurv";
                                         this.button.title = "Allerede lagt i kurv";
                                     }
                                 } else if (this.resultItem !== undefined) {
                                     // Løse datasett
                                     if (this.resultItem.Uuid == addedOrderItemUuid) {
-                                        this.button.className = "btn";
+                                        this.button.className = this.defaultButtonClass;
                                         this.button.content = "Legg i kurv";
                                         this.button.title = "Legg " + this.resultItem.Title + " i kurv";
                                     }
@@ -150,7 +150,7 @@
                         orderItemCount += 1;
                         $('#orderitem-count').text(orderItemCount);
                         updateShoppingCart();
-                        this.button.className = "btn added";
+                        this.button.className = this.defaultButtonClass + " added";
                         this.button.content = "Lagt i kurv";
                         this.button.title = "Allerede lagt i kurv";
                     } else {
@@ -164,7 +164,7 @@
                         updateShoppingCart();
                         clearAlertMessage();
                         showAlert(item.name + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
-                        this.button.className = "btn";
+                        this.button.className = this.defaultButtonClass;
                         this.button.content = "Legg i kurv";
                         this.button.title = "Legg " + this.resultItem.Title + " i kurv";
                     }

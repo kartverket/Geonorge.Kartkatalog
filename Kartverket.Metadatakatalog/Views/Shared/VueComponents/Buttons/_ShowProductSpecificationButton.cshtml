@@ -7,12 +7,12 @@
         var ShowProductSpecificationButton = {
             name: "showProductSpecificationButton",
             template: "#showProductSpecificationButtonTemplate",
-            props: ["resultItem"],
+            props: ["resultItem", "defaultButtonClass"],
             data: function () {
                 return {
                     button: {
                         content: "Vis produktspesifikasjon",
-                        className: "btn",
+                        className: this.defaultButtonClass,
                         url: this.resultItem.ProductSpecificationUrl !== undefined ? this.resultItem.ProductSpecificationUrl : null,
                         title: "Vis produktark for " + this.resultItem.Title,
                         icon: {

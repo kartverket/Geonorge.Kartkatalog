@@ -7,12 +7,12 @@
         var HelpButton = {
             name: "helpButton",
             template: "#helpButtonTemplate",
-            props: ["resultItem"],
+            props: ["resultItem", "defaultButtonClass"],
             data: function () {
                 return {
                     button: {
                         content: "Hjelp",
-                        className: "btn",
+                        className: this.defaultButtonClass,
                         url: "#help",
                         title: "",
                         icon: {

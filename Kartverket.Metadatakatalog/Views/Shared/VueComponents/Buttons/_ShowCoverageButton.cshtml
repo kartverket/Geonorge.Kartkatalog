@@ -7,12 +7,12 @@
         var ShowCoverageButton = {
             name: "showCoverageButton",
             template: "#showCoverageButtonTemplate",
-            props: ["resultItem"],
+            props: ["resultItem", "defaultButtonClass"],
             data: function () {
                 return {
                     button: {
                         content: "Vis dekningskart",
-                        className: "btn",
+                        className: this.defaultButtonClass,
                         url: this.resultItem.CoverageUrl,
                         title: "Vis dekningskart for " + this.resultItem.Title,
                         icon: {

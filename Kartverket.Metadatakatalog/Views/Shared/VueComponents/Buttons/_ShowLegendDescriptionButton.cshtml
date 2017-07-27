@@ -7,12 +7,12 @@
         var ShowLegendDescriptionButton = {
             name: "showLegendDescriptionButton",
             template: "#showLegendDescriptionButtonTemplate",
-            props: ["resultItem"],
+            props: ["resultItem", "defaultButtonClass"],
             data: function () {
                 return {
                     button: {
                         content: "Vis tegneregler",
-                        className: "btn",
+                        className: this.defaultButtonClass,
                         url: this.resultItem.LegendDescriptionUrl !== undefined ? this.resultItem.LegendDescriptionUrl : null,
                         title: "Vis tegneregler for " + this.resultItem.Title,
                         icon: {

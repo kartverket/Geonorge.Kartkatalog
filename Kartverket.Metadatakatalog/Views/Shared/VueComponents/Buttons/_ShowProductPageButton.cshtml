@@ -7,12 +7,12 @@
         var ShowProductPageButton = {
             name: "showProductPageButton",
             template: "#showProductPageButtonTemplate",
-            props: ["resultItem"],
+            props: ["resultItem", "defaultButtonClass"],
             data: function () {
                 return {
                     button: {
                         content: "Vis produktside",
-                        className: "btn",
+                        className: this.defaultButtonClass,
                         url: this.resultItem.ProductPageUrl !== undefined ? this.resultItem.ProductPageUrl : null,
                         title: "Vis produktside for " + this.resultItem.Title,
                         icon: {

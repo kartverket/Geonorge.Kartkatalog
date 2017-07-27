@@ -7,12 +7,12 @@
         var ShowWebsiteButton = {
             name: "showWebsiteButton",
             template: "#showWebsiteButtonTemplate",
-            props: ["resultItem"],
+            props: ["resultItem", "defaultButtonClass"],
             data: function () {
                 return {
                     button: {
                         content: "Besøk nettside",
-                        className: "btn",
+                        className: this.defaultButtonClass,
                         url: this.resultItem.ShowWebsiteUrl !== undefined ? this.resultItem.ShowWebsiteUrl : null,
                         title: "Besøk nettside for " + this.resultItem.Title,
                         icon: {

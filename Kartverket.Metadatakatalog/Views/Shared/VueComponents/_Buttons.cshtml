@@ -13,29 +13,29 @@
     <div>
         <div v-if="hasComponentContainer">
             <div v-bind:class="componentContainerClassName">
-                <div v-if="isSelected('showInMapButton')" is="show-in-map-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-                <div v-if="isSelected('addToCartButton')" is="add-to-cart-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-                <div v-if="isSelected('showCoverageButton')" is="show-coverage-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-                <div v-if="isSelected('helpButton')" is="help-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-                <div v-if="isSelected('contactOwnerButton')" is="contact-owner-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-                <div v-if="isSelected('showProductSheetButton')" is="show-product-sheet-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-                <div v-if="isSelected('showProductSpecificationButton')" is="show-product-specification-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-                <div v-if="isSelected('showLegendDescriptionButton')" is="show-legend-description-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-                <div v-if="isSelected('showWebsiteButton')" is="show-website-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-                <div v-if="isSelected('showProductPageButton')" is="show-product-page-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showInMapButton')" is="show-in-map-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('addToCartButton')" is="add-to-cart-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showCoverageButton')" is="show-coverage-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('helpButton')" is="help-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('contactOwnerButton')" is="contact-owner-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showProductSheetButton')" is="show-product-sheet-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showProductSpecificationButton')" is="show-product-specification-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showLegendDescriptionButton')" is="show-legend-description-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showWebsiteButton')" is="show-website-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+                <div v-if="isSelected('showProductPageButton')" is="show-product-page-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
             </div>
         </div>
         <div v-else>
-            <div v-if="isSelected('showInMapButton')" is="show-in-map-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-            <div v-if="isSelected('addToCartButton')" is="add-to-cart-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-            <div v-if="isSelected('showCoverageButton')" is="show-coverage-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-            <div v-if="isSelected('helpButton')" is="help-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-            <div v-if="isSelected('contactOwnerButton')" is="contact-owner-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-            <div v-if="isSelected('showProductSheetButton')" is="show-product-sheet-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-            <div v-if="isSelected('showProductSpecificationButton')" is="show-product-specification-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-            <div v-if="isSelected('showLegendDescriptionButton')" is="show-legend-description-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-            <div v-if="isSelected('showWebsiteButton')" is="show-website-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
-            <div v-if="isSelected('showProductPageButton')" is="show-product-page-button" v-bind:result-item="resultItem" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showInMapButton')" is="show-in-map-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('addToCartButton')" is="add-to-cart-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showCoverageButton')" is="show-coverage-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('helpButton')" is="help-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('contactOwnerButton')" is="contact-owner-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showProductSheetButton')" is="show-product-sheet-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showProductSpecificationButton')" is="show-product-specification-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showLegendDescriptionButton')" is="show-legend-description-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showWebsiteButton')" is="show-website-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
+            <div v-if="isSelected('showProductPageButton')" is="show-product-page-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:class="componentClassName"></div>
         </div>
     </div>
 </script>
@@ -59,6 +59,11 @@
             ShowProductPageButton: getShowProductPageButton(this.resultItem)
         },
         computed: {
+            defaultButtonClass: function () {
+                var defaultButtonClass = "";
+                if (this.buttonType == 'topRow') { defaultButtonClass = "btn" }
+                return defaultButtonClass;
+            },
             hasComponentContainer: function () {
                 hasComponentContainer = false;
                 if (this.buttonType == 'topRow') { hasComponentContainer = true }
