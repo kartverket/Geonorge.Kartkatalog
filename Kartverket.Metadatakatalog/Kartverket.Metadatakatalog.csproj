@@ -1136,6 +1136,7 @@
     <Content Include="Views\Shared\VueComponents\Buttons\_ShowLegendDescriptionButton.cshtml" />
     <Content Include="Views\Shared\VueComponents\Buttons\_ShowWebsiteButton.cshtml" />
     <Content Include="Views\Shared\VueComponents\Buttons\_ShowProductPageButton.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Helpers\_ConvertModelToResultItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

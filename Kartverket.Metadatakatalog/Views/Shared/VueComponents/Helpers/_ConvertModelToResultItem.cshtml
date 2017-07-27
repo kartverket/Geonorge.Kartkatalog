@@ -1,0 +1,73 @@
+﻿<script>
+    function makeSeoFriendlyString(text) {
+        if (text != null) {
+            text = text.toLowerCase();
+
+            // replace & with and
+            text = text.replace(/\&+/g, "and");
+
+            // remove characters
+            text = text.replace("'", "");
+
+            // replace norwegian characters
+            text = text.replace("å", "a").replace("æ", "ae").replace("ø", "o");
+
+            // remove invalid characters
+            text = text.replace(/[^a-z0-9]/g, "-");
+
+            // remove duplicates
+            text = text.replace(/-+/g, "-");
+
+            // trim leading & trailing characters
+            text = text.trim('-');
+        }
+        return text;
+    }
+
+    function convertMetadataToResultItem(item) {
+
+        var MapUrl = null;
+        if (item.MapLink !== undefined){
+            MapUrl = item.MapLink;
+        }else if(showInMapUrl !== undefined){
+            MapUrl = showInMapUrl;
+        }
+
+        return {
+            ShowMapLink: item.CanShowMapUrl,
+            ShowServiceMapLink: item.CanShowServiceMapUrl,
+            MapUrl: MapUrl,
+            ServiceUrl: item.ServiceLink,
+            ServiceUuid: item.ServiceUuid,
+            ServiceDistributionAccessConstraint: item.ServiceDistributionAccessConstraint,
+            DistributionUrl: item.DistributionDetails !== undefined && item.DistributionDetails.URL !== undefined ? item.DistributionDetails.URL : null,
+
+            ShowDownloadService: item.CanShowDownloadService,
+            ShowDownloadLink: item.CanShowDownloadUrl,
+            DownloadUrl: item.DownloadUrl,
+
+            CoverageUrl: coverageUrl,
+            ProductSheetUrl: productSheetUrl,
+            ProductSpecificationUrl: productSpecificationUrl,
+            LegendDescriptionUrl: legendDescriptionUrl,
+            ShowWebsiteUrl: showWebsiteUrl,
+            ProductPageUrl: productPageUrl,
+
+            ContactOwner: contactOwner,
+
+            IsRestricted: item.AccessIsRestricted,
+            IsOffline: item.AccessIsProtected,
+            IsOpendata: item.AccessIsOpendata,
+
+            DistributionFormats: item.DistributionFormats,
+
+            Organization: item.Organization !== undefined ? item.Organization : null,
+            OrganizationSeoName: item.ContactOwner !== undefined && item.ContactOwner.Organization !== undefined ? makeSeoFriendlyString(item.ContactOwner.Organization) : null,
+            Title: item.Title,
+            TitleSeo: makeSeoFriendlyString(item.Title),
+            Type: item.Protocol,
+
+            Uuid: item.Uuid
+        }
+    }
+</script>
