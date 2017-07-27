@@ -1,0 +1,49 @@
+﻿@Html.Partial("VueComponents/_Buttons")
+@Html.Partial("VueComponents/Helpers/_ConvertModelToResultItem")
+
+<script type="text/x-template" id="top-row-buttons-template">
+    <div>
+        <div is="Buttons"
+             v-bind:result-item="resultItem"
+             v-bind:button-type="'topRow'"
+             v-bind:selected-buttons="[
+             'showInMapButton',
+             'addToCartButton',
+             'showCoverageButton',
+             'helpButton',
+             'contactOwnerButton',
+             'showProductSheetButton',
+             'showProductSpecificationButton',
+             'showLegendDescriptionButton',
+             'showWebsiteButton',
+             'showProductPageButton'
+             ]">
+        </div>
+    </div>
+</script>
+
+<script>
+    var TopRowButtons = {
+        template: "#top-row-buttons-template",
+        name: "top-row-buttons",
+        props: ["metadata"],
+        data: function () {
+            var data = {
+                buttons: [],
+                buttonElements: [],
+                resultItem: convertMetadataToResultItem(this.metadata)
+            };
+            return data;
+        },
+        components: {
+            Buttons: Buttons
+        },
+        methods: {
+            showServiceMapLink: function () {
+                if (this.metadata.ServiceUrl) return true;
+                else return false;
+            }
+        }
+    };
+
+</script>
