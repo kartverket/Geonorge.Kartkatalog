@@ -22,7 +22,11 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
 
-        // GET: ServiceDirectory
+        /// <summary>
+        /// Contains service and service layers. 
+        /// </summary>
+        /// <param name="parameters">Facets</param>
+        /// <returns>/apier-og-tjenester</returns>
         public ActionResult Index(SearchParameters parameters)
         {
             parameters.AddComplexFacetsIfMissing();

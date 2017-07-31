@@ -22,7 +22,15 @@ namespace Kartverket.Metadatakatalog.Controllers
             _metadataService = metadataService;
             _searchService = searchService;
         }
-
+        
+        /// <summary>
+        /// Metadata page. 
+        /// </summary>
+        /// <param name="uuid"></param>
+        /// <param name="organization"></param>
+        /// <param name="title"></param>
+        /// <param name="orderby"></param>
+        /// <returns>/metadata/{organization}/{title}/{uuid}</returns>
         public ActionResult Index(string uuid, string organization = null, string title = null, string orderby = "title")
         {
             MetadataViewModel model = null;
@@ -69,6 +77,12 @@ namespace Kartverket.Metadatakatalog.Controllers
             return model;
         }
 
+
+        /// <summary>
+        /// Shows metadata by selected organization
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns>/etatvis-oversikt/{organization}</returns>
         public ActionResult Organization(SearchByOrganizationParameters parameters)
         {
             parameters.AddDefaultFacetsIfMissing();

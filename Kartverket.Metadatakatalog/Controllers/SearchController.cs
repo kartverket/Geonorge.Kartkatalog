@@ -18,6 +18,12 @@ namespace Kartverket.Metadatakatalog.Controllers
             _searchService = searchService;
         }
 
+
+        /// <summary>
+        /// Main search page. Contains all datasets
+        /// </summary>
+        /// <param name="parameters">Facets</param>
+        /// <returns>/search</returns>
         public ActionResult Index(SearchParameters parameters)
         {
             parameters.AddComplexFacetsIfMissing();
@@ -28,6 +34,11 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Shows datasets by selected municipality or county.
+        /// </summary>
+        /// <param name="parameters">Uses AreaCode to find selected municipality or county. </param>
+        /// <returns>/hva-finnes-i-kommunen-eller-fylket</returns>
         public ActionResult Area(SearchByAreaParameters parameters)
         {
             parameters.AddDefaultFacetsIfMissing();
