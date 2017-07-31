@@ -33,7 +33,6 @@ namespace Kartverket.Metadatakatalog.Controllers
             parameters.AddDefaultFacetsIfMissing();
             parameters.CreateFacetOfArea();
             parameters.AddComplexFacetsIfMissing();
-            FixAreaParameters(parameters);
 
             var searchResult = _searchService.Search(parameters);
             var model = new SearchByAreaViewModel(parameters, searchResult);
@@ -44,14 +43,6 @@ namespace Kartverket.Metadatakatalog.Controllers
         protected override void OnException(ExceptionContext filterContext)
         {
             Log.Error("Error", filterContext.Exception);
-        }
-
-        private static void FixAreaParameters(SearchByAreaParameters parameters)
-        {
-            if (parameters.AreaCode == "omrade")
-            {
-                parameters.AreaCode = null;
-            }
         }
     }
 }
