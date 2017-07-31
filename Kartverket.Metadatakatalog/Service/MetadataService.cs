@@ -64,27 +64,31 @@ namespace Kartverket.Metadatakatalog.Service
                 tmp.DistributionFormats = GetDistributionTypes(simpleMetadata.DistributionsFormats);
                 tmp.Organization = simpleMetadata.ContactMetadata.Organization;
                 tmp.ShowDetailsUrl = "/metadata/org/title/" + uuid;
-                tmp.ServiceDistributionAccessConstraint = simpleMetadata.Constraints.AccessConstraints;
-                tmp.Protocol = simpleMetadata.DistributionDetails.Protocol;
+                if (simpleMetadata.Constraints != null)
+                    tmp.ServiceDistributionAccessConstraint = simpleMetadata.Constraints.AccessConstraints;
+                if (simpleMetadata.DistributionDetails != null)
+                {
+                    tmp.Protocol = simpleMetadata.DistributionDetails.Protocol;
                 
-                //Vis kart
-                if (SimpleMetadataUtil.ShowMapLink(simpleMetadata))
-                {
-                    tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(simpleMetadata);
-                    tmp.CanShowMapUrl = true;
-                }
+                    //Vis kart
+                    if (SimpleMetadataUtil.ShowMapLink(simpleMetadata))
+                    {
+                        tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(simpleMetadata);
+                        tmp.CanShowMapUrl = true;
+                    }
 
-                //Last ned
-                if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadata))
-                {
-                    tmp.DownloadUrl = simpleMetadata.DistributionDetails.URL; // TODO sjekk om det er liktig url!
-                    tmp.CanShowDownloadUrl = true;
-                }
-                //Handlekurv
-                if (SimpleMetadataUtil.ShowDownloadService(simpleMetadata))
-                {
-                    tmp.DownloadUrl = simpleMetadata.DistributionDetails.URL; // TODO sjekk om det er liktig url!
-                    tmp.CanShowDownloadService = true;
+                    //Last ned
+                    if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadata))
+                    {
+                        tmp.DownloadUrl = simpleMetadata.DistributionDetails.URL; // TODO sjekk om det er liktig url!
+                        tmp.CanShowDownloadUrl = true;
+                    }
+                    //Handlekurv
+                    if (SimpleMetadataUtil.ShowDownloadService(simpleMetadata))
+                    {
+                        tmp.DownloadUrl = simpleMetadata.DistributionDetails.URL; // TODO sjekk om det er liktig url!
+                        tmp.CanShowDownloadService = true;
+                    }
                 }
 
                 //Åpne data, begrenset, skjermet
