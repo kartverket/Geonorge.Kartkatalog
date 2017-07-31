@@ -7,7 +7,6 @@ namespace Kartverket.Metadatakatalog.Controllers
 {
     public class ApplicationController : Controller
     {
-        // GET: Application
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IApplicationService _applicationService;
@@ -18,7 +17,11 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
 
-        // GET: ServiceDirectory
+        /// <summary>
+        /// Shows "Kartløsninger". Contains metadata of type "Application"
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns>/kartlosninger</returns>
         public ActionResult Index(SearchParameters parameters)
         {
             parameters.AddComplexFacetsIfMissing();
