@@ -2,20 +2,6 @@
 
 
 <script>
-    // coverageUrl
-    var coverageUrl = null;
-    @if (!string.IsNullOrEmpty(Model.CoverageUrl))
-    {
-        if (Model.CoverageUrl.IndexOf("TYPE:") != -1)
-        {
-            @:coverageUrl = "@Model.GetCoverageLink()";
-            }
-        else
-        {
-            @:coverageUrl = "@Model.CoverageUrl";
-            }
-    }
-
 
     // contactOwner
     var contactOwner = {};

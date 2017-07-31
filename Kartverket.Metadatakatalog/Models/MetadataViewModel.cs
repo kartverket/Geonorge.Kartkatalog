@@ -289,42 +289,51 @@ namespace Kartverket.Metadatakatalog.Models
             return ServiceDistributionAccessConstraint == "Beskyttet" || ServiceDistributionAccessConstraint == "restricted" || ServiceDistributionAccessConstraint == "norway digital restricted";
         }
 
-        public string GetCoverageLink(){
+        public string GetCoverageLink()
+        {
 
-            string CoverageLink = "";
-            var coverageStr = CoverageUrl;
-            var startPos = 5;
-            var endPosType = coverageStr.IndexOf("@PATH");
-            var typeStr = coverageStr.Substring(startPos, endPosType - startPos);
-
-            var endPath = coverageStr.IndexOf("@LAYER");
-            var pathStr = coverageStr.Substring(endPosType + startPos + 1, endPath - (endPosType + startPos + 1));
-
-            var startLayer = endPath + 7;
-            var endLayer = coverageStr.Length - startLayer;
-            var layerStr = coverageStr.Substring(startLayer, endLayer);
-
-            int zoomLevel = ZoomLevel();
-
-            if (typeStr == "WMS")
+            if (!string.IsNullOrEmpty(CoverageUrl))
             {
-                CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel + "/269663/6802350/l/wms/[" + pathStr + "]/+" + layerStr;
-            }
+                if (CoverageUrl.IndexOf("TYPE:") != -1)
+                {
+                    string CoverageLink = "";
+                    var coverageStr = CoverageUrl;
+                    var startPos = 5;
+                    var endPosType = coverageStr.IndexOf("@PATH");
+                    var typeStr = coverageStr.Substring(startPos, endPosType - startPos);
 
-            else if (typeStr == "WFS")
-            {
-                CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel + "/255216/6653881/l/wfs/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
-            }
+                    var endPath = coverageStr.IndexOf("@LAYER");
+                    var pathStr = coverageStr.Substring(endPosType + startPos + 1, endPath - (endPosType + startPos + 1));
 
-            else if (typeStr == "GeoJSON")
-            {
-                CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel + "/355422/6668909/l/geojson/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
-            }
+                    var startLayer = endPath + 7;
+                    var endLayer = coverageStr.Length - startLayer;
+                    var layerStr = coverageStr.Substring(startLayer, endLayer);
 
-            return CoverageLink;
-        
+                    int zoomLevel = ZoomLevel();
+
+                    if (typeStr == "WMS")
+                    {
+                        CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel +
+                                       "/269663/6802350/l/wms/[" + pathStr + "]/+" + layerStr;
+                    }
+
+                    else if (typeStr == "WFS")
+                    {
+                        CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel +
+                                       "/255216/6653881/l/wfs/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                    }
+
+                    else if (typeStr == "GeoJSON")
+                    {
+                        CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel +
+                                       "/355422/6668909/l/geojson/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                    }
+
+                    return CoverageLink;
+                }
+            }
+            return CoverageUrl;
         }
-
 
         public string GetCoverageParams()
         {

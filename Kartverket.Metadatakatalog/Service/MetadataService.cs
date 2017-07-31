@@ -887,6 +887,8 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.MapLink = metadata.MapUrl();
             metadata.ServiceLink = metadata.ServiceUrl();
 
+            metadata.CoverageUrl = metadata.GetCoverageLink();
+
             return metadata;
         }
 
