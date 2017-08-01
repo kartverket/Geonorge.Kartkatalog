@@ -6,10 +6,7 @@
         <div is="Buttons"
              v-bind:result-item="resultItem"
              v-bind:button-type="'tableRow'"
-             v-bind:selected-buttons="[
-             'showInMapButton',
-             'addToCartButton'
-             ]">
+             v-bind:selected-buttons="this.listOfButtons">  
         </div>
     </div>
 </script>
@@ -18,7 +15,7 @@
     var TableRowButtons = {
         template: "#table-row-buttons-template",
         name: "table-row-buttons",
-        props: ["metadata"],
+        props: ["metadata", "listOfButtons"],
         data: function () {
             var data = {
                 buttons: [],
