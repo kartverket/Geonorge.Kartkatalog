@@ -7,7 +7,7 @@
         var ShowInMapButton = {
             name: "showInMapButton",
             template: "#showInMapButtonTemplate",
-            props: ["resultItem", "defaultButtonClass"],
+            props: ["resultItem", "defaultButtonClass", "buttonType"],
             data: function () {
                 return {
                     button: {
@@ -47,6 +47,10 @@
                     this.button.id = "";
                     this.button.icon.id = "";
                     this.button.attributes = [];
+                }
+
+                if (this.buttonType === "tableRow") {
+                    this.button.content = "";
                 }
 
                 this.htmlElement = this.$parent.createButtonElement(this.button);

@@ -12,8 +12,8 @@
         var ShowInMapButton = {
             name: "addToCartButton",
             template: "#addToCartButtonTemplate",
-            props: ["resultItem", "defaultButtonClass"],
-            data: function () {
+            props: ["resultItem", "defaultButtonClass", "buttonType"],
+            data: function() {
                 return {
                     button: {
                         id: "",
@@ -26,12 +26,19 @@
                         },
                         attributes: [
                             { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'leggikurv')" }
-                        ]
-                    },
+                        ],
+                        showContent: true
+            },
                     htmlElement: null
                 }
             },
-            created: function () {
+            created: function() {
+                if (this.buttonType === "tableRow") {
+                    this.button.content = "";
+                    this.button.showContent = false;
+                }
+                console.log("test " + this.showContent);
+
                 if (this.resultItem.ShowDownloadService) {
                     this.getCartButtonStatus();
 
@@ -53,10 +60,10 @@
                                 addToCartEventParamater = "&addtocart_event_id=" + this.resultItem.Uuid;
                             }
 
-                            var downloadSignInUrl = '@Html.DownloadUrl()'
-                           + 'AuthServices/SignIn?ReturnUrl='
-                           + encodeURIComponent(baseUrl)
-                           + encodeURIComponent(addToCartEventParamater);
+                            var downloadSignInUrl = '@Html.DownloadUrl()' +
+                                'AuthServices/SignIn?ReturnUrl=' +
+                                encodeURIComponent(baseUrl) +
+                                encodeURIComponent(addToCartEventParamater);
 
                             this.button.url = addToCartUrl = '@Html.KartkatalogenUrl()'
                                  + 'AuthServices/SignIn?ReturnUrl='
@@ -69,7 +76,9 @@
                             { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'lastned')" },
                             { key: "target", value: "_blank" }
                     ];
-                    this.button.content = "Last ned";
+                    if (this.button.showContent) {
+                        this.button.content = "Last ned";
+                    }
                     this.button.icon.className = "custom-icon custom-icon-lastned";
                 } else {
                     this.button.className = this.defaultButtonClass + " disabled";
@@ -77,7 +86,9 @@
                     this.button.attributes = [
                             { key: "disabled", value: "disabled" }
                     ];
-                    this.button.content = "Last ned";
+                    if (this.button.showContent) {
+                        this.button.content = "Last ned";
+                    }
                 }
                 this.htmlElement = this.$parent.createButtonElement(this.button);
             },
@@ -96,14 +107,18 @@
                                     // Temainndelte datasett
                                     if (this.resultItem.Uuid == addedOrderItemUuid) {
                                         this.button.className = this.defaultButtonClass + " added";
-                                        this.button.content = "Lagt i kurv";
+                                        if (this.button.showContent) {
+                                            this.button.content = "Lagt i kurv";
+                                        }
                                         this.button.title = "Allerede lagt i kurv";
                                     }
                                 } else if (this.resultItem !== undefined) {
                                     // Løse datasett
                                     if (this.resultItem.Uuid == addedOrderItemUuid) {
                                         this.button.className = this.defaultButtonClass;
-                                        this.button.content = "Legg i kurv";
+                                        if (this.button.showContent) {
+                                            this.button.content = "Legg i kurv";
+                                        }
                                         this.button.title = "Legg " + this.resultItem.Title + " i kurv";
                                     }
                                 }
@@ -151,7 +166,9 @@
                         $('#orderitem-count').text(orderItemCount);
                         updateShoppingCart();
                         this.button.className = this.defaultButtonClass + " added";
-                        this.button.content = "Lagt i kurv";
+                        if (this.button.showContent) {
+                            this.button.content = "Lagt i kurv";
+                        }
                         this.button.title = "Allerede lagt i kurv";
                     } else {
                         var index = orderItems.indexOf(item.uuid);
@@ -165,7 +182,9 @@
                         clearAlertMessage();
                         showAlert(item.name + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
                         this.button.className = this.defaultButtonClass;
-                        this.button.content = "Legg i kurv";
+                        if (this.button.showContent) {
+                            this.button.content = "Legg i kurv";
+                        }
                         this.button.title = "Legg " + this.resultItem.Title + " i kurv";
                     }
                     this.htmlElement = this.$parent.createButtonElement(this.button);

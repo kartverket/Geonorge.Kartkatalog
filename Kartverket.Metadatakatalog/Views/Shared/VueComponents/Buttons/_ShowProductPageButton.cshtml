@@ -7,7 +7,7 @@
         var ShowProductPageButton = {
             name: "showProductPageButton",
             template: "#showProductPageButtonTemplate",
-            props: ["resultItem", "defaultButtonClass"],
+            props: ["resultItem", "defaultButtonClass", "buttonType"],
             data: function () {
                 return {
                     button: {
@@ -33,6 +33,9 @@
                     this.button.className += " disabled";
                 }
                 this.htmlElement = this.$parent.createButtonElement(this.button);
+                if (this.buttonType === "tableRow") {
+                    this.button.content = "";
+                }
             }
         };
         return ShowProductPageButton;
