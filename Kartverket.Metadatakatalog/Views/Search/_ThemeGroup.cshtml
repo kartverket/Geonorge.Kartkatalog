@@ -83,8 +83,8 @@ if (items.Any())
         </div>
         <div v-show="expanded">
             <div v-if="theme.Metadata.length">
-                <div v-for="subItem in theme.Metadata">
-                    <div is="metadata-item" v-bind:metadata="subItem"></div>
+                <div v-for="subItem in theme.Metadata" class="table-border-bottom">
+                    <div style="background-color:rgb(238, 238, 238)" is="metadata-item" v-bind:metadata="subItem"></div>
                 </div>
             </div>
             <div v-if="theme.Children.length">
