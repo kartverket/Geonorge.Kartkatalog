@@ -30,55 +30,6 @@
 </section>
 
 
-@* Vue code for resultitem*@
-@Html.Partial("_resultItemRow")
-
-@* Vue template for resultItem*@
-@*Template for a table row*@
-
-<script type="text/x-template" id="resultItemRow">
-    <div>
-        <div class="resultItemRow">
-            <div class="row">
-
-                @*Tittel*@
-                <div class="col-sm-5">
-                    <div class="resultItemRowTitle">
-                        <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                            <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
-                        </a>
-                    </div>
-                </div>
-
-                @*Organisasjon*@
-                <div class="col-sm-4">
-                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
-                        {{resultItem.Organization}}
-                    </a>
-                </div>
-
-                @*Åpne data*@
-                <div class="col-xs-1 text-center">
-                    <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
-                </div>
-
-                @*Kart*@
-                <div class="col-xs-1 text-center">
-                    <div class="center-block" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
-                </div>
-
-                @*Last ned*@
-                <div class="col-xs-1 text-center">
-                    <div class="center-block" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="clearfix"></div>
-    </div>
-
-</script>
-
 @helper DisplayPaginationBottom()
 {
     <div class="search-result-navigation">
