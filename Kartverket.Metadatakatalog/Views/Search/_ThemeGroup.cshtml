@@ -58,7 +58,7 @@ if (items.Any())
         <div class="col-sm-1"><p>Last ned</p></div>
     </div>
     <div class="menu-separator search-results-table-heading"></div>
-    <div v-for="resultItem in searchResults">
+    <div v-for="resultItem in searchResults" class="table-border-bottom">
         <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes">
             <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="0"></div>
         </div>

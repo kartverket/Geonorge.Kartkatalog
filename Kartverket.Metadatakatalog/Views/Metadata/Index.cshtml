@@ -53,6 +53,63 @@ if (contact != null)
 @Html.Partial("VueComponents/_TopRowButtons")
 @Html.Partial("VueComponents/Helpers/_SetVariablesForResultItem", Model)
 
+@*Template for a table row*@
+
+<script type="text/x-template" id="resultItemRow">
+    <div>
+        <div class="resultItemRow">
+            <div class="row">
+
+                @*Tittel*@
+                <div class="col-sm-3">
+                    <div class="resultItemRowTitle">
+                        <a v-bind:href="readMoreUrl" class="show-loading-animation">
+                            <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
+                        </a>
+                    </div>
+                </div>
+                
+                @*Distribusjonstype *@
+                <div class="col-sm-2">
+                    <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.Type}}</span>
+                </div>
+
+                @*Organisasjon*@
+                <div class="col-sm-2">
+                    <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
+                        {{resultItem.Organization}}
+                    </a>
+                </div>
+
+                @*Åpne data*@
+                <div class="col-xs-1 text-center">
+                    <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                </div>
+
+                @*Kart*@
+                <div class="col-xs-1 text-center">
+                    <div class="center-block" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
+                </div>
+
+                @*Last ned*@
+                <div class="col-xs-1 text-center">
+                    <div class="center-block" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
+                </div>
+                
+                @*Format*@
+                <div class="col-xs-1">
+                    <div v-for="distribution in resultItem.DistributionFormats">
+                        <span class="label label-default" style="margin-bottom: 1px; width: auto;">{{distribution.Name}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+
+</script>
+
 @* *** HANDLINGSKNAPPER *** *@
 <div id="topRowButtons" class="margin-bottom-10">
     <div is="top-row-buttons" v-bind:metadata="@Json.Encode(Model)"></div>
@@ -120,13 +177,10 @@ if (contact != null)
         </div>
     </aside>
 
-
-    
-
     <div id="metadata">
        
         @* *** Distribusjoner ****@
-        <article class="col-md-12">
+        <div class="col-md-12">
             <h3>Distribusjoner</h3>
 
             <div class="row resultItemRowTableHeader">
@@ -140,13 +194,14 @@ if (contact != null)
             </div>
             <div class="menu-separator search-results-table-heading"></div>
             <div v-for="item in distributionlist" class="table-border-bottom">
-                <div is="resultItem" v-bind:result-item="item"></div>
+                <div is="resultItem" v-bind:result-item="item">
+                </div>
             </div>
             <div class="clearfix"></div>
-        </article>
+        </div>
 
         @* *** Relaterte data ****@
-        <article v-if="model.HierarchyLevel == 'service' && model.Related && model.Related.length > 0" class="col-md-12">
+        <div v-if="model.HierarchyLevel == 'service' && model.Related && model.Related.length > 0" class="col-md-12">
             @if (Model.Related != null && Model.Related.Count > 0)
             {
                 <div class="row search-result-navigation">
@@ -186,7 +241,7 @@ if (contact != null)
                 </div>
                 <div class="clearfix"></div>
             }
-        </article>
+        </div>
     </div>
     @* *** Generell info *** *@
     <article>
@@ -516,34 +571,8 @@ if (keywords != null && keywords.Any())
                 convertDistributionList: function(distributionList) {
                     var distributionArray = new Array();
                     distributionList.forEach(function(distribution) {
-                        /*
-                        var resultItem =
-                        {
-                            ShowMapLink: distribution.CanShowMapUrl,
-                            ShowServiceMapLink: distribution.CanShowServiceMapUrl,
-                            MapUrl: distribution.MapUrl,
-                            ServiceDistributionAccessConstraint: distribution.ServiceDistributionAccessConstraint,
-                            DistributionProtocol: distribution.Protocol,
-
-                            ShowDownloadService: distribution.CanShowDownloadService,
-                            ShowDownloadLink: distribution.CanShowDownloadUrl,
-                            DownloadUrl: distribution.DownloadUrl,
-
-                            IsRestricted: distribution.AccessIsRestricted,
-                            IsOffline: distribution.AccessIsProtected,
-                            IsOpendata: distribution.AccessIsOpendata,
-                            DistributionFormats: distribution.DistributionFormats,
-                            Organization: distribution.Organization,
-                            OrganizationSeoName: this.makeSeoFriendlyString(distribution.Organization),
-                            Title: distribution.Title,
-                            TitleSeo: this.makeSeoFriendlyString(distribution.Title),
-                            Type: distribution.Type,
-                            Uuid: distribution.Uuid
-                           
-                        }*/
-
+                        console.log(distribution);
                         var resultItem = convertMetadataToResultItem(distribution);
-
                         distributionArray.push(resultItem);
                     }.bind(this));
                     return distributionArray;
@@ -554,66 +583,13 @@ if (keywords != null && keywords.Any())
                     if (format) {
                         version += ' ${format}';
                     }
-                    //return version ? " " : "(" + version + ")";
                     return ' (${version})';
                 },
-                makeSeoFriendlyString: function(text) {
-                    if (text != null) {
-                        text = text.toLowerCase();
-
-                        // replace & with and
-                        text = text.replace(/\&+/g, "and");
-
-                        // remove characters
-                        text = text.replace("'", "");
-
-                        // replace norwegian characters
-                        text = text.replace("å", "a").replace("æ", "ae").replace("ø", "o");
-
-                        // remove invalid characters
-                        text = text.replace(/[^a-z0-9]/g, "-");
-
-                        // remove duplicates
-                        text = text.replace(/-+/g, "-");
-
-                        // trim leading & trailing characters
-                        text = text.trim('-');
-                    }
-                    return text;
-                },
+                
                 convertRelatedDataList: function() {
                     if (this.model.Related) {
                         this.model.Related.forEach(function(item) {
-
                             var resultItem = convertMetadataToResultItem(item);
-
-                            /*var resultItem =
-                            {
-                                ShowMapLink: item.CanShowMapUrl,
-                                ShowServiceMapLink: item.CanShowServiceMapUrl,
-                                MapUrl: item.MapLink,
-                                ServiceUrl: item.ServiceLink,
-                                ServiceDistributionAccessConstraint: item.ServiceDistributionAccessConstraint,
-                                DistributionUrl: item.DistributionUrl,
-
-                                ShowDownloadService: item.CanShowDownloadService,
-                                ShowDownloadLink: item.CanShowDownloadUrl,
-                                DownloadUrl: item.DownloadUrl,
-
-                                IsRestricted: item.AccessIsRestricted,
-                                IsOffline: item.AccessIsProtected,
-                                IsOpendata: item.AccessIsOpendata,
-
-                                DistributionFormats: item.DistributionFormats,
-
-                                Organization: item.Organization,
-                                OrganizationSeoName: this.makeSeoFriendlyString(item.ContactOwner.Organization),
-                                Title: item.Title,
-                                TitleSeo: this.makeSeoFriendlyString(item.Title),
-                                Type: item.Protocol,
-
-                                Uuid: item.Uuid
-                            }*/
 
                             this.relatedDataList.push(resultItem);
                     }.
