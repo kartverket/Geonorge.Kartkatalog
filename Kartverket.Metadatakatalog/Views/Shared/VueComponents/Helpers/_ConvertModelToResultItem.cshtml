@@ -62,7 +62,7 @@
             DistributionFormats: item.DistributionFormats,
 
             Organization: item.Organization !== undefined ? item.Organization : null,
-            OrganizationSeoName: item.ContactOwner !== undefined && item.ContactOwner.Organization !== undefined ? makeSeoFriendlyString(item.ContactOwner.Organization) : null,
+            OrganizationSeoName: makeSeoFriendlyString(item.Organization !== undefined ? item.Organization : null),
             Title: item.Title,
             TitleSeo: makeSeoFriendlyString(item.Title),
             Type: item.Protocol,
