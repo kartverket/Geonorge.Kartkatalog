@@ -113,14 +113,10 @@
 
             <div class="resultItemRow" v-bind:class="{expanded: expanded}">
                 <div class="row">
-
+                    
+                    @*Tittel*@
                     <div class="col-sm-4">
-                        <div class="resultItemRowTitle">
-                            @*Tittel*@
-                            <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                                <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
-                            </a>
-                        </div>
+                        <div is="table-title" v-bind:metadata="resultItem"></div>
                     </div>
 
                     @*Distribusjonstype *@
@@ -145,33 +141,7 @@
 
                     @*Last ned*@
                     <div class="col-xs-1">
-                        <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                           v-bind:href='resultItem.AddToCartUrl'
-                           data-toggle='tooltip'
-                           data-placement='bottom'
-                           onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                           v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                           class="add-to-cart-btn"
-                           v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
-                            <span class="custom-icon custom-icon-handlekurv"></span>
-                            {{resultItem.addedToCart}}
-                        </a>
-
-                        <a v-else-if="resultItem.ShowDownloadLink"
-                           v-bind:href="resultItem.DownloadUrl"
-                           onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                           data-toggle='tooltip'
-                           data-placement='bottom'
-                           v:bind:title='"Last ned datasett for " + resultItem.Title'
-                           target="_blank">
-                            <span class="custom-icon custom-icon-lastned"></span>
-                        </a>
-
-                        <a v-else
-                           v-bind:title='"Last ned datasett for " + resultItem.Title'
-                           class="disabled">
-                            <span class="custom-icon custom-icon-lastned"></span>
-                        </a>
+                        <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
                     </div>
 
                 </div>
