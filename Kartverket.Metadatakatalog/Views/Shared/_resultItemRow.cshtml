@@ -8,6 +8,7 @@
 
 @Html.Partial("VueComponents/_TableRowButtons")
 
+@Html.Partial("VueComponents/Table content/_title")
 
 <script>
     //Component
@@ -29,7 +30,8 @@
         },
         components: {
             distributionRows: distributionRows,
-            TableRowButtons: TableRowButtons
+            TableRowButtons: TableRowButtons,
+            TableTitle: TableTitle
         },
         mounted: function () {
             this.getCartButtonStatus();
@@ -128,13 +130,6 @@
             },
             organizationUrl: function () {
                 url = "/etatvis-oversikt/" + this.resultItem.OrganizationSeoName;
-                return url;
-            },
-            readMoreUrl: function () {
-                var organization = this.resultItem.OrganizationSeoName;
-                var title = this.resultItem.TitleSeo;
-                var uuid = this.resultItem.Uuid;
-                var url = "/metadata/" + organization + "/" + title + "/" + uuid;
                 return url;
             },
             description: function () {

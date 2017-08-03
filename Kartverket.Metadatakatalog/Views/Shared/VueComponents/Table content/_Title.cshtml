@@ -1,0 +1,32 @@
+﻿<script type="text/x-template" id="titleContentTemplate">
+    <div class="resultItemRowTitle">
+        <a v-bind:href="href" class="show-loading-animation">
+            <span class="role-button search-results-name" role="button">{{metadata.Title}}</span> 
+        </a>
+    </div>
+</script>
+
+<script>
+    var TableTitle = {
+        name: "table-title",
+        template: "#titleContentTemplate",
+        props: ["metadata"],
+        data: function () {
+            var data = {
+                href: "/metadata/" +
+                    this.metadata.OrganizationSeoName +
+                    "/" +
+                    this.metadata.TitleSeo +
+                    "/" +
+                    this.metadata.Uuid,
+                content: this.metadata.Title,
+            };
+            return data;
+        }
+        
+        @* TODO! 
+           Får ikke tak i props "metadata" på metadata innenfor et tema... 
+           Må spørre direkte i templaten ved å bruke "Metadata.Title" osv..*@
+
+        };
+</script>

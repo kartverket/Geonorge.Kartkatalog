@@ -86,11 +86,7 @@ if (items.Any())
 
                 @*Tittel*@
                 <div class="col-sm-5">
-                    <div class="resultItemRowTitle">
-                        <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                            <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
-                        </a>
-                    </div>
+                    <div is="table-title" v-bind:metadata="resultItem"></div>
                 </div>
 
                 @*Organisasjon*@

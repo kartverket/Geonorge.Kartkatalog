@@ -62,11 +62,7 @@ if (contact != null)
 
                 @*Tittel*@
                 <div class="col-sm-3">
-                    <div class="resultItemRowTitle">
-                        <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                            <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
-                        </a>
-                    </div>
+                    <div is="table-title" v-bind:metadata="resultItem"></div>
                 </div>
                 
                 @*Distribusjonstype *@
@@ -182,6 +178,7 @@ if (contact != null)
         @* *** Distribusjoner ****@
         <div class="col-md-12">
             <h3>Distribusjoner</h3>
+            <span class="separator-lg"></span>
 
             <div class="row resultItemRowTableHeader">
                 <div class="col-sm-3"><p>Tittel</p></div>
@@ -206,8 +203,10 @@ if (contact != null)
             {
                 <div class="row search-result-navigation">
                     <div class="col-sm-8">
-                        <h3 class="article-h3">Relaterte data</h3>
+                        <h3>Relaterte data</h3>
+                        <span class="separator-lg"></span>
                     </div>
+
                     <div class="col-md-4 pull-right">
                         <div class="save-as-menu pull-right" style="margin-top: 50px">
                             <div class="no-padding-bottom save-as-dropdown">
