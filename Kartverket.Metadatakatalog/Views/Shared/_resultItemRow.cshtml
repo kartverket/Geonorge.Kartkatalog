@@ -10,6 +10,9 @@
 
 @Html.Partial("VueComponents/Table content/_Title")
 @Html.Partial("VueComponents/Table content/_Owner")
+@Html.Partial("VueComponents/Table content/_OpenData")
+
+
 
 <script>
     //Component
@@ -33,7 +36,9 @@
             distributionRows: distributionRows,
             TableRowButtons: TableRowButtons,
             TableTitle: TableTitle,
-            TableOwner: TableOwner
+            TableOwner: TableOwner,
+            TableOpenData: TableOpenData
+           
         },
         mounted: function () {
             this.getCartButtonStatus();
@@ -43,6 +48,7 @@
             }
         },
         computed: {
+            // TODO ta vekk?
             openData: function () {
                 var openData = {
                     className: "",
@@ -60,6 +66,7 @@
                 }
                 return openData;
             },
+            // TODO ta vekk?
             mapLink: function () {
                 var mapLink = {
                     mapLinkButtonId: "mapmacrolink-button-" + this.resultItem.Uuid,

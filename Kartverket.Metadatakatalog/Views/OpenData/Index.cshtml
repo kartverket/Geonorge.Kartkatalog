@@ -126,7 +126,7 @@
 
                     @*Åpne data*@
                     <div class="col-xs-1 text-center">
-                        <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
+                        <div is="table-open-data" v-bind:metadata="resultItem"></div>
                     </div>
 
                     @*Kart*@

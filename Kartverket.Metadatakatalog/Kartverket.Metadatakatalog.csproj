@@ -1141,6 +1141,7 @@
     <Content Include="Views\Shared\VueComponents\Helpers\_SetVariablesForResultItem.cshtml" />
     <Content Include="Views\Shared\VueComponents\Table content\_Owner.cshtml" />
     <Content Include="Views\Shared\VueComponents\Table content\_Title.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Table content\_OpenData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
