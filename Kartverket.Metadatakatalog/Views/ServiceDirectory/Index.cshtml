@@ -119,9 +119,7 @@
 
                     @*Kart*@
                     <div class="col-xs-1">
-                        <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
-                            <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
-                        </a>
+                        <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
                     </div>
 
                 </div>
