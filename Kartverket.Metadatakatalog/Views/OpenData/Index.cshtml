@@ -109,24 +109,19 @@
         </div>
 
         @* *** TABELL *** *@
-        <div v-if="$root.viewType == 'tableView'" class="table-border-bottom">
+        <div v-if="$root.viewType == 'tableView'">
 
             <div v-bind:class="{expanded: expanded}" class="resultItemRow">
                 <div class="row">
-
+                    
+                    @* Tittel *@
                     <div class="col-sm-5">
                         <div is="table-title" v-bind:metadata="resultItem"></div>
                     </div>
 
-                    @*Distribusjonstype *@
-                    <!-- <div class="col-sm-2">
-                         <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
-                     </div>-->
                     @*Organisasjon*@
                     <div class="col-sm-4">
-                        <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
-                            {{resultItem.Organization}}
-                        </a>
+                        <div is="table-owner" v-bind:metadata="resultItem"></div>
                     </div>
 
                     @*Åpne data*@

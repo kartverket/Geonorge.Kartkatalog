@@ -1,0 +1,25 @@
+﻿<script type="text/x-template" id="ownerContentTemplate">
+    <a v-bind:href="href" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + content" v-bind:title="'Vis alle tjenester og datasett fra ' + content">
+        {{content}}
+    </a>
+</script>
+
+<script>
+    var TableOwner = {
+        name: "table-owner",
+        template: "#ownerContentTemplate",
+        props: ["metadata"],
+        data: function () {
+            var data = {
+                href: "/etatvis-oversikt/" + this.metadata.OrganizationSeoName,
+                content: this.metadata.Organization,
+            };
+            return data;
+        }
+        
+        @* TODO! 
+           Får ikke tak i props "metadata" på metadata innenfor et tema... 
+           Må spørre direkte i templaten ved å bruke "Metadata.Title" osv..*@
+
+        };
+</script>

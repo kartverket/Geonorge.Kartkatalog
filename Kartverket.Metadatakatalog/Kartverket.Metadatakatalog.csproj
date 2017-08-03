@@ -1139,6 +1139,7 @@
     <Content Include="Views\Shared\VueComponents\Helpers\_ConvertModelToResultItem.cshtml" />
     <Content Include="Views\Shared\VueComponents\_TableRowButtons.cshtml" />
     <Content Include="Views\Shared\VueComponents\Helpers\_SetVariablesForResultItem.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Table content\_Owner.cshtml" />
     <Content Include="Views\Shared\VueComponents\Table content\_Title.cshtml" />
   </ItemGroup>
   <ItemGroup>
