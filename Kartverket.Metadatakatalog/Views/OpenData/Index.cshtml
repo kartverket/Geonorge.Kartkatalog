@@ -115,12 +115,7 @@
                 <div class="row">
 
                     <div class="col-sm-5">
-                        <div class="resultItemRowTitle" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
-                            @*Tittel*@
-                            <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                                <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
-                            </a>
-                        </div>
+                        <div is="table-title" v-bind:metadata="resultItem"></div>
                     </div>
 
                     @*Distribusjonstype *@

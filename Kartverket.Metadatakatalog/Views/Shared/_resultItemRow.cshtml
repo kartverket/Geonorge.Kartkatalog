@@ -92,6 +92,13 @@
                 }
                 return mapLink;
             },
+            readMoreUrl: function () {
+                var organization = this.resultItem.OrganizationSeoName;
+                var title = this.resultItem.TitleSeo;
+                var uuid = this.resultItem.Uuid;
+                var url = "/metadata/" + organization + "/" + title + "/" + uuid;
+                return url;
+            },
             itemAddToCart: function () {
                 var itemAddToCart = {
                     buttonClass: "btn btn-default add-to-cart-btn",
