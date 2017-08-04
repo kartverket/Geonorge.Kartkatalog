@@ -14,6 +14,7 @@
 @Html.Partial("VueComponents/Table content/_DistributionType")
 @Html.Partial("VueComponents/Table content/_DistributionUrl")
 @Html.Partial("VueComponents/Table content/_DistributionFormats")
+@Html.Partial("VueComponents/Table content/_CopyUrl")
 
 
 
@@ -44,6 +45,7 @@
             TableDistributionType: TableDistributionType,           
             TableDistributionUrl: TableDistributionUrl,
             TableDistributionFormats: TableDistributionFormats,
+            TableCopyUrl: TableCopyUrl,
         },
         mounted: function () {
             this.getCartButtonStatus();

@@ -1,0 +1,30 @@
+﻿<script type="text/x-template" id="copyUrlContentTemplate">
+    <span v-bind:class="className" data-toggle="tooltip" data-placement="bottom" v-bind:data-clipboard-text="copyText" alt="Kopier til utklippstavle" onclick="">
+        <i class="fa fa-clipboard"></i>
+    </span>
+</script>
+
+<script>
+    var TableCopyUrl = {
+        name: "table-copy-url",
+        template: "#copyUrlContentTemplate",
+        props: ["metadata"],
+        data: function () {
+            var data = {
+                className: "btn btn-copy input-group-addon",
+                copyText: this.metadata.GetCapabilitiesUrl
+            };
+            return data;
+        },
+        computed: function () {
+            if (this.metadata.GetCapabilitiesUrl) {
+                this.className = "btn input-group-addon disabled";
+            }
+        }
+
+        @* TODO!
+           Får ikke tak i props "metadata" på metadata innenfor et tema...
+           Må spørre direkte i templaten ved å bruke "Metadata.Title" osv..*@
+
+    };
+</script>

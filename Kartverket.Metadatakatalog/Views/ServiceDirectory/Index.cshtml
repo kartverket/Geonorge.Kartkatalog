@@ -111,9 +111,7 @@
 
                     @*Kopier url*@
                     <div class="col-xs-1 search-results-action-icons">
-                        <span v-bind:class="copyClass.icon" data-toggle="tooltip" data-placement="bottom" v-bind:data-clipboard-text="resultItem.GetCapabilitiesUrl" alt="Kopier til utklippstavle" onclick="">
-                            <i class="fa fa-clipboard"></i>
-                        </span>
+                        <div is="table-copy-url" v-bind:metadata="resultItem"></div>
                     </div>
 
                     @*Kart*@
