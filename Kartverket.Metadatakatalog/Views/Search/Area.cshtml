@@ -151,7 +151,7 @@
 
                     @*Distribusjonstype *@
                     <div class="col-sm-2">
-                        <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
+                        <div is="table-distribution-type" v-bind:metadata="resultItem"></div>
                     </div>
 
                     @*Organisasjon*@

@@ -11,6 +11,7 @@
 @Html.Partial("VueComponents/Table content/_Title")
 @Html.Partial("VueComponents/Table content/_Owner")
 @Html.Partial("VueComponents/Table content/_OpenData")
+@Html.Partial("VueComponents/Table content/_DistributionType")
 
 
 
@@ -20,7 +21,7 @@
         template: "#resultItemRow",
         name: "resultItem",
         props: ["resultItem"],
-        data: function () {
+        data: function() {
             var data = {
                 expanded: false,
                 underlayingDistributions: [],
@@ -37,8 +38,8 @@
             TableRowButtons: TableRowButtons,
             TableTitle: TableTitle,
             TableOwner: TableOwner,
-            TableOpenData: TableOpenData
-           
+            TableOpenData: TableOpenData,
+            TableDistributionType: TableDistributionType           
         },
         mounted: function () {
             this.getCartButtonStatus();

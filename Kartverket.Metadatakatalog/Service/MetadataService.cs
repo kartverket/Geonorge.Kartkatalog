@@ -62,7 +62,7 @@ namespace Kartverket.Metadatakatalog.Service
                 tmp.Title = simpleMetadata.Title;
                 tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(simpleMetadata.HierarchyLevel);
                 tmp.DistributionFormats = GetDistributionTypes(simpleMetadata.DistributionsFormats);
-                tmp.Organization = simpleMetadata.ContactMetadata.Organization;
+                tmp.Organization = simpleMetadata.ContactMetadata != null ? simpleMetadata.ContactMetadata.Organization : "ikke angitt";
                 tmp.ShowDetailsUrl = "/metadata/org/title/" + uuid;
                 if (simpleMetadata.Constraints != null)
                     tmp.ServiceDistributionAccessConstraint = simpleMetadata.Constraints.AccessConstraints;
