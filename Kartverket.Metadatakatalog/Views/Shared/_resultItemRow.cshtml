@@ -12,6 +12,7 @@
 @Html.Partial("VueComponents/Table content/_Owner")
 @Html.Partial("VueComponents/Table content/_OpenData")
 @Html.Partial("VueComponents/Table content/_DistributionType")
+@Html.Partial("VueComponents/Table content/_DistributionUrl")
 
 
 
@@ -39,7 +40,8 @@
             TableTitle: TableTitle,
             TableOwner: TableOwner,
             TableOpenData: TableOpenData,
-            TableDistributionType: TableDistributionType           
+            TableDistributionType: TableDistributionType,           
+            TableDistributionUrl: TableDistributionUrl
         },
         mounted: function () {
             this.getCartButtonStatus();

@@ -1143,6 +1143,7 @@
     <Content Include="Views\Shared\VueComponents\Table content\_Title.cshtml" />
     <Content Include="Views\Shared\VueComponents\Table content\_OpenData.cshtml" />
     <Content Include="Views\Shared\VueComponents\Table content\_DistributionType.cshtml" />
+    <Content Include="Views\Shared\VueComponents\Table content\_DistributionUrl.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

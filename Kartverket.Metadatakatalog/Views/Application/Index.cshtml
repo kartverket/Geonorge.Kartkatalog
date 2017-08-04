@@ -89,6 +89,8 @@
         <div v-if="$root.viewType == 'tableView'">
             <div class="resultItemRow" v-bind:class="{expanded: expanded}">
                 <div class="row">
+                    
+                    @*Tittel*@
                     <div class="col-sm-4">
                         <div is="table-title" v-bind:metadata="resultItem"></div>
                     </div>
@@ -110,9 +112,7 @@
 
                     @*Besøk nettsiden*@
                     <div class="col-xs-1 text-center">
-                        <a v-bind:href="resultItem.DistributionUrl" target="_blank">
-                            <span class="custom-icon custom-icon-eksternlink"></span>
-                        </a>
+                        <div is="table-distribution-url" v-bind:metadata="resultItem"></div>
                     </div>
                 </div>
             </div>
