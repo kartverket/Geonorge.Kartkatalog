@@ -96,8 +96,7 @@
 
                     @*Distribusjonstype *@
                     <div class="col-sm-2">
-                        <span v-if="resultItem.Type == 'servicelayer'" v-bind:title="resultItem.DistributionType + 'lag'" data-toggle='tooltip' data-placement='bottom' class="label label-tjenestelag" style="width:auto">{{resultItem.DistributionType}}lag</span>
-                        <span v-else v-bind:title="resultItem.DistributionType" data-toggle='tooltip' data-placement='bottom' class="label label-tjeneste" style="width:auto">{{resultItem.DistributionType}}</span>
+                        <div is="table-distributionType" v-bind:metadata="resultItem"></div>    
                     </div>
 
                     @*Organisasjon*@
