@@ -92,9 +92,7 @@ if (contact != null)
                 
                 @*Format*@
                 <div class="col-xs-1">
-                    <div v-for="distribution in resultItem.DistributionFormats">
-                        <span class="label label-default" style="margin-bottom: 1px; width: auto;">{{distribution.Name}}</span>
-                    </div>
+                     <div is="table-distribution-formats" v-bind:metadata="resultItem"></div>
                 </div>
             </div>
         </div>

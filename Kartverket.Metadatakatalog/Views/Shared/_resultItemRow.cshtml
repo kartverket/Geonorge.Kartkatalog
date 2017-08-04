@@ -13,6 +13,7 @@
 @Html.Partial("VueComponents/Table content/_OpenData")
 @Html.Partial("VueComponents/Table content/_DistributionType")
 @Html.Partial("VueComponents/Table content/_DistributionUrl")
+@Html.Partial("VueComponents/Table content/_DistributionFormats")
 
 
 
@@ -41,7 +42,8 @@
             TableOwner: TableOwner,
             TableOpenData: TableOpenData,
             TableDistributionType: TableDistributionType,           
-            TableDistributionUrl: TableDistributionUrl
+            TableDistributionUrl: TableDistributionUrl,
+            TableDistributionFormats: TableDistributionFormats,
         },
         mounted: function () {
             this.getCartButtonStatus();
