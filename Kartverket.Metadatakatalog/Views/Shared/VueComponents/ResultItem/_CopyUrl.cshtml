@@ -1,5 +1,9 @@
 ﻿<script type="text/x-template" id="copyUrlContentTemplate">
-    <span v-bind:class="className" data-toggle="tooltip" data-placement="bottom" v-bind:data-clipboard-text="copyText" alt="Kopier til utklippstavle" onclick="">
+    <button  v-if="$root.viewType == 'listView'" v-bind:class="classNameButton" v-bind:data-clipboard-text="getCapabilitiesUrl" alt="Kopier til utklippstavle">
+        Url til tjeneste
+    </button>
+    
+    <span v-else v-bind:class="classNameIcon" data-toggle="tooltip" data-placement="bottom" v-bind:data-clipboard-text="copyText" alt="Kopier til utklippstavle" onclick="">
         <i class="fa fa-clipboard"></i>
     </span>
 </script>
@@ -11,14 +15,17 @@
         props: ["metadata"],
         data: function () {
             var data = {
-                className: "btn btn-copy input-group-addon",
-                copyText: this.metadata.GetCapabilitiesUrl
+                classNameIcon: "btn btn-copy input-group-addon",
+                classNameButton: "btn btn-copy",
+                copyText: this.metadata.GetCapabilitiesUrl,
+                getCapabilitiesUrl: this.metadata.GetCapabilitiesUrl
             };
             return data;
         },
-        computed: function () {
-            if (this.metadata.GetCapabilitiesUrl) {
-                this.className = "btn input-group-addon disabled";
+        created() {
+            if (!this.getCapabilitiesUrl) {
+                this.classNameIcon = "btn btn-copy input-group-addon disabled";
+                this.classNameButton = "btn disabled";
             }
         }
 

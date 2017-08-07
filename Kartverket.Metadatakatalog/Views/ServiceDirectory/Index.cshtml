@@ -52,6 +52,7 @@
             </div>
 
             <div class="col-sm-6">
+                @*Tittel*@
                 <div is="table-title" v-bind:metadata="resultItem"></div>
                 <p>{{description}}</p>
                 <p>
@@ -66,10 +67,8 @@
                 <a style="width: 130px" v-bind:id="mapLink.mapLinkButtonId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
                     <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
                 </a>
-
-                <button v-bind:class="copyClass.btn" v-bind:data-clipboard-text="resultItem.GetCapabilitiesUrl" alt="Kopier til utklippstavle">
-                    Url til tjeneste
-                </button>
+                @*Kopier url*@
+                <div is="table-copy-url" v-bind:metadata="resultItem"></div>
             </div>
 
             <div class="col-sm-3">
