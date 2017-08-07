@@ -94,9 +94,10 @@ namespace Kartverket.Metadatakatalog.Service
 
                 distlist.Add(tmp);
             }
-            
+
             //Hente inn indeks og relaterte services
-            distlist.AddRange(GetMetadataRelatedDistributions(uuid));
+            if (simpleMetadata.IsDataset())
+                distlist.AddRange(GetMetadataRelatedDistributions(uuid));
             //distlist.AddRange(GetServiceDirectoryRelatedDistributions(uuid));
             distlist.AddRange(GetApplicationRelatedDistributions(uuid));
             return distlist;
@@ -566,7 +567,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                 var datasetServices = searchResult.Items[0].DatasetServices;
 
-                if (datasetServices != null && datasetServices.Count > 0)
+                if (metadata.IsDataset() && datasetServices != null && datasetServices.Count > 0)
                 {
                     metadata.Related = new List<MetadataViewModel>();
 
