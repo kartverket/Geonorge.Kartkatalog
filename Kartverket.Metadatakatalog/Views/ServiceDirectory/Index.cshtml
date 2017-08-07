@@ -54,9 +54,7 @@
             </div>
 
             <div class="col-sm-6">
-                <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                    <p style="font-size:14pt" class="role-button search-results-name" role="button">{{resultItem.Title}}</p>
-                </a>
+                <div is="table-title" v-bind:metadata="resultItem"></div>
                 <p>{{description}}</p>
                 <p>
                     Tilgjengelig som:
@@ -126,21 +124,7 @@
 
         @* *** GALLERI *** *@
         <div v-if="$root.viewType == 'galleryView'" class="resultItemRowGallery">
-            <div class="search-results-gallery-image layoutblock">
-                <div class="block shortcutpageteaserblock size-4 col-sm-4">
-                    <div class="teaser-with-background-image">
-                        <a v-bind:href="readMoreUrl">
-                            <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
-                                <div class="teaser-overlay">
-                                    <div class="teaser-caption">
-                                        <div class="teaser-heading">{{resultItem.Title}}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            <div is="table-title" v-bind:metadata="resultItem"></div>
         </div>
 
             <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
