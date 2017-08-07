@@ -546,23 +546,24 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (searchResult != null && searchResult.NumFound > 0)
             {
-                metadata.ServiceDistributionProtocolForDataset =
+                if (metadata.IsDataset()) { 
+
+                    metadata.ServiceDistributionProtocolForDataset =
                     searchResult.Items[0].ServiceDistributionProtocolForDataset != null
                         ? searchResult.Items[0].ServiceDistributionProtocolForDataset
                         : null;
-                metadata.ServiceDistributionUrlForDataset = searchResult.Items[0].ServiceDistributionUrlForDataset !=
-                                                            null
-                    ? searchResult.Items[0].ServiceDistributionUrlForDataset
-                    : null;
-                metadata.ServiceDistributionNameForDataset = searchResult.Items[0].ServiceDistributionNameForDataset !=
-                                                             null
-                    ? searchResult.Items[0].ServiceDistributionNameForDataset
-                    : null;
-                if (metadata.IsDataset())
-                    metadata.ServiceUuid = searchResult.Items[0].ServiceDistributionUuidForDataset != null
-                        ? searchResult.Items[0].ServiceDistributionUuidForDataset
+                    metadata.ServiceDistributionUrlForDataset = searchResult.Items[0].ServiceDistributionUrlForDataset !=
+                                                                null
+                        ? searchResult.Items[0].ServiceDistributionUrlForDataset
                         : null;
-
+                    metadata.ServiceDistributionNameForDataset = searchResult.Items[0].ServiceDistributionNameForDataset !=
+                                                                 null
+                        ? searchResult.Items[0].ServiceDistributionNameForDataset
+                        : null;
+                        metadata.ServiceUuid = searchResult.Items[0].ServiceDistributionUuidForDataset != null
+                            ? searchResult.Items[0].ServiceDistributionUuidForDataset
+                            : null;
+                }
                 metadata.ServiceDistributionAccessConstraint = searchResult.Items[0].ServiceDistributionAccessConstraint;
 
                 var datasetServices = searchResult.Items[0].DatasetServices;
