@@ -402,7 +402,7 @@ if (contact != null)
     <div id="metadata">
         <div is="Metadata" v-bind:metadata="@Json.Encode(Model)"></div>
         @* *** Distribusjoner ****@
-        <article class="col-md-12">
+        <article class="col-md-12@(Model.IsService() ? " hidden" : "")">
             <h3>Distribusjoner</h3>
 
             <div class="row resultItemRowTableHeader">

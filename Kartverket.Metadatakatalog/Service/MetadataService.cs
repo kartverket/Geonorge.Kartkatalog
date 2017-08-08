@@ -98,9 +98,10 @@ namespace Kartverket.Metadatakatalog.Service
 
                 distlist.Add(tmp);
             }
-            
+
             //Hente inn indeks og relaterte services
-            distlist.AddRange(GetMetadataRelatedDistributions(uuid));
+            if (simpleMetadata.IsDataset())
+                distlist.AddRange(GetMetadataRelatedDistributions(uuid));
             //distlist.AddRange(GetServiceDirectoryRelatedDistributions(uuid));
             distlist.AddRange(GetApplicationRelatedDistributions(uuid));
             return distlist;
@@ -549,28 +550,29 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (searchResult != null && searchResult.NumFound > 0)
             {
-                metadata.ServiceDistributionProtocolForDataset =
+                if (metadata.IsDataset()) { 
+
+                    metadata.ServiceDistributionProtocolForDataset =
                     searchResult.Items[0].ServiceDistributionProtocolForDataset != null
                         ? searchResult.Items[0].ServiceDistributionProtocolForDataset
                         : null;
-                metadata.ServiceDistributionUrlForDataset = searchResult.Items[0].ServiceDistributionUrlForDataset !=
-                                                            null
-                    ? searchResult.Items[0].ServiceDistributionUrlForDataset
-                    : null;
-                metadata.ServiceDistributionNameForDataset = searchResult.Items[0].ServiceDistributionNameForDataset !=
-                                                             null
-                    ? searchResult.Items[0].ServiceDistributionNameForDataset
-                    : null;
-                if (metadata.IsDataset())
-                    metadata.ServiceUuid = searchResult.Items[0].ServiceDistributionUuidForDataset != null
-                        ? searchResult.Items[0].ServiceDistributionUuidForDataset
+                    metadata.ServiceDistributionUrlForDataset = searchResult.Items[0].ServiceDistributionUrlForDataset !=
+                                                                null
+                        ? searchResult.Items[0].ServiceDistributionUrlForDataset
                         : null;
-
+                    metadata.ServiceDistributionNameForDataset = searchResult.Items[0].ServiceDistributionNameForDataset !=
+                                                                 null
+                        ? searchResult.Items[0].ServiceDistributionNameForDataset
+                        : null;
+                        metadata.ServiceUuid = searchResult.Items[0].ServiceDistributionUuidForDataset != null
+                            ? searchResult.Items[0].ServiceDistributionUuidForDataset
+                            : null;
+                }
                 metadata.ServiceDistributionAccessConstraint = searchResult.Items[0].ServiceDistributionAccessConstraint;
 
                 var datasetServices = searchResult.Items[0].DatasetServices;
 
-                if (datasetServices != null && datasetServices.Count > 0)
+                if (metadata.IsDataset() && datasetServices != null && datasetServices.Count > 0)
                 {
                     metadata.Related = new List<MetadataViewModel>();
 
