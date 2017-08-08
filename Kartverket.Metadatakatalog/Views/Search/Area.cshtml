@@ -89,39 +89,12 @@
             </div>
 
             <div class="col-sm-2">
-
+                @*Vis i kart*@
                 <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['showInMapButton']" v-bind:buttonType="'button'"></div>
-
-                <a style="width: 130px"
-                   v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                   v-bind:href='resultItem.AddToCartUrl'
-                   data-toggle='tooltip'
-                   data-placement='bottom'
-                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                   v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                   class="btn btn-default add-to-cart-btn"
-                   v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
-                    <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
-                </a>
-
-                <a style="width: 130px"
-                   v-else-if="resultItem.ShowDownloadLink"
-                   v-bind:href="resultItem.DownloadUrl"
-                   onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                   data-toggle='tooltip'
-                   data-placement='bottom'
-                   v:bind:title='"Last ned datasett for " + resultItem.Title'
-                   target="_blank"
-                   class="btn btn-default">
-                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                </a>
-
-                <a style="width: 130px"
-                   v-else
-                   v-bind:title='"Last ned datasett for " + resultItem.Title'
-                   class="disabled btn btn-default">
-                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                </a>
+                
+                @*Last ned*@
+                <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['addToCartButton']" v-bind:buttonType="'button'"></div>
+                
             </div>
 
             <div class="col-sm-3">
