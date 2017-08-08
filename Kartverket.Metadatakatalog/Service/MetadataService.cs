@@ -55,6 +55,8 @@ namespace Kartverket.Metadatakatalog.Service
                 return null;
 
             var simpleMetadata = new SimpleMetadata(mdMetadataType);
+            if (simpleMetadata.IsService())
+                return null;
             if (simpleMetadata.DistributionsFormats != null)
             {
                 var tmp = new Models.Api.Distribution();
