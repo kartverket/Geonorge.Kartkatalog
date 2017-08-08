@@ -79,12 +79,13 @@
             </div>
 
             <div class="col-sm-6">
+                @*Distribusjonstype*@
                 <div is="table-title" v-bind:metadata="resultItem"></div>
+                
                 <p>{{description}}</p>
-                <p>
-                    Tilgjengelig som:
-                    <span v-bind:title="'Tilgjengelig som ' + resultItem.TypeTranslated" style="width:auto" v-bind:class="type(resultItem.Type)">{{resultItem.TypeTranslated}}</span>
-                </p>
+                
+                @*Distribusjonstype*@
+                <div is="table-distributionType" v-bind:metadata="resultItem"></div>
             </div>
 
             <div class="col-sm-2">
