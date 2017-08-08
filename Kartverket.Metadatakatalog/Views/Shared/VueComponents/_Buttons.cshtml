@@ -61,7 +61,7 @@
         computed: {
             defaultButtonClass: function () {
                 var defaultButtonClass = "";
-                if (this.buttonType == 'topRow') { defaultButtonClass = "btn" }
+                if (this.buttonType == 'topRow' || this.buttonType == 'button') { defaultButtonClass = "btn" }
                 return defaultButtonClass;
             },
             hasComponentContainer: function () {
@@ -99,7 +99,7 @@
                 }
                 var hrefAttribute = button.url !== null ? "href='" + button.url + "'" : "";
                 var iconElement = "<span class='" + button.icon.className + "'></span>";
-                var buttonElement = "<a " + hrefAttribute + " data-toggle='tooltip' data-placement='bottom' title='' class='" + button.className + "' " + attributes + ">" + iconElement + button.content + "</a>";
+                var buttonElement = "<a " + hrefAttribute + " data-toggle='tooltip' data-placement='bottom' title='' class='" + button.className + "' " + attributes + "style='width: 130px;'>" + iconElement + button.content + "</a>";
                 return buttonElement;
             }
 

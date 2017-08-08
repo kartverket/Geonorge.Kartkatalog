@@ -59,10 +59,8 @@
             </div>
 
             <div class="col-sm-2">
-
-                <a style="width: 130px" v-bind:id="mapLink.mapLinkButtonId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
-                    <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
-                </a>
+                
+                <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['showInMapButton']" v-bind:buttonType="'button'"></div>
 
                 <a style="width: 130px"
                    v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
