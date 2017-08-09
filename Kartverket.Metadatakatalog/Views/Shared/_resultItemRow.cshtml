@@ -50,41 +50,6 @@
             }
         },
         computed: {
-            // TODO ta vekk?
-            mapLink: function () {
-                var mapLink = {
-                    mapLinkButtonId: "mapmacrolink-button-" + this.resultItem.Uuid,
-                    mapMacroButtonId: "mapmacro-button-" + this.resultItem.Uuid,
-                    mapLinkId: "mapmacrolink-" + this.resultItem.Uuid,
-                    mapMacroId: "mapmacro-" + this.resultItem.Uuid,
-                    onClick: "ga('send', 'event', 'Nedlasting', 'viskart')",
-                    mapLinkClassButton: "btn btn-default",
-                    mapLinkClassLink: "",
-                    iconPermission: "custom-icon",
-                    mapTitleTag: this.resultItem.MapTitleTag,
-                    url: ""
-                };
-
-                if (this.resultItem.ShowMapLink) {
-                    mapLink.iconPermission += " custom-icon-kartmarkoer";
-                    mapLink.url = this.resultItem.MapUrl;
-
-                } else if (this.resultItem.ShowServiceMapLink) {
-                    mapLink.iconPermission += this.restrictedServiceClass();
-                    mapLink.url = this.resultItem.ServiceUrl;
-                } else {
-                    mapLink.mapLinkClassLink = "disabled";
-                    mapLink.mapLinkClassButton += " disabled";
-                    mapLink.iconPermission += " custom-icon-kartmarkoer";
-                    mapLink.mapLinkButtonId = "";
-                    mapLink.mapMacroButtonId = "";
-                    mapLink.mapLinkId = "";
-                    mapLink.mapMacroId = "";
-                    mapLink.onClick = "";
-                    mapLink.mapTitleTag = "Vis " + this.resultItem.Title + " i kart";
-                }
-                return mapLink;
-            },
             readMoreUrl: function () {
                 var organization = this.resultItem.OrganizationSeoName;
                 var title = this.resultItem.TitleSeo;
