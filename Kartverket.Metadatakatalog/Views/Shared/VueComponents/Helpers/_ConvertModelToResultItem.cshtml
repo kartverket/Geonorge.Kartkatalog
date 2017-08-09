@@ -32,7 +32,7 @@
         }else if(showInMapUrl !== undefined){
             MapUrl = showInMapUrl;
         }
-
+        console.log(item);
         return {
             ShowMapLink: item.CanShowMapUrl,
             ShowServiceMapLink: item.CanShowServiceMapUrl,
@@ -50,7 +50,7 @@
             ProductSheetUrl: productSheetUrl,
             ProductSpecificationUrl: productSpecificationUrl,
             LegendDescriptionUrl: legendDescriptionUrl,
-            ShowWebsiteUrl: showWebsiteUrl,
+            ShowWebsiteUrl: item.DistributionDetails !== undefined && item.DistributionDetails.URL !== undefined ? item.DistributionDetails.URL : null,
             ProductPageUrl: productPageUrl,
 
             ContactOwner: contactOwner,

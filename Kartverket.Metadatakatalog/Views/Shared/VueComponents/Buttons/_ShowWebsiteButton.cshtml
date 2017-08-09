@@ -11,9 +11,9 @@
             data: function () {
                 return {
                     button: {
-                        content: "Besøk nettside",
+                        content: "Nettside",
                         className: this.defaultButtonClass,
-                        url: this.resultItem.ShowWebsiteUrl !== undefined ? this.resultItem.ShowWebsiteUrl : null,
+                        url: this.resultItem.DistributionUrl,
                         title: "Besøk nettside for " + this.resultItem.Title,
                         icon: {
                             className: "custom-icon custom-icon-eksternlink"

@@ -42,15 +42,16 @@
 
         @* **** LISTE **** *@
         <div v-if="$root.viewType == 'listView'" class="resultItemRowList table-border-bottom">
-
+            
             <div class="col-sm-1">
+                @*Organisasjon*@
                 <div is="table-owner" v-bind:metadata="resultItem"></div>
             </div>
 
             <div class="col-sm-6">
-                <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                    <p style="font-size:14pt" class="role-button search-results-name" role="button">{{resultItem.Title}}</p>
-                </a>
+                @*Tittel*@
+                <div is="table-title" v-bind:metadata="resultItem"></div>
+
                 <p>{{description}}</p>
                 
                 @*Distribusjonstype*@

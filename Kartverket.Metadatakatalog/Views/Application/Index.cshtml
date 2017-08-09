@@ -46,8 +46,9 @@
     <div>
         @* **** LISTE **** *@
         <div v-if="$root.viewType == 'listView'" class="row resultItemRowList">
-
+            
             <div class="col-sm-1">
+                @*Organisasjon*@
                 <div is="table-owner" v-bind:metadata="resultItem"></div>
             </div>
 
@@ -61,16 +62,9 @@
                 <div is="table-distributionType" v-bind:metadata="resultItem"></div> 
             </div>
 
-            <div class="col-sm-2">
-                
-                <a v-if="resultItem.DistributionUrl" style="width: 130px" v-bind:href="resultItem.DistributionUrl" target="_blank" data-toggle='tooltip' data-placement='bottom' title="Besøk nettside" class="btn btn-default">
-                    <span class="custom-icon custom-icon-eksternlink"></span><span class="button-text">Nettside</span>
-                </a>
-                
-                <span v-else style="width: 130px" class="btn btn-default disabled">
-                    <span class="custom-icon custom-icon-eksternlink"></span><span class="button-text">Nettside</span>
-                </span>
-
+            <div class="col-sm-2">                
+                @*Nettside*@
+                <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['showWebsiteButton']" v-bind:buttonType="'button'"></div>
             </div>
 
             <div class="col-sm-3">

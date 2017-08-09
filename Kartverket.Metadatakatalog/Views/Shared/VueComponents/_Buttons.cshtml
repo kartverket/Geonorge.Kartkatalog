@@ -92,6 +92,7 @@
             },
             createButtonElement: function (button) {
                 var attributes = '';
+                var style = this.buttonType == "button" ? "width: 130px;" : "";
                 if (button.attributes !== undefined && button.attributes.length) {
                     button.attributes.forEach(function (buttonAttribute) {
                         attributes += buttonAttribute.key + "='" + buttonAttribute.value + "' ";
@@ -99,7 +100,7 @@
                 }
                 var hrefAttribute = button.url !== null ? "href='" + button.url + "'" : "";
                 var iconElement = "<span class='" + button.icon.className + "'></span>";
-                var buttonElement = "<a " + hrefAttribute + " data-toggle='tooltip' data-placement='bottom' title='' class='" + button.className + "' " + attributes + "style='width: 130px;'>" + iconElement + button.content + "</a>";
+                var buttonElement = "<a " + hrefAttribute + " data-toggle='tooltip' data-placement='bottom' title='' class='" + button.className + "' " + attributes + "style='" + style + "'>" + iconElement + button.content + "</a>";
                 return buttonElement;
             }
 

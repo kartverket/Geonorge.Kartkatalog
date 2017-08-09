@@ -73,13 +73,14 @@
     <div>
         @* **** LISTE **** *@
         <div v-if="$root.viewType == 'listView'" class="row resultItemRowList">
-
+            
             <div class="col-sm-1">
+                @*Organisasjon*@
                 <div is="table-owner" v-bind:metadata="resultItem"></div>
             </div>
 
             <div class="col-sm-6">
-                @*Distribusjonstype*@
+                @*Tittel*@
                 <div is="table-title" v-bind:metadata="resultItem"></div>
                 
                 <p>{{description}}</p>
