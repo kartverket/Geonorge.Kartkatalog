@@ -23,16 +23,19 @@
         created: function() {
             if (this.type == "dataset" || this.type == "Datasett") this.className += "label-datasett";
             else if (this.type == "software" || this.type == "Applikasjon") this.className += "label-applikasjon";
-            else if (this.type == "service" || this.type == "Tjeneste") this.className += "label-tjeneste";
-            else if (this.type == "servicelayer" || this.type == "Tjenestelag") this.className += "label-tjenestelag";
+            else if (this.type == "service" || this.type == "Tjeneste") {
+                this.className += "label-tjeneste";
+                this.typeTranslated = this.metadata.DistributionType;
+            }
+            else if (this.type == "servicelayer" || this.type == "Tjenestelag") {
+                this.className += "label-tjenestelag";
+                this.typeTranslated = this.metadata.DistributionType + "lag";
+            }
             else if (this.type == "series" || this.type == "Datasettserie") this.className += "label-datasettserie";
             else if (this.type == "dimensionGroup" || this.type == "Datasett") this.className += "label-datasett";
             else if (this.type == "default") this.className += "label-default";
             else this.className += "label-tjeneste";
 
-            if (this.typeTranslated == "Tjeneste" || this.typeTranslated == "Tjenestelag") {
-                this.typeTranslated = this.metadata.DistributionType;
-            }
 
             if (!this.typeTranslated) {
                 this.typeTranslated = this.type;
