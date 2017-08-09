@@ -15,6 +15,7 @@
 @Html.Partial("VueComponents/ResultItem/_DistributionUrl")
 @Html.Partial("VueComponents/ResultItem/_DistributionFormats")
 @Html.Partial("VueComponents/ResultItem/_CopyUrl")
+@Html.Partial("VueComponents/ResultItem/_Thumbnail")
 
 
 
@@ -46,7 +47,8 @@
             TableDistributionUrl: TableDistributionUrl,
             TableDistributionFormats: TableDistributionFormats,
             TableCopyUrl: TableCopyUrl,
-            Buttons: Buttons
+            Buttons: Buttons,
+            thumbnail: thumbnail
         },
         mounted: function () {
             this.getCartButtonStatus();
