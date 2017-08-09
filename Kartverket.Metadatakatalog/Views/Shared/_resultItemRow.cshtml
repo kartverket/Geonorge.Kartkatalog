@@ -42,13 +42,6 @@
             Buttons: Buttons,
             thumbnail: thumbnail
         },
-        mounted: function () {
-            this.getCartButtonStatus();
-            var addToCartId = getParameterByName('addtocart_event_id');
-            if (addToCartId && this.resultItem.Uuid == addToCartId) {
-                this.addToCart();
-            }
-        },
         computed: {
             readMoreUrl: function () {
                 var organization = this.resultItem.OrganizationSeoName;
@@ -57,42 +50,7 @@
                 var url = "/metadata/" + organization + "/" + title + "/" + uuid;
                 return url;
             },
-            itemAddToCart: function () {
-                var itemAddToCart = {
-                    buttonClass: "btn btn-default add-to-cart-btn",
-                };
-
-                if (this.resultItem.IsRestricted || this.resultItem.IsOffline) {
-                    itemAddToCart.buttonClass += " add-to-cart-btn prevent-action";
-                }
-                if (this.resultItem.IsRestricted) {
-                    @{
-                        string baseUrl = Request.Url.AbsoluteUri;
-                        baseUrl = baseUrl.Replace("http://", "https://");
-                        if (baseUrl.Contains("addtocart_event_id"))
-                        {
-                            baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
-                        }
-                    }
-                    var baseUrl = '@baseUrl';
-                    var addToCartEventParamater = "?addtocart_event_id=" + this.resultItem.Uuid;
-
-                    if (baseUrl.indexOf("?") !== -1) {
-                        addToCartEventParamater = "&addtocart_event_id=" + this.resultItem.Uuid;
-                    }
-
-                    var downloadSignInUrl = '@Html.DownloadUrl()'
-                   + 'AuthServices/SignIn?ReturnUrl='
-                   + encodeURIComponent(baseUrl)
-                   + encodeURIComponent(addToCartEventParamater);
-
-                    var addToCartUrl = '@Html.KartkatalogenUrl()'
-                         + 'AuthServices/SignIn?ReturnUrl='
-                         + encodeURIComponent(downloadSignInUrl);
-                    itemAddToCart.href = addToCartUrl;
-                }
-                return itemAddToCart;
-            },
+            
             // TODO ta vekk
             organizationUrl: function () {
                 url = "/etatvis-oversikt/" + this.resultItem.OrganizationSeoName;
@@ -124,94 +82,7 @@
             }
         },
         methods: {
-            downloadUrl: function (url) {
-                url += this.resultItem.DownloadUrl;
-                return url;
-            },
-            showMapLink: function () {
-                if (this.resultItem.DistributionProtocol &&
-                    (this.resultItem.DistributionProtocol.indexOf("OGC:WMS") > -1 ||
-                        this.resultItem.DistributionProtocol.indexOf("OGC:WFS") > -1 ||
-                        this.resultItem.DistributionProtocol.indexOf("OGC:WCS") > -1) &&
-                    (this.resultItem.Type == "service" || this.resultItem.Type == "servicelayer") &&
-                    this.resultItem.MapUrl)
-                    return true;
-                else return false;
-            },
-            showServiceMapLink: function () {
-                if (this.resultItem.ServiceUrl) return true;
-                else return false;
-            },
-            isRestrictedService: function () {
-                if (this.resultItem.ServiceDistributionAccessConstraint == "Beskyttet" ||
-                    this.resultItem.ServiceDistributionAccessConstraint == "restricted" ||
-                    this.resultItem.ServiceDistributionAccessConstraint == "norway digital restricted") return true;
-                else {
-                    return false;
-                }
-            },
-            restrictedServiceClass: function () {
-                var iconPermissionClass;
-                if (this.isRestrictedService()) {
-                    iconPermissionClass = " custom-icon-kartmarkoer-needs-permission";
-                } else {
-                    iconPermissionClass = " custom-icon-kartmarkoer";
-                }
-                return iconPermissionClass;
-            },
-            addToCart: function () {
-                var orderItems = [];
-                var added = false;
-                var item = {
-                    name: this.resultItem.Title,
-                    uuid: this.resultItem.Uuid,
-                    url: "/metadata/uuid/" + this.resultItem.Uuid,
-                    organizationLogoUrl: this.resultItem.OrganizationLogoUrl,
-                    distributionUrl: this.resultItem.DownloadUrl,
-                    theme: this.resultItem.Theme,
-                    organizationName: this.resultItem.Organization
-                }
-
-                if (localStorage.getItem('orderItems') != null) {
-                    orderItems = (JSON.parse(localStorage.getItem('orderItems')));
-                }
-                $.map(orderItems,
-                    function (elementOfArray, indexInArray) {
-                        if (elementOfArray == item.uuid) {
-                            added = true;
-                        }
-                    });
-                if (!added) {
-                    orderItems.push(item.uuid);
-                    localStorage["orderItems"] = JSON.stringify(orderItems);
-                    localStorage[item.uuid + ".metadata"] = JSON.stringify(item);
-                    showAlert(item.name + ' er lagt til i <a href="/nedlasting">kurven</a>', 'success');
-
-                    var orderItemCount = $('#orderitem-count').text();
-                    if (orderItemCount == null || orderItemCount == '') {
-                        orderItemCount = 0;
-                        $('#orderitem-count-text').text(' datasett');
-                    } else {
-                        orderItemCount = parseInt($('#orderitem-count').text());
-                    }
-                    orderItemCount += 1;
-                    $('#orderitem-count').text(orderItemCount);
-                    updateShoppingCart();
-                    this.addedToCart = true;
-                } else {
-                    var index = orderItems.indexOf(item.uuid);
-                    if (index > -1) {
-                        orderItems.splice(index, 1);
-                    }
-                    localStorage.removeItem(item.uuid + ".metadata");
-                    localStorage["orderItems"] = JSON.stringify(orderItems);
-
-                    updateShoppingCart();
-
-                    showAlert(item.name + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
-                    this.addedToCart = false;
-                }
-            },
+            
             type: function (type) {
                 var className = "label ";
                 if (type == "dataset" || type == "Datasett") className += "label-datasett";
@@ -224,33 +95,7 @@
                 else className += "label-tjeneste";
 
                 return className;
-            },
-            getCartButtonStatus: function () {
-                var addedOrderitems = localStorage.getItem('orderItems');
-                if (addedOrderitems !== null &&
-                    addedOrderitems !== "[]" &&
-                    addedOrderitems !== "[null]" &&
-                    addedOrderitems !== "") {
-                    addedOrderitems = JSON.parse(addedOrderitems);
-                    var addedToCart = false;
-                    addedOrderitems.forEach(function (addedOrderItemUuid) {
-                        if (addedOrderItemUuid !== null) {
-                            if (this.$parent.metadata !== undefined) {
-                                // Temainndelte datasett
-                                if (this.$parent.metadata.Uuid == addedOrderItemUuid) {
-                                    addedToCart = true;
-                                }
-                            } else if (this.resultItem !== undefined) {
-                                // Løse datasett
-                                if (this.resultItem.Uuid == addedOrderItemUuid) {
-                                    addedToCart = true;
-                                }
-                            }
-                        }
-                    }.bind(this));
-                    this.addedToCart = addedToCart;
-                }
-            },
+            }, 
         }
     }
 </script>
