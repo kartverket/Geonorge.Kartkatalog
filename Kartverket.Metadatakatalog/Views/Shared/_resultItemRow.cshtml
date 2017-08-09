@@ -51,24 +51,6 @@
         },
         computed: {
             // TODO ta vekk?
-            openData: function () {
-                var openData = {
-                    className: "",
-                    title: ""
-                };
-                if (this.resultItem.IsRestricted) {
-                    openData.className = "custom-icon custom-icon-hengelaas-closed-yellow";
-                    openData.title = "Tilgangsbegrensede data";
-                } else if (this.resultItem.IsOffline) {
-                    openData.className = "custom-icon custom-icon-hengelaas-closed-red";
-                    openData.title = "Skjermede data";
-                } else if (this.resultItem.IsOpendata) {
-                    openData.className = "custom-icon custom-icon-hengelaas-open-green";
-                    openData.title = "Åpne data";
-                }
-                return openData;
-            },
-            // TODO ta vekk?
             mapLink: function () {
                 var mapLink = {
                     mapLinkButtonId: "mapmacrolink-button-" + this.resultItem.Uuid,
