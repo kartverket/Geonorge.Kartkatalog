@@ -64,38 +64,7 @@
                     description = this.resultItem.Abstract;
                 }
                 return description;
-            },
-            thumbnailSrc: function () {
-                var src = "/thumbnail?uuid=" + this.resultItem.Uuid + "&type=small";
-                return src;
-            },
-            copyClass: function () {
-                copyClass = {
-                    btn: "btn btn-copy",
-                    icon: "btn btn-copy input-group-addon"
-                };
-                if (this.resultItem.GetCapabilitiesUrl.length == 0) {
-                    copyClass.btn = "btn disabled";
-                    copyClass.icon = "btn input-group-addon disabled";
-                }
-                return copyClass;
             }
-        },
-        methods: {
-            
-            type: function (type) {
-                var className = "label ";
-                if (type == "dataset" || type == "Datasett") className += "label-datasett";
-                else if (type == "software" || type == "Applikasjon") className += "label-applikasjon";
-                else if (type == "service" || type == "Tjeneste") className += "label-tjeneste";
-                else if (type == "servicelayer" || type == "Tjenestelag") className += "label-tjenestelag";
-                else if (type == "series" || type == "Datasettserie") className += "label-datasettserie";
-                else if (type == "dimensionGroup" || type == "Datasett") className += "label-datasett";
-                else if (type == "default") className += "label-default";
-                else className += "label-tjeneste";
-
-                return className;
-            }, 
         }
     }
 </script>
