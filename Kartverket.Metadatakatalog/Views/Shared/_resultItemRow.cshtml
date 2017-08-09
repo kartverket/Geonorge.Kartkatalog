@@ -1,10 +1,6 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
 
-
 @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
-
-@* Template for Underliggende distribusjoner *@
-@Html.Partial("_UnderlayingDistributions")
 
 @Html.Partial("VueComponents/_TableRowButtons")
 
@@ -18,7 +14,6 @@
 @Html.Partial("VueComponents/ResultItem/_Thumbnail")
 
 
-
 <script>
     //Component
     var ResultItemComponent = {
@@ -28,8 +23,6 @@
         data: function() {
             var data = {
                 expanded: false,
-                underlayingDistributions: [],
-                underlayingDistributionsRequested: false,
                 backgroundColor: "#fff",
                 addedToCart: false,
                 itemType: this.resultItem.type,
@@ -38,7 +31,6 @@
             return data;
         },
         components: {
-            distributionRows: distributionRows,
             TableRowButtons: TableRowButtons,
             TableTitle: TableTitle,
             TableOwner: TableOwner,
@@ -220,42 +212,6 @@
                 }
                 return iconPermissionClass;
             },
-            getUnderlyingDistributions: function () {
-                this.expanded = !this.expanded;
-                if (!this.underlayingDistributionsRequested) {
-                    showLoadingAnimation("Henter underliggende distribusjoner");
-                    $.ajax({
-                        type: "GET",
-                        url: "/api/distributions/" + uuid,
-                        success: function (response) {
-                            ResultItemComponent.distributionlist = ResultItemComponent.convertDistributionList(response);
-                        }
-                    });
-
-                    $.ajax({
-                        type: "GET",
-                        url: "/api/distributions/" + this.resultItem.Uuid,
-                        success: function (response) {
-                            ResultItemComponent.underlayingDistributions = response;
-                            ResultItemComponent.underlayingDistributions.forEach(function (dis, index) {
-                                dis.Type = ResultItemComponent.translateDistributionType(dis.DistributionProtocol, index);
-                            });
-                            hideLoadingAnimation();
-                        }
-                    });
-                    this.relatedDataList = this.convertRelatedDataList();
-                }
-                if (this.$root.viewType == "galleryView") {
-                    this.backgroundColor = "#fff";
-                } else {
-                    if (this.expanded) {
-                        this.backgroundColor = "#f4f4f4";
-                    } else {
-                        this.backgroundColor = "#fff";
-                    }
-                }
-                this.underlayingDistributionsRequested = true;
-            },
             addToCart: function () {
                 var orderItems = [];
                 var added = false;
@@ -348,20 +304,6 @@
                     this.addedToCart = addedToCart;
                 }
             },
-            translateDistributionType: function (Type, index) {
-
-                $.ajax({
-                    type: "GET",
-                    url: "/api/distributions/" + uuid,
-                    success: function (response) {
-                        response.containeditems.forEach(function (item) {
-                            if (item.codevalue == Type) {
-                                ResultItemComponent.underlayingDistributions[index].Type = item.label;
-                            }
-                        }.bind(this));
-                    }
-                });
-            }
         }
     }
 </script>

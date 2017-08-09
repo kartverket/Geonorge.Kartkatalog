@@ -1114,7 +1114,6 @@
     <Content Include="settings.config" />
     <Content Include="Views\Search\Area.cshtml" />
     <Content Include="Views\Shared\_FilterPages.cshtml" />
-    <Content Include="Views\Shared\_UnderlayingDistributions.cshtml" />
     <Content Include="Views\Shared\_resultItemRow.cshtml" />
     <Content Include="Views\Themes\Create.cshtml" />
     <Content Include="Views\Themes\Delete.cshtml" />
