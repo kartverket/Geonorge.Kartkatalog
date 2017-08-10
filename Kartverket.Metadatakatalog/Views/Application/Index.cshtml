@@ -2,8 +2,6 @@
 @using Kartverket.Metadatakatalog.Helpers
 @model SearchViewModel
 
-@Html.Partial("VueComponents/Helpers/_Sorting")
-
 @{ ViewBag.Title = "Kartløsninger"; }
 
 @section breadcrumb {
@@ -90,13 +88,8 @@
 <script type="text/x-template" id="searchResultTemplate">
         <div>
             <div v-if="$root.viewType == 'tableView' && items.length" class="row resultItemRowTableHeader">
-                <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
-                    <p>
-                        <a href="@Url.Action("Index", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
-                            Tittel<span class="orderby-indicator"></span>
-                        </a>
-                    </p>
-                </div>
+                <div is="header-title"></div>
+                
                 <div class="col-sm-2"><p>Type</p></div>
                 <div v-bind:class="orderByOwner.className" class="col-sm-4" v-bind:id="orderByOwner.id">
                     <p>

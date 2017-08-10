@@ -1,5 +1,6 @@
-﻿<script>
-    //Component
+﻿@Html.Partial("VueComponents/_TableHeader")
+
+<script>
     var SearchResult = {
         template: "#searchResultTemplate",
         name: "searchResult",
@@ -23,7 +24,8 @@
             return data;
         },
         components: {
-            ResultItem: ResultItemComponent
+            ResultItem: ResultItemComponent,
+            HeaderTitle: HeaderTitle
         },
         computed: {
             tableBorder: function() {

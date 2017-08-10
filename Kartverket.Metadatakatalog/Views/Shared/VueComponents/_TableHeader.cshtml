@@ -1,0 +1,28 @@
+﻿<script type="text/x-template" theme="tabell" id="titleHeaderTemplate">
+        <div v-bind:class="$parent.orderByTitle.className" class="col-sm-4" v-bind:id="$parent.orderByTitle.id">
+            <p>
+                <a href="@Url.Action("Index", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
+                    Tittel<span class="orderby-indicator"></span>
+                </a>
+            </p>
+        </div>
+</script>
+
+<script>
+    var HeaderTitle = {
+        name: "header-title",
+        template: "#titleHeaderTemplate",
+        data: function () {
+            var data = {
+                
+            };
+            return data;
+        }
+
+        @* TODO!
+           Får ikke tak i props "metadata" på metadata innenfor et tema...
+           Må spørre direkte i templaten ved å bruke "Metadata.Title" osv..*@
+
+    };
+</script>
+

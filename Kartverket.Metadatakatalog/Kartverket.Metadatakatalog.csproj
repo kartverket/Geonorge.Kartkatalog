@@ -1136,7 +1136,7 @@
     <Content Include="Views\Shared\VueComponents\Buttons\_ShowWebsiteButton.cshtml" />
     <Content Include="Views\Shared\VueComponents\Buttons\_ShowProductPageButton.cshtml" />
     <Content Include="Views\Shared\VueComponents\Helpers\_ConvertModelToResultItem.cshtml" />
-    <Content Include="Views\Shared\VueComponents\_TableRowButtons.cshtml" />
+    <Content Include="Views\Shared\VueComponents\_TableHeader.cshtml" />
     <Content Include="Views\Shared\VueComponents\Helpers\_SetVariablesForResultItem.cshtml" />
     <Content Include="Views\Shared\VueComponents\ResultItem\_Owner.cshtml" />
     <Content Include="Views\Shared\VueComponents\ResultItem\_Title.cshtml" />
@@ -1147,6 +1147,7 @@
     <Content Include="Views\Shared\VueComponents\ResultItem\_CopyUrl.cshtml" />
     <Content Include="Views\Shared\VueComponents\ResultItem\_Thumbnail.cshtml" />
     <Content Include="Views\Shared\_searchResult.cshtml" />
+    <Content Include="Views\Shared\VueComponents\_TableRowButtons.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
