@@ -160,11 +160,11 @@ if (items.Any())
             return {
                 apiData: {},
                 hierarchyLevel: this.$parent.hierarchyLevel !== undefined ? this.$parent.hierarchyLevel : 0
-            }
+            };
         },
         mounted: function () {
             $.getJSON('/api/metadata/' + this.metadata.Uuid, function (result) {
-                if (result.length != 0) {
+                if (result.length !== 0) {
                     this.apiData = result;
                 }
             }.bind(this));
@@ -184,7 +184,7 @@ if (items.Any())
         data: function () {
             return {
                 expanded: false
-            }
+            };
         },
         computed: {
             hierarchyLevel: function () {
@@ -219,7 +219,7 @@ if (items.Any())
                     if (addedTheme.Id == theme.Id){
                         topLevelThemeAllreadyAdded = true;
                     }
-                })
+                });
                 return topLevelThemeAllreadyAdded;
             },
             topLevelThemes: function (searchResultItem){
@@ -245,7 +245,7 @@ if (items.Any())
                     if (addedTopLevelThemeId == topLevelTheme.Id){
                         topLevelThemeIsAllreadyAdded = true;
                     }
-                })
+                });
                 return topLevelThemeIsAllreadyAdded;
             },
             getTopLevelTheme: function (theme){
@@ -274,7 +274,7 @@ if (items.Any())
             themeItem: ThemeItem,
             ResultItem: ResultItemComponent
         }
-    })
+    });
 </script>
 
 

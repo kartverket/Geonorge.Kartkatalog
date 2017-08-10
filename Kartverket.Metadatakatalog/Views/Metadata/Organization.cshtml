@@ -35,92 +35,91 @@
     </div>
 </section>
 
-@* Vue code for resultitem*@
 @Html.Partial("_resultItemRow")
+@Html.Partial("_searchResult")
 
-@*Template for a table row*@
 <script type="text/x-template" id="resultItemRow">
     <div>
         @* **** LISTE **** *@
         <div v-if="$root.viewType == 'listView'" class="row resultItemRowList">
-            
             <div class="col-sm-1">
-                @*Organisasjon*@
                 <div is="table-owner" v-bind:metadata="resultItem"></div>
             </div>
-
             <div class="col-sm-6">
-                @*Tittel*@
                 <div is="table-title" v-bind:metadata="resultItem"></div>
-                
                 <p>{{description}}</p>
-                
-                @*Distribusjonstype*@
                 <div is="table-distributionType" v-bind:metadata="resultItem"></div> 
             </div>
-
             <div class="col-sm-2">
-                @*Vis i kart*@
                 <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['showInMapButton']" v-bind:buttonType="'button'"></div>
-                
-                @*Last ned*@
                 <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['addToCartButton']" v-bind:buttonType="'button'"></div>
             </div>
-
             <div class="col-sm-3">
-                @*Thumbnail*@
                 <div is="thumbnail" v-bind:metadata="resultItem"></div>
             </div>
-
             <div class="clearfix"></div>
         </div>
 
         @* *** TABELL *** *@
         <div v-if="$root.viewType == 'tableView'">
-
             <div class="resultItemRow">
                 <div class="row">
-                    
-                    @*Tittel*@
                     <div class="col-sm-4">
                         <div is="table-title" v-bind:metadata="resultItem"></div>
                     </div>
-
-                    @*Distribusjonstype *@
                     <div class="col-sm-2">
                         <div is="table-distribution-type" v-bind:metadata="resultItem"></div>
                     </div>
-
-                    @*Organisasjon*@
                     <div class="col-sm-3">
                         <div is="table-owner" v-bind:metadata="resultItem"></div>
                     </div>
-
-                    @*Åpne data*@
                     <div class="col-sm-1">
                         <div is="table-open-data" v-bind:metadata="resultItem"></div>
                     </div>
-
-                    @*Kart*@
                     <div class="col-xs-1">
                         <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
                     </div>
-
-                    @*Last ned*@
                     <div class="col-xs-1">
                         <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
                     </div>
-
                 </div>
             </div>
         </div>
 
         @* *** GALLERI *** *@
-        <div v-if="$root.viewType == 'galleryView'" class="resultItemRowGallery">
+        <div v-if="$root.viewType == 'galleryView'">
             <div is="table-title" v-bind:metadata="resultItem"></div>
         </div>
 
         <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
+    </div>
+</script>
+
+<script type="text/x-template" id="searchResultTemplate">
+    <div>
+        <div v-if="$root.viewType == 'tableView' && items.length" class="row resultItemRowTableHeader">
+            <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
+                <p>
+                    <a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByTitle()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a>
+                </p>
+            </div>
+            <div class="col-sm-2"><p>Type</p></div>
+            <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
+                <p>
+                    <a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByOrganization()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
+                </p>
+            </div>
+            <div class="col-sm-1"><p>Åpne data</p></div>
+            <div class="col-sm-1"><p>Kart</p></div>
+            <div class="col-sm-1"><p>Last ned</p></div>
+        </div>
+
+        <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
+        <div v-for="item in items" v-bind:class="tableBorder">
+            <div is="resultItem" v-bind:result-item="item"></div>
+        </div>
+
+        <div class="clearfix"></div>
     </div>
 </script>
 
@@ -263,37 +262,12 @@
         <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
         <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
         <div class="clearfix"></div>
-        @if (Model.Result != null)
-        {
-            <div>
-                <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
-                    <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
-                        <p>
-                            <a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByTitle()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a>
-                        </p>
-                    </div>
-                    <div class="col-sm-2"><p>Type</p></div>
-                    <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
-                        <p>
-                            <a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByOrganization()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
-                        </p>
-                    </div>
-                    <div class="col-sm-1"><p>Åpne data</p></div>
-                    <div class="col-sm-1"><p>Kart</p></div>
-                    <div class="col-sm-1"><p>Last ned</p></div>
-                </div>
+        
+        <div is="searchResult" v-bind:result-items="ResultItems"></div>
 
-                <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
-                <div v-for="item in viewModel.Result.Items" v-bind:class="tableBorder">
-                    <div is="resultItem" v-bind:result-item="item"></div>
-                </div>
+        @DisplayPaginationBottom()
 
-                <div class="clearfix"></div>
-            </div>
-
-            @DisplayPaginationBottom()
-
-        }
+        
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
         <aside class="facet-filter-container">
@@ -308,15 +282,6 @@
     </div>
 </div>
 
-<script>
-@foreach (var item in Model.Result.Items)
-{
-    if (item.ShowMapLink || item.ShowServiceMapLink)
-    {
-        @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                      }
-}
-</script>
 
 
 @section scripts {
@@ -328,107 +293,33 @@
         @if (Model.OrganizationSeoName != null) {
             @:setMainSearchUrl('etatvis-oversikt/@Model.OrganizationSeoName');
             @:setMainSearchApiUrl('search?facets[0]name=organization&facets[0]value=@Model.OrganizationName');
-        }else
+        }
+        else
         {
             @:setMainSearchUrl('etatvis-oversikt/organisasjon');
         }
+
         //Main vue model
         var vueModel = new Vue({
             el: '#searchResultTable',
             data: {
-                viewModel: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
-                ResultItems: [],
-                currentOrderByParameter: getParameterByName("orderby"),
-                viewType: "tableView",
-                columns: "",
-                orderByUrl: "@Html.Raw(HttpUtility.HtmlDecode(HttpContext.Current.Request.Url.AbsoluteUri)).ToString()",
-                orderByTitle: {
-                    orderByParam: "title",
-                    className: "orderby orderby-title orderby-asc",
-                    id: "orderby-title-asc",
-                    url: "",
-                },
-                backgroundColor: "#fff",
-                orderByOwner: {
-                    orderByParam: "organization",
-                    className: "orderby orderby-organization orderby-asc",
-                    id: "orderby-organization-asc",
-                    url: "",
-                },
-                tableBorder: "table-border-bottom"
+                ResultItems: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.Result.Items))),
+                viewType: "tableView"
             },
             components: {
+                SearchResult: SearchResult,
                 ResultItem: ResultItemComponent
             },
             created: function() {
-                if (this.currentOrderByParameter == "title") {
-                    this.orderByTitle.orderByParam = "title_desc";
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                    this.orderByOwner.orderByParam = "organization";
-                    this.orderByOwner.id = "orderby-organization-asc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                } else if (this.currentOrderByParameter == "organization") {
-                    this.orderByTitle.orderByParam = "title";
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                    this.orderByOwner.orderByParam = "organization_desc";
-                    this.orderByOwner.id = "orderby-organization-desc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                } else if (this.currentOrderByParameter == "") {
-                    this.orderByTitle.orderByParam = "title";
-                    this.orderByOwner.orderByParam = "organization";
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                    this.orderByOwner.id = "orderby-organization-asc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                } else if (this.currentOrderByParameter == "organization_desc") {
-                    this.orderByTitle.orderByParam = "title";
-                    this.orderByOwner.orderByParam = "organization";
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                    this.orderByOwner.id = "orderby-organization-desc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-desc";
-                } else if (this.currentOrderByParameter == "title_desc") {
-                    this.orderByTitle.orderByParam = "title";
-                    this.orderByOwner.orderByParam = "organization";
-                    this.orderByTitle.id = "orderby-title-desc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-desc";
-                    this.orderByOwner.id = "orderby-organization-asc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                }
-
                 this.viewType = this.getSelectedViewType();
-
-                this.orderByTitle.url = this.getOrderByUrl(this.orderByTitle.orderByParam);
-                this.orderByOwner.url = this.getOrderByUrl(this.orderByOwner.orderByParam);
             },
             methods: {
-                orderByExists: function() {
-                    return this.orderByUrl.includes("orderby");
-                },
-                isNotFirstParameterInUrl: function() {
-                    return this.orderByUrl.includes("?");
-                },
-                getOrderByUrl: function(param) {
-                    if (this.orderByExists()) {
-                        return this.orderByUrl.replace("orderby=" + this.currentOrderByParameter, "orderby=" + param);
-                    } else {
-                        if (this.isNotFirstParameterInUrl()) {
-                            return this.orderByUrl + "&orderby=" + param;
-                        } else {
-                            return this.orderByUrl + "?orderby=" + param;
-                        }
-                    }
-                },
                 view: function(type) {
                     this.viewType = type;
                     localStorage.setItem("layout", this.viewType);
-                    if (type == "galleryView") {
-                        this.columns = 'col-sm-4';
+                    if (type === "galleryView") {
                         this.tableBorder = "";
                     } else {
-                        this.columns = "";
                         this.tableBorder = "table-border-bottom";
                     }
                 },
