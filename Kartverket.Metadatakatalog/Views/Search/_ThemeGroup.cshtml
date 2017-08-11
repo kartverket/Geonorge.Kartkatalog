@@ -49,19 +49,27 @@ if (items.Any())
         });
 }
 
-@* Vue code for resultitem*@
 @Html.Partial("_resultItemRow")
+@Html.Partial("_searchResult")
 
 
 @* Tabellen *@
 <div id="themesVueList">
     <div class="row resultItemRowTableHeader">
+        <div class="col-sm-5" is="header-title"></div>
+        <div class="col-sm-4" is="header-organization"></div>
+        <div class="col-sm-1" is="header-open-data"></div>
+        <div class="col-sm-1" is="header-Map"></div>
+        <div class="col-sm-1" is="header-Add-to-cart"></div>
+    </div>
+    
+    @*<div class="row resultItemRowTableHeader">
         <div class="col-sm-5"><p>Tittel</p></div>
         <div class="col-sm-4"><p>Dataeier</p></div>
         <div class="col-sm-1"><p>Åpne data</p></div>
         <div class="col-sm-1"><p>Kart</p></div>
         <div class="col-sm-1"><p>Last ned</p></div>
-    </div>
+    </div>*@
     <div class="menu-separator search-results-table-heading"></div>
     <div v-for="resultItem in searchResults" class="table-border-bottom">
         <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes">
@@ -170,7 +178,8 @@ if (items.Any())
             }.bind(this));
         },
         components: {
-            ResultItem: ResultItemComponent
+            ResultItem: ResultItemComponent,
+            SearchResult: SearchResult,
         }
     };
 
@@ -192,7 +201,7 @@ if (items.Any())
             }
         },
         components: {
-            metadataItem: MetadataItem
+            metadataItem: MetadataItem,
         }
     };
 
@@ -272,7 +281,15 @@ if (items.Any())
         },
         components: {
             themeItem: ThemeItem,
-            ResultItem: ResultItemComponent
+            ResultItem: ResultItemComponent,
+            HeaderTitle: HeaderTitle,
+            HeaderType: HeaderType,
+            HeaderOrganization: HeaderOrganization,
+            HeaderOpenData: HeaderOpenData,
+            HeaderWebsite: HeaderWebsite,
+            HeaderAddToCart: HeaderAddToCart,
+            HeaderMap: HeaderMap,
+            HeaderUrl: HeaderUrl
         }
     });
 </script>
