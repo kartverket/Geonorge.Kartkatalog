@@ -63,13 +63,6 @@ if (items.Any())
         <div class="col-sm-1" is="header-Add-to-cart"></div>
     </div>
     
-    @*<div class="row resultItemRowTableHeader">
-        <div class="col-sm-5"><p>Tittel</p></div>
-        <div class="col-sm-4"><p>Dataeier</p></div>
-        <div class="col-sm-1"><p>Åpne data</p></div>
-        <div class="col-sm-1"><p>Kart</p></div>
-        <div class="col-sm-1"><p>Last ned</p></div>
-    </div>*@
     <div class="menu-separator search-results-table-heading"></div>
     <div v-for="resultItem in searchResults" class="table-border-bottom">
         <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes">
