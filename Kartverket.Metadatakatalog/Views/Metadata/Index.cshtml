@@ -94,8 +94,9 @@ if (contact != null)
 </div>
 
 
+
+@* Vue code for resultitem*@
 @Html.Partial("_resultItemRow")
-@Html.Partial("_searchResult")
 
 
 <div class="row margin-top-10">
@@ -162,12 +163,12 @@ if (contact != null)
             <span class="separator-lg"></span>
 
             <div class="row resultItemRowTableHeader">
-                <div class="col-sm-3" is="header-title"></div>
-                <div class="col-sm-2" is="header-type"></div>
-                <div class="col-sm-2" is="header-organization"></div>
-                <div class="col-sm-1" is="header-open-data"></div>
-                <div class="col-sm-1" is="header-map"></div>
-                <div class="col-sm-1" is="header-add-to-cart"></div>
+                <div class="col-sm-3"><p>Tittel</p></div>
+                <div class="col-sm-2"><p>Type</p></div>
+                <div class="col-sm-2"><p>Dataeier</p></div>
+                <div class="col-sm-1"><p>Åpne data</p></div>
+                <div class="col-sm-1"><p>Kart</p></div>
+                <div class="col-sm-1"><p>Last ned</p></div>
                 <div class="col-sm-2"><p>Format</p></div>
             </div>
             <div class="menu-separator search-results-table-heading"></div>
@@ -536,7 +537,6 @@ if (keywords != null && keywords.Any())
             },
             components: {
                 ResultItem: ResultItemComponent,
-                SearchResult: SearchResult
             },
             created: function() {
                 $.ajax({
