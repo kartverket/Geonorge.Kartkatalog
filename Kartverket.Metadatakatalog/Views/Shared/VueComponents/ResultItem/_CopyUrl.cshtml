@@ -3,7 +3,7 @@
         Url til tjeneste
     </button>
     
-    <span v-else v-bind:class="classNameIcon" data-toggle="tooltip" data-placement="bottom" v-bind:data-clipboard-text="copyText" alt="Kopier til utklippstavle" onclick="">
+    <span v-else v-bind:class="classNameIcon" data-toggle="tooltip" data-placement="bottom" title="Klikk for å kopiere urlen til utklippstavle" v-bind:data-clipboard-text="copyText" alt="Kopier til utklippstavle" onclick="">
         <i class="fa fa-clipboard"></i>
     </span>
 </script>

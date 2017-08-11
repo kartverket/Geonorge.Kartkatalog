@@ -100,7 +100,7 @@
                 }
                 var hrefAttribute = button.url !== null ? "href='" + button.url + "'" : "";
                 var iconElement = "<span class='" + button.icon.className + "'></span>";
-                var buttonElement = "<a " + hrefAttribute + " data-toggle='tooltip' data-placement='bottom' title='' class='" + button.className + "' " + attributes + "style='" + style + "'>" + iconElement + button.content + "</a>";
+                var buttonElement = "<a " + hrefAttribute + " data-toggle='tooltip' data-placement='bottom' title='"+ button.title + "' class='" + button.className + "' " + attributes + "style='" + style + "'>" + iconElement + button.content + "</a>";
                 return buttonElement;
             }
 
