@@ -1,11 +1,13 @@
 ﻿<script type="text/x-template" id="copyUrlContentTemplate">
-    <button  v-if="$root.viewType == 'listView'" v-bind:class="classNameButton" v-bind:data-clipboard-text="getCapabilitiesUrl" alt="Kopier til utklippstavle">
+    <div class="text-center">
+    <span  v-if="$root.viewType == 'listView'" v-bind:class="classNameButton" v-bind:data-clipboard-text="getCapabilitiesUrl" alt="Kopier til utklippstavle">
         Url til tjeneste
-    </button>
+    </span>
     
     <span v-else v-bind:class="classNameIcon" data-toggle="tooltip" data-placement="bottom" title="Klikk for å kopiere urlen til utklippstavle" v-bind:data-clipboard-text="copyText" alt="Kopier til utklippstavle" onclick="">
         <i class="fa fa-clipboard"></i>
     </span>
+    </div>
 </script>
 
 <script>

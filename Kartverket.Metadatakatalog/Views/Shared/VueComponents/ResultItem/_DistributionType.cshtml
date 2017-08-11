@@ -1,10 +1,12 @@
 ﻿<script type="text/x-template" id="distributionTypeContentTemplate">    
-    <p v-if="$root.viewType == 'listView'" >
-        Tilgjengelig som:
-        <span v-bind:title="'Tilgjengelig som ' + typeTranslated" data-toggle='tooltip' data-placement='bottom' style="width:auto" v-bind:class="className">{{typeTranslated}}</span>
-    </p>
-    
-    <span v-else v-bind:title="'Tilgjengelig som ' + typeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="className" style="width:auto">{{typeTranslated}}</span>
+    <div>
+        <p v-if="$root.viewType == 'listView'">
+            Tilgjengelig som:
+            <span v-bind:title="'Tilgjengelig som ' + typeTranslated" data-toggle='tooltip' data-placement='bottom' style="width:auto" v-bind:class="className">{{typeTranslated}}</span>
+        </p>
+
+        <span v-else v-bind:title="'Tilgjengelig som ' + typeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="className" style="width:auto">{{typeTranslated}}</span>
+    </div>
 </script>
 
 <script>

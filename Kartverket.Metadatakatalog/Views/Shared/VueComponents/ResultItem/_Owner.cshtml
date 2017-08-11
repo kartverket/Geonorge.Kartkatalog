@@ -1,13 +1,13 @@
 ﻿<script type="text/x-template" id="ownerContentTemplate">
-    
-    <a v-if="$root.viewType == 'listView'" v-bind:href="href" class="show-loading-animation" data-loading-message="Henter innhold">
-        <img v-bind:src="organizationLogo" class="img-responsive center-block" v-bind:alt="organizationName" v-bind:title="'Vis alle tjenester og datasett fra ' + organizationName" />
-    </a>
-    
-    <a v-else v-bind:href="href" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + organizationName" v-bind:title="'Vis alle tjenester og datasett fra ' + organizationName">
-        {{organizationName}}
-    </a>
+    <div>
+        <a v-if="$root.viewType == 'listView'" v-bind:href="href" class="show-loading-animation" data-loading-message="Henter innhold">
+            <img v-bind:src="organizationLogo" class="img-responsive center-block" v-bind:alt="organizationName" v-bind:title="'Vis alle tjenester og datasett fra ' + organizationName" />
+        </a>
 
+        <a v-else v-bind:href="href" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + organizationName" v-bind:title="'Vis alle tjenester og datasett fra ' + organizationName">
+            {{organizationName}}
+        </a>
+    </div>
 </script>
 
 <script>

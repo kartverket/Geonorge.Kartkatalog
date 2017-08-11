@@ -59,27 +59,13 @@ if (contact != null)
     <div>
         <div class="resultItemRow">
             <div class="row">
-                <div class="col-sm-3">
-                    <div is="table-title" v-bind:metadata="resultItem"></div>
-                </div>
-                <div class="col-sm-2">
-                    <div is="table-distribution-type" v-bind:metadata="resultItem"></div>
-                </div>
-                <div class="col-sm-2">
-                    <div is="table-owner" v-bind:metadata="resultItem"></div>
-                </div>
-                <div class="col-xs-1 text-center">
-                    <div is="table-open-data" v-bind:metadata="resultItem"></div>
-                </div>
-                <div class="col-xs-1 text-center">
-                    <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
-                </div>
-                <div class="col-xs-1 text-center">
-                    <div class="center-block" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
-                </div>
-                <div class="col-xs-1">
-                     <div is="table-distribution-formats" v-bind:metadata="resultItem"></div>
-                </div>
+                <div class="col-sm-3" is="table-title" v-bind:metadata="resultItem"></div>
+                <div class="col-sm-2" is="table-distribution-type" v-bind:metadata="resultItem"></div>
+                <div class="col-sm-2" is="table-owner" v-bind:metadata="resultItem"></div>
+                <div class="col-sm-1" is="table-open-data" v-bind:metadata="resultItem"></div>
+                <div class="col-sm-1" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
+                <div class="col-sm-1" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
+                <div class="col-sm-1" is="table-distribution-formats" v-bind:metadata="resultItem"></div>
             </div>
         </div>
 

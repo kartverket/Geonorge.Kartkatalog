@@ -59,27 +59,14 @@
         <div v-if="$root.viewType == 'tableView'" id="tableView">
             <div class="resultItemRow">
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div is="table-title" v-bind:metadata="resultItem"></div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div is="table-distributionType" v-bind:metadata="resultItem"></div>    
-                    </div>
-                    <div class="col-sm-3">
-                        <div is="table-owner" v-bind:metadata="resultItem"></div>
-                    </div>
-                    <div class="col-sm-1">
-                        <div is="table-open-data" v-bind:metadata="resultItem"></div>
-                    </div>
-                    <div class="col-xs-1 search-results-action-icons">
-                        <div is="table-copy-url" v-bind:metadata="resultItem"></div>
-                    </div>
-                    <div class="col-xs-1">
-                        <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
-                    </div>
+                        <div class="col-sm-4" is="table-title" v-bind:metadata="resultItem"></div>
+                        <div class="col-sm-2" is="table-distributionType" v-bind:metadata="resultItem"></div>    
+                        <div class="col-sm-3" is="table-owner" v-bind:metadata="resultItem"></div>
+                        <div class="col-sm-1" is="table-open-data" v-bind:metadata="resultItem"></div>
+                        <div class="col-sm-1" is="table-copy-url" v-bind:metadata="resultItem"></div>
+                        <div class="col-sm-1" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
                 </div>
             </div>
-
         </div>
 
         @* *** GALLERI *** *@

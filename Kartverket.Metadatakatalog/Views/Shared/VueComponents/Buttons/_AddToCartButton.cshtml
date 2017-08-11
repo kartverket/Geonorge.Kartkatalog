@@ -1,7 +1,7 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
 
 <script type="text/x-template" id="addToCartButtonTemplate">
-    <div>
+    <div class="text-center">
         <div v-if="resultItem.ShowDownloadService" v-on:click="addToCart()" v-html="htmlElement"></div>
         <div v-else v-html="htmlElement"></div>
     </div>

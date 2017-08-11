@@ -48,7 +48,7 @@
             <div class="col-sm-6">
                 <div is="table-title" v-bind:metadata="resultItem"></div>
                 <p>{{description}}</p>
-                <div is="table-distributionType" v-bind:metadata="resultItem"></div> 
+                <div is="table-distributionType" v-bind:metadata="resultItem"></div>
             </div>
             <div class="col-sm-2">
                 <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['showInMapButton']" v-bind:buttonType="'button'"></div>
@@ -64,24 +64,12 @@
         <div v-if="$root.viewType == 'tableView'">
             <div class="resultItemRow">
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div is="table-title" v-bind:metadata="resultItem"></div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div is="table-distribution-type" v-bind:metadata="resultItem"></div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div is="table-owner" v-bind:metadata="resultItem"></div>
-                    </div>
-                    <div class="col-sm-1">
-                        <div is="table-open-data" v-bind:metadata="resultItem"></div>
-                    </div>
-                    <div class="col-xs-1">
-                        <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
-                    </div>
-                    <div class="col-xs-1">
-                        <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
-                    </div>
+                    <div class="col-sm-4" is="table-title" v-bind:metadata="resultItem"></div>
+                    <div class="col-sm-2" is="table-distribution-type" v-bind:metadata="resultItem"></div>
+                    <div class="col-sm-3" is="table-owner" v-bind:metadata="resultItem"></div>
+                    <div class="col-sm-1" is="table-open-data" v-bind:metadata="resultItem"></div>
+                    <div class="col-sm-1" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
+                    <div class="col-sm-1" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
                 </div>
             </div>
         </div>
@@ -123,33 +111,33 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForFirstLink()))">&laquo;</a></li>
+                <li><a aria-label="Første" title="Første" href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForFirstLink()))">&laquo;</a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                    <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForPreviousLink()))">&laquo; Forrige</a></li>
+                <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForPreviousLink()))">&laquo; Forrige</a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                        <li class="active"><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
+                <li class="active"><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.OrganizationRouteValues(Model.ParamsForPageNumber(i))))">@i</a></li>
+                <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.OrganizationRouteValues(Model.ParamsForPageNumber(i))))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                    <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForNextLink()))">Neste &raquo;</a></li>
+                <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForNextLink()))">Neste &raquo;</a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForLastLink()))"> &raquo;</a></li>
+                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForLastLink()))"> &raquo;</a></li>
                 }
             </ul>
         </div>
@@ -254,12 +242,12 @@
         <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
         <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
         <div class="clearfix"></div>
-        
+
         <div is="searchResult" v-bind:result-items="ResultItems"></div>
 
         @DisplayPaginationBottom()
 
-        
+
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
         <aside class="facet-filter-container">
@@ -284,12 +272,12 @@
         // Setter url for søkeresultat
         @if (Model.OrganizationSeoName != null) {
             @:setMainSearchUrl('etatvis-oversikt/@Model.OrganizationSeoName');
-            @:setMainSearchApiUrl('search?facets[0]name=organization&facets[0]value=@Model.OrganizationName');
-        }
+                    @:setMainSearchApiUrl('search?facets[0]name=organization&facets[0]value=@Model.OrganizationName');
+                }
         else
         {
             @:setMainSearchUrl('etatvis-oversikt/organisasjon');
-        }
+                }
 
         //Main vue model
         var vueModel = new Vue({

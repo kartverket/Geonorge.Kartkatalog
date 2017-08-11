@@ -84,31 +84,11 @@ if (items.Any())
     <div>
         <div class="resultItemRow">
             <div class="row">
-
-                @*Tittel*@
-                <div class="col-sm-5">
-                    <div is="table-title" v-bind:metadata="resultItem"></div>
-                </div>
-
-                @*Organisasjon*@
-                <div class="col-sm-4">
-                    <div is="table-owner" v-bind:metadata="resultItem"></div>
-                </div>
-
-                @*Åpne data*@
-                <div class="col-xs-1 text-center">
-                    <div is="table-open-data" v-bind:metadata="resultItem"></div>
-                </div>
-
-                @*Kart*@
-                <div class="col-xs-1 text-center">
-                    <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
-                </div>
-
-                @*Last ned*@
-                <div class="col-xs-1 text-center">
-                    <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
-                </div>
+                <div class="col-sm-5" is="table-title" v-bind:metadata="resultItem"></div>
+                <div class="col-sm-4" is="table-owner" v-bind:metadata="resultItem"></div>
+                <div class="col-xs-1" is="table-open-data" v-bind:metadata="resultItem"></div>
+                <div class="col-xs-1" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
+                <div class="col-xs-1" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
             </div>
         </div>
 
