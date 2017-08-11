@@ -8,24 +8,20 @@
         data: function() {
             var data = {
                 items: this.resultItems,
-                currentOrderByParameter: getParameterByName("orderby"),
-                orderByUrl: "@Html.Raw(HttpUtility.HtmlDecode(HttpContext.Current.Request.Url.AbsoluteUri)).ToString()",
-                orderByTitle: {
-                    orderByParam: "title",
-                    className: "orderby orderby-title orderby-asc",
-                    id: "orderby-title-asc"
-                },
-                orderByOwner: {
-                    orderByParam: "organization",
-                    className: "orderby orderby-organization orderby-asc",
-                    id: "orderby-organization-asc"
-                }
+                currentOrderByParameter: getParameterByName("orderby")
             };
             return data;
         },
         components: {
             ResultItem: ResultItemComponent,
-            HeaderTitle: HeaderTitle
+            HeaderTitle: HeaderTitle,
+            HeaderType: HeaderType,
+            HeaderOrganization: HeaderOrganization,
+            HeaderOpenData: HeaderOpenData,
+            HeaderWebsite: HeaderWebsite,
+            HeaderAddToCart: HeaderAddToCart,
+            HeaderMap: HeaderMap,
+            HeaderUrl: HeaderUrl
         },
         computed: {
             tableBorder: function() {
@@ -33,63 +29,6 @@
                     return "";
                 } else {
                     return "table-border-bottom";
-                }
-            }
-        },
-        created: function () {
-            if (this.currentOrderByParameter === "title") {
-                this.orderByTitle.orderByParam = "title_desc";
-                this.orderByTitle.id = "orderby-title-asc";
-                this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                this.orderByOwner.orderByParam = "organization";
-                this.orderByOwner.id = "orderby-organization-asc";
-                this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-            } else if (this.currentOrderByParameter === "organization") {
-                this.orderByTitle.orderByParam = "title";
-                this.orderByTitle.id = "orderby-title-asc";
-                this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                this.orderByOwner.orderByParam = "organization_desc";
-                this.orderByOwner.id = "orderby-organization-desc";
-                this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-            } else if (this.currentOrderByParameter === "") {
-                this.orderByTitle.orderByParam = "title";
-                this.orderByOwner.orderByParam = "organization";
-                this.orderByTitle.id = "orderby-title-asc";
-                this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                this.orderByOwner.id = "orderby-organization-asc";
-                this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-            } else if (this.currentOrderByParameter === "organization_desc") {
-                this.orderByTitle.orderByParam = "title";
-                this.orderByOwner.orderByParam = "organization";
-                this.orderByTitle.id = "orderby-title-asc";
-                this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                this.orderByOwner.id = "orderby-organization-desc";
-                this.orderByOwner.className = "orderby orderby-organization orderby-desc";
-            } else if (this.currentOrderByParameter === "title_desc") {
-                this.orderByTitle.orderByParam = "title";
-                this.orderByOwner.orderByParam = "organization";
-                this.orderByTitle.id = "orderby-title-desc";
-                this.orderByTitle.className = "orderby orderby-title orderby-desc";
-                this.orderByOwner.id = "orderby-organization-asc";
-                this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-            }
-        },
-        methods: {
-            orderByExists: function () {
-                return this.orderByUrl.includes("orderby");
-            },
-            isNotFirstParameterInUrl: function () {
-                return this.orderByUrl.includes("?");
-            },
-            getOrderByUrl: function (param) {
-                if (this.orderByExists()) {
-                    return this.orderByUrl.replace("orderby=" + this.currentOrderByParameter, "orderby=" + param);
-                } else {
-                    if (this.isNotFirstParameterInUrl()) {
-                        return this.orderByUrl + "&orderby=" + param;
-                    } else {
-                        return this.orderByUrl + "?orderby=" + param;
-                    }
                 }
             }
         }

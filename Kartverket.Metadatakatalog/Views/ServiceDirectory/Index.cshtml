@@ -94,21 +94,13 @@
 
 <script type="text/x-template" id="searchResultTemplate">
     <div>
-        <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
-            <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
-                <p>
-                    <a href="@Url.Action("Index", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a>
-                </p>
-            </div>
-            <div class="col-sm-2"><p>Type</p></div>
-            <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
-                <p>
-                    <a href="@Url.Action("Index", Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
-                </p>
-            </div>
-            <div class="col-sm-1"><p>Åpne data</p></div>
-            <div class="col-sm-1"><p>URL</p></div>
-            <div class="col-sm-1"><p>Kart</p></div>
+        <div v-if="$root.viewType == 'tableView' && items.length" class="row resultItemRowTableHeader">
+            <div class="col-sm-4" is="header-title"></div>
+            <div class="col-sm-2" is="header-type"></div>
+            <div class="col-sm-3" is="header-organization"></div>
+            <div class="col-sm-1" is="header-open-data"></div>
+            <div class="col-sm-1" is="header-url"></div>
+            <div class="col-sm-1" is="header-map"></div>
         </div>
 
         <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>

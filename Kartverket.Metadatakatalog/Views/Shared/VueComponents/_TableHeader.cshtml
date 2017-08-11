@@ -1,28 +1,121 @@
 ﻿<script type="text/x-template" theme="tabell" id="titleHeaderTemplate">
-        <div v-bind:class="$parent.orderByTitle.className" class="col-sm-4" v-bind:id="$parent.orderByTitle.id">
-            <p>
-                <a href="@Url.Action("Index", Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
-                    Tittel<span class="orderby-indicator"></span>
-                </a>
-            </p>
-        </div>
+    <div v-bind:class="orderByTitle.className" v-bind:id="orderByTitle.id">
+        <p>
+            <a href="@Url.Action(ViewContext.RouteData.GetRequiredString("action"), Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
+                Tittel<span class="orderby-indicator"></span>
+            </a>
+        </p>
+    </div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="typeHeaderTemplate">
+    <div><p>Type</p></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="organizationHeaderTemplate">
+    <div v-bind:class="orderByOrganization.className" v-bind:id="orderByOrganization.id">
+        <p>
+            <a href="@Url.Action(ViewContext.RouteData.GetRequiredString("action"), Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
+                Dataeier<span class="orderby-indicator"></span>
+            </a>
+        </p>
+    </div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="openDataHeaderTemplate">
+    <div><p>Åpne data</p></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="websiteHeaderTemplate">
+    <div><p>Kart</p></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="mapHeaderTemplate">
+    <div><p>Nett-side</p></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="addToCartHeaderTemplate">
+    <div><p>Last ned</p></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="urlHeaderTemplate">
+    <div><p>Url</p></div>
 </script>
 
 <script>
-    var HeaderTitle = {
-        name: "header-title",
-        template: "#titleHeaderTemplate",
-        data: function () {
-            var data = {
-                
-            };
-            return data;
-        }
+        var HeaderTitle = {
+            name: "header-title",
+            template: "#titleHeaderTemplate",
+            data: function () {
+                var data = {
+                    orderByTitle: {
+                        className: "orderby orderby-title orderby-asc",
+                        id: "orderby-title-asc"
+                    }
+                };
+                return data;
+            },
+            created: function () {
+                if (this.$parent.currentOrderByParameter === "title_desc") {
+                    this.orderByTitle.id = "orderby-title-desc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-desc";
+                } else {
+                    this.orderByTitle.id = "orderby-title-asc";
+                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+                }
+            }
+        };
 
-        @* TODO!
-           Får ikke tak i props "metadata" på metadata innenfor et tema...
-           Må spørre direkte i templaten ved å bruke "Metadata.Title" osv..*@
+        var HeaderOrganization = {
+            name: "header-organization",
+            template: "#organizationHeaderTemplate",
+            data: function () {
+                var data = {
+                    orderByOrganization: {
+                        className: "orderby orderby-organization orderby-asc",
+                        id: "orderby-organization-asc"
+                    }
+                };
+                return data;
+            },
+            created: function () {
+                if (this.$parent.currentOrderByParameter === "organization_desc") {
+                    this.orderByOrganization.id = "orderby-organization-desc";
+                    this.orderByOrganization.className = "orderby orderby-organization orderby-desc";
+                } else {
+                    this.orderByOrganization.id = "orderby-organization-asc";
+                    this.orderByOrganization.className = "orderby orderby-organization orderby-asc";
+                }
+            }
+        };
 
-    };
-</script>
+        var HeaderType = {
+            name: "header-type",
+            template: "#typeHeaderTemplate"
+        };
 
+        var HeaderOpenData = {
+            name: "header-open-data",
+            template: "#openDataHeaderTemplate"
+        };
+
+        var HeaderWebsite = {
+            name: "header-website",
+            template: "#websiteHeaderTemplate"
+        };
+
+        var HeaderMap = {
+            name: "header-map",
+            template: "#mapHeaderTemplate"
+        };
+
+        var HeaderAddToCart = {
+            name: "header-add-to-cart",
+            template: "#addToCartHeaderTemplate"
+        };
+
+        var HeaderUrl = {
+            name: "header-url",
+            template: "#urlHeaderTemplate"
+        };
+    </script>

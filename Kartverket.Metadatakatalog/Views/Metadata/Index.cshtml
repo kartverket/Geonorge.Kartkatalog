@@ -58,39 +58,25 @@ if (contact != null)
 <script type="text/x-template" id="resultItemRow">
     <div>
         <div class="resultItemRow">
-            <div class="row">
-
-                @*Tittel*@
+            <div class="row">@
                 <div class="col-sm-3">
                     <div is="table-title" v-bind:metadata="resultItem"></div>
                 </div>
-                
-                @*Distribusjonstype *@
                 <div class="col-sm-2">
                     <div is="table-distribution-type" v-bind:metadata="resultItem"></div>
                 </div>
-
-                @*Organisasjon*@
                 <div class="col-sm-2">
                     <div is="table-owner" v-bind:metadata="resultItem"></div>
                 </div>
-
-                @*Åpne data*@
                 <div class="col-xs-1 text-center">
                     <div is="table-open-data" v-bind:metadata="resultItem"></div>
                 </div>
-
-                @*Kart*@
                 <div class="col-xs-1 text-center">
                     <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
                 </div>
-
-                @*Last ned*@
                 <div class="col-xs-1 text-center">
                     <div class="center-block" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
                 </div>
-                
-                @*Format*@
                 <div class="col-xs-1">
                      <div is="table-distribution-formats" v-bind:metadata="resultItem"></div>
                 </div>
