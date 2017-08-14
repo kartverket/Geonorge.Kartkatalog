@@ -496,6 +496,30 @@
             Run metadata re-indexing
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApplicationController.Index(Kartverket.Metadatakatalog.Models.SearchParameters)">
+            <summary>
+            Shows "Kartløsninger". Contains metadata of type "Application"
+            </summary>
+            <param name="parameters"></param>
+            <returns>/kartlosninger</returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.MetadataController.Index(System.String,System.String,System.String,System.String)">
+            <summary>
+            Metadata page. 
+            </summary>
+            <param name="uuid"></param>
+            <param name="organization"></param>
+            <param name="title"></param>
+            <param name="orderby"></param>
+            <returns>/metadata/{organization}/{title}/{uuid}</returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.MetadataController.Organization(Kartverket.Metadatakatalog.Models.SearchByOrganizationParameters)">
+            <summary>
+            Shows metadata by selected organization
+            </summary>
+            <param name="parameters"></param>
+            <returns>/etatvis-oversikt/{organization}</returns>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Get(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
             <summary>
             Catalogue search
@@ -535,6 +559,27 @@
             <summary>
             Get distributions for uuid
             </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.SearchController.Index(Kartverket.Metadatakatalog.Models.SearchParameters)">
+            <summary>
+            Main search page. Contains all datasets
+            </summary>
+            <param name="parameters">Facets</param>
+            <returns>/search</returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.SearchController.Area(Kartverket.Metadatakatalog.Models.SearchByAreaParameters)">
+            <summary>
+            Shows datasets by selected municipality or county.
+            </summary>
+            <param name="parameters">Uses AreaCode to find selected municipality or county. </param>
+            <returns>/hva-finnes-i-kommunen-eller-fylket</returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ServiceDirectoryController.Index(Kartverket.Metadatakatalog.Models.SearchParameters)">
+            <summary>
+            Contains service and service layers. 
+            </summary>
+            <param name="parameters">Facets</param>
+            <returns>/apier-og-tjenester</returns>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Facet.FacetField">
             <summary>

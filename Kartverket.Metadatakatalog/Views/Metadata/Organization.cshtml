@@ -131,7 +131,7 @@
                     @*Organisasjon*@
                     <div class="col-sm-3">
                         <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
-                            {{resultItem.Organization}}
+                            {{resultItem.OrganizationShortName}}
                         </a>
                     </div>
 
