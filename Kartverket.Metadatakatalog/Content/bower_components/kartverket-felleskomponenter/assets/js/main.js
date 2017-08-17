@@ -162,6 +162,25 @@ function setMainSearchApiUrl(urlSlug, environment){
     }
 }
 
+function setMainSearchPlaceholder(placeholder, environment) { 
+    environmentIsSet = false; 
+    var environmentSlug = ''; 
+    if (typeof environment !== 'undefined') { 
+        if (environment == 'dev' || environment == 'test' || environment == 'prod') { 
+            environmentIsSet = true; 
+        } else { 
+            console.error("incorrect value for environment. Use 'dev', 'test' or 'prod'"); 
+        } 
+    } 
+    if (environmentIsSet) { 
+        searchOptionsArray[environment].searchPlaceholder = placeholder; 
+    } else { 
+        searchOptionsArray.dev.searchPlaceholder = placeholder; 
+        searchOptionsArray.test.searchPlaceholder = placeholder; 
+        searchOptionsArray.prod.searchPlaceholder = placeholder; 
+    } 
+} 
+
 angular.module('geonorge', ['ui.bootstrap']);
 
 angular.module('geonorge').config(["$sceDelegateProvider", function ($sceDelegateProvider) {
@@ -172,6 +191,7 @@ var searchOptionsArray =
     "dev" : {
         text: "Kartkatalogen",
 	    searchTitle: "Kartkatalogen",
+	    searchPlaceholder: "S\u00F8k etter kartdata",
 	    buttonCss: "edgesKartkatalogen",
 	    listCss: "left-edge-kartkatalogen",
 	    baseUrl: "//kartkatalog.dev.geonorge.no",
@@ -185,6 +205,7 @@ var searchOptionsArray =
     "test" : {
         text: "Kartkatalogen",
 	    searchTitle: "Kartkatalogen",
+	    searchPlaceholder: "S\u00F8k etter kartdata",
 	    buttonCss: "edgesKartkatalogen",
 	    listCss: "left-edge-kartkatalogen",
 	    baseUrl: "//kartkatalog.test.geonorge.no",
@@ -198,6 +219,7 @@ var searchOptionsArray =
     "prod" : {
         text: "Kartkatalogen",
 	    searchTitle: "Kartkatalogen",
+	    searchPlaceholder: "S\u00F8k etter kartdata",
 	    buttonCss: "edgesKartkatalogen",
 	    listCss: "left-edge-kartkatalogen",
 	    baseUrl: "//kartkatalog.geonorge.no",
