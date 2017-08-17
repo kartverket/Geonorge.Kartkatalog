@@ -62,7 +62,7 @@ namespace Kartverket.Metadatakatalog.Service
                 tmp.Title = simpleMetadata.Title;
                 tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(simpleMetadata.HierarchyLevel);
                 tmp.DistributionFormats = GetDistributionTypes(simpleMetadata.DistributionsFormats);
-                tmp.Organization = simpleMetadata.ContactMetadata.Organization;
+                tmp.Organization = simpleMetadata.ContactMetadata != null ? simpleMetadata.ContactMetadata.Organization : "";
                 tmp.ShowDetailsUrl = "/metadata/org/title/" + uuid;
                 if (simpleMetadata.Constraints != null)
                     tmp.ServiceDistributionAccessConstraint = simpleMetadata.Constraints.AccessConstraints;
@@ -370,6 +370,53 @@ namespace Kartverket.Metadatakatalog.Service
                         }
                     }
                 }
+
+                var bundles = searchResult.Items[0].Bundles;
+
+                if (bundles != null && bundles.Count > 0)
+                {
+                    foreach (var relatert in bundles)
+                    {
+                        var relData = relatert.Split('|');
+
+                        try
+                        {
+                            var tmp = new Models.Api.Distribution();
+                            tmp.Uuid = relData[0] != null ? relData[0] : "";
+                            tmp.Title = relData[1] != null ? relData[1] : "";
+                            string parentIdentifier = relData[2] != null ? relData[2] : "";
+                            tmp.Type = "Datasett";
+                            tmp.DistributionFormats.Add(new DistributionFormat()
+                            {
+                                Name = relData[6] != null ? register.GetDistributionType(relData[6]) : "",
+                                Version = ""
+                            });
+                            tmp.Protocol = relData[6] != null ? register.GetDistributionType(relData[6]) : "";
+                            tmp.Organization = relData[4];
+                            tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
+
+                            //Åpne data, begrenset, skjermet
+                            if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
+                            if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
+                            if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
+                            tmp.ServiceDistributionAccessConstraint = !IsNullOrWhiteSpace(relData[12]) ? relData[12] : relData[11];
+
+                            //Vis kart
+                            if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
+                            {
+                                tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
+                                tmp.CanShowMapUrl = true;
+                            }
+
+                            distlist.Add(tmp);
+
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                }
+
             }
             return distlist;
         }

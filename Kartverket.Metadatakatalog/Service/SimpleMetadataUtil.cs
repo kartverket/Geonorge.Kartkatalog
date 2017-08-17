@@ -29,7 +29,7 @@ namespace Kartverket.Metadatakatalog.Service
                 case "datasetserie":
                     res = "Datasettserie";
                     break;
-                case "dimmensiongroup":
+                case "dimensionGroup":
                     res = "Datapakke";
                     break;
             }
