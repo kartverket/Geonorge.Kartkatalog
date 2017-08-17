@@ -310,7 +310,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 .Select(item => new FacetParameter
                 {
                     Name = item.name, Value = item.value
-                })
+                }).Where(v => v.Name != null)
                 .ToList();
         }
 
