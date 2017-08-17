@@ -106,6 +106,8 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.license = simpleMetadata.license;
             indexDoc.Type = simpleMetadata.Type;
             indexDoc.typenumber = simpleMetadata.typenumber;
+            indexDoc.ServiceDatasets = simpleMetadata.ServiceDatasets;
+            indexDoc.ServiceLayers = simpleMetadata.ServiceLayers;
 
             return indexDoc;
 
@@ -586,7 +588,9 @@ namespace Kartverket.Metadatakatalog.Service
                             DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
                             KeywordNationalTheme = keywordNationalTheme,
                             OrganizationLogoUrl = OrganizationLogoUrl,
-                            ThumbnailUrl = thumbnailsUrl
+                            ThumbnailUrl = thumbnailsUrl,
+                            AccessConstraints = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.AccessConstraints) ? simpleMd.Constraints.AccessConstraints : ""),
+                            OtherConstraintsAccess = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.OtherConstraintsAccess) ? simpleMd.Constraints.OtherConstraintsAccess : "")
                         });
                     }
                     catch (Exception ex)
@@ -597,7 +601,7 @@ namespace Kartverket.Metadatakatalog.Service
                 List<string> serviceDatasetsNewList = new List<string>();
                 foreach (var serviceDataset in serviceDatasets)
                 {
-                    serviceDatasetsNewList.Add(serviceDataset.Uuid + "|" + serviceDataset.Title + "|" + serviceDataset.ParentIdentifier + "|" + serviceDataset.HierarchyLevel + "|" + serviceDataset.ContactOwnerOrganization + "|" + serviceDataset.DistributionDetailsName + "|" + serviceDataset.DistributionDetailsProtocol + "|" + serviceDataset.DistributionDetailsUrl + "|" + serviceDataset.KeywordNationalTheme + "|" + serviceDataset.OrganizationLogoUrl + "|" + serviceDataset.ThumbnailUrl);
+                    serviceDatasetsNewList.Add(serviceDataset.Uuid + "|" + serviceDataset.Title + "|" + serviceDataset.ParentIdentifier + "|" + serviceDataset.HierarchyLevel + "|" + serviceDataset.ContactOwnerOrganization + "|" + serviceDataset.DistributionDetailsName + "|" + serviceDataset.DistributionDetailsProtocol + "|" + serviceDataset.DistributionDetailsUrl + "|" + serviceDataset.KeywordNationalTheme + "|" + serviceDataset.OrganizationLogoUrl + "|" + serviceDataset.ThumbnailUrl + "|" + serviceDataset.AccessConstraints + "|" + serviceDataset.OtherConstraintsAccess);
                 }
 
                 indexDoc.ServiceDatasets = serviceDatasetsNewList.ToList();
