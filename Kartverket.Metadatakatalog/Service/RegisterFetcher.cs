@@ -17,6 +17,7 @@ namespace Kartverket.Metadatakatalog.Service
         Dictionary<string, string> ListOfRestrictionValues = new Dictionary<string, string>();
         Dictionary<string, string> ListOfCoordinatesystemNameValues = new Dictionary<string, string>();
         Dictionary<string, string> ListOfDistributionTypes = new Dictionary<string, string>();
+        public Dictionary<string, string> OrganizationShortNames = new Dictionary<string, string>();
 
 
         public RegisterFetcher()
@@ -29,8 +30,53 @@ namespace Kartverket.Metadatakatalog.Service
             ListOfRestrictionValues = GetCodeList("D23E9F2F-66AB-427D-8AE4-5B6FD3556B57");
             ListOfCoordinatesystemNameValues = GetEPSGCodeList("37B9DC41-D868-4CBC-84F9-39557041FB2C");
             ListOfDistributionTypes = GetCodeList("94B5A165-7176-4F43-B6EC-1063F7ADE9EA");
+            OrganizationShortNames = GetListOfOrganizations();
 
         }
+
+        public Dictionary<string, string> GetListOfOrganizations()
+        {
+            MemoryCacher memCacher = new MemoryCacher();
+
+            var cache = memCacher.GetValue("organizations");
+
+            Dictionary<string, string> Organizations = new Dictionary<string, string>();
+
+            if (cache != null)
+            {
+                Organizations = cache as Dictionary<string, string>;
+            }
+
+            if (Organizations.Count < 1)
+            {
+                System.Net.WebClient c = new System.Net.WebClient();
+                c.Encoding = System.Text.Encoding.UTF8;
+                var data = c.DownloadString(System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner");
+                var response = Newtonsoft.Json.Linq.JObject.Parse(data);
+
+                var orgs = response["containeditems"];
+
+                foreach (var org in orgs)
+                {
+                    var name = org["label"].ToString();
+                    var shortName = name;
+                    if (org["ShortName"] != null)
+                        shortName = org["ShortName"].ToString();
+
+                    if (!Organizations.ContainsKey(name))
+                    {
+                        Organizations.Add(name, shortName);
+                    }
+                }
+
+                Organizations = Organizations.OrderBy(o => o.Value).ToDictionary(o => o.Key, o => o.Value);
+                memCacher.Add("organizations", Organizations, new DateTimeOffset(DateTime.Now.AddHours(12)));
+
+            }
+
+            return Organizations;
+        }
+
 
         public string GetCoordinatesystemName(string value)
         {

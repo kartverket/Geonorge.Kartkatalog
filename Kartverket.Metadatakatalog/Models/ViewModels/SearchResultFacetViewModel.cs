@@ -11,7 +11,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         private SearchResultFacetViewModel(Facet facet)
         {
             FacetField = facet.FacetField;
-            FacetResults = SearchResultFacetValueViewModel.CreateFromList(facet.FacetResults);
+            FacetResults = SearchResultFacetValueViewModel.CreateFromList(facet);
         }
 
         public static List<SearchResultFacetViewModel> CreateFromList(IEnumerable<Facet> facets)
