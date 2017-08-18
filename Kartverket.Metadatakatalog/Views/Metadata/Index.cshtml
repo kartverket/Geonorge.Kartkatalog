@@ -97,16 +97,16 @@ if (contact != null)
             <div class="col-sm-12">
                 <script>
                     function getMetadata(uuid) {
-                        $.getJSON('/api/search?text=${uuid}',
+                        $.getJSON('/api/search?text=' + uuid,
                             function(result) {
                                 if (result.length != 0) {
                                     if (result.Results[0] != null) {
                                         const title = result.Results[0].Title;
-                                        $('#related-${uuid}').text(title);
+                                        $('#related-' + uuid).text(title);
                                     } else
-                                        $('#related-${uuid}').text("Tittel mangler");
+                                        $('#related-' + uuid).text("Tittel mangler");
                                 } else {
-                                    $('#related-${uuid}').text("Tittel mangler");
+                                    $('#related-' + uuid).text("Tittel mangler");
                                 }
                             });
                     };
@@ -144,7 +144,7 @@ if (contact != null)
     <div id="metadata">
        
         @* *** Distribusjoner ****@
-        <div class="col-md-12@(Model.IsService() ? " hidden" : "")">
+        <article class="col-md-12">
             <h3>Distribusjoner</h3>
             <span class="separator-lg"></span>
 

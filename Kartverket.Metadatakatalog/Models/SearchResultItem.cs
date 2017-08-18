@@ -10,6 +10,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string Type { get; set; }
         public string Theme { get; set; }
         public string Organization { get; set; }
+        public string OrganizationShortName { get; set; }
         public string OrganizationLogoUrl { get; set; }
         public string ThumbnailUrl { get; set; }
         public string DistributionUrl { get; set; }
@@ -78,6 +79,7 @@ namespace Kartverket.Metadatakatalog.Models
             Title = doc.Title;
             Abstract = doc.Abstract;
             Organization = doc.Organizationgroup;
+            OrganizationShortName = !string.IsNullOrEmpty(doc.OrganizationShortName) ? doc.OrganizationShortName : doc.Organizationgroup;
             Theme = doc.Theme;
             Type = doc.Type;
             OrganizationLogoUrl = doc.OrganizationLogoUrl;

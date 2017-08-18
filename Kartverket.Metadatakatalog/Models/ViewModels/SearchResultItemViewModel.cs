@@ -15,6 +15,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string Type { get; set; }
         public string Theme { get; set; }
         public string Organization { get; set; }
+        public string OrganizationShortName { get; set; }
         public string OrganizationLogoUrl { get; set; }
         public string ThumbnailUrl { get; set; }
         public string MaintenanceFrequency { get; set; }
@@ -114,6 +115,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             Type = item.Type;
             Theme = item.Theme;
             Organization = item.Organization;
+            OrganizationShortName = !string.IsNullOrEmpty(item.OrganizationShortName) ? item.OrganizationShortName : item.Organization;
             OrganizationLogoUrl = GetOrganizationLogoUrl(item.OrganizationLogoUrl);
             ThumbnailUrl = item.ThumbnailUrl;
             MaintenanceFrequency = item.MaintenanceFrequency;

@@ -259,6 +259,8 @@
                 data: {
                     ResultItems: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.Result.Items))),
                     viewType: "tableView"
+        // Setter placeholder for søkefelt
+        setMainSearchPlaceholder('Søk etter kartløsninger');
                 },
                 components: {
                     SearchResult: SearchResult,
