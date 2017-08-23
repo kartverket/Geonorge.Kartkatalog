@@ -18,13 +18,13 @@
     @* Sett url og fiks linjeskift i data for themes *@
     @helper BuildMenu(Theme theme)
     {
-        theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
-        theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
-        foreach (var item in theme.Children)
-        {
-            @BuildMenu(item)
-        }
-    }
+theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+foreach (var item in theme.Children)
+{
+        @BuildMenu(item)
+}
+}
     @BuildMenu(Model)
 }
 
@@ -54,51 +54,10 @@
     <aside class="col-sm-4  size-12 col-sm-12 ">
         @if (!string.IsNullOrWhiteSpace(Model.ThumbnailUrl))
         {
-                <img src="@Model.ThumbnailUrl" class="pull-right" alt="Forhåndsvisning av data." />
+            <img src="@Model.ThumbnailUrl" class="pull-right" alt="Forhåndsvisning av data." />
         }
     </aside>
 </div>
-
-
-@*Template for a table row*@
-<script type="text/x-template" id="resultItemRow">
-    <div>
-
-        @* *** TABELL *** *@
-        <div v-if="$root.viewType == 'tableView'" class="table-border-bottom">
-
-            <div v-bind:class="{expanded: expanded}" class="resultItemRow">
-                <div class="row">
-                    
-                    @* Tittel *@
-                    <div class="col-sm-5">
-                        <div is="table-title" v-bind:metadata="resultItem"></div>
-                    </div>
-
-                    @*Organisasjon*@
-                    <div class="col-sm-4">
-                        <div is="table-owner" v-bind:metadata="resultItem"></div>
-                    </div>
-
-                    @*Åpne data*@
-                    <div class="col-xs-1 text-center">
-                        <div is="table-open-data" v-bind:metadata="resultItem"></div>
-                    </div>
-
-                    @*Kart*@
-                    <div class="col-xs-1 text-center">
-                        <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
-                    </div>
-
-                    @*Last ned*@
-                    <div class="col-xs-1 text-center">
-                        <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
 
 
 @* Metadata*@
@@ -116,41 +75,54 @@
     </div>
     <div class="menu-separator search-results-table-heading"></div>
     <div v-if="children.length" v-for="theme in children">
-        <div is="theme-item" v-bind:theme="theme" v-bind:parent-hierarchy-level="0"></div>
+        <div is="theme-item" v-bind:theme="theme" v-bind:parent-hierarchy-level="-1"></div>
     </div>
     <div v-for="metadataItem in metadataArray">
-        <div is="resultItem" v-bind:result-item="metadataItem"></div>
+        <div class="table-border-bottom">
+
+            <div is="resultItem" v-bind:result-item="metadataItem"></div>
+        </div>
     </div>
 </div>
 
+@* Metadata template *@
 <script type="text/x-template" id="metadata-item-template">
     <div>
         <div is="resultItem" v-bind:result-item="apiData"></div>
     </div>
 </script>
 
+
+@* Tema template *@
 <script type="text/x-template" id="theme-item-template">
     <div>
+
+        @* Tema *@
         <div class="table-border-bottom">
-            <div class="resultItemRow" style="margin-left: -18px;" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
+            <div class="resultItemRow" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
                 <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']" style="vertical-align: middle;"></span>
                 <a v-bind:href="theme.ShowDetailsUrl">{{ theme.Name }}</a>
             </div>
         </div>
         <div v-show="expanded">
+            @*Temaets metadata. *@
             <div v-if="theme.Metadata.length">
-                <div v-for="subItem in theme.Metadata">
+                <div v-for="subItem in theme.Metadata" class="table-border-bottom">
                     <div is="metadata-item" v-bind:metadata="subItem"></div>
                 </div>
             </div>
+
+            @* Temaets undertema *@
             <div v-if="theme.Children.length">
                 <div v-for="child in theme.Children">
                     <div is="theme-item" v-bind:theme="child" v-bind:parent-hierarchy-level="hierarchyLevel"></div>
                 </div>
             </div>
         </div>
+
     </div>
 </script>
+
 
 @if (ViewBag.IsAdmin)
 {

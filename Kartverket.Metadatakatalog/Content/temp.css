@@ -1,5 +1,5 @@
 ﻿.table-border-bottom {
-    border-bottom: 1px solid rgb(109, 110, 112);
+    border-bottom: 1px solid #ccc;
 }
 
 .resultItemRowTableHeaderListView {
@@ -49,6 +49,10 @@
 
     .resultItemRowTitle > * {
         display: table-cell;
+    }
+
+    .resultItemRowTitle span {
+        display: inline-block;
     }
 
     .resultItemRowTitle .expand-arrow-conatiner,

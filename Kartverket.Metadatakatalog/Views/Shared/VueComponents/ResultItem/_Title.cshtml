@@ -1,8 +1,8 @@
 ﻿<script type="text/x-template" theme="tabell" id="titleContentTemplate">
-    
+
     @*Liste*@
-    <a v-if="$root.viewType == 'listView'" v-bind:href="href" class="show-loading-animation" data-toggle="tooltip" data-placement="bottom" v-bind:title="'se metadata for ' + metadata.Title">
-        <p style="font-size:14pt" class="role-button search-results-name" role="button">{{metadata.Title}}</p>
+    <a v-if="$root.viewType == 'listView'" v-bind:href="href" class="show-loading-animation" data-toggle="tooltip" data-placement="bottom" v-bind:title="'se metadata for ' + content">
+        <p style="font-size:14pt" class="role-button search-results-name" role="button">{{ content }}</p>
     </a>
 
     @*Galleri*@
@@ -10,11 +10,11 @@
         <div class="search-results-gallery-image layoutblock">
             <div class="block shortcutpageteaserblock size-4 col-sm-4">
                 <div class="teaser-with-background-image">
-                    <a v-bind:href="href" data-toggle="tooltip" data-placement="bottom" v-bind:title="'se metadata for ' + metadata.Title">
+                    <a v-bind:href="href" data-toggle="tooltip" data-placement="bottom" v-bind:title="'se metadata for ' + content">
                         <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnail + ')'}">
                             <div class="teaser-overlay">
                                 <div class="teaser-caption">
-                                    <div class="teaser-heading">{{metadata.Title}}</div>
+                                    <div class="teaser-heading">{{ content }}</div>
                                 </div>
                             </div>
                         </div>
@@ -23,14 +23,18 @@
             </div>
         </div>
     </div>
-    
+
     @*Tabell*@
     <div v-else class="resultItemRowTitle">
-        <a v-bind:href="href" class="show-loading-animation" data-toggle="tooltip" data-placement="bottom" v-bind:title="'se metadata for ' + metadata.Title">
-            <span class="role-button search-results-name" role="button">{{metadata.Title}}</span>
+        <a v-bind:href="href"
+           class="show-loading-animation"
+           data-toggle="tooltip"
+           data-placement="bottom"
+           v-bind:title="'se metadata for ' + content"
+           v-bind:style="'padding-left: ' + this.leftPadding + ';'">
+            <span class="role-button search-results-name" role="button">{{ content }}</span>
         </a>
     </div>
-
 
 </script>
 
@@ -38,27 +42,39 @@
     var TableTitle = {
         name: "table-title",
         template: "#titleContentTemplate",
-        props: ["metadata", ""],
-        data: function () {
-            var data = {
-                href: "/metadata/" +
+        props: ["metadata", "parentHierarchyLevel"],
+        computed: {
+            hierarchyLevel: function () {
+                return this.parentHierarchyLevel !== undefined ? this.parentHierarchyLevel : 0;
+            },
+            leftPadding: function () {
+                var leftPadding = 0;
+                if (this.hierarchyLevel > 0) {
+                    leftPadding = 18 + (18 * this.hierarchyLevel);
+                    leftPadding = leftPadding += 'px';
+                }
+                return leftPadding;
+            },
+            href: function () {
+                return "/metadata/" +
                     this.metadata.OrganizationSeoName +
                     "/" +
                     this.metadata.TitleSeo +
                     "/" +
-                    this.metadata.Uuid,
-                content: this.metadata.Title,
-                thumbnail: "/thumbnail?uuid=" + this.metadata.Uuid + "&type=small"
-            };
-            return data;
+                    this.metadata.Uuid;
+            },
+            content: function () {
+                return this.metadata.Title;
+            },
+            thumbnail: function () {
+                return "/thumbnail?uuid=" + this.metadata.Uuid + "&type=small";
+            }
         }
-        
-        @* TODO! 
-           Får ikke tak i props "metadata" på metadata innenfor et tema... 
+
+        @* TODO!
+           Får ikke tak i props "metadata" på metadata innenfor et tema...
            Må spørre direkte i templaten ved å bruke "Metadata.Title" osv..*@
 
     };
-
-
 
 </script>

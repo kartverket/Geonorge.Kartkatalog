@@ -8,9 +8,9 @@
             name: "showInMapButton",
             template: "#showInMapButtonTemplate",
             props: ["resultItem", "defaultButtonClass", "buttonType"],
-            data: function () {
-                return {
-                    button: {
+            computed: {
+                button: function () {
+                    var button = {
                         id: "mapmacrolink-" + this.resultItem.Uuid,
                         content: "Vis i kart",
                         className: this.defaultButtonClass,
@@ -23,38 +23,40 @@
                         attributes: [
                             { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'viskart')" }
                         ]
-                    },
-                    htmlElement: null
-                }
-            },
-            created: function () {
-                if (this.resultItem.ShowMapLink) {
-                    if (this.resultItem.IsRestricted) {
-                        this.button.icon.className += " custom-icon-kartmarkoer-needs-permission";
+                    };
+
+                    if (this.resultItem.ShowMapLink) {
+                        if (this.resultItem.IsRestricted) {
+                            button.icon.className += " custom-icon-kartmarkoer-needs-permission";
+                        } else {
+                            button.icon.className += " custom-icon-kartmarkoer";
+                        }
+
+                    } else if (this.resultItem.ShowServiceMapLink) {
+                        if (this.resultItem.IsRestricted) {
+                            button.icon.className += " custom-icon-kartmarkoer-needs-permission";
+                        } else {
+                            button.icon.className += " custom-icon-kartmarkoer";
+                        }
                     } else {
-                        this.button.icon.className += " custom-icon-kartmarkoer";
+                        button.className += " disabled";
+                        button.icon.className += " custom-icon-kartmarkoer";
+                        button.id = "";
+                        button.icon.id = "";
+                        button.attributes = [];
                     }
 
-                } else if (this.resultItem.ShowServiceMapLink) {
-                    if (this.resultItem.IsRestricted) {
-                        this.button.icon.className += " custom-icon-kartmarkoer-needs-permission";
-                    } else {
-                        this.button.icon.className += " custom-icon-kartmarkoer";
+                    if (this.buttonType === "tableRow") {
+                        button.content = "";
                     }
-                } else {
-                    this.button.className += " disabled";
-                    this.button.icon.className += " custom-icon-kartmarkoer";
-                    this.button.id = "";
-                    this.button.icon.id = "";
-                    this.button.attributes = [];
-                }
 
-                if (this.buttonType === "tableRow") {
-                    this.button.content = "";
-                }
+                    this.getServiceStatus();
 
-                this.htmlElement = this.$parent.createButtonElement(this.button);
-                this.getServiceStatus();
+                    return button;
+                },
+                htmlElement: function () {
+                    return this.$parent.createButtonElement(this.button);
+                }
             },
             methods: {
                 isRestrictedService: function () {

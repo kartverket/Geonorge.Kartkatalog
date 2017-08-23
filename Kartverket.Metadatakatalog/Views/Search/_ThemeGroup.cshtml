@@ -13,8 +13,8 @@
 
     //Finn temaer som er tilknyttet metadata.
     var metadataWithThemesList = (from metadata in metadatas
-                              join metadataResult in result on metadata.Uuid equals metadataResult.Uuid
-                              select metadata).ToList();   
+                                  join metadataResult in result on metadata.Uuid equals metadataResult.Uuid
+                                  select metadata).ToList();
 }
 
 @* Sett url og fiks linjeskift i data for themes *@
@@ -40,7 +40,7 @@ if (items.Any())
 @BuildMenu(themes, null)
 
 @{
-    
+
     var metadatasWithThemes = JsonConvert.SerializeObject(metadataWithThemesList,
         Formatting.None,
         new JsonSerializerSettings()
@@ -62,11 +62,11 @@ if (items.Any())
         <div class="col-sm-1" is="header-Map"></div>
         <div class="col-sm-1" is="header-Add-to-cart"></div>
     </div>
-    
+
     <div class="menu-separator search-results-table-heading"></div>
     <div v-for="resultItem in searchResults" class="table-border-bottom">
         <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes">
-            <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="0"></div>
+            <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="-1"></div>
         </div>
         <div is="resultItem" v-bind:result-item="resultItem"></div>
     </div>
@@ -79,45 +79,27 @@ if (items.Any())
     </div>
 </script>
 
-@* ResultItem Template*@
-<script type="text/x-template" id="resultItemRow">
-    <div>
-        <div class="resultItemRow">
-            <div class="row">
-                <div class="col-sm-5" is="table-title" v-bind:metadata="resultItem"></div>
-                <div class="col-sm-4" is="table-owner" v-bind:metadata="resultItem"></div>
-                <div class="col-xs-1" is="table-open-data" v-bind:metadata="resultItem"></div>
-                <div class="col-xs-1" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
-                <div class="col-xs-1" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
-            </div>
-        </div>
-
-        <div class="clearfix"></div>
-    </div>
-
-</script>
-
 @* Tema template *@
 <script type="text/x-template" id="theme-item-template">
     <div>
-        
+
         @* Tema *@
         <div class="table-border-bottom">
-            <div class="resultItemRow" style="margin-left: -18px;" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
+            <div class="resultItemRow" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
                 <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']" style="vertical-align: middle;"></span>
                 <a v-bind:href="theme.ShowDetailsUrl">{{ theme.Name }}</a>
             </div>
         </div>
-        
+
         <div v-show="expanded">
-        
-            @*Temaets metadata. *@    
+
+            @*Temaets metadata. *@
             <div v-if="theme.Metadata.length">
                 <div v-for="subItem in theme.Metadata" class="table-border-bottom">
-                    <div style="background-color:rgb(238, 238, 238)" is="metadata-item" v-bind:metadata="subItem"></div>
+                    <div is="metadata-item" v-bind:metadata="subItem"></div>
                 </div>
             </div>
-            
+
             @* Temaets undertema *@
             <div v-if="theme.Children.length">
                 <div v-for="child in theme.Children">

@@ -14,6 +14,24 @@
 @Html.Partial("VueComponents/ResultItem/_Thumbnail")
 
 
+<script type="text/x-template" id="resultItemRow">
+    <div>
+        <div class="resultItemRow">
+            <div class="result-item-row-content">
+                <div class="row">
+                    <div class="col-sm-5" is="table-title" v-bind:metadata="resultItem" v-bind:parent-hierarchy-level="hierarchyLevel"></div>
+                    <div class="col-sm-4" is="table-owner" v-bind:metadata="resultItem"></div>
+                    <div class="col-xs-1" is="table-open-data" v-bind:metadata="resultItem"></div>
+                    <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
+                    <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</script>
+
+
 <script>
     //Component
     var ResultItemComponent = {
@@ -24,7 +42,7 @@
             var data = {
                 expanded: false,
                 addedToCart: false,
-                hierarchyLevel: this.$parent.hierarchyLevel !== undefined ? this.$parent.hierarchyLevel : 0,
+                hierarchyLevel: this.$parent.hierarchyLevel !== undefined ? this.$parent.hierarchyLevel + 1 : 0,
             };
             return data;
         },

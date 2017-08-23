@@ -4,7 +4,7 @@
 <script type="text/x-template" id="table-row-buttons-template">
     <div>
         <div is="Buttons"
-             v-bind:result-item="resultItem"
+             v-bind:result-item="metadata"
              v-bind:button-type="'tableRow'"
              v-bind:selected-buttons="this.listOfButtons">  
         </div>
@@ -19,8 +19,7 @@
         data: function () {
             var data = {
                 buttons: [],
-                buttonElements: [],
-                resultItem: this.metadata
+                buttonElements: []
             };
             return data;
         },
