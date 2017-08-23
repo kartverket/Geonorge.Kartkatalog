@@ -68,6 +68,24 @@
     </div>
 </script>
 
+<script type="text/x-template" id="organization-template">
+    <div class="facet-filter-item">
+        <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive, 'no-indicator': !hasChildren}" class="indicator"></span>
+        <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="facet-filter-title">{{ FacetName }}</span>
+        <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
+            <div v-bind:class="{'selected': facetResult.isSelected, 'is-empty': facetResult.Count == 0}" v-for="facetResult in FacetResults">
+                <div class="facet-checkbox  facet-link">
+                    <span v-on:click="$root.toggleFilter(FacetField, facetResult)"
+                          data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
+                    </span>
+                    <a data-toggle='tooltip' data-placement='bottom' v-bind:title="facetResult.FacetName">
+                        {{ facetResult.FacetNameShort }} </a> <span class="text-muted">({{ facetResult.Count }})</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
 <script type="text/x-template" id="areas-template">
     <div class="facet-filter-item">
         <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="indicator"></span>
@@ -294,7 +312,7 @@
     }
 
     var Organizations = {
-        template: '#default-template',
+        template: '#organization-template',
         data: function(){
             var data = {
                 FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(organizations))),
@@ -307,6 +325,8 @@
                 foreach (var organization in organizations)
                 {
                     @:data.FacetResults[@organizationIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(organization.LinkName()))";
+
+                    @:data.FacetResults[@organizationIndex].FacetNameShort = "@Html.Raw(HttpUtility.HtmlDecode(organization.ShortName))";
 
                     @:data.FacetResults[@organizationIndex].isSelected = this.$parent.isSelected(data.FacetField, data.FacetResults[@organizationIndex]);
 

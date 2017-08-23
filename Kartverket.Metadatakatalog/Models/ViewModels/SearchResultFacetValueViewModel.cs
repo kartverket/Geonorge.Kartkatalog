@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Resources;
 
@@ -8,16 +9,29 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
     {
         public string Name { get; set; }
         public int Count { get; set; }
+        public string ShortName { get; set; }
 
-        private SearchResultFacetValueViewModel(Facet.FacetValue facetValue)
+        private SearchResultFacetValueViewModel(Facet.FacetValue facetValue, string facetField)
         {
             Name = facetValue.Name;
             Count = facetValue.Count;
+            if(facetField == "organization")
+                ShortName = GetShortName(facetValue.Name);
         }
 
-        public static List<SearchResultFacetValueViewModel> CreateFromList(IEnumerable<Facet.FacetValue> facetResults)
+        private string GetShortName(string name)
         {
-            return facetResults.Select(item => new SearchResultFacetValueViewModel(item)).ToList();
+            Service.RegisterFetcher register = new Service.RegisterFetcher();
+            string newValue = name;
+            register.OrganizationShortNames.TryGetValue(name, out newValue);
+            if (!string.IsNullOrEmpty(newValue))
+                name = newValue;
+            return name;
+        }
+
+        public static List<SearchResultFacetValueViewModel> CreateFromList(Facet facet)
+        {
+            return facet.FacetResults.Select(item => new SearchResultFacetValueViewModel(item, facet.FacetField)).ToList();
         }
 
         public string LinkName()
