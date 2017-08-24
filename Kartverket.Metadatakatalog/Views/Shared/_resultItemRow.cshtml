@@ -16,7 +16,9 @@
 
 <script type="text/x-template" id="resultItemRow">
     <div>
-        <div class="resultItemRow">
+
+        @* *** TABELL *** *@
+        <div v-if="$root.viewType == 'tableView'" class="resultItemRow table-border-bottom">
             <div class="result-item-row-content">
                 <div class="row">
                     <div v-bind:class="getFieldSizeClass('title')" v-show="isSelectedField('title')" is="table-title" v-bind:metadata="resultItem" v-bind:parent-hierarchy-level="hierarchyLevel"></div>
@@ -27,7 +29,34 @@
                 </div>
             </div>
         </div>
-        <div class="clearfix"></div>
+
+        @* **** LISTE **** *@
+        <div v-if="$root.viewType == 'listView'" class="row resultItemRowList">
+            <div class="col-sm-1">
+                <div is="table-owner" v-bind:metadata="resultItem"></div>
+            </div>
+            <div class="col-sm-6">
+                <div is="table-title" v-bind:metadata="resultItem"></div>
+                <p>{{description}}</p>
+                <div is="table-distributionType" v-bind:metadata="resultItem"></div>
+            </div>
+            <div class="col-sm-2">
+                <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['showInMapButton']" v-bind:buttonType="'button'"></div>
+                <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['addToCartButton']" v-bind:buttonType="'button'"></div>
+            </div>
+            <div class="col-sm-3">
+                <div is="thumbnail" v-bind:metadata="resultItem"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        @* *** GALLERI *** *@
+        <div v-if="$root.viewType == 'galleryView'">
+            <div is="table-title" v-bind:metadata="resultItem"></div>
+        </div>
+
+        <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
+
     </div>
 </script>
 
@@ -38,7 +67,7 @@
         template: "#resultItemRow",
         name: "resultItem",
         props: ["resultItem", "selectedFields", "selectedButtons"],
-        data: function() {
+        data: function () {
             var data = {
                 expanded: false,
                 addedToCart: false,
@@ -51,7 +80,7 @@
             TableTitle: TableTitle,
             TableOwner: TableOwner,
             TableOpenData: TableOpenData,
-            TableDistributionType: TableDistributionType,           
+            TableDistributionType: TableDistributionType,
             TableDistributionUrl: TableDistributionUrl,
             TableDistributionFormats: TableDistributionFormats,
             TableCopyUrl: TableCopyUrl,
@@ -66,7 +95,7 @@
                 var url = "/metadata/" + organization + "/" + title + "/" + uuid;
                 return url;
             },
-            
+
             // TODO ta vekk
             organizationUrl: function () {
                 url = "/etatvis-oversikt/" + this.resultItem.OrganizationSeoName;
