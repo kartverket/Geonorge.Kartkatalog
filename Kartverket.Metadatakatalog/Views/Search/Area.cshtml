@@ -38,11 +38,11 @@
                         {
                             if (Model.AreaCode == countie.Code)
                             {
-                        <option selected value="@countie.Code">@countie.Name</option>
+                                <option selected value="@countie.Code">@countie.Name</option>
                             }
                             else
                             {
-                        <option value="@countie.Code">@countie.Name</option>
+                                <option value="@countie.Code">@countie.Name</option>
                             }
                         }
                     </optgroup>
@@ -51,11 +51,11 @@
                         {
                             if (Model.AreaCode == municipal.Code)
                             {
-                        <option selected value="@municipal.Code">@municipal.Name</option>
+                                <option selected value="@municipal.Code">@municipal.Name</option>
                             }
                             else
                             {
-                        <option value="@municipal.Code">@municipal.Name</option>
+                                <option value="@municipal.Code">@municipal.Name</option>
                             }
                         }
                     </optgroup>
@@ -68,51 +68,6 @@
 @Html.Partial("_resultItemRow")
 @Html.Partial("_searchResult")
 
-<script type="text/x-template" id="resultItemRow">
-    <div>
-        @* **** LISTE **** *@
-        <div v-if="$root.viewType == 'listView'" class="row resultItemRowList">
-            <div class="col-sm-1">
-                <div is="table-owner" v-bind:metadata="resultItem"></div>
-            </div>
-            <div class="col-sm-6">
-                <div is="table-title" v-bind:metadata="resultItem"></div>
-                <p>{{description}}</p>
-                <div is="table-distributionType" v-bind:metadata="resultItem"></div>
-            </div>
-            <div class="col-sm-2">
-                <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['showInMapButton']" v-bind:buttonType="'button'"></div>
-                <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['addToCartButton']" v-bind:buttonType="'button'"></div>
-            </div>
-            <div class="col-sm-3">
-                <div is="thumbnail" v-bind:metadata="resultItem"></div>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-
-        @* *** TABELL *** *@
-        <div v-if="$root.viewType == 'tableView'">
-            <div class="resultItemRow">
-                <div class="row">
-                        <div class="col-sm-4" is="table-title" v-bind:metadata="resultItem"></div>
-                        <div class="col-sm-2" is="table-distribution-type" v-bind:metadata="resultItem"></div>
-                        <div class="col-sm-3" is="table-owner" v-bind:metadata="resultItem"></div>
-                        <div class="col-sm-1" is="table-open-data" v-bind:metadata="resultItem"></div>
-                        <div class="col-sm-1" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton']"></div>
-                        <div class="col-sm-1" is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['addToCartButton']"></div>
-                    </div>
-                </div>
-            </div>
-
-        @* *** GALLERI *** *@
-        <div v-if="$root.viewType == 'galleryView'">
-            <div is="table-title" v-bind:metadata="resultItem"></div>
-        </div>
-
-        <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
-    </div>
-</script>
-
 <script type="text/x-template" id="searchResultTemplate">
     <div>
         <div v-if="$root.viewType == 'tableView' && items.length" class="row resultItemRowTableHeader">
@@ -124,10 +79,21 @@
             <div class="col-sm-1" is="header-add-to-cart"></div>
         </div>
         <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
-        <div v-for="item in items" v-bind:class="tableBorder">
-            <div is="resultItem" v-bind:result-item="item"></div>
+        <div v-for="item in items">
+            <div is="resultItem"
+                 v-bind:result-item="item"
+                 v-bind:selected-fields="[
+                 {name: 'title', size: '4'},
+                 {name: 'distributionType', size: '2'},
+                 {name: 'owner', size: '3'},
+                 {name: 'openData', size: '1'}
+                 ]"
+                 v-bind:selected-buttons="[
+                 'showInMapButton',
+                 'addToCartButton'
+                 ]">
+            </div>
         </div>
-
         <div class="clearfix"></div>
     </div>
 </script>
@@ -199,33 +165,33 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
             {
-                <li><a aria-label="Første" title="Første" href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForFirstLink()))"><span class="fa fa-angle-double-left"></span></a></li>
+                    <li><a aria-label="Første" title="Første" href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForFirstLink()))"><span class="fa fa-angle-double-left"></span></a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
             {
-                <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPreviousLink()))"><span class="fa fa-angle-left"></span> Forrige</a></li>
+                    <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPreviousLink()))"><span class="fa fa-angle-left"></span> Forrige</a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
             {
                 if (Model.IsActivePage(i))
                 {
-                <li class="active"><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
+                        <li class="active"><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
                     }
                     else
                     {
-                <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
+                        <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
             {
-                <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForNextLink()))"> Neste <span class="fa fa-angle-right"></span></a></li>
+                    <li><a href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForNextLink()))"> Neste <span class="fa fa-angle-right"></span></a></li>
                 }
                 @if (Model.IsLastButtonActive())
             {
-                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForLastLink()))"> <span class="fa fa-angle-double-right"></span></a></li>
+                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Area", Model.AreaRouteValues(Model.ParamsForLastLink()))"> <span class="fa fa-angle-double-right"></span></a></li>
                 }
             </ul>
         </div>
@@ -342,22 +308,22 @@
             @if (Html.DownloadServiceEnabled())
             {
                 <text>
-                    if (localStorage.getItem("orderItems") != null) {
-                        var storedOrderItems = JSON.parse(localStorage["orderItems"]);
-                        var orderitemCount = storedOrderItems.length;
-                        if (orderitemCount > 0) {
-                            $('#orderitem-count').text(orderitemCount);
-                            $('#orderitem-count-text').text(' datasett');
-                            updateAllCartButtons(storedOrderItems);
-                        } else {
-                            $('#orderitem-count').text('');
-                            $('#orderitem-count-text').text('Kurven er tom');
-                        }
-                    } else {
-                        $('#orderitem-count').text('');
-                        $('#orderitem-count-text').text('Kurven er tom');
-                    }
-                </text>
+            if (localStorage.getItem("orderItems") != null) {
+                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+                var orderitemCount = storedOrderItems.length;
+                if (orderitemCount > 0) {
+                    $('#orderitem-count').text(orderitemCount);
+                    $('#orderitem-count-text').text(' datasett');
+                    updateAllCartButtons(storedOrderItems);
+                } else {
+                    $('#orderitem-count').text('');
+                    $('#orderitem-count-text').text('Kurven er tom');
+                }
+            } else {
+                $('#orderitem-count').text('');
+                $('#orderitem-count-text').text('Kurven er tom');
+            }
+            </text>
             }
         });
 
