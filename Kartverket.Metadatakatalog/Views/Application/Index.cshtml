@@ -32,51 +32,6 @@
 @Html.Partial("_resultItemRow")
 @Html.Partial("_searchResult")
 
-<!--
-<script type="text/x-template" id="resultItemRow">
-    <div>
-        @* **** LISTE **** *@
-        <div v-if="$root.viewType == 'listView'" class="row resultItemRowList">
-            <div class="col-sm-1">
-                <div is="table-owner" v-bind:metadata="resultItem"></div>
-            </div>
-            <div class="col-sm-6">
-                <div is="table-title" v-bind:metadata="resultItem"></div>
-                <p>{{description}}</p>
-                <div is="table-distributionType" v-bind:metadata="resultItem"></div>
-            </div>
-            <div class="col-sm-2">
-                <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['showWebsiteButton']" v-bind:buttonType="'button'"></div>
-            </div>
-            <div class="col-sm-3">
-                <div is="thumbnail" v-bind:metadata="resultItem"></div>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-
-        @* *** TABELL *** *@
-        <div v-if="$root.viewType == 'tableView'">
-            <div class="resultItemRow" v-bind:class="{expanded: expanded}">
-                <div class="row">
-                    <div class="col-sm-4" is="table-title" v-bind:metadata="resultItem"></div>
-                    <div class="col-sm-2" is="table-distribution-type" v-bind:metadata="resultItem"></div>
-                    <div class="col-sm-4" is="table-owner" v-bind:metadata="resultItem"></div>
-                    <div class="col-sm-1" is="table-open-data" v-bind:metadata="resultItem"></div>
-                    <div class="col-xs-1" is="table-distribution-url" v-bind:metadata="resultItem"></div>
-                </div>
-            </div>
-        </div>
-
-
-        @* *** GALLERI *** *@
-        <div v-if="$root.viewType == 'galleryView'">
-            <div is="table-title" v-bind:metadata="resultItem"></div>
-        </div>
-
-        <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
-    </div>
-</script>
--->
 <script type="text/x-template" id="searchResultTemplate">
     <div>
         <div v-if="$root.viewType == 'tableView' && items.length" class="row resultItemRowTableHeader">
@@ -88,7 +43,7 @@
         </div>
 
         <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
-        <div v-for="item in items" v-bind:class="tableBorder">
+        <div v-for="item in items">
             <div is="resultItem"
                  v-bind:result-item="item"
                  v-bind:selected-fields="[
