@@ -19,10 +19,11 @@
         <div class="resultItemRow">
             <div class="result-item-row-content">
                 <div class="row">
-                    <div class="col-sm-5" is="table-title" v-bind:metadata="resultItem" v-bind:parent-hierarchy-level="hierarchyLevel"></div>
-                    <div class="col-sm-4" is="table-owner" v-bind:metadata="resultItem"></div>
-                    <div class="col-xs-1" is="table-open-data" v-bind:metadata="resultItem"></div>
-                    <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton', 'addToCartButton']"></div>
+                    <div v-bind:class="getFieldSizeClass('title')" v-show="isSelectedField('title')" is="table-title" v-bind:metadata="resultItem" v-bind:parent-hierarchy-level="hierarchyLevel"></div>
+                    <div v-bind:class="getFieldSizeClass('distributionType')" v-show="isSelectedField('distributionType')" is="table-distribution-type" v-bind:metadata="resultItem"></div>
+                    <div v-bind:class="getFieldSizeClass('owner')" v-if="isSelectedField('owner')" is="table-owner" v-bind:metadata="resultItem"></div>
+                    <div v-bind:class="getFieldSizeClass('openData')" v-if="isSelectedField('openData')" is="table-open-data" v-bind:metadata="resultItem"></div>
+                    <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="selectedButtons"></div>
                 </div>
             </div>
         </div>
@@ -36,7 +37,7 @@
     var ResultItemComponent = {
         template: "#resultItemRow",
         name: "resultItem",
-        props: ["resultItem"],
+        props: ["resultItem", "selectedFields", "selectedButtons"],
         data: function() {
             var data = {
                 expanded: false,
@@ -79,6 +80,29 @@
                     description = this.resultItem.Abstract;
                 }
                 return description;
+            }
+        },
+        methods: {
+            isSelectedField: function (fieldName) {
+                var isSelected = false;
+                this.selectedFields.forEach(function (selectedField) {
+                    if (selectedField.name == fieldName) isSelected = true;
+                });
+                return isSelected;
+            },
+            getFieldSizeClass: function (fieldName) {
+                var fieldSizeClass = "";
+                this.selectedFields.forEach(function (selectedField) {
+                    if (selectedField.name == fieldName) fieldSizeClass = "col-sm-" + selectedField.size;
+                });
+                return fieldSizeClass;
+            },
+            isSelectedButton: function (buttonName) {
+                var isSelected = false;
+                this.selectedButtons.forEach(function (selectedButtonName) {
+                    if (selectedButtonName == buttonName) isSelected = true;
+                });
+                return isSelected;
             }
         }
     }

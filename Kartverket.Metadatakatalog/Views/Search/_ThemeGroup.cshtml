@@ -68,14 +68,38 @@ if (items.Any())
         <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes">
             <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="-1"></div>
         </div>
-        <div is="resultItem" v-bind:result-item="resultItem"></div>
+        <div is="resultItem" 
+             v-bind:result-item="resultItem"
+             v-bind:selected-fields="[
+                 {name: 'title', size: '5'},
+                 {name: 'owner', size: '4'},
+                 {name: 'openData', size: '1'}
+                 ]"
+                 v-bind:selected-buttons="[
+                 'showInMapButton',
+                 'addToCartButton'
+                 ]"
+             >
+        </div>
     </div>
 </div>
 
 @* Metadata template *@
 <script type="text/x-template" id="metadata-item-template">
     <div>
-        <div is="resultItem" v-bind:result-item="apiData"></div>
+        <div is="resultItem" 
+             v-bind:result-item="apiData"
+             v-bind:selected-fields="[
+                 {name: 'title', size: '5'},
+                 {name: 'owner', size: '4'},
+                 {name: 'openData', size: '1'}
+                 ]"
+                 v-bind:selected-buttons="[
+                 'showInMapButton',
+                 'addToCartButton'
+                 ]"
+             >
+        </div>
     </div>
 </script>
 
