@@ -78,9 +78,17 @@ foreach (var item in theme.Children)
         <div is="theme-item" v-bind:theme="theme" v-bind:parent-hierarchy-level="-1"></div>
     </div>
     <div v-for="metadataItem in metadataArray">
-        <div class="table-border-bottom">
-
-            <div is="resultItem" v-bind:result-item="metadataItem"></div>
+        <div is="resultItem"
+             v-bind:result-item="metadataItem"
+             v-bind:selected-fields="[
+                 {name: 'title', size: '5'},
+                 {name: 'owner', size: '4'},
+                 {name: 'openData', size: '1'}
+                 ]"
+             v-bind:selected-buttons="[
+                 'showInMapButton',
+                 'addToCartButton'
+                 ]">
         </div>
     </div>
 </div>
@@ -88,7 +96,18 @@ foreach (var item in theme.Children)
 @* Metadata template *@
 <script type="text/x-template" id="metadata-item-template">
     <div>
-        <div is="resultItem" v-bind:result-item="apiData"></div>
+        <div is="resultItem"
+             v-bind:result-item="apiData"
+             v-bind:selected-fields="[
+                 {name: 'title', size: '5'},
+                 {name: 'owner', size: '4'},
+                 {name: 'openData', size: '1'}
+                 ]"
+             v-bind:selected-buttons="[
+                 'showInMapButton',
+                 'addToCartButton'
+                 ]">
+        </div>
     </div>
 </script>
 
@@ -107,7 +126,7 @@ foreach (var item in theme.Children)
         <div v-show="expanded">
             @*Temaets metadata. *@
             <div v-if="theme.Metadata.length">
-                <div v-for="subItem in theme.Metadata" class="table-border-bottom">
+                <div v-for="subItem in theme.Metadata">
                     <div is="metadata-item" v-bind:metadata="subItem"></div>
                 </div>
             </div>
