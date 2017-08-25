@@ -71,6 +71,8 @@ function addToCartButtonClick(addToCartButton) {
     var itemorgname = addToCartButton.attr('itemorgname');
 
 
+
+
     var orderItems = [];
 
     if (localStorage.getItem('orderItems') != null) {
@@ -81,38 +83,43 @@ function addToCartButtonClick(addToCartButton) {
             added = true;
         }
     });
-    if (!added) {
-        orderItems.push(itemuuid);
-        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl, 'theme': itemtheme, 'organizationName': itemorgname };
-        localStorage["orderItems"] = JSON.stringify(orderItems);
-        localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
-        showAlert(itemname + ' er lagt til i <a href="/nedlasting">kurven</a>', 'success');
+    if (itemuuid !== undefined) {
+        if (!added) {
+            orderItems.push(itemuuid);
+            var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl, 'theme': itemtheme, 'organizationName': itemorgname };
+            localStorage["orderItems"] = JSON.stringify(orderItems);
+            localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
+            showAlert(itemname + ' er lagt til i <a href="/nedlasting">kurven</a>', 'success');
 
-        var orderItemCount = $('#orderitem-count').text();
-        if (orderItemCount == null || orderItemCount == '') {
-            orderItemCount = 0;
-            $('#orderitem-count-text').text(' datasett');
+            var orderItemCount = $('#orderitem-count').text();
+            if (orderItemCount == null || orderItemCount == '') {
+                orderItemCount = 0;
+                $('#orderitem-count-text').text(' datasett');
+            } else {
+                orderItemCount = parseInt($('#orderitem-count').text());
+            }
+            orderItemCount += 1;
+            $('#orderitem-count').text(orderItemCount);
+            updateShoppingCart();
+
         } else {
-            orderItemCount = parseInt($('#orderitem-count').text());
-        }
-        orderItemCount += 1;
-        $('#orderitem-count').text(orderItemCount);
-        updateShoppingCart();
+            var index = orderItems.indexOf(itemuuid);
+            if (index > -1) {
+                orderItems.splice(index, 1);
+            }
+            localStorage.removeItem(itemuuid + ".metadata");
+            localStorage["orderItems"] = JSON.stringify(orderItems);
 
+            updateShoppingCart();
+
+            showAlert(itemname + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
+        }
+
+        updateCartButton(addToCartButton, orderItems);
     } else {
-        var index = orderItems.indexOf(itemuuid);
-        if (index > -1) {
-            orderItems.splice(index, 1);
-        }
-        localStorage.removeItem(itemuuid + ".metadata");
-        localStorage["orderItems"] = JSON.stringify(orderItems);
-
-        updateShoppingCart();
-
-        showAlert(itemname + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
+        showAlert('Kunne ikke legge til datasett i kurv', 'danger');
     }
 
-    updateCartButton(addToCartButton, orderItems);
 
 }
 

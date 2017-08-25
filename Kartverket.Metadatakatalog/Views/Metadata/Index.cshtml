@@ -104,11 +104,11 @@ if (contact != null)
                     baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
                 }
 
-                var addToCartEventParamater = "?addtocart_event_id=addToCart-" + Model.Uuid;
+                var addToCartEventParamater = "?addtocart_event_id=addtocart-" + Model.Uuid;
 
                 if (Request.Url.AbsoluteUri.Contains("?"))
                 {
-                    addToCartEventParamater = "&addtocart_event_id=addToCart-" + Model.Uuid;
+                    addToCartEventParamater = "&addtocart_event_id=addtocart-" + Model.Uuid;
                 }
 
                 string downloadSignInUrl = Html.DownloadUrl()
@@ -124,7 +124,7 @@ if (contact != null)
                 addToCartClass = "add-to-cart-btn prevent-action";
             }
 
-            <a id='addToCart-@Model.Uuid'
+            <a id='addtocart-@Model.Uuid'
                href='@addToCartUrl'
                onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                class="btn @addToCartClass"

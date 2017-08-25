@@ -814,6 +814,31 @@ function addShoppingCartTooltip(elementsCount) {
     element.tooltip();
 }
 
+function removeSingleItemFromArray(array, undesirableItem) {
+    var index = array.indexOf(undesirableItem);
+    if (index >= 0) {
+        array.splice(index, 1);
+    }
+    return array;
+}
+
+function removeFromArray(array, undesirableItems) {
+    var multiple = Array.isArray(undesirableItems);
+    if (multiple) {
+        undesirableItems.forEach(function (undesirableItem) {
+            array = removeSingleItemFromArray(array, undesirableItem);
+        });
+    } else {
+        array = removeSingleItemFromArray(array, undesirableItems);
+    }
+}
+
+function removeBrokenOrderItems() {
+    var orderItems = JSON.parse(localStorage.getItem("orderItems"));
+    removeFromArray(orderItems, [null, undefined, "null", {}, ""]);
+    localStorage.setItem('orderItems', JSON.stringify(orderItems));
+}
+
 function updateShoppingCart() {
     var shoppingCartElement = $('#orderitem-count');
     var orderItems = "";
@@ -864,7 +889,8 @@ function updateShoppingCartCookie() {
 }
 
 
-$(window).load(function() {
+$(window).load(function () {
+    removeBrokenOrderItems();
     updateShoppingCart();
 });
 
