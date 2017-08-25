@@ -79,20 +79,18 @@
             <div class="col-sm-1" is="header-add-to-cart"></div>
         </div>
         <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
-        <div v-for="item in items">
-            <div is="resultItem"
-                 v-bind:result-item="item"
-                 v-bind:selected-fields="[
+        <div v-for="item in items" is="resultItem"
+             v-bind:result-item="item"
+             v-bind:selected-fields="[
                  {name: 'title', size: '4'},
                  {name: 'distributionType', size: '2'},
                  {name: 'owner', size: '3'},
                  {name: 'openData', size: '1'}
                  ]"
-                 v-bind:selected-buttons="[
+             v-bind:selected-buttons="[
                  'showInMapButton',
                  'addToCartButton'
                  ]">
-            </div>
         </div>
         <div class="clearfix"></div>
     </div>

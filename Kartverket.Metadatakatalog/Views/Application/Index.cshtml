@@ -43,22 +43,18 @@
         </div>
 
         <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
-        <div v-for="item in items">
-            <div is="resultItem"
-                 v-bind:result-item="item"
-                 v-bind:selected-fields="[
+        <div v-for="item in items" is="resultItem"
+             v-bind:result-item="item"
+             v-bind:selected-fields="[
                  {name: 'title', size: '4'},
                  {name: 'distributionType', size: '2'},
                  {name: 'owner', size: '4'},
                  {name: 'openData', size: '1'}
                  ]"
-                 v-bind:selected-buttons="[
+             v-bind:selected-buttons="[
                  'showWebsiteButton'
-                 ]"
-                 >
-            </div>
+                 ]">
         </div>
-
         <div class="clearfix"></div>
     </div>
 </script>
@@ -103,201 +99,201 @@
         </div>
     </div>}
 
-@{
-    string url = HttpContext.Current.Request.Url.AbsoluteUri;
-    url = url.ToLower().Replace("kartlosninger", "api/kartlosninger-i-norge");
-    Uri uri = new Uri(url);
-    string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
-        Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
-    string querystring = Request.QueryString.ToString();
-    querystring = querystring.Replace(".name", "name");
-    querystring = querystring.Replace(".value", "value");
-    var qs = HttpUtility.ParseQueryString(querystring);
-    System.Collections.Specialized.NameValueCollection qsCol = new System.Collections.Specialized.NameValueCollection(qs);
-    qs.Clear();
-    foreach (string key in qsCol)
-    {
-        qs.Add(key.ToLower(), qsCol[key]);
+    @{
+        string url = HttpContext.Current.Request.Url.AbsoluteUri;
+        url = url.ToLower().Replace("kartlosninger", "api/kartlosninger-i-norge");
+        Uri uri = new Uri(url);
+        string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
+            Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
+        string querystring = Request.QueryString.ToString();
+        querystring = querystring.Replace(".name", "name");
+        querystring = querystring.Replace(".value", "value");
+        var qs = HttpUtility.ParseQueryString(querystring);
+        System.Collections.Specialized.NameValueCollection qsCol = new System.Collections.Specialized.NameValueCollection(qs);
+        qs.Clear();
+        foreach (string key in qsCol)
+        {
+            qs.Add(key.ToLower(), qsCol[key]);
+        }
+        qs.Set("Offset", "1");
+        qs.Set("limit", Model.NumFound.ToString());
+        qs.Add("mediatype", "csv");
+        string query = qs.ToString();
+        string urlCSV = path + "?" + query;
     }
-    qs.Set("Offset", "1");
-    qs.Set("limit", Model.NumFound.ToString());
-    qs.Add("mediatype", "csv");
-    string query = qs.ToString();
-    string urlCSV = path + "?" + query;
-}
 
-<div class="row search-result-navigation">
-    <div class="col-md-4">
-        Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
-        <div class="pagination-container">
-            <ul class="pagination pagination-sm btn-group inline-block">
-                @if (Model.IsFirstButtonActive())
-                {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
-                }
-
-                @if (Model.IsPreviousButtonActive())
-                {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
-                }
-
-                @for (int i = Model.startPage; i <= Model.endPage; i++)
-                {
-                    if (Model.IsActivePage(i))
+    <div class="row search-result-navigation">
+        <div class="col-md-4">
+            Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
+            <div class="pagination-container">
+                <ul class="pagination pagination-sm btn-group inline-block">
+                    @if (Model.IsFirstButtonActive())
                     {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        <li><a aria-label="Første" title="Første" href="@Url.Action(" Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
                     }
-                    else
-                    {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                    }
-                }
 
-                @if (Model.IsNextButtonActive())
-                {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
-                }
-                @if (Model.IsLastButtonActive())
-                {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
-                }
-            </ul>
+                    @if (Model.IsPreviousButtonActive())
+                    {
+                        <li><a href="@Url.Action(" Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
+                    }
+
+                    @for (int i = Model.startPage; i <= Model.endPage; i++)
+                    {
+                        if (Model.IsActivePage(i))
+                        {
+                            <li class="active"><a href="@Url.Action(" Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action(" Index", Model.ParamsForPageNumber(i))">@i</a></li>
+                        }
+                    }
+
+                    @if (Model.IsNextButtonActive())
+                    {
+                        <li><a href="@Url.Action(" Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
+                    }
+                    @if (Model.IsLastButtonActive())
+                    {
+                        <li><a aria-label="Siste" title="Siste" href="@Url.Action(" Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
+                    }
+                </ul>
+            </div>
         </div>
-    </div>
-    <div class="col-md-4 pull-right">
-        <div class="save-as-menu pull-right">
-            <label>Lagre som:</label>
-            <div class="no-padding-bottom save-as-dropdown">
-                <div class="custom-select">
-                    <select onchange="additionalView(this.value)" class="form-control">
-                        <option value="csvUrl" selected="selected">CSV</option>
-                    </select>
+        <div class="col-md-4 pull-right">
+            <div class="save-as-menu pull-right">
+                <label>Lagre som:</label>
+                <div class="no-padding-bottom save-as-dropdown">
+                    <div class="custom-select">
+                        <select onchange="additionalView(this.value)" class="form-control">
+                            <option value="csvUrl" selected="selected">CSV</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="saveButtons" class="no-padding-bottom save-as-buttons">
+                    <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
                 </div>
             </div>
-            <div id="saveButtons" class="no-padding-bottom save-as-buttons">
-                <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
-            </div>
         </div>
-    </div>
-    <div class="clearfix"></div>
-
-
-</div>
-
-<span class="separator-small separator-gray margin-bottom-10"></span>
-
-<div class="row resultItemTitleRow">
-
-    <div id="searchResultTable" class="col-md-9">
-        <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
-        <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
-        <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
         <div class="clearfix"></div>
 
-        <div is="searchResult" v-bind:result-items="ResultItems"></div>
-
-        @DisplayPaginationBottom()
 
     </div>
-    <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
-        <aside class="facet-filter-container">
-            <h3 class="">Filtrer søket på:</h3>
-            <span class="separator-small"></span>
-            @Html.Partial("_FacetFilter", Model)
-            <h3 class="" style="padding-top: 40px;">Sider</h3>
-            <span class="separator-small"></span>
-            @Html.Partial("_FilterPages")
-        </aside>
+
+    <span class="separator-small separator-gray margin-bottom-10"></span>
+
+    <div class="row resultItemTitleRow">
+
+        <div id="searchResultTable" class="col-md-9">
+            <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
+            <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
+            <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
+            <div class="clearfix"></div>
+
+            <div is="searchResult" v-bind:result-items="ResultItems"></div>
+
+            @DisplayPaginationBottom()
+
+        </div>
+        <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
+            <aside class="facet-filter-container">
+                <h3 class="">Filtrer søket på:</h3>
+                <span class="separator-small"></span>
+                @Html.Partial("_FacetFilter", Model)
+                <h3 class="" style="padding-top: 40px;">Sider</h3>
+                <span class="separator-small"></span>
+                @Html.Partial("_FilterPages")
+            </aside>
+        </div>
     </div>
-</div>
 
 
-@section scripts {
-    @{ var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
+    @section scripts {
+        @{ var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
-    <script>
+        <script>
 
-        // Setter api url for søkeresultat
-        setMainSearchUrl('kartlosninger');
-        setMainSearchApiUrl('kartlosninger-i-norge');
+            // Setter api url for søkeresultat
+            setMainSearchUrl('kartlosninger');
+            setMainSearchApiUrl('kartlosninger-i-norge');
 
-        // Setter placeholder for søkefelt
-        setMainSearchPlaceholder('Søk etter kartløsninger');
+            // Setter placeholder for søkefelt
+            setMainSearchPlaceholder('Søk etter kartløsninger');
 
-        //Main vue model
-        var vueModel = new Vue({
-            el: '#searchResultTable',
-            data: {
-                ResultItems: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.Result.Items))),
-                viewType: "tableView"
+            //Main vue model
+            var vueModel = new Vue({
+                el: '#searchResultTable',
+                data: {
+                    ResultItems: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.Result.Items))),
+                    viewType: "tableView"
 
-            },
-            components: {
-                SearchResult: SearchResult,
-                ResultItem: ResultItemComponent
-            },
-            created: function() {
-                this.viewType = this.getSelectedViewType();
-            },
-            methods: {
-                view: function(type) {
-                    this.viewType = type;
-                    localStorage.setItem("layout", this.viewType);
-                    if (type === "galleryView") {
-                        this.tableBorder = "";
-                    } else {
-                        this.tableBorder = "table-border-bottom";
-                    }
                 },
-                getSelectedViewType: function() {
-                    var viewType = "tableView";
-                    if (localStorage.getItem("layout")) {
-                        viewType = localStorage.getItem("layout");
-                        this.view(viewType);
+                components: {
+                    SearchResult: SearchResult,
+                    ResultItem: ResultItemComponent
+                },
+                created: function() {
+                    this.viewType = this.getSelectedViewType();
+                },
+                methods: {
+                    view: function(type) {
+                        this.viewType = type;
+                        localStorage.setItem("layout", this.viewType);
+                        if (type === "galleryView") {
+                            this.tableBorder = "";
+                        } else {
+                            this.tableBorder = "table-border-bottom";
+                        }
+                    },
+                    getSelectedViewType: function() {
+                        var viewType = "tableView";
+                        if (localStorage.getItem("layout")) {
+                            viewType = localStorage.getItem("layout");
+                            this.view(viewType);
+                        }
+                        return viewType;
                     }
-                    return viewType;
                 }
+            });
+
+        </script>
+
+        <script>
+            function showAlert(message, colorClass) {
+                $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
+                $('#feedback-alert .message').html(message);
+                $('#feedback-alert').show();
             }
-        });
 
-    </script>
+            $(document).ready(function() {
+                $("#orderby").change(
+                    function() {
+                        location.href = $(this).val();
+                    }
+                );
+            });
 
-    <script>
-        function showAlert(message, colorClass) {
-            $('#feedback-alert').attr('class', 'alert alert-dismissible alert-' + colorClass);
-            $('#feedback-alert .message').html(message);
-            $('#feedback-alert').show();
-        }
-
-        $(document).ready(function() {
-            $("#orderby").change(
-                function() {
-                    location.href = $(this).val();
-                }
-            );
-        });
-
-        $(document).ready(function() {
-            @if (Html.DownloadServiceEnabled())
+            $(document).ready(function() {
+                @if (Html.DownloadServiceEnabled())
             {
                 <text>
-            if (localStorage.getItem("orderItems") != null) {
-                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
-                var orderitemCount = storedOrderItems.length;
-                if (orderitemCount > 0) {
-                    $('#orderitem-count').text(orderitemCount);
-                    $('#orderitem-count-text').text(' datasett');
-                    updateAllCartButtons(storedOrderItems);
+                if (localStorage.getItem("orderItems") != null) {
+                    var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+                    var orderitemCount = storedOrderItems.length;
+                    if (orderitemCount > 0) {
+                        $('#orderitem-count').text(orderitemCount);
+                        $('#orderitem-count-text').text(' datasett');
+                        updateAllCartButtons(storedOrderItems);
+                    } else {
+                        $('#orderitem-count').text('');
+                        $('#orderitem-count-text').text('Kurven er tom');
+                    }
                 } else {
                     $('#orderitem-count').text('');
                     $('#orderitem-count-text').text('Kurven er tom');
                 }
-            } else {
-                $('#orderitem-count').text('');
-                $('#orderitem-count-text').text('Kurven er tom');
+                </text>
             }
-            </text>
-            }
-        });
-    </script>
-}
+            });
+        </script>
+    }

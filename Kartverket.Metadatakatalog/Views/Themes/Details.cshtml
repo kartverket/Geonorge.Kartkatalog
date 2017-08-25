@@ -95,19 +95,17 @@ foreach (var item in theme.Children)
 
 @* Metadata template *@
 <script type="text/x-template" id="metadata-item-template">
-    <div>
-        <div is="resultItem"
-             v-bind:result-item="apiData"
-             v-bind:selected-fields="[
+    <div is="resultItem"
+         v-bind:result-item="apiData"
+         v-bind:selected-fields="[
                  {name: 'title', size: '5'},
                  {name: 'owner', size: '4'},
                  {name: 'openData', size: '1'}
                  ]"
-             v-bind:selected-buttons="[
+         v-bind:selected-buttons="[
                  'showInMapButton',
                  'addToCartButton'
                  ]">
-        </div>
     </div>
 </script>
 

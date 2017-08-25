@@ -50,20 +50,18 @@
         </div>
 
         <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
-        <div v-for="item in items">
-            <div is="resultItem"
-                 v-bind:result-item="item"
-                 v-bind:selected-fields="[
+        <div v-for="item in items" is="resultItem"
+             v-bind:result-item="item"
+             v-bind:selected-fields="[
                  {name: 'title', size: '4'},
                  {name: 'distributionType', size: '2'},
                  {name: 'owner', size: '3'},
                  {name: 'openData', size: '1'}
                  ]"
-                 v-bind:selected-buttons="[
+             v-bind:selected-buttons="[
                  'showInMapButton',
                  'addToCartButton'
                  ]">
-            </div>
         </div>
         <div class="clearfix"></div>
     </div>
@@ -77,33 +75,33 @@
             <ul class="pagination pagination-sm btn-group inline-block">
                 @if (Model.IsFirstButtonActive())
                 {
-                <li><a aria-label="Første" title="Første" href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForFirstLink()))">&laquo;</a></li>
+                    <li><a aria-label="Første" title="Første" href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForFirstLink()))">&laquo;</a></li>
                 }
 
                 @if (Model.IsPreviousButtonActive())
                 {
-                <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForPreviousLink()))">&laquo; Forrige</a></li>
+                    <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForPreviousLink()))">&laquo; Forrige</a></li>
                 }
 
                 @for (int i = Model.startPage; i <= Model.endPage; i++)
                 {
                     if (Model.IsActivePage(i))
                     {
-                <li class="active"><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
+                        <li class="active"><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
                     }
                     else
                     {
-                <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.OrganizationRouteValues(Model.ParamsForPageNumber(i))))">@i</a></li>
+                        <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.OrganizationRouteValues(Model.ParamsForPageNumber(i))))">@i</a></li>
                     }
                 }
 
                 @if (Model.IsNextButtonActive())
                 {
-                <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForNextLink()))">Neste &raquo;</a></li>
+                    <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForNextLink()))">Neste &raquo;</a></li>
                 }
                 @if (Model.IsLastButtonActive())
                 {
-                <li><a aria-label="Siste" title="Siste" href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForLastLink()))"> &raquo;</a></li>
+                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForLastLink()))"> &raquo;</a></li>
                 }
             </ul>
         </div>
@@ -238,12 +236,12 @@
         // Setter url for søkeresultat
         @if (Model.OrganizationSeoName != null) {
             @:setMainSearchUrl('etatvis-oversikt/@Model.OrganizationSeoName');
-                    @:setMainSearchApiUrl('search?facets[0]name=organization&facets[0]value=@Model.OrganizationName');
-                }
+                            @:setMainSearchApiUrl('search?facets[0]name=organization&facets[0]value=@Model.OrganizationName');
+                        }
         else
         {
             @:setMainSearchUrl('etatvis-oversikt/organisasjon');
-                }
+                        }
 
         //Main vue model
         var vueModel = new Vue({

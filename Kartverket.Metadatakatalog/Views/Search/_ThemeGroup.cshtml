@@ -64,7 +64,7 @@ if (items.Any())
     </div>
 
     <div class="menu-separator search-results-table-heading"></div>
-    <div v-for="resultItem in searchResults" class="table-border-bottom">
+    <div v-for="resultItem in searchResults">
         <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes">
             <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="-1"></div>
         </div>
@@ -119,7 +119,7 @@ if (items.Any())
 
             @*Temaets metadata. *@
             <div v-if="theme.Metadata.length">
-                <div v-for="subItem in theme.Metadata" class="table-border-bottom">
+                <div v-for="subItem in theme.Metadata">
                     <div is="metadata-item" v-bind:metadata="subItem"></div>
                 </div>
             </div>
