@@ -847,16 +847,22 @@ function updateShoppingCart() {
     var cookieValue = 0;
     var cookieDomain = ".geonorge.no";
 
-    if (localStorage.getItem("orderItems") !== null && localStorage.getItem("orderItems") != "[]") {
+    if (localStorage.getItem("orderItems") !== null) {
         orderItems = localStorage.getItem("orderItems");
     }
-
+    
     if (orderItems !== "") {
-        shoppingCartElement.css("display", "block");
         orderItemsObj = JSON.parse(orderItems);
         cookieValue = orderItemsObj.length;
-        shoppingCartElement.html(cookieValue);
-        addShoppingCartTooltip(cookieValue);
+        if (cookieValue > 0) {
+            shoppingCartElement.css("display", "block");
+            shoppingCartElement.html(cookieValue);
+            addShoppingCartTooltip(cookieValue);
+        } else {
+            shoppingCartElement.css("display", "none");
+            addShoppingCartTooltip(0);
+        }
+        
     } else if (Cookies.get(cookieName) !== undefined && Cookies.get(cookieName) !== 0 && Cookies.get(cookieName) !== "0") {
         cookieValue = Cookies.get(cookieName);
         shoppingCartElement.css("display", "block");
