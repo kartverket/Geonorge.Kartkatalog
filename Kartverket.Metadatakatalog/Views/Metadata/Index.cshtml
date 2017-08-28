@@ -106,7 +106,7 @@ if (contact != null)
 
                 var addToCartEventParamater = "?addtocart_event_id=addtocart-" + Model.Uuid;
 
-                if (Request.Url.AbsoluteUri.Contains("?"))
+                if (baseUrl.Contains("?"))
                 {
                     addToCartEventParamater = "&addtocart_event_id=addtocart-" + Model.Uuid;
                 }
