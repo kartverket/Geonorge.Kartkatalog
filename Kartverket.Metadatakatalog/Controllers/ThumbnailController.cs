@@ -28,28 +28,42 @@ namespace Kartverket.Metadatakatalog.Controllers
 
                 if (model.Thumbnails != null && model.Thumbnails.Any())
                 {
-                    Thumbnail thumbnail = model.Thumbnails[model.Thumbnails.Count - 1];
-                    if (type != null && string.Equals(type, "small", StringComparison.InvariantCultureIgnoreCase))
+                    Thumbnail thumbnail = model.Thumbnails[0];
+                    Thumbnail thumbnailSmall = null;
+                    Thumbnail thumbnailMedium = null;
+                    Thumbnail thumbnailLarge = null;
+
+                    foreach (var thumb in model.Thumbnails)
                     {
-                        foreach (var thumb in model.Thumbnails)
+                        if (thumb.Type == "thumbnail" || thumb.Type == "miniatyrbilde")
                         {
-                            if (thumb.Type == "thumbnail" || thumb.Type == "miniatyrbilde")
-                            {
-                                thumbnail = thumb;
-                                break;
-                            }
+                            thumbnailSmall = thumb;
+                        }
+                        else if (thumb.Type == "medium")
+                        {
+                            thumbnailMedium = thumb;
+                        }
+                        else if (thumb.Type == "large_thumbnail")
+                        {
+                            thumbnailLarge = thumb;
                         }
                     }
-                    else if (type != null && string.Equals(type, "medium", StringComparison.InvariantCultureIgnoreCase))
+
+                    if (thumbnailSmall != null && type != null && string.Equals(type, "small", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        foreach (var thumb in model.Thumbnails)
-                        {
-                            if (thumb.Type == "medium")
-                            {
-                                thumbnail = thumb;
-                                break;
-                            }
-                        }
+                        thumbnail = thumbnailSmall;
+                    }
+                    else if (thumbnailMedium != null &&  type != null && string.Equals(type, "medium", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        thumbnail = thumbnailMedium;
+                    }
+                    else if (thumbnailSmall != null && type != null && string.Equals(type, "medium", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        thumbnail = thumbnailSmall;
+                    }
+                    else if (thumbnailLarge != null && type != null && string.Equals(type, "large", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        thumbnail = thumbnailLarge;
                     }
                     string url = thumbnail.URL;
                     string mimeType = GetMimeTypeFromUrl(url);
