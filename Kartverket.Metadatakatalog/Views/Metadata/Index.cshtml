@@ -307,7 +307,7 @@ if (contact != null)
         <div class="block listblock size-12 col-sm-12 ">
             @if (Model.Thumbnails != null && Model.Thumbnails.Count > 0)
             {
-                <img src="@Url.Action("Index", "Thumbnail", new {uuid = Model.Uuid, type = "small"})" w width="300" class="pull-right" alt="Forhåndsvisning av data." />
+                <img src="@Url.Action("Index", "Thumbnail", new {uuid = Model.Uuid, type = "medium"})" w width="300" class="pull-right" alt="Forhåndsvisning av data." />
             }
         </div>
     </aside>
