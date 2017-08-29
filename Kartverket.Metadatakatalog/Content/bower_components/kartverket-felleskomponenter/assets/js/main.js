@@ -1055,6 +1055,22 @@ function getParameterByName(name) {
   return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
+// Remove URL parameters from string
+function removeParameterByName(name, urlParameters) {
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "([^&#]*)"),
+  results = regex.exec(urlParameters);
+  urlParameters = urlParameters.replace(results[0], "");
+  return urlParameters;
+}
+
+// Remove URL parameters from url field
+function removeParameterByNameFromUrl(name) {
+  var urlParameters = location.search.toLowerCase();
+  urlParameters = removeParameterByName(name, urlParameters);
+  var newRelativeUrl = location.pathname + urlParameters;
+  window.history.replaceState({ path: newRelativeUrl }, null, newRelativeUrl);
+}
 $(document).on('focus', '.custom-select-list-input', function() {
   var customSelectListElement = $(this).closest('.custom-select-list');
   var dropdownElement = customSelectListElement.find('.custom-select-list-dropdown-container');
