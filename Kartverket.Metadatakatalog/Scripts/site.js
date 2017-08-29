@@ -37,7 +37,7 @@ function getServiceStatus(uuid, id) {
         try {
             var vurderingIsDefined = result.connect !== undefined && result.connect.vurdering !== undefined;
             var numLayersIsDefined = result.numLayers !== undefined && result.numLayers.svar !== undefined;
-            var statusOK =  vurderingIsDefined && result.connect.vurdering != "no";
+            var statusOK = vurderingIsDefined && result.connect.vurdering != "no";
             var numLayers = parseInt(numLayersIsDefined ? result.numLayers.svar : 0);
             if (!statusOK) {
                 $('#mapmacro-' + id + ', #mapmacro-button-' + id).attr("class", "custom-icon custom-icon-kartmarkoer-unavailable");
@@ -58,68 +58,3 @@ function getServiceStatus(uuid, id) {
     });
 };
 
-
-
-function addToCartButtonClick(addToCartButton) {
-    var added = false;
-    var itemuuid = addToCartButton.attr('itemuuid');
-    var itemname = addToCartButton.attr('itemname');
-    var itemurl = addToCartButton.attr('itemurl');
-    var itemorglogo = addToCartButton.attr('itemorglogo');
-    var itemdisturl = addToCartButton.attr('itemdisturl');
-    var itemtheme = addToCartButton.attr('itemtheme');
-    var itemorgname = addToCartButton.attr('itemorgname');
-
-
-    var orderItems = [];
-
-    if (localStorage.getItem('orderItems') != null) {
-        orderItems = (JSON.parse(localStorage.getItem('orderItems')));
-    }
-    $.map(orderItems, function (elementOfArray, indexInArray) {
-        if (elementOfArray == itemuuid) {
-            added = true;
-        }
-    });
-    if (!added) {
-        orderItems.push(itemuuid);
-        var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl, 'theme': itemtheme, 'organizationName': itemorgname };
-        localStorage["orderItems"] = JSON.stringify(orderItems);
-        localStorage[itemuuid + ".metadata"] = JSON.stringify(metadata);
-        showAlert(itemname + ' er lagt til i <a href="/nedlasting">kurven</a>', 'success');
-
-        var orderItemCount = $('#orderitem-count').text();
-        if (orderItemCount == null || orderItemCount == '') {
-            orderItemCount = 0;
-            $('#orderitem-count-text').text(' datasett');
-        } else {
-            orderItemCount = parseInt($('#orderitem-count').text());
-        }
-        orderItemCount += 1;
-        $('#orderitem-count').text(orderItemCount);
-        updateShoppingCart();
-
-    } else {
-        var index = orderItems.indexOf(itemuuid);
-        if (index > -1) {
-            orderItems.splice(index, 1);
-        }
-        localStorage.removeItem(itemuuid + ".metadata");
-        localStorage["orderItems"] = JSON.stringify(orderItems);
-
-        updateShoppingCart();
-
-        showAlert(itemname + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
-    }
-
-    updateCartButton(addToCartButton, orderItems);
-
-}
-
-$(document).ready(function () {
-    var addToCartId = getParameterByName('addtocart_event_id');
-    if (addToCartId) {
-        var addToCartButton = $("#" + addToCartId);
-        addToCartButtonClick(addToCartButton);
-    }
-})

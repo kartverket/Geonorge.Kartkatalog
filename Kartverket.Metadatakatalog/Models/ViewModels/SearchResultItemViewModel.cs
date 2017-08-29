@@ -171,7 +171,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             }
             else {
                 DownloadUrl = item.DistributionUrl;
-                DownloadUrl = MakeDownloadUrlRelative();
+                if (!DownloadLink())
+                    DownloadUrl = MakeDownloadUrlRelative();
             }
 
             LegendDescriptionUrl = item.LegendDescriptionUrl;
