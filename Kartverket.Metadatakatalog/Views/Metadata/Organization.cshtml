@@ -112,15 +112,15 @@
     string url = HttpContext.Current.Request.Url.AbsoluteUri;
     if (url.Contains("etatvis-oversikt/organisasjon"))
     {
-        url = url.Replace("etatvis-oversikt/organisasjon", "api/search");
+        url = url.Replace("etatvis-oversikt/organisasjon", "api/datasets");
     }
     else if (url.Contains("etatvis-oversikt"))
     {
-        url = url.Replace("etatvis-oversikt/" + Model.OrganizationSeoName, "api/search");
+        url = url.Replace("etatvis-oversikt/" + Model.OrganizationSeoName, "api/datasets");
     }
     else
     {
-        url = url.Replace("metadata/" + Model.OrganizationSeoName, "api/search");
+        url = url.Replace("metadata/" + Model.OrganizationSeoName, "api/datasets");
     }
     Uri uri = new Uri(url);
     string path = String.Format("{0}{1}{2}{3}", uri.Scheme,

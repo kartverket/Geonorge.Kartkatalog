@@ -40,6 +40,17 @@ namespace Kartverket.Metadatakatalog.Controllers
                             }
                         }
                     }
+                    else if (type != null && string.Equals(type, "medium", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        foreach (var thumb in model.Thumbnails)
+                        {
+                            if (thumb.Type == "medium")
+                            {
+                                thumbnail = thumb;
+                                break;
+                            }
+                        }
+                    }
                     string url = thumbnail.URL;
                     string mimeType = GetMimeTypeFromUrl(url);
                     Stream stream = DownloadImage(url);
