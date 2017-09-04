@@ -1059,7 +1059,7 @@ if (keywords != null && keywords.Any())
             } 
         }
 
-        $(document).ready(function () {
+        $(window).load(function () {
             var addToCartId = getParameterByName('addtocart_event_id');
             if (addToCartId) {
                 var addToCartButton = $("#" + addToCartId);
