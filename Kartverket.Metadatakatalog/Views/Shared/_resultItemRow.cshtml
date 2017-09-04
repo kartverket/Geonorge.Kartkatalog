@@ -252,6 +252,7 @@
                             added = true;
                         }
                     });
+                clearAlertMessage();
                 if (!added) {
                     orderItems.push(item.uuid);
                     localStorage["orderItems"] = JSON.stringify(orderItems);
