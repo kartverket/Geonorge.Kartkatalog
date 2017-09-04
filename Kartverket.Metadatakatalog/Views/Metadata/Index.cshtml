@@ -1060,12 +1060,9 @@ if (keywords != null && keywords.Any())
         $(document).ready(function () {
             var addToCartId = getParameterByName('addtocart_event_id');
             if (addToCartId) {
-                
                 var addToCartButton = $("#" + addToCartId);
                 addToCartButtonClick(addToCartButton);
-                console.log(window.location.search);
                 removeParameterByNameFromUrl('addtocart_event_id');
-                console.log(window.location.search);
             }
         })
 
