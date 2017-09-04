@@ -17,7 +17,6 @@
                 underlayingDistributions: [],
                 underlayingDistributionsRequested: false,
                 backgroundColor: "#fff",
-                addedToCart: false,
                 itemType: this.resultItem.type,
                 hierarchyLevel: this.$parent.hierarchyLevel !== undefined ? this.$parent.hierarchyLevel : 0
             };
@@ -27,14 +26,18 @@
             distributionRows: distributionRows
         },
         mounted: function () {
-            this.getCartButtonStatus();
             var addToCartId = getParameterByName('addtocart_event_id');
             if (addToCartId && this.resultItem.Uuid == addToCartId) {
                 this.addToCart();
                 removeParameterByNameFromUrl('addtocart_event_id');
             }
         },
+        created: function () {
+        },
         computed: {
+            addedToCart: function () {
+                return this.getCartButtonStatus();
+            },
             openData: function () {
                 var openData = {
                     className: "",
@@ -322,7 +325,7 @@
                             }
                         }
                     }.bind(this));
-                    this.addedToCart = addedToCart;
+                    return addedToCart;
                 }
             },
             translateDistributionType: function (Type, index) {
