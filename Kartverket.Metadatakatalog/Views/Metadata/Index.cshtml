@@ -704,6 +704,7 @@ if (keywords != null && keywords.Any())
                 }
             });
             if (itemuuid !== undefined) {
+                clearAlertMessage();
                 if (!added) {
                     orderItems.push(itemuuid);
                     var metadata = { 'name': itemname, 'uuid': itemuuid, 'url': itemurl, 'organizationLogoUrl': itemorglogo, 'distributionUrl': itemdisturl, 'theme': itemtheme, 'organizationName': itemorgname };
@@ -720,6 +721,7 @@ if (keywords != null && keywords.Any())
                     }
                     orderItemCount += 1;
                     $('#orderitem-count').text(orderItemCount);
+                    $(".add-to-cart-btn-" + itemuuid).addClass("added"); 
                     updateShoppingCart();
 
                 } else {
@@ -731,23 +733,20 @@ if (keywords != null && keywords.Any())
                     localStorage["orderItems"] = JSON.stringify(orderItems);
 
                     updateShoppingCart();
-
                     showAlert(itemname + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
+                    $(".add-to-cart-btn-" + itemuuid).removeClass("added"); 
                 }
 
                 updateCartButton(addToCartButton, orderItems);
             } 
         }
 
-        $(document).ready(function () {
+        $(window).load(function () {
             var addToCartId = getParameterByName('addtocart_event_id');
             if (addToCartId) {
-                
                 var addToCartButton = $("#" + addToCartId);
                 addToCartButtonClick(addToCartButton);
-                console.log(window.location.search);
                 removeParameterByNameFromUrl('addtocart_event_id');
-                console.log(window.location.search);
             }
         })
 
