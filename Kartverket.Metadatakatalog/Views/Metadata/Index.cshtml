@@ -127,7 +127,7 @@ if (contact != null)
             <a id='addtocart-@Model.Uuid'
                href='@addToCartUrl'
                onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-               class="btn @addToCartClass"
+               class="btn @addToCartClass add-to-cart-btn-@Model.Uuid"
                itemuuid="@Model.Uuid"
                itemname="@Model.Title"
                itemurl="/metadata/uuid/@Model.Uuid"
@@ -364,7 +364,7 @@ if (contact != null)
                            onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                            v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
                            class="add-to-cart-btn"
-                           v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
+                           v-bind:class="[{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline}, 'add-to-cart-btn-' + resultItem.Uuid]"> 
                             <span class="custom-icon custom-icon-handlekurv"></span>
                             {{resultItem.addedToCart}}
                         </a>
@@ -1039,6 +1039,7 @@ if (keywords != null && keywords.Any())
                     }
                     orderItemCount += 1;
                     $('#orderitem-count').text(orderItemCount);
+                    $(".add-to-cart-btn-" + itemuuid).addClass("added"); 
                     updateShoppingCart();
 
                 } else {
@@ -1050,8 +1051,8 @@ if (keywords != null && keywords.Any())
                     localStorage["orderItems"] = JSON.stringify(orderItems);
 
                     updateShoppingCart();
-
                     showAlert(itemname + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
+                    $(".add-to-cart-btn-" + itemuuid).removeClass("added"); 
                 }
 
                 updateCartButton(addToCartButton, orderItems);
