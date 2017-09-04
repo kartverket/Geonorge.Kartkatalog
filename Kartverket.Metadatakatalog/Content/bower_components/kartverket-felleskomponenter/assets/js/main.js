@@ -835,8 +835,10 @@ function removeFromArray(array, undesirableItems) {
 
 function removeBrokenOrderItems() {
     var orderItems = JSON.parse(localStorage.getItem("orderItems"));
-    removeFromArray(orderItems, [null, undefined, "null", {}, ""]);
-    localStorage.setItem('orderItems', JSON.stringify(orderItems));
+    if (orderItems !== null){
+        removeFromArray(orderItems, [null, undefined, "null", {}, ""]);
+        localStorage.setItem('orderItems', JSON.stringify(orderItems));
+    }
 }
 
 function updateShoppingCart() {
