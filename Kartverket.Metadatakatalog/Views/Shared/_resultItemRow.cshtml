@@ -252,6 +252,7 @@
                             added = true;
                         }
                     });
+                clearAlertMessage();
                 if (!added) {
                     orderItems.push(item.uuid);
                     localStorage["orderItems"] = JSON.stringify(orderItems);
@@ -268,6 +269,7 @@
                     orderItemCount += 1;
                     $('#orderitem-count').text(orderItemCount);
                     updateShoppingCart();
+                    $(".add-to-cart-btn-" + item.uuid).addClass("added");
                     this.addedToCart = true;
                 } else {
                     var index = orderItems.indexOf(item.uuid);
@@ -280,6 +282,7 @@
                     updateShoppingCart();
 
                     showAlert(item.name + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
+                    $(".add-to-cart-btn-" + item.uuid).removeClass("added");
                     this.addedToCart = false;
                 }
             },

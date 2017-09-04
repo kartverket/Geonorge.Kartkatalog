@@ -160,7 +160,7 @@
                            onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
                            v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
                            class="add-to-cart-btn"
-                           v-bind:class="{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline, 'added': addedToCart}">
+                           v-bind:class="[{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline}, 'add-to-cart-btn-' + resultItem.Uuid]">
                             <span class="custom-icon custom-icon-handlekurv"></span>
                             {{resultItem.addedToCart}}
                         </a>
