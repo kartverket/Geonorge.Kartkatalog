@@ -89,12 +89,13 @@
             thumbnail: thumbnail
         },
         mounted: function () {
-            this.getCartButtonStatus();
             var addToCartId = getParameterByName('addtocart_event_id');
             if (addToCartId && this.resultItem.Uuid == addToCartId) {
                 this.addToCart();
                 removeParameterByNameFromUrl('addtocart_event_id');
             }
+        },
+        created: function () {
         },
         computed: {
             readMoreUrl: function () {
