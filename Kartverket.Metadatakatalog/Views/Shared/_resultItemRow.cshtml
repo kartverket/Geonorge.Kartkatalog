@@ -2,6 +2,7 @@
 
 @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
+@Html.Partial("VueComponents/_ListRowButtons")
 @Html.Partial("VueComponents/_TableRowButtons")
 
 @Html.Partial("VueComponents/ResultItem/_Title")
@@ -42,8 +43,7 @@
                 <div is="table-distributionType" v-bind:metadata="resultItem"></div>
             </div>
             <div class="col-sm-2">
-                <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['showInMapButton']" v-bind:buttonType="'button'"></div>
-                <div is="buttons" v-bind:result-item="resultItem" v-bind:selectedButtons="['addToCartButton']" v-bind:buttonType="'button'"></div>
+                <div is="list-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="selectedButtons"></div>
             </div>
             <div class="col-sm-3">
                 <div is="thumbnail" v-bind:metadata="resultItem"></div>
@@ -77,6 +77,7 @@
             return data;
         },
         components: {
+            ListRowButtons: ListRowButtons,
             TableRowButtons: TableRowButtons,
             TableTitle: TableTitle,
             TableOwner: TableOwner,
