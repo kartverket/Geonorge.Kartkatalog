@@ -153,6 +153,24 @@ describe('create-element', () => {
     expect('Avoid using observed data object as vnode data').toHaveBeenWarned()
   })
 
+  it('warn non-primitive key', () => {
+    new Vue({
+      render (h) {
+        return h('div', { key: {}})
+      }
+    }).$mount()
+    expect('Avoid using non-primitive value as key').toHaveBeenWarned()
+  })
+
+  it('doesn\'t warn boolean key', () => {
+    new Vue({
+      render (h) {
+        return h('div', { key: true })
+      }
+    }).$mount()
+    expect('Avoid using non-primitive value as key').not.toHaveBeenWarned()
+  })
+
   it('nested child elements should be updated correctly', done => {
     const vm = new Vue({
       data: { n: 1 },
