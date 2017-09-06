@@ -2290,9 +2290,9 @@ input[type="submit"].btn {
 .btn .fa {
   margin: 0 4px; }
 
-.btn.icon-btn .btn .custom-icon,
-.btn.icon-btn .btn .glyphicon,
-.btn.icon-btn .btn .fa {
+.btn.icon-btn .custom-icon,
+.btn.icon-btn .glyphicon,
+.btn.icon-btn .fa {
   margin: 0; }
 
 .disabled .custom-icon {
