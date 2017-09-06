@@ -182,7 +182,8 @@
                             button.content = "Lagt i kurv";
                         }
                         button.title = "Allerede lagt i kurv";
-                      $(".add-to-cart-btn-" + this.resultItem.Uuid).addClass("added");
+                        $(".add-to-cart-btn-" + this.resultItem.Uuid).addClass("added");
+                        $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "Allerede lagt i kurv");
                     } else {
                         var index = orderItems.indexOf(item.uuid);
                         if (index > -1) {
@@ -199,6 +200,7 @@
                         }
                         this.button.title = "Legg " + this.resultItem.Title + " i kurv";
                         $(".add-to-cart-btn-" + this.resultItem.Uuid).removeClass("added");
+                        $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "Legg " + this.resultItem.Title + " i kurv");
                     }
                 }
             }
