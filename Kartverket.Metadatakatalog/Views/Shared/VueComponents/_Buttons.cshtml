@@ -95,7 +95,7 @@
                 var style = this.buttonType == "button" ? "width: 130px;" : "";
                 if (button.attributes !== undefined && button.attributes.length) {
                     button.attributes.forEach(function (buttonAttribute) {
-                        attributes += buttonAttribute.key + "='" + buttonAttribute.value + "' ";
+                        attributes += buttonAttribute.key + '="' + buttonAttribute.value + '" ';
                     });
                 }
                 var hrefAttribute = button.url !== null ? "href='" + button.url + "'" : "";
