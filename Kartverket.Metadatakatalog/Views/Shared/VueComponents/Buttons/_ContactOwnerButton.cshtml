@@ -8,9 +8,9 @@
             name: "contactOwnerButton",
             template: "#contactOwnerButtonTemplate",
             props: ["resultItem", "defaultButtonClass", "buttonType"],
-            data: function () {
-                return {
-                    button: {
+            computed: {
+                button: function () {
+                    var button = {
                         content: "Kontakt dataeier",
                         className: this.defaultButtonClass,
                         url: this.resultItem.ContactOwner.Email !== undefined ? "mailto:" + this.resultItem.ContactOwner.Email : null,
@@ -22,23 +22,21 @@
                             { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'kontaktdataeier')" },
                             { key: "target", value: "_blank" }
                         ]
-                    },
-                    htmlElement: null
-                }
-            },
-            created: function () {
-                if (this.button.url == null) {
-                    this.button.attributes.push({ key: 'disabled', value: 'disabled' });
-                    this.button.className += " disabled";
-                }
-                this.htmlElement = this.$parent.createButtonElement(this.button);
-                if (this.buttonType === "tableRow") {
-                    this.button.content = "";
+                    };
+                    if (button.url == null) {
+                        button.attributes.push({ key: 'disabled', value: 'disabled' });
+                        button.className += " disabled";
+                    }
+                    if (this.buttonType === "tableRow") {
+                        button.content = "";
+                    }
+                    return button;
+                },
+                htmlElement: function () {
+                    return this.$parent.createButtonElement(this.button);
                 }
             }
         };
         return ContactOwnerButton;
     }
 </script>
-
-
