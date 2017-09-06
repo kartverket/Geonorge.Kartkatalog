@@ -2,7 +2,7 @@
 
 <script type="text/x-template" id="addToCartButtonTemplate">
     <div class="text-center">
-        <div v-if="resultItem.ShowDownloadService" v-on:click="addToCart()" v-html="htmlElement"></div>
+        <div v-if="resultItem.ShowDownloadService && !resultItem.IsRestricted" v-on:click="addToCart()" v-html="htmlElement"></div>
         <div v-else v-html="htmlElement"></div>
     </div>
 </script>
@@ -13,11 +13,6 @@
             name: "addToCartButton",
             template: "#addToCartButtonTemplate",
             props: ["resultItem", "defaultButtonClass", "buttonType"],
-            data: function () {
-                return {
-                    added: false
-                }
-            },
             computed: {
                 button: function () {
                     return this.createButtonObject();
@@ -26,10 +21,34 @@
                     return this.$parent.createButtonElement(this.button);
                 }
             },
-            created: function () {
-                this.added = this.isAdded();
+            mounted: function () {
+                var addToCartId = getParameterByName('addtocart_event_id');
+                if (addToCartId && this.resultItem.Uuid == addToCartId) {
+                    this.addToCart();
+                    removeParameterByNameFromUrl('addtocart_event_id');
+                }
             },
             methods: {
+                getCartButtonStatus: function () {
+                    var addedOrderitems = localStorage.getItem('orderItems');
+                    if (addedOrderitems !== null &&
+                        addedOrderitems !== "[]" &&
+                    addedOrderitems !== "[null]" &&
+                    addedOrderitems !== "") {
+                        addedOrderitems = JSON.parse(addedOrderitems);
+                        var addedToCart = false;
+                        addedOrderitems.forEach(function (addedOrderItemUuid) {
+                            if (addedOrderItemUuid !== null) {
+                                 if (this.resultItem !== undefined) {
+                                    if (this.resultItem.Uuid == addedOrderItemUuid) {
+                                        addedToCart = true;
+                                    }
+                                }
+                            }
+                        }.bind(this));
+                        return addedToCart;
+                    }
+                },
                 createButtonObject: function () {
                     var button = {
                         id: "",
@@ -52,6 +71,8 @@
                     }
 
                     if (this.resultItem.ShowDownloadService) {
+                        button.className += ' add-to-cart-btn-' + this.resultItem.Uuid;
+
                         if (this.resultItem.IsRestricted || this.resultItem.IsOffline) {
                             button.className += " add-to-cart-btn prevent-action";
                             if (this.resultItem.IsRestricted) {
@@ -80,15 +101,15 @@
                                      + encodeURIComponent(downloadSignInUrl);
                             }
                         }
-                        if (this.added) {
-                            button.className = this.defaultButtonClass + " added";
+                        var isAdded = this.getCartButtonStatus();
+
+                        if (isAdded) {
+                             button.className += " added";
                             if (button.showContent) {
                                 button.content = "Lagt i kurv";
                             }
-                            button.added = true;
                             button.title = "Allerede lagt i kurv";
                         } else {
-                            button.className = this.defaultButtonClass;
                             if (button.showContent) {
                                 button.content = "Legg i kurv";
                             }
@@ -118,29 +139,6 @@
                     }
                     return button;
                 },
-
-                isAdded: function () {
-                    var isAdded = false;
-                    var addedOrderitems = localStorage.getItem('orderItems');
-                    if (addedOrderitems !== null &&
-                        addedOrderitems !== "[]" &&
-                        addedOrderitems !== "[null]" &&
-                        addedOrderitems !== "") {
-                        addedOrderitems = JSON.parse(addedOrderitems);
-                        var added = false;
-                        addedOrderitems.forEach(function (addedOrderItemUuid) {
-                            if (addedOrderItemUuid !== null) {
-                                if (this.resultItem !== undefined) {
-                                    // Temainndelte datasett
-                                    if (this.resultItem.Uuid == addedOrderItemUuid) {
-                                        isAdded = true;
-                                    }
-                                }
-                            }
-                        }.bind(this));
-                    }
-                    return isAdded;
-                },
                 addToCart: function () {
                     var orderItems = [];
 
@@ -160,7 +158,9 @@
 
                     var button = this.button;
 
-                    if (!this.added) {
+                    var isAdded = this.getCartButtonStatus();
+
+                    if (!isAdded) {
 
                         orderItems.push(item.uuid);
                         localStorage["orderItems"] = JSON.stringify(orderItems);
@@ -178,12 +178,11 @@
                         orderItemCount += 1;
                         $('#orderitem-count').text(orderItemCount);
                         updateShoppingCart();
-                        button.className = this.defaultButtonClass + " added";
                         if (button.showContent) {
                             button.content = "Lagt i kurv";
                         }
-                        this.added = true;
                         button.title = "Allerede lagt i kurv";
+                      $(".add-to-cart-btn-" + this.resultItem.Uuid).addClass("added");
                     } else {
                         var index = orderItems.indexOf(item.uuid);
                         if (index > -1) {
@@ -195,12 +194,11 @@
                         updateShoppingCart();
                         clearAlertMessage();
                         showAlert(item.name + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
-                        button.className = this.defaultButtonClass;
                         if (button.showContent) {
                             button.content = "Legg i kurv";
                         }
                         this.button.title = "Legg " + this.resultItem.Title + " i kurv";
-                        this.added = false;
+                        $(".add-to-cart-btn-" + this.resultItem.Uuid).removeClass("added");
                     }
                 }
             }
