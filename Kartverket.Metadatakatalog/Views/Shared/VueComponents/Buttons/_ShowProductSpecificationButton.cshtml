@@ -1,0 +1,41 @@
+﻿<script type="text/x-template" id="showProductSpecificationButtonTemplate">
+    <div v-html="htmlElement"></div>
+</script>
+
+<script>
+    function getShowProductSpecificationButton(resultItem) {
+        var ShowProductSpecificationButton = {
+            name: "showProductSpecificationButton",
+            template: "#showProductSpecificationButtonTemplate",
+            props: ["resultItem", "defaultButtonClass", "buttonType"],
+            computed: {
+                button: function () {
+                    var button = {
+                        content: "Vis produktspesifikasjon",
+                        className: this.defaultButtonClass,
+                        url: this.resultItem.ProductSpecificationUrl !== undefined ? this.resultItem.ProductSpecificationUrl : null,
+                        title: "Vis produktark for " + this.resultItem.Title,
+                        icon: {
+                            className: "glyphicon glyphicon-list-alt"
+                        },
+                        attributes: [
+                            { key: "onClick", value: "ga('send', 'event', 'MerInfo', 'produktspesifikasjon')" }
+                        ]
+                    };
+                    if (button.url == null) {
+                        button.attributes.push({ key: 'disabled', value: 'disabled' });
+                        button.className += " disabled";
+                    }
+                    if (this.buttonType === "tableRow") {
+                        button.content = "";
+                    }
+                    return button;
+                },
+                htmlElement: function () {
+                    return this.$parent.createButtonElement(this.button);
+                }
+            }
+        };
+        return ShowProductSpecificationButton;
+    }
+</script>

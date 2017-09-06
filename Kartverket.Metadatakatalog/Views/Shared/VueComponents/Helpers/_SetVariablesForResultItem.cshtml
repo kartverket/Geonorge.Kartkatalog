@@ -1,0 +1,70 @@
+﻿@using Kartverket.Metadatakatalog.Helpers
+
+
+<script>
+
+    // contactOwner
+    var contactOwner = {};
+    @if (Model.ContactOwner != null && !string.IsNullOrEmpty(Model.ContactOwner.Email))
+    {
+        @:contactOwner.Email = "@Model.ContactOwner.Email";
+        }
+
+
+    // productSheetUrl
+    var productSheetUrl = null;
+    @if (!string.IsNullOrWhiteSpace(Model.ProductSheetUrl))
+    {
+        @:productSheetUrl = "@Model.ProductSheetUrl";
+        }
+
+
+    // productSpecificationUrl
+    var productSpecificationUrl = null;
+    @if (!string.IsNullOrWhiteSpace(Model.ProductSpecificationUrl))
+    {
+        @:productSpecificationUrl = "@Model.ProductSpecificationUrl";
+        }
+
+
+    // legendDescriptionUrl
+    var legendDescriptionUrl = null;
+    @if (!string.IsNullOrWhiteSpace(Model.LegendDescriptionUrl))
+    {
+        @:legendDescriptionUrl = "@Model.LegendDescriptionUrl";
+        }
+
+
+    // showWebsiteUrl
+    var showWebsiteUrl = null;
+    @if (Model.ShowWebsiteLink())
+    {
+        @:showWebsiteUrl = "@Model.DistributionDetails.URL";
+        }
+
+
+    var productPageUrl = null;
+    @if (!string.IsNullOrWhiteSpace(Model.ProductPageUrl))
+    {
+        @:productPageUrl = "@Model.ProductPageUrl";
+                }
+
+
+    var showInMapIsRestricted = null;
+    var showInMapUrl = null;
+
+    @if (Model.ShowMapLink())
+    {
+        @:showInMapUrl = "@Html.NorgeskartUrl()@Model.MapUrl()/";
+                    if (Model.IsRestrictedService()) {
+            @:showInMapIsRestricted = true;
+                    }
+    }
+    else if (Model.ShowServiceMapLink())
+    {
+        @:showInMapUrl = "@Html.NorgeskartUrl()@Model.ServiceUrl()/";
+                    if (Model.IsRestrictedService()) {
+            @:showInMapIsRestricted = true;
+                    }
+    }
+</script>

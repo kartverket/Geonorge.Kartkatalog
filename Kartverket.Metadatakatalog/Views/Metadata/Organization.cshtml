@@ -35,173 +35,35 @@
     </div>
 </section>
 
-@* Vue code for resultitem*@
 @Html.Partial("_resultItemRow")
+@Html.Partial("_searchResult")
 
-@*Template for a table row*@
-<script type="text/x-template" id="resultItemRow">
+<script type="text/x-template" id="searchResultTemplate">
     <div>
-        @* **** LISTE **** *@
-        <div v-if="$root.viewType == 'listView'" class="row resultItemRowList">
-
-            <div class="col-sm-1">
-                <a v-bind:href="organizationUrl" class="show-loading-animation" data-loading-message="Henter innhold">
-                    <img v-bind:src="resultItem.OrganizationLogoUrl" class="img-responsive center-block" v-bind:alt="resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization" />
-                </a>
-            </div>
-
-            <div class="col-sm-6">
-                <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                    <p style="font-size:14pt" class="role-button search-results-name" role="button">{{resultItem.Title}}</p>
-                </a>
-                <p>{{description}}</p>
-                <p>
-                    Tilgjengelig som:
-                    <span v-bind:title="'Tilgjengelig som ' + resultItem.TypeTranslated" style="width:auto" v-bind:class="type(resultItem.Type)">{{resultItem.TypeTranslated}}</span>
-                </p>
-            </div>
-
-            <div class="col-sm-2">
-
-                <a style="width: 130px" v-bind:id="mapLink.mapLinkButtonId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="resultItem.MapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassButton">
-                    <span v-bind:id="mapLink.mapMacroButtonId" class="custom-icon custom-icon-kartmarkoer"></span><span class="button-text">Kart</span>
-                </a>
-
-                <a style="width: 130px"
-                   v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                   v-bind:href='resultItem.AddToCartUrl'
-                   data-toggle='tooltip'
-                   data-placement='bottom'
-                   onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                   v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                   class="btn btn-default add-to-cart-btn"
-                   v-bind:class="[{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline}, 'add-to-cart-btn-' + resultItem.Uuid, {'added': addedToCart}]">
-                    <span class="custom-icon custom-icon-handlekurv"></span><span class="button-text"> Legg i kurv</span>
-                </a>
-
-                <a style="width: 130px"
-                   v-else-if="resultItem.ShowDownloadLink"
-                   v-bind:href="resultItem.DownloadUrl"
-                   onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                   data-toggle='tooltip'
-                   data-placement='bottom'
-                   v:bind:title='"Last ned datasett for " + resultItem.Title'
-                   target="_blank"
-                   class="btn btn-default">
-                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                </a>
-
-                <a style="width: 130px"
-                   v-else
-                   v-bind:title='"Last ned datasett for " + resultItem.Title'
-                   class="disabled btn btn-default">
-                    <span class="custom-icon custom-icon-lastned"></span><span class="button-text"> Last ned</span>
-                </a>
-            </div>
-
-            <div class="col-sm-3">
-                <a v-if="thumbnailSrc" v-bind:href="readMoreUrl">
-                    <img v-bind:src="thumbnailSrc" />
-                </a>
-            </div>
-
-            <div class="clearfix"></div>
+        <div v-if="$root.viewType == 'tableView' && items.length" class="row resultItemRowTableHeader">
+            <div class="col-sm-4" is="header-title"></div>
+            <div class="col-sm-2" is="header-type"></div>
+            <div class="col-sm-3" is="header-organization"></div>
+            <div class="col-sm-1" is="header-open-data"></div>
+            <div class="col-sm-1" is="header-map"></div>
+            <div class="col-sm-1" is="header-add-to-cart"></div>
         </div>
 
-        @* *** TABELL *** *@
-        <div v-if="$root.viewType == 'tableView'">
-
-            <div class="resultItemRow" v-bind:class="{expanded: expanded}">
-                <div class="row">
-
-                    <div class="col-sm-4">
-                        <div class="resultItemRowTitle">
-                            @*Tittel*@
-                            <a v-bind:href="readMoreUrl" class="show-loading-animation">
-                                <span class="role-button search-results-name" role="button">{{resultItem.Title}}</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    @*Distribusjonstype *@
-                    <div class="col-sm-2">
-                        <span v-bind:title="resultItem.TypeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="type(resultItem.Type)" style="width:auto">{{resultItem.TypeTranslated}}</span>
-                    </div>
-
-                    @*Organisasjon*@
-                    <div class="col-sm-3">
-                        <a v-bind:href="organizationUrl" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + resultItem.Organization" v-bind:title="'Vis alle tjenester og datasett fra ' + resultItem.Organization">
-                            {{resultItem.OrganizationShortName}}
-                        </a>
-                    </div>
-
-                    @*Åpne data*@
-                    <div class="col-sm-1">
-                        <span data-toggle='tooltip' data-placement='bottom' v-bind:title="openData.title" v-bind:class="openData.className"></span>
-                    </div>
-
-                    @*Kart*@
-                    <div class="col-xs-1">
-                        <a v-bind:id="mapLink.mapLinkId" v-bind:href="resultItem.MapUrl" v-bind:onclick="mapLink.onClick" data-toggle='tooltip' data-placement='bottom' v-bind:title="mapLink.mapTitleTag" target="_blank" v-bind:class="mapLink.mapLinkClassLink">
-                            <span v-bind:id="mapLink.mapMacroId" v-bind:class="mapLink.iconPermission"></span>
-                        </a>
-                    </div>
-
-                    @*Last ned*@
-                    <div class="col-xs-1">
-                        <a v-on:click="addToCart()" v-if="resultItem.ShowDownloadService"
-                           v-bind:href='resultItem.AddToCartUrl'
-                           data-toggle='tooltip'
-                           data-placement='bottom'
-                           onclick="ga('send', 'event', 'Nedlasting', 'leggikurv');"
-                           v-bind:title='"Legg til " + resultItem.Title + " i kurv"'
-                           class="add-to-cart-btn"
-                           v-bind:class="[{'prevent-action': resultItem.IsRestricted || resultItem.IsOffline}, 'add-to-cart-btn-' + resultItem.Uuid, {'added': addedToCart}]">
-                            <span class="custom-icon custom-icon-handlekurv"></span>
-                            {{resultItem.addedToCart}}
-                        </a>
-
-                        <a v-else-if="resultItem.ShowDownloadLink"
-                           v-bind:href="resultItem.DownloadUrl"
-                           onclick="ga('send', 'event', 'Nedlasting', 'lastned');"
-                           data-toggle='tooltip'
-                           data-placement='bottom'
-                           v:bind:title='"Last ned datasett for " + resultItem.Title'
-                           target="_blank">
-                            <span class="custom-icon custom-icon-lastned"></span>
-                        </a>
-
-                        <a v-else
-                           v-bind:title='"Last ned datasett for " + resultItem.Title'
-                           class="disabled">
-                            <span class="custom-icon custom-icon-lastned"></span>
-                        </a>
-                    </div>
-
-                </div>
-            </div>
+        <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
+        <div v-for="item in items" is="resultItem"
+             v-bind:result-item="item"
+             v-bind:selected-fields="[
+                 {name: 'title', size: '4'},
+                 {name: 'distributionType', size: '2'},
+                 {name: 'owner', size: '3'},
+                 {name: 'openData', size: '1'}
+                 ]"
+             v-bind:selected-buttons="[
+                 'showInMapButton',
+                 'addToCartButton'
+                 ]">
         </div>
-
-        @* *** GALLERI *** *@
-        <div v-if="$root.viewType == 'galleryView'" class="resultItemRowGallery">
-            <div class="search-results-gallery-image layoutblock">
-                <div class="block shortcutpageteaserblock size-4 col-sm-4">
-                    <div class="teaser-with-background-image">
-                        <a v-bind:href="readMoreUrl">
-                            <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnailSrc + ')'}">
-                                <div class="teaser-overlay">
-                                    <div class="teaser-caption">
-                                        <div class="teaser-heading">{{resultItem.Title}}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div v-if="$root.viewType != 'galleryView'" class="clearfix"></div>
+        <div class="clearfix"></div>
     </div>
 </script>
 
@@ -344,37 +206,12 @@
         <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
         <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
         <div class="clearfix"></div>
-        @if (Model.Result != null)
-        {
-            <div>
-                <div v-if="$root.viewType == 'tableView'" class="row resultItemRowTableHeader">
-                    <div v-bind:class="orderByTitle.className" class="col-sm-4" v-bind:id="orderByTitle.id">
-                        <p>
-                            <a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByTitle()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Tittel<span class="orderby-indicator"></span></a>
-                        </p>
-                    </div>
-                    <div class="col-sm-2"><p>Type</p></div>
-                    <div v-bind:class="orderByOwner.className" class="col-sm-3" v-bind:id="orderByOwner.id">
-                        <p>
-                            <a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForOrderByOrganization()))" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">Dataeier<span class="orderby-indicator"></span></a>
-                        </p>
-                    </div>
-                    <div class="col-sm-1"><p>Åpne data</p></div>
-                    <div class="col-sm-1"><p>Kart</p></div>
-                    <div class="col-sm-1"><p>Last ned</p></div>
-                </div>
 
-                <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
-                <div v-for="item in viewModel.Result.Items" v-bind:class="tableBorder">
-                    <div is="resultItem" v-bind:result-item="item"></div>
-                </div>
+        <div is="searchResult" v-bind:result-items="ResultItems"></div>
 
-                <div class="clearfix"></div>
-            </div>
+        @DisplayPaginationBottom()
 
-            @DisplayPaginationBottom()
 
-        }
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
         <aside class="facet-filter-container">
@@ -389,15 +226,6 @@
     </div>
 </div>
 
-<script>
-@foreach (var item in Model.Result.Items)
-{
-    if (item.ShowMapLink || item.ShowServiceMapLink)
-    {
-        @:getServiceStatus("@item.ServiceUuid", "@item.Uuid");
-                      }
-}
-</script>
 
 
 @section scripts {
@@ -408,108 +236,34 @@
         // Setter url for søkeresultat
         @if (Model.OrganizationSeoName != null) {
             @:setMainSearchUrl('etatvis-oversikt/@Model.OrganizationSeoName');
-            @:setMainSearchApiUrl('search?facets[0]name=organization&facets[0]value=@Model.OrganizationName');
-        }else
+                            @:setMainSearchApiUrl('search?facets[0]name=organization&facets[0]value=@Model.OrganizationName');
+                        }
+        else
         {
             @:setMainSearchUrl('etatvis-oversikt/organisasjon');
-        }
+                        }
+
         //Main vue model
         var vueModel = new Vue({
             el: '#searchResultTable',
             data: {
-                viewModel: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
-                ResultItems: [],
-                currentOrderByParameter: getParameterByName("orderby"),
-                viewType: "tableView",
-                columns: "",
-                orderByUrl: "@Html.Raw(HttpUtility.HtmlDecode(HttpContext.Current.Request.Url.AbsoluteUri)).ToString()",
-                orderByTitle: {
-                    orderByParam: "title",
-                    className: "orderby orderby-title orderby-asc",
-                    id: "orderby-title-asc",
-                    url: "",
-                },
-                backgroundColor: "#fff",
-                orderByOwner: {
-                    orderByParam: "organization",
-                    className: "orderby orderby-organization orderby-asc",
-                    id: "orderby-organization-asc",
-                    url: "",
-                },
-                tableBorder: "table-border-bottom"
+                ResultItems: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.Result.Items))),
+                viewType: "tableView"
             },
             components: {
+                SearchResult: SearchResult,
                 ResultItem: ResultItemComponent
             },
             created: function() {
-                if (this.currentOrderByParameter == "title") {
-                    this.orderByTitle.orderByParam = "title_desc";
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                    this.orderByOwner.orderByParam = "organization";
-                    this.orderByOwner.id = "orderby-organization-asc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                } else if (this.currentOrderByParameter == "organization") {
-                    this.orderByTitle.orderByParam = "title";
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                    this.orderByOwner.orderByParam = "organization_desc";
-                    this.orderByOwner.id = "orderby-organization-desc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                } else if (this.currentOrderByParameter == "") {
-                    this.orderByTitle.orderByParam = "title";
-                    this.orderByOwner.orderByParam = "organization";
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                    this.orderByOwner.id = "orderby-organization-asc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                } else if (this.currentOrderByParameter == "organization_desc") {
-                    this.orderByTitle.orderByParam = "title";
-                    this.orderByOwner.orderByParam = "organization";
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
-                    this.orderByOwner.id = "orderby-organization-desc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-desc";
-                } else if (this.currentOrderByParameter == "title_desc") {
-                    this.orderByTitle.orderByParam = "title";
-                    this.orderByOwner.orderByParam = "organization";
-                    this.orderByTitle.id = "orderby-title-desc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-desc";
-                    this.orderByOwner.id = "orderby-organization-asc";
-                    this.orderByOwner.className = "orderby orderby-organization orderby-asc";
-                }
-
                 this.viewType = this.getSelectedViewType();
-
-                this.orderByTitle.url = this.getOrderByUrl(this.orderByTitle.orderByParam);
-                this.orderByOwner.url = this.getOrderByUrl(this.orderByOwner.orderByParam);
             },
             methods: {
-                orderByExists: function() {
-                    return this.orderByUrl.includes("orderby");
-                },
-                isNotFirstParameterInUrl: function() {
-                    return this.orderByUrl.includes("?");
-                },
-                getOrderByUrl: function(param) {
-                    if (this.orderByExists()) {
-                        return this.orderByUrl.replace("orderby=" + this.currentOrderByParameter, "orderby=" + param);
-                    } else {
-                        if (this.isNotFirstParameterInUrl()) {
-                            return this.orderByUrl + "&orderby=" + param;
-                        } else {
-                            return this.orderByUrl + "?orderby=" + param;
-                        }
-                    }
-                },
                 view: function(type) {
                     this.viewType = type;
                     localStorage.setItem("layout", this.viewType);
-                    if (type == "galleryView") {
-                        this.columns = 'col-sm-4';
+                    if (type === "galleryView") {
                         this.tableBorder = "";
                     } else {
-                        this.columns = "";
                         this.tableBorder = "table-border-bottom";
                     }
                 },

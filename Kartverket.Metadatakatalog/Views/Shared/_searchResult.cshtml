@@ -1,0 +1,36 @@
+﻿@Html.Partial("VueComponents/_TableHeader")
+
+<script>
+    var SearchResult = {
+        template: "#searchResultTemplate",
+        name: "searchResult",
+        props: ["resultItems"],
+        data: function() {
+            var data = {
+                items: this.resultItems,
+                currentOrderByParameter: getParameterByName("orderby")
+            };
+            return data;
+        },
+        components: {
+            ResultItem: ResultItemComponent,
+            HeaderTitle: HeaderTitle,
+            HeaderType: HeaderType,
+            HeaderOrganization: HeaderOrganization,
+            HeaderOpenData: HeaderOpenData,
+            HeaderWebsite: HeaderWebsite,
+            HeaderAddToCart: HeaderAddToCart,
+            HeaderMap: HeaderMap,
+            HeaderUrl: HeaderUrl
+        },
+        computed: {
+            tableBorder: function() {
+                if (this.$root.viewType === "galleryView") {
+                    return "";
+                } else {
+                    return "table-border-bottom";
+                }
+            }
+        }
+    }
+</script>

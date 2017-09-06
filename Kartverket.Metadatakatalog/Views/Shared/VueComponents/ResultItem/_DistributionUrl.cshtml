@@ -1,0 +1,25 @@
+﻿<script type="text/x-template" id="distributionUrlContentTemplate">
+    <div class="text-center">
+        <a v-bind:href="href" target="_blank">
+            <span v-bind:title="'Gå til nettside'" data-toggle='tooltip' data-placement='bottom' class="custom-icon custom-icon-eksternlink"></span>
+        </a>
+    </div>
+</script>
+
+<script>
+    var TableDistributionUrl = {
+        name: "table-distribution-url",
+        template: "#distributionUrlContentTemplate",
+        props: ["metadata"],
+        data: function () {
+            var data = {
+                href: this.metadata.DistributionUrl
+            };
+            return data;
+        }
+        
+        @* TODO! 
+           Får ikke tak i props "metadata" på metadata innenfor et tema... 
+           Må spørre direkte i templaten ved å bruke "Metadata.Title" osv..*@
+        };
+</script>

@@ -1,0 +1,25 @@
+﻿@Html.Partial("VueComponents/_Buttons")
+@Html.Partial("VueComponents/Helpers/_ConvertModelToResultItem")
+
+<script type="text/x-template" id="table-row-buttons-template">
+    <div>
+        <div is="Buttons"
+             v-bind:result-item="metadata"
+             v-bind:button-type="'tableRow'"
+             v-bind:selected-buttons="this.listOfButtons">  
+        </div>
+    </div>
+</script>
+
+<script>
+    var TableRowButtons = {
+        template: "#table-row-buttons-template",
+        name: "table-row-buttons",
+        props: ["metadata", "listOfButtons"],
+        components: {
+            Buttons: Buttons
+        }
+    };
+
+</script>
+
