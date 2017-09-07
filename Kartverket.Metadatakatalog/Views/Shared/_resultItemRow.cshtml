@@ -33,15 +33,13 @@
 
         @* **** LISTE **** *@
         <div v-if="$root.viewType == 'listView'" class="row resultItemRowList">
-            <div class="col-sm-1">
+            <div class="col-sm-2">
                 <div is="table-owner" v-bind:metadata="resultItem"></div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-7">
                 <div is="table-title" v-bind:metadata="resultItem"></div>
                 <p>{{description}}</p>
                 <div is="table-distributionType" v-bind:metadata="resultItem"></div>
-            </div>
-            <div class="col-sm-2">
                 <div is="list-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="selectedButtons"></div>
             </div>
             <div class="col-sm-3">

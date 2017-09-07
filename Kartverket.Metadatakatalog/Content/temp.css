@@ -2,6 +2,39 @@
     border-bottom: 1px solid #ccc;
 }
 
+.resultItemRowList {
+    padding: 20px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+
+.btn-table-row-list .table-btn-container {
+    width: 100%;
+}
+
+@media (min-width: 500px) {
+    .btn-table-row-list .table-btn-container {
+        width: 33.333%;
+        display: inline-block;
+    }
+}
+
+@media (min-width: 768px) {
+    .btn-table-row-list .table-btn-container {
+        width: auto;
+        display: inline-block;
+    }
+}
+
+.table-row-icon {
+    font-size: 22px;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
 .resultItemRowTableHeaderListView {
 }
 
@@ -36,34 +69,12 @@
 }
 
 .resultItemRow {
-    padding: 10px 0;
+    padding: 8px 0;
 }
 
-    .resultItemRow.expanded {
-        background-color: #f4f4f4;
-    }
 
-.resultItemRowTitle {
-    display: table;
-}
-
-    .resultItemRowTitle > * {
-        display: table-cell;
-    }
-
-    .resultItemRowTitle span {
-        display: inline-block;
-    }
-
-    .resultItemRowTitle .expand-arrow-conatiner,
-    .resultItemRowTitle .expand-arrow-container {
-        width: 24px;
-        text-align: center;
-        display: inline-block;
-    }
-
-.resultItemRow .resultItemRowTitle .expand-arrow-container .expand-arrow {
-    margin-bottom: 0;
+.resultItemRowTitle span {
+    display: inline-block;
 }
 
 
@@ -80,9 +91,6 @@
     font-size: 14pt;
 }
 
-.resultItemRowList {
-    padding: 20px 0;
-}
 
 .label-datapakke {
     border-color: #5d4777;

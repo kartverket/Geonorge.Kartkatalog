@@ -65,23 +65,24 @@
         computed: {
             defaultButtonClass: function () {
                 var defaultButtonClass = "";
-                if (this.buttonType == 'topRow' || this.buttonType == 'button') { defaultButtonClass = "btn" }
+                if (this.buttonType == 'topRow' || this.buttonType == 'button' || this.buttonType == 'list') { defaultButtonClass = "btn" }
                 return defaultButtonClass;
             },
             hasComponentContainer: function () {
                 hasComponentContainer = false;
-                if (this.buttonType == 'topRow') { hasComponentContainer = true }
+                if (this.buttonType == 'topRow' || this.buttonType == 'list') { hasComponentContainer = true }
                 return hasComponentContainer;
             },
             componentContainerClassName: function () {
                 var componentContainerClassName = "";
                 if (this.buttonType == 'topRow') { componentContainerClassName = "btn-table-row-5" }
+                else if (this.buttonType == 'list') { componentContainerClassName = "btn-table-row-list" }
                 if (this.buttonType == 'tableRow') { componentContainerClassName = "" }
                 return componentContainerClassName;
             },
             componentClassName: function () {
                 var componentClassName = "";
-                if (this.buttonType == 'topRow') { componentClassName = "table-btn-container" }
+                if (this.buttonType == 'topRow' || this.buttonType == 'list') { componentClassName = "table-btn-container" }
                 if (this.buttonType == 'tableRow') { componentClassName = "col-xs-1" }
                 return componentClassName;
             }
@@ -96,7 +97,9 @@
             },
             createButtonElement: function (button) {
                 var attributes = '';
-                var style = this.buttonType == "button" ? "width: 130px;" : "";
+                var style = "";
+                if (this.buttonType == "button") style = "width: 130px;";
+                else if (this.buttonType == "list") style = "width: 100%";
                 if (button.attributes !== undefined && button.attributes.length) {
                     button.attributes.forEach(function (buttonAttribute) {
                         attributes += buttonAttribute.key + '="' + buttonAttribute.value + '" ';
