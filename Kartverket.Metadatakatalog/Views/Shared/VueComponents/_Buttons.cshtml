@@ -1,4 +1,5 @@
-﻿@Html.Partial("VueComponents/Buttons/_ShowInMapButton")
+﻿@Html.Partial("VueComponents/Buttons/_CopyUrlButton")
+@Html.Partial("VueComponents/Buttons/_ShowInMapButton")
 @Html.Partial("VueComponents/Buttons/_ShowCoverageButton")
 @Html.Partial("VueComponents/Buttons/_AddToCartButton")
 @Html.Partial("VueComponents/Buttons/_HelpButton")
@@ -13,6 +14,7 @@
     <div>
         <div v-if="hasComponentContainer">
             <div v-bind:class="componentContainerClassName">
+                <div v-if="isSelected('copyUrlButton')" is="copy-url-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:button-type="buttonType" v-bind:class="componentClassName"></div>
                 <div v-if="isSelected('showInMapButton')" is="show-in-map-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:button-type="buttonType" v-bind:class="componentClassName"></div>
                 <div v-if="isSelected('addToCartButton')" is="add-to-cart-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:button-type="buttonType" v-bind:class="componentClassName"></div>
                 <div v-if="isSelected('showCoverageButton')" is="show-coverage-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:button-type="buttonType" v-bind:class="componentClassName"></div>
@@ -26,6 +28,7 @@
             </div>
         </div>
         <div v-else>
+            <div v-if="isSelected('copyUrlButton')" is="copy-url-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:button-type="buttonType" v-bind:class="componentClassName"></div>
             <div v-if="isSelected('showInMapButton')" is="show-in-map-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:button-type="buttonType" v-bind:class="componentClassName"></div>
             <div v-if="isSelected('addToCartButton')" is="add-to-cart-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:button-type="buttonType" v-bind:class="componentClassName"></div>
             <div v-if="isSelected('showCoverageButton')" is="show-coverage-button" v-bind:result-item="resultItem" v-bind:default-button-class="defaultButtonClass" v-bind:button-type="buttonType" v-bind:class="componentClassName"></div>
@@ -47,6 +50,7 @@
         template: "#buttonsTemplate",
         props: ["resultItem", "selectedButtons", "buttonType"],
         components: {
+            CopyUrlButton: getCopyUrlButton(this.resultItem),
             ShowInMapButton: getShowInMapButton(this.resultItem),
             AddToCartButton: getAddToCartButton(this.resultItem),
             ShowCoverageButton: getShowCoverageButton(this.resultItem),
