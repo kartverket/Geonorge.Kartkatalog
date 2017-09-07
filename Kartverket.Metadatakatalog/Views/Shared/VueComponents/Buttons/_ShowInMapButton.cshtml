@@ -46,7 +46,10 @@
                     if (this.buttonType === "tableRow") {
                         button.content = "";
                     }
-                    this.getServiceStatus();
+
+                    if (this.resultItem.ShowMapLink || this.resultItem.ShowServiceMapLink) {
+                        this.getServiceStatus();
+                    }
 
                     return button;
                 },
