@@ -25,16 +25,10 @@
                         ]
                     };
 
-                    if (this.resultItem.ShowMapLink) {
-                        if (this.resultItem.IsRestricted) {
-                            button.icon.className += " custom-icon-kartmarkoer-needs-permission";
-                        } else {
-                            button.icon.className += " custom-icon-kartmarkoer";
-                        }
-
-                    } else if (this.resultItem.ShowServiceMapLink) {
-                        if (this.resultItem.IsRestricted) {
-                            button.icon.className += " custom-icon-kartmarkoer-needs-permission";
+                    if (this.resultItem.ShowMapLink || this.resultItem.ShowServiceMapLink) {
+                        if (this.isRestrictedService()) {
+                            button.icon.className += " custom-icon-kartmarkoer-warning";
+                            button.title = "Tjenesten krever spesiell tilgang for å kunne vises - kontakt dataeier";
                         } else {
                             button.icon.className += " custom-icon-kartmarkoer";
                         }
@@ -42,6 +36,7 @@
                         button.className += " disabled";
                         button.icon.className += " custom-icon-kartmarkoer";
                         button.id = "";
+                        button.title = "Tjenesten kan ikke vises i kart";
                         button.icon.id = "";
                         button.attributes = [];
                     }
@@ -53,7 +48,6 @@
                     }
                     this.getServiceStatus();
 
-
                     return button;
                 },
                 htmlElement: function () {
@@ -62,21 +56,17 @@
             },
             methods: {
                 isRestrictedService: function () {
-                    if (this.resultItem.ServiceDistributionAccessConstraint == "Beskyttet" ||
+                    if (this.resultItem.IsRestricted) {
+                        return true;
+                    }
+                    else if (this.resultItem.ServiceDistributionAccessConstraint == "Beskyttet" ||
                         this.resultItem.ServiceDistributionAccessConstraint == "restricted" ||
-                        this.resultItem.ServiceDistributionAccessConstraint == "norway digital restricted") return true;
+                        this.resultItem.ServiceDistributionAccessConstraint == "norway digital restricted") {
+                        return true;
+                    }
                     else {
                         return false;
                     }
-                },
-                restrictedServiceClass: function () {
-                    var iconPermissionClass;
-                    if (this.isRestrictedService()) {
-                        iconPermissionClass = " custom-icon-kartmarkoer-needs-permission";
-                    } else {
-                        iconPermissionClass = " custom-icon-kartmarkoer";
-                    }
-                    return iconPermissionClass;
                 },
                 getServiceStatus: function () {
                     $.getJSON(statusApi + "monitorApi/serviceDetail?uuid=" + this.resultItem.ServiceUuid, function (result) {
@@ -91,16 +81,26 @@
                                 this.button.url = null;
                                 this.button.title = "Tjenesten er utilgjengelig for øyeblikket";
                                 this.button.attributes = [{ key: "disabled", value: "disabled" }];
+                                $(".show-in-map-btn-" + this.resultItem.Uuid).addClass("disabled");
+                                $(".show-in-map-btn-" + this.resultItem.Uuid).attr("disabled", "disabled");
+                                $(".show-in-map-btn-" + this.resultItem.Uuid).attr("href", "");
                                 $(".show-in-map-btn-" + this.resultItem.Uuid).attr("title", "Tjenesten er utilgjengelig for øyeblikket");
                                 $(".show-in-map-btn-" + this.resultItem.Uuid).attr("data-original-title", "Tjenesten er utilgjengelig for øyeblikket");
                                 $(".show-in-map-btn-" + this.resultItem.Uuid + " > span").attr("class", "custom-icon custom-icon-kartmarkoer-unavailable");
                             }
                             else if (numLayers > 30) {
                                 this.button.icon.className = "custom-icon custom-icon-kartmarkoer-warning";
-                                this.button.title = "Tjenesten kan være treg å vise";
-                                $(".show-in-map-btn-" + this.resultItem.Uuid).attr("title", "Tjenesten kan være treg å vise");
-                                $(".show-in-map-btn-" + this.resultItem.Uuid).attr("data-original-title", "Tjenesten kan være treg å vise");
                                 $(".show-in-map-btn-" + this.resultItem.Uuid + " > span").attr("class", "custom-icon custom-icon-kartmarkoer-warning");
+                                if (this.isRestrictedService()) {
+                                    this.button.title = "Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier";
+                                    $(".show-in-map-btn-" + this.resultItem.Uuid).attr("title", "Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier");
+                                    $(".show-in-map-btn-" + this.resultItem.Uuid).attr("data-original-title", "Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier");
+                                } else {
+                                    this.button.title = "Tjenesten kan være treg å vise";
+                                    $(".show-in-map-btn-" + this.resultItem.Uuid).attr("title", "Tjenesten kan være treg å vise");
+                                    $(".show-in-map-btn-" + this.resultItem.Uuid).attr("data-original-title", "Tjenesten kan være treg å vise");
+                                }
+
                             }
                         }
                         catch (err) {

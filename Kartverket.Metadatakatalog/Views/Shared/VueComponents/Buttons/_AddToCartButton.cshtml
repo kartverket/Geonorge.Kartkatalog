@@ -39,7 +39,7 @@
                         var addedToCart = false;
                         addedOrderitems.forEach(function (addedOrderItemUuid) {
                             if (addedOrderItemUuid !== null) {
-                                 if (this.resultItem !== undefined) {
+                                if (this.resultItem !== undefined) {
                                     if (this.resultItem.Uuid == addedOrderItemUuid) {
                                         addedToCart = true;
                                     }
@@ -104,7 +104,7 @@
                         var isAdded = this.getCartButtonStatus();
 
                         if (isAdded) {
-                             button.className += " added";
+                            button.className += " added";
                             if (button.showContent) {
                                 button.content = "Lagt i kurv";
                             }
@@ -117,24 +117,24 @@
                         }
                     } else if (this.resultItem.ShowDownloadLink) {
                         button.url = this.resultItem.DistributionUrl;
+                        button.title = "Last ned " + this.resultItem.Title;
                         button.attributes = [
                                 { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'lastned')" },
                                 { key: "target", value: "_blank" }
                         ];
                         if (button.showContent) {
                             button.content = "Last ned";
-                            button.title = "Last ned " + this.resultItem.Title;
                         }
                         button.icon.className = "custom-icon custom-icon-lastned";
                     } else {
                         button.className = this.defaultButtonClass + " disabled";
                         button.url = null;
+                        button.title = "Kan ikke legges i kurv";
                         button.attributes = [
                                 { key: "disabled", value: "disabled" }
                         ];
                         if (button.showContent) {
                             button.content = "Last ned";
-                            button.title = "Kan ikke legges i kurv";
                         }
                     }
                     return button;
