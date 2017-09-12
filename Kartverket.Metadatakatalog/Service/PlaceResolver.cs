@@ -82,29 +82,25 @@ namespace Kartverket.Metadatakatalog.Service
                 client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var result = client.GetAsync("api/subregister/sosi-kodelister/kartverket/fylkesnummer")?.Result;
-                if (result != null)
+                var result = client.GetAsync("api/subregister/sosi-kodelister/kartverket/fylkesnummer").Result;
+                if (result.IsSuccessStatusCode)
                 {
-                    if (result.IsSuccessStatusCode)
-                    {
-                        var register = result.Content.ReadAsAsync<Register>().Result;
+                    var register = result.Content.ReadAsAsync<Register>().Result;
 
-                        foreach (var item in register.containeditems)
-                        {
-                            _areas.Add("0/" + item.codevalue, item.label);
-                        }
-                    }
-                    var result2 = client.GetAsync("api/subregister/sosi-kodelister/kartverket/kommunenummer").Result;
-                    if (result2.IsSuccessStatusCode)
+                    foreach (var item in register.containeditems)
                     {
-                        var register = result2.Content.ReadAsAsync<Register>().Result;
-                        foreach (var item in register.containeditems)
-                        {
-                            _areas.Add("0/" + item.codevalue.Substring(0, 2) + "/" + item.codevalue, item.label);
-                        }
+                        _areas.Add("0/" + item.codevalue, item.label);
                     }
                 }
-
+                var result2 = client.GetAsync("api/subregister/sosi-kodelister/kartverket/kommunenummer").Result;
+                if (result2.IsSuccessStatusCode)
+                {
+                    var register = result2.Content.ReadAsAsync<Register>().Result;
+                    foreach (var item in register.containeditems)
+                    {
+                        _areas.Add("0/" + item.codevalue.Substring(0, 2) + "/" + item.codevalue, item.label);
+                    }
+                }
 
             }
 
@@ -182,14 +178,14 @@ namespace Kartverket.Metadatakatalog.Service
             foreach (var keyword in metadata.Keywords)
             {
                 var myValueList = _areas.Where(x => x.Value.ToLower() == keyword.Keyword.ToLower()).ToList();
-                if (myValueList != null)
+                if(myValueList != null)
                 {
                     foreach (var myValue in myValueList)
                     {
                         if (myValue.Key != null) placegroup.Add(myValue.Key);
                     }
                 }
-
+                
             }
 
 
@@ -202,10 +198,10 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 var register = result.Content.ReadAsAsync<Coverage>().Result;
 
-                for (int c = 0; c < register.kommuner.Count(); c++)
+                for(int c = 0; c < register.kommuner.Count(); c ++)
                 {
                     string kommune = register.kommuner[c].ToString("D4");
-                    string fylke = kommune.Substring(0, 2);
+                    string fylke = kommune.Substring(0,2);
                     kommune = "0/" + kommune.Substring(0, 2) + "/" + kommune;
                     fylke = "0/" + fylke;
                     var municipality = _areas.FirstOrDefault(x => x.Key == kommune).Key;
