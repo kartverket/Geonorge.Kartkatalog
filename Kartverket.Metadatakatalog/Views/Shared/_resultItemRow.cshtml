@@ -71,8 +71,8 @@
 
                 if (this.resultItem.ShowMapLink) {
                     mapLink.iconPermission += " custom-icon-kartmarkoer";
-                    mapLink.mapTitleTag = "Kan ikke vises i kart";
-                    mapLink.url = "Vis " + this.resultItem.Title + " i kart";
+                    mapLink.mapTitleTag = "Vis " + this.resultItem.Title + " i kart";
+                    mapLink.url = this.resultItem.MapUrl;
 
                 } else if (this.resultItem.ShowServiceMapLink) {
                     mapLink.iconPermission += this.restrictedServiceClass();
