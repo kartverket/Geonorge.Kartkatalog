@@ -20,8 +20,12 @@ if (cultureData !== {}) {
     cultureData.currentCulture = cultureData.currentCulture === undefined ? "" : cultureData.currentCulture;
 }
 
+function environmentIsProduction() {
+    var productionEnvironment = "";
+    return applicationEnvironment === productionEnvironment;
+}
 
-var geonorgeUrl = (applicationEnvironment === "") ? "https://www.geonorge.no/" : "https://www.test.geonorge.no/";
+var geonorgeUrl = environmentIsProduction() ? "https://www.geonorge.no/" : "https://www.test.geonorge.no/";
 
 // Check if string contains parameters
 function containsParameters(string) {
