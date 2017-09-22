@@ -363,6 +363,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Content\Blocks\SurveyBlock\SurveyBlockScript.js" />
+    <Content Include="Content\Blocks\SurveyBlock\SurveyBlockStyle.css" />
     <Content Include="Content\bower_components\axios\.bower.json" />
     <Content Include="Content\bower_components\axios\bower.json" />
     <Content Include="Content\bower_components\axios\CHANGELOG.md" />
@@ -1179,6 +1181,7 @@
     <Content Include="Views\Themes\Details.cshtml" />
     <Content Include="Views\OpenData\Index.cshtml" />
     <Content Include="Views\Shared\VueComponents\Buttons\_CopyUrlButton.cshtml" />
+    <Content Include="Content\Blocks\SurveyBlock\_SurveyBlock.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

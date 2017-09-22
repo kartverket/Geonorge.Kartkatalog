@@ -16,7 +16,8 @@ namespace Kartverket.Metadatakatalog
                 "~/Content/bower_components/kartverket-felleskomponenter/assets/css/vendor.min.css",
                 "~/Content/bower_components/kartverket-felleskomponenter/assets/css/vendorfonts.min.css",
                 "~/Content/bower_components/kartverket-felleskomponenter/assets/css/main.min.css",
-                "~/Content/temp.css"
+                "~/Content/temp.css",
+                "~/Content/Blocks/SurveyBlock/SurveyBlockStyle.css"
                 ));
 
             bundles.Add(new ScriptBundle("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts").Include(
@@ -26,7 +27,8 @@ namespace Kartverket.Metadatakatalog
                "~/Content/bower_components/clipboard/dist/clipboard.min.js",
                "~/Content/bower_components/axios/dist/axios.min.js",
                "~/Scripts/site.js",
-               "~/Scripts/visninger.js"
+               "~/Scripts/visninger.js",
+                "~/Content/Blocks/SurveyBlock/SurveyBlockScript.js"
            ));
 
             bundles.Add(new ScriptBundle("~/Content/download").Include(

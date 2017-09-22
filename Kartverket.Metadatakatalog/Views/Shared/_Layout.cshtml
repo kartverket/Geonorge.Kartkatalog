@@ -44,7 +44,7 @@
         var statusApi = '@Html.StatusApiUrl()';
     </script>
     @Scripts.Render("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts")
-    
+
 </head>
 <body class="geonorge-container prototype  geonorge ng-scope" ng-app="geonorge">
 
@@ -52,6 +52,18 @@
 
     @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_Analytics.min.cshtml")
     @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_SharedMenu.min.cshtml")
+    
+
+    @* Modal dialog for survey *@
+    @{  DateTime startSurvey = new DateTime(2017, 9, 22, 0, 0, 0);
+        DateTime endSurvey = new DateTime(2017, 9, 29, 23, 59, 59);
+        DateTime now = DateTime.Now;
+        if ((now > startSurvey) && (now < endSurvey))
+        {
+            @RenderPage("~/Content/Blocks/SurveyBlock/_SurveyBlock.cshtml")
+        }
+    }
+
 
     <div class="container container-breadcrumbs" id="navTabCont">
         <ul class="breadcrumbs col-md-12">
