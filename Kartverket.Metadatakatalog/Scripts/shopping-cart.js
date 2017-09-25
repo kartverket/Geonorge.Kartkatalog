@@ -17,10 +17,22 @@ function removeFromArray(array, undesirableItems) {
     }
 }
 
+function orderItemHasMetadata(orderItemUuid) {
+    var orderItemHasMetadata = localStorage.getItem(orderItemUuid + ".metadata") != null ? true : false;
+    return orderItemHasMetadata;
+}
+
 function removeBrokenOrderItems() {
     var orderItems = JSON.parse(localStorage.getItem("orderItems"));
-    removeFromArray(orderItems, [null, undefined, "null", {}, ""]);
-    localStorage.setItem('orderItems', JSON.stringify(orderItems));
+    if (orderItems != null) {
+        removeFromArray(orderItems, [null, undefined, "null", {}, ""]);
+        orderItems.forEach(function (orderItem) {
+            if (!orderItemHasMetadata(orderItem)) {
+                removeSingleItemFromArray(orderItems, orderItem);
+            }
+        });
+        localStorage.setItem('orderItems', JSON.stringify(orderItems));
+    }
 }
 
 function updateShoppingCart() {
@@ -31,16 +43,23 @@ function updateShoppingCart() {
     var cookieValue = 0;
     var cookieDomain = ".geonorge.no";
 
-    if (localStorage.getItem("orderItems") != null && localStorage.getItem("orderItems") != "[]") {
+    if (localStorage.getItem("orderItems") != null) {
         orderItems = localStorage.getItem("orderItems");
     }
 
     if (orderItems != "") {
-        shoppingCartElement.css("display", "block");
         orderItemsObj = JSON.parse(orderItems);
         cookieValue = orderItemsObj.length;
-        shoppingCartElement.html(cookieValue);
-    } else if ($.cookie(cookieName) != 0 && $.cookie(cookieName) != null) {
+        if (cookieValue > 0) {
+            shoppingCartElement.css("display", "block");
+            shoppingCartElement.html(cookieValue);
+            addShoppingCartTooltip(cookieValue);
+        } else {
+            shoppingCartElement.css("display", "none");
+            addShoppingCartTooltip(0);
+        }
+
+    } else if ($.cookie(cookieName) !== undefined && $.cookie(cookieName) != 0 && $.cookie(cookieName) != null) {
         cookieValue = $.cookie(cookieName);
         shoppingCartElement.css("display", "block");
         shoppingCartElement.html(cookieValue);

@@ -1,0 +1,26 @@
+﻿<script type="text/x-template" id="distributionFormatsContentTemplate">    
+    <div>
+        <div v-for="format in formats">
+            <span class="label label-default" style="margin-bottom: 1px; width: auto;">{{format.Name}} {{format.Version}}</span>
+        </div>
+    </div>
+</script>
+
+<script>
+    var TableDistributionFormats = {
+        name: "table-distribution-formats",
+        template: "#distributionFormatsContentTemplate",
+        props: ["metadata"],
+        data: function() {
+            var data = {
+                formats: this.metadata.DistributionFormats
+            };
+            return data;
+        }
+
+        @* TODO!
+           Får ikke tak i props "metadata" på metadata innenfor et tema...
+           Må spørre direkte i templaten ved å bruke "Metadata.Title" osv..*@
+
+        };
+</script>

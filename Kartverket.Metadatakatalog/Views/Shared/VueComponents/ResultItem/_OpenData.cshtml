@@ -1,0 +1,35 @@
+﻿<script type="text/x-template" id="openDataContentTemplate">
+    <div class="text-center"><span data-toggle='tooltip' data-placement='bottom' v-bind:title="title" v-bind:class="className"></span></div>
+</script>
+
+<script>
+    var TableOpenData = {
+        name: "table-open-data",
+        template: "#openDataContentTemplate",
+        props: ["metadata"],
+        computed: {
+            className: function () {
+                var className = "";
+                if (this.metadata.IsRestricted) {
+                    className = "custom-icon custom-icon-hengelaas-closed-yellow";
+                } else if (this.metadata.IsOffline) {
+                    className = "custom-icon custom-icon-hengelaas-closed-red";
+                } else if (this.metadata.IsOpendata) {
+                    className = "custom-icon custom-icon-hengelaas-open-green";
+                }
+                return className;
+            },
+            title: function () {
+                var title = "";
+                if (this.metadata.IsRestricted) {
+                    title = "Tilgangsbegrensede data";
+                } else if (this.metadata.IsOffline) {
+                    title = "Skjermede data";
+                } else if (this.metadata.IsOpendata) {
+                    title = "Åpne data";
+                }
+                return title;
+            }
+        }
+    }
+</script>

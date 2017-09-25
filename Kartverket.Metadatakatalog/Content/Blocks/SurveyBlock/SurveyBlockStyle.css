@@ -1,0 +1,84 @@
+﻿.backdrop {
+    -ms-opacity: .0;
+    background: #000;
+    display: none;
+    filter: alpha(opacity=0);
+    height: 100%;
+    left: 0;
+    opacity: .0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 50;
+}
+
+.survey-block {
+    -ms-border-radius: 5px;
+    background: none repeat scroll 0 0 #fff;
+    border-radius: 5px;
+    bottom: 0;
+    box-shadow: 0 0 15px #000;
+    display: none;
+    left: 0;
+    margin: auto;
+    max-height: 50%;
+    max-width: 75%;
+    padding: 1%;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 51;
+}
+
+    .survey-block .flex-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .survey-block .flex-wrapper .close {
+            -o-align-self: flex-end;
+            -webkit-align-self: flex-end;
+            align-self: flex-end;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        .survey-block .flex-wrapper .PopUpText {
+            text-align: center;
+        }
+
+            .survey-block .flex-wrapper .PopUpText h2 {
+                color: #5d4777;
+                font-family: 'Raleway', sans-serif;
+                font-size: 34pt;
+                font-weight: 300;
+                margin-top: 40px;
+                word-wrap: normal;
+            }
+
+            .survey-block .flex-wrapper .PopUpText p {
+                color: #000000;
+                font-family: 'Open Sans', sans-serif;
+                font-size: 16pt;
+                font-style: italic;
+                font-weight: 500;
+                line-height: 24pt;
+            }
+
+        .survey-block .flex-wrapper .survey-buttons {
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+            .survey-block .flex-wrapper .survey-buttons .btn-survey {
+                -ms-border-radius: 5px;
+                background: #0058A3;
+                border: 0 none;
+                border-radius: 5px;
+                color: #FFFFFF;
+                font-family: Arial, sans-serif;
+                font-size: 28px;
+                padding: .5em;
+                width: 40%;
+            }

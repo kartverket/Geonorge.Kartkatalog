@@ -1,0 +1,120 @@
+﻿<script type="text/x-template" id="showInMapButtonTemplate">
+    <div class="text-center" v-html="htmlElement"></div>
+</script>
+
+<script>
+    function getShowInMapButton(resultItem) {
+        var ShowInMapButton = {
+            name: "showInMapButton",
+            template: "#showInMapButtonTemplate",
+            props: ["resultItem", "defaultButtonClass", "buttonType"],
+            computed: {
+                button: function () {
+                    var button = {
+                        id: "mapmacrolink-" + this.resultItem.Uuid,
+                        content: "Vis i kart",
+                        className: this.defaultButtonClass,
+                        url: this.resultItem.MapUrl,
+                        title: "Vis " + this.resultItem.Title + " i kart",
+                        icon: {
+                            id: "mapmacro-button-" + this.resultItem.Uuid,
+                            className: "custom-icon"
+                        },
+                        attributes: [
+                            { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'viskart')" }
+                        ]
+                    };
+
+                    if (this.resultItem.ShowMapLink || this.resultItem.ShowServiceMapLink) {
+                        if (this.isRestrictedService()) {
+                            button.icon.className += " custom-icon-kartmarkoer-warning";
+                            button.title = "Tjenesten krever spesiell tilgang for å kunne vises - kontakt dataeier";
+                        } else {
+                            button.icon.className += " custom-icon-kartmarkoer";
+                        }
+                    } else {
+                        button.className += " disabled";
+                        button.icon.className += " custom-icon-kartmarkoer";
+                        button.id = "";
+                        button.title = "Tjenesten kan ikke vises i kart";
+                        button.icon.id = "";
+                        button.attributes = [];
+                    }
+
+                    button.className += ' show-in-map-btn-' + this.resultItem.Uuid;
+
+                    if (this.buttonType === "tableRow") {
+                        button.content = "";
+                    }
+
+                    if (this.resultItem.ShowMapLink || this.resultItem.ShowServiceMapLink) {
+                        this.getServiceStatus();
+                    }
+
+                    return button;
+                },
+                htmlElement: function () {
+                    return this.$parent.createButtonElement(this.button);
+                }
+            },
+            methods: {
+                isRestrictedService: function () {
+                    if (this.resultItem.IsRestricted) {
+                        return true;
+                    }
+                    else if (this.resultItem.ServiceDistributionAccessConstraint == "Beskyttet" ||
+                        this.resultItem.ServiceDistributionAccessConstraint == "restricted" ||
+                        this.resultItem.ServiceDistributionAccessConstraint == "norway digital restricted") {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+                getServiceStatus: function () {
+                    if (this.resultItem.ServiceUuid !== undefined && this.resultItem.ServiceUuid !== null) {
+                        $.getJSON(statusApi + "monitorApi/serviceDetail?uuid=" + this.resultItem.ServiceUuid, function (result) {
+                            try {
+                                var vurderingIsDefined = result.connect !== undefined && result.connect.vurdering !== undefined;
+                                var numLayersIsDefined = result.numLayers !== undefined && result.numLayers.svar !== undefined;
+                                var statusOK = vurderingIsDefined && result.connect.vurdering != "no";
+                                var numLayers = parseInt(numLayersIsDefined ? result.numLayers.svar : 0);
+                                if (!statusOK) {
+                                    this.button.className += " disabled";
+                                    this.button.icon.className = "custom-icon custom-icon-kartmarkoer-unavailable";
+                                    this.button.url = null;
+                                    this.button.title = "Tjenesten er utilgjengelig for øyeblikket";
+                                    this.button.attributes = [{ key: "disabled", value: "disabled" }];
+                                    $(".show-in-map-btn-" + this.resultItem.Uuid).addClass("disabled");
+                                    $(".show-in-map-btn-" + this.resultItem.Uuid).attr("disabled", "disabled");
+                                    $(".show-in-map-btn-" + this.resultItem.Uuid).attr("href", "");
+                                    $(".show-in-map-btn-" + this.resultItem.Uuid).attr("title", "Tjenesten er utilgjengelig for øyeblikket");
+                                    $(".show-in-map-btn-" + this.resultItem.Uuid).attr("data-original-title", "Tjenesten er utilgjengelig for øyeblikket");
+                                    $(".show-in-map-btn-" + this.resultItem.Uuid + " > span").attr("class", "custom-icon custom-icon-kartmarkoer-unavailable");
+                                }
+                                else if (numLayers > 30) {
+                                    this.button.icon.className = "custom-icon custom-icon-kartmarkoer-warning";
+                                    $(".show-in-map-btn-" + this.resultItem.Uuid + " > span").attr("class", "custom-icon custom-icon-kartmarkoer-warning");
+                                    if (this.isRestrictedService()) {
+                                        this.button.title = "Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier";
+                                        $(".show-in-map-btn-" + this.resultItem.Uuid).attr("title", "Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier");
+                                        $(".show-in-map-btn-" + this.resultItem.Uuid).attr("data-original-title", "Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier");
+                                    } else {
+                                        this.button.title = "Tjenesten kan være treg å vise";
+                                        $(".show-in-map-btn-" + this.resultItem.Uuid).attr("title", "Tjenesten kan være treg å vise");
+                                        $(".show-in-map-btn-" + this.resultItem.Uuid).attr("data-original-title", "Tjenesten kan være treg å vise");
+                                    }
+
+                                }
+                            }
+                            catch (err) {
+                                console.log(err);
+                            }
+                        }.bind(this));
+                    }
+                }
+            }
+        };
+        return ShowInMapButton;
+    }
+</script>

@@ -1,0 +1,41 @@
+﻿<script type="text/x-template" id="showProductPageButtonTemplate">
+    <div v-html="htmlElement"></div>
+</script>
+
+<script>
+    function getShowProductPageButton(resultItem) {
+        var ShowProductPageButton = {
+            name: "showProductPageButton",
+            template: "#showProductPageButtonTemplate",
+            props: ["resultItem", "defaultButtonClass", "buttonType"],
+            computed: {
+                button: function () {
+                    var button = {
+                        content: "Vis produktside",
+                        className: this.defaultButtonClass,
+                        url: this.resultItem.ProductPageUrl !== undefined ? this.resultItem.ProductPageUrl : null,
+                        title: "Vis produktside for " + this.resultItem.Title,
+                        icon: {
+                            className: "custom-icon custom-icon-eksternlink"
+                        },
+                        attributes: [
+                            { key: "onClick", value: "ga('send', 'event', 'MerInfo', 'produktside')" }
+                        ]
+                    };
+                    if (button.url == null) {
+                        button.attributes.push({ key: 'disabled', value: 'disabled' });
+                        button.className += " disabled";
+                    }
+                    if (this.buttonType === "tableRow") {
+                        button.content = "";
+                    }
+                    return button;
+                },
+                htmlElement: function () {
+                    return this.$parent.createButtonElement(this.button);
+                }
+            }
+        };
+        return ShowProductPageButton;
+    }
+</script>

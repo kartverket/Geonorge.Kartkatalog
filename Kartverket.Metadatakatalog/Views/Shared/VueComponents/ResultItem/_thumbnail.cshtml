@@ -1,0 +1,31 @@
+﻿<script type="text/x-template" theme="tabell" id="thumbnailContentTemplate">
+    <div>
+    <a v-if="thumbnailSrc" v-bind:href="href">
+        <img v-bind:src="thumbnailSrc" />
+    </a>
+    </div>
+
+</script>
+
+<script>
+    var thumbnail = {
+        name: "thumbnail",
+        template: "#thumbnailContentTemplate",
+        props: ["metadata"],
+        data: function () {
+            var data = {
+                href: "/metadata/" + this.metadata.OrganizationSeoName + "/" + this.metadata.TitleSeo + "/" + this.metadata.Uuid,
+                thumbnailSrc: "/thumbnail?uuid=" + this.metadata.Uuid + "&type=small"            
+            };
+            return data;
+        }
+        
+        @* TODO! 
+           Får ikke tak i props "metadata" på metadata innenfor et tema... 
+           Må spørre direkte i templaten ved å bruke "Metadata.Title" osv..*@
+
+    };
+
+
+
+</script>

@@ -13,8 +13,8 @@
 
     //Finn temaer som er tilknyttet metadata.
     var metadataWithThemesList = (from metadata in metadatas
-                              join metadataResult in result on metadata.Uuid equals metadataResult.Uuid
-                              select metadata).ToList();   
+                                  join metadataResult in result on metadata.Uuid equals metadataResult.Uuid
+                                  select metadata).ToList();
 }
 
 @* Sett url og fiks linjeskift i data for themes *@
@@ -40,7 +40,7 @@ if (items.Any())
 @BuildMenu(themes, null)
 
 @{
-    
+
     var metadatasWithThemes = JsonConvert.SerializeObject(metadataWithThemesList,
         Formatting.None,
         new JsonSerializerSettings()
@@ -49,56 +49,96 @@ if (items.Any())
         });
 }
 
+@Html.Partial("_resultItemRow")
+@Html.Partial("_searchResult")
+
+
+@* Tabellen *@
 <div id="themesVueList">
     <div class="row resultItemRowTableHeader">
-        <div class="col-sm-5"><p>Tittel</p></div>
-        <div class="col-sm-4"><p>Dataeier</p></div>
-        <div class="col-sm-1"><p>Åpne data</p></div>
-        <div class="col-sm-1"><p>Kart</p></div>
-        <div class="col-sm-1"><p>Last ned</p></div>
+        <div class="col-sm-5" is="header-title"></div>
+        <div class="col-sm-4" is="header-organization"></div>
+        <div class="col-sm-1" is="header-open-data"></div>
+        <div class="col-sm-1" is="header-Map"></div>
+        <div class="col-sm-1" is="header-Add-to-cart"></div>
     </div>
+
     <div class="menu-separator search-results-table-heading"></div>
     <div v-for="resultItem in searchResults">
         <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes">
-            <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="0"></div>
+            <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="-1"></div>
         </div>
-        <div is="resultItem" v-bind:result-item="resultItem"></div>
+        <div is="resultItem" 
+             v-bind:result-item="resultItem"
+             v-bind:selected-fields="[
+                 {name: 'title', size: '5'},
+                 {name: 'owner', size: '4'},
+                 {name: 'openData', size: '1'}
+                 ]"
+                 v-bind:selected-buttons="[
+                 'showInMapButton',
+                 'addToCartButton'
+                 ]"
+             >
+        </div>
     </div>
 </div>
 
+@* Metadata template *@
 <script type="text/x-template" id="metadata-item-template">
     <div>
-        <div is="resultItem" v-bind:result-item="apiData"></div>
+        <div is="resultItem" 
+             v-bind:result-item="apiData"
+             v-bind:selected-fields="[
+                 {name: 'title', size: '5'},
+                 {name: 'owner', size: '4'},
+                 {name: 'openData', size: '1'}
+                 ]"
+                 v-bind:selected-buttons="[
+                 'showInMapButton',
+                 'addToCartButton'
+                 ]"
+             >
+        </div>
     </div>
 </script>
 
-
+@* Tema template *@
 <script type="text/x-template" id="theme-item-template">
     <div>
+
+        @* Tema *@
         <div class="table-border-bottom">
-            <div class="resultItemRow" style="margin-left: -18px;" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
+            <div class="resultItemRow" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
                 <span v-on:click="expanded = !expanded" class="expand-arrow clickable" v-bind:class="[expanded ? 'active' : '']" style="vertical-align: middle;"></span>
                 <a v-bind:href="theme.ShowDetailsUrl">{{ theme.Name }}</a>
             </div>
         </div>
+
         <div v-show="expanded">
+
+            @*Temaets metadata. *@
             <div v-if="theme.Metadata.length">
                 <div v-for="subItem in theme.Metadata">
                     <div is="metadata-item" v-bind:metadata="subItem"></div>
                 </div>
             </div>
+
+            @* Temaets undertema *@
             <div v-if="theme.Children.length">
                 <div v-for="child in theme.Children">
                     <div is="theme-item" v-bind:theme="child" v-bind:parent-hierarchy-level="hierarchyLevel"></div>
                 </div>
             </div>
+
         </div>
     </div>
 </script>
 
 
-<script>
 
+
+<script>
     var MetadataItem = {
         name: 'metadataItem',
         template: '#metadata-item-template',
@@ -107,17 +147,18 @@ if (items.Any())
             return {
                 apiData: {},
                 hierarchyLevel: this.$parent.hierarchyLevel !== undefined ? this.$parent.hierarchyLevel : 0
-            }
+            };
         },
         mounted: function () {
             $.getJSON('/api/metadata/' + this.metadata.Uuid, function (result) {
-                if (result.length != 0) {
+                if (result.length !== 0) {
                     this.apiData = result;
                 }
             }.bind(this));
         },
         components: {
-            ResultItem: ResultItemComponent
+            ResultItem: ResultItemComponent,
+            SearchResult: SearchResult,
         }
     };
 
@@ -131,7 +172,7 @@ if (items.Any())
         data: function () {
             return {
                 expanded: false
-            }
+            };
         },
         computed: {
             hierarchyLevel: function () {
@@ -139,7 +180,7 @@ if (items.Any())
             }
         },
         components: {
-            metadataItem: MetadataItem
+            metadataItem: MetadataItem,
         }
     };
 
@@ -166,7 +207,7 @@ if (items.Any())
                     if (addedTheme.Id == theme.Id){
                         topLevelThemeAllreadyAdded = true;
                     }
-                })
+                });
                 return topLevelThemeAllreadyAdded;
             },
             topLevelThemes: function (searchResultItem){
@@ -192,7 +233,7 @@ if (items.Any())
                     if (addedTopLevelThemeId == topLevelTheme.Id){
                         topLevelThemeIsAllreadyAdded = true;
                     }
-                })
+                });
                 return topLevelThemeIsAllreadyAdded;
             },
             getTopLevelTheme: function (theme){
@@ -219,9 +260,17 @@ if (items.Any())
         },
         components: {
             themeItem: ThemeItem,
-            ResultItem: ResultItemComponent
+            ResultItem: ResultItemComponent,
+            HeaderTitle: HeaderTitle,
+            HeaderType: HeaderType,
+            HeaderOrganization: HeaderOrganization,
+            HeaderOpenData: HeaderOpenData,
+            HeaderWebsite: HeaderWebsite,
+            HeaderAddToCart: HeaderAddToCart,
+            HeaderMap: HeaderMap,
+            HeaderUrl: HeaderUrl
         }
-    })
+    });
 </script>
 
 

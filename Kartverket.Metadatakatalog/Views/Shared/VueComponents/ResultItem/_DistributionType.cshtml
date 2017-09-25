@@ -1,0 +1,52 @@
+﻿<script type="text/x-template" id="distributionTypeContentTemplate">    
+    <div>
+        <p v-if="$root.viewType == 'listView'">
+            Tilgjengelig som:
+            <span v-bind:title="'Tilgjengelig som ' + typeTranslated" data-toggle='tooltip' data-placement='bottom' style="width:auto" v-bind:class="className">{{typeTranslated}}</span>
+        </p>
+
+        <span v-else v-bind:title="'Tilgjengelig som ' + typeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="className" style="width:auto">{{typeTranslated}}</span>
+    </div>
+</script>
+
+<script>
+    var TableDistributionType = {
+        name: "table-distribution-type",
+        template: "#distributionTypeContentTemplate",
+        props: ["metadata"],
+        data: function() {
+            var data = {
+                type: this.metadata.Type,
+                typeTranslated: this.metadata.TypeTranslated,
+                className: "label "
+        };
+            return data;
+        },
+        created: function() {
+            if (this.type == "dataset" || this.type == "Datasett") this.className += "label-datasett";
+            else if (this.type == "software" || this.type == "Applikasjon") this.className += "label-applikasjon";
+            else if (this.type == "service" || this.type == "Tjeneste") {
+                this.className += "label-tjeneste";
+                this.typeTranslated = this.metadata.DistributionType;
+            }
+            else if (this.type == "servicelayer" || this.type == "Tjenestelag") {
+                this.className += "label-tjenestelag";
+                this.typeTranslated = this.metadata.DistributionType + "lag";
+            }
+            else if (this.type == "series" || this.type == "Datasettserie") this.className += "label-datasettserie";
+            else if (this.type == "dimensionGroup" || this.type == "Datasett") this.className += "label-datasett";
+            else if (this.type == "default") this.className += "label-default";
+            else this.className += "label-tjeneste";
+
+
+            if (!this.typeTranslated) {
+                this.typeTranslated = this.type;
+            }
+        }
+
+        @* TODO!
+           Får ikke tak i props "metadata" på metadata innenfor et tema...
+           Må spørre direkte i templaten ved å bruke "Metadata.Title" osv..*@
+
+        };
+</script>

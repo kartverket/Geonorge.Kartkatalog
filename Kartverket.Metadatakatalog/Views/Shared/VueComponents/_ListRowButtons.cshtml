@@ -1,0 +1,25 @@
+﻿@Html.Partial("VueComponents/_Buttons")
+@Html.Partial("VueComponents/Helpers/_ConvertModelToResultItem")
+
+<script type="text/x-template" id="list-row-buttons-template">
+    <div>
+        <div is="Buttons"
+             v-bind:result-item="metadata"
+             v-bind:button-type="'list'"
+             v-bind:selected-buttons="this.listOfButtons">
+        </div>
+    </div>
+</script>
+
+<script>
+    var ListRowButtons = {
+        template: "#list-row-buttons-template",
+        name: "list-row-buttons",
+        props: ["metadata", "listOfButtons"],
+        components: {
+            Buttons: Buttons
+        }
+    };
+
+</script>
+
