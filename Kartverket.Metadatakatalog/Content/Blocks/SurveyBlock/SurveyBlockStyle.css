@@ -30,6 +30,24 @@
     z-index: 51;
 }
 
+@media (max-width: 650px) {
+    .survey-block {
+        max-height: 55%;
+    }
+}
+
+@media (max-width: 500px) {
+    .survey-block {
+        max-height: 80%;
+    }
+}
+
+@media (max-width: 350px) {
+    .survey-block {
+        max-height: 85%;
+    }
+}
+
     .survey-block .flex-wrapper {
         display: flex;
         flex-direction: column;
@@ -52,10 +70,16 @@
             .survey-block .flex-wrapper .PopUpText h2 {
                 color: #5d4777;
                 font-family: 'Raleway', sans-serif;
-                font-size: 34pt;
+                font-size: 24pt;
                 font-weight: 300;
                 margin-top: 40px;
-                word-wrap: normal;
+                word-wrap: break-word;
+            }
+
+            @media (min-width: 768px){
+                .survey-block .flex-wrapper .PopUpText h2 {
+                    font-size: 34pt;
+                }
             }
 
             .survey-block .flex-wrapper .PopUpText p {
@@ -66,6 +90,18 @@
                 font-weight: 500;
                 line-height: 24pt;
                 padding: 32px 0 42px;
+            }
+
+            @media (max-width: 500px) {
+                .survey-block .flex-wrapper .PopUpText p {
+                    font-size: 12pt;
+                }
+            }
+
+            @media (max-width: 350px) {
+                .survey-block .flex-wrapper .PopUpText p {
+                    font-size: 10pt;
+                }
             }
 
         .survey-block .flex-wrapper .survey-buttons {
