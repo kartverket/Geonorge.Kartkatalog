@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "kartverket-felleskomponenter": "7.3.6",
+    "kartverket-felleskomponenter": "7.4.1",
     "vue": "^2.0.0",
     "clipboard": "^1.6.1",
     "axios": "^0.16.1"
