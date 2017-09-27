@@ -65,7 +65,7 @@ var Areas = {
         }
         if (!this.master) {
             data.supportsPolygonSelection = this.$parent.capabilities.supportsPolygonSelection,
-            data.supportsGridSelection = this.$parent.capabilities.supportsGridSelection
+                data.supportsGridSelection = this.$parent.capabilities.supportsGridSelection
         }
         else {
             data.supportsPolygonSelection = this.$parent.masterSupportsPolygonSelection();
@@ -1045,6 +1045,12 @@ var mainVueModel = new Vue({
             })
             return isSupportedType;
         },
+        hasMasterSelectedProjections: function () {
+            return this.masterOrderLine.masterSelectedProjections.length > 0;
+        },
+        hasMasterSelectedFormats: function () {
+            return this.masterOrderLine.masterSelectedFormats.length > 0;
+        },
         hasSelectedProjections: function (area, orderLine) {
             var hasSelectedProjections = false;
 
@@ -1086,34 +1092,37 @@ var mainVueModel = new Vue({
             return hasSelectedFormats;
         },
         hasSelectedProjectionsDifferentFromMasterSelectedProjections: function (orderLineUuid) {
-            this.masterOrderLine.allSelectedProjections[orderLineUuid].forEach(function (selectedProjection) {
-                var isMasterSelected = false;
-                this.masterOrderLine.masterSelectedProjections.forEach(function (masterSelectedProjection) {
-                    if (masterSelectedProjection.code == selectedProjection.code) {
-                        isMasterSelected = true;
+            if (this.hasMasterSelectedProjections()) {
+                this.masterOrderLine.allSelectedProjections[orderLineUuid].forEach(function (selectedProjection) {
+                    var isMasterSelected = false;
+                    this.masterOrderLine.masterSelectedProjections.forEach(function (masterSelectedProjection) {
+                        if (masterSelectedProjection.code == selectedProjection.code) {
+                            isMasterSelected = true;
+                        }
+                    }.bind(this));
+                    if (!isMasterSelected) {
+                        var infoMessage = "" + selectedProjection.name + " er ikke valgt som fellesvalg";
+                        this.masterOrderLine.allOrderLineInfoMessages[orderLineUuid]["projection"].push(infoMessage);
                     }
                 }.bind(this));
-                if (!isMasterSelected) {
-                    var infoMessage = "" + selectedProjection.name + " er ikke valgt som fellesvalg";
-                    this.masterOrderLine.allOrderLineInfoMessages[orderLineUuid]["projection"].push(infoMessage);
-                }
-            }.bind(this));
+            }
         },
         hasSelectedFormatsDifferentFromMasterSelectedFormats: function (orderLineUuid) {
-            this.masterOrderLine.allSelectedFormats[orderLineUuid].forEach(function (selectedFormat) {
-                var isMasterSelected = false;
-                this.masterOrderLine.masterSelectedFormats.forEach(function (masterSelectedFormat) {
-                    if (masterSelectedFormat.name == selectedFormat.name) {
-                        isMasterSelected = true;
+            if (this.hasMasterSelectedFormats()) {
+                this.masterOrderLine.allSelectedFormats[orderLineUuid].forEach(function (selectedFormat) {
+                    var isMasterSelected = false;
+                    this.masterOrderLine.masterSelectedFormats.forEach(function (masterSelectedFormat) {
+                        if (masterSelectedFormat.name == selectedFormat.name) {
+                            isMasterSelected = true;
+                        }
+                    }.bind(this));
+                    if (!isMasterSelected) {
+                        var infoMessage = "" + selectedFormat.name + " er ikke valgt som fellesvalg";
+                        this.masterOrderLine.allOrderLineInfoMessages[orderLineUuid]["format"].push(infoMessage);
                     }
                 }.bind(this));
-                if (!isMasterSelected) {
-                    var infoMessage = "" + selectedFormat.name + " er ikke valgt som fellesvalg";
-                    this.masterOrderLine.allOrderLineInfoMessages[orderLineUuid]["format"].push(infoMessage);
-                }
-            }.bind(this));
+            }
         },
-
         updateInfoMessagesForOrderLine: function (orderLineUuid) {
             this.masterOrderLine.allOrderLineInfoMessages[orderLineUuid] = {};
             this.masterOrderLine.allOrderLineInfoMessages[orderLineUuid]["projection"] = [];
@@ -1669,11 +1678,11 @@ var mainVueModel = new Vue({
             });
             localStorage["orderItems"] = JSON.stringify(orderItems);
             Object.keys(localStorage)
-                    .forEach(function (key) {
-                        if (key.substring(0, uuidLength) == uuid) {
-                            localStorage.removeItem(key);
-                        }
-                    });
+                .forEach(function (key) {
+                    if (key.substring(0, uuidLength) == uuid) {
+                        localStorage.removeItem(key);
+                    }
+                });
             updateShoppingCart();
             updateShoppingCartCookie();
         },
