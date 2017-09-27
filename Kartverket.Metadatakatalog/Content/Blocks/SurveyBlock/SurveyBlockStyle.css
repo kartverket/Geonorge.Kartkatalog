@@ -42,6 +42,7 @@
             cursor: pointer;
             font-weight: bold;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            margin: 1%;
         }
 
         .survey-block .flex-wrapper .PopUpText {
@@ -64,6 +65,7 @@
                 font-style: italic;
                 font-weight: 500;
                 line-height: 24pt;
+                padding: 32px 0 42px;
             }
 
         .survey-block .flex-wrapper .survey-buttons {
