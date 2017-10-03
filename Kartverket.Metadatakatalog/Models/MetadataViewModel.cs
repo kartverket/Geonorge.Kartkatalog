@@ -151,6 +151,10 @@ namespace Kartverket.Metadatakatalog.Models
 
                 else return "";
             }
+            else if (IsDataset())
+            {
+                return WebConfigurationManager.AppSettings["NorgeskartUrl"] + ServiceUrl();
+            }
             else return "";
         }
 

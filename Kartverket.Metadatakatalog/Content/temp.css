@@ -95,3 +95,8 @@
 .label-datapakke {
     border-color: #5d4777;
 }
+
+.label{
+    height: auto;
+    white-space: normal;
+}

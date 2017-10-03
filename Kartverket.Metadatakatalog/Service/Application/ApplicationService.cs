@@ -76,7 +76,11 @@ namespace Kartverket.Metadatakatalog.Service.Application
 
         private string GetType(SolrQueryResults<ApplicationIndexDoc> queryResults)
         {
-            return queryResults?[0].ClassName;
+            if (queryResults != null && queryResults.Count > 0)
+            {
+                return queryResults[0].ClassName;
+            }
+            return null;
         }
 
         private List<Facet> ParseFacetResults(SolrQueryResults<ApplicationIndexDoc> queryResults)
