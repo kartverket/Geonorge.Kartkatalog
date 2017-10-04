@@ -153,7 +153,7 @@ namespace Kartverket.Metadatakatalog.Models
             }
             else if (IsDataset())
             {
-                return WebConfigurationManager.AppSettings["NorgeskartUrl"] + ServiceUrl();
+                return WebConfigurationManager.AppSettings["NorgeskartUrl"] + ServiceUrl() + "/";
             }
             else return "";
         }
