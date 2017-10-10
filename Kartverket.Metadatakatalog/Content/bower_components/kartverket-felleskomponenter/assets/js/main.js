@@ -374,6 +374,7 @@ var baseurl_local = searchOption.baseUrl;
     $scope.searchString = "";
     $rootScope.selectedSearch = searchOption;
     $rootScope.searchQuery = parseLocation(window.location.search).text;
+    $rootScope.activePageUrl = "//" + window.location.host + window.location.pathname + window.location.search; 
     $scope.autoCompleteResult = [];
 
     $scope.autoCompletePartial = '/Content/bower_components/kartverket-felleskomponenter/assets/partials/_autoCompleteRow.html';
@@ -602,17 +603,15 @@ var baseurl_local = searchOption.baseUrl;
                         var item = {};
                         var curr = list[x];
                         if (curr.data == null || curr.data.Results.length === 0) continue;
-                        item.type = curr.Section;
 
-                        item.title = curr.SectionName;
-
+                        item.showAllUrl = getUrl(curr.data.Results[0].Type) + '?text=' + $rootScope.searchQuery;
                         item.list = [];
+                        
                         for (var y = 0; y < curr.data.Results.length; y++) {
                           var currResult = curr.data.Results[y];
 
                           item.title = getType(currResult.Type);
-                          item.url = searchOption.url;
-
+                          item.url = getUrl(currResult.Type);
 
                           item.list.push({
                             externalId: curr.SectionName + '_' + curr.Section + '_' + y,
@@ -624,7 +623,7 @@ var baseurl_local = searchOption.baseUrl;
                         }
                         $scope.autoCompleteResult.push(item);
                       }
-
+                      
                     }
                   }
 
@@ -640,6 +639,23 @@ var baseurl_local = searchOption.baseUrl;
                       return "Datapakker";
                       case "software":
                       return "Applikasjon";
+                      default:
+                    }
+                  }
+
+                  function getUrl(type) {
+                    var baseUrl = searchOption.baseUrl;
+                    switch (type) {
+                      case "dataset":
+                      return baseUrl + "/search";
+                      case "servicelayer":
+                      return baseUrl + "/apier-og-tjenester";
+                      case "service":
+                      return baseUrl + "/apier-og-tjenester";
+                      case "dimensionGroup":
+                      return baseUrl + "/search";
+                      case "software":
+                      return baseUrl + "/kartlosninger";
                       default:
                     }
                   }
@@ -809,7 +825,6 @@ $(document).ready(function () {
             url: menuService,
             headers: {
               'Content-Type': 'application/json; charset=utf-8'
-
             },
             data: {}
           });
