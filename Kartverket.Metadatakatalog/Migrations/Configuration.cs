@@ -5,6 +5,7 @@ namespace Kartverket.Metadatakatalog.Migrations
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Data.Entity.ModelConfiguration;
     using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<Kartverket.Metadatakatalog.Models.MetadataContext>
@@ -12,6 +13,16 @@ namespace Kartverket.Metadatakatalog.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+        }
+
+        internal class ThemeTranslationConfiguration : EntityTypeConfiguration<Theme>
+        {
+
+            public ThemeTranslationConfiguration()
+            {
+                HasMany(x => x.Translations).WithRequired().HasForeignKey(x => x.ThemeId);
+            }
+
         }
 
         protected override void Seed(Kartverket.Metadatakatalog.Models.MetadataContext context)

@@ -269,12 +269,26 @@
     <Compile Include="Migrations\201706090621035_AddTheme.Designer.cs">
       <DependentUpon>201706090621035_AddTheme.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710111145232_AddThemeTranslation.cs" />
+    <Compile Include="Migrations\201710111145232_AddThemeTranslation.Designer.cs">
+      <DependentUpon>201710111145232_AddThemeTranslation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Api\Distribution.cs" />
     <Compile Include="Models\SearchIndex\MetadataIndexAllDoc.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\SearchByAreaParameters.cs" />
     <Compile Include="Models\SearchIndex\SearchIndexDoc.cs" />
+    <Compile Include="Models\Translations\Culture.cs" />
+    <Compile Include="Models\Translations\ThemeTranslation.cs" />
+    <Compile Include="Models\Translations\Translation.cs" />
+    <Compile Include="Models\Translations\TranslationCollection.cs" />
     <Compile Include="Models\ViewModels\SearchByAreaViewModel.cs" />
+    <Compile Include="Resources\Resource.cs" />
+    <Compile Include="Resources\UI.en.Designer.cs">
+      <DependentUpon>UI.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Service\Application\IApplicationService.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Service\Application\ApplicationService.cs" />
@@ -1195,6 +1209,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201706090621035_AddTheme.resx">
       <DependentUpon>201706090621035_AddTheme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710111145232_AddThemeTranslation.resx">
+      <DependentUpon>201710111145232_AddThemeTranslation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UI.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UI.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UI.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

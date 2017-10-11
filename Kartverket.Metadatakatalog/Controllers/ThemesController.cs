@@ -46,8 +46,10 @@ namespace Kartverket.Metadatakatalog.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            Theme theme = new Theme();
+            theme.AddMissingTranslations();
             ViewBag.ParentId = new SelectList(_themeService.GetThemes(), "Id", "Name");
-            return View();
+            return View(theme);
         }
 
         // POST: Themes/Create
@@ -56,7 +58,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,ThumbnailUrl,ParentId")] Theme theme, HttpPostedFileBase uploadFile)
+        public ActionResult Create(Theme theme, HttpPostedFileBase uploadFile)
         {
             if (!IsAdmin())
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
@@ -123,7 +125,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,ThumbnailUrl,ParentId")] Theme theme, string[] operatesOn, HttpPostedFileBase uploadFile)
+        public ActionResult Edit(Theme theme, string[] operatesOn, HttpPostedFileBase uploadFile)
         {
 
             if (!IsAdmin())
