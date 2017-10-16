@@ -67,47 +67,6 @@
     </div>
 </script>
 
-@helper DisplayPaginationBottom()
-{
-    <div class="search-result-navigation">
-        Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
-        <div class="pagination-container">
-            <ul class="pagination pagination-sm btn-group inline-block">
-                @if (Model.IsFirstButtonActive())
-                {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
-                }
-
-                @if (Model.IsPreviousButtonActive())
-                {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
-                }
-
-                @for (int i = Model.startPage; i <= Model.endPage; i++)
-                {
-                    if (Model.IsActivePage(i))
-                    {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                    }
-                }
-
-                @if (Model.IsNextButtonActive())
-                {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
-                }
-                @if (Model.IsLastButtonActive())
-                {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
-                }
-            </ul>
-        </div>
-    </div>
-}
-
 @{
 
     string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.ToLower().Replace("apier-og-tjenester", "api/servicedirectory");
@@ -129,41 +88,7 @@
 
 <div class="row search-result-navigation">
     <div class="col-md-4">
-        Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
-        <div class="pagination-container">
-            <ul class="pagination pagination-sm btn-group inline-block">
-                @if (Model.IsFirstButtonActive())
-                {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
-                }
-
-                @if (Model.IsPreviousButtonActive())
-                {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
-                }
-
-                @for (int i = Model.startPage; i <= Model.endPage; i++)
-                {
-                    if (Model.IsActivePage(i))
-                    {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                    }
-                }
-
-                @if (Model.IsNextButtonActive())
-                {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
-                }
-                @if (Model.IsLastButtonActive())
-                {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
-                }
-            </ul>
-        </div>
+        @Html.Partial("_Pagination", Model)
     </div>
     <div class="col-md-4 pull-right">
         <div class="save-as-menu pull-right">
@@ -194,7 +119,9 @@
         <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
         <div class="clearfix"></div>
         <div is="searchResult" v-bind:result-items="ResultItems"></div>
-        @DisplayPaginationBottom()
+        <div class="margin-top-10">
+            @Html.Partial("_Pagination", Model)
+        </div>
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
         <aside class="facet-filter-container">
@@ -217,8 +144,8 @@
 
     function setTooltip(btn, message) {
         btn.tooltip('hide')
-          .attr('data-original-title', message)
-          .tooltip('show');
+            .attr('data-original-title', message)
+            .tooltip('show');
     }
 
     function hideTooltip(btn) {

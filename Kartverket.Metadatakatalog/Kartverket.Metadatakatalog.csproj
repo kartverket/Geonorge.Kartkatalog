@@ -1196,6 +1196,9 @@
     <Content Include="Views\OpenData\Index.cshtml" />
     <Content Include="Views\Shared\VueComponents\Buttons\_CopyUrlButton.cshtml" />
     <Content Include="Content\Blocks\SurveyBlock\_SurveyBlock.cshtml" />
+    <Content Include="Views\Shared\_Pagination.cshtml" />
+    <Content Include="Views\Shared\_PaginationForArea.cshtml" />
+    <Content Include="Views\Shared\_PaginationForOrganization.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

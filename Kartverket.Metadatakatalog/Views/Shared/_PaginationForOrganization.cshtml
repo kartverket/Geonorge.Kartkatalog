@@ -1,0 +1,36 @@
+﻿Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
+<div class="pagination-container">
+    <ul class="pagination pagination-sm btn-group inline-block">
+        @if (Model.IsFirstButtonActive())
+        {
+            <li><a aria-label="Første" title="Første" href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForFirstLink()))"><span class="fa fa-angle-double-left"></span></a></li>
+        }
+
+        @if (Model.IsPreviousButtonActive())
+        {
+            <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForPreviousLink()))"><span class="fa fa-angle-left"></span></a></li>
+        }
+
+        @for (int i = Model.startPage; i <= Model.endPage; i++)
+        {
+            if (Model.IsActivePage(i))
+            {
+                <li class="active"><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
+            }
+            else
+            {
+                <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForPageNumber(i)))">@i</a></li>
+            }
+        }
+
+        @if (Model.IsNextButtonActive())
+        {
+            <li><a href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForNextLink()))"><span class="fa fa-angle-right"></span></a></li>
+        }
+        @if (Model.IsLastButtonActive())
+        {
+            <li><a aria-label="Siste" title="Siste" href="@Url.Action("Organization", Model.OrganizationRouteValues(Model.ParamsForLastLink()))"><span class="fa fa-angle-double-right"></span></a></li>
+        }
+    </ul>
+</div>
+
