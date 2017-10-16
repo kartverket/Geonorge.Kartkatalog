@@ -117,70 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AppPageTitle" xml:space="preserve">
-    <value>Kartkatalogen</value>
+  <data name="Target" xml:space="preserve">
+    <value>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</value>
   </data>
-  <data name="Facet_area" xml:space="preserve">
-    <value>Område</value>
-  </data>
-  <data name="Facet_DistributionProtocols" xml:space="preserve">
-    <value>Distribusjonsform</value>
-  </data>
-  <data name="Facet_keyword" xml:space="preserve">
-    <value>Nøkkelord</value>
-  </data>
-  <data name="Facet_license" xml:space="preserve">
-    <value>Lisens</value>
-  </data>
-  <data name="Facet_nationalinitiative" xml:space="preserve">
-    <value>Samarbeid og lover</value>
-  </data>
-  <data name="Facet_organization" xml:space="preserve">
-    <value>Organisasjon</value>
-  </data>
-  <data name="Facet_organizationgroup" xml:space="preserve">
-    <value>Organisasjon</value>
-  </data>
-  <data name="Facet_place" xml:space="preserve">
-    <value>Geografisk område</value>
-  </data>
-  <data name="Facet_placegroups" xml:space="preserve">
-    <value>Geografisk område</value>
-  </data>
-  <data name="Facet_theme" xml:space="preserve">
-    <value>Tema</value>
-  </data>
-  <data name="Facet_type" xml:space="preserve">
-    <value>Type</value>
-  </data>
-  <data name="Facet_type_dataset" xml:space="preserve">
-    <value>Datasett</value>
-  </data>
-  <data name="Facet_type_series" xml:space="preserve">
-    <value>Datasettserie</value>
-  </data>
-  <data name="Facet_type_service" xml:space="preserve">
-    <value>Tjeneste</value>
-  </data>
-  <data name="Facet_type_servicelayer" xml:space="preserve">
-    <value>Tjenestelag</value>
-  </data>
-  <data name="Facet_type_software" xml:space="preserve">
-    <value>Applikasjon</value>
-  </data>
-  <data name="Facet_type_dimensionGroup" xml:space="preserve">
-    <value>Datapakke</value>
-  </data>
-  <data name="Facet_dataaccess" xml:space="preserve">
-    <value>Tilgang til data</value>
-  </data>
-  <data name="Service_need_permission" xml:space="preserve">
-    <value>Tjenesten krever spesiell tilgang for å kunne vises - kontakt dataeier</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Beskrivelse</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Navn</value>
+  <data name="DefaultSchema" xml:space="preserve">
+    <value>dbo</value>
   </data>
 </root>

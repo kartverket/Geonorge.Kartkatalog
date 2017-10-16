@@ -1,11 +1,11 @@
 ﻿<script type="text/x-template" id="ownerContentTemplate">
     <div>
-        <a v-if="$root.viewType == 'listView'" v-bind:href="href" class="show-loading-animation" data-loading-message="Henter innhold">
-            <img v-bind:src="organizationLogo" class="img-responsive center-block" v-bind:alt="organizationName" v-bind:title="'Vis alle tjenester og datasett fra ' + organizationName" />
+        <a v-if="$root.viewType == 'listView'" v-bind:href="'/etatvis-oversikt/' + this.metadata.OrganizationSeoName" class="show-loading-animation" data-loading-message="Henter innhold">
+            <img v-bind:src="metadata.OrganizationLogoUrl" class="img-responsive center-block" v-bind:alt="metadata.Organization" v-bind:title="'Vis alle datasett fra ' + metadata.Organization" />
         </a>
 
-        <a v-else v-bind:href="href" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + organizationName" v-bind:title="'Vis alle tjenester og datasett fra ' + organizationName">
-            {{organizationName}}
+        <a v-else v-bind:href="'/etatvis-oversikt/' + this.metadata.OrganizationSeoName" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="'Vis alle datasett fra ' + metadata.Organization">
+            {{metadata.Organization}}
         </a>
     </div>
 </script>
@@ -14,19 +14,6 @@
     var TableOwner = {
         name: "table-owner",
         template: "#ownerContentTemplate",
-        props: ["metadata"],
-        data: function () {
-            var data = {
-                href: "/etatvis-oversikt/" + this.metadata.OrganizationSeoName,
-                organizationName: this.metadata.Organization,
-                organizationLogo: this.metadata.OrganizationLogoUrl
-            };
-            return data;
-        }
-        
-        @* TODO! 
-           Får ikke tak i props "metadata" på metadata innenfor et tema... 
-           Må spørre direkte i templaten ved å bruke "Metadata.Title" osv..*@
-
-        };
+        props: ["metadata"]
+    };
 </script>

@@ -1010,6 +1010,11 @@
               Looks up a localized string similar to Kartkatalogen.
             </summary>
         </member>
+        <member name="P:Resources.UI.Description">
+            <summary>
+              Looks up a localized string similar to Beskrivelse.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Facet_area">
             <summary>
               Looks up a localized string similar to Område.
@@ -1098,6 +1103,11 @@
         <member name="P:Resources.UI.Facet_type_software">
             <summary>
               Looks up a localized string similar to Applikasjon.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Name">
+            <summary>
+              Looks up a localized string similar to Navn.
             </summary>
         </member>
         <member name="P:Resources.UI.Service_need_permission">

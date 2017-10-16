@@ -24,7 +24,9 @@ namespace Kartverket.Metadatakatalog.Service
 
         public Theme GetTheme(int? id)
         {
-            return _dbContext.Themes.Find(id);
+            var theme = _dbContext.Themes.Find(id);
+            theme.AddMissingTranslations();
+            return theme;
         }
 
         public List<Theme> GetThemes()
@@ -43,7 +45,7 @@ namespace Kartverket.Metadatakatalog.Service
         {
             _dbContext.Database.ExecuteSqlCommand("DELETE FROM ThemeMetadatas WHERE Theme_Id = {0}", theme.Id);
 
-            if(metadataRelated != null)
+            if (metadataRelated != null)
             {
 
                 foreach (var uuid in metadataRelated)
@@ -58,6 +60,13 @@ namespace Kartverket.Metadatakatalog.Service
 
                     _dbContext.Database.ExecuteSqlCommand("INSERT INTO ThemeMetadatas(Theme_Id, Metadata_Uuid) VALUES({0}, {1})", theme.Id, uuid);
                 }
+            }
+
+            _dbContext.Database.ExecuteSqlCommand("DELETE FROM ThemeTranslations WHERE ThemeId = {0}", theme.Id);
+            foreach (var translation in theme.Translations.ToList())
+            {
+                _dbContext.Database.ExecuteSqlCommand("INSERT INTO ThemeTranslations(ThemeId,Name,Description,CultureName, Id) VALUES({0}, {1}, {2}, {3}, {4})", 
+                translation.ThemeId, translation.Name, translation.Description, translation.CultureName, Guid.NewGuid());
             }
 
             _dbContext.Entry(theme).State = EntityState.Modified;
