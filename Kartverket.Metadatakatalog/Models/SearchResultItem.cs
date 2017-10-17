@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Kartverket.Metadatakatalog.Helpers;
+using System.Collections.Generic;
 namespace Kartverket.Metadatakatalog.Models
 {
     public class SearchResultItem
@@ -76,9 +77,9 @@ namespace Kartverket.Metadatakatalog.Models
         private void SetSearchIndexDoc(SearchIndexDoc doc)
         {
             Uuid = doc.Uuid;
-            Title = doc.Title;
+            Title = CultureHelper.IsNorwegian() ? doc.Title : doc.TitleEnglish;
             Abstract = doc.Abstract;
-            Organization = doc.Organizationgroup;
+            Organization = CultureHelper.IsNorwegian() ? doc.Organizationgroup : doc.OrganizationEnglish;
             OrganizationShortName = !string.IsNullOrEmpty(doc.OrganizationShortName) ? doc.OrganizationShortName : doc.Organizationgroup;
             Theme = doc.Theme;
             Type = doc.Type;

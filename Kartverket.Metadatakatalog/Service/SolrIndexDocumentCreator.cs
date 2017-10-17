@@ -183,6 +183,8 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     indexDoc.Organizationgroup = simpleMetadata.ContactOwner.Organization;
                     indexDoc.Organization = indexDoc.Organizationgroup;
+                    indexDoc.Organizationgroup = simpleMetadata.ContactOwner.Organization;
+                    indexDoc.OrganizationEnglish = simpleMetadata.ContactOwner.OrganizationEnglish;
                     indexDoc.OrganizationContactname = simpleMetadata.ContactOwner.Name;
                     if (indexDoc.Organization != null) {
                         
