@@ -170,8 +170,11 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 indexDoc.Uuid = simpleMetadata.Uuid;
                 indexDoc.Title = simpleMetadata.Title;
+                indexDoc.TitleEnglish = simpleMetadata.EnglishTitle;
                 indexDoc.Abstract = simpleMetadata.Abstract;
+                indexDoc.AbstractEnglish = simpleMetadata.EnglishAbstract;
                 indexDoc.Purpose = simpleMetadata.Purpose;
+                indexDoc.PurposeEnglish = simpleMetadata.EnglishPurpose;
                 indexDoc.Type = simpleMetadata.HierarchyLevel;
                 if (!string.IsNullOrEmpty(simpleMetadata.ParentIdentifier))
                     indexDoc.ParentIdentifier = simpleMetadata.ParentIdentifier;
@@ -1024,8 +1027,11 @@ namespace Kartverket.Metadatakatalog.Service
 
             indexDoc.Uuid = simpleMetadata.Uuid;
             indexDoc.Title = simpleMetadata.Title;
+            indexDoc.TitleEnglish = simpleMetadata.TitleEnglish;
             indexDoc.Abstract = simpleMetadata.Abstract;
+            indexDoc.AbstractEnglish = simpleMetadata.AbstractEnglish;
             indexDoc.Purpose = simpleMetadata.Purpose;
+            indexDoc.PurposeEnglish = simpleMetadata.PurposeEnglish;
             indexDoc.Type = simpleMetadata.Type;
             indexDoc.ParentIdentifier = simpleMetadata.ParentIdentifier;
             indexDoc.Organizationgroup = simpleMetadata.Organizationgroup;

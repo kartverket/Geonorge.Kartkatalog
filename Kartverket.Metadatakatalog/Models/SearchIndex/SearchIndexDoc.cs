@@ -12,11 +12,20 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("title")]
         public string Title { get; set; }
 
+        [SolrField("title_en")]
+        public string TitleEnglish { get; set; }
+
         [SolrField("abstract")]
         public string @Abstract { get; set; }
 
+        [SolrField("abstract_en")]
+        public string AbstractEnglish { get; set; }
+
         [SolrField("purpose")]
         public string Purpose { get; set; }
+
+        [SolrField("purpose_en")]
+        public string PurposeEnglish { get; set; }
 
         [SolrField("type")]
         public string Type { get; set; }
@@ -27,11 +36,20 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("organization")]
         public string Organization { get; set; }
 
+        [SolrField("organization_en")]
+        public string OrganizationEnglish { get; set; }
+
         [SolrField("organization2")]
         public string Organization2 { get; set; }
 
+        [SolrField("organization2_en")]
+        public string Organization2English { get; set; }
+
         [SolrField("organization3")]
         public string Organization3 { get; set; }
+
+        [SolrField("organization3_en")]
+        public string Organization3English { get; set; }
 
         [SolrField("organizationContactname")]
         public string OrganizationContactname { get; set; }
