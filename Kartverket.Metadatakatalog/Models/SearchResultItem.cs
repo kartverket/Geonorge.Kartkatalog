@@ -77,9 +77,13 @@ namespace Kartverket.Metadatakatalog.Models
         private void SetSearchIndexDoc(SearchIndexDoc doc)
         {
             Uuid = doc.Uuid;
-            Title = CultureHelper.IsNorwegian() ? doc.Title : doc.TitleEnglish;
+            Title = doc.Title;
+            if (!CultureHelper.IsNorwegian() && !string.IsNullOrEmpty(doc.TitleEnglish))
+                Title = doc.TitleEnglish;
             Abstract = doc.Abstract;
-            Organization = CultureHelper.IsNorwegian() ? doc.Organizationgroup : doc.OrganizationEnglish;
+            Organization = doc.Organizationgroup;
+            if (!CultureHelper.IsNorwegian() && !string.IsNullOrEmpty(doc.OrganizationEnglish))
+                Organization = doc.OrganizationEnglish;
             OrganizationShortName = !string.IsNullOrEmpty(doc.OrganizationShortName) ? doc.OrganizationShortName : doc.Organizationgroup;
             Theme = doc.Theme;
             Type = doc.Type;
