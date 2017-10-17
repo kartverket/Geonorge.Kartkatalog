@@ -1,4 +1,5 @@
-﻿using Kartverket.Metadatakatalog.Models.Translations;
+﻿using Kartverket.Metadatakatalog.Helpers;
+using Kartverket.Metadatakatalog.Models.Translations;
 using Resources;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,24 @@ namespace Kartverket.Metadatakatalog.Models
         public void AddMissingTranslations()
         {
             Translations.AddMissingTranslations();
+        }
+
+        public string NameTranslated()
+        {
+            var cultureName = CultureHelper.GetCurrentCulture();
+            var nameTranslated = Translations[cultureName]?.Name;
+            if (string.IsNullOrEmpty(nameTranslated))
+                nameTranslated = Name;
+            return nameTranslated;
+        }
+
+        public string DescriptionTranslated()
+        {
+            var cultureName = CultureHelper.GetCurrentCulture();
+            var descriptionTranslated = Translations[cultureName]?.Description;
+            if (string.IsNullOrEmpty(descriptionTranslated))
+                descriptionTranslated = Description;
+            return descriptionTranslated;
         }
     }
 

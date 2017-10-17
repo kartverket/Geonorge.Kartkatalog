@@ -79,11 +79,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dataeier.
+        /// </summary>
+        public static string DataOwner {
+            get {
+                return ResourceManager.GetString("DataOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Beskrivelse.
         /// </summary>
         public static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last ned.
+        /// </summary>
+        public static string Download {
+            get {
+                return ResourceManager.GetString("Download", resourceCulture);
             }
         }
         
@@ -250,6 +268,42 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to treff.
+        /// </summary>
+        public static string Hits {
+            get {
+                return ResourceManager.GetString("Hits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Viser.
+        /// </summary>
+        public static string HitsDisplay {
+            get {
+                return ResourceManager.GetString("HitsDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to av.
+        /// </summary>
+        public static string HitsOf {
+            get {
+                return ResourceManager.GetString("HitsOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kart.
+        /// </summary>
+        public static string Map {
+            get {
+                return ResourceManager.GetString("Map", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Navn.
         /// </summary>
         public static string Name {
@@ -259,11 +313,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Åpne data.
+        /// </summary>
+        public static string OpenData {
+            get {
+                return ResourceManager.GetString("OpenData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tjenesten krever spesiell tilgang for å kunne vises - kontakt dataeier.
         /// </summary>
         public static string Service_need_permission {
             get {
                 return ResourceManager.GetString("Service_need_permission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tittel.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
     }

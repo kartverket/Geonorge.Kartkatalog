@@ -21,17 +21,18 @@
 @helper BuildMenu(List<Theme> data, int? parentId = null)
 {
 
-foreach (var theme in data)
-{
-    theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
-    theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
-}
-
-var items = data.Where(d => d.ParentId == parentId);
-if (items.Any())
-{
-    foreach (var item in items)
+    foreach (var theme in data)
     {
+        theme.Name = theme.NameTranslated(); 
+        theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+        theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+    }
+
+    var items = data.Where(d => d.ParentId == parentId);
+    if (items.Any())
+    {
+        foreach (var item in items)
+        {
             @BuildMenu(data, item.Id)
     }
 }

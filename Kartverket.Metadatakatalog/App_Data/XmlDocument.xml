@@ -1032,9 +1032,19 @@
               Looks up a localized string similar to Kartkatalogen.
             </summary>
         </member>
+        <member name="P:Resources.UI.DataOwner">
+            <summary>
+              Looks up a localized string similar to Dataeier.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Description">
             <summary>
               Looks up a localized string similar to Beskrivelse.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Download">
+            <summary>
+              Looks up a localized string similar to Last ned.
             </summary>
         </member>
         <member name="P:Resources.UI.Facet_area">
@@ -1127,14 +1137,44 @@
               Looks up a localized string similar to Applikasjon.
             </summary>
         </member>
+        <member name="P:Resources.UI.Hits">
+            <summary>
+              Looks up a localized string similar to treff.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.HitsDisplay">
+            <summary>
+              Looks up a localized string similar to Viser.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.HitsOf">
+            <summary>
+              Looks up a localized string similar to av.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Map">
+            <summary>
+              Looks up a localized string similar to Kart.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Name">
             <summary>
               Looks up a localized string similar to Navn.
             </summary>
         </member>
+        <member name="P:Resources.UI.OpenData">
+            <summary>
+              Looks up a localized string similar to Åpne data.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Service_need_permission">
             <summary>
               Looks up a localized string similar to Tjenesten krever spesiell tilgang for å kunne vises - kontakt dataeier.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Title">
+            <summary>
+              Looks up a localized string similar to Tittel.
             </summary>
         </member>
     </members>

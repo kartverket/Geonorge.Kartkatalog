@@ -3,15 +3,15 @@
 @using Newtonsoft.Json
 
 @{
-    ViewBag.Title = "Tema - " + Model.Name;
+    ViewBag.Title = "Tema - " + Model.NameTranslated();
 }
 
 @section breadcrumb {
     @foreach (var parent in HtmlHelperExtensions.Parents(Model))
     {
-        <li><a href="@Url.Action("Details", "Themes", new { id = @parent.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(parent.Name) })">@parent.Name</a></li>
+        <li><a href="@Url.Action("Details", "Themes", new { id = @parent.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(parent.Name) })">@parent.NameTranslated()</a></li>
     }
-    <li class="active">@Model.Name</li>
+    <li class="active">@Model.NameTranslated()</li>
 }
 
 @{
@@ -20,6 +20,7 @@
     {
 theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
 theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+theme.Name = theme.NameTranslated();
 foreach (var item in theme.Children)
 {
         @BuildMenu(item)
@@ -38,7 +39,7 @@ foreach (var item in theme.Children)
 <section class="heading">
     <div class="row">
         <div class="col-sm-12">
-            <h1>@Model.Name</h1>
+            <h1>@Model.NameTranslated()</h1>
             <span class="label label-default">Tema</span>
         </div>
         <div class="col-sm-12">
@@ -53,7 +54,7 @@ foreach (var item in theme.Children)
     @* *** Beskrivelse tekst *** *@
     <div>
         <div class="col-md-8  size-12 col-sm-12 ">
-            <p>@Html.Raw(Model.Description)</p>
+            <p>@Html.Raw(Model.DescriptionTranslated())</p>
         </div>
     </div>
 
@@ -74,11 +75,11 @@ foreach (var item in theme.Children)
 
 <div id="themesVueList">
     <div class="row resultItemRowTableHeader">
-        <div class="col-sm-5"><p>Tittel</p></div>
-        <div class="col-sm-4"><p>Dataeier</p></div>
-        <div class="col-sm-1"><p>Åpne data</p></div>
-        <div class="col-sm-1"><p>Kart</p></div>
-        <div class="col-sm-1"><p>Last ned</p></div>
+        <div class="col-sm-5"><p>@Resources.UI.Title</p></div>
+        <div class="col-sm-4"><p>@Resources.UI.DataOwner</p></div>
+        <div class="col-sm-1"><p>@Resources.UI.OpenData</p></div>
+        <div class="col-sm-1"><p>@Resources.UI.Map</p></div>
+        <div class="col-sm-1"><p>@Resources.UI.Download</p></div>
     </div>
     <div class="menu-separator search-results-table-heading"></div>
     <div v-if="children.length" v-for="theme in children">

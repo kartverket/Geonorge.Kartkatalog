@@ -186,4 +186,28 @@
   <data name="AboutMapCatalog" xml:space="preserve">
     <value>Her gis oversikt over datasett i Geonorge med opplysninger om tilgjengelige formater, tilknyttede tjenester og API-er. Egne oversikter over tjenester/API-er og kartløsninger finner du på egne sider i høyre spalte.</value>
   </data>
+  <data name="DataOwner" xml:space="preserve">
+    <value>Dataeier</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Last ned</value>
+  </data>
+  <data name="Hits" xml:space="preserve">
+    <value>treff</value>
+  </data>
+  <data name="HitsDisplay" xml:space="preserve">
+    <value>Viser</value>
+  </data>
+  <data name="HitsOf" xml:space="preserve">
+    <value>av</value>
+  </data>
+  <data name="Map" xml:space="preserve">
+    <value>Kart</value>
+  </data>
+  <data name="OpenData" xml:space="preserve">
+    <value>Åpne data</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Tittel</value>
+  </data>
 </root>
