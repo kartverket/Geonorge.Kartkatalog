@@ -13,6 +13,8 @@ using System.Data.Entity;
 using System.Web.Configuration;
 using System.Web.Helpers;
 using System.Security.Claims;
+using System.Web;
+using Kartverket.Metadatakatalog.Models.Translations;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -57,5 +59,22 @@ namespace Kartverket.Metadatakatalog
 
             log.Error("App_Error", ex);
         }
+
+        protected void Application_BeginRequest()
+        {
+            var cookie = Context.Request.Cookies["_culture"];
+            if (cookie == null)
+            {
+                cookie = new HttpCookie("_culture", Culture.NorwegianCode);
+            }
+
+            if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+            {
+                var culture = new CultureInfo(cookie.Value);
+                Thread.CurrentThread.CurrentCulture = culture;
+                Thread.CurrentThread.CurrentUICulture = culture;
+            }
+        }
+
     }
 }

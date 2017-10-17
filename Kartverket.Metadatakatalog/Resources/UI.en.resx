@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppPageTitle" xml:space="preserve">
-    <value>Kartkatalogen</value>
+    <value>Map Catalog</value>
   </data>
   <data name="Facet_area" xml:space="preserve">
     <value>Område</value>
@@ -182,5 +182,8 @@
   </data>
   <data name="Name" xml:space="preserve">
     <value>Navn</value>
+  </data>
+  <data name="AboutMapCatalog" xml:space="preserve">
+    <value>Here is an overview of data sets in Geonorge with information about available formats, associated services and APIs. Own overview of services / APIs and map solutions can be found on your own pages in the right column.</value>
   </data>
 </root>
