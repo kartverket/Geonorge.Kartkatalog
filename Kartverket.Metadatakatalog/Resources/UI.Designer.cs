@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to API-er og tjenester.
+        /// </summary>
+        public static string ApisAndServices {
+            get {
+                return ResourceManager.GetString("ApisAndServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kartkatalogen.
         /// </summary>
         public static string AppPageTitle {
@@ -84,6 +93,15 @@ namespace Resources {
         public static string DataOwner {
             get {
                 return ResourceManager.GetString("DataOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Etatvis oversikt.
+        /// </summary>
+        public static string DepartmentalOverview {
+            get {
+                return ResourceManager.GetString("DepartmentalOverview", resourceCulture);
             }
         }
         
@@ -268,6 +286,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filtrer søket på.
+        /// </summary>
+        public static string FilterSearch {
+            get {
+                return ResourceManager.GetString("FilterSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to treff.
         /// </summary>
         public static string Hits {
@@ -304,6 +331,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kartkatalogen - hovedside.
+        /// </summary>
+        public static string MapCatalogMainPage {
+            get {
+                return ResourceManager.GetString("MapCatalogMainPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kartløsninger.
+        /// </summary>
+        public static string MapServices {
+            get {
+                return ResourceManager.GetString("MapServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hva finnes i kommune/fylke?.
+        /// </summary>
+        public static string MetadataInMunicipality {
+            get {
+                return ResourceManager.GetString("MetadataInMunicipality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Navn.
         /// </summary>
         public static string Name {
@@ -318,6 +372,33 @@ namespace Resources {
         public static string OpenData {
             get {
                 return ResourceManager.GetString("OpenData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sider.
+        /// </summary>
+        public static string Pages {
+            get {
+                return ResourceManager.GetString("Pages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lagre.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lagre som.
+        /// </summary>
+        public static string SaveAs {
+            get {
+                return ResourceManager.GetString("SaveAs", resourceCulture);
             }
         }
         

@@ -1027,6 +1027,11 @@
               Looks up a localized string similar to Her gis oversikt over datasett i Geonorge med opplysninger om tilgjengelige formater, tilknyttede tjenester og API-er. Egne oversikter over tjenester/API-er og kartløsninger finner du på egne sider i høyre spalte..
             </summary>
         </member>
+        <member name="P:Resources.UI.ApisAndServices">
+            <summary>
+              Looks up a localized string similar to API-er og tjenester.
+            </summary>
+        </member>
         <member name="P:Resources.UI.AppPageTitle">
             <summary>
               Looks up a localized string similar to Kartkatalogen.
@@ -1035,6 +1040,11 @@
         <member name="P:Resources.UI.DataOwner">
             <summary>
               Looks up a localized string similar to Dataeier.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DepartmentalOverview">
+            <summary>
+              Looks up a localized string similar to Etatvis oversikt.
             </summary>
         </member>
         <member name="P:Resources.UI.Description">
@@ -1137,6 +1147,11 @@
               Looks up a localized string similar to Applikasjon.
             </summary>
         </member>
+        <member name="P:Resources.UI.FilterSearch">
+            <summary>
+              Looks up a localized string similar to Filtrer søket på.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Hits">
             <summary>
               Looks up a localized string similar to treff.
@@ -1157,6 +1172,21 @@
               Looks up a localized string similar to Kart.
             </summary>
         </member>
+        <member name="P:Resources.UI.MapCatalogMainPage">
+            <summary>
+              Looks up a localized string similar to Kartkatalogen - hovedside.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.MapServices">
+            <summary>
+              Looks up a localized string similar to Kartløsninger.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.MetadataInMunicipality">
+            <summary>
+              Looks up a localized string similar to Hva finnes i kommune/fylke?.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Name">
             <summary>
               Looks up a localized string similar to Navn.
@@ -1165,6 +1195,21 @@
         <member name="P:Resources.UI.OpenData">
             <summary>
               Looks up a localized string similar to Åpne data.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Pages">
+            <summary>
+              Looks up a localized string similar to Sider.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Save">
+            <summary>
+              Looks up a localized string similar to Lagre.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SaveAs">
+            <summary>
+              Looks up a localized string similar to Lagre som.
             </summary>
         </member>
         <member name="P:Resources.UI.Service_need_permission">
