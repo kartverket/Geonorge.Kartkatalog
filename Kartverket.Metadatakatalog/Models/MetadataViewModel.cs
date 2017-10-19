@@ -12,6 +12,12 @@ namespace Kartverket.Metadatakatalog.Models
 {
     public class MetadataViewModel
     {
+        public void SetDistributionUrl()
+        {
+            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL)){
+                DownloadUrl = DistributionDetails.URL;
+            }
+        }
 
         public string Abstract { get; set; }
         public BoundingBox BoundingBox { get; set; }
@@ -70,6 +76,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
         public string CoverageUrl { get; set; }
+        public string DownloadUrl { get; set; }
         public string Purpose { get; set; }
         public List<QualitySpecification> QualitySpecifications { get; set; }
         public ReferenceSystem ReferenceSystem { get; set; }
