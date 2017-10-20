@@ -15,7 +15,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public SolrIndexerApplication()
         {
-            _solr = ServiceLocator.Current.GetInstance<ISolrOperations<ApplicationIndexDoc>>();
+            _solr = MvcApplication.indexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>("applications");
         }
 
         public void Index(IEnumerable<ApplicationIndexDoc> docs)

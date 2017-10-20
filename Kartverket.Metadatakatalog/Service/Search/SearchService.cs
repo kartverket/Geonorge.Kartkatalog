@@ -8,6 +8,7 @@ using SolrNet.Commands.Parameters;
 using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.SearchResult;
 using System;
+using Kartverket.Metadatakatalog.Helpers;
 
 namespace Kartverket.Metadatakatalog.Service.Search
 {
@@ -21,7 +22,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
         public SearchService(IOrganizationService organizationService)
         {
             _organizationService = organizationService;
-            _solrInstance = ServiceLocator.Current.GetInstance<ISolrOperations<MetadataIndexDoc>>();
+            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>("metadata");
         }
 
         public SearchResult Search(SearchParameters parameters)
@@ -35,7 +36,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     FilterQueries = parameters.BuildFilterQueries(),
                     OrderBy = parameters.OrderBy(),
                     Rows = parameters.Limit,
-                    StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
+                    Start = parameters.Offset - 1, //solr is zero-based - we use one-based indexing in api
                     Facet = parameters.BuildFacetParameters(),
                     Fields = new[] { "uuid", "title", "title_en", "abstract", "purpose", "type", "theme", "organization", "organization_en", "organization_seo_lowercase", "organization_shortname", "placegroups", "organizationgroup",
                     "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
@@ -70,7 +71,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 FilterQueries = parameters.BuildFilterQueries(),
                 OrderBy = parameters.OrderBy(),
                 Rows = parameters.Limit,
-                StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
+                Start = parameters.Offset - 1, //solr is zero-based - we use one-based indexing in api
                 Facet = parameters.BuildFacetParameters()                
             });
 

@@ -15,12 +15,15 @@ using System.Web.Helpers;
 using System.Security.Claims;
 using System.Web;
 using Kartverket.Metadatakatalog.Models.Translations;
+using Castle.Windsor;
+using Castle.Facilities.SolrNetIntegration;
 
 namespace Kartverket.Metadatakatalog
 {
     public class MvcApplication : System.Web.HttpApplication
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(MvcApplication));
+        public static WindsorContainer indexContainer = new WindsorContainer();
 
         protected void Application_Start()
         {
@@ -45,11 +48,13 @@ namespace Kartverket.Metadatakatalog
 
             log4net.Config.XmlConfigurator.Configure();
 
-            Startup.Init<MetadataIndexDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata");
-            Startup.Init<MetadataIndexAllDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata_all");
-            Startup.Init<ServiceIndexDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/services");
-            Startup.Init<ApplicationIndexDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications");
             //https://github.com/mausch/SolrNet/blob/master/Documentation/Multi-core-instance.md
+            var solrFacility = new SolrNetFacility(WebConfigurationManager.AppSettings["SolrServerUrl"]);
+            solrFacility.AddCore("metadata", typeof(MetadataIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata");
+            solrFacility.AddCore("metadata_all", typeof(MetadataIndexAllDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata_all");
+            solrFacility.AddCore("services", typeof(ServiceIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/services");
+            solrFacility.AddCore("applications", typeof(ApplicationIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications");
+            indexContainer.AddFacility(solrFacility);
 
         }
 

@@ -3,6 +3,7 @@ using Kartverket.Metadatakatalog.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Device.Location;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
@@ -389,11 +390,12 @@ namespace Kartverket.Metadatakatalog.Models
                 string.IsNullOrEmpty(BoundingBox.EastBoundLongitude) || string.IsNullOrEmpty(BoundingBox.NorthBoundLatitude))
                 return Convert.ToInt16(zoomLevel);
 
-            SolrNet.Location[] locations = new SolrNet.Location[] 
-            { 
-                new SolrNet.Location(Convert.ToDouble(BoundingBox.SouthBoundLatitude), Convert.ToDouble(BoundingBox.WestBoundLongitude)), 
-                new SolrNet.Location(Convert.ToDouble(BoundingBox.NorthBoundLatitude), Convert.ToDouble(BoundingBox.EastBoundLongitude)) 
-            };            
+            GeoCoordinate[] locations = new GeoCoordinate[]
+            {
+                new GeoCoordinate(Convert.ToDouble(BoundingBox.SouthBoundLatitude), Convert.ToDouble(BoundingBox.WestBoundLongitude)),
+                new GeoCoordinate(Convert.ToDouble(BoundingBox.NorthBoundLatitude), Convert.ToDouble(BoundingBox.EastBoundLongitude))
+            };
+
 
             double maxLat = -85;
             double minLat = 85;

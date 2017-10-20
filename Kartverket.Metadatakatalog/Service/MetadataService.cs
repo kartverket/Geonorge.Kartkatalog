@@ -18,6 +18,7 @@ using DistributionFormat = Kartverket.Metadatakatalog.Models.DistributionFormat;
 using Keyword = Kartverket.Metadatakatalog.Models.Keyword;
 using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.SearchResult;
+using SolrNet;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -132,7 +133,7 @@ namespace Kartverket.Metadatakatalog.Service
             List<Models.Api.Distribution> distlist = new List<Models.Api.Distribution>();
 
             SolrNet.ISolrOperations<ApplicationIndexDoc> _solrInstance;
-            _solrInstance = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<SolrNet.ISolrOperations<ApplicationIndexDoc>>();
+            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>("applications");
 
             SolrNet.ISolrQuery query = new SolrNet.SolrQuery("applicationdataset:" + uuid + "*");
             try
@@ -179,7 +180,7 @@ namespace Kartverket.Metadatakatalog.Service
             SearchResultItem metadata = null;
 
             SolrNet.ISolrOperations<MetadataIndexDoc> _solrInstance;
-            _solrInstance = Microsoft.Practices.ServiceLocation.ServiceLocator.Current.GetInstance<SolrNet.ISolrOperations<MetadataIndexDoc>>();
+            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>("metadata");
 
             SolrNet.ISolrQuery query = new SolrNet.SolrQuery("uuid:" + uuid);
             try

@@ -29,8 +29,8 @@ declare interface Component {
   $slots: { [key: string]: Array<VNode> };
   $scopedSlots: { [key: string]: () => VNodeChildren };
   $vnode: VNode; // the placeholder node for the component in parent's render tree
-  $attrs: ?{ [key: string] : string };
-  $listeners: ?{ [key: string]: Function | Array<Function> };
+  $attrs: { [key: string] : string };
+  $listeners: { [key: string]: Function | Array<Function> };
   $isServer: boolean;
 
   // public methods
@@ -66,7 +66,6 @@ declare interface Component {
   _isDestroyed: boolean;
   _isBeingDestroyed: boolean;
   _vnode: ?VNode; // self root node
-  _staticTrees: ?Array<VNode>;
   _hasHookEvent: boolean;
   _provided: ?Object;
 
@@ -126,7 +125,7 @@ declare interface Component {
   // apply v-on object
   _g: (data: any, value: any) => VNodeData;
   // check custom keyCode
-  _k: (eventKeyCode: number, key: string, builtInAlias: number | Array<number> | void) => boolean;
+  _k: (eventKeyCode: number, key: string, builtInAlias?: number | Array<number>, eventKeyName?: string) => ?boolean;
   // resolve scoped slots
   _u: (scopedSlots: ScopedSlotsData, res?: Object) => { [key: string]: Function };
 

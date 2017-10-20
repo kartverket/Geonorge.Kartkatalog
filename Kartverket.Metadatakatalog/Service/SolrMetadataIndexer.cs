@@ -3,6 +3,7 @@ using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
 using System;
+using System.Globalization;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -46,10 +47,8 @@ namespace Kartverket.Metadatakatalog.Service
                 _indexerService.RemoveIndexDocument(uuid);
                 _indexerAll.RemoveIndexDocument(uuid);
 
-
                 if (metadata != null)
                 {
-
                     MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge);
                     RunIndex(metadataIndexDoc);
                 }
@@ -64,25 +63,23 @@ namespace Kartverket.Metadatakatalog.Service
 
         private void RunIndex(MetadataIndexDoc metadataIndexDoc)
         {
+            var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+
             if (metadataIndexDoc.Type != null && (metadataIndexDoc.Type.ToLower() == "service" || metadataIndexDoc.Type.ToLower() == "servicelayer"))
             {
                 _indexerService.Index(_indexDocumentCreator.ConvertIndexDocToService(metadataIndexDoc));
-                //Unntak for services som er koblet til datasett - GEOPORTAL-2169
-                //if (metadataIndexDoc.ServiceDatasets == null || metadataIndexDoc.ServiceDatasets.Count == 0) //Hvis service ikke "operatesOn" noen datasett
-                //    _indexer.Index(metadataIndexDoc);
             }
             else if (metadataIndexDoc.Type != null && metadataIndexDoc.Type.ToLower() == "software")
             {
                 _indexerApplication.Index(_indexDocumentCreator.ConvertIndexDocToApplication(metadataIndexDoc));
-                //Unntak for applikasjoner som er koblet til datasett - GEOPORTAL-2170 (GEOPORTAL-2214)
-                //if (metadataIndexDoc.ApplicationDatasets == null || metadataIndexDoc.ApplicationDatasets.Count == 0) //Hvis application ikke har "crossReference" noen datasett
-                //    _indexer.Index(metadataIndexDoc);
             }
-
             else
                 _indexer.Index(metadataIndexDoc);
 
             _indexerAll.Index(_indexDocumentCreator.ConvertIndexDocToMetadataAll(metadataIndexDoc));
+
+            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
         }
 
         private void RunSearch(int startPosition)
