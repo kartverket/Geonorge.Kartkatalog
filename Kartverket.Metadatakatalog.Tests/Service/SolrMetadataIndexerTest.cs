@@ -5,6 +5,7 @@ using Kartverket.Metadatakatalog.Service;
 using Moq;
 using NUnit.Framework;
 using www.opengis.net;
+using Kartverket.Metadatakatalog.Models.Translations;
 
 namespace Kartverket.Metadatakatalog.Tests.Service
 {
@@ -45,9 +46,10 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
             var indexDocumentCreator = new Mock<IndexDocumentCreator>();
             var indexDocs = new List<MetadataIndexDoc>();
+            var culture = Culture.NorwegianCode;
             indexDocs.Add(new MetadataIndexDoc { Uuid = "12345-123545-1231245-1231230" });
             indexDocs.Add(new MetadataIndexDoc { Uuid = "12345-123545-1231245-1231231" });
-            indexDocumentCreator.Setup(i => i.CreateIndexDocs(It.IsAny<object[]>(), geoNorgeMock.Object)).Returns(indexDocs);
+            indexDocumentCreator.Setup(i => i.CreateIndexDocs(It.IsAny<object[]>(), geoNorgeMock.Object, culture)).Returns(indexDocs);
 
             var errorMock = new Mock<IErrorService>();
 
@@ -89,13 +91,14 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             var indexerSerMock = new Mock<IndexerService>();
 
             var indexDocumentCreator = new Mock<IndexDocumentCreator>();
+            var culture = Culture.NorwegianCode;
             var indexDocs = new List<MetadataIndexDoc>();
             indexDocs.Add(new MetadataIndexDoc { Uuid = "12345-123545-1231245-1231238" });
             indexDocs.Add(new MetadataIndexDoc { Uuid = "12345-123545-1231245-1231239" });
 
             var errorMock = new Mock<IErrorService>();
 
-            indexDocumentCreator.Setup(i => i.CreateIndexDocs(It.IsAny<object[]>(),geoNorgeMock.Object)).Returns(indexDocs);
+            indexDocumentCreator.Setup(i => i.CreateIndexDocs(It.IsAny<object[]>(),geoNorgeMock.Object, culture)).Returns(indexDocs);
 
             var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexerAppMock.Object, indexerSerMock.Object, indexDocumentCreator.Object, errorMock.Object, indexerMockAll.Object);
 
@@ -120,10 +123,11 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             var indexerSerMock = new Mock<IndexerService>();
 
             var indexDocumentCreator = new Mock<IndexDocumentCreator>();
+            var culture = Culture.NorwegianCode;
 
             geoNorgeMock.Setup(g => g.GetRecordByUuid(uuid)).Returns(CreateDummyMetadata);
             var metadataIndexDoc = new MetadataIndexDoc();
-            indexDocumentCreator.Setup(i => i.CreateIndexDoc(It.IsAny<SimpleMetadata>(),geoNorgeMock.Object))
+            indexDocumentCreator.Setup(i => i.CreateIndexDoc(It.IsAny<SimpleMetadata>(),geoNorgeMock.Object, culture))
                 .Returns(metadataIndexDoc);
 
             var errorMock = new Mock<IErrorService>();

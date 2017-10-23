@@ -372,6 +372,7 @@
     <Compile Include="Service\Search\SearchService.cs" />
     <Compile Include="Service\ServiceDirectory\ServiceDirectoryService.cs" />
     <Compile Include="Service\SimpleMetadataUtil.cs" />
+    <Compile Include="Service\SolrCores.cs" />
     <Compile Include="Service\SolrIndexDocumentCreator.cs" />
     <Compile Include="Service\SolrIndexerApplication.cs" />
     <Compile Include="Service\SolrIndexerMetadataAll.cs" />

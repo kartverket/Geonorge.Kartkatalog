@@ -17,6 +17,7 @@ using System.Web;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Castle.Windsor;
 using Castle.Facilities.SolrNetIntegration;
+using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -50,10 +51,14 @@ namespace Kartverket.Metadatakatalog
 
             //https://github.com/mausch/SolrNet/blob/master/Documentation/Multi-core-instance.md
             var solrFacility = new SolrNetFacility(WebConfigurationManager.AppSettings["SolrServerUrl"]);
-            solrFacility.AddCore("metadata", typeof(MetadataIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata");
-            solrFacility.AddCore("metadata_all", typeof(MetadataIndexAllDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata_all");
-            solrFacility.AddCore("services", typeof(ServiceIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/services");
-            solrFacility.AddCore("applications", typeof(ApplicationIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications");
+            solrFacility.AddCore(SolrCores.Metadata, typeof(MetadataIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata");
+            solrFacility.AddCore(SolrCores.MetadataEnglish, typeof(MetadataIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata_en");
+            solrFacility.AddCore(SolrCores.MetadataAll, typeof(MetadataIndexAllDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata_all");
+            solrFacility.AddCore(SolrCores.MetadataAllEnglish, typeof(MetadataIndexAllDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata_all_en");
+            solrFacility.AddCore(SolrCores.Services, typeof(ServiceIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/services");
+            solrFacility.AddCore(SolrCores.ServicesEnglish, typeof(ServiceIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/services_en");
+            solrFacility.AddCore(SolrCores.Applications, typeof(ApplicationIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications");
+            solrFacility.AddCore(SolrCores.ApplicationsEnglish, typeof(ApplicationIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications_en");
             indexContainer.AddFacility(solrFacility);
 
         }

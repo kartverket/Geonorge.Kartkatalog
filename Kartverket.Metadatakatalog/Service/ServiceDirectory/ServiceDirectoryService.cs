@@ -5,6 +5,7 @@ using SolrNet;
 using SolrNet.Commands.Parameters;
 using System;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
+using Kartverket.Metadatakatalog.Helpers;
 
 namespace Kartverket.Metadatakatalog.Service.Search
 {
@@ -16,7 +17,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
         public ServiceDirectoryService()
         {
-            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ServiceIndexDoc>>("services");
+            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ServiceIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Services));
         }
 
         public SearchResult Services(SearchParameters parameters)

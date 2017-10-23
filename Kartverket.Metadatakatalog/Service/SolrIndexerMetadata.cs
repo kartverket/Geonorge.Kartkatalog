@@ -11,11 +11,16 @@ namespace Kartverket.Metadatakatalog.Service
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly ISolrOperations<MetadataIndexDoc> _solr;
+        private ISolrOperations<MetadataIndexDoc> _solr;
 
         public SolrIndexer()
         {
-            _solr = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>("metadata");
+            _solr = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(SolrCores.Metadata);
+        }
+
+        public void SetSolrIndexer(string coreId)
+        {
+            _solr = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(coreId);
         }
 
         public void Index(IEnumerable<MetadataIndexDoc> docs)

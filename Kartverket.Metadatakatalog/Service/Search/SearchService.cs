@@ -22,7 +22,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
         public SearchService(IOrganizationService organizationService)
         {
             _organizationService = organizationService;
-            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>("metadata");
+            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
         }
 
         public SearchResult Search(SearchParameters parameters)

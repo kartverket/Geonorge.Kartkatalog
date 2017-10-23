@@ -19,6 +19,7 @@ using Keyword = Kartverket.Metadatakatalog.Models.Keyword;
 using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.SearchResult;
 using SolrNet;
+using Kartverket.Metadatakatalog.Helpers;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -133,7 +134,7 @@ namespace Kartverket.Metadatakatalog.Service
             List<Models.Api.Distribution> distlist = new List<Models.Api.Distribution>();
 
             SolrNet.ISolrOperations<ApplicationIndexDoc> _solrInstance;
-            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>("applications");
+            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Applications));
 
             SolrNet.ISolrQuery query = new SolrNet.SolrQuery("applicationdataset:" + uuid + "*");
             try
@@ -180,14 +181,14 @@ namespace Kartverket.Metadatakatalog.Service
             SearchResultItem metadata = null;
 
             SolrNet.ISolrOperations<MetadataIndexDoc> _solrInstance;
-            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>("metadata");
+            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
 
             SolrNet.ISolrQuery query = new SolrNet.SolrQuery("uuid:" + uuid);
             try
             {
                 SolrNet.SolrQueryResults<MetadataIndexDoc> queryResults = _solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
                 {
-                    Fields = new[] { "uuid", "title", "title_en", "abstract", "purpose", "type", "theme", "organization", "organization_en", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
                     "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
                     "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier" }
 

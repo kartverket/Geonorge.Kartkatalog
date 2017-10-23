@@ -87,5 +87,14 @@ namespace Kartverket.Metadatakatalog.Helpers
         {
             return culture == Culture.NorwegianCode || culture == "nb-NO" || culture == "nn-NO";
         }
+
+        public static string GetIndexCore(string coreId)
+        {
+            var culture = GetCurrentCulture();
+            if (culture == Culture.EnglishCode)
+                coreId = coreId + "_" + Culture.EnglishCode;
+
+            return coreId;
+        }
     }
 }

@@ -11,11 +11,11 @@ namespace Kartverket.Metadatakatalog.Service
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly ISolrOperations<ServiceIndexDoc> _solr;
+        private ISolrOperations<ServiceIndexDoc> _solr;
 
         public SolrIndexerServices()
         {
-            _solr = MvcApplication.indexContainer.Resolve<ISolrOperations<ServiceIndexDoc>>("services");
+            _solr = MvcApplication.indexContainer.Resolve<ISolrOperations<ServiceIndexDoc>>(SolrCores.Services);
         }
 
         public void Index(IEnumerable<ServiceIndexDoc> docs)
@@ -53,6 +53,11 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 Log.Error("Error removing UUID: " + uuid + "", exception);
             }
+        }
+
+        public void SetSolrIndexer(string coreId)
+        {
+            _solr = MvcApplication.indexContainer.Resolve<ISolrOperations<ServiceIndexDoc>>(coreId);
         }
     }
 }

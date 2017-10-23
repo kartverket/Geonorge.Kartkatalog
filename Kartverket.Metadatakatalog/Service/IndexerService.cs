@@ -9,5 +9,6 @@ namespace Kartverket.Metadatakatalog.Service
         void Index(ServiceIndexDoc doc);
         void DeleteIndex();
         void RemoveIndexDocument(string uuid);
+        void SetSolrIndexer(string coreId);
     }
 }

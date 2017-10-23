@@ -78,12 +78,8 @@ namespace Kartverket.Metadatakatalog.Models
         {
             Uuid = doc.Uuid;
             Title = doc.Title;
-            if (!CultureHelper.IsNorwegian() && !string.IsNullOrEmpty(doc.TitleEnglish))
-                Title = doc.TitleEnglish;
             Abstract = doc.Abstract;
             Organization = doc.Organizationgroup;
-            if (!CultureHelper.IsNorwegian() && !string.IsNullOrEmpty(doc.OrganizationEnglish))
-                Organization = doc.OrganizationEnglish;
             OrganizationShortName = !string.IsNullOrEmpty(doc.OrganizationShortName) ? doc.OrganizationShortName : doc.Organizationgroup;
             Theme = doc.Theme;
             Type = doc.Type;

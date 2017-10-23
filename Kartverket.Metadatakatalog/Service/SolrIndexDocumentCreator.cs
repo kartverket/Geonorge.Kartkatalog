@@ -10,6 +10,7 @@ using www.opengis.net;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
+using Kartverket.Metadatakatalog.Models.Translations;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -30,7 +31,7 @@ namespace Kartverket.Metadatakatalog.Service
             _placeResolver = new PlaceResolver();
         }
 
-        public List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems, IGeoNorge geoNorge)
+        public List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems, IGeoNorge geoNorge, string culture)
         {
             var documentsToIndex = new List<MetadataIndexDoc>();
             foreach (var item in searchResultItems)
@@ -41,7 +42,7 @@ namespace Kartverket.Metadatakatalog.Service
                     try
                     {
                         var simpleMetadata = new SimpleMetadata(metadataItem);
-                        var indexDoc = CreateIndexDoc(simpleMetadata, geoNorge);
+                        var indexDoc = CreateIndexDoc(simpleMetadata, geoNorge, culture);
                         if (indexDoc != null)
                         {
                             documentsToIndex.Add(indexDoc);    
@@ -162,29 +163,24 @@ namespace Kartverket.Metadatakatalog.Service
             return indexDoc;
 
         }
-        public MetadataIndexDoc CreateIndexDoc(SimpleMetadata simpleMetadata, IGeoNorge geoNorge)
+        public MetadataIndexDoc CreateIndexDoc(SimpleMetadata simpleMetadata, IGeoNorge geoNorge, string culture)
         {
             var indexDoc = new MetadataIndexDoc();
             
             try
             {
                 indexDoc.Uuid = simpleMetadata.Uuid;
-                indexDoc.Title = simpleMetadata.Title;
-                indexDoc.TitleEnglish = simpleMetadata.EnglishTitle;
-                indexDoc.Abstract = simpleMetadata.Abstract;
-                indexDoc.AbstractEnglish = simpleMetadata.EnglishAbstract;
-                indexDoc.Purpose = simpleMetadata.Purpose;
-                indexDoc.PurposeEnglish = simpleMetadata.EnglishPurpose;
+                indexDoc.Title = culture == Culture.EnglishCode && !string.IsNullOrEmpty(simpleMetadata.EnglishTitle) ? simpleMetadata.EnglishTitle : simpleMetadata.Title;
+                indexDoc.Abstract = culture == Culture.EnglishCode && !string.IsNullOrEmpty(simpleMetadata.EnglishAbstract) ? simpleMetadata.EnglishAbstract : simpleMetadata.Abstract;
+                indexDoc.Purpose = culture == Culture.EnglishCode && !string.IsNullOrEmpty(simpleMetadata.EnglishPurpose) ? simpleMetadata.EnglishPurpose : simpleMetadata.Purpose;
                 indexDoc.Type = simpleMetadata.HierarchyLevel;
                 if (!string.IsNullOrEmpty(simpleMetadata.ParentIdentifier))
                     indexDoc.ParentIdentifier = simpleMetadata.ParentIdentifier;
 
                 if (simpleMetadata.ContactOwner != null)
                 {
-                    indexDoc.Organizationgroup = simpleMetadata.ContactOwner.Organization;
+                    indexDoc.Organizationgroup = culture == Culture.EnglishCode && !string.IsNullOrEmpty(simpleMetadata.ContactOwner.OrganizationEnglish) ? simpleMetadata.ContactOwner.OrganizationEnglish : simpleMetadata.ContactOwner.Organization;
                     indexDoc.Organization = indexDoc.Organizationgroup;
-                    indexDoc.Organizationgroup = simpleMetadata.ContactOwner.Organization;
-                    indexDoc.OrganizationEnglish = simpleMetadata.ContactOwner.OrganizationEnglish;
                     indexDoc.OrganizationContactname = simpleMetadata.ContactOwner.Name;
                     if (indexDoc.Organization != null) {
                         
@@ -268,7 +264,7 @@ namespace Kartverket.Metadatakatalog.Service
                     indexDoc.Organization3Contactname = simpleMetadata.ContactPublisher.Name;
 
                 }
-                indexDoc.Theme = _themeResolver.Resolve(simpleMetadata);
+                indexDoc.Theme = _themeResolver.Resolve(simpleMetadata, culture);
 
                 // FIXME - BAD!! Move this error handling into GeoNorgeAPI
                 try
@@ -325,7 +321,17 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.MaintenanceFrequency = simpleMetadata.MaintenanceFrequency;
 
                 indexDoc.TopicCategory = simpleMetadata.TopicCategory;
-                indexDoc.Keywords = simpleMetadata.Keywords.Select(k => k.Keyword).ToList();
+
+                List<string> keyWords = new List<string>();
+                foreach (var keyword in simpleMetadata.Keywords)
+                {
+                    if (culture == Culture.EnglishCode && !string.IsNullOrEmpty(keyword.EnglishKeyword))
+                        keyWords.Add(keyword.EnglishKeyword);
+                    else
+                        keyWords.Add(keyword.Keyword);
+
+                }
+                indexDoc.Keywords = keyWords;
 
                 indexDoc.NationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)).Select(k => k.KeywordValue).ToList();
                 indexDoc.Place = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)).Select(k => k.KeywordValue).ToList();
@@ -340,7 +346,7 @@ namespace Kartverket.Metadatakatalog.Service
                 if (indexDoc.Type == "service" || indexDoc.Type == "servicelayer")
                     indexDoc.ServiceDistributionAccessConstraint = simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.OtherConstraintsAccess) ? simpleMetadata.Constraints.OtherConstraintsAccess : "";
 
-                indexDoc.DataAccess = _themeResolver.ResolveAccess(indexDoc.AccessConstraint, indexDoc.OtherConstraintsAccess);
+                indexDoc.DataAccess = _themeResolver.ResolveAccess(indexDoc.AccessConstraint, indexDoc.OtherConstraintsAccess, culture);
 
                 //TODO tolke liste fra nøkkelord
                 indexDoc.Area = _placeResolver.ResolveArea(simpleMetadata);
@@ -375,7 +381,7 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.DistributionProtocols = new List<string>();
                 if (!String.IsNullOrEmpty(indexDoc.DistributionProtocol))
                 {
-                    indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.DistributionProtocol));
+                    indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.DistributionProtocol, culture));
                 }
                 //if (!String.IsNullOrEmpty(indexDoc.ServiceDistributionProtocolForDataset))
                 //{
@@ -988,19 +994,36 @@ namespace Kartverket.Metadatakatalog.Service
             }
         }
 
-        private string ConvertProtocolToSimpleName(string protocol) {
-            if (protocol.ToLower().Contains("wmts")) return "WMTS-tjeneste";
-            else if (protocol.ToLower().Contains("wfs")) return "WFS-tjeneste";
-            else if (protocol.ToLower().Contains("wms")) return "WMS-tjeneste";
-            else if (protocol.ToLower().Contains("csw")) return "CSW-tjeneste";
-            else if (protocol.ToLower().Contains("sos")) return "SOS-tjeneste";
-            else if (protocol.ToLower().Contains("download")) return "Nedlastingsside";
-            else if (protocol.ToLower().Contains("link")) return "Webside";
-            else if (protocol.ToLower().Contains("rest")) return "REST-API";
-            else if (protocol.ToLower().Contains("wcs")) return "WCS-tjeneste";
-            else if (protocol.ToLower().Contains("ws")) return "Webservice";
-            else if (protocol.ToLower().Contains("wps")) return "WPS-tjeneste";
-            else return protocol;
+        private string ConvertProtocolToSimpleName(string protocol, string culture) {
+            if (culture == Culture.EnglishCode) {
+                if (protocol.ToLower().Contains("wmts")) return "WMTS-service";
+                else if (protocol.ToLower().Contains("wfs")) return "WFS-service";
+                else if (protocol.ToLower().Contains("wms")) return "WMS-service";
+                else if (protocol.ToLower().Contains("csw")) return "CSW-service";
+                else if (protocol.ToLower().Contains("sos")) return "SOS-service";
+                else if (protocol.ToLower().Contains("download")) return "Downloadpage";
+                else if (protocol.ToLower().Contains("link")) return "Webpage";
+                else if (protocol.ToLower().Contains("rest")) return "REST-API";
+                else if (protocol.ToLower().Contains("wcs")) return "WCS-service";
+                else if (protocol.ToLower().Contains("ws")) return "Webservice";
+                else if (protocol.ToLower().Contains("wps")) return "WPS-service";
+                else return protocol;
+            }
+            else
+            {
+                if (protocol.ToLower().Contains("wmts")) return "WMTS-tjeneste";
+                else if (protocol.ToLower().Contains("wfs")) return "WFS-tjeneste";
+                else if (protocol.ToLower().Contains("wms")) return "WMS-tjeneste";
+                else if (protocol.ToLower().Contains("csw")) return "CSW-tjeneste";
+                else if (protocol.ToLower().Contains("sos")) return "SOS-tjeneste";
+                else if (protocol.ToLower().Contains("download")) return "Nedlastingsside";
+                else if (protocol.ToLower().Contains("link")) return "Webside";
+                else if (protocol.ToLower().Contains("rest")) return "REST-API";
+                else if (protocol.ToLower().Contains("wcs")) return "WCS-tjeneste";
+                else if (protocol.ToLower().Contains("ws")) return "Webservice";
+                else if (protocol.ToLower().Contains("wps")) return "WPS-tjeneste";
+                else return protocol;
+            }
         }
 
         private List<Keyword> Convert(IEnumerable<SimpleKeyword> simpleKeywords)
@@ -1029,11 +1052,8 @@ namespace Kartverket.Metadatakatalog.Service
 
             indexDoc.Uuid = simpleMetadata.Uuid;
             indexDoc.Title = simpleMetadata.Title;
-            indexDoc.TitleEnglish = simpleMetadata.TitleEnglish;
             indexDoc.Abstract = simpleMetadata.Abstract;
-            indexDoc.AbstractEnglish = simpleMetadata.AbstractEnglish;
             indexDoc.Purpose = simpleMetadata.Purpose;
-            indexDoc.PurposeEnglish = simpleMetadata.PurposeEnglish;
             indexDoc.Type = simpleMetadata.Type;
             indexDoc.ParentIdentifier = simpleMetadata.ParentIdentifier;
             indexDoc.Organizationgroup = simpleMetadata.Organizationgroup;
