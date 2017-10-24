@@ -3,11 +3,11 @@
 @model SearchViewModel
 
 @{
-    ViewBag.Title = "Åpne data";
+    ViewBag.Title = Resources.UI.OpenData;
 }
 
 @section breadcrumb {
-    <li class="active">Åpne data</li>
+    <li class="active">@Resources.UI.OpenData</li>
 }
 
 
@@ -27,7 +27,7 @@
             <span class="separator-lg"></span>
         </div>
         <div class="col-sm-9">
-            <p>De fleste kartdata i Norge er åpne data. Disse kan du laste ned gratis fra Geonorge, hvilket gir store muligheter for innovasjon og bruk. Datasettets lisens beskriver hva du har lov til å gjøre med dataene.</p>
+            <p>@Resources.UI.OpenDataText</p>
         </div>
     </div>
 </section>
@@ -57,7 +57,7 @@
     </div>
     <div class="col-md-4 pull-right">
         <div class="save-as-menu pull-right">
-            <label>Lagre som:</label>
+            <label>@Resources.UI.SaveAs:</label>
             <div class="no-padding-bottom save-as-dropdown">
                 <div class="custom-select">
                     <select onchange="additionalView(this.value)" class="form-control">
@@ -66,7 +66,7 @@
                 </div>
             </div>
             <div id="saveButtons" class="no-padding-bottom save-as-buttons">
-                <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
+                <a class="btn" id="csvUrl" href="@urlCSV">@Resources.UI.Save</a>
             </div>
         </div>
     </div>
@@ -89,10 +89,10 @@
     </div>
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
         <aside class="facet-filter-container">
-            <h3 class="">Filtrer søket på:</h3>
+            <h3 class="">@Resources.UI.FilterSearch:</h3>
             <span class="separator-small"></span>
             @Html.Partial("_FacetFilter", Model)
-            <h3 class="" style="padding-top: 40px;">Sider</h3>
+            <h3 class="" style="padding-top: 40px;">@Resources.UI.Pages</h3>
             <span class="separator-small"></span>
             @Html.Partial("_FilterPages")
         </aside>

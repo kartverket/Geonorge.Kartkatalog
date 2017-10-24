@@ -226,7 +226,7 @@
     <value>Map services</value>
   </data>
   <data name="MetadataInMunicipality" xml:space="preserve">
-    <value>What is in municipality / county?</value>
+    <value>What is in municipality/county?</value>
   </data>
   <data name="Pages" xml:space="preserve">
     <value>Pages</value>
@@ -236,5 +236,26 @@
   </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Save As</value>
+  </data>
+  <data name="APIsAndServicesText" xml:space="preserve">
+    <value>APIs and services are machine-readable interface over map data and documentation. These are used in many internet solutions to update the information continuously.</value>
+  </data>
+  <data name="DepartmentalOverviewHeader" xml:space="preserve">
+    <value>Departmental overview of data</value>
+  </data>
+  <data name="MapServicesText" xml:space="preserve">
+    <value>Many departments, county counties and municipalities offer a map for use to the public. Here you can explore, for example, aerial photographs, elevation data, area plans or different theme maps.</value>
+  </data>
+  <data name="MunicipalitySelect" xml:space="preserve">
+    <value>Select municipality/county</value>
+  </data>
+  <data name="MunicipalitySelectInfo" xml:space="preserve">
+    <value>Select a municipality or county, and get an overview of which site-specific data exists</value>
+  </data>
+  <data name="OpenDataText" xml:space="preserve">
+    <value>Most map data in Norway are open data. These can be downloaded free of charge from Geonorge, which offers great opportunities for innovation and use. The data set license describes what you are allowed to do with the data.</value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>Select organization</value>
   </data>
 </root>

@@ -79,6 +79,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to API-er og tjenester er maskinlesbare grensesnitt over kartdata og dokumentasjon. Disse brukes i mange internett-løsninger for å oppdatere informasjonen kontinuerlig..
+        /// </summary>
+        public static string APIsAndServicesText {
+            get {
+                return ResourceManager.GetString("APIsAndServicesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kartkatalogen.
         /// </summary>
         public static string AppPageTitle {
@@ -102,6 +111,15 @@ namespace Resources {
         public static string DepartmentalOverview {
             get {
                 return ResourceManager.GetString("DepartmentalOverview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Etatsvis oversikt over data.
+        /// </summary>
+        public static string DepartmentalOverviewHeader {
+            get {
+                return ResourceManager.GetString("DepartmentalOverviewHeader", resourceCulture);
             }
         }
         
@@ -349,11 +367,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mange fagetater, fylkesetater og kommuner tilbyr nettkart til bruk for publikum. Her kan du utforske for eksempel flyfoto, høydedata, arealplaner eller ulike temakart..
+        /// </summary>
+        public static string MapServicesText {
+            get {
+                return ResourceManager.GetString("MapServicesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hva finnes i kommune/fylke?.
         /// </summary>
         public static string MetadataInMunicipality {
             get {
                 return ResourceManager.GetString("MetadataInMunicipality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Velg kommune/fylke.
+        /// </summary>
+        public static string MunicipalitySelect {
+            get {
+                return ResourceManager.GetString("MunicipalitySelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Velg en kommune eller et fylke, og få oversikt over hvilke stedfestede data som finnes der.
+        /// </summary>
+        public static string MunicipalitySelectInfo {
+            get {
+                return ResourceManager.GetString("MunicipalitySelectInfo", resourceCulture);
             }
         }
         
@@ -372,6 +417,15 @@ namespace Resources {
         public static string OpenData {
             get {
                 return ResourceManager.GetString("OpenData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to De fleste kartdata i Norge er åpne data. Disse kan du laste ned gratis fra Geonorge, hvilket gir store muligheter for innovasjon og bruk. Datasettets lisens beskriver hva du har lov til å gjøre med dataene..
+        /// </summary>
+        public static string OpenDataText {
+            get {
+                return ResourceManager.GetString("OpenDataText", resourceCulture);
             }
         }
         
@@ -399,6 +453,15 @@ namespace Resources {
         public static string SaveAs {
             get {
                 return ResourceManager.GetString("SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Velg etat.
+        /// </summary>
+        public static string SelectOrganization {
+            get {
+                return ResourceManager.GetString("SelectOrganization", resourceCulture);
             }
         }
         

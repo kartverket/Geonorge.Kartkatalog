@@ -237,4 +237,25 @@
   <data name="SaveAs" xml:space="preserve">
     <value>Lagre som</value>
   </data>
+  <data name="APIsAndServicesText" xml:space="preserve">
+    <value>API-er og tjenester er maskinlesbare grensesnitt over kartdata og dokumentasjon. Disse brukes i mange internett-løsninger for å oppdatere informasjonen kontinuerlig.</value>
+  </data>
+  <data name="DepartmentalOverviewHeader" xml:space="preserve">
+    <value>Etatsvis oversikt over data</value>
+  </data>
+  <data name="MapServicesText" xml:space="preserve">
+    <value>Mange fagetater, fylkesetater og kommuner tilbyr nettkart til bruk for publikum. Her kan du utforske for eksempel flyfoto, høydedata, arealplaner eller ulike temakart.</value>
+  </data>
+  <data name="MunicipalitySelect" xml:space="preserve">
+    <value>Velg kommune/fylke</value>
+  </data>
+  <data name="MunicipalitySelectInfo" xml:space="preserve">
+    <value>Velg en kommune eller et fylke, og få oversikt over hvilke stedfestede data som finnes der</value>
+  </data>
+  <data name="OpenDataText" xml:space="preserve">
+    <value>De fleste kartdata i Norge er åpne data. Disse kan du laste ned gratis fra Geonorge, hvilket gir store muligheter for innovasjon og bruk. Datasettets lisens beskriver hva du har lov til å gjøre med dataene.</value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>Velg etat</value>
+  </data>
 </root>

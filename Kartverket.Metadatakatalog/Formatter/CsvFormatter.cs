@@ -8,6 +8,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web;
+using Resources;
 
 namespace Kartverket.Metadatakatalog.Formatter
 {
@@ -92,7 +93,7 @@ namespace Kartverket.Metadatakatalog.Formatter
 
         private void WriteApplicationLines(SearchResult data, StreamWriter writer)
         {
-            writer.WriteLine("Tittel;Type;Organisasjon;Uuid;Url til tjeneste;");
+            writer.WriteLine(UI.Title + ";Type;" + UI.Facet_organization + ";Uuid;Url til tjeneste;");
             foreach (var meta in data.Results)
             {
                 writer.WriteLine(
@@ -107,7 +108,7 @@ namespace Kartverket.Metadatakatalog.Formatter
 
         private void WriteServiceDirectoryLines(SearchResult data, StreamWriter writer)
         {
-            writer.WriteLine("Tittel;Type;Organisasjon;Uuid;Url til tjeneste;");
+            writer.WriteLine(UI.Title + ";Type;" + UI.Facet_organization + ";Uuid;Url til tjeneste;");
             foreach (var meta in data.Results)
             {
                 writer.WriteLine(
@@ -122,7 +123,7 @@ namespace Kartverket.Metadatakatalog.Formatter
 
         private void WriteSearchLines(SearchResult data, StreamWriter writer)
         {
-            writer.WriteLine("Tittel;Type;Tema;Organisasjon;Åpne data;DOK-data;Uuid;Wms-url;Wfs-url;Atom-feed");
+            writer.WriteLine(UI.Title + ";Type;" + UI.Facet_theme + ";" + UI.Facet_organization + ";" + UI.OpenData + ";DOK-data;Uuid;Wms-url;Wfs-url;Atom-feed");
             foreach (var meta in data.Results)
             {
                 writer.WriteLine(
@@ -130,7 +131,7 @@ namespace Kartverket.Metadatakatalog.Formatter
                     Escape(meta.Type) + ";" +
                     Escape(meta.Theme) + ";" +
                     Escape(meta.Organization) + ";" +
-                    (meta.IsOpenData ? "Åpne data" : "") + ";" +
+                    (meta.IsOpenData ? UI.OpenData : "") + ";" +
                     (meta.IsDokData ? "Det offentlige kartgrunnlaget" : "") + ";" +
                     Escape(meta.Uuid) + ";" +
                     Escape(meta.ServiceDistributionUrlForDataset) + ";" +

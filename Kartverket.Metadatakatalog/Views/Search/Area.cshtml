@@ -2,7 +2,7 @@
 @using Kartverket.Metadatakatalog.Helpers
 @model SearchByAreaViewModel
 @{
-    ViewBag.Title = "Hva finnes i kommune/fylke?";
+    ViewBag.Title = Resources.UI.MetadataInMunicipality;
 
 }
 @section breadcrumb {
@@ -25,14 +25,14 @@
             <span class="separator-lg"></span>
         </div>
         <div class="col-sm-9">
-            <p>Velg en kommune eller et fylke, og få oversikt over hvilke stedfestede data som finnes der</p>
+            <p>@Resources.UI.MunicipalitySelectInfo</p>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-3">
             <form action=@Url.Action("Area", "Search", new { AreaCode = ""}) method="get" class="custom-select">
                 <select class="form-control" name="AreaCode" onchange="this.form.submit()">
-                    <option Selected disabled>Velg kommune/Fylke</option>
+                    <option Selected disabled>@Resources.UI.MunicipalitySelect</option>
                     <optgroup label="Fylker">
                         @foreach (var countie in Model.Counties)
                         {
@@ -121,7 +121,7 @@
     </div>
     <div class="col-md-4 pull-right">
         <div class="save-as-menu pull-right">
-            <label>Lagre som:</label>
+            <label>@Resources.UI.SaveAs:</label>
             <div class="no-padding-bottom save-as-dropdown">
                 <div class="custom-select">
                     <select onchange="additionalView(this.value)" class="form-control">
@@ -130,7 +130,7 @@
                 </div>
             </div>
             <div id="saveButtons" class="no-padding-bottom save-as-buttons">
-                <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
+                <a class="btn" id="csvUrl" href="@urlCSV">@Resources.UI.Save</a>
             </div>
         </div>
     </div>
@@ -158,10 +158,10 @@
 
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
         <aside class="facet-filter-container">
-            <h3 class="">Filtrer søket på:</h3>
+            <h3 class="">@Resources.UI.FilterSearch:</h3>
             <span class="separator-small"></span>
             @Html.Partial("_FacetFilter", Model)
-            <h3 class="" style="padding-top: 40px;">Sider</h3>
+            <h3 class="" style="padding-top: 40px;">@Resources.UI.Pages</h3>
             <span class="separator-small"></span>
             @Html.Partial("_FilterPages")
         </aside>

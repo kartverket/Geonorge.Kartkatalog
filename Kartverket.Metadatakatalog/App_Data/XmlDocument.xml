@@ -1032,6 +1032,11 @@
               Looks up a localized string similar to API-er og tjenester.
             </summary>
         </member>
+        <member name="P:Resources.UI.APIsAndServicesText">
+            <summary>
+              Looks up a localized string similar to API-er og tjenester er maskinlesbare grensesnitt over kartdata og dokumentasjon. Disse brukes i mange internett-løsninger for å oppdatere informasjonen kontinuerlig..
+            </summary>
+        </member>
         <member name="P:Resources.UI.AppPageTitle">
             <summary>
               Looks up a localized string similar to Kartkatalogen.
@@ -1045,6 +1050,11 @@
         <member name="P:Resources.UI.DepartmentalOverview">
             <summary>
               Looks up a localized string similar to Etatvis oversikt.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DepartmentalOverviewHeader">
+            <summary>
+              Looks up a localized string similar to Etatsvis oversikt over data.
             </summary>
         </member>
         <member name="P:Resources.UI.Description">
@@ -1182,9 +1192,24 @@
               Looks up a localized string similar to Kartløsninger.
             </summary>
         </member>
+        <member name="P:Resources.UI.MapServicesText">
+            <summary>
+              Looks up a localized string similar to Mange fagetater, fylkesetater og kommuner tilbyr nettkart til bruk for publikum. Her kan du utforske for eksempel flyfoto, høydedata, arealplaner eller ulike temakart..
+            </summary>
+        </member>
         <member name="P:Resources.UI.MetadataInMunicipality">
             <summary>
               Looks up a localized string similar to Hva finnes i kommune/fylke?.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.MunicipalitySelect">
+            <summary>
+              Looks up a localized string similar to Velg kommune/fylke.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.MunicipalitySelectInfo">
+            <summary>
+              Looks up a localized string similar to Velg en kommune eller et fylke, og få oversikt over hvilke stedfestede data som finnes der.
             </summary>
         </member>
         <member name="P:Resources.UI.Name">
@@ -1195,6 +1220,11 @@
         <member name="P:Resources.UI.OpenData">
             <summary>
               Looks up a localized string similar to Åpne data.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.OpenDataText">
+            <summary>
+              Looks up a localized string similar to De fleste kartdata i Norge er åpne data. Disse kan du laste ned gratis fra Geonorge, hvilket gir store muligheter for innovasjon og bruk. Datasettets lisens beskriver hva du har lov til å gjøre med dataene..
             </summary>
         </member>
         <member name="P:Resources.UI.Pages">
@@ -1210,6 +1240,11 @@
         <member name="P:Resources.UI.SaveAs">
             <summary>
               Looks up a localized string similar to Lagre som.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SelectOrganization">
+            <summary>
+              Looks up a localized string similar to Velg etat.
             </summary>
         </member>
         <member name="P:Resources.UI.Service_need_permission">
