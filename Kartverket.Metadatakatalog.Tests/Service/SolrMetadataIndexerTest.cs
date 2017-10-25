@@ -3,7 +3,7 @@ using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using www.opengis.net;
 using Kartverket.Metadatakatalog.Models.Translations;
 
@@ -26,7 +26,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
         //}
 
-        [Test]
+        [Fact]
         public void ShouldSearchAndIndexTwoMetadataEntriesFromGeonorge()
         {
             var geoNorgeMock = new Mock<IGeoNorge>();
@@ -63,7 +63,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             indexerMock.Verify(i => i.Index(indexDocs[1]));
         }
 
-        [Test]
+        [Fact]
         public void ShouldCrawlAndIndexAllMetadataFromGeonorge()
         {
             var geoNorgeMock = new Mock<IGeoNorge>();
@@ -111,7 +111,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             indexerMock.Verify(i => i.Index(indexDocs[1]));
         }
 
-        [Test]
+        [Fact]
         public void ShouldIndexSingleMetadata()
         {
             const string uuid = "12345-123545-1231245-1231232";

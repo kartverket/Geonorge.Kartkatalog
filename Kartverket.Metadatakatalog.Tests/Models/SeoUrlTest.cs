@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using Kartverket.Metadatakatalog.Models;
-using NUnit.Framework;
+using Xunit;
 
 namespace Kartverket.Metadatakatalog.Tests.Models
 {
     public class SeoUrlTest
     {
-        [Test]
+        [Fact]
         public void ShouldLowerCase()
         {
             var seoUrl = new SeoUrl("SkogOgLandskap", "Ar50");
@@ -14,7 +14,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
             seoUrl.Title.Should().Be("ar50");
         }
 
-        [Test]
+        [Fact]
         public void ShouldRemoveApostroph()
         {
             var seoUrl = new SeoUrl("skog'", "a'r");
@@ -22,7 +22,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
             seoUrl.Title.Should().Be("ar");
         }
 
-        [Test]
+        [Fact]
         public void ShouldReplaceNorwegianCharacters()
         {
             var seoUrl = new SeoUrl("SkØgÅLÆndskap", "årøæ5");
@@ -30,7 +30,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
             seoUrl.Title.Should().Be("aroae5");
         }
 
-        [Test]
+        [Fact]
         public void ShouldReplaceSpecialCharacters()
         {
             var seoUrl = new SeoUrl("skog$og@landska%p", "a~r 5");
@@ -38,7 +38,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
             seoUrl.Title.Should().Be("a-r-5");
         }
 
-        [Test]
+        [Fact]
         public void ShouldRemoveDuplicateHyphens()
         {
             var seoUrl = new SeoUrl("skog og -landskap", "ar - 5");
@@ -46,7 +46,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
             seoUrl.Title.Should().Be("ar-5");
         }
 
-        [Test]
+        [Fact]
         public void ShouldRemoveLeadingAndTrailingHyphens()
         {
             var seoUrl = new SeoUrl("-skog og landskap-", "-ar5-");
@@ -54,21 +54,21 @@ namespace Kartverket.Metadatakatalog.Tests.Models
             seoUrl.Title.Should().Be("ar5");
         }
 
-        [Test]
+        [Fact]
         public void ShouldReturnTrueWhenBothOrganizationAndTitleMatches()
         {
             var seoUrl = new SeoUrl("Skog og landskap", "WMS AR-5");
             seoUrl.Matches("skog-og-landskap", "wms-ar-5").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void ShouldReturnFalseWhenOrganizationDoesNotMatch()
         {
             var seoUrl = new SeoUrl("Skog og landskap", "AR-5");
             seoUrl.Matches("skogoglandskap", "ar-5").Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void ShouldReturnFalseWhenTitleDoesNotMatch()
         {
             var seoUrl = new SeoUrl("Skog og landskap", "AR-5");

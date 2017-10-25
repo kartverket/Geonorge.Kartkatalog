@@ -2,212 +2,211 @@
 using FluentAssertions;
 using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Service;
-using NUnit.Framework;
+using Xunit;
 
 namespace Kartverket.Metadatakatalog.Tests.Service
 {
-    class ThemeResolverTest
+    public class ThemeResolverTest
     {
-       
-        //[Test]
+        //[Fact]
         //public void InspireCoordinateReferenceSystemsResolveToBasisGeodata()
         //{
         //    ResolveInspireKeyword("Coordinate reference systems", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireGeographicalNamesResolveToBasisGeodata()
         //{
         //    ResolveInspireKeyword("Geographical names", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireAdministrativeUnitsResolveToBasisGeodata()
         //{
         //    ResolveInspireKeyword("Administrative units", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireAddressesResolveToBasisGeodata()
         //{
         //    ResolveInspireKeyword("Addresses", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireCadastralParcelsResolveToBasisGeodata()
         //{
         //    ResolveInspireKeyword("Cadastral parcels", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireTransportNetworksResolveToSamferdsel()
         //{
         //    ResolveInspireKeyword("Transport networks", ThemeResolver.DokSamferdsel);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireHydrographyResolveToBasisGeodata()
         //{
         //    ResolveInspireKeyword("Hydrography", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireProtectedSitesResolveToNatur()
         //{
         //    ResolveInspireKeyword("Protected sites", ThemeResolver.DokNatur);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireElevationResolveToBasisGeodata()
         //{
         //    ResolveInspireKeyword("Elevation", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireLandCoverResolveToBasisGeodata()
         //{
         //    ResolveInspireKeyword("Land cover", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireOrthoimageryResolveToBasisGeodata()
         //{
         //    ResolveInspireKeyword("Orthoimagery", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireGeologyResolveToGeologi()
         //{
         //    ResolveInspireKeyword("Geology", ThemeResolver.DokGeologi);
         //}
-        
-        //[Test]
+
+        //[Fact]
         //public void InspireStatisticalUnitsResolveToBasisGeodata()
         //{
         //    ResolveInspireKeyword("Statistical units", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireBuildingsResolveToBasisGeodata()
         //{
         //    ResolveInspireKeyword("Buildings", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireSoilResolveToLandbruk()
         //{
         //    ResolveInspireKeyword("Soil", ThemeResolver.DokLandbruk);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireLandUseResolveToPlan()
         //{
         //    ResolveInspireKeyword("Land use", ThemeResolver.DokPlan);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireHumanHealthResolveToSamfunnssikkerhet()
         //{
         //    ResolveInspireKeyword("Human health and safety", ThemeResolver.DokSamfunnssikkerhet);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireUtilityAndGovernmentalServicesResolveToSamfunnssikkerhet()
         //{
         //    ResolveInspireKeyword("Utility and governmental services", ThemeResolver.DokSamfunnssikkerhet);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireEnvironmentalMonitoringFacilitiesResolveToForurensning()
         //{
         //    ResolveInspireKeyword("Environmental monitoring facilities", ThemeResolver.DokForurensning);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireProductionAndIndustrialFacilitiesResolveToBasisGeodata()
         //{
         //    ResolveInspireKeyword("Production and industrial facilities", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireAgriculturalAndAquacultureFacilitiesResolveToLandbruk()
         //{
         //    ResolveInspireKeyword("Agricultural and aquaculture facilities", ThemeResolver.DokLandbruk);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspirePopulationDistributionResolveToAnnen()
         //{
         //    ResolveInspireKeyword("Population distribution and demography", ThemeResolver.DokAnnen);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireAreaManagementResolveToPlan()
         //{
         //    ResolveInspireKeyword("Area management / restriction / regulation zones & reporting units", ThemeResolver.DokPlan);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireNaturalRiskZonesResolveToNatur()
         //{
         //    ResolveInspireKeyword("Natural risk zones", ThemeResolver.DokNatur);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireAtmosphericConditionsResolveToNatur()
         //{
         //    ResolveInspireKeyword("Atmospheric conditions", ThemeResolver.DokNatur);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireMeteorologicalGeographicalFeaturesResolveToNatur()
         //{
         //    ResolveInspireKeyword("Meteorological geographical features", ThemeResolver.DokNatur);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireOceanographicGeographicalFeaturesResolveToKystFiskeri()
         //{
         //    ResolveInspireKeyword("Oceanographic geographical features", ThemeResolver.DokKystFiskeri);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireSeaRegionsResolveToKystFiskeri()
         //{
         //    ResolveInspireKeyword("Sea regions", ThemeResolver.DokKystFiskeri);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireBioGeographicalRegionsResolveToLandskap()
         //{
         //    ResolveInspireKeyword("Bio-geographical regions", ThemeResolver.DokLandskap);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireHabitatsAndBiotopesResolveToNatur()
         //{
         //    ResolveInspireKeyword("Habitats and biotopes", ThemeResolver.DokNatur);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireSpeciesDistributionResolveToNatur()
         //{
         //    ResolveInspireKeyword("Species distribution", ThemeResolver.DokNatur);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireEnergyResourcesResolveToEnergi()
         //{
         //    ResolveInspireKeyword("Energy resources", ThemeResolver.DokEnergi);
         //}
 
-        //[Test]
+        //[Fact]
         //public void InspireMineralResourcesResolveToNatur()
         //{
         //    ResolveInspireKeyword("Mineral resources", ThemeResolver.DokNatur);
         //}
 
-        //[Test]
+        //[Fact]
         //public void ShouldUseTopicCategoryWhenNoMappingExistsForInspireKeyword()
         //{
         //    SimpleMetadata metadata = createMetadataWithInspireKeyword("this inspire keyword does not exist");
@@ -215,213 +214,213 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         //    ResolveTheme(metadata).Should().Be(ThemeResolver.DokLandbruk);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryFarmingResolveToLandbruk()
         //{
         //    ResolveTopicCategory("farming", ThemeResolver.DokLandbruk);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryBiotaResolveToNatur()
         //{
         //    ResolveTopicCategory("biota", ThemeResolver.DokNatur);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryBoundariesResolveToBasisGeodata()
         //{
         //    ResolveTopicCategory("boundaries", ThemeResolver.DokBasisGeodata);
         //}
-        
-        //[Test]
+
+        //[Fact]
         //public void TopicCategoryClimatologyMeteorologyAtmosphereResolveToNatur()
         //{
         //    ResolveTopicCategory("climatologyMeteorologyAtmosphere", ThemeResolver.DokNatur);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryEconomyResolveToAnnen()
         //{
         //    ResolveTopicCategory("economy", ThemeResolver.DokAnnen);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryElevationResolveToBasisGeodata()
         //{
         //    ResolveTopicCategory("elevation", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryEnvironmentResolveToForurensning()
         //{
         //    ResolveTopicCategory("environment", ThemeResolver.DokForurensning);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryGeoscientificInformationResolveToGeologi()
         //{
         //    ResolveTopicCategory("geoscientificInformation", ThemeResolver.DokGeologi);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryHealthResolveToSamfunnssikkerhet()
         //{
         //    ResolveTopicCategory("health", ThemeResolver.DokSamfunnssikkerhet);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryImageryBaseMapsEarthCoverResolveToBasisGeodata()
         //{
         //    ResolveTopicCategory("imageryBaseMapsEarthCover", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryintelligenceMilitaryResolveToAnnen()
         //{
         //    ResolveTopicCategory("intelligenceMilitary", ThemeResolver.DokAnnen);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryinlandWatersResolveToBasisGeodata()
         //{
         //    ResolveTopicCategory("inlandWaters", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryLocationResolveToBasisGeodata()
         //{
         //    ResolveTopicCategory("location", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryOceansResolveToKystFiskeri()
         //{
         //    ResolveTopicCategory("oceans", ThemeResolver.DokKystFiskeri);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryPlanningCadastreResolveToPlan()
         //{
         //    ResolveTopicCategory("planningCadastre", ThemeResolver.DokPlan);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategorySocietyResolveToKulturminner()
         //{
         //    ResolveTopicCategory("society", ThemeResolver.DokKulturminner);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryStructureResolveToBasisGeodata()
         //{
         //    ResolveTopicCategory("structure", ThemeResolver.DokBasisGeodata);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryTransportationResolveToSamferdsel()
         //{
         //    ResolveTopicCategory("transportation", ThemeResolver.DokSamferdsel);
         //}
 
-        //[Test]
+        //[Fact]
         //public void TopicCategoryUtilitiesCommunicationResolveToEnergi()
         //{
         //    ResolveTopicCategory("utilitiesCommunication", ThemeResolver.DokEnergi);
         //}
 
-        //[Test]
+        //[Fact]
         //public void ShouldResolveKeywordKulturToKulturminner()
         //{
         //    ResolveTheme(CreateMetadataWithKeyword("Kultur")).Should().Be(ThemeResolver.DokKulturminner);
         //    ResolveTheme(CreateMetadataWithKeyword("kultur")).Should().Be(ThemeResolver.DokKulturminner);
         //}
 
-        //[Test]
+        //[Fact]
         //public void ShouldResolveKeywordKulturminneToKulturminner()
         //{
         //    ResolveTheme(CreateMetadataWithKeyword("Kulturminne")).Should().Be(ThemeResolver.DokKulturminner);
         //    ResolveTheme(CreateMetadataWithKeyword("kulturminne")).Should().Be(ThemeResolver.DokKulturminner);
         //}
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordKulturminnerToKulturminner()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
         }
 
-        [Test]
+        [Fact]
         public void ShouldResolveToAnnenWhenNoKeywordOrTopicCategoryWithMappingExists()
         {
             ResolveTheme(SimpleMetadata.CreateDataset()).Should().Be(ThemeResolver.DokAnnen);
         }
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordBasisGeodataRegardslessOfCase()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Basis geodata")).Should().Be(ThemeResolver.DokBasisGeodata);
         }
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordSamferdsel()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Samferdsel")).Should().Be(ThemeResolver.DokSamferdsel);
         }
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordSamfunnssikkerhet()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Samfunnssikkerhet")).Should().Be(ThemeResolver.DokSamfunnssikkerhet);
         }
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordForurensning()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Forurensning")).Should().Be(ThemeResolver.DokForurensning);
         }
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordFriluftsliv()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Friluftsliv")).Should().Be(ThemeResolver.DokFriluftsliv);
         }
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordLandskap()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Landskap")).Should().Be(ThemeResolver.DokLandskap);
         }
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordNatur()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Natur")).Should().Be(ThemeResolver.DokNatur);
         }
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordKulturminner()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
         }
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordLandbruk()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Landbruk")).Should().Be(ThemeResolver.DokLandbruk);
         }
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordEnergi()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Energi")).Should().Be(ThemeResolver.DokEnergi);
         }
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordGeologi()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Geologi")).Should().Be(ThemeResolver.DokGeologi);
         }
 
-        //[Test]
+        //[Fact]
         //public void ShouldResolveKeywordKystFiskeri()
         //{
         //    ResolveTheme(CreateMetadataWithDokKeyword("Kyst / Fiskeri")).Should().Be(ThemeResolver.DokKystFiskeri);
@@ -429,7 +428,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         //    ResolveTheme(CreateMetadataWithDokKeyword("Fiskeri")).Should().Be(ThemeResolver.DokKystFiskeri);
         //}
 
-        [Test]
+        [Fact]
         public void ShouldResolveKeywordPlan()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Plan")).Should().Be(ThemeResolver.DokPlan);
@@ -437,9 +436,9 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
         private static SimpleMetadata CreateMetadataWithKeyword(string keyword, string thesaurus = null)
         {
-            SimpleMetadata metadata = SimpleMetadata.CreateDataset();
+            var metadata = SimpleMetadata.CreateDataset();
             var keywords = new List<SimpleKeyword>();
-            keywords.Add(new SimpleKeyword()
+            keywords.Add(new SimpleKeyword
             {
                 Keyword = keyword,
                 Thesaurus = thesaurus
@@ -452,7 +451,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         {
             return CreateMetadataWithKeyword(keyword, SimpleKeyword.THESAURUS_NATIONAL_THEME);
         }
-        
+
         private static void ResolveTopicCategory(string topicCategory, string expectedTheme)
         {
             ResolveTheme(CreateMetadataWithTopicCategory(topicCategory)).Should().Be(expectedTheme);
@@ -460,7 +459,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
         private static SimpleMetadata CreateMetadataWithTopicCategory(string topicCategory)
         {
-            SimpleMetadata metadata = SimpleMetadata.CreateDataset();
+            var metadata = SimpleMetadata.CreateDataset();
             metadata.TopicCategory = topicCategory;
             return metadata;
         }
@@ -477,9 +476,9 @@ namespace Kartverket.Metadatakatalog.Tests.Service
 
         private static SimpleMetadata createMetadataWithInspireKeyword(string inspireKeyword)
         {
-            SimpleMetadata metadata = SimpleMetadata.CreateDataset();
+            var metadata = SimpleMetadata.CreateDataset();
             var keywords = new List<SimpleKeyword>();
-            keywords.Add(new SimpleKeyword()
+            keywords.Add(new SimpleKeyword
             {
                 Thesaurus = SimpleKeyword.THESAURUS_GEMET_INSPIRE_V1,
                 Keyword = inspireKeyword
