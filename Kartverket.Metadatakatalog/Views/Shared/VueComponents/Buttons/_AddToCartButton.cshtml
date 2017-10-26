@@ -1,4 +1,5 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
+@using Resources
 
 <script type="text/x-template" id="addToCartButtonTemplate">
     <div class="text-center">
@@ -52,10 +53,10 @@
                 createButtonObject: function () {
                     var button = {
                         id: "",
-                        content: "Legg i kurv",
+                        content: "@Html.Raw(UI.AddToBasket)",
                         className: this.defaultButtonClass,
                         url: null,
-                        title: "Legg " + this.resultItem.Title + " i kurv",
+                        title: "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)",
                         icon: {
                             className: "custom-icon custom-icon-handlekurv"
                         },
@@ -111,25 +112,25 @@
                             button.title = "Allerede lagt i kurv";
                         } else {
                             if (button.showContent) {
-                                button.content = "Legg i kurv";
+                                button.content = "@Html.Raw(UI.AddToBasket)";
                             }
-                            button.title = "Legg " + this.resultItem.Title + " i kurv";
+                            button.title = "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)";
                         }
                     } else if (this.resultItem.ShowDownloadLink) {
                         button.url = this.resultItem.DistributionUrl;
-                        button.title = "Last ned " + this.resultItem.Title;
+                        button.title = "@Html.Raw(UI.Download) " + this.resultItem.Title;
                         button.attributes = [
                                 { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'lastned')" },
                                 { key: "target", value: "_blank" }
                         ];
                         if (button.showContent) {
-                            button.content = "Last ned";
+                            button.content = "@Html.Raw(UI.Download)";
                         }
                         button.icon.className = "custom-icon custom-icon-lastned";
                     } else {
                         button.className = this.defaultButtonClass + " disabled";
                         button.url = null;
-                        button.title = "Kan ikke legges i kurv";
+                        button.title = "@Html.Raw(UI.CanNotBeAddedToBasket)";
                         button.attributes = [
                                 { key: "disabled", value: "disabled" }
                         ];
@@ -166,7 +167,7 @@
                         localStorage["orderItems"] = JSON.stringify(orderItems);
                         localStorage[item.uuid + ".metadata"] = JSON.stringify(item);
                         clearAlertMessage();
-                        showAlert(item.name + ' er lagt til i <a href="/nedlasting">kurven</a>', 'success');
+                        showAlert(item.name + ' @Html.Raw(UI.IsAddedTo) <a href="/nedlasting">@Html.Raw(UI.TheBasket)</a>', 'success');
 
                         var orderItemCount = $('#orderitem-count').text();
                         if (orderItemCount == null || orderItemCount == '') {
@@ -194,13 +195,13 @@
 
                         updateShoppingCart();
                         clearAlertMessage();
-                        showAlert(item.name + ' er fjernet fra <a href="/nedlasting">kurven</a>', 'warning');
+                        showAlert(item.name + ' @Html.Raw(UI.IsRemovedFrom) <a href="/nedlasting">@Html.Raw(UI.TheBasket)</a>', 'warning');
                         if (button.showContent) {
-                            button.content = "Legg i kurv";
+                            button.content = "@Html.Raw(UI.AddToBasket)";
                         }
-                        this.button.title = "Legg " + this.resultItem.Title + " i kurv";
+                        this.button.title = "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)";
                         $(".add-to-cart-btn-" + this.resultItem.Uuid).removeClass("added");
-                        $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "Legg " + this.resultItem.Title + " i kurv");
+                        $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)");
                     }
                 }
             }

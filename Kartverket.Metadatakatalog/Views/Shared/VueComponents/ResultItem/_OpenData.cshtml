@@ -1,4 +1,5 @@
-﻿<script type="text/x-template" id="openDataContentTemplate">
+﻿@using Resources
+<script type="text/x-template" id="openDataContentTemplate">
     <div class="text-center"><span data-toggle='tooltip' data-placement='bottom' v-bind:title="title" v-bind:class="className"></span></div>
 </script>
 
@@ -22,11 +23,11 @@
             title: function () {
                 var title = "";
                 if (this.metadata.IsRestricted) {
-                    title = "Tilgangsbegrensede data";
+                    title = "@Html.Raw(UI.RestrictedData)";
                 } else if (this.metadata.IsOffline) {
-                    title = "Skjermede data";
+                    title = "@Html.Raw(UI.OfflineData)";
                 } else if (this.metadata.IsOpendata) {
-                    title = "Åpne data";
+                    title = "@Html.Raw(UI.OpenData)";
                 }
                 return title;
             }

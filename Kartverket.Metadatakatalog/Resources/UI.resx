@@ -258,4 +258,55 @@
   <data name="SelectOrganization" xml:space="preserve">
     <value>Velg etat</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Legg</value>
+  </data>
+  <data name="AddToBasket" xml:space="preserve">
+    <value>Legg i kurv</value>
+  </data>
+  <data name="CanNotBeAddedToBasket" xml:space="preserve">
+    <value>Kan ikke legges i kurv</value>
+  </data>
+  <data name="Display" xml:space="preserve">
+    <value>Vis </value>
+  </data>
+  <data name="DisplayAllDatasetsFrom" xml:space="preserve">
+    <value>Vis alle datasett fra</value>
+  </data>
+  <data name="DisplayMetadataFor" xml:space="preserve">
+    <value>Se metadata for</value>
+  </data>
+  <data name="InMap" xml:space="preserve">
+    <value>i kart</value>
+  </data>
+  <data name="IsAddedTo" xml:space="preserve">
+    <value>er lagt til i</value>
+  </data>
+  <data name="IsRemovedFrom" xml:space="preserve">
+    <value>er fjernet fra</value>
+  </data>
+  <data name="OfflineData" xml:space="preserve">
+    <value>Skjermede data</value>
+  </data>
+  <data name="RestrictedData" xml:space="preserve">
+    <value>Tilgangsbegrensede data</value>
+  </data>
+  <data name="ServiceCannotBeDisplayedMap" xml:space="preserve">
+    <value>Tjenesten kan ikke vises i kart</value>
+  </data>
+  <data name="ServiceNotavailable" xml:space="preserve">
+    <value>Tjenesten er utilgjengelig for øyeblikket</value>
+  </data>
+  <data name="ServiceSlow" xml:space="preserve">
+    <value>Tjenesten kan være treg å vise</value>
+  </data>
+  <data name="ServiceSlowAndSpecialAccess" xml:space="preserve">
+    <value>Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier</value>
+  </data>
+  <data name="TheBasket" xml:space="preserve">
+    <value>kurven</value>
+  </data>
+  <data name="ToBasket" xml:space="preserve">
+    <value>i kurv</value>
+  </data>
 </root>

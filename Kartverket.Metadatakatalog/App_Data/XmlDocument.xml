@@ -1027,6 +1027,16 @@
               Looks up a localized string similar to Her gis oversikt over datasett i Geonorge med opplysninger om tilgjengelige formater, tilknyttede tjenester og API-er. Egne oversikter over tjenester/API-er og kartløsninger finner du på egne sider i høyre spalte..
             </summary>
         </member>
+        <member name="P:Resources.UI.Add">
+            <summary>
+              Looks up a localized string similar to Legg.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.AddToBasket">
+            <summary>
+              Looks up a localized string similar to Legg i kurv.
+            </summary>
+        </member>
         <member name="P:Resources.UI.ApisAndServices">
             <summary>
               Looks up a localized string similar to API-er og tjenester.
@@ -1040,6 +1050,11 @@
         <member name="P:Resources.UI.AppPageTitle">
             <summary>
               Looks up a localized string similar to Kartkatalogen.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.CanNotBeAddedToBasket">
+            <summary>
+              Looks up a localized string similar to Kan ikke legges i kurv.
             </summary>
         </member>
         <member name="P:Resources.UI.DataOwner">
@@ -1060,6 +1075,21 @@
         <member name="P:Resources.UI.Description">
             <summary>
               Looks up a localized string similar to Beskrivelse.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Display">
+            <summary>
+              Looks up a localized string similar to Vis .
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DisplayAllDatasetsFrom">
+            <summary>
+              Looks up a localized string similar to Vis alle datasett fra.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DisplayMetadataFor">
+            <summary>
+              Looks up a localized string similar to Se metadata for.
             </summary>
         </member>
         <member name="P:Resources.UI.Download">
@@ -1177,6 +1207,21 @@
               Looks up a localized string similar to av.
             </summary>
         </member>
+        <member name="P:Resources.UI.InMap">
+            <summary>
+              Looks up a localized string similar to i kart.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.IsAddedTo">
+            <summary>
+              Looks up a localized string similar to er lagt til i.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.IsRemovedFrom">
+            <summary>
+              Looks up a localized string similar to er fjernet fra.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Map">
             <summary>
               Looks up a localized string similar to Kart.
@@ -1217,6 +1262,11 @@
               Looks up a localized string similar to Navn.
             </summary>
         </member>
+        <member name="P:Resources.UI.OfflineData">
+            <summary>
+              Looks up a localized string similar to Skjermede data.
+            </summary>
+        </member>
         <member name="P:Resources.UI.OpenData">
             <summary>
               Looks up a localized string similar to Åpne data.
@@ -1230,6 +1280,11 @@
         <member name="P:Resources.UI.Pages">
             <summary>
               Looks up a localized string similar to Sider.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.RestrictedData">
+            <summary>
+              Looks up a localized string similar to Tilgangsbegrensede data.
             </summary>
         </member>
         <member name="P:Resources.UI.Save">
@@ -1252,9 +1307,39 @@
               Looks up a localized string similar to Tjenesten krever spesiell tilgang for å kunne vises - kontakt dataeier.
             </summary>
         </member>
+        <member name="P:Resources.UI.ServiceCannotBeDisplayedMap">
+            <summary>
+              Looks up a localized string similar to Tjenesten kan ikke vises i kart.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.ServiceNotavailable">
+            <summary>
+              Looks up a localized string similar to Tjenesten er utilgjengelig for øyeblikket.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.ServiceSlow">
+            <summary>
+              Looks up a localized string similar to Tjenesten kan være treg å vise.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.ServiceSlowAndSpecialAccess">
+            <summary>
+              Looks up a localized string similar to Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.TheBasket">
+            <summary>
+              Looks up a localized string similar to kurven.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Title">
             <summary>
               Looks up a localized string similar to Tittel.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.ToBasket">
+            <summary>
+              Looks up a localized string similar to i kurv.
             </summary>
         </member>
     </members>

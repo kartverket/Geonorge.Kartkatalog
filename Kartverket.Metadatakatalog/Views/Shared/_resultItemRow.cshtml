@@ -1,4 +1,5 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
+@using Resources
 
 @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
@@ -103,13 +104,13 @@
                 };
                 if (this.resultItem.IsRestricted) {
                     openData.className = "custom-icon custom-icon-hengelaas-closed-yellow";
-                    openData.title = "Tilgangsbegrensede data";
+                    openData.title = "@Html.Raw(UI.RestrictedData)";
                 } else if (this.resultItem.IsOffline) {
                     openData.className = "custom-icon custom-icon-hengelaas-closed-red";
-                    openData.title = "Skjermede data";
+                    openData.title = "@Html.Raw(UI.OfflineData)";
                 } else if (this.resultItem.IsOpendata) {
                     openData.className = "custom-icon custom-icon-hengelaas-open-green";
-                    openData.title = "Åpne data";
+                    openData.title = "@Html.Raw(UI.OpenData)";
                 }
                 return openData;
             },

@@ -70,6 +70,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Legg.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Legg i kurv.
+        /// </summary>
+        public static string AddToBasket {
+            get {
+                return ResourceManager.GetString("AddToBasket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to API-er og tjenester.
         /// </summary>
         public static string ApisAndServices {
@@ -93,6 +111,15 @@ namespace Resources {
         public static string AppPageTitle {
             get {
                 return ResourceManager.GetString("AppPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kan ikke legges i kurv.
+        /// </summary>
+        public static string CanNotBeAddedToBasket {
+            get {
+                return ResourceManager.GetString("CanNotBeAddedToBasket", resourceCulture);
             }
         }
         
@@ -129,6 +156,33 @@ namespace Resources {
         public static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis .
+        /// </summary>
+        public static string Display {
+            get {
+                return ResourceManager.GetString("Display", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis alle datasett fra.
+        /// </summary>
+        public static string DisplayAllDatasetsFrom {
+            get {
+                return ResourceManager.GetString("DisplayAllDatasetsFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Se metadata for.
+        /// </summary>
+        public static string DisplayMetadataFor {
+            get {
+                return ResourceManager.GetString("DisplayMetadataFor", resourceCulture);
             }
         }
         
@@ -340,6 +394,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to i kart.
+        /// </summary>
+        public static string InMap {
+            get {
+                return ResourceManager.GetString("InMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to er lagt til i.
+        /// </summary>
+        public static string IsAddedTo {
+            get {
+                return ResourceManager.GetString("IsAddedTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to er fjernet fra.
+        /// </summary>
+        public static string IsRemovedFrom {
+            get {
+                return ResourceManager.GetString("IsRemovedFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kart.
         /// </summary>
         public static string Map {
@@ -412,6 +493,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Skjermede data.
+        /// </summary>
+        public static string OfflineData {
+            get {
+                return ResourceManager.GetString("OfflineData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Åpne data.
         /// </summary>
         public static string OpenData {
@@ -435,6 +525,15 @@ namespace Resources {
         public static string Pages {
             get {
                 return ResourceManager.GetString("Pages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tilgangsbegrensede data.
+        /// </summary>
+        public static string RestrictedData {
+            get {
+                return ResourceManager.GetString("RestrictedData", resourceCulture);
             }
         }
         
@@ -475,11 +574,65 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tjenesten kan ikke vises i kart.
+        /// </summary>
+        public static string ServiceCannotBeDisplayedMap {
+            get {
+                return ResourceManager.GetString("ServiceCannotBeDisplayedMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tjenesten er utilgjengelig for øyeblikket.
+        /// </summary>
+        public static string ServiceNotavailable {
+            get {
+                return ResourceManager.GetString("ServiceNotavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tjenesten kan være treg å vise.
+        /// </summary>
+        public static string ServiceSlow {
+            get {
+                return ResourceManager.GetString("ServiceSlow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier.
+        /// </summary>
+        public static string ServiceSlowAndSpecialAccess {
+            get {
+                return ResourceManager.GetString("ServiceSlowAndSpecialAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to kurven.
+        /// </summary>
+        public static string TheBasket {
+            get {
+                return ResourceManager.GetString("TheBasket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tittel.
         /// </summary>
         public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to i kurv.
+        /// </summary>
+        public static string ToBasket {
+            get {
+                return ResourceManager.GetString("ToBasket", resourceCulture);
             }
         }
     }

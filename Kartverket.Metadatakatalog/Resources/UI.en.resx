@@ -258,4 +258,55 @@
   <data name="SelectOrganization" xml:space="preserve">
     <value>Select organization</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AddToBasket" xml:space="preserve">
+    <value>Add to basket</value>
+  </data>
+  <data name="CanNotBeAddedToBasket" xml:space="preserve">
+    <value>Can not be added to basket</value>
+  </data>
+  <data name="Display" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="DisplayAllDatasetsFrom" xml:space="preserve">
+    <value>Display all datasets from</value>
+  </data>
+  <data name="DisplayMetadataFor" xml:space="preserve">
+    <value>Display metadata for</value>
+  </data>
+  <data name="InMap" xml:space="preserve">
+    <value>in map</value>
+  </data>
+  <data name="IsAddedTo" xml:space="preserve">
+    <value>is added to</value>
+  </data>
+  <data name="IsRemovedFrom" xml:space="preserve">
+    <value>Is removed from</value>
+  </data>
+  <data name="OfflineData" xml:space="preserve">
+    <value>Restricted data</value>
+  </data>
+  <data name="RestrictedData" xml:space="preserve">
+    <value>Protected data</value>
+  </data>
+  <data name="ServiceCannotBeDisplayedMap" xml:space="preserve">
+    <value>The service can not be displayed on the map</value>
+  </data>
+  <data name="ServiceNotavailable" xml:space="preserve">
+    <value>Service is not available</value>
+  </data>
+  <data name="ServiceSlow" xml:space="preserve">
+    <value>The service may be slow to show</value>
+  </data>
+  <data name="ServiceSlowAndSpecialAccess" xml:space="preserve">
+    <value>The service may be slow to display and requires special access to display - contact data owner</value>
+  </data>
+  <data name="TheBasket" xml:space="preserve">
+    <value>the basket</value>
+  </data>
+  <data name="ToBasket" xml:space="preserve">
+    <value>to basket</value>
+  </data>
 </root>
