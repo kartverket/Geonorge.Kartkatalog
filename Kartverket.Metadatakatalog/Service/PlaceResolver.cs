@@ -61,7 +61,10 @@ namespace Kartverket.Metadatakatalog.Service
         public const string PlaceJanMayen = "Jan Mayen";
 
         private Dictionary<string, string> _areas;
-
+        private static readonly HttpClient _httpClient = new HttpClient
+        {
+            BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]),
+        };
         /// <summary>
         /// Gets fylke og kommuner fra register i et dictionary
         /// </summary>
@@ -78,11 +81,9 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 _areas = new Dictionary<string, string>();
                 //call register fylker og kommuner
-                HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var result = client.GetAsync("api/subregister/sosi-kodelister/kartverket/fylkesnummer").Result;
+                _httpClient.DefaultRequestHeaders.Accept.Clear();
+                _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var result = _httpClient.GetAsync("api/subregister/sosi-kodelister/kartverket/fylkesnummer").Result;
                 if (result.IsSuccessStatusCode)
                 {
                     var register = result.Content.ReadAsAsync<Register>().Result;
@@ -92,7 +93,7 @@ namespace Kartverket.Metadatakatalog.Service
                         _areas.Add("0/" + item.codevalue, item.label);
                     }
                 }
-                var result2 = client.GetAsync("api/subregister/sosi-kodelister/kartverket/kommunenummer").Result;
+                var result2 = _httpClient.GetAsync("api/subregister/sosi-kodelister/kartverket/kommunenummer").Result;
                 if (result2.IsSuccessStatusCode)
                 {
                     var register = result2.Content.ReadAsAsync<Register>().Result;
