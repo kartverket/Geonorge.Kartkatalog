@@ -133,6 +133,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kontakt dataeier.
+        /// </summary>
+        public static string ContactDataOwner {
+            get {
+                return ResourceManager.GetString("ContactDataOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Klikk for å kopiere urlen til utklippstavle.
         /// </summary>
         public static string CopyToClipboard {
@@ -196,11 +205,65 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vis tegneregler.
+        /// </summary>
+        public static string DisplayCartography {
+            get {
+                return ResourceManager.GetString("DisplayCartography", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis dekningskart.
+        /// </summary>
+        public static string DisplayCoverageMap {
+            get {
+                return ResourceManager.GetString("DisplayCoverageMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Se metadata for.
         /// </summary>
         public static string DisplayMetadataFor {
             get {
                 return ResourceManager.GetString("DisplayMetadataFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis produktside.
+        /// </summary>
+        public static string DisplayProductPage {
+            get {
+                return ResourceManager.GetString("DisplayProductPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis produktark.
+        /// </summary>
+        public static string DisplayProductSheet {
+            get {
+                return ResourceManager.GetString("DisplayProductSheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis produktspesifikasjon.
+        /// </summary>
+        public static string DisplayProductSpesification {
+            get {
+                return ResourceManager.GetString("DisplayProductSpesification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distribusjoner.
+        /// </summary>
+        public static string Distributions {
+            get {
+                return ResourceManager.GetString("Distributions", resourceCulture);
             }
         }
         
@@ -385,6 +448,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hjelp.
+        /// </summary>
+        public static string Help {
+            get {
+                return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to treff.
         /// </summary>
         public static string Hits {
@@ -507,6 +579,15 @@ namespace Resources {
         public static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ikke angitt.
+        /// </summary>
+        public static string NotSet {
+            get {
+                return ResourceManager.GetString("NotSet", resourceCulture);
             }
         }
         

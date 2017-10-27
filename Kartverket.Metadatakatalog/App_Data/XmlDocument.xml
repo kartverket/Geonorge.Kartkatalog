@@ -1062,6 +1062,11 @@
               Looks up a localized string similar to Kan ikke legges i kurv.
             </summary>
         </member>
+        <member name="P:Resources.UI.ContactDataOwner">
+            <summary>
+              Looks up a localized string similar to Kontakt dataeier.
+            </summary>
+        </member>
         <member name="P:Resources.UI.CopyToClipboard">
             <summary>
               Looks up a localized string similar to Klikk for å kopiere urlen til utklippstavle.
@@ -1097,9 +1102,39 @@
               Looks up a localized string similar to Vis alle datasett fra.
             </summary>
         </member>
+        <member name="P:Resources.UI.DisplayCartography">
+            <summary>
+              Looks up a localized string similar to Vis tegneregler.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DisplayCoverageMap">
+            <summary>
+              Looks up a localized string similar to Vis dekningskart.
+            </summary>
+        </member>
         <member name="P:Resources.UI.DisplayMetadataFor">
             <summary>
               Looks up a localized string similar to Se metadata for.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DisplayProductPage">
+            <summary>
+              Looks up a localized string similar to Vis produktside.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DisplayProductSheet">
+            <summary>
+              Looks up a localized string similar to Vis produktark.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DisplayProductSpesification">
+            <summary>
+              Looks up a localized string similar to Vis produktspesifikasjon.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Distributions">
+            <summary>
+              Looks up a localized string similar to Distribusjoner.
             </summary>
         </member>
         <member name="P:Resources.UI.Download">
@@ -1202,6 +1237,11 @@
               Looks up a localized string similar to Filtrer søket på.
             </summary>
         </member>
+        <member name="P:Resources.UI.Help">
+            <summary>
+              Looks up a localized string similar to Hjelp.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Hits">
             <summary>
               Looks up a localized string similar to treff.
@@ -1270,6 +1310,11 @@
         <member name="P:Resources.UI.Name">
             <summary>
               Looks up a localized string similar to Navn.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.NotSet">
+            <summary>
+              Looks up a localized string similar to ikke angitt.
             </summary>
         </member>
         <member name="P:Resources.UI.OfflineData">

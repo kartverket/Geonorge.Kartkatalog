@@ -20,6 +20,8 @@ using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.SearchResult;
 using SolrNet;
 using Kartverket.Metadatakatalog.Helpers;
+using Kartverket.Metadatakatalog.Models.Translations;
+using Resources;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -33,6 +35,7 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly IServiceDirectoryService _searchServiceDirectoryService;
         private readonly ThemeResolver _themeResolver;
         RegisterFetcher register;
+        string _culture = Culture.NorwegianCode;
 
         public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService, ThemeResolver themeResolver)
         {
@@ -50,7 +53,7 @@ namespace Kartverket.Metadatakatalog.Service
         public List<Models.Api.Distribution> GetRelatedDistributionsForUuid(string uuid)
         {
             List<Models.Api.Distribution> distlist = new List<Models.Api.Distribution>();
-
+            _culture = CultureHelper.GetCurrentCulture();
             //Henter distribusjoner - mulig å få raskere med å lese søkeindex
             MD_Metadata_Type mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
             if (mdMetadataType == null)
@@ -61,10 +64,12 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 var tmp = new Models.Api.Distribution();
                 tmp.Uuid = uuid;
-                tmp.Title = simpleMetadata.Title;
+                tmp.Title = GetTranslation(simpleMetadata.Title, simpleMetadata.EnglishTitle);
                 tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(simpleMetadata.HierarchyLevel);
                 tmp.DistributionFormats = GetDistributionTypes(simpleMetadata.DistributionsFormats);
-                tmp.Organization = simpleMetadata.ContactMetadata != null ? simpleMetadata.ContactMetadata.Organization : "ikke angitt";
+                tmp.Organization = simpleMetadata.ContactMetadata != null 
+                                   ? GetTranslation(simpleMetadata.ContactMetadata.Organization, simpleMetadata.ContactMetadata.OrganizationEnglish) 
+                                   : UI.NotSet;
                 tmp.ShowDetailsUrl = "/metadata/org/title/" + uuid;
                 if (simpleMetadata.Constraints != null)
                     tmp.ServiceDistributionAccessConstraint = simpleMetadata.Constraints.AccessConstraints;
@@ -436,12 +441,12 @@ namespace Kartverket.Metadatakatalog.Service
 
         private MetadataViewModel CreateMetadataViewModel(SimpleMetadata simpleMetadata)
         {
-
+            _culture = CultureHelper.GetCurrentCulture();
             register = new RegisterFetcher();
 
             var metadata = new MetadataViewModel
             {
-                Abstract = simpleMetadata.Abstract,
+                Abstract = GetTranslation(simpleMetadata.Abstract, simpleMetadata.EnglishAbstract),
                 BoundingBox = Convert(simpleMetadata.BoundingBox),
                 Constraints = Convert(simpleMetadata.Constraints),
                 ContactMetadata = Convert(simpleMetadata.ContactMetadata),
@@ -489,7 +494,7 @@ namespace Kartverket.Metadatakatalog.Service
                 SupplementalDescription = simpleMetadata.SupplementalDescription,
                 HelpUrl = simpleMetadata.HelpUrl,
                 Thumbnails = Convert(simpleMetadata.Thumbnails, simpleMetadata.Uuid),
-                Title = simpleMetadata.Title,
+                Title = GetTranslation(simpleMetadata.Title, simpleMetadata.EnglishTitle),
                 TopicCategory = register.GetTopicCategory(simpleMetadata.TopicCategory),
                 Uuid = simpleMetadata.Uuid,
                 ServiceUuid = simpleMetadata.Uuid,
@@ -889,6 +894,14 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.CoverageUrl = metadata.GetCoverageLink();
 
             return metadata;
+        }
+
+        private string GetTranslation(string norwegian, string english)
+        {
+            if (_culture == Culture.EnglishCode && !string.IsNullOrEmpty(english))
+                return english;
+            else
+                return norwegian;
         }
 
         private List<Keyword> Convert(IEnumerable<SimpleKeyword> simpleKeywords)

@@ -1,4 +1,5 @@
-﻿<script type="text/x-template" id="showLegendDescriptionButtonTemplate">
+﻿@using Resources
+<script type="text/x-template" id="showLegendDescriptionButtonTemplate">
     <div v-html="htmlElement"></div>
 </script>
 
@@ -11,10 +12,10 @@
             computed: {
                 button: function () {
                     var button = {
-                        content: "Vis tegneregler",
+                        content: "@Html.Raw(UI.DisplayCartography)",
                         className: this.defaultButtonClass,
                         url: this.resultItem.LegendDescriptionUrl !== undefined ? this.resultItem.LegendDescriptionUrl : null,
-                        title: "Vis tegneregler for " + this.resultItem.Title,
+                        title: "@Html.Raw(UI.DisplayCartography) for " + this.resultItem.Title,
                         icon: {
                             className: "glyphicon glyphicon-picture"
                         },

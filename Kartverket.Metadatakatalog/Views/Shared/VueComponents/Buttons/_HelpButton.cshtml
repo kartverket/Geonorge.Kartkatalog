@@ -1,4 +1,5 @@
-﻿<script type="text/x-template" id="helpButtonTemplate">
+﻿@using Resources
+<script type="text/x-template" id="helpButtonTemplate">
     <div v-html="htmlElement"></div>
 </script>
 
@@ -11,7 +12,7 @@
             computed: {
                 button: function () {
                     var button = {
-                        content: "Hjelp",
+                        content: "@Html.Raw(UI.Help)",
                         className: this.defaultButtonClass,
                         url: "#help",
                         title: "",

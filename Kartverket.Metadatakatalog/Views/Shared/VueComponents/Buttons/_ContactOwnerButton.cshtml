@@ -1,4 +1,5 @@
-﻿<script type="text/x-template" id="contactOwnerButtonTemplate">
+﻿@using Resources
+<script type="text/x-template" id="contactOwnerButtonTemplate">
     <div v-html="htmlElement"></div>
 </script>
 
@@ -11,10 +12,10 @@
             computed: {
                 button: function () {
                     var button = {
-                        content: "Kontakt dataeier",
+                        content: "@Html.Raw(UI.ContactDataOwner)",
                         className: this.defaultButtonClass,
                         url: this.resultItem.ContactOwner.Email !== undefined ? "mailto:" + this.resultItem.ContactOwner.Email : null,
-                        title: "Kontakt dataeier for " + this.resultItem.Title,
+                        title: "@Html.Raw(UI.ContactDataOwner) for " + this.resultItem.Title,
                         icon: {
                             className: "fa fa-envelope"
                         },

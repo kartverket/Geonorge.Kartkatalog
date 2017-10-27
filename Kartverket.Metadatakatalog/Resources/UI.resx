@@ -327,4 +327,31 @@
   <data name="WebPageHeader" xml:space="preserve">
     <value>nett side</value>
   </data>
+  <data name="ContactDataOwner" xml:space="preserve">
+    <value>Kontakt dataeier</value>
+  </data>
+  <data name="DisplayCartography" xml:space="preserve">
+    <value>Vis tegneregler</value>
+  </data>
+  <data name="DisplayCoverageMap" xml:space="preserve">
+    <value>Vis dekningskart</value>
+  </data>
+  <data name="DisplayProductPage" xml:space="preserve">
+    <value>Vis produktside</value>
+  </data>
+  <data name="DisplayProductSheet" xml:space="preserve">
+    <value>Vis produktark</value>
+  </data>
+  <data name="DisplayProductSpesification" xml:space="preserve">
+    <value>Vis produktspesifikasjon</value>
+  </data>
+  <data name="Distributions" xml:space="preserve">
+    <value>Distribusjoner</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Hjelp</value>
+  </data>
+  <data name="NotSet" xml:space="preserve">
+    <value>ikke angitt</value>
+  </data>
 </root>

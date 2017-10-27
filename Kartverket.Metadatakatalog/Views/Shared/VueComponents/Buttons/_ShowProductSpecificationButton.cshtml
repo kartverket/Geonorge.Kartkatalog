@@ -1,4 +1,5 @@
-﻿<script type="text/x-template" id="showProductSpecificationButtonTemplate">
+﻿@using Resources
+<script type="text/x-template" id="showProductSpecificationButtonTemplate">
     <div v-html="htmlElement"></div>
 </script>
 
@@ -11,10 +12,10 @@
             computed: {
                 button: function () {
                     var button = {
-                        content: "Vis produktspesifikasjon",
+                        content: "@Html.Raw(UI.DisplayProductSpesification)",
                         className: this.defaultButtonClass,
                         url: this.resultItem.ProductSpecificationUrl !== undefined ? this.resultItem.ProductSpecificationUrl : null,
-                        title: "Vis produktark for " + this.resultItem.Title,
+                        title: "@Html.Raw(UI.DisplayProductSpesification) for " + this.resultItem.Title,
                         icon: {
                             className: "glyphicon glyphicon-list-alt"
                         },

@@ -3,6 +3,7 @@ using Kartverket.Metadatakatalog.Models.Translations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 
 namespace Kartverket.Metadatakatalog.Service
@@ -10,6 +11,7 @@ namespace Kartverket.Metadatakatalog.Service
     public class RegisterFetcher
     {
         MemoryCacher memCacher = new MemoryCacher();
+        private static readonly WebClient _webClient = new WebClient();
 
         Dictionary<string, string> TopicCategories = new Dictionary<string, string>();
         Dictionary<string, string> TopicCategoriesEnglish = new Dictionary<string, string>();
@@ -67,9 +69,8 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (Organizations.Count < 1)
             {
-                System.Net.WebClient c = new System.Net.WebClient();
-                c.Encoding = System.Text.Encoding.UTF8;
-                var data = c.DownloadString(System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner");
+                _webClient.Encoding = System.Text.Encoding.UTF8;
+                var data = _webClient.DownloadString(System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner");
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
 
                 var orgs = response["containeditems"];
@@ -226,10 +227,9 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
-                System.Net.WebClient c = new System.Net.WebClient();
-                c.Headers.Add("Accept-Language", culture);
-                c.Encoding = System.Text.Encoding.UTF8;
-                var data = c.DownloadString(url);
+                _webClient.Headers.Add("Accept-Language", culture);
+                _webClient.Encoding = System.Text.Encoding.UTF8;
+                var data = _webClient.DownloadString(url);
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
                 var codeList = response["containeditems"];
 
@@ -270,9 +270,8 @@ namespace Kartverket.Metadatakatalog.Service
             {
 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
-                System.Net.WebClient c = new System.Net.WebClient();
-                c.Encoding = System.Text.Encoding.UTF8;
-                var data = c.DownloadString(url);
+                _webClient.Encoding = System.Text.Encoding.UTF8;
+                var data = _webClient.DownloadString(url);
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
 
                 var codeList = response["containeditems"];

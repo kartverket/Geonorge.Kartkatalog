@@ -1,4 +1,6 @@
 ﻿using GeoNorgeAPI;
+using Kartverket.Metadatakatalog.Helpers;
+using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Service;
 using System;
 using System.Collections.Generic;
@@ -475,12 +477,25 @@ namespace Kartverket.Metadatakatalog.Models
 
         public string GetHierarchyLevelTranslated()
         {
-            if (IsDataset()) return "Datasett";
-            if (IsServiceLayer()) return "Tjenestelag";
-            if (IsService()) return "Tjeneste";
-            if (IsApplication()) return "Applikasjon";
-            if (IsDatasetSeries()) return "Datasettserie";
-            if (IsDatasetBundle()) return "Datapakke";
+            var culture = CultureHelper.GetCurrentCulture();
+            if (culture == Culture.NorwegianCode)
+            {
+                if (IsDataset()) return "Datasett";
+                if (IsServiceLayer()) return "Tjenestelag";
+                if (IsService()) return "Tjeneste";
+                if (IsApplication()) return "Applikasjon";
+                if (IsDatasetSeries()) return "Datasettserie";
+                if (IsDatasetBundle()) return "Datapakke";
+            }
+            else
+            {
+                if (IsDataset()) return "Dataset";
+                if (IsServiceLayer()) return "Service layer";
+                if (IsService()) return "Service";
+                if (IsApplication()) return "Application";
+                if (IsDatasetSeries()) return "Dataset series";
+                if (IsDatasetBundle()) return "Data package";
+            }
 
             return HierarchyLevel;
         }

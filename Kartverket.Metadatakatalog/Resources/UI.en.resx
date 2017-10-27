@@ -327,4 +327,31 @@
   <data name="WebPageHeader" xml:space="preserve">
     <value>web page</value>
   </data>
+  <data name="ContactDataOwner" xml:space="preserve">
+    <value>Contact dataowner</value>
+  </data>
+  <data name="DisplayCartography" xml:space="preserve">
+    <value>Display cartography</value>
+  </data>
+  <data name="DisplayCoverageMap" xml:space="preserve">
+    <value>Display coverage map</value>
+  </data>
+  <data name="DisplayProductPage" xml:space="preserve">
+    <value>Display productpage</value>
+  </data>
+  <data name="DisplayProductSheet" xml:space="preserve">
+    <value>Display product sheet</value>
+  </data>
+  <data name="DisplayProductSpesification" xml:space="preserve">
+    <value>Display product spesification</value>
+  </data>
+  <data name="Distributions" xml:space="preserve">
+    <value>Distributions</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="NotSet" xml:space="preserve">
+    <value>not set</value>
+  </data>
 </root>
