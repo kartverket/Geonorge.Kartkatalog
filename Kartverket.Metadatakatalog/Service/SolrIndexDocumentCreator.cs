@@ -346,9 +346,30 @@ namespace Kartverket.Metadatakatalog.Service
                 }
                 indexDoc.Keywords = keyWords;
 
-                indexDoc.NationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)).Select(k => k.KeywordValue).ToList();
-                indexDoc.Place = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)).Select(k => k.KeywordValue).ToList();
-                indexDoc.Placegroups = _placeResolver.Resolve(simpleMetadata);
+                var nationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)).ToList();
+                keyWords = new List<string>();
+                foreach (var keyword in nationalInitiative)
+                {
+                    if (culture == Culture.EnglishCode && !string.IsNullOrEmpty(keyword.EnglishKeyword))
+                        keyWords.Add(keyword.EnglishKeyword);
+                    else
+                        keyWords.Add(keyword.KeywordValue);
+                }
+
+                indexDoc.NationalInitiative = keyWords;
+
+                var place = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)).ToList();
+                keyWords = new List<string>();
+                foreach (var keyword in place)
+                {
+                    if (culture == Culture.EnglishCode && !string.IsNullOrEmpty(keyword.EnglishKeyword))
+                        keyWords.Add(keyword.EnglishKeyword);
+                    else
+                        keyWords.Add(keyword.KeywordValue);
+                }
+
+                indexDoc.Place = keyWords;
+                indexDoc.Placegroups = _placeResolver.Resolve(simpleMetadata, culture);
                 indexDoc.AccessConstraint = 
                         simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.AccessConstraints) 
                         ? simpleMetadata.Constraints.AccessConstraints : "";
