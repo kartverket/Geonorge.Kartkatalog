@@ -1052,9 +1052,19 @@
               Looks up a localized string similar to Kartkatalogen.
             </summary>
         </member>
+        <member name="P:Resources.UI.AvailableAs">
+            <summary>
+              Looks up a localized string similar to Tilgjengelig som.
+            </summary>
+        </member>
         <member name="P:Resources.UI.CanNotBeAddedToBasket">
             <summary>
               Looks up a localized string similar to Kan ikke legges i kurv.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.CopyToClipboard">
+            <summary>
+              Looks up a localized string similar to Klikk for å kopiere urlen til utklippstavle.
             </summary>
         </member>
         <member name="P:Resources.UI.DataOwner">
@@ -1340,6 +1350,26 @@
         <member name="P:Resources.UI.ToBasket">
             <summary>
               Looks up a localized string similar to i kurv.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.UrlToService">
+            <summary>
+              Looks up a localized string similar to Url til tjeneste.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.VisitWebsite">
+            <summary>
+              Looks up a localized string similar to Besøk nettside for.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.WebPage">
+            <summary>
+              Looks up a localized string similar to Nettside.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.WebPageHeader">
+            <summary>
+              Looks up a localized string similar to nett side.
             </summary>
         </member>
     </members>

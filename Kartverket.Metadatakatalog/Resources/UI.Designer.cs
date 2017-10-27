@@ -115,11 +115,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tilgjengelig som.
+        /// </summary>
+        public static string AvailableAs {
+            get {
+                return ResourceManager.GetString("AvailableAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kan ikke legges i kurv.
         /// </summary>
         public static string CanNotBeAddedToBasket {
             get {
                 return ResourceManager.GetString("CanNotBeAddedToBasket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Klikk for å kopiere urlen til utklippstavle.
+        /// </summary>
+        public static string CopyToClipboard {
+            get {
+                return ResourceManager.GetString("CopyToClipboard", resourceCulture);
             }
         }
         
@@ -633,6 +651,42 @@ namespace Resources {
         public static string ToBasket {
             get {
                 return ResourceManager.GetString("ToBasket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url til tjeneste.
+        /// </summary>
+        public static string UrlToService {
+            get {
+                return ResourceManager.GetString("UrlToService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Besøk nettside for.
+        /// </summary>
+        public static string VisitWebsite {
+            get {
+                return ResourceManager.GetString("VisitWebsite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nettside.
+        /// </summary>
+        public static string WebPage {
+            get {
+                return ResourceManager.GetString("WebPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to nett side.
+        /// </summary>
+        public static string WebPageHeader {
+            get {
+                return ResourceManager.GetString("WebPageHeader", resourceCulture);
             }
         }
     }

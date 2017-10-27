@@ -13,7 +13,7 @@
                 button: function () {
                     var button = {
                         id: "mapmacrolink-" + this.resultItem.Uuid,
-                        content: "Vis i kart",
+                        content: "@Html.Raw(UI.Display) @Html.Raw(UI.InMap)",
                         className: this.defaultButtonClass,
                         url: this.resultItem.MapUrl,
                         title: "@Html.Raw(UI.Display) " + this.resultItem.Title + " @Html.Raw(UI.InMap)",

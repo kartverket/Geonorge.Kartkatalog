@@ -309,4 +309,22 @@
   <data name="ToBasket" xml:space="preserve">
     <value>to basket</value>
   </data>
+  <data name="AvailableAs" xml:space="preserve">
+    <value>Available as</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Click to copy the url to clipboard</value>
+  </data>
+  <data name="UrlToService" xml:space="preserve">
+    <value>Url to service</value>
+  </data>
+  <data name="VisitWebsite" xml:space="preserve">
+    <value>Visit website for</value>
+  </data>
+  <data name="WebPage" xml:space="preserve">
+    <value>Webpage</value>
+  </data>
+  <data name="WebPageHeader" xml:space="preserve">
+    <value>web page</value>
+  </data>
 </root>

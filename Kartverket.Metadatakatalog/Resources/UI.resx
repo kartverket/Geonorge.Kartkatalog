@@ -309,4 +309,22 @@
   <data name="ToBasket" xml:space="preserve">
     <value>i kurv</value>
   </data>
+  <data name="AvailableAs" xml:space="preserve">
+    <value>Tilgjengelig som</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Klikk for å kopiere urlen til utklippstavle</value>
+  </data>
+  <data name="UrlToService" xml:space="preserve">
+    <value>Url til tjeneste</value>
+  </data>
+  <data name="VisitWebsite" xml:space="preserve">
+    <value>Besøk nettside for</value>
+  </data>
+  <data name="WebPage" xml:space="preserve">
+    <value>Nettside</value>
+  </data>
+  <data name="WebPageHeader" xml:space="preserve">
+    <value>nett side</value>
+  </data>
 </root>

@@ -1,4 +1,5 @@
-﻿<script type="text/x-template" id="showWebsiteButtonTemplate">
+﻿@using Resources
+<script type="text/x-template" id="showWebsiteButtonTemplate">
     <div v-html="htmlElement"></div>
 </script>
 
@@ -11,10 +12,10 @@
             computed: {
                 button: function () {
                     var button = {
-                        content: "Nettside",
+                        content: "@Html.Raw(UI.WebPage)",
                         className: this.defaultButtonClass,
                         url: this.resultItem.DistributionUrl,
-                        title: "Besøk nettside for " + this.resultItem.Title,
+                        title: "@Html.Raw(UI.VisitWebsite) " + this.resultItem.Title,
                         icon: {
                             className: "custom-icon custom-icon-eksternlink"
                         },
