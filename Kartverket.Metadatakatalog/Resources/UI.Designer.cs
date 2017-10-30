@@ -133,6 +133,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Område må velges først.
+        /// </summary>
+        public static string AreaMustBeSelectedFirst {
+            get {
+                return ResourceManager.GetString("AreaMustBeSelectedFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tilgjengelig som.
         /// </summary>
         public static string AvailableAs {
@@ -412,6 +421,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Felles valg for nedlastning, vil gjelde for alle datasett.
+        /// </summary>
+        public static string DownloadOrderLineHeader {
+            get {
+                return ResourceManager.GetString("DownloadOrderLineHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Øst.
         /// </summary>
         public static string East {
@@ -588,6 +606,45 @@ namespace Resources {
         public static string Facet_type_software {
             get {
                 return ResourceManager.GetString("Facet_type_software", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filnedlastning.
+        /// </summary>
+        public static string FileDownload {
+            get {
+                return ResourceManager.GetString("FileDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filnedlastning - nedlastning.
+        /// </summary>
+        public static string FileDownloadDownload {
+            get {
+                return ResourceManager.GetString("FileDownloadDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;
+        ///            &lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;
+        ///            &lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;
+        ///            &lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene i handlekurven.&lt;/p&gt;.
+        /// </summary>
+        public static string FileDownloadIntro {
+            get {
+                return ResourceManager.GetString("FileDownloadIntro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filnedlastning - bestilling.
+        /// </summary>
+        public static string FileDownloadOrder {
+            get {
+                return ResourceManager.GetString("FileDownloadOrder", resourceCulture);
             }
         }
         
@@ -817,6 +874,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bestill mer.
+        /// </summary>
+        public static string OrderMore {
+            get {
+                return ResourceManager.GetString("OrderMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Annet.
         /// </summary>
         public static string Other {
@@ -849,6 +915,15 @@ namespace Resources {
         public static string ProcessHistory {
             get {
                 return ResourceManager.GetString("ProcessHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Projeksjon.
+        /// </summary>
+        public static string Projection {
+            get {
+                return ResourceManager.GetString("Projection", resourceCulture);
             }
         }
         
@@ -903,6 +978,15 @@ namespace Resources {
         public static string ReferenceSystems {
             get {
                 return ResourceManager.GetString("ReferenceSystems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fjern alle.
+        /// </summary>
+        public static string RemoveAll {
+            get {
+                return ResourceManager.GetString("RemoveAll", resourceCulture);
             }
         }
         

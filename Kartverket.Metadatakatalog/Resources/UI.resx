@@ -420,6 +420,9 @@
   <data name="Approved" xml:space="preserve">
     <value>Godkjent</value>
   </data>
+  <data name="AreaMustBeSelectedFirst" xml:space="preserve">
+    <value>Område må velges først</value>
+  </data>
   <data name="BoundingBox" xml:space="preserve">
     <value>Geografisk utstrekning</value>
   </data>
@@ -432,8 +435,26 @@
   <data name="Date" xml:space="preserve">
     <value>Dato</value>
   </data>
+  <data name="DownloadOrderLineHeader" xml:space="preserve">
+    <value>Felles valg for nedlastning, vil gjelde for alle datasett</value>
+  </data>
   <data name="East" xml:space="preserve">
     <value>Øst</value>
+  </data>
+  <data name="FileDownload" xml:space="preserve">
+    <value>Filnedlastning</value>
+  </data>
+  <data name="FileDownloadDownload" xml:space="preserve">
+    <value>Filnedlastning - nedlastning</value>
+  </data>
+  <data name="FileDownloadIntro" xml:space="preserve">
+    <value>&lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;
+            &lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;
+            &lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;
+            &lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene i handlekurven.&lt;/p&gt;</value>
+  </data>
+  <data name="FileDownloadOrder" xml:space="preserve">
+    <value>Filnedlastning - bestilling</value>
   </data>
   <data name="KeywordsPlace" xml:space="preserve">
     <value>Geografisk område</value>
@@ -447,11 +468,17 @@
   <data name="NotApproved" xml:space="preserve">
     <value>Ikke godkjent</value>
   </data>
+  <data name="OrderMore" xml:space="preserve">
+    <value>Bestill mer</value>
+  </data>
   <data name="Other" xml:space="preserve">
     <value>Annet</value>
   </data>
   <data name="ProcessHistory" xml:space="preserve">
     <value>Prosesshistorie</value>
+  </data>
+  <data name="Projection" xml:space="preserve">
+    <value>Projeksjon</value>
   </data>
   <data name="Published" xml:space="preserve">
     <value>Publisert</value>
@@ -464,6 +491,9 @@
   </data>
   <data name="QualitySpecificationExplanation" xml:space="preserve">
     <value>Forklaring av resultat</value>
+  </data>
+  <data name="RemoveAll" xml:space="preserve">
+    <value>Fjern alle</value>
   </data>
   <data name="ResolutionScale" xml:space="preserve">
     <value>Målestokkstall</value>

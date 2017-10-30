@@ -420,6 +420,9 @@
   <data name="Approved" xml:space="preserve">
     <value>Approved</value>
   </data>
+  <data name="AreaMustBeSelectedFirst" xml:space="preserve">
+    <value>Area must be selected first</value>
+  </data>
   <data name="BoundingBox" xml:space="preserve">
     <value>Bounding box</value>
   </data>
@@ -432,8 +435,26 @@
   <data name="Date" xml:space="preserve">
     <value>Date</value>
   </data>
+  <data name="DownloadOrderLineHeader" xml:space="preserve">
+    <value>Common download options will apply to all data sets</value>
+  </data>
   <data name="East" xml:space="preserve">
     <value>East</value>
+  </data>
+  <data name="FileDownload" xml:space="preserve">
+    <value>File download</value>
+  </data>
+  <data name="FileDownloadDownload" xml:space="preserve">
+    <value>File download - download</value>
+  </data>
+  <data name="FileDownloadIntro" xml:space="preserve">
+    <value>&lt;p&gt; Downloading files requires that you choose the area, format, and coordinate system for each data set. &lt;/ p&gt;
+             &lt;p&gt;Should multiple files be downloaded, common options can be made at the top. Individual choices can be made for each dataset. &lt;/p&gt;
+             &lt;p&gt; Symbols indicate whether data from your selection is available. &lt;/p&gt;
+             &lt;p&gt; If an area is not displayed in a public choice, it must be individually selected for the data sets in the cart. &lt;/p&gt;</value>
+  </data>
+  <data name="FileDownloadOrder" xml:space="preserve">
+    <value>File download - order</value>
   </data>
   <data name="KeywordsPlace" xml:space="preserve">
     <value>Geografisk område</value>
@@ -447,11 +468,17 @@
   <data name="NotApproved" xml:space="preserve">
     <value>Not approved</value>
   </data>
+  <data name="OrderMore" xml:space="preserve">
+    <value>Order more</value>
+  </data>
   <data name="Other" xml:space="preserve">
     <value>Other</value>
   </data>
   <data name="ProcessHistory" xml:space="preserve">
     <value>Process history</value>
+  </data>
+  <data name="Projection" xml:space="preserve">
+    <value>Projection</value>
   </data>
   <data name="Published" xml:space="preserve">
     <value>Published</value>
@@ -464,6 +491,9 @@
   </data>
   <data name="QualitySpecificationExplanation" xml:space="preserve">
     <value>Explanation of results</value>
+  </data>
+  <data name="RemoveAll" xml:space="preserve">
+    <value>Remove all</value>
   </data>
   <data name="ResolutionScale" xml:space="preserve">
     <value>Resolution scale</value>

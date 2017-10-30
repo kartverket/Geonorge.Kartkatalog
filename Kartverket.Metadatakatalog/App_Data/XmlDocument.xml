@@ -1062,6 +1062,11 @@
               Looks up a localized string similar to Godkjent.
             </summary>
         </member>
+        <member name="P:Resources.UI.AreaMustBeSelectedFirst">
+            <summary>
+              Looks up a localized string similar to Område må velges først.
+            </summary>
+        </member>
         <member name="P:Resources.UI.AvailableAs">
             <summary>
               Looks up a localized string similar to Tilgjengelig som.
@@ -1217,6 +1222,11 @@
               Looks up a localized string similar to Last ned.
             </summary>
         </member>
+        <member name="P:Resources.UI.DownloadOrderLineHeader">
+            <summary>
+              Looks up a localized string similar to Felles valg for nedlastning, vil gjelde for alle datasett.
+            </summary>
+        </member>
         <member name="P:Resources.UI.East">
             <summary>
               Looks up a localized string similar to Øst.
@@ -1315,6 +1325,29 @@
         <member name="P:Resources.UI.Facet_type_software">
             <summary>
               Looks up a localized string similar to Applikasjon.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.FileDownload">
+            <summary>
+              Looks up a localized string similar to Filnedlastning.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.FileDownloadDownload">
+            <summary>
+              Looks up a localized string similar to Filnedlastning - nedlastning.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.FileDownloadIntro">
+            <summary>
+              Looks up a localized string similar to &lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;
+                       &lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;
+                       &lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;
+                       &lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene i handlekurven.&lt;/p&gt;.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.FileDownloadOrder">
+            <summary>
+              Looks up a localized string similar to Filnedlastning - bestilling.
             </summary>
         </member>
         <member name="P:Resources.UI.FilterSearch">
@@ -1442,6 +1475,11 @@
               Looks up a localized string similar to De fleste kartdata i Norge er åpne data. Disse kan du laste ned gratis fra Geonorge, hvilket gir store muligheter for innovasjon og bruk. Datasettets lisens beskriver hva du har lov til å gjøre med dataene..
             </summary>
         </member>
+        <member name="P:Resources.UI.OrderMore">
+            <summary>
+              Looks up a localized string similar to Bestill mer.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Other">
             <summary>
               Looks up a localized string similar to Annet.
@@ -1460,6 +1498,11 @@
         <member name="P:Resources.UI.ProcessHistory">
             <summary>
               Looks up a localized string similar to Prosesshistorie.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Projection">
+            <summary>
+              Looks up a localized string similar to Projeksjon.
             </summary>
         </member>
         <member name="P:Resources.UI.Published">
@@ -1490,6 +1533,11 @@
         <member name="P:Resources.UI.ReferenceSystems">
             <summary>
               Looks up a localized string similar to Romlig referansesystem.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.RemoveAll">
+            <summary>
+              Looks up a localized string similar to Fjern alle.
             </summary>
         </member>
         <member name="P:Resources.UI.ResolutionScale">
