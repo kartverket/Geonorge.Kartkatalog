@@ -124,6 +124,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Godkjent.
+        /// </summary>
+        public static string Approved {
+            get {
+                return ResourceManager.GetString("Approved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tilgjengelig som.
         /// </summary>
         public static string AvailableAs {
@@ -133,11 +142,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Geografisk utstrekning.
+        /// </summary>
+        public static string BoundingBox {
+            get {
+                return ResourceManager.GetString("BoundingBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kan ikke legges i kurv.
         /// </summary>
         public static string CanNotBeAddedToBasket {
             get {
                 return ResourceManager.GetString("CanNotBeAddedToBasket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Begreper.
+        /// </summary>
+        public static string Concepts {
+            get {
+                return ResourceManager.GetString("Concepts", resourceCulture);
             }
         }
         
@@ -205,11 +232,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opprettet.
+        /// </summary>
+        public static string Created {
+            get {
+                return ResourceManager.GetString("Created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dataeier.
         /// </summary>
         public static string DataOwner {
             get {
                 return ResourceManager.GetString("DataOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dato.
+        /// </summary>
+        public static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
             }
         }
         
@@ -363,6 +408,15 @@ namespace Resources {
         public static string Download {
             get {
                 return ResourceManager.GetString("Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Øst.
+        /// </summary>
+        public static string East {
+            get {
+                return ResourceManager.GetString("East", resourceCulture);
             }
         }
         
@@ -610,11 +664,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Geografisk område.
+        /// </summary>
+        public static string KeywordsPlace {
+            get {
+                return ResourceManager.GetString("KeywordsPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lisens.
         /// </summary>
         public static string Licence {
             get {
                 return ResourceManager.GetString("Licence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oppdateringshyppighet.
+        /// </summary>
+        public static string MaintenanceFrequency {
+            get {
+                return ResourceManager.GetString("MaintenanceFrequency", resourceCulture);
             }
         }
         
@@ -691,6 +763,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nord.
+        /// </summary>
+        public static string North {
+            get {
+                return ResourceManager.GetString("North", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ikke godkjent.
+        /// </summary>
+        public static string NotApproved {
+            get {
+                return ResourceManager.GetString("NotApproved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ikke angitt.
         /// </summary>
         public static string NotSet {
@@ -727,6 +817,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Annet.
+        /// </summary>
+        public static string Other {
+            get {
+                return ResourceManager.GetString("Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Andre restriksjoner.
         /// </summary>
         public static string OtherConstraints {
@@ -745,11 +844,83 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Prosesshistorie.
+        /// </summary>
+        public static string ProcessHistory {
+            get {
+                return ResourceManager.GetString("ProcessHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Publisert.
+        /// </summary>
+        public static string Published {
+            get {
+                return ResourceManager.GetString("Published", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Formål.
+        /// </summary>
+        public static string Purpose {
+            get {
+                return ResourceManager.GetString("Purpose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kvalitet.
+        /// </summary>
+        public static string Quality {
+            get {
+                return ResourceManager.GetString("Quality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Konformitet.
+        /// </summary>
+        public static string QualitySpecification {
+            get {
+                return ResourceManager.GetString("QualitySpecification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forklaring av resultat.
+        /// </summary>
+        public static string QualitySpecificationExplanation {
+            get {
+                return ResourceManager.GetString("QualitySpecificationExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Romlig referansesystem.
         /// </summary>
         public static string ReferenceSystems {
             get {
                 return ResourceManager.GetString("ReferenceSystems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Målestokkstall.
+        /// </summary>
+        public static string ResolutionScale {
+            get {
+                return ResourceManager.GetString("ResolutionScale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ressurs.
+        /// </summary>
+        public static string Resource {
+            get {
+                return ResourceManager.GetString("Resource", resourceCulture);
             }
         }
         
@@ -853,6 +1024,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sør.
+        /// </summary>
+        public static string South {
+            get {
+                return ResourceManager.GetString("South", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Representasjonsform.
         /// </summary>
         public static string SpatialRepresentation {
@@ -867,6 +1047,15 @@ namespace Resources {
         public static string TheBasket {
             get {
                 return ResourceManager.GetString("TheBasket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tid og rom.
+        /// </summary>
+        public static string TimeAndSpace {
+            get {
+                return ResourceManager.GetString("TimeAndSpace", resourceCulture);
             }
         }
         
@@ -889,11 +1078,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tematisk hovedkategori.
+        /// </summary>
+        public static string TopicCategory {
+            get {
+                return ResourceManager.GetString("TopicCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Geografisk distribusjonsinndeling.
         /// </summary>
         public static string UnitsOfDistribution {
             get {
                 return ResourceManager.GetString("UnitsOfDistribution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oppdatert.
+        /// </summary>
+        public static string Updated {
+            get {
+                return ResourceManager.GetString("Updated", resourceCulture);
             }
         }
         
@@ -925,6 +1132,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gyldighetsperiode.
+        /// </summary>
+        public static string ValidityPeriod {
+            get {
+                return ResourceManager.GetString("ValidityPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Besøk nettside for.
         /// </summary>
         public static string VisitWebsite {
@@ -948,6 +1164,15 @@ namespace Resources {
         public static string WebPageHeader {
             get {
                 return ResourceManager.GetString("WebPageHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vest.
+        /// </summary>
+        public static string West {
+            get {
+                return ResourceManager.GetString("West", resourceCulture);
             }
         }
     }

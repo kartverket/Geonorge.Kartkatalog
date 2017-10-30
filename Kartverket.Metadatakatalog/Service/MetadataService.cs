@@ -484,7 +484,7 @@ namespace Kartverket.Metadatakatalog.Service
                 ProductSheetUrl = simpleMetadata.ProductSheetUrl,
                 ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl,
                 CoverageUrl = simpleMetadata.CoverageUrl,
-                Purpose = simpleMetadata.Purpose,
+                Purpose = GetTranslation(simpleMetadata.Purpose, simpleMetadata.EnglishPurpose),
                 QualitySpecifications = Convert(simpleMetadata.QualitySpecifications),
                 ReferenceSystem = Convert(simpleMetadata.ReferenceSystem),
                 ResolutionScale = simpleMetadata.ResolutionScale,
@@ -973,7 +973,7 @@ namespace Kartverket.Metadatakatalog.Service
                         Date = (spec.Date != null && !IsNullOrWhiteSpace(spec.Date)) ? DateTime.Parse(spec.Date) : (DateTime?)null,
                         //Date = simpleQualitySpecification.Date,
                         DateType = spec.DateType,
-                        Explanation = spec.Explanation,
+                        Explanation = GetTranslation(spec.Explanation, spec.EnglishExplanation),
                         Result = spec.Result
                     }
                     );
@@ -1043,7 +1043,7 @@ namespace Kartverket.Metadatakatalog.Service
                     SecurityConstraints = register.GetClassification(simpleConstraints.SecurityConstraints),
                     SecurityConstraintsNote = simpleConstraints.SecurityConstraintsNote,
                     UseConstraints = register.GetRestriction(simpleConstraints.UseConstraints),
-                    UseLimitations = simpleConstraints.UseLimitations,
+                    UseLimitations = GetTranslation(simpleConstraints.UseLimitations, simpleConstraints.EnglishUseLimitations),
                     OtherConstraintsAccess = simpleConstraints.OtherConstraintsAccess
                 };
             }

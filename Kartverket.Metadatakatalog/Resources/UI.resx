@@ -393,6 +393,9 @@
   <data name="OtherConstraints" xml:space="preserve">
     <value>Andre restriksjoner</value>
   </data>
+  <data name="Quality" xml:space="preserve">
+    <value>Kvalitet</value>
+  </data>
   <data name="ReferenceSystems" xml:space="preserve">
     <value>Romlig referansesystem</value>
   </data>
@@ -413,5 +416,77 @@
   </data>
   <data name="UseLimitations" xml:space="preserve">
     <value>Bruksbegrensninger</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Godkjent</value>
+  </data>
+  <data name="BoundingBox" xml:space="preserve">
+    <value>Geografisk utstrekning</value>
+  </data>
+  <data name="Concepts" xml:space="preserve">
+    <value>Begreper</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Opprettet</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Dato</value>
+  </data>
+  <data name="East" xml:space="preserve">
+    <value>Øst</value>
+  </data>
+  <data name="KeywordsPlace" xml:space="preserve">
+    <value>Geografisk område</value>
+  </data>
+  <data name="MaintenanceFrequency" xml:space="preserve">
+    <value>Oppdateringshyppighet</value>
+  </data>
+  <data name="North" xml:space="preserve">
+    <value>Nord</value>
+  </data>
+  <data name="NotApproved" xml:space="preserve">
+    <value>Ikke godkjent</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Annet</value>
+  </data>
+  <data name="ProcessHistory" xml:space="preserve">
+    <value>Prosesshistorie</value>
+  </data>
+  <data name="Published" xml:space="preserve">
+    <value>Publisert</value>
+  </data>
+  <data name="Purpose" xml:space="preserve">
+    <value>Formål</value>
+  </data>
+  <data name="QualitySpecification" xml:space="preserve">
+    <value>Konformitet</value>
+  </data>
+  <data name="QualitySpecificationExplanation" xml:space="preserve">
+    <value>Forklaring av resultat</value>
+  </data>
+  <data name="ResolutionScale" xml:space="preserve">
+    <value>Målestokkstall</value>
+  </data>
+  <data name="Resource" xml:space="preserve">
+    <value>Ressurs</value>
+  </data>
+  <data name="South" xml:space="preserve">
+    <value>Sør</value>
+  </data>
+  <data name="TimeAndSpace" xml:space="preserve">
+    <value>Tid og rom</value>
+  </data>
+  <data name="TopicCategory" xml:space="preserve">
+    <value>Tematisk hovedkategori</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Oppdatert</value>
+  </data>
+  <data name="ValidityPeriod" xml:space="preserve">
+    <value>Gyldighetsperiode</value>
+  </data>
+  <data name="West" xml:space="preserve">
+    <value>Vest</value>
   </data>
 </root>

@@ -1057,14 +1057,29 @@
               Looks up a localized string similar to Kartkatalogen.
             </summary>
         </member>
+        <member name="P:Resources.UI.Approved">
+            <summary>
+              Looks up a localized string similar to Godkjent.
+            </summary>
+        </member>
         <member name="P:Resources.UI.AvailableAs">
             <summary>
               Looks up a localized string similar to Tilgjengelig som.
             </summary>
         </member>
+        <member name="P:Resources.UI.BoundingBox">
+            <summary>
+              Looks up a localized string similar to Geografisk utstrekning.
+            </summary>
+        </member>
         <member name="P:Resources.UI.CanNotBeAddedToBasket">
             <summary>
               Looks up a localized string similar to Kan ikke legges i kurv.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Concepts">
+            <summary>
+              Looks up a localized string similar to Begreper.
             </summary>
         </member>
         <member name="P:Resources.UI.Constraints">
@@ -1102,9 +1117,19 @@
               Looks up a localized string similar to Klikk for å kopiere urlen til utklippstavle.
             </summary>
         </member>
+        <member name="P:Resources.UI.Created">
+            <summary>
+              Looks up a localized string similar to Opprettet.
+            </summary>
+        </member>
         <member name="P:Resources.UI.DataOwner">
             <summary>
               Looks up a localized string similar to Dataeier.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Date">
+            <summary>
+              Looks up a localized string similar to Dato.
             </summary>
         </member>
         <member name="P:Resources.UI.DepartmentalOverview">
@@ -1190,6 +1215,11 @@
         <member name="P:Resources.UI.Download">
             <summary>
               Looks up a localized string similar to Last ned.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.East">
+            <summary>
+              Looks up a localized string similar to Øst.
             </summary>
         </member>
         <member name="P:Resources.UI.Edit">
@@ -1327,9 +1357,19 @@
               Looks up a localized string similar to er fjernet fra.
             </summary>
         </member>
+        <member name="P:Resources.UI.KeywordsPlace">
+            <summary>
+              Looks up a localized string similar to Geografisk område.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Licence">
             <summary>
               Looks up a localized string similar to Lisens.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.MaintenanceFrequency">
+            <summary>
+              Looks up a localized string similar to Oppdateringshyppighet.
             </summary>
         </member>
         <member name="P:Resources.UI.Map">
@@ -1372,6 +1412,16 @@
               Looks up a localized string similar to Navn.
             </summary>
         </member>
+        <member name="P:Resources.UI.North">
+            <summary>
+              Looks up a localized string similar to Nord.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.NotApproved">
+            <summary>
+              Looks up a localized string similar to Ikke godkjent.
+            </summary>
+        </member>
         <member name="P:Resources.UI.NotSet">
             <summary>
               Looks up a localized string similar to ikke angitt.
@@ -1392,6 +1442,11 @@
               Looks up a localized string similar to De fleste kartdata i Norge er åpne data. Disse kan du laste ned gratis fra Geonorge, hvilket gir store muligheter for innovasjon og bruk. Datasettets lisens beskriver hva du har lov til å gjøre med dataene..
             </summary>
         </member>
+        <member name="P:Resources.UI.Other">
+            <summary>
+              Looks up a localized string similar to Annet.
+            </summary>
+        </member>
         <member name="P:Resources.UI.OtherConstraints">
             <summary>
               Looks up a localized string similar to Andre restriksjoner.
@@ -1402,9 +1457,49 @@
               Looks up a localized string similar to Sider.
             </summary>
         </member>
+        <member name="P:Resources.UI.ProcessHistory">
+            <summary>
+              Looks up a localized string similar to Prosesshistorie.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Published">
+            <summary>
+              Looks up a localized string similar to Publisert.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Purpose">
+            <summary>
+              Looks up a localized string similar to Formål.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Quality">
+            <summary>
+              Looks up a localized string similar to Kvalitet.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.QualitySpecification">
+            <summary>
+              Looks up a localized string similar to Konformitet.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.QualitySpecificationExplanation">
+            <summary>
+              Looks up a localized string similar to Forklaring av resultat.
+            </summary>
+        </member>
         <member name="P:Resources.UI.ReferenceSystems">
             <summary>
               Looks up a localized string similar to Romlig referansesystem.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.ResolutionScale">
+            <summary>
+              Looks up a localized string similar to Målestokkstall.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Resource">
+            <summary>
+              Looks up a localized string similar to Ressurs.
             </summary>
         </member>
         <member name="P:Resources.UI.RestrictedData">
@@ -1462,6 +1557,11 @@
               Looks up a localized string similar to Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier.
             </summary>
         </member>
+        <member name="P:Resources.UI.South">
+            <summary>
+              Looks up a localized string similar to Sør.
+            </summary>
+        </member>
         <member name="P:Resources.UI.SpatialRepresentation">
             <summary>
               Looks up a localized string similar to Representasjonsform.
@@ -1470,6 +1570,11 @@
         <member name="P:Resources.UI.TheBasket">
             <summary>
               Looks up a localized string similar to kurven.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.TimeAndSpace">
+            <summary>
+              Looks up a localized string similar to Tid og rom.
             </summary>
         </member>
         <member name="P:Resources.UI.Title">
@@ -1482,9 +1587,19 @@
               Looks up a localized string similar to i kurv.
             </summary>
         </member>
+        <member name="P:Resources.UI.TopicCategory">
+            <summary>
+              Looks up a localized string similar to Tematisk hovedkategori.
+            </summary>
+        </member>
         <member name="P:Resources.UI.UnitsOfDistribution">
             <summary>
               Looks up a localized string similar to Geografisk distribusjonsinndeling.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Updated">
+            <summary>
+              Looks up a localized string similar to Oppdatert.
             </summary>
         </member>
         <member name="P:Resources.UI.UrlToService">
@@ -1502,6 +1617,11 @@
               Looks up a localized string similar to Bruksbegrensninger.
             </summary>
         </member>
+        <member name="P:Resources.UI.ValidityPeriod">
+            <summary>
+              Looks up a localized string similar to Gyldighetsperiode.
+            </summary>
+        </member>
         <member name="P:Resources.UI.VisitWebsite">
             <summary>
               Looks up a localized string similar to Besøk nettside for.
@@ -1515,6 +1635,11 @@
         <member name="P:Resources.UI.WebPageHeader">
             <summary>
               Looks up a localized string similar to nett side.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.West">
+            <summary>
+              Looks up a localized string similar to Vest.
             </summary>
         </member>
     </members>

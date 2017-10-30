@@ -336,25 +336,25 @@ if (contact != null)
             </div><div id="metadata-text-details" class="detailed-info" style="display: none;">
                 @* ** Kvalitet ** *@
                 <div class="col-sm-6">
-                    <h3>Kvalitet</h3>
-                    @DisplayValue("Målestokkstall", Model.ResolutionScale)
+                    <h3>@UI.Quality</h3>
+                    @DisplayValue(UI.ResolutionScale, Model.ResolutionScale)
                     @DisplayValue("Status", Model.Status)
-                    @DisplayValue("Prosesshistorie", Model.ProcessHistory)
+                    @DisplayValue(UI.ProcessHistory, Model.ProcessHistory)
                     @if (Model.QualitySpecifications != null)
                 {
-                <h3>Konformitet</h3>
+                <h3>@UI.QualitySpecification</h3>
                     for (var s = 0; s < Model.QualitySpecifications.Count; s++)
                     {
                 <p>
                     <strong>Standard: </strong>@Model.QualitySpecifications[s].Title
                 </p>
                 <p>
-                    <strong>Dato: </strong>@Html.DisplayFor(m => Model.QualitySpecifications[s].Date) (@Model.QualitySpecifications[s].DateType)
+                    <strong>@UI.Date: </strong>@Html.DisplayFor(m => Model.QualitySpecifications[s].Date) (@Model.QualitySpecifications[s].DateType)
                 </p>
                 <p>
-                    <strong>Forklaring av resultat: </strong>@Model.QualitySpecifications[s].Explanation
+                    <strong>@UI.QualitySpecificationExplanation: </strong>@Model.QualitySpecifications[s].Explanation
                 </p>
-                <p> @(Model.QualitySpecifications[s].Result ? "Godkjent" : "Ikke godkjent") </p>
+                <p> @(Model.QualitySpecifications[s].Result ? UI.Approved : UI.NotApproved) </p>
                         if (Model.QualitySpecifications.Count > 1 && s != Model.QualitySpecifications.Count - 1)
                         {
                 <hr />
@@ -363,79 +363,79 @@ if (contact != null)
                 }
                     @if (!string.IsNullOrWhiteSpace(Model.Purpose))
                 {
-                <h3>Formål</h3>
+                <h3>@UI.Purpose</h3>
                 <p>@Model.Purpose</p>
                 }
                 </div>
                 @* ** Tid og rom ** *@
                 <div class="col-sm-6">
-                    <h3>Tid og rom</h3>
+                    <h3>@UI.TimeAndSpace</h3>
                     @if (Model.DateUpdated != null)
                 {
                 <p>
-                    <strong>Oppdatert(Ressurs):</strong> @Html.DisplayFor(m => m.DateUpdated)
+                    <strong>@UI.Updated (@UI.Resource):</strong> @Html.DisplayFor(m => m.DateUpdated)
                 </p>
                 }
                     @if (Model.DateMetadataUpdated != null)
                 {
                 <p>
-                    <strong>Oppdatert(Metadata):</strong> @Html.DisplayFor(m => m.DateMetadataUpdated)
+                    <strong>@UI.Updated (Metadata):</strong> @Html.DisplayFor(m => m.DateMetadataUpdated)
                 </p>
                 }
                     @if (Model.DatePublished != null)
                 {
                 <p>
-                    <strong>Publisert:</strong> @Html.DisplayFor(m => m.DatePublished)
+                    <strong>@UI.Published:</strong> @Html.DisplayFor(m => m.DatePublished)
                 </p>
                 }
                     @if (Model.DateCreated != null)
                 {
                 <p>
-                    <strong>Opprettet:</strong> @Html.DisplayFor(m => m.DateCreated)
+                    <strong>@UI.Created:</strong> @Html.DisplayFor(m => m.DateCreated)
                 </p>
                 }
                     @if (Model.DateMetadataValidFrom != null)
                 {
                 <p>
-                    <strong>Gyldighetsperiode:</strong> @Html.DisplayFor(m => m.DateMetadataValidFrom) - @Html.DisplayFor(m => m.DateMetadataValidTo)
+                    <strong>@UI.ValidityPeriod:</strong> @Html.DisplayFor(m => m.DateMetadataValidFrom) - @Html.DisplayFor(m => m.DateMetadataValidTo)
                 </p>
                 }
                     @if (Model.MaintenanceFrequency != null)
                 {
                 <p>
-                    <strong>Oppdateringshyppighet:</strong> @Model.MaintenanceFrequency
+                    <strong>@UI.MaintenanceFrequency:</strong> @Model.MaintenanceFrequency
                 </p>
                 }
                     @if (Model.KeywordsPlace != null && Model.KeywordsPlace.Count > 0)
                 {
-                @DisplayKeywords("Geografisk område", Model.KeywordsPlace)
+                @DisplayKeywords(UI.KeywordsPlace, Model.KeywordsPlace)
                 }
                     @if (Model.BoundingBox != null)
                 {
                 <p>
-                    <strong>Geografisk utstrekning:</strong>
+                    <strong>@UI.BoundingBox:</strong>
                     <ul>
-                        <li>Nord: @Model.BoundingBox.NorthBoundLatitude</li>
-                        <li>Sør: @Model.BoundingBox.SouthBoundLatitude</li>
-                        <li>Øst: @Model.BoundingBox.EastBoundLongitude</li>
-                        <li>Vest: @Model.BoundingBox.WestBoundLongitude</li>
+                        <li>@UI.North: @Model.BoundingBox.NorthBoundLatitude</li>
+                        <li>@UI.South: @Model.BoundingBox.SouthBoundLatitude</li>
+                        <li>@UI.East: @Model.BoundingBox.EastBoundLongitude</li>
+                        <li>@UI.West: @Model.BoundingBox.WestBoundLongitude</li>
                     </ul>
                 </p>
                 }
                 </div>
                 @* ** Nøkkelord ** *@
                 <div class="col-sm-6">
-                    <h3>Nøkkelord</h3>
-                    @DisplayKeywords("Tema", Model.KeywordsTheme)
-                    @DisplayKeywords("Nasjonal temakategori", Model.KeywordsNationalTheme)
-                    @DisplayKeywords("Samarbeid og lover", Model.KeywordsNationalInitiative)
+                    <h3>@UI.Facet_keyword</h3>
+                    @DisplayKeywords(UI.Facet_theme, Model.KeywordsTheme)
+                    @DisplayKeywords(UI.Facet_theme, Model.KeywordsNationalTheme)
+                    @DisplayKeywords(UI.Facet_nationalinitiative, Model.KeywordsNationalInitiative)
                     @DisplayKeywords("Inspire", Model.KeywordsInspire)
-                    @DisplayKeywords("Annet", Model.KeywordsOther)
-                    @DisplayKeywords("Begreper", Model.KeywordsConcept)
+                    @DisplayKeywords(UI.Other, Model.KeywordsOther)
+                    @DisplayKeywords(UI.Concepts, Model.KeywordsConcept)
                     @if (!string.IsNullOrWhiteSpace(Model.TopicCategory))
                 {
                 <p>
-                    <strong>Tematisk hovedkategori:</strong> @Model.TopicCategory
+                    <strong>@UI.TopicCategory:</strong> @Model.TopicCategory
                 </p>
                 }
                 </div>

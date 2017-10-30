@@ -393,6 +393,9 @@
   <data name="OtherConstraints" xml:space="preserve">
     <value>Other constraints</value>
   </data>
+  <data name="Quality" xml:space="preserve">
+    <value>Quality</value>
+  </data>
   <data name="ReferenceSystems" xml:space="preserve">
     <value>Reference systems</value>
   </data>
@@ -413,5 +416,77 @@
   </data>
   <data name="UseLimitations" xml:space="preserve">
     <value>Use limitations</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="BoundingBox" xml:space="preserve">
+    <value>Bounding box</value>
+  </data>
+  <data name="Concepts" xml:space="preserve">
+    <value>Concepts</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="East" xml:space="preserve">
+    <value>East</value>
+  </data>
+  <data name="KeywordsPlace" xml:space="preserve">
+    <value>Geografisk område</value>
+  </data>
+  <data name="MaintenanceFrequency" xml:space="preserve">
+    <value>Maintenance frequency</value>
+  </data>
+  <data name="North" xml:space="preserve">
+    <value>North</value>
+  </data>
+  <data name="NotApproved" xml:space="preserve">
+    <value>Not approved</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="ProcessHistory" xml:space="preserve">
+    <value>Process history</value>
+  </data>
+  <data name="Published" xml:space="preserve">
+    <value>Published</value>
+  </data>
+  <data name="Purpose" xml:space="preserve">
+    <value>Purpose</value>
+  </data>
+  <data name="QualitySpecification" xml:space="preserve">
+    <value>Quality specification</value>
+  </data>
+  <data name="QualitySpecificationExplanation" xml:space="preserve">
+    <value>Explanation of results</value>
+  </data>
+  <data name="ResolutionScale" xml:space="preserve">
+    <value>Resolution scale</value>
+  </data>
+  <data name="Resource" xml:space="preserve">
+    <value>Resource</value>
+  </data>
+  <data name="South" xml:space="preserve">
+    <value>South</value>
+  </data>
+  <data name="TimeAndSpace" xml:space="preserve">
+    <value>Time and space</value>
+  </data>
+  <data name="TopicCategory" xml:space="preserve">
+    <value>Topic category</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+  <data name="ValidityPeriod" xml:space="preserve">
+    <value>Validity period</value>
+  </data>
+  <data name="West" xml:space="preserve">
+    <value>West</value>
   </data>
 </root>
