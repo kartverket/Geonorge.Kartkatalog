@@ -354,4 +354,64 @@
   <data name="NotSet" xml:space="preserve">
     <value>ikke angitt</value>
   </data>
+  <data name="AccessConstraints" xml:space="preserve">
+    <value>Tilgangsrestriksjoner</value>
+  </data>
+  <data name="Constraints" xml:space="preserve">
+    <value>Restriksjoner</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Kontaktinformasjon</value>
+  </data>
+  <data name="ContactMetadata" xml:space="preserve">
+    <value>Metadatakontakt</value>
+  </data>
+  <data name="ContactOwner" xml:space="preserve">
+    <value>Faglig kontakt</value>
+  </data>
+  <data name="ContactPublisher" xml:space="preserve">
+    <value>Teknisk kontakt</value>
+  </data>
+  <data name="DetailedInformation" xml:space="preserve">
+    <value>Detaljert informasjon</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Distribusjon</value>
+  </data>
+  <data name="DistributionName" xml:space="preserve">
+    <value>Lagnavn</value>
+  </data>
+  <data name="DistributionType" xml:space="preserve">
+    <value>Distribusjonstype</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Rediger</value>
+  </data>
+  <data name="Licence" xml:space="preserve">
+    <value>Lisens</value>
+  </data>
+  <data name="OtherConstraints" xml:space="preserve">
+    <value>Andre restriksjoner</value>
+  </data>
+  <data name="ReferenceSystems" xml:space="preserve">
+    <value>Romlig referansesystem</value>
+  </data>
+  <data name="SecurityConstraints" xml:space="preserve">
+    <value>Sikkerhetsnivå</value>
+  </data>
+  <data name="SecurityConstraintsNote" xml:space="preserve">
+    <value>Lovhenvisning</value>
+  </data>
+  <data name="SpatialRepresentation" xml:space="preserve">
+    <value>Representasjonsform</value>
+  </data>
+  <data name="UnitsOfDistribution" xml:space="preserve">
+    <value>Geografisk distribusjonsinndeling</value>
+  </data>
+  <data name="UseConstraints" xml:space="preserve">
+    <value>Brukerrestriksjoner</value>
+  </data>
+  <data name="UseLimitations" xml:space="preserve">
+    <value>Bruksbegrensninger</value>
+  </data>
 </root>

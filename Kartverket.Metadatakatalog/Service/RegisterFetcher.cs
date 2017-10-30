@@ -227,6 +227,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
+                _webClient.Headers.Remove("Accept-Language");
                 _webClient.Headers.Add("Accept-Language", culture);
                 _webClient.Encoding = System.Text.Encoding.UTF8;
                 var data = _webClient.DownloadString(url);

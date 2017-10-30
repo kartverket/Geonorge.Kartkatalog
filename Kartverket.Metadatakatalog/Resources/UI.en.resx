@@ -354,4 +354,64 @@
   <data name="NotSet" xml:space="preserve">
     <value>not set</value>
   </data>
+  <data name="AccessConstraints" xml:space="preserve">
+    <value>Access constraints</value>
+  </data>
+  <data name="Constraints" xml:space="preserve">
+    <value>Constraints</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Contact information</value>
+  </data>
+  <data name="ContactMetadata" xml:space="preserve">
+    <value>Contact metadata</value>
+  </data>
+  <data name="ContactOwner" xml:space="preserve">
+    <value>Contact owner</value>
+  </data>
+  <data name="ContactPublisher" xml:space="preserve">
+    <value>Contact publisher</value>
+  </data>
+  <data name="DetailedInformation" xml:space="preserve">
+    <value>Detailed information</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Distribution</value>
+  </data>
+  <data name="DistributionName" xml:space="preserve">
+    <value>Layer name</value>
+  </data>
+  <data name="DistributionType" xml:space="preserve">
+    <value>Distribution type</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Licence" xml:space="preserve">
+    <value>Licence</value>
+  </data>
+  <data name="OtherConstraints" xml:space="preserve">
+    <value>Other constraints</value>
+  </data>
+  <data name="ReferenceSystems" xml:space="preserve">
+    <value>Reference systems</value>
+  </data>
+  <data name="SecurityConstraints" xml:space="preserve">
+    <value>Security constraints</value>
+  </data>
+  <data name="SecurityConstraintsNote" xml:space="preserve">
+    <value>Reference laws</value>
+  </data>
+  <data name="SpatialRepresentation" xml:space="preserve">
+    <value>Spatial representation</value>
+  </data>
+  <data name="UnitsOfDistribution" xml:space="preserve">
+    <value>Units of distribution</value>
+  </data>
+  <data name="UseConstraints" xml:space="preserve">
+    <value>Use constraints</value>
+  </data>
+  <data name="UseLimitations" xml:space="preserve">
+    <value>Use limitations</value>
+  </data>
 </root>

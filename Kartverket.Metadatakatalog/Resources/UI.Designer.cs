@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tilgangsrestriksjoner.
+        /// </summary>
+        public static string AccessConstraints {
+            get {
+                return ResourceManager.GetString("AccessConstraints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Legg.
         /// </summary>
         public static string Add {
@@ -133,11 +142,56 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Restriksjoner.
+        /// </summary>
+        public static string Constraints {
+            get {
+                return ResourceManager.GetString("Constraints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kontakt dataeier.
         /// </summary>
         public static string ContactDataOwner {
             get {
                 return ResourceManager.GetString("ContactDataOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kontaktinformasjon.
+        /// </summary>
+        public static string ContactInformation {
+            get {
+                return ResourceManager.GetString("ContactInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Metadatakontakt.
+        /// </summary>
+        public static string ContactMetadata {
+            get {
+                return ResourceManager.GetString("ContactMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Faglig kontakt.
+        /// </summary>
+        public static string ContactOwner {
+            get {
+                return ResourceManager.GetString("ContactOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Teknisk kontakt.
+        /// </summary>
+        public static string ContactPublisher {
+            get {
+                return ResourceManager.GetString("ContactPublisher", resourceCulture);
             }
         }
         
@@ -183,6 +237,15 @@ namespace Resources {
         public static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detaljert informasjon.
+        /// </summary>
+        public static string DetailedInformation {
+            get {
+                return ResourceManager.GetString("DetailedInformation", resourceCulture);
             }
         }
         
@@ -259,6 +322,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Distribusjon.
+        /// </summary>
+        public static string Distribution {
+            get {
+                return ResourceManager.GetString("Distribution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lagnavn.
+        /// </summary>
+        public static string DistributionName {
+            get {
+                return ResourceManager.GetString("DistributionName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Distribusjoner.
         /// </summary>
         public static string Distributions {
@@ -268,11 +349,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Distribusjonstype.
+        /// </summary>
+        public static string DistributionType {
+            get {
+                return ResourceManager.GetString("DistributionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last ned.
         /// </summary>
         public static string Download {
             get {
                 return ResourceManager.GetString("Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rediger.
+        /// </summary>
+        public static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
             }
         }
         
@@ -511,6 +610,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lisens.
+        /// </summary>
+        public static string Licence {
+            get {
+                return ResourceManager.GetString("Licence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kart.
         /// </summary>
         public static string Map {
@@ -619,11 +727,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Andre restriksjoner.
+        /// </summary>
+        public static string OtherConstraints {
+            get {
+                return ResourceManager.GetString("OtherConstraints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sider.
         /// </summary>
         public static string Pages {
             get {
                 return ResourceManager.GetString("Pages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Romlig referansesystem.
+        /// </summary>
+        public static string ReferenceSystems {
+            get {
+                return ResourceManager.GetString("ReferenceSystems", resourceCulture);
             }
         }
         
@@ -651,6 +777,24 @@ namespace Resources {
         public static string SaveAs {
             get {
                 return ResourceManager.GetString("SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sikkerhetsnivå.
+        /// </summary>
+        public static string SecurityConstraints {
+            get {
+                return ResourceManager.GetString("SecurityConstraints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lovhenvisning.
+        /// </summary>
+        public static string SecurityConstraintsNote {
+            get {
+                return ResourceManager.GetString("SecurityConstraintsNote", resourceCulture);
             }
         }
         
@@ -709,6 +853,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Representasjonsform.
+        /// </summary>
+        public static string SpatialRepresentation {
+            get {
+                return ResourceManager.GetString("SpatialRepresentation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to kurven.
         /// </summary>
         public static string TheBasket {
@@ -736,11 +889,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Geografisk distribusjonsinndeling.
+        /// </summary>
+        public static string UnitsOfDistribution {
+            get {
+                return ResourceManager.GetString("UnitsOfDistribution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Url til tjeneste.
         /// </summary>
         public static string UrlToService {
             get {
                 return ResourceManager.GetString("UrlToService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Brukerrestriksjoner.
+        /// </summary>
+        public static string UseConstraints {
+            get {
+                return ResourceManager.GetString("UseConstraints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bruksbegrensninger.
+        /// </summary>
+        public static string UseLimitations {
+            get {
+                return ResourceManager.GetString("UseLimitations", resourceCulture);
             }
         }
         
