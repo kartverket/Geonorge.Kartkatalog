@@ -24,7 +24,7 @@ if (contact != null)
                     <text>@contact.Name, </text>
                 }
                 @contact.Email
-            </a> &ndash; @(CultureHelper.IsNorwegian() ? contact.Organization : contact.OrganizationEnglish) 
+            </a> &ndash; @(!CultureHelper.IsNorwegian() && !string.IsNullOrEmpty(contact.OrganizationEnglish) ? contact.OrganizationEnglish : contact.Organization) 
         </p>
 }
 }
@@ -471,15 +471,16 @@ if (keywords != null && keywords.Any())
         <ul>
             @foreach (var keyword in keywords)
             {
+                var word = !CultureHelper.IsNorwegian() && !string.IsNullOrEmpty(keyword.EnglishKeyword) ? keyword.EnglishKeyword : keyword.KeywordValue;
                 if (!string.IsNullOrEmpty(keyword.KeywordLink))
                 {
                     <li>
-                        <a href="@keyword.KeywordLink" target="_blank">@keyword.KeywordValue</a>
+                        <a href="@keyword.KeywordLink" target="_blank">@word</a>
                     </li>
                 }
                 else
                 {
-                    <li>@keyword.KeywordValue</li>
+                    <li>@word</li>
                 }
             }
         </ul>

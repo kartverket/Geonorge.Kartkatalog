@@ -479,7 +479,7 @@ namespace Kartverket.Metadatakatalog.Service
                 MetadataStandard = simpleMetadata.MetadataStandard,
                 MetadataStandardVersion = simpleMetadata.MetadataStandardVersion,
                 OperatesOn = simpleMetadata.OperatesOn,
-                ProcessHistory = simpleMetadata.ProcessHistory,
+                ProcessHistory = GetTranslation(simpleMetadata.ProcessHistory, simpleMetadata.EnglishProcessHistory),
                 ProductPageUrl = simpleMetadata.ProductPageUrl,
                 ProductSheetUrl = simpleMetadata.ProductSheetUrl,
                 ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl,
