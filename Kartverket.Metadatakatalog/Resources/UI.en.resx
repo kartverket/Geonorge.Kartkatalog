@@ -519,4 +519,42 @@
   <data name="West" xml:space="preserve">
     <value>West</value>
   </data>
+  <data name="AddedToBasket" xml:space="preserve">
+    <value>Added to basket</value>
+  </data>
+  <data name="AlreadyPutInBasket" xml:space="preserve">
+    <value>Already put in basket</value>
+  </data>
+  <data name="AreaHelpText" xml:space="preserve">
+    <value>&lt;p&gt;Here you can select finished files from fixed areas from drop-down list. &lt;/p&gt;
+                     &lt;p&gt;For some datasets you can also use the Map tool to select data from grid or define freely chosen polygon for download. &lt;/p&gt;
+                     &lt;p&gt;For freely chosen polygon, the file will be generated and you will be notified by email when the file is complete for download. &lt;/p&gt;</value>
+  </data>
+  <data name="DatasetIsCorrect" xml:space="preserve">
+    <value>Datasets are correctly filled out</value>
+  </data>
+  <data name="DeleteDataset" xml:space="preserve">
+    <value>Delete dataset</value>
+  </data>
+  <data name="DisplayErrors" xml:space="preserve">
+    <value>Display errors</value>
+  </data>
+  <data name="DisplayMessages" xml:space="preserve">
+    <value>Display messages</value>
+  </data>
+  <data name="FormatHelpText" xml:space="preserve">
+    <value>&lt;p&gt;Location-based information is available in different formats depending on the type of data set. Special tools are needed to read most formats. &lt;/p&gt;
+     &lt;p&gt;SOSI - Norwegian exchange format for site-based information. &lt;/p&gt;
+&lt;p&gt;GML - International XML Format for Location-based Information. &lt;/p&gt;</value>
+  </data>
+  <data name="Nationwide" xml:space="preserve">
+    <value>Nationwide</value>
+  </data>
+  <data name="NavigateToDataset" xml:space="preserve">
+    <value>Navigate to dataset	</value>
+  </data>
+  <data name="ProjectionHelpText" xml:space="preserve">
+    <value>&lt;p&gt;Enter the desired data set coordinate system to be downloaded. &lt;/p&gt;
+                     &lt;p&gt;If you want data for the entire country, it is common to use EUREF89, UTM zone 33. &lt;/p&gt;</value>
+  </data>
 </root>

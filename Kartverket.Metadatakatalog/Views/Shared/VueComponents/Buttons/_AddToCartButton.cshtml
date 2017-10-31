@@ -107,9 +107,9 @@
                         if (isAdded) {
                             button.className += " added";
                             if (button.showContent) {
-                                button.content = "Lagt i kurv";
+                                button.content = "@UI.AddedToBasket";
                             }
-                            button.title = "Allerede lagt i kurv";
+                            button.title = "@UI.AlreadyPutInBasket";
                         } else {
                             if (button.showContent) {
                                 button.content = "@Html.Raw(UI.AddToBasket)";
@@ -180,11 +180,11 @@
                         $('#orderitem-count').text(orderItemCount);
                         updateShoppingCart();
                         if (button.showContent) {
-                            button.content = "Lagt i kurv";
+                            button.content = "@UI.AddedToBasket";
                         }
-                        button.title = "Allerede lagt i kurv";
+                        button.title = "@UI.AlreadyPutInBasket";
                         $(".add-to-cart-btn-" + this.resultItem.Uuid).addClass("added");
-                        $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "Allerede lagt i kurv");
+                        $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "@UI.AlreadyPutInBasket");
                     } else {
                         var index = orderItems.indexOf(item.uuid);
                         if (index > -1) {

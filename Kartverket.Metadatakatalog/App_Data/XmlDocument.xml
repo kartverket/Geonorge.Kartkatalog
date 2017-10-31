@@ -1037,9 +1037,19 @@
               Looks up a localized string similar to Legg.
             </summary>
         </member>
+        <member name="P:Resources.UI.AddedToBasket">
+            <summary>
+              Looks up a localized string similar to Lagt i kurv.
+            </summary>
+        </member>
         <member name="P:Resources.UI.AddToBasket">
             <summary>
               Looks up a localized string similar to Legg i kurv.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.AlreadyPutInBasket">
+            <summary>
+              Looks up a localized string similar to Allerede lagt i kurv.
             </summary>
         </member>
         <member name="P:Resources.UI.ApisAndServices">
@@ -1060,6 +1070,13 @@
         <member name="P:Resources.UI.Approved">
             <summary>
               Looks up a localized string similar to Godkjent.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.AreaHelpText">
+            <summary>
+              Looks up a localized string similar to &lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;
+                               &lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;
+                               &lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;.
             </summary>
         </member>
         <member name="P:Resources.UI.AreaMustBeSelectedFirst">
@@ -1132,9 +1149,19 @@
               Looks up a localized string similar to Dataeier.
             </summary>
         </member>
+        <member name="P:Resources.UI.DatasetIsCorrect">
+            <summary>
+              Looks up a localized string similar to Datasett er korrekt utfylt.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Date">
             <summary>
               Looks up a localized string similar to Dato.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DeleteDataset">
+            <summary>
+              Looks up a localized string similar to Slett datasett.
             </summary>
         </member>
         <member name="P:Resources.UI.DepartmentalOverview">
@@ -1175,6 +1202,16 @@
         <member name="P:Resources.UI.DisplayCoverageMap">
             <summary>
               Looks up a localized string similar to Vis dekningskart.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DisplayErrors">
+            <summary>
+              Looks up a localized string similar to Vis mangler.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DisplayMessages">
+            <summary>
+              Looks up a localized string similar to Vis meldinger.
             </summary>
         </member>
         <member name="P:Resources.UI.DisplayMetadataFor">
@@ -1355,6 +1392,13 @@
               Looks up a localized string similar to Filtrer søket på.
             </summary>
         </member>
+        <member name="P:Resources.UI.FormatHelpText">
+             <summary>
+               Looks up a localized string similar to &lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;
+                                &lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;
+            &lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;.
+             </summary>
+        </member>
         <member name="P:Resources.UI.Help">
             <summary>
               Looks up a localized string similar to Hjelp.
@@ -1445,6 +1489,16 @@
               Looks up a localized string similar to Navn.
             </summary>
         </member>
+        <member name="P:Resources.UI.Nationwide">
+            <summary>
+              Looks up a localized string similar to Landsdekkende.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.NavigateToDataset">
+            <summary>
+              Looks up a localized string similar to Gå til datasett.
+            </summary>
+        </member>
         <member name="P:Resources.UI.North">
             <summary>
               Looks up a localized string similar to Nord.
@@ -1503,6 +1557,12 @@
         <member name="P:Resources.UI.Projection">
             <summary>
               Looks up a localized string similar to Projeksjon.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.ProjectionHelpText">
+            <summary>
+              Looks up a localized string similar to &lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;
+                               &lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;.
             </summary>
         </member>
         <member name="P:Resources.UI.Published">

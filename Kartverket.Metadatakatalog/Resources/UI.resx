@@ -519,4 +519,42 @@
   <data name="West" xml:space="preserve">
     <value>Vest</value>
   </data>
+  <data name="AddedToBasket" xml:space="preserve">
+    <value>Lagt i kurv</value>
+  </data>
+  <data name="AlreadyPutInBasket" xml:space="preserve">
+    <value>Allerede lagt i kurv</value>
+  </data>
+  <data name="AreaHelpText" xml:space="preserve">
+    <value>&lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;
+                    &lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;
+                    &lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;</value>
+  </data>
+  <data name="DatasetIsCorrect" xml:space="preserve">
+    <value>Datasett er korrekt utfylt</value>
+  </data>
+  <data name="DeleteDataset" xml:space="preserve">
+    <value>Slett datasett</value>
+  </data>
+  <data name="DisplayErrors" xml:space="preserve">
+    <value>Vis mangler</value>
+  </data>
+  <data name="DisplayMessages" xml:space="preserve">
+    <value>Vis meldinger</value>
+  </data>
+  <data name="FormatHelpText" xml:space="preserve">
+    <value>&lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;
+                    &lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;
+&lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;</value>
+  </data>
+  <data name="Nationwide" xml:space="preserve">
+    <value>Landsdekkende</value>
+  </data>
+  <data name="NavigateToDataset" xml:space="preserve">
+    <value>Gå til datasett</value>
+  </data>
+  <data name="ProjectionHelpText" xml:space="preserve">
+    <value>&lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;
+                    &lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;</value>
+  </data>
 </root>

@@ -44,7 +44,7 @@
                 <div class="custom-select-list-dropdown">
                     <div class="custom-select-list-dropdown-content">
                         <div v-if="available.landsdekkende" class="custom-select-list-option-group">
-                            <p class="custom-select-list-option-group-name">Landsdekkende</p>
+                            <p class="custom-select-list-option-group-name">@UI.Nationwide</p>
                             <ul class="custom-select-list-options area-option-list">
                                 <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': area.isSelected}" v-for="area in available.landsdekkende">{{ area.name }}</li>
                             </ul>
@@ -139,25 +139,25 @@
         </h2>
         <div class="pull-right margin-top-10">
             <span v-show="hasInfoMessages" class="orderline-field-counter">
-                <span v-on:click="expanded = true" class="custom-icon custom-icon-info" data-toggle="tooltip" data-placement="bottom" title="Vis meldinger">
+                <span v-on:click="expanded = true" class="custom-icon custom-icon-info" data-toggle="tooltip" data-placement="bottom" title="@UI.DisplayMessages">
                     <span class="custom-icon-overlay">{{ numberOfInfoMessages }}</span>
                 </span>
             </span>
             <span v-show="!hasAreas" class="orderline-field-counter">
-                <span v-on:click="expanded = true" class="custom-icon custom-icon-danger" data-toggle="tooltip" data-placement="bottom" title="Vis mangler">
+                <span v-on:click="expanded = true" class="custom-icon custom-icon-danger" data-toggle="tooltip" data-placement="bottom" title="@UI.DisplayErrors">
                 </span>
             </span>
             <span v-show="hasErrors" class="orderline-field-counter">
-                <span v-on:click="expanded = true" class="custom-icon custom-icon-warning" data-toggle="tooltip" data-placement="bottom" title="Vis mangler">
+                <span v-on:click="expanded = true" class="custom-icon custom-icon-warning" data-toggle="tooltip" data-placement="bottom" title="@UI.DisplayErrors">
                     <span class="custom-icon-overlay">{{ numberOfErrors }}</span>
                 </span>
             </span>
             <span v-show="!hasErrors" class="orderline-field-counter">
-                <span class="custom-icon custom-icon-checked" data-toggle="tooltip" data-placement="bottom" title="Datasett er korrekt utfylt">
+                <span class="custom-icon custom-icon-checked" data-toggle="tooltip" data-placement="bottom" title="@UI.DatasetIsCorrect">
                 </span>
             </span>
-            <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom" title="Gå til datasett" class="btn icon-btn"><span class="fa fa-home"></span></a>
-            <span v-on:click="$root.removeOrderLine(metadata.uuid, false)" data-toggle="tooltip" data-placement="bottom" title="Slett datasett" class="btn icon-btn"><span class="fa fa-trash"></span></span>
+            <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom" title="@UI.NavigateToDataset" class="btn icon-btn"><span class="fa fa-home"></span></a>
+            <span v-on:click="$root.removeOrderLine(metadata.uuid, false)" data-toggle="tooltip" data-placement="bottom" title="@UI.DeleteDataset" class="btn icon-btn"><span class="fa fa-trash"></span></span>
         </div>
         <div class="clearfix"></div>
         <div v-show="expanded">
@@ -232,9 +232,7 @@
                 <p>@UI.Facet_area <span href="#" v-on:click="showAreaHelpText = !showAreaHelpText" v-bind:class="{active: showAreaHelpText}" class="badge help-text-toggle clickable">?</span></p>
                 <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master"></div>
                 <div v-show="showAreaHelpText" class="help-text form-element-help-text bg-info margin-top-10">
-                    <p>Her kan du velge ferdige filer fra faste områder fra nedtrekklista.</p>
-                    <p>For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.</p>
-                    <p>For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.</p>
+                    @Html.Raw(UI.AreaHelpText)
                 </div>
             </div>
             <div class="col-md-4">
@@ -242,8 +240,7 @@
                 <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>@UI.AreaMustBeSelectedFirst</span></div>
                 <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="master"></div>
                 <div v-show="showProjectionHelpText" class="help-text form-element-help-text bg-info margin-top-10">
-                    <p>Her angir du ønsket koordinatsystem for datasett som skal lastes ned.</p>
-                    <p>Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.</p>
+                    @Html.Raw(UI.ProjectionHelpText)
                 </div>
             </div>
             <div class="col-md-4">
@@ -251,9 +248,7 @@
                 <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>@UI.AreaMustBeSelectedFirst</span></div>
                 <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="master"></div>
                 <div v-show="showFormatHelpText" class="help-text form-element-help-text bg-info margin-top-10">
-                    <p>Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.</p>
-                    <p>SOSI – norsk utvekslingsformat for stedfestet informasjon.</p>
-                    <p>GML – internasjonalt XML-format for stedfestet informasjon.</p>
+                    @Html.Raw(UI.FormatHelpText)
                 </div>
             </div>
         </div>

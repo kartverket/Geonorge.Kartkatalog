@@ -88,11 +88,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lagt i kurv.
+        /// </summary>
+        public static string AddedToBasket {
+            get {
+                return ResourceManager.GetString("AddedToBasket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Legg i kurv.
         /// </summary>
         public static string AddToBasket {
             get {
                 return ResourceManager.GetString("AddToBasket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allerede lagt i kurv.
+        /// </summary>
+        public static string AlreadyPutInBasket {
+            get {
+                return ResourceManager.GetString("AlreadyPutInBasket", resourceCulture);
             }
         }
         
@@ -129,6 +147,17 @@ namespace Resources {
         public static string Approved {
             get {
                 return ResourceManager.GetString("Approved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;
+        ///                    &lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;
+        ///                    &lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;.
+        /// </summary>
+        public static string AreaHelpText {
+            get {
+                return ResourceManager.GetString("AreaHelpText", resourceCulture);
             }
         }
         
@@ -259,11 +288,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Datasett er korrekt utfylt.
+        /// </summary>
+        public static string DatasetIsCorrect {
+            get {
+                return ResourceManager.GetString("DatasetIsCorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dato.
         /// </summary>
         public static string Date {
             get {
                 return ResourceManager.GetString("Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slett datasett.
+        /// </summary>
+        public static string DeleteDataset {
+            get {
+                return ResourceManager.GetString("DeleteDataset", resourceCulture);
             }
         }
         
@@ -336,6 +383,24 @@ namespace Resources {
         public static string DisplayCoverageMap {
             get {
                 return ResourceManager.GetString("DisplayCoverageMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis mangler.
+        /// </summary>
+        public static string DisplayErrors {
+            get {
+                return ResourceManager.GetString("DisplayErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis meldinger.
+        /// </summary>
+        public static string DisplayMessages {
+            get {
+                return ResourceManager.GetString("DisplayMessages", resourceCulture);
             }
         }
         
@@ -658,6 +723,17 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;
+        ///                    &lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;
+        ///&lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;.
+        /// </summary>
+        public static string FormatHelpText {
+            get {
+                return ResourceManager.GetString("FormatHelpText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hjelp.
         /// </summary>
         public static string Help {
@@ -820,6 +896,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Landsdekkende.
+        /// </summary>
+        public static string Nationwide {
+            get {
+                return ResourceManager.GetString("Nationwide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gå til datasett.
+        /// </summary>
+        public static string NavigateToDataset {
+            get {
+                return ResourceManager.GetString("NavigateToDataset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nord.
         /// </summary>
         public static string North {
@@ -924,6 +1018,16 @@ namespace Resources {
         public static string Projection {
             get {
                 return ResourceManager.GetString("Projection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;
+        ///                    &lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;.
+        /// </summary>
+        public static string ProjectionHelpText {
+            get {
+                return ResourceManager.GetString("ProjectionHelpText", resourceCulture);
             }
         }
         
