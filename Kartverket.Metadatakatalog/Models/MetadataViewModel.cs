@@ -15,6 +15,12 @@ namespace Kartverket.Metadatakatalog.Models
 {
     public class MetadataViewModel
     {
+        public void SetDistributionUrl()
+        {
+            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL)){
+                DownloadUrl = DistributionDetails.URL;
+            }
+        }
 
         public string Abstract { get; set; }
         public BoundingBox BoundingBox { get; set; }
@@ -73,6 +79,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
         public string CoverageUrl { get; set; }
+        public string DownloadUrl { get; set; }
         public string Purpose { get; set; }
         public List<QualitySpecification> QualitySpecifications { get; set; }
         public ReferenceSystem ReferenceSystem { get; set; }
@@ -128,35 +135,36 @@ namespace Kartverket.Metadatakatalog.Models
 
         public String MapUrl()
         {
+            var norgeskartUrl = WebConfigurationManager.AppSettings["NorgeskartUrl"];
             if (IsService() || IsServiceLayer())
             {
                 if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:WMS")))
                 {
                     if (!string.IsNullOrWhiteSpace(DistributionDetails.Name))
-                        return "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(DistributionDetails.URL) + "]/+" + DistributionDetails.Name;
+                        return norgeskartUrl + "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(DistributionDetails.URL) + "]/+" + DistributionDetails.Name + "/";
                     else
-                        return "#5/355422/6668909/l/wms/[" + RemoveQueryString(DistributionDetails.URL) + "]";
+                        return norgeskartUrl + "#5/355422/6668909/l/wms/[" + RemoveQueryString(DistributionDetails.URL) + "]" + "/";
                 }
                 else if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:WFS")))
                 {
                     if (!string.IsNullOrWhiteSpace(DistributionDetails.Name))
-                        return "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(DistributionDetails.URL) + "]/+" + DistributionDetails.Name;
+                        return norgeskartUrl + "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(DistributionDetails.URL) + "]/+" + DistributionDetails.Name + "/";
                     else
-                        return "#5/355422/6668909/l/wfs/[" + RemoveQueryString(DistributionDetails.URL) + "]";
+                        return norgeskartUrl + "#5/355422/6668909/l/wfs/[" + RemoveQueryString(DistributionDetails.URL) + "]" + "/";
                 }
                 else if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:WCS")))
                 {
                     if (!string.IsNullOrWhiteSpace(DistributionDetails.Name))
-                        return "#5/355422/6668909/*/l/wcs/[" + RemoveQueryString(DistributionDetails.URL) + "]/+" + DistributionDetails.Name;
+                        return norgeskartUrl + "#5/355422/6668909/*/l/wcs/[" + RemoveQueryString(DistributionDetails.URL) + "]/+" + DistributionDetails.Name + "/";
                     else
-                        return "#5/355422/6668909/l/wcs/[" + RemoveQueryString(DistributionDetails.URL) + "]";
+                        return norgeskartUrl + "#5/355422/6668909/l/wcs/[" + RemoveQueryString(DistributionDetails.URL) + "]" + "/";
                 }
 
                 else return "";
             }
             else if (IsDataset())
             {
-                return WebConfigurationManager.AppSettings["NorgeskartUrl"] + ServiceUrl();
+                return WebConfigurationManager.AppSettings["NorgeskartUrl"] + ServiceUrl() + "/";
             }
             else return "";
         }

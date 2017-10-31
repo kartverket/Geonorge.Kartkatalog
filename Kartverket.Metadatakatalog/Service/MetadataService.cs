@@ -518,6 +518,8 @@ namespace Kartverket.Metadatakatalog.Service
                     simpleMetadata.ReferenceSystems != null ? Convert(simpleMetadata.ReferenceSystems) : null,
             };
 
+            metadata.SetDistributionUrl();
+
             if (!IsNullOrEmpty(metadata.ParentIdentifier) && metadata.HierarchyLevel == "service")
                 metadata.ServiceUuid = metadata.ParentIdentifier;
 
