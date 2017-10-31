@@ -19,7 +19,7 @@
                 <iframe v-if="master" id="masterorderline-iframe" v-bind:src="mapSrc" name="iframe" style="height:100%"></iframe>
                 <iframe v-else v-bind:id="$parent.$parent.metadata.uuid + '-iframe'" v-bind:src="mapSrc" name="iframe" style="height:100%"></iframe>
                 <div class="modal-footer">
-                    <button type="button" v-on:click="$parent.$parent.showMap = false" class="btn btn-default" data-dismiss="modal">Lukk</button>
+                    <button type="button" v-on:click="$parent.$parent.showMap = false" class="btn btn-default" data-dismiss="modal">@UI.Close</button>
                 </div>
             </div>
         </div>
@@ -59,8 +59,8 @@
                         </div>
                     </div>
                     <div class="custom-select-list-dropdown-additional-options">
-                        <a v-show="supportsPolygonSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> Velg fra kart</a>
-                        <a v-show="supportsGridSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'grid')" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> Velg fra kartblad</a>
+                        <a v-show="supportsPolygonSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> @UI.ChooseFromMap</a>
+                        <a v-show="supportsGridSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'grid')" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !this.supportsGridSelection}"><span class="fa fa-map"></span> @UI.SelectGrid</a>
                     </div>
                 </div>
             </div>
@@ -164,7 +164,7 @@
             <div class="row orderline-fields">
                 <div class="col-md-4 orderline-field">
                     <p>@UI.Facet_area</p>
-                    <div v-if="!hasAreas" class="help-text form-element-help-text bg-danger"><span>Ingen områder er tilgjengelig</span></div>
+                    <div v-if="!hasAreas" class="help-text form-element-help-text bg-danger"><span>@UI.NoAreasAreAvailable</span></div>
                     <div v-else is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.area && orderLineErrors.area.length ? 'hasError' : '']"></div>
                     <div v-if="orderLineErrors && orderLineErrors.area && hasAreas" class="orderline-errors margin-top-10">
                         <div v-for="orderlineError in orderLineErrors.area" class="help-text form-element-help-text bg-danger">
@@ -173,7 +173,7 @@
                     </div>
                     <div v-if="notAvailableSelectedAreas && notAvailableSelectedAreas.length" class="orderline-errors margin-top-10">
                         <div class="help-text form-element-help-text bg-info">
-                            {{ notAvailableSelectedAreas.length }} {{notAvailableSelectedAreas.length == 1 ? "valgt område" : "valgte områder"}} er ikke tilgjengelig
+                            {{ notAvailableSelectedAreas.length }} {{notAvailableSelectedAreas.length == 1 ? "valgt område" : "valgte områder"}} @UI.IsNotAvailable
                         </div>
                     </div>
                 </div>
@@ -184,17 +184,17 @@
 
                     <div v-if="orderLineErrors && orderLineErrors.projection" class="orderline-errors margin-top-10">
                         <div v-show="orderLineErrors.projection.length" class="help-text form-element-help-text bg-danger">
-                            <span class="custom-icon projection-warning-icon"></span> Mangler projeksjon for {{ orderLineErrors.projection.length }} {{orderLineErrors.projection.length == 1 ? "område" : "områder"}}
+                            <span class="custom-icon projection-warning-icon"></span> @UI.MissingProjectionFor {{ orderLineErrors.projection.length }} {{orderLineErrors.projection.length == 1 ? "område" : "områder"}}
                         </div>
                     </div>
                     <div v-if="orderLineInfoMessages && orderLineInfoMessages.projection" class="orderline-errors margin-top-10">
                         <div v-show="orderLineInfoMessages.projection.length" class="help-text form-element-help-text bg-info">
-                            {{ orderLineInfoMessages.projection.length }} {{orderLineInfoMessages.projection.length == 1 ? "valgt projeksjon" : "valgte projeksjoner"}} er ikke lik fellesvalget
+                            {{ orderLineInfoMessages.projection.length }} {{orderLineInfoMessages.projection.length == 1 ? "valgt projeksjon" : "valgte projeksjoner"}} @UI.DoesNotMatchCommonChoice
                         </div>
                     </div>
                     <div v-if="notAvailableSelectedProjections && notAvailableSelectedProjections.length" class="orderline-errors margin-top-10">
                         <div class="help-text form-element-help-text bg-info">
-                            {{ notAvailableSelectedProjections.length }} {{notAvailableSelectedProjections.length == 1 ? "valgt projeksjon" : "valgte projeksjoner"}} er ikke tilgjengelig
+                            {{ notAvailableSelectedProjections.length }} {{notAvailableSelectedProjections.length == 1 ? "valgt projeksjon" : "valgte projeksjoner"}} @UI.IsNotAvailable
                         </div>
                     </div>
                 </div>
@@ -205,17 +205,17 @@
 
                     <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
                         <div v-show="orderLineErrors.format.length" class="help-text form-element-help-text bg-danger">
-                            <span class="custom-icon format-warning-icon"></span> Mangler format for {{ orderLineErrors.format.length }} {{orderLineErrors.format.length == 1 ? "område" : "områder"}}
+                            <span class="custom-icon format-warning-icon"></span> @UI.MissingFormatFor {{ orderLineErrors.format.length }} {{orderLineErrors.format.length == 1 ? "område" : "områder"}}
                         </div>
                     </div>
                     <div v-if="orderLineInfoMessages && orderLineInfoMessages.format" class="orderline-errors margin-top-10">
                         <div v-show="orderLineInfoMessages.format.length" class="help-text form-element-help-text bg-info">
-                            {{ orderLineInfoMessages.format.length }} {{orderLineInfoMessages.format.length == 1 ? "valgt format" : "valgte formater"}} er ikke lik som fellesvalget
+                            {{ orderLineInfoMessages.format.length }} {{orderLineInfoMessages.format.length == 1 ? "valgt format" : "valgte formater"}} @UI.DoesNotMatchCommonChoice
                         </div>
                     </div>
                     <div v-if="notAvailableSelectedFormats && notAvailableSelectedFormats.length" class="orderline-errors margin-top-10">
                         <div class="help-text form-element-help-text bg-info">
-                            {{ notAvailableSelectedFormats.length }} {{notAvailableSelectedFormats.length == 1 ? "valgt format" : "valgte formater"}} er ikke tilgjengelig
+                            {{ notAvailableSelectedFormats.length }} {{notAvailableSelectedFormats.length == 1 ? "valgt format" : "valgte formater"}} @UI.IsNotAvailable
                         </div>
                     </div>
                 </div>
@@ -318,7 +318,7 @@
             <div class="download-form">
                 <div v-show="emailRequired" class="row margin-bottom-10">
                     <div id="emailField" class="col-sm-6 margin-bottom-10">
-                        <p class="article-p">E-post: <span class="required-indicator"></span></p>
+                        <p class="article-p">@UI.Email: <span class="required-indicator"></span></p>
                         <input type="text" v-model="email" name="email" class="form-control" />
                     </div>
                 </div>
@@ -340,14 +340,14 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Fjerning av datasett</h4>
+                                <h4 class="modal-title" id="myModalLabel">@UI.RemovalOfDataset</h4>
                             </div>
                             <div class="modal-body">
-                                Er du sikker på at du vil fjerne alle datasett fra kurven?
+                                @UI.RemoveAllDatasetsConfirm
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn" data-dismiss="modal">Nei</button>
-                                <button type="button" v-on:click="removeAllOrderLines()" id="remove-all-items-submit" class="btn">Ja</button>
+                                <button type="button" class="btn" data-dismiss="modal">@UI.No</button>
+                                <button type="button" v-on:click="removeAllOrderLines()" id="remove-all-items-submit" class="btn">@UI.Yes</button>
                             </div>
                         </div>
                     </div>
@@ -359,7 +359,7 @@
     <article v-show="!orderLines.length && !orderResponse.length">
         <div class="row">
             <div class="col-md-12">
-                <p>Du har ingen elementer i kurven</p>
+                <p>@UI.NoElementsInBasket</p>
             </div>
         </div>
     </article>
@@ -396,7 +396,7 @@
                                     <div class="col-sm-5 col-md-6">
 
                                         <span class="download-list-item-name">
-                                            {{ file.metadataName }}, <span class="inline-block">Valgt fra kart</span> <small class="inline-block">(Under behandling)</small>
+                                            {{ file.metadataName }}, <span class="inline-block">@UI.SelectedFromMap</span> <small class="inline-block">(Under behandling)</small>
                                         </span>
                                     </div>
                                     <div class="col-sm-4 col-md-3">

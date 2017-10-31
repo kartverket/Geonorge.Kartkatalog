@@ -530,6 +530,12 @@
                     &lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;
                     &lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;</value>
   </data>
+  <data name="ChooseFromMap" xml:space="preserve">
+    <value>Velg fra kart</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Lukk</value>
+  </data>
   <data name="DatasetIsCorrect" xml:space="preserve">
     <value>Datasett er korrekt utfylt</value>
   </data>
@@ -542,10 +548,25 @@
   <data name="DisplayMessages" xml:space="preserve">
     <value>Vis meldinger</value>
   </data>
+  <data name="DoesNotMatchCommonChoice" xml:space="preserve">
+    <value>er ikke lik fellesvalget</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-post</value>
+  </data>
   <data name="FormatHelpText" xml:space="preserve">
     <value>&lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;
                     &lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;
 &lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;</value>
+  </data>
+  <data name="IsNotAvailable" xml:space="preserve">
+    <value>er ikke tilgjengelig</value>
+  </data>
+  <data name="MissingFormatFor" xml:space="preserve">
+    <value>Mangler format for</value>
+  </data>
+  <data name="MissingProjectionFor" xml:space="preserve">
+    <value>Mangler projeksjon for</value>
   </data>
   <data name="Nationwide" xml:space="preserve">
     <value>Landsdekkende</value>
@@ -553,8 +574,32 @@
   <data name="NavigateToDataset" xml:space="preserve">
     <value>Gå til datasett</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>Nei</value>
+  </data>
+  <data name="NoAreasAreAvailable" xml:space="preserve">
+    <value>Ingen områder er tilgjengelig</value>
+  </data>
+  <data name="NoElementsInBasket" xml:space="preserve">
+    <value>Du har ingen elementer i kurven</value>
+  </data>
   <data name="ProjectionHelpText" xml:space="preserve">
     <value>&lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;
                     &lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;</value>
+  </data>
+  <data name="RemovalOfDataset" xml:space="preserve">
+    <value>Fjerning av datasett</value>
+  </data>
+  <data name="RemoveAllDatasetsConfirm" xml:space="preserve">
+    <value>Er du sikker på at du vil fjerne alle datasett fra kurven?</value>
+  </data>
+  <data name="SelectedFromMap" xml:space="preserve">
+    <value>Valgt fra kart</value>
+  </data>
+  <data name="SelectGrid" xml:space="preserve">
+    <value>Velg fra kartblad</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
   </data>
 </root>

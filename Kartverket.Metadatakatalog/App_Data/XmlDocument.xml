@@ -1099,6 +1099,16 @@
               Looks up a localized string similar to Kan ikke legges i kurv.
             </summary>
         </member>
+        <member name="P:Resources.UI.ChooseFromMap">
+            <summary>
+              Looks up a localized string similar to Velg fra kart.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Close">
+            <summary>
+              Looks up a localized string similar to Lukk.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Concepts">
             <summary>
               Looks up a localized string similar to Begreper.
@@ -1254,6 +1264,11 @@
               Looks up a localized string similar to Distribusjonstype.
             </summary>
         </member>
+        <member name="P:Resources.UI.DoesNotMatchCommonChoice">
+            <summary>
+              Looks up a localized string similar to er ikke lik fellesvalget.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Download">
             <summary>
               Looks up a localized string similar to Last ned.
@@ -1272,6 +1287,11 @@
         <member name="P:Resources.UI.Edit">
             <summary>
               Looks up a localized string similar to Rediger.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Email">
+            <summary>
+              Looks up a localized string similar to E-post.
             </summary>
         </member>
         <member name="P:Resources.UI.Facet_area">
@@ -1429,6 +1449,11 @@
               Looks up a localized string similar to er lagt til i.
             </summary>
         </member>
+        <member name="P:Resources.UI.IsNotAvailable">
+            <summary>
+              Looks up a localized string similar to er ikke tilgjengelig.
+            </summary>
+        </member>
         <member name="P:Resources.UI.IsRemovedFrom">
             <summary>
               Looks up a localized string similar to er fjernet fra.
@@ -1474,6 +1499,16 @@
               Looks up a localized string similar to Hva finnes i kommune/fylke?.
             </summary>
         </member>
+        <member name="P:Resources.UI.MissingFormatFor">
+            <summary>
+              Looks up a localized string similar to Mangler format for.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.MissingProjectionFor">
+            <summary>
+              Looks up a localized string similar to Mangler projeksjon for.
+            </summary>
+        </member>
         <member name="P:Resources.UI.MunicipalitySelect">
             <summary>
               Looks up a localized string similar to Velg kommune/fylke.
@@ -1497,6 +1532,21 @@
         <member name="P:Resources.UI.NavigateToDataset">
             <summary>
               Looks up a localized string similar to Gå til datasett.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.No">
+            <summary>
+              Looks up a localized string similar to Nei.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.NoAreasAreAvailable">
+            <summary>
+              Looks up a localized string similar to Ingen områder er tilgjengelig.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.NoElementsInBasket">
+            <summary>
+              Looks up a localized string similar to Du har ingen elementer i kurven.
             </summary>
         </member>
         <member name="P:Resources.UI.North">
@@ -1595,9 +1645,19 @@
               Looks up a localized string similar to Romlig referansesystem.
             </summary>
         </member>
+        <member name="P:Resources.UI.RemovalOfDataset">
+            <summary>
+              Looks up a localized string similar to Fjerning av datasett.
+            </summary>
+        </member>
         <member name="P:Resources.UI.RemoveAll">
             <summary>
               Looks up a localized string similar to Fjern alle.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.RemoveAllDatasetsConfirm">
+            <summary>
+              Looks up a localized string similar to Er du sikker på at du vil fjerne alle datasett fra kurven?.
             </summary>
         </member>
         <member name="P:Resources.UI.ResolutionScale">
@@ -1633,6 +1693,16 @@
         <member name="P:Resources.UI.SecurityConstraintsNote">
             <summary>
               Looks up a localized string similar to Lovhenvisning.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SelectedFromMap">
+            <summary>
+              Looks up a localized string similar to Valgt fra kart.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SelectGrid">
+            <summary>
+              Looks up a localized string similar to Velg fra kartblad.
             </summary>
         </member>
         <member name="P:Resources.UI.SelectOrganization">
@@ -1748,6 +1818,11 @@
         <member name="P:Resources.UI.West">
             <summary>
               Looks up a localized string similar to Vest.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Yes">
+            <summary>
+              Looks up a localized string similar to Ja.
             </summary>
         </member>
     </members>

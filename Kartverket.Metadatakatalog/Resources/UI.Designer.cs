@@ -198,6 +198,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Velg fra kart.
+        /// </summary>
+        public static string ChooseFromMap {
+            get {
+                return ResourceManager.GetString("ChooseFromMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lukk.
+        /// </summary>
+        public static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Begreper.
         /// </summary>
         public static string Concepts {
@@ -477,6 +495,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to er ikke lik fellesvalget.
+        /// </summary>
+        public static string DoesNotMatchCommonChoice {
+            get {
+                return ResourceManager.GetString("DoesNotMatchCommonChoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last ned.
         /// </summary>
         public static string Download {
@@ -509,6 +536,15 @@ namespace Resources {
         public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E-post.
+        /// </summary>
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
             }
         }
         
@@ -788,6 +824,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to er ikke tilgjengelig.
+        /// </summary>
+        public static string IsNotAvailable {
+            get {
+                return ResourceManager.GetString("IsNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to er fjernet fra.
         /// </summary>
         public static string IsRemovedFrom {
@@ -869,6 +914,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mangler format for.
+        /// </summary>
+        public static string MissingFormatFor {
+            get {
+                return ResourceManager.GetString("MissingFormatFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mangler projeksjon for.
+        /// </summary>
+        public static string MissingProjectionFor {
+            get {
+                return ResourceManager.GetString("MissingProjectionFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Velg kommune/fylke.
         /// </summary>
         public static string MunicipalitySelect {
@@ -910,6 +973,33 @@ namespace Resources {
         public static string NavigateToDataset {
             get {
                 return ResourceManager.GetString("NavigateToDataset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nei.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ingen områder er tilgjengelig.
+        /// </summary>
+        public static string NoAreasAreAvailable {
+            get {
+                return ResourceManager.GetString("NoAreasAreAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Du har ingen elementer i kurven.
+        /// </summary>
+        public static string NoElementsInBasket {
+            get {
+                return ResourceManager.GetString("NoElementsInBasket", resourceCulture);
             }
         }
         
@@ -1086,11 +1176,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fjerning av datasett.
+        /// </summary>
+        public static string RemovalOfDataset {
+            get {
+                return ResourceManager.GetString("RemovalOfDataset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fjern alle.
         /// </summary>
         public static string RemoveAll {
             get {
                 return ResourceManager.GetString("RemoveAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Er du sikker på at du vil fjerne alle datasett fra kurven?.
+        /// </summary>
+        public static string RemoveAllDatasetsConfirm {
+            get {
+                return ResourceManager.GetString("RemoveAllDatasetsConfirm", resourceCulture);
             }
         }
         
@@ -1154,6 +1262,24 @@ namespace Resources {
         public static string SecurityConstraintsNote {
             get {
                 return ResourceManager.GetString("SecurityConstraintsNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valgt fra kart.
+        /// </summary>
+        public static string SelectedFromMap {
+            get {
+                return ResourceManager.GetString("SelectedFromMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Velg fra kartblad.
+        /// </summary>
+        public static string SelectGrid {
+            get {
+                return ResourceManager.GetString("SelectGrid", resourceCulture);
             }
         }
         
@@ -1361,6 +1487,15 @@ namespace Resources {
         public static string West {
             get {
                 return ResourceManager.GetString("West", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ja.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }
