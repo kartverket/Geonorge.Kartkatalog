@@ -512,7 +512,7 @@ namespace Kartverket.Metadatakatalog.Service
                 DistributionFormats = simpleMetadata.DistributionFormats,
                 UnitsOfDistribution =
                     simpleMetadata.DistributionDetails != null
-                        ? simpleMetadata.DistributionDetails.UnitsOfDistribution
+                        ? GetTranslation(simpleMetadata.DistributionDetails.UnitsOfDistribution, simpleMetadata.DistributionDetails.EnglishUnitsOfDistribution)
                         : null,
                 ReferenceSystems =
                     simpleMetadata.ReferenceSystems != null ? Convert(simpleMetadata.ReferenceSystems) : null,
