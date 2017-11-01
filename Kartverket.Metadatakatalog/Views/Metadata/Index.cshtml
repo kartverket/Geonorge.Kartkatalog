@@ -523,6 +523,7 @@ if (keywords != null && keywords.Any())
             data: {
                 tableBorder: "",
                 distributionlist: [],
+                distributionListRaw: [],
                 relatedDataList: [],
                 model: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
             },
@@ -535,6 +536,7 @@ if (keywords != null && keywords.Any())
                     url: "/api/distributions/" + uuid,
                     success: function (response) {
                         vueModel.distributionlist = vueModel.convertDistributionList(response);
+                        vueModel.distributionlistRaw = response;
                     }
                 });
                 this.relatedDataList = this.convertRelatedDataList();

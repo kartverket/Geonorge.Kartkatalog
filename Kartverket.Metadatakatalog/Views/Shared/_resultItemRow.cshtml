@@ -195,12 +195,6 @@
                 var url = "/metadata/" + organization + "/" + title + "/" + uuid;
                 return url;
             },
-
-            // TODO ta vekk
-            organizationUrl: function () {
-                url = "/etatvis-oversikt/" + this.resultItem.OrganizationSeoName;
-                return url;
-            },
             description: function () {
                 var description;
                 if (this.resultItem.Abstract.length > 250) {

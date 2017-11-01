@@ -1040,7 +1040,6 @@
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
     <Content Include="authentication.default.config" />
-    <Content Include="authentication.config" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\.bower.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\702ZOKiLJc3WVjuplzInF5uFdDttMLvmWuJdhhgs.ttf" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.eot" />
@@ -1195,7 +1194,6 @@
     <Content Include="settings.default.config" />
     <Content Include="Views\ServiceDirectory\Index.cshtml" />
     <Content Include="Views\Application\Index.cshtml" />
-    <Content Include="settings.config" />
     <Content Include="Views\Search\Area.cshtml" />
     <Content Include="Views\Themes\Create.cshtml" />
     <Content Include="Views\Themes\Delete.cshtml" />
