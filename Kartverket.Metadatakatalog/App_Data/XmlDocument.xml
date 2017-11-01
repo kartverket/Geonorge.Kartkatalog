@@ -1072,6 +1072,11 @@
               Looks up a localized string similar to Godkjent.
             </summary>
         </member>
+        <member name="P:Resources.UI.Area">
+            <summary>
+              Looks up a localized string similar to område.
+            </summary>
+        </member>
         <member name="P:Resources.UI.AreaHelpText">
             <summary>
               Looks up a localized string similar to &lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;
@@ -1082,6 +1087,11 @@
         <member name="P:Resources.UI.AreaMustBeSelectedFirst">
             <summary>
               Looks up a localized string similar to Område må velges først.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Areas">
+            <summary>
+              Looks up a localized string similar to områder.
             </summary>
         </member>
         <member name="P:Resources.UI.AvailableAs">
@@ -1695,9 +1705,39 @@
               Looks up a localized string similar to Lovhenvisning.
             </summary>
         </member>
+        <member name="P:Resources.UI.SelectedArea">
+            <summary>
+              Looks up a localized string similar to valgt område.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SelectedAreas">
+            <summary>
+              Looks up a localized string similar to valgte områder.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SelectedFormat">
+            <summary>
+              Looks up a localized string similar to valgt format.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SelectedFormats">
+            <summary>
+              Looks up a localized string similar to valgte formater.
+            </summary>
+        </member>
         <member name="P:Resources.UI.SelectedFromMap">
             <summary>
               Looks up a localized string similar to Valgt fra kart.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SelectedProjection">
+            <summary>
+              Looks up a localized string similar to valgt projeksjon.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SelectedProjections">
+            <summary>
+              Looks up a localized string similar to valgte projeksjoner.
             </summary>
         </member>
         <member name="P:Resources.UI.SelectGrid">

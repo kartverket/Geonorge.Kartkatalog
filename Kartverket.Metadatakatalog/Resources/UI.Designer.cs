@@ -151,6 +151,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to område.
+        /// </summary>
+        public static string Area {
+            get {
+                return ResourceManager.GetString("Area", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;
         ///                    &lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;
         ///                    &lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;.
@@ -167,6 +176,15 @@ namespace Resources {
         public static string AreaMustBeSelectedFirst {
             get {
                 return ResourceManager.GetString("AreaMustBeSelectedFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to områder.
+        /// </summary>
+        public static string Areas {
+            get {
+                return ResourceManager.GetString("Areas", resourceCulture);
             }
         }
         
@@ -1266,11 +1284,65 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to valgt område.
+        /// </summary>
+        public static string SelectedArea {
+            get {
+                return ResourceManager.GetString("SelectedArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to valgte områder.
+        /// </summary>
+        public static string SelectedAreas {
+            get {
+                return ResourceManager.GetString("SelectedAreas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to valgt format.
+        /// </summary>
+        public static string SelectedFormat {
+            get {
+                return ResourceManager.GetString("SelectedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to valgte formater.
+        /// </summary>
+        public static string SelectedFormats {
+            get {
+                return ResourceManager.GetString("SelectedFormats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Valgt fra kart.
         /// </summary>
         public static string SelectedFromMap {
             get {
                 return ResourceManager.GetString("SelectedFromMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to valgt projeksjon.
+        /// </summary>
+        public static string SelectedProjection {
+            get {
+                return ResourceManager.GetString("SelectedProjection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to valgte projeksjoner.
+        /// </summary>
+        public static string SelectedProjections {
+            get {
+                return ResourceManager.GetString("SelectedProjections", resourceCulture);
             }
         }
         

@@ -1210,6 +1210,7 @@
     <Content Include="Views\Shared\_Pagination.cshtml" />
     <Content Include="Views\Shared\_PaginationForArea.cshtml" />
     <Content Include="Views\Shared\_PaginationForOrganization.cshtml" />
+    <Content Include="Views\Shared\_Resources.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

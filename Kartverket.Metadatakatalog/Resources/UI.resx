@@ -602,4 +602,28 @@
   <data name="Yes" xml:space="preserve">
     <value>Ja</value>
   </data>
+  <data name="Area" xml:space="preserve">
+    <value>område</value>
+  </data>
+  <data name="Areas" xml:space="preserve">
+    <value>områder</value>
+  </data>
+  <data name="SelectedArea" xml:space="preserve">
+    <value>valgt område</value>
+  </data>
+  <data name="SelectedAreas" xml:space="preserve">
+    <value>valgte områder</value>
+  </data>
+  <data name="SelectedFormat" xml:space="preserve">
+    <value>valgt format</value>
+  </data>
+  <data name="SelectedFormats" xml:space="preserve">
+    <value>valgte formater</value>
+  </data>
+  <data name="SelectedProjection" xml:space="preserve">
+    <value>valgt projeksjon</value>
+  </data>
+  <data name="SelectedProjections" xml:space="preserve">
+    <value>valgte projeksjoner</value>
+  </data>
 </root>

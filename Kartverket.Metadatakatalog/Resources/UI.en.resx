@@ -602,4 +602,28 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="Area" xml:space="preserve">
+    <value>area</value>
+  </data>
+  <data name="Areas" xml:space="preserve">
+    <value>areas</value>
+  </data>
+  <data name="SelectedArea" xml:space="preserve">
+    <value>selected area</value>
+  </data>
+  <data name="SelectedAreas" xml:space="preserve">
+    <value>selected areas</value>
+  </data>
+  <data name="SelectedFormat" xml:space="preserve">
+    <value>selected format</value>
+  </data>
+  <data name="SelectedFormats" xml:space="preserve">
+    <value>selected formats</value>
+  </data>
+  <data name="SelectedProjection" xml:space="preserve">
+    <value>selected projection</value>
+  </data>
+  <data name="SelectedProjections" xml:space="preserve">
+    <value>selected projections</value>
+  </data>
 </root>

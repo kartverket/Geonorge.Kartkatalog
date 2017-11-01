@@ -173,7 +173,7 @@
                     </div>
                     <div v-if="notAvailableSelectedAreas && notAvailableSelectedAreas.length" class="orderline-errors margin-top-10">
                         <div class="help-text form-element-help-text bg-info">
-                            {{ notAvailableSelectedAreas.length }} {{notAvailableSelectedAreas.length == 1 ? "valgt område" : "valgte områder"}} @UI.IsNotAvailable
+                            {{ notAvailableSelectedAreas.length }} {{notAvailableSelectedAreas.length == 1 ? "@UI.SelectedArea" : "@UI.SelectedAreas"}} @UI.IsNotAvailable
                         </div>
                     </div>
                 </div>
@@ -184,17 +184,17 @@
 
                     <div v-if="orderLineErrors && orderLineErrors.projection" class="orderline-errors margin-top-10">
                         <div v-show="orderLineErrors.projection.length" class="help-text form-element-help-text bg-danger">
-                            <span class="custom-icon projection-warning-icon"></span> @UI.MissingProjectionFor {{ orderLineErrors.projection.length }} {{orderLineErrors.projection.length == 1 ? "område" : "områder"}}
+                            <span class="custom-icon projection-warning-icon"></span> @UI.MissingProjectionFor {{ orderLineErrors.projection.length }} {{orderLineErrors.projection.length == 1 ? "@UI.Area" : "@UI.Areas"}}
                         </div>
                     </div>
                     <div v-if="orderLineInfoMessages && orderLineInfoMessages.projection" class="orderline-errors margin-top-10">
                         <div v-show="orderLineInfoMessages.projection.length" class="help-text form-element-help-text bg-info">
-                            {{ orderLineInfoMessages.projection.length }} {{orderLineInfoMessages.projection.length == 1 ? "valgt projeksjon" : "valgte projeksjoner"}} @UI.DoesNotMatchCommonChoice
+                            {{ orderLineInfoMessages.projection.length }} {{orderLineInfoMessages.projection.length == 1 ? "@UI.SelectedProjection" : "@UI.SelectedProjections"}} @UI.DoesNotMatchCommonChoice
                         </div>
                     </div>
                     <div v-if="notAvailableSelectedProjections && notAvailableSelectedProjections.length" class="orderline-errors margin-top-10">
                         <div class="help-text form-element-help-text bg-info">
-                            {{ notAvailableSelectedProjections.length }} {{notAvailableSelectedProjections.length == 1 ? "valgt projeksjon" : "valgte projeksjoner"}} @UI.IsNotAvailable
+                            {{ notAvailableSelectedProjections.length }} {{notAvailableSelectedProjections.length == 1 ? "@UI.SelectedProjection" : "@UI.SelectedProjections"}} @UI.IsNotAvailable
                         </div>
                     </div>
                 </div>
@@ -205,17 +205,17 @@
 
                     <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
                         <div v-show="orderLineErrors.format.length" class="help-text form-element-help-text bg-danger">
-                            <span class="custom-icon format-warning-icon"></span> @UI.MissingFormatFor {{ orderLineErrors.format.length }} {{orderLineErrors.format.length == 1 ? "område" : "områder"}}
+                            <span class="custom-icon format-warning-icon"></span> @UI.MissingFormatFor {{ orderLineErrors.format.length }} {{orderLineErrors.format.length == 1 ? "@UI.Area" : "@UI.Areas"}}
                         </div>
                     </div>
                     <div v-if="orderLineInfoMessages && orderLineInfoMessages.format" class="orderline-errors margin-top-10">
                         <div v-show="orderLineInfoMessages.format.length" class="help-text form-element-help-text bg-info">
-                            {{ orderLineInfoMessages.format.length }} {{orderLineInfoMessages.format.length == 1 ? "valgt format" : "valgte formater"}} @UI.DoesNotMatchCommonChoice
+                            {{ orderLineInfoMessages.format.length }} {{orderLineInfoMessages.format.length == 1 ? "@UI.SelectedFormat" : "@UI.SelectedFormats"}} @UI.DoesNotMatchCommonChoice
                         </div>
                     </div>
                     <div v-if="notAvailableSelectedFormats && notAvailableSelectedFormats.length" class="orderline-errors margin-top-10">
                         <div class="help-text form-element-help-text bg-info">
-                            {{ notAvailableSelectedFormats.length }} {{notAvailableSelectedFormats.length == 1 ? "valgt format" : "valgte formater"}} @UI.IsNotAvailable
+                            {{ notAvailableSelectedFormats.length }} {{notAvailableSelectedFormats.length == 1 ? "@UI.SelectedFormat" : "@UI.SelectedFormats"}} @UI.IsNotAvailable
                         </div>
                     </div>
                 </div>
