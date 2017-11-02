@@ -50,7 +50,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
 
         public override bool Equals(object obj)
         {
-            return obj is DistributionRow other && (other.Organization == Organization && other.Protocol == Protocol && other.Url == Url);
+            return obj is DistributionRow other &&
+                   (other.Organization == Organization && other.Protocol == Protocol && other.Url == Url);
         }
         public override int GetHashCode()
         {
