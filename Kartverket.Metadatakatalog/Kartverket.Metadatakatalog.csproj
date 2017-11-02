@@ -1113,6 +1113,7 @@
     <Content Include="Content\bower_components\vue\test\unit\.eslintrc" />
     <Content Include="Content\bower_components\vue\test\weex\.eslintrc" />
     <Content Include="Content\bower_components\vue\test\weex\jasmine.json" />
+    <Content Include="authentication.config" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
@@ -1209,6 +1210,7 @@
     <Content Include="Views\Shared\_PaginationForArea.cshtml" />
     <Content Include="Views\Shared\_PaginationForOrganization.cshtml" />
     <Content Include="Views\Shared\_Resources.cshtml" />
+    <Content Include="settings.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />
