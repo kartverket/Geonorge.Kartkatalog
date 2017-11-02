@@ -118,9 +118,10 @@ namespace Kartverket.Metadatakatalog.Models
         public bool CanShowServiceMapUrl { get; set; }
         public bool CanShowDownloadService { get; set; }
         public bool CanShowDownloadUrl { get; set; }
+        public bool CanShowWebsiteUrl { get; set; }
         public string MapLink { get; set; }
         public string ServiceLink { get; set; }
-
+        public string DistributionUrl { get; set; }
 
         public SeoUrl CreateSeoUrl()
         {

@@ -463,6 +463,7 @@ namespace Kartverket.Metadatakatalog.Service
                 DatePublished = simpleMetadata.DatePublished,
                 DateUpdated = simpleMetadata.DateUpdated,
                 DistributionDetails = Convert(simpleMetadata.DistributionDetails),
+                DistributionUrl = simpleMetadata.DistributionDetails.URL,
                 DistributionFormat = Convert(simpleMetadata.DistributionFormat),
                 EnglishAbstract = simpleMetadata.EnglishAbstract,
                 EnglishTitle = simpleMetadata.EnglishTitle,
@@ -896,6 +897,7 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.CanShowServiceMapUrl = metadata.ShowServiceMapLink();
             metadata.CanShowDownloadService = metadata.ShowDownloadService();
             metadata.CanShowDownloadUrl = metadata.ShowDownloadLink();
+            metadata.CanShowWebsiteUrl = metadata.ShowWebsiteLink();
 
             metadata.MapLink = metadata.MapUrl();
             metadata.ServiceLink = metadata.ServiceUrl();

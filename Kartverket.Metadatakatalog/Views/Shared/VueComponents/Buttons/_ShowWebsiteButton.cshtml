@@ -23,7 +23,9 @@
                             { key: "onClick", value: "ga('send', 'event', 'MerInfo', 'nettside')" }
                         ]
                     };
-                    if (button.url == null) {
+                    //if (button.url == null) {
+                    if (this.resultItem.ShowWebsiteUrl === false) {
+                        button.url = "",
                         button.attributes.push({ key: 'disabled', value: 'disabled' });
                         button.className += " disabled";
                     }
