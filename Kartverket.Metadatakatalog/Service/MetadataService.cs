@@ -238,11 +238,11 @@ namespace Kartverket.Metadatakatalog.Service
                             tmp.Title = relData[1] != null ? relData[1] : "";
                             tmp.Type = relData[3] != null ? relData[3] : "";
                             tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
-                            tmp.DistributionFormats.Add(new DistributionFormat()
-                            {
-                                Name = relData[6] != null ? Register.GetDistributionType(relData[6]) : "",
-                                Version = ""
-                            });
+                            //tmp.DistributionFormats.Add(new DistributionFormat()
+                            //{
+                            //    Name = /*relData[6] != null ? Register.GetDistributionType(relData[6]) :*/ "",
+                            //    Version = ""
+                            //});
                             tmp.DistributionName = relData[5] != null ? relData[5] : "";
                             tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
                             tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
@@ -289,11 +289,11 @@ namespace Kartverket.Metadatakatalog.Service
                             if (tmp.Type == "service" && !IsNullOrEmpty(parentIdentifier))
                                 tmp.Type = "servicelayer";
                             tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
-                            tmp.DistributionFormats.Add(new DistributionFormat()
-                            {
-                                Name = relData[6] != null ? Register.GetDistributionType(relData[6]) : "",
-                                Version = ""
-                            });
+                            //tmp.DistributionFormats.Add(new DistributionFormat()
+                            //{
+                            //    Name = /*relData[6] != null ? Register.GetDistributionType(relData[6]) :*/ "",
+                            //    Version = ""
+                            //});
                             tmp.DistributionName = relData[5] != null ? relData[5] : "";
                             tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
                             tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
@@ -326,11 +326,11 @@ namespace Kartverket.Metadatakatalog.Service
 
         private List<Models.Api.Distribution> GetMetadataRelatedDistributions(string uuid)
         {
-            List<Models.Api.Distribution> distlist = new List<Models.Api.Distribution>();
+            var distlist = new List<Distribution>();
 
-            SearchParameters parameters = new SearchParameters();
+            var parameters = new SearchParameters();
             parameters.Text = uuid;
-            SearchResult searchResult = _searchService.Search(parameters);
+            var searchResult = _searchService.Search(parameters);
 
             if (searchResult != null && searchResult.NumFound > 0)
             {
@@ -344,19 +344,19 @@ namespace Kartverket.Metadatakatalog.Service
 
                         try
                         {
-                            var tmp = new Models.Api.Distribution();
+                            var tmp = new Distribution();
                             tmp.Uuid = relData[0] != null ? relData[0] : "";
                             tmp.Title = relData[1] != null ? relData[1] : "";
-                            string parentIdentifier = relData[2] != null ? relData[2] : "";
+                            var parentIdentifier = relData[2] != null ? relData[2] : "";
                             tmp.Type = relData[3] != null ? relData[3] : "";
                             if (tmp.Type == "service" && !IsNullOrEmpty(parentIdentifier))
                                 tmp.Type = "servicelayer";
                             tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
-                            tmp.DistributionFormats.Add(new DistributionFormat()
-                            {
-                                Name = relData[6] != null ? Register.GetDistributionType(relData[6]) : "",
-                                Version = ""
-                            });
+                            //tmp.DistributionFormats.Add(new DistributionFormat()
+                            //{
+                            //    Name = relData[6] != null ? Register.GetDistributionType(relData[6]) : "",
+                            //    Version = ""
+                            //});
                             tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
                             tmp.Organization = relData[4];
                             tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
@@ -398,11 +398,11 @@ namespace Kartverket.Metadatakatalog.Service
                             tmp.Title = relData[1] != null ? relData[1] : "";
                             string parentIdentifier = relData[2] != null ? relData[2] : "";
                             tmp.Type = "Datasett";
-                            tmp.DistributionFormats.Add(new DistributionFormat()
-                            {
-                                Name = relData[6] != null ? Register.GetDistributionType(relData[6]) : "",
-                                Version = ""
-                            });
+                            //tmp.DistributionFormats.Add(new DistributionFormat()
+                            //{
+                            //    Name = /*relData[6] != null ? Register.GetDistributionType(relData[6]) :*/ "",
+                            //    Version = ""
+                            //});
                             tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
                             tmp.Organization = relData[4];
                             tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
