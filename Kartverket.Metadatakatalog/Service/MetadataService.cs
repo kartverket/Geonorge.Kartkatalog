@@ -100,7 +100,7 @@ namespace Kartverket.Metadatakatalog.Service
                             //Last ned
                             if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
                             {
-                                distribution.DownloadUrl = simpleMetadataDistribution.URL;
+                                distribution.DistributionUrl = simpleMetadataDistribution.URL;
                                 distribution.CanShowDownloadUrl = true;
                             }
                             //Handlekurv
