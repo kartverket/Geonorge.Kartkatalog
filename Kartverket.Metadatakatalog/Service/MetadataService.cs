@@ -463,7 +463,7 @@ namespace Kartverket.Metadatakatalog.Service
                 DatePublished = simpleMetadata.DatePublished,
                 DateUpdated = simpleMetadata.DateUpdated,
                 DistributionDetails = Convert(simpleMetadata.DistributionDetails),
-                DistributionUrl = simpleMetadata.DistributionDetails.URL,
+                DistributionUrl = GetDistributionUrl(simpleMetadata.DistributionDetails),
                 DistributionFormat = Convert(simpleMetadata.DistributionFormat),
                 EnglishAbstract = simpleMetadata.EnglishAbstract,
                 EnglishTitle = simpleMetadata.EnglishTitle,
@@ -905,6 +905,11 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.CoverageUrl = metadata.GetCoverageLink();
 
             return metadata;
+        }
+
+        private string GetDistributionUrl(SimpleDistributionDetails distributionDetails)
+        {
+            return distributionDetails?.URL;
         }
 
         private string GetTranslation(string norwegian, string english)
