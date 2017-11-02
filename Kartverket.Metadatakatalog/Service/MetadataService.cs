@@ -244,7 +244,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 Version = ""
                             });
                             tmp.DistributionName = relData[5] != null ? relData[5] : "";
-                            tmp.Protocol = relData[6] != null ? relData[6] : "";
+                            tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
                             tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
                             tmp.Organization = relData[4];
                             tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
@@ -295,7 +295,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 Version = ""
                             });
                             tmp.DistributionName = relData[5] != null ? relData[5] : "";
-                            tmp.Protocol = relData[6] != null ? relData[6] : "";
+                            tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
                             tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
                             tmp.Organization = relData[4];
                             tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
@@ -326,7 +326,6 @@ namespace Kartverket.Metadatakatalog.Service
 
         private List<Models.Api.Distribution> GetMetadataRelatedDistributions(string uuid)
         {
-            Register = new RegisterFetcher();
             List<Models.Api.Distribution> distlist = new List<Models.Api.Distribution>();
 
             SearchParameters parameters = new SearchParameters();
