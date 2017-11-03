@@ -198,6 +198,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tilbake.
+        /// </summary>
+        public static string Back {
+            get {
+                return ResourceManager.GetString("Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Geografisk utstrekning.
         /// </summary>
         public static string BoundingBox {
@@ -239,6 +248,33 @@ namespace Resources {
         public static string Concepts {
             get {
                 return ResourceManager.GetString("Concepts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Er du sikker på at du vil slette?.
+        /// </summary>
+        public static string ConfirmDelete {
+            get {
+                return ResourceManager.GetString("ConfirmDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tilknyttede datasett.
+        /// </summary>
+        public static string ConnectedDatasets {
+            get {
+                return ResourceManager.GetString("ConnectedDatasets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Koble til metadata.
+        /// </summary>
+        public static string ConnectToMetadata {
+            get {
+                return ResourceManager.GetString("ConnectToMetadata", resourceCulture);
             }
         }
         
@@ -306,6 +342,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opprett.
+        /// </summary>
+        public static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Opprettet.
         /// </summary>
         public static string Created {
@@ -324,6 +369,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Datasett er allerede lagt til.
+        /// </summary>
+        public static string DatasetAlreadyConnected {
+            get {
+                return ResourceManager.GetString("DatasetAlreadyConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Datasett er korrekt utfylt.
         /// </summary>
         public static string DatasetIsCorrect {
@@ -338,6 +392,15 @@ namespace Resources {
         public static string Date {
             get {
                 return ResourceManager.GetString("Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slett.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
             }
         }
         
@@ -563,6 +626,15 @@ namespace Resources {
         public static string Email {
             get {
                 return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vennligst skriv inn søkeord.
+        /// </summary>
+        public static string EnterSearchCriteria {
+            get {
+                return ResourceManager.GetString("EnterSearchCriteria", resourceCulture);
             }
         }
         
@@ -1022,6 +1094,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fant ingen metadata.
+        /// </summary>
+        public static string NoMetadataFound {
+            get {
+                return ResourceManager.GetString("NoMetadataFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nord.
         /// </summary>
         public static string North {
@@ -1108,6 +1189,15 @@ namespace Resources {
         public static string Pages {
             get {
                 return ResourceManager.GetString("Pages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tilkyttet tema.
+        /// </summary>
+        public static string ParentTheme {
+            get {
+                return ResourceManager.GetString("ParentTheme", resourceCulture);
             }
         }
         
@@ -1262,6 +1352,15 @@ namespace Resources {
         public static string SaveAs {
             get {
                 return ResourceManager.GetString("SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Søk.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         
@@ -1437,6 +1536,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Temaer.
+        /// </summary>
+        public static string Themes {
+            get {
+                return ResourceManager.GetString("Themes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tid og rom.
         /// </summary>
         public static string TimeAndSpace {
@@ -1451,6 +1559,15 @@ namespace Resources {
         public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tittel mangler.
+        /// </summary>
+        public static string TitleMissing {
+            get {
+                return ResourceManager.GetString("TitleMissing", resourceCulture);
             }
         }
         

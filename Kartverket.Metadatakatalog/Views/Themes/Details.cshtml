@@ -1,9 +1,10 @@
 ﻿@model Kartverket.Metadatakatalog.Models.Theme
 @using Kartverket.Metadatakatalog.Helpers
 @using Newtonsoft.Json
+@using Resources
 
 @{
-    ViewBag.Title = "Tema - " + Model.NameTranslated();
+    ViewBag.Title = UI.Facet_theme + " - " + Model.NameTranslated();
 }
 
 @section breadcrumb {
@@ -40,7 +41,7 @@ foreach (var item in theme.Children)
     <div class="row">
         <div class="col-sm-12">
             <h1>@Model.NameTranslated()</h1>
-            <span class="label label-default">Tema</span>
+            <span class="label label-default">@UI.Facet_theme</span>
         </div>
         <div class="col-sm-12">
             <span class="separator-lg"></span>
@@ -152,7 +153,7 @@ foreach (var item in theme.Children)
 @if (ViewBag.IsAdmin)
 {
     <div class="form-group pull-right top-padding">
-        <a href="@Url.Action("Edit", "Themes", new {id = Model.Id})" class="btn btn-default margin-top-10">Rediger</a>
+        <a href="@Url.Action("Edit", "Themes", new {id = Model.Id})" class="btn btn-default margin-top-10">@UI.Edit</a>
     </div>
 }
 @{

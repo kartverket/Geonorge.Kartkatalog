@@ -626,4 +626,43 @@
   <data name="SelectedProjections" xml:space="preserve">
     <value>valgte projeksjoner</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>Tilbake</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Er du sikker på at du vil slette?</value>
+  </data>
+  <data name="ConnectedDatasets" xml:space="preserve">
+    <value>Tilknyttede datasett</value>
+  </data>
+  <data name="ConnectToMetadata" xml:space="preserve">
+    <value>Koble til metadata</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Opprett</value>
+  </data>
+  <data name="DatasetAlreadyConnected" xml:space="preserve">
+    <value>Datasett er allerede lagt til</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Slett</value>
+  </data>
+  <data name="EnterSearchCriteria" xml:space="preserve">
+    <value>Vennligst skriv inn søkeord</value>
+  </data>
+  <data name="NoMetadataFound" xml:space="preserve">
+    <value>Fant ingen metadata</value>
+  </data>
+  <data name="ParentTheme" xml:space="preserve">
+    <value>Tilkyttet tema</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Søk</value>
+  </data>
+  <data name="Themes" xml:space="preserve">
+    <value>Temaer</value>
+  </data>
+  <data name="TitleMissing" xml:space="preserve">
+    <value>Tittel mangler</value>
+  </data>
 </root>

@@ -1,13 +1,14 @@
 ﻿@model Kartverket.Metadatakatalog.Models.Theme
 @using Kartverket.Metadatakatalog.Resources;
+@using Resources
 @{
-    ViewBag.Title = "Rediger tema";
+    ViewBag.Title = UI.Edit + " " + UI.Facet_theme;
 }
 @section breadcrumb {
-    <li><a href="/temaer">Temaer</a></li>
-    <li class="active">Rediger: @Model.Name</li>
+    <li><a href="/temaer">@UI.Themes</a></li>
+    <li class="active">@UI.Edit: @Model.Name</li>
 }
-<h2>Rediger tema</h2>
+<h2>@UI.Edit @UI.Facet_theme</h2>
 
 @using (Html.BeginForm("Edit", "Themes", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -70,7 +71,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ParentId, "Tilkyttet tema", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ParentId, UI.ParentTheme, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("ParentId", null, string.Empty, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ParentId, "", new { @class = "text-danger" })
@@ -78,13 +79,13 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <a href="#" role="button" data-toggle="modal" id="operatesOnLink" data-target="#operatesOn" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-list-alt"></span> Koble til metadata</a>
+                <a href="#" role="button" data-toggle="modal" id="operatesOnLink" data-target="#operatesOn" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-list-alt"></span> @UI.ConnectToMetadata</a>
             </div>
         </div>
         <div class="form-group pull-right">
             <div class="col-md-12">
-                <a class="btn btn-default" href="~/temaer/delete/@Model.Id">Slett</a>
-                <input type="submit" value="Lagre" class="btn btn-default" />
+                <a class="btn btn-default" href="~/temaer/delete/@Model.Id">@UI.Delete</a>
+                <input type="submit" value="@UI.Save" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -94,5 +95,5 @@
 }
 
 <div>
-    @Html.ActionLink("Tilbake", "Index")
+    @Html.ActionLink(UI.Back, "Index")
 </div>

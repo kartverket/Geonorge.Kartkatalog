@@ -1,15 +1,16 @@
 ﻿@model Kartverket.Metadatakatalog.Models.Theme
+@using Resources
 
 @{
-    ViewBag.Title = "Slett tema";
+    ViewBag.Title = UI.Delete + " " + UI.Facet_theme;
 }
 @section breadcrumb {
-    <li><a href="/temaer">Temaer</a></li>
-    <li class="active">Slett</li>
+    <li><a href="/temaer">@UI.Themes</a></li>
+    <li class="active">@UI.Delete</li>
 }
-<h2>Slett tema</h2>
+<h2>@UI.Delete @UI.Facet_theme</h2>
 
-<h3>Er du sikker på at du vil slette tema</h3>
+<h3>@UI.ConfirmDelete</h3>
 <div>
     <hr />
     <dl class="dl-horizontal">
@@ -22,7 +23,7 @@
         </dd>
 
         <dt>
-            Tilknyttet tema
+            @UI.ParentTheme
         </dt>
 
         <dd>
@@ -51,8 +52,8 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Slett" class="btn btn-default pull-right" />
-            @Html.ActionLink("Tilbake", "Index")
+            <input type="submit" value="@UI.Delete" class="btn btn-default pull-right" />
+            @Html.ActionLink(UI.Back, "Index")
         </div>
     }
 </div>

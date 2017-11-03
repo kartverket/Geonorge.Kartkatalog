@@ -1,4 +1,5 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
+@using Resources
 @model Kartverket.Metadatakatalog.Models.Theme
 <script>
 
@@ -12,11 +13,11 @@
                     var title = result.Results[0].Title;
                     $("#title-" + uuid).text(title);
                 }
-                else { $("#title-" + uuid).text("TITTEL MANGLER"); }
+                else { $("#title-" + uuid).text("@UI.TitleMissing"); }
             }
 
             else {
-                $("#title-" + uuid).text("TITTEL MANGLER");
+                $("#title-" + uuid).text("@UI.TitleMissing");
             }
 
         });
@@ -26,9 +27,9 @@
     function getMetadataFreetext(searchStr) {
 
         $('#searchresultsDS').empty();
-        $('#searchInfo').text('Fant ingen metadata');
+        $('#searchInfo').text('@Html.Raw(UI.NoMetadataFound)');
         if (searchStr == '') {
-            $('#searchInfo').text('Vennligst skriv inn søkeord');
+            $('#searchInfo').text('@Html.Raw(UI.EnterSearchCriteria)');
             return false;
         }
 
@@ -69,7 +70,7 @@
 
 
     function displayMetadataRow(result) {
-        var div = '<div class="row"><div class="col-sm-10">' + result.Title + ', ' + result.Organization + '</div> <div class="col-sm-2"> <a onclick="addOperatesOn(\'' + result.Uuid + '\')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus-sign"></span> Legg til' + '</a> </div> </div> <hr style="margin: 2px 2px 2px 2px" />';
+        var div = '<div class="row"><div class="col-sm-10">' + result.Title + ', ' + result.Organization + '</div> <div class="col-sm-2"> <a onclick="addOperatesOn(\'' + result.Uuid + '\')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus-sign"></span> @UI.Add' + '</a> </div> </div> <hr style="margin: 2px 2px 2px 2px" />';
         $('#searchresultsDS').append(div);
     }
 
@@ -87,12 +88,12 @@
 
         h += '<div class="col-sm-2 btn-group">';
         h += '<a href="@System.Web.Configuration.WebConfigurationManager.AppSettings["KartkatalogenUrl"]metadata/uuid/' + Uuid + '" target="_blank" class="btn btn-default btn-xs">';
-        h += ' <span class="glyphicon glyphicon-share-alt"></span> Vis i katalog';
+        h += ' <span class="glyphicon glyphicon-share-alt"></span> @UI.Display';
         h += '   </a>';
         h += '</div>';
 
         h += '<div class="col-sm-2 btn-group">';
-        h += '<a href="#" onclick="document.getElementById(\'operatesOn-' + Uuid + '\').parentNode.removeChild(document.getElementById(\'operatesOn-' + Uuid + '\'));" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-trash"></span> Slett</a>';
+        h += '<a href="#" onclick="document.getElementById(\'operatesOn-' + Uuid + '\').parentNode.removeChild(document.getElementById(\'operatesOn-' + Uuid + '\'));" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-trash"></span> @UI.Delete</a>';
         h += '</div>';
 
         h += '</div>';
@@ -100,7 +101,7 @@
         if(document.getElementById('operatesOn-' + Uuid) == null){
             $('#operatesOnDIV').append(h);
         }
-        else { alert('Datasett er allerede lagt til');}
+        else { alert('@Html.Raw(UI.DatasetAlreadyConnected)');}
 
     }
 
@@ -108,8 +109,8 @@
 <div class="modal-dialog" style="width: 75%;">
     <div class="modal-content">
         <div class="modal-header">
-            <h4>Koble til datasett (@Model.Name)</h4>
-            <div style="right: 5px; top: 5px; position:absolute;"><button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button></div>
+            <h4>@UI.ConnectToMetadata (@Model.Name)</h4>
+            <div style="right: 5px; top: 5px; position:absolute;"><button type="button" class="btn btn-default" data-dismiss="modal">@UI.Close</button></div>
         </div>
         <div class="modal-body">    
                 <div class="row">
@@ -117,10 +118,10 @@
                         <input class="form-control" type="text" id="searchmetadata" onkeydown="if (event.keyCode == 13) { getMetadataFreetext(document.getElementById('searchmetadata').value); return false; }" />                    
                     </div>
                     <div class="col-sm-1">
-                        <button type="button" class="form-control" onclick="getMetadataFreetext(document.getElementById('searchmetadata').value);">Søk</button>                        
+                        <button type="button" class="form-control" onclick="getMetadataFreetext(document.getElementById('searchmetadata').value);">@UI.Search</button>                        
                         <span id="searchInfo" style="color:red"></span>                    
                     </div>
-                    <div class="col-sm-6"><b>Tilknyttede datasett:</b></div>
+                    <div class="col-sm-6"><b>@UI.ConnectedDatasets:</b></div>
                 </div>
                 
                 <div class="row">
@@ -145,11 +146,11 @@
                                     </div>
                                     <div class="col-sm-2 btn-group">
                                         <a href="@System.Web.Configuration.WebConfigurationManager.AppSettings["KartkatalogenUrl"]/metadata/uuid/@Model.Metadata[i].Uuid" target="_blank" class="btn btn-default btn-xs">
-                                            <span class="glyphicon glyphicon-share-alt"></span> Vis i katalog
+                                            <span class="glyphicon glyphicon-share-alt"></span> @UI.Display
                                         </a>
                                     </div>
                                         <div class="col-sm-2 btn-group">
-                                            <a href="#" onclick="document.getElementById('operatesOn-@Model.Metadata[i].Uuid').parentNode.removeChild(document.getElementById('operatesOn-@Model.Metadata[i].Uuid'));" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-trash"></span> Slett</a>
+                                            <a href="#" onclick="document.getElementById('operatesOn-@Model.Metadata[i].Uuid').parentNode.removeChild(document.getElementById('operatesOn-@Model.Metadata[i].Uuid'));" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-trash"></span> @UI.Delete</a>
                                         </div>
                                 </div>
                                 <hr style="margin: 2px 2px 2px 2px" />

@@ -626,4 +626,43 @@
   <data name="SelectedProjections" xml:space="preserve">
     <value>selected projections</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Are you sure you want to delete?</value>
+  </data>
+  <data name="ConnectedDatasets" xml:space="preserve">
+    <value>Connected datasets</value>
+  </data>
+  <data name="ConnectToMetadata" xml:space="preserve">
+    <value>Connect to metadata</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="DatasetAlreadyConnected" xml:space="preserve">
+    <value>Dataset is already connected</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="EnterSearchCriteria" xml:space="preserve">
+    <value>Please enter search criteria</value>
+  </data>
+  <data name="NoMetadataFound" xml:space="preserve">
+    <value>No metadata found</value>
+  </data>
+  <data name="ParentTheme" xml:space="preserve">
+    <value>Parent theme</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Themes" xml:space="preserve">
+    <value>Themes</value>
+  </data>
+  <data name="TitleMissing" xml:space="preserve">
+    <value>Title is missing</value>
+  </data>
 </root>

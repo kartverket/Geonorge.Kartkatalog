@@ -1099,6 +1099,11 @@
               Looks up a localized string similar to Tilgjengelig som.
             </summary>
         </member>
+        <member name="P:Resources.UI.Back">
+            <summary>
+              Looks up a localized string similar to Tilbake.
+            </summary>
+        </member>
         <member name="P:Resources.UI.BoundingBox">
             <summary>
               Looks up a localized string similar to Geografisk utstrekning.
@@ -1122,6 +1127,21 @@
         <member name="P:Resources.UI.Concepts">
             <summary>
               Looks up a localized string similar to Begreper.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.ConfirmDelete">
+            <summary>
+              Looks up a localized string similar to Er du sikker på at du vil slette?.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.ConnectedDatasets">
+            <summary>
+              Looks up a localized string similar to Tilknyttede datasett.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.ConnectToMetadata">
+            <summary>
+              Looks up a localized string similar to Koble til metadata.
             </summary>
         </member>
         <member name="P:Resources.UI.Constraints">
@@ -1159,6 +1179,11 @@
               Looks up a localized string similar to Klikk for å kopiere urlen til utklippstavle.
             </summary>
         </member>
+        <member name="P:Resources.UI.Create">
+            <summary>
+              Looks up a localized string similar to Opprett.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Created">
             <summary>
               Looks up a localized string similar to Opprettet.
@@ -1169,6 +1194,11 @@
               Looks up a localized string similar to Dataeier.
             </summary>
         </member>
+        <member name="P:Resources.UI.DatasetAlreadyConnected">
+            <summary>
+              Looks up a localized string similar to Datasett er allerede lagt til.
+            </summary>
+        </member>
         <member name="P:Resources.UI.DatasetIsCorrect">
             <summary>
               Looks up a localized string similar to Datasett er korrekt utfylt.
@@ -1177,6 +1207,11 @@
         <member name="P:Resources.UI.Date">
             <summary>
               Looks up a localized string similar to Dato.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Delete">
+            <summary>
+              Looks up a localized string similar to Slett.
             </summary>
         </member>
         <member name="P:Resources.UI.DeleteDataset">
@@ -1302,6 +1337,11 @@
         <member name="P:Resources.UI.Email">
             <summary>
               Looks up a localized string similar to E-post.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.EnterSearchCriteria">
+            <summary>
+              Looks up a localized string similar to Vennligst skriv inn søkeord.
             </summary>
         </member>
         <member name="P:Resources.UI.Facet_area">
@@ -1559,6 +1599,11 @@
               Looks up a localized string similar to Du har ingen elementer i kurven.
             </summary>
         </member>
+        <member name="P:Resources.UI.NoMetadataFound">
+            <summary>
+              Looks up a localized string similar to Fant ingen metadata.
+            </summary>
+        </member>
         <member name="P:Resources.UI.North">
             <summary>
               Looks up a localized string similar to Nord.
@@ -1607,6 +1652,11 @@
         <member name="P:Resources.UI.Pages">
             <summary>
               Looks up a localized string similar to Sider.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.ParentTheme">
+            <summary>
+              Looks up a localized string similar to Tilkyttet tema.
             </summary>
         </member>
         <member name="P:Resources.UI.ProcessHistory">
@@ -1693,6 +1743,11 @@
         <member name="P:Resources.UI.SaveAs">
             <summary>
               Looks up a localized string similar to Lagre som.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Search">
+            <summary>
+              Looks up a localized string similar to Søk.
             </summary>
         </member>
         <member name="P:Resources.UI.SecurityConstraints">
@@ -1790,6 +1845,11 @@
               Looks up a localized string similar to kurven.
             </summary>
         </member>
+        <member name="P:Resources.UI.Themes">
+            <summary>
+              Looks up a localized string similar to Temaer.
+            </summary>
+        </member>
         <member name="P:Resources.UI.TimeAndSpace">
             <summary>
               Looks up a localized string similar to Tid og rom.
@@ -1798,6 +1858,11 @@
         <member name="P:Resources.UI.Title">
             <summary>
               Looks up a localized string similar to Tittel.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.TitleMissing">
+            <summary>
+              Looks up a localized string similar to Tittel mangler.
             </summary>
         </member>
         <member name="P:Resources.UI.ToBasket">
