@@ -1750,6 +1750,21 @@
               Looks up a localized string similar to Søk.
             </summary>
         </member>
+        <member name="P:Resources.UI.SearchAPIsAndServices">
+            <summary>
+              Looks up a localized string similar to Søk etter API-er og tjenester.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SearchApplications">
+            <summary>
+              Looks up a localized string similar to Søk etter kartløsninger.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SearchMapData">
+            <summary>
+              Looks up a localized string similar to Søk etter kartdata.
+            </summary>
+        </member>
         <member name="P:Resources.UI.SecurityConstraints">
             <summary>
               Looks up a localized string similar to Sikkerhetsnivå.

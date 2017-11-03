@@ -659,6 +659,15 @@
   <data name="Search" xml:space="preserve">
     <value>Søk</value>
   </data>
+  <data name="SearchAPIsAndServices" xml:space="preserve">
+    <value>Søk etter API-er og tjenester</value>
+  </data>
+  <data name="SearchApplications" xml:space="preserve">
+    <value>Søk etter kartløsninger</value>
+  </data>
+  <data name="SearchMapData" xml:space="preserve">
+    <value>Søk etter kartdata</value>
+  </data>
   <data name="Themes" xml:space="preserve">
     <value>Temaer</value>
   </data>

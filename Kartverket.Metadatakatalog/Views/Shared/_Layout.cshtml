@@ -1,4 +1,5 @@
 ﻿﻿@using Kartverket.Metadatakatalog.Helpers
+@using Resources
 <!DOCTYPE html>
 <html class="js flexbox no-flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg no-smil svgclippaths">
 <head>
@@ -49,11 +50,12 @@
             urlSetCultureNorwegian: '@Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url })',
             currentCulture: '@CultureHelper.GetCurrentCulture()'
         };
-
     </script>
     @Html.Partial("_Resources")
     @Scripts.Render("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts")
-
+    <script>
+        setMainSearchPlaceholder('@Html.Raw(UI.SearchMapData)');
+    </script>
 </head>
 <body class="geonorge-container prototype  geonorge ng-scope" ng-app="geonorge">
 

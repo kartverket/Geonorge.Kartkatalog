@@ -1,5 +1,6 @@
 ﻿@using Kartverket.Metadatakatalog.Models.ViewModels
 @using Kartverket.Metadatakatalog.Helpers
+@using Resources
 @model SearchViewModel
 
 @{ ViewBag.Title = Resources.UI.MapServices; }
@@ -142,7 +143,7 @@
             setMainSearchApiUrl('kartlosninger-i-norge');
 
             // Setter placeholder for søkefelt
-            setMainSearchPlaceholder('Søk etter kartløsninger');
+            setMainSearchPlaceholder('@Html.Raw(UI.SearchApplications)');
 
             //Main vue model
             var vueModel = new Vue({

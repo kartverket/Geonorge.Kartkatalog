@@ -1365,6 +1365,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Søk etter API-er og tjenester.
+        /// </summary>
+        public static string SearchAPIsAndServices {
+            get {
+                return ResourceManager.GetString("SearchAPIsAndServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Søk etter kartløsninger.
+        /// </summary>
+        public static string SearchApplications {
+            get {
+                return ResourceManager.GetString("SearchApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Søk etter kartdata.
+        /// </summary>
+        public static string SearchMapData {
+            get {
+                return ResourceManager.GetString("SearchMapData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sikkerhetsnivå.
         /// </summary>
         public static string SecurityConstraints {

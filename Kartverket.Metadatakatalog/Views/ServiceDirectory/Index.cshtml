@@ -1,5 +1,6 @@
 ﻿@using Kartverket.Metadatakatalog.Models.ViewModels
 @using Kartverket.Metadatakatalog.Helpers
+@using Resources
 @model SearchViewModel
 
 @{
@@ -181,7 +182,7 @@
         setMainSearchApiUrl('servicedirectory');
 
         // Setter placeholder for søkefelt
-        setMainSearchPlaceholder('Søk etter API-er og tjenester');
+        setMainSearchPlaceholder('@Html.Raw(UI.SearchAPIsAndServices)');
 
         //Main vue model
         var vueModel = new Vue({
