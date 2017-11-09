@@ -8,6 +8,7 @@ using System.Net.Http;
 using System;
 using System.Net.Http.Headers;
 using System.Web.Configuration;
+using Kartverket.Metadatakatalog.Models.Translations;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -56,12 +57,18 @@ namespace Kartverket.Metadatakatalog.Service
     public class PlaceResolver
     {
         public const string PlaceNorge = "Norge";
+        public const string PlaceNorgeEnglish = "Norway";
         public const string PlaceHavomraader = "Havområder";
+        public const string PlaceHavomraaderEnglish = "Sea areas";
         public const string PlaceSvalbard = "Svalbard";
         public const string PlaceJanMayen = "Jan Mayen";
 
-        private Dictionary<string, string> _areas;
 
+        private Dictionary<string, string> _areas;
+        private static readonly HttpClient _httpClient = new HttpClient
+        {
+            BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]),
+        };
         /// <summary>
         /// Gets fylke og kommuner fra register i et dictionary
         /// </summary>
@@ -78,11 +85,9 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 _areas = new Dictionary<string, string>();
                 //call register fylker og kommuner
-                HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var result = client.GetAsync("api/subregister/sosi-kodelister/kartverket/fylkesnummer").Result;
+                _httpClient.DefaultRequestHeaders.Accept.Clear();
+                _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var result = _httpClient.GetAsync("api/subregister/sosi-kodelister/kartverket/fylkesnummer").Result;
                 if (result.IsSuccessStatusCode)
                 {
                     var register = result.Content.ReadAsAsync<Register>().Result;
@@ -92,7 +97,7 @@ namespace Kartverket.Metadatakatalog.Service
                         _areas.Add("0/" + item.codevalue, item.label);
                     }
                 }
-                var result2 = client.GetAsync("api/subregister/sosi-kodelister/kartverket/kommunenummer").Result;
+                var result2 = _httpClient.GetAsync("api/subregister/sosi-kodelister/kartverket/kommunenummer").Result;
                 if (result2.IsSuccessStatusCode)
                 {
                     var register = result2.Content.ReadAsAsync<Register>().Result;
@@ -128,6 +133,27 @@ namespace Kartverket.Metadatakatalog.Service
 
         };
 
+        private readonly Dictionary<string, string> _placeToHavomraaderEnglish = new Dictionary<string, string>
+        {
+            {"norskehavet", PlaceHavomraaderEnglish},
+            {"barentshavet", PlaceHavomraaderEnglish},
+            {"nordsjøen", PlaceHavomraaderEnglish},
+            {"tromsøflaket", PlaceHavomraaderEnglish},
+            {"norsk kontinentalsokkel", PlaceHavomraaderEnglish},
+            {"finnmarkskysten", PlaceHavomraaderEnglish},
+            {"eggakanten", PlaceHavomraaderEnglish},
+            {"hav", PlaceHavomraaderEnglish},
+            {"kyst", PlaceHavomraaderEnglish},
+            {"kystnære områder", PlaceHavomraaderEnglish},
+            {"sjø", PlaceHavomraaderEnglish},
+            {"grønlandshavet", PlaceHavomraaderEnglish},
+            {"norske sjøområder", PlaceHavomraaderEnglish},
+            {"kystnær", PlaceHavomraaderEnglish},
+            {"norsk økonomisk sone", PlaceHavomraaderEnglish},
+            {"skagerak", PlaceHavomraaderEnglish}
+
+        };
+
         private readonly Dictionary<string, string> _placeToSvalbard = new Dictionary<string, string>
         {
             {"norge og svalbard", PlaceSvalbard},
@@ -142,17 +168,31 @@ namespace Kartverket.Metadatakatalog.Service
 
         };
 
-        public List<string> Resolve(SimpleMetadata metadata)
+        public List<string> Resolve(SimpleMetadata metadata, string culture)
         {
             List<string> placegroup = new List<string>();
-            placegroup.Add("Norge");
+            if(culture == Culture.NorwegianCode)
+                placegroup.Add(PlaceNorge);
+            else
+                placegroup.Add(PlaceNorgeEnglish);
+
             foreach (var keyword in metadata.Keywords)
             {
                 string lowerCaseKeyword = keyword.Keyword.ToLower();
                 string placeHav;
-                if (_placeToHavomraader.TryGetValue(lowerCaseKeyword, out placeHav))
+                if (culture == Culture.NorwegianCode)
                 {
-                    placegroup.Add(placeHav);
+                    if (_placeToHavomraader.TryGetValue(lowerCaseKeyword, out placeHav))
+                    {
+                        placegroup.Add(placeHav);
+                    }
+                }
+                else
+                {
+                    if (_placeToHavomraaderEnglish.TryGetValue(lowerCaseKeyword, out placeHav))
+                    {
+                        placegroup.Add(placeHav);
+                    }
                 }
                 string placeSval;
                 if (_placeToSvalbard.TryGetValue(lowerCaseKeyword, out placeSval))
@@ -188,12 +228,9 @@ namespace Kartverket.Metadatakatalog.Service
                 
             }
 
-
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var result = client.GetAsync("https://ws.geonorge.no/dekningsApi/dekning?uuid=" + metadata.Uuid).Result;
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var result = _httpClient.GetAsync("https://ws.geonorge.no/dekningsApi/dekning?uuid=" + metadata.Uuid).Result;
             if (result.IsSuccessStatusCode)
             {
                 var register = result.Content.ReadAsAsync<Coverage>().Result;

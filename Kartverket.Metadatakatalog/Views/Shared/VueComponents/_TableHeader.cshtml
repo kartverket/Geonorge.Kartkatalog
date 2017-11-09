@@ -2,7 +2,7 @@
     <div v-bind:class="orderByTitle.className" v-bind:id="orderByTitle.id">
         <p>
             <a href="@Url.Action(ViewContext.RouteData.GetRequiredString("action"), Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
-                Tittel<span class="orderby-indicator"></span>
+                @Resources.UI.Title<span class="orderby-indicator"></span>
             </a>
         </p>
     </div>
@@ -16,26 +16,26 @@
     <div v-bind:class="orderByOrganization.className" v-bind:id="orderByOrganization.id">
         <p>
             <a href="@Url.Action(ViewContext.RouteData.GetRequiredString("action"), Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
-                Dataeier<span class="orderby-indicator"></span>
+                @Resources.UI.DataOwner<span class="orderby-indicator"></span>
             </a>
         </p>
     </div>
 </script>
 
 <script type="text/x-template" theme="tabell" id="openDataHeaderTemplate">
-    <div><p>Åpne data</p></div>
+    <div><p>@Resources.UI.OpenData</p></div>
 </script>
 
 <script type="text/x-template" theme="tabell" id="websiteHeaderTemplate">
-    <div><p>nett side</p></div>
+    <div><p>@Resources.UI.WebPageHeader</p></div>
 </script>
 
 <script type="text/x-template" theme="tabell" id="mapHeaderTemplate">
-    <div><p>Kart</p></div>
+    <div><p>@Resources.UI.Map</p></div>
 </script>
 
 <script type="text/x-template" theme="tabell" id="addToCartHeaderTemplate">
-    <div><p>Last ned</p></div>
+    <div><p>@Resources.UI.Download</p></div>
 </script>
 
 <script type="text/x-template" theme="tabell" id="urlHeaderTemplate">

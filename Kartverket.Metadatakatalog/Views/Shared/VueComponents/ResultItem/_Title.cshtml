@@ -1,7 +1,8 @@
-﻿<script type="text/x-template" theme="tabell" id="titleContentTemplate">
+﻿@using Resources
+<script type="text/x-template" theme="tabell" id="titleContentTemplate">
 
     @*Liste*@
-    <a v-if="$root.viewType == 'listView'" v-bind:href="href" class="show-loading-animation" data-toggle="tooltip" data-placement="bottom" v-bind:title="'se metadata for ' + metadata.Title">
+    <a v-if="$root.viewType == 'listView'" v-bind:href="href" class="show-loading-animation" data-toggle="tooltip" data-placement="bottom" v-bind:title="'@UI.DisplayMetadataFor ' + metadata.Title">
         <p style="font-size:14pt" class="role-button search-results-name" role="button">{{ metadata.Title }}</p>
     </a>
 
@@ -10,7 +11,7 @@
         <div class="search-results-gallery-image layoutblock">
             <div class="block shortcutpageteaserblock size-4 col-sm-4">
                 <div class="teaser-with-background-image">
-                    <a v-bind:href="href" data-toggle="tooltip" data-placement="bottom" v-bind:title="'se metadata for ' + metadata.Title">
+                    <a v-bind:href="href" data-toggle="tooltip" data-placement="bottom" v-bind:title="'@UI.DisplayMetadataFor ' + metadata.Title">
                         <div class="teaser-background-image" v-bind:style="{ backgroundImage: 'url(' + thumbnail + ')'}">
                             <div class="teaser-overlay">
                                 <div class="teaser-caption">
@@ -30,7 +31,7 @@
            class="show-loading-animation"
            data-toggle="tooltip"
            data-placement="bottom"
-           v-bind:title="'se metadata for ' + metadata.Title"
+           v-bind:title="'@UI.DisplayMetadataFor ' + metadata.Title"
            v-bind:style="'padding-left: ' + this.leftPadding + ';'">
             <span class="role-button search-results-name" role="button">{{ metadata.Title }}</span>
         </a>

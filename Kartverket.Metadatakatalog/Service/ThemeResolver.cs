@@ -3,6 +3,7 @@ using System.Linq;
 using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Models.Api;
 using www.opengis.net;
+using Kartverket.Metadatakatalog.Models.Translations;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -104,9 +105,9 @@ namespace Kartverket.Metadatakatalog.Service
             {"plan", DokPlan},
         };
 
-        public string Resolve(SimpleMetadata metadata)
+        public string Resolve(SimpleMetadata metadata, string culture = Culture.NorwegianCode)
         {
-            string theme = ResolveThemeFromDokKeywords(metadata);
+            string theme = ResolveThemeFromDokKeywords(metadata, culture);
             if (string.IsNullOrWhiteSpace(theme))
             {
                 theme = DokAnnen;
@@ -131,21 +132,33 @@ namespace Kartverket.Metadatakatalog.Service
             return theme;
         }
 
-        public string ResolveAccess(string AccessConstraint, string OtherConstraintsAccess)
+        public string ResolveAccess(string AccessConstraint, string OtherConstraintsAccess, string culture)
         {
             string dataaccess = null;
-            if (AccessConstraint == "restricted")
-                dataaccess = "Skjermede data";
-            else if (AccessConstraint == "otherRestrictions")
-                if (OtherConstraintsAccess == "norway digital restricted")
-                    dataaccess = "Norge digitalt-begrenset";
-                else if (OtherConstraintsAccess == "no restrictions")
-                    dataaccess = "Åpne data";
-
+            if (culture == Culture.EnglishCode)
+            {
+                if (AccessConstraint == "restricted")
+                    dataaccess = "Restricted data";
+                else if (AccessConstraint == "otherRestrictions")
+                    if (OtherConstraintsAccess == "norway digital restricted")
+                        dataaccess = "Norway digital restricted";
+                    else if (OtherConstraintsAccess == "no restrictions")
+                        dataaccess = "Open data";
+            }
+            else
+            {
+                if (AccessConstraint == "restricted")
+                    dataaccess = "Skjermede data";
+                else if (AccessConstraint == "otherRestrictions")
+                    if (OtherConstraintsAccess == "norway digital restricted")
+                        dataaccess = "Norge digitalt-begrenset";
+                    else if (OtherConstraintsAccess == "no restrictions")
+                        dataaccess = "Åpne data";
+            }
             return dataaccess;
         }
 
-        private string ResolveThemeFromDokKeywords(SimpleMetadata metadata)
+        private string ResolveThemeFromDokKeywords(SimpleMetadata metadata, string culture)
         {
             List<SimpleKeyword> keywordsDok = SimpleKeyword.Filter(metadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME);
             foreach (var keyword in keywordsDok)
@@ -156,6 +169,9 @@ namespace Kartverket.Metadatakatalog.Service
                 //{
                 //return theme;
                 //}
+                if (culture == Culture.EnglishCode && !string.IsNullOrEmpty(keyword.EnglishKeyword))
+                    return keyword.EnglishKeyword;
+                else
                 return keyword.Keyword;
             }
             return null;

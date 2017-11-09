@@ -69,6 +69,11 @@ namespace Kartverket.Metadatakatalog.Helpers
             return WebConfigurationManager.AppSettings["StatusApiUrl"];
         }
 
+        public static bool SupportsMultiCulture(this HtmlHelper helper)
+        {
+            return Boolean.Parse(WebConfigurationManager.AppSettings["SupportsMultiCulture"]); ;
+        }
+
         public static string RemoveQueryStringByKey(string url, string key)
         {
             var uri = new Uri(url);

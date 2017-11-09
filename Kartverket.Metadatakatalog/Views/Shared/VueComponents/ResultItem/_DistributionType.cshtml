@@ -1,11 +1,12 @@
-﻿<script type="text/x-template" id="distributionTypeContentTemplate">    
+﻿@using Resources
+<script type="text/x-template" id="distributionTypeContentTemplate">    
     <div>
         <p v-if="$root.viewType == 'listView'">
-            Tilgjengelig som:
-            <span v-bind:title="'Tilgjengelig som ' + typeTranslated" data-toggle='tooltip' data-placement='bottom' style="width:auto" v-bind:class="className">{{typeTranslated}}</span>
+            @UI.AvailableAs:
+            <span v-bind:title="'@Html.Raw(UI.AvailableAs) ' + typeTranslated" data-toggle='tooltip' data-placement='bottom' style="width:auto" v-bind:class="className">{{typeTranslated}}</span>
         </p>
 
-        <span v-else v-bind:title="'Tilgjengelig som ' + typeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="className" style="width:auto">{{typeTranslated}}</span>
+        <span v-else v-bind:title="'@Html.Raw(UI.AvailableAs) ' + typeTranslated" data-toggle='tooltip' data-placement='bottom' v-bind:class="className" style="width:auto">{{typeTranslated}}</span>
     </div>
 </script>
 

@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-sm-12">
             <h1 class="small-h1">
-                Kartkatalogen
+                @Resources.UI.AppPageTitle
             </h1>
         </div>
         <div class="col-sm-12">
@@ -23,53 +23,11 @@
         </div>
         <div class="col-sm-9">
             <p>
-                Her gis oversikt over datasett i Geonorge med opplysninger om tilgjengelige formater, tilknyttede tjenester og API-er. Egne oversikter over tjenester/API-er og kartløsninger finner du på egne sider i høyre spalte.
+                @Resources.UI.AboutMapCatalog
             </p>
         </div>
     </div>
 </section>
-
-
-@helper DisplayPaginationBottom()
-{
-    <div class="search-result-navigation">
-        Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
-        <div class="pagination-container">
-            <ul class="pagination pagination-sm btn-group inline-block">
-                @if (Model.IsFirstButtonActive())
-                {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())">&laquo;</a></li>
-                }
-
-                @if (Model.IsPreviousButtonActive())
-                {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())">&laquo; Forrige</a></li>
-                }
-
-                @for (int i = Model.startPage; i <= Model.endPage; i++)
-                {
-                    if (Model.IsActivePage(i))
-                    {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                    }
-                }
-
-                @if (Model.IsNextButtonActive())
-                {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">Neste &raquo;</a></li>
-                }
-                @if (Model.IsLastButtonActive())
-                {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> &raquo;</a></li>
-                }
-            </ul>
-        </div>
-    </div>
-}
 
 @{
     string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("search", "api/datasets");
@@ -89,48 +47,13 @@
     string query = qs.ToString(); string urlCSV = path + "?" + query;
 }
 
-
 <div class="row search-result-navigation">
     <div class="col-md-4">
-        Viser @Model.ShowingFromAndTo() av @Model.NumFound treff:
-        <div class="pagination-container">
-            <ul class="pagination pagination-sm btn-group inline-block">
-                @if (Model.IsFirstButtonActive())
-                {
-                    <li><a aria-label="Første" title="Første" href="@Url.Action("Index", Model.ParamsForFirstLink())"><span class="fa fa-angle-double-left"></span></a></li>
-                }
-
-                @if (Model.IsPreviousButtonActive())
-                {
-                    <li><a href="@Url.Action("Index", Model.ParamsForPreviousLink())"><span class="fa fa-angle-left"></span> </a></li>
-                }
-
-                @for (int i = Model.startPage; i <= Model.endPage; i++)
-                {
-                    if (Model.IsActivePage(i))
-                    {
-                        <li class="active"><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="@Url.Action("Index", Model.ParamsForPageNumber(i))">@i</a></li>
-                    }
-                }
-
-                @if (Model.IsNextButtonActive())
-                {
-                    <li><a href="@Url.Action("Index", Model.ParamsForNextLink())">  <span class="fa fa-angle-right"></span></a></li>
-                }
-                @if (Model.IsLastButtonActive())
-                {
-                    <li><a aria-label="Siste" title="Siste" href="@Url.Action("Index", Model.ParamsForLastLink())"> <span class="fa fa-angle-double-right"></span></a></li>
-                }
-            </ul>
-        </div>
+        @Html.Partial("_Pagination", Model)
     </div>
     <div class="col-md-4 pull-right">
         <div class="save-as-menu pull-right">
-            <label>Lagre som:</label>
+            <label>@Resources.UI.SaveAs:</label>
             <div class="no-padding-bottom save-as-dropdown">
                 <div class="custom-select">
                     <select onchange="additionalView(this.value)" class="form-control">
@@ -139,19 +62,16 @@
                 </div>
             </div>
             <div id="saveButtons" class="no-padding-bottom save-as-buttons">
-                <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
+                <a class="btn" id="csvUrl" href="@urlCSV">@Resources.UI.Save</a>
             </div>
         </div>
     </div>
     <div class="clearfix"></div>
-
-
 </div>
 
 <span class="separator-small separator-gray margin-bottom-10"></span>
 
-
-<div class="row resultItemTitleRow">
+<div class="row">
 
     <div class="col-md-9">
         @if (Model.Result != null)
@@ -159,19 +79,19 @@
             @Html.Partial("_ThemeGroup", Model)
 
         }
+        <div class="margin-top-10">
+            @Html.Partial("_Pagination", Model)
+        </div>
     </div>
 
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
         <aside class="facet-filter-container">
-            <h3 class="">Filtrer søket på:</h3>
+            <h3 class="">@Resources.UI.FilterSearch:</h3>
             <span class="separator-small"></span>
             @Html.Partial("_FacetFilter", Model)
-            <h3 class="" style="padding-top: 40px;">Sider</h3>
+            <h3 class="" style="padding-top: 40px;">@Resources.UI.Pages</h3>
             <span class="separator-small"></span>
             @Html.Partial("_FilterPages")
         </aside>
     </div>
 </div>
-
-
-

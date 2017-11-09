@@ -1,4 +1,5 @@
-﻿<script type="text/x-template" id="copyUrlButtonTemplate">
+﻿@using Resources
+<script type="text/x-template" id="copyUrlButtonTemplate">
     <div class="text-center" v-html="htmlElement"></div>
 </script>
 
@@ -11,10 +12,10 @@
             computed: {
                 button: function () {
                     var button = {
-                        content: "Url til tjeneste",
+                        content: "@Html.Raw(UI.UrlToService)",
                         className: this.defaultButtonClass,
                         url: null,
-                        title: "Klikk for å kopiere urlen til utklippstavle",
+                        title: "@Html.Raw(UI.CopyToClipboard)",
                         icon: {
                             className: "fa fa-clipboard"
                         },

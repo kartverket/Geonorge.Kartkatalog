@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using SolrNet.Commands.Parameters;
+using Kartverket.Metadatakatalog.Helpers;
+using Kartverket.Metadatakatalog.Models.Translations;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -180,7 +182,7 @@ namespace Kartverket.Metadatakatalog.Models
                         new SolrQuery("allText:" + Text + "*^1.1"),
                         new SolrQuery("allText:\"" + Text + "\"~1"),   //Fuzzy
                         new SolrQuery("allText2:" + Text + ""), //Stemmer
-                        new SolrQuery("!boost b=typenumber")
+                        new SolrQuery("!boost b=typenumber"),
                         //new SolrQuery("allText3:" + text)        //Fonetisk
                     });
                 }
@@ -196,8 +198,10 @@ namespace Kartverket.Metadatakatalog.Models
             FacetParameter dataAccess = Facets.Where(v => v.Name == "dataaccess").FirstOrDefault();
             if (dataAccess != null)
                 Facets.Remove(dataAccess);
-
-            Facets.Add(new FacetParameter { Name = "dataaccess", Value = "Åpne data" });
+            if(CultureHelper.GetCurrentCulture() == Culture.EnglishCode)
+                Facets.Add(new FacetParameter { Name = "dataaccess", Value = "Open data" });
+            else
+                Facets.Add(new FacetParameter { Name = "dataaccess", Value = "Åpne data" });
         }
 
 

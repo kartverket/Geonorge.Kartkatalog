@@ -223,7 +223,7 @@ describe('vdom patch: hydration', () => {
         expect(dom.innerHTML).toBe('<span>bar</span>')
         expect(dom.querySelector('span')).toBe(span)
       }).then(done)
-    }, 10)
+    }, 50)
   })
 
   it('should hydrate async component without showing loading', done => {
@@ -296,5 +296,50 @@ describe('vdom patch: hydration', () => {
       expect(dom.innerHTML).toBe('<span>error</span>')
       done()
     }, 50)
+  })
+
+  it('should hydrate v-html with children', () => {
+    const dom = createMockSSRDOM('<span>foo</span>')
+
+    new Vue({
+      data: {
+        html: `<span>foo</span>`
+      },
+      template: `<div v-html="html">hello</div>`
+    }).$mount(dom)
+
+    expect('not matching server-rendered content').not.toHaveBeenWarned()
+  })
+
+  it('should warn mismatching v-html', () => {
+    const dom = createMockSSRDOM('<span>bar</span>')
+
+    new Vue({
+      data: {
+        html: `<span>foo</span>`
+      },
+      template: `<div v-html="html">hello</div>`
+    }).$mount(dom)
+
+    expect('not matching server-rendered content').toHaveBeenWarned()
+  })
+
+  it('should hydrate with adjacent text nodes from array children (e.g. slots)', () => {
+    const dom = createMockSSRDOM('<div>foo</div> hello')
+
+    new Vue({
+      template: `<test>hello</test>`,
+      components: {
+        test: {
+          template: `
+            <div>
+              <div>foo</div>
+              <slot/>
+            </div>
+          `
+        }
+      }
+    }).$mount(dom)
+    expect('not matching server-rendered content').not.toHaveBeenWarned()
   })
 })

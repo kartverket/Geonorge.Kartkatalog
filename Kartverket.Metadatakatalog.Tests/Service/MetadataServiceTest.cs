@@ -2,14 +2,11 @@
 using GeoNorgeAPI;
 using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
-using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
-using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 using Moq;
-using NUnit.Framework;
-using www.opengis.net;
+using Xunit;
 
 namespace Kartverket.Metadatakatalog.Tests.Service
 {
@@ -17,7 +14,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
     {
         private const string Uuid = "123456";
 
-        [Test]
+        [Fact]
         public void ReturnNullWhenMetadataIsNotFound()
         {
             var geoNorgeMock = new Mock<IGeoNorge>();
@@ -26,17 +23,19 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             var searchServiceMock = new Mock<ISearchService>();
             var searchServiceDirectoryServiceMock = new Mock<IServiceDirectoryService>();
             var themeResolverMock = new Mock<ThemeResolver>();
-            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"), geonorgeUrlResolverMock.Object, organizationServiceMock.Object, searchServiceMock.Object, searchServiceDirectoryServiceMock.Object, themeResolverMock.Object);
+            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"),
+                geonorgeUrlResolverMock.Object, organizationServiceMock.Object, searchServiceMock.Object,
+                searchServiceDirectoryServiceMock.Object, themeResolverMock.Object);
 
-            MetadataViewModel metadata = metadataService.GetMetadataByUuid(Uuid);
-            
+            var metadata = metadataService.GetMetadataByUuid(Uuid);
+
             metadata.Should().BeNull();
         }
 
-        [Test]
+        [Fact]
         public void ShouldReturnMetadataFromGeoNorge()
         {
-            MD_Metadata_Type dummyMetadata = SimpleMetadata.CreateDataset().GetMetadata();
+            var dummyMetadata = SimpleMetadata.CreateDataset().GetMetadata();
             var geoNorgeMock = new Mock<IGeoNorge>();
             geoNorgeMock.Setup(m => m.GetRecordByUuid(Uuid)).Returns(dummyMetadata);
             var geonorgeUrlResolverMock = new Mock<IGeonorgeUrlResolver>();
@@ -44,17 +43,13 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             var searchServiceMock = new Mock<ISearchService>();
             var themeResolverMock = new Mock<ThemeResolver>();
             var searchServiceDirectoryServiceMock = new Mock<IServiceDirectoryService>();
-            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"), geonorgeUrlResolverMock.Object, organizationServiceMock.Object, searchServiceMock.Object, searchServiceDirectoryServiceMock.Object, themeResolverMock.Object);
-            
-            MetadataViewModel metadata = metadataService.GetMetadataByUuid(Uuid);
+            var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"),
+                geonorgeUrlResolverMock.Object, organizationServiceMock.Object, searchServiceMock.Object,
+                searchServiceDirectoryServiceMock.Object, themeResolverMock.Object);
+
+            var metadata = metadataService.GetMetadataByUuid(Uuid);
 
             metadata.Should().NotBeNull();
         }
-
-       
-
-
-        
-
     }
 }

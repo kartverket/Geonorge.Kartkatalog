@@ -183,4 +183,495 @@
   <data name="Name" xml:space="preserve">
     <value>Navn</value>
   </data>
+  <data name="AboutMapCatalog" xml:space="preserve">
+    <value>Her gis oversikt over datasett i Geonorge med opplysninger om tilgjengelige formater, tilknyttede tjenester og API-er. Egne oversikter over tjenester/API-er og kartløsninger finner du på egne sider i høyre spalte.</value>
+  </data>
+  <data name="DataOwner" xml:space="preserve">
+    <value>Dataeier</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Last ned</value>
+  </data>
+  <data name="Hits" xml:space="preserve">
+    <value>treff</value>
+  </data>
+  <data name="HitsDisplay" xml:space="preserve">
+    <value>Viser</value>
+  </data>
+  <data name="HitsOf" xml:space="preserve">
+    <value>av</value>
+  </data>
+  <data name="Map" xml:space="preserve">
+    <value>Kart</value>
+  </data>
+  <data name="OpenData" xml:space="preserve">
+    <value>Åpne data</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Tittel</value>
+  </data>
+  <data name="ApisAndServices" xml:space="preserve">
+    <value>API-er og tjenester</value>
+  </data>
+  <data name="DepartmentalOverview" xml:space="preserve">
+    <value>Etatvis oversikt</value>
+  </data>
+  <data name="FilterSearch" xml:space="preserve">
+    <value>Filtrer søket på</value>
+  </data>
+  <data name="MapCatalogMainPage" xml:space="preserve">
+    <value>Kartkatalogen - hovedside</value>
+  </data>
+  <data name="MapServices" xml:space="preserve">
+    <value>Kartløsninger</value>
+  </data>
+  <data name="MetadataInMunicipality" xml:space="preserve">
+    <value>Hva finnes i kommune/fylke?</value>
+  </data>
+  <data name="Pages" xml:space="preserve">
+    <value>Sider</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Lagre</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Lagre som</value>
+  </data>
+  <data name="APIsAndServicesText" xml:space="preserve">
+    <value>API-er og tjenester er maskinlesbare grensesnitt over kartdata og dokumentasjon. Disse brukes i mange internett-løsninger for å oppdatere informasjonen kontinuerlig.</value>
+  </data>
+  <data name="DepartmentalOverviewHeader" xml:space="preserve">
+    <value>Etatsvis oversikt over data</value>
+  </data>
+  <data name="MapServicesText" xml:space="preserve">
+    <value>Mange fagetater, fylkesetater og kommuner tilbyr nettkart til bruk for publikum. Her kan du utforske for eksempel flyfoto, høydedata, arealplaner eller ulike temakart.</value>
+  </data>
+  <data name="MunicipalitySelect" xml:space="preserve">
+    <value>Velg kommune/fylke</value>
+  </data>
+  <data name="MunicipalitySelectInfo" xml:space="preserve">
+    <value>Velg en kommune eller et fylke, og få oversikt over hvilke stedfestede data som finnes der</value>
+  </data>
+  <data name="OpenDataText" xml:space="preserve">
+    <value>De fleste kartdata i Norge er åpne data. Disse kan du laste ned gratis fra Geonorge, hvilket gir store muligheter for innovasjon og bruk. Datasettets lisens beskriver hva du har lov til å gjøre med dataene.</value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>Velg etat</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Legg</value>
+  </data>
+  <data name="AddToBasket" xml:space="preserve">
+    <value>Legg i kurv</value>
+  </data>
+  <data name="CanNotBeAddedToBasket" xml:space="preserve">
+    <value>Kan ikke legges i kurv</value>
+  </data>
+  <data name="Display" xml:space="preserve">
+    <value>Vis </value>
+  </data>
+  <data name="DisplayAllDatasetsFrom" xml:space="preserve">
+    <value>Vis alle datasett fra</value>
+  </data>
+  <data name="DisplayMetadataFor" xml:space="preserve">
+    <value>Se metadata for</value>
+  </data>
+  <data name="InMap" xml:space="preserve">
+    <value>i kart</value>
+  </data>
+  <data name="IsAddedTo" xml:space="preserve">
+    <value>er lagt til i</value>
+  </data>
+  <data name="IsRemovedFrom" xml:space="preserve">
+    <value>er fjernet fra</value>
+  </data>
+  <data name="OfflineData" xml:space="preserve">
+    <value>Skjermede data</value>
+  </data>
+  <data name="RestrictedData" xml:space="preserve">
+    <value>Tilgangsbegrensede data</value>
+  </data>
+  <data name="ServiceCannotBeDisplayedMap" xml:space="preserve">
+    <value>Tjenesten kan ikke vises i kart</value>
+  </data>
+  <data name="ServiceNotavailable" xml:space="preserve">
+    <value>Tjenesten er utilgjengelig for øyeblikket</value>
+  </data>
+  <data name="ServiceSlow" xml:space="preserve">
+    <value>Tjenesten kan være treg å vise</value>
+  </data>
+  <data name="ServiceSlowAndSpecialAccess" xml:space="preserve">
+    <value>Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier</value>
+  </data>
+  <data name="TheBasket" xml:space="preserve">
+    <value>kurven</value>
+  </data>
+  <data name="ToBasket" xml:space="preserve">
+    <value>i kurv</value>
+  </data>
+  <data name="AvailableAs" xml:space="preserve">
+    <value>Tilgjengelig som</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Klikk for å kopiere urlen til utklippstavle</value>
+  </data>
+  <data name="UrlToService" xml:space="preserve">
+    <value>Url til tjeneste</value>
+  </data>
+  <data name="VisitWebsite" xml:space="preserve">
+    <value>Besøk nettside for</value>
+  </data>
+  <data name="WebPage" xml:space="preserve">
+    <value>Nettside</value>
+  </data>
+  <data name="WebPageHeader" xml:space="preserve">
+    <value>nett side</value>
+  </data>
+  <data name="ContactDataOwner" xml:space="preserve">
+    <value>Kontakt dataeier</value>
+  </data>
+  <data name="DisplayCartography" xml:space="preserve">
+    <value>Vis tegneregler</value>
+  </data>
+  <data name="DisplayCoverageMap" xml:space="preserve">
+    <value>Vis dekningskart</value>
+  </data>
+  <data name="DisplayProductPage" xml:space="preserve">
+    <value>Vis produktside</value>
+  </data>
+  <data name="DisplayProductSheet" xml:space="preserve">
+    <value>Vis produktark</value>
+  </data>
+  <data name="DisplayProductSpesification" xml:space="preserve">
+    <value>Vis produktspesifikasjon</value>
+  </data>
+  <data name="Distributions" xml:space="preserve">
+    <value>Distribusjoner</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Hjelp</value>
+  </data>
+  <data name="NotSet" xml:space="preserve">
+    <value>ikke angitt</value>
+  </data>
+  <data name="AccessConstraints" xml:space="preserve">
+    <value>Tilgangsrestriksjoner</value>
+  </data>
+  <data name="Constraints" xml:space="preserve">
+    <value>Restriksjoner</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Kontaktinformasjon</value>
+  </data>
+  <data name="ContactMetadata" xml:space="preserve">
+    <value>Metadatakontakt</value>
+  </data>
+  <data name="ContactOwner" xml:space="preserve">
+    <value>Faglig kontakt</value>
+  </data>
+  <data name="ContactPublisher" xml:space="preserve">
+    <value>Teknisk kontakt</value>
+  </data>
+  <data name="DetailedInformation" xml:space="preserve">
+    <value>Detaljert informasjon</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Distribusjon</value>
+  </data>
+  <data name="DistributionName" xml:space="preserve">
+    <value>Lagnavn</value>
+  </data>
+  <data name="DistributionType" xml:space="preserve">
+    <value>Distribusjonstype</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Rediger</value>
+  </data>
+  <data name="Licence" xml:space="preserve">
+    <value>Lisens</value>
+  </data>
+  <data name="OtherConstraints" xml:space="preserve">
+    <value>Andre restriksjoner</value>
+  </data>
+  <data name="Quality" xml:space="preserve">
+    <value>Kvalitet</value>
+  </data>
+  <data name="ReferenceSystems" xml:space="preserve">
+    <value>Romlig referansesystem</value>
+  </data>
+  <data name="SecurityConstraints" xml:space="preserve">
+    <value>Sikkerhetsnivå</value>
+  </data>
+  <data name="SecurityConstraintsNote" xml:space="preserve">
+    <value>Lovhenvisning</value>
+  </data>
+  <data name="SpatialRepresentation" xml:space="preserve">
+    <value>Representasjonsform</value>
+  </data>
+  <data name="UnitsOfDistribution" xml:space="preserve">
+    <value>Geografisk distribusjonsinndeling</value>
+  </data>
+  <data name="UseConstraints" xml:space="preserve">
+    <value>Brukerrestriksjoner</value>
+  </data>
+  <data name="UseLimitations" xml:space="preserve">
+    <value>Bruksbegrensninger</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Godkjent</value>
+  </data>
+  <data name="AreaMustBeSelectedFirst" xml:space="preserve">
+    <value>Område må velges først</value>
+  </data>
+  <data name="BoundingBox" xml:space="preserve">
+    <value>Geografisk utstrekning</value>
+  </data>
+  <data name="Concepts" xml:space="preserve">
+    <value>Begreper</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Opprettet</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Dato</value>
+  </data>
+  <data name="DownloadOrderLineHeader" xml:space="preserve">
+    <value>Felles valg for nedlastning, vil gjelde for alle datasett</value>
+  </data>
+  <data name="East" xml:space="preserve">
+    <value>Øst</value>
+  </data>
+  <data name="FileDownload" xml:space="preserve">
+    <value>Filnedlastning</value>
+  </data>
+  <data name="FileDownloadDownload" xml:space="preserve">
+    <value>Filnedlastning - nedlastning</value>
+  </data>
+  <data name="FileDownloadIntro" xml:space="preserve">
+    <value>&lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;
+            &lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;
+            &lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;
+            &lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene i handlekurven.&lt;/p&gt;</value>
+  </data>
+  <data name="FileDownloadOrder" xml:space="preserve">
+    <value>Filnedlastning - bestilling</value>
+  </data>
+  <data name="KeywordsPlace" xml:space="preserve">
+    <value>Geografisk område</value>
+  </data>
+  <data name="MaintenanceFrequency" xml:space="preserve">
+    <value>Oppdateringshyppighet</value>
+  </data>
+  <data name="North" xml:space="preserve">
+    <value>Nord</value>
+  </data>
+  <data name="NotApproved" xml:space="preserve">
+    <value>Ikke godkjent</value>
+  </data>
+  <data name="OrderMore" xml:space="preserve">
+    <value>Bestill mer</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Annet</value>
+  </data>
+  <data name="ProcessHistory" xml:space="preserve">
+    <value>Prosesshistorie</value>
+  </data>
+  <data name="Projection" xml:space="preserve">
+    <value>Projeksjon</value>
+  </data>
+  <data name="Published" xml:space="preserve">
+    <value>Publisert</value>
+  </data>
+  <data name="Purpose" xml:space="preserve">
+    <value>Formål</value>
+  </data>
+  <data name="QualitySpecification" xml:space="preserve">
+    <value>Konformitet</value>
+  </data>
+  <data name="QualitySpecificationExplanation" xml:space="preserve">
+    <value>Forklaring av resultat</value>
+  </data>
+  <data name="RemoveAll" xml:space="preserve">
+    <value>Fjern alle</value>
+  </data>
+  <data name="ResolutionScale" xml:space="preserve">
+    <value>Målestokkstall</value>
+  </data>
+  <data name="Resource" xml:space="preserve">
+    <value>Ressurs</value>
+  </data>
+  <data name="South" xml:space="preserve">
+    <value>Sør</value>
+  </data>
+  <data name="TimeAndSpace" xml:space="preserve">
+    <value>Tid og rom</value>
+  </data>
+  <data name="TopicCategory" xml:space="preserve">
+    <value>Tematisk hovedkategori</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Oppdatert</value>
+  </data>
+  <data name="ValidityPeriod" xml:space="preserve">
+    <value>Gyldighetsperiode</value>
+  </data>
+  <data name="West" xml:space="preserve">
+    <value>Vest</value>
+  </data>
+  <data name="AddedToBasket" xml:space="preserve">
+    <value>Lagt i kurv</value>
+  </data>
+  <data name="AlreadyPutInBasket" xml:space="preserve">
+    <value>Allerede lagt i kurv</value>
+  </data>
+  <data name="AreaHelpText" xml:space="preserve">
+    <value>&lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;
+                    &lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;
+                    &lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;</value>
+  </data>
+  <data name="ChooseFromMap" xml:space="preserve">
+    <value>Velg fra kart</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Lukk</value>
+  </data>
+  <data name="DatasetIsCorrect" xml:space="preserve">
+    <value>Datasett er korrekt utfylt</value>
+  </data>
+  <data name="DeleteDataset" xml:space="preserve">
+    <value>Slett datasett</value>
+  </data>
+  <data name="DisplayErrors" xml:space="preserve">
+    <value>Vis mangler</value>
+  </data>
+  <data name="DisplayMessages" xml:space="preserve">
+    <value>Vis meldinger</value>
+  </data>
+  <data name="DoesNotMatchCommonChoice" xml:space="preserve">
+    <value>er ikke lik fellesvalget</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-post</value>
+  </data>
+  <data name="FormatHelpText" xml:space="preserve">
+    <value>&lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;
+                    &lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;
+&lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;</value>
+  </data>
+  <data name="IsNotAvailable" xml:space="preserve">
+    <value>er ikke tilgjengelig</value>
+  </data>
+  <data name="MissingFormatFor" xml:space="preserve">
+    <value>Mangler format for</value>
+  </data>
+  <data name="MissingProjectionFor" xml:space="preserve">
+    <value>Mangler projeksjon for</value>
+  </data>
+  <data name="Nationwide" xml:space="preserve">
+    <value>Landsdekkende</value>
+  </data>
+  <data name="NavigateToDataset" xml:space="preserve">
+    <value>Gå til datasett</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nei</value>
+  </data>
+  <data name="NoAreasAreAvailable" xml:space="preserve">
+    <value>Ingen områder er tilgjengelig</value>
+  </data>
+  <data name="NoElementsInBasket" xml:space="preserve">
+    <value>Du har ingen elementer i kurven</value>
+  </data>
+  <data name="ProjectionHelpText" xml:space="preserve">
+    <value>&lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;
+                    &lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;</value>
+  </data>
+  <data name="RemovalOfDataset" xml:space="preserve">
+    <value>Fjerning av datasett</value>
+  </data>
+  <data name="RemoveAllDatasetsConfirm" xml:space="preserve">
+    <value>Er du sikker på at du vil fjerne alle datasett fra kurven?</value>
+  </data>
+  <data name="SelectedFromMap" xml:space="preserve">
+    <value>Valgt fra kart</value>
+  </data>
+  <data name="SelectGrid" xml:space="preserve">
+    <value>Velg fra kartblad</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="Area" xml:space="preserve">
+    <value>område</value>
+  </data>
+  <data name="Areas" xml:space="preserve">
+    <value>områder</value>
+  </data>
+  <data name="SelectedArea" xml:space="preserve">
+    <value>valgt område</value>
+  </data>
+  <data name="SelectedAreas" xml:space="preserve">
+    <value>valgte områder</value>
+  </data>
+  <data name="SelectedFormat" xml:space="preserve">
+    <value>valgt format</value>
+  </data>
+  <data name="SelectedFormats" xml:space="preserve">
+    <value>valgte formater</value>
+  </data>
+  <data name="SelectedProjection" xml:space="preserve">
+    <value>valgt projeksjon</value>
+  </data>
+  <data name="SelectedProjections" xml:space="preserve">
+    <value>valgte projeksjoner</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Tilbake</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Er du sikker på at du vil slette?</value>
+  </data>
+  <data name="ConnectedDatasets" xml:space="preserve">
+    <value>Tilknyttede datasett</value>
+  </data>
+  <data name="ConnectToMetadata" xml:space="preserve">
+    <value>Koble til metadata</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Opprett</value>
+  </data>
+  <data name="DatasetAlreadyConnected" xml:space="preserve">
+    <value>Datasett er allerede lagt til</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Slett</value>
+  </data>
+  <data name="EnterSearchCriteria" xml:space="preserve">
+    <value>Vennligst skriv inn søkeord</value>
+  </data>
+  <data name="NoMetadataFound" xml:space="preserve">
+    <value>Fant ingen metadata</value>
+  </data>
+  <data name="ParentTheme" xml:space="preserve">
+    <value>Tilkyttet tema</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Søk</value>
+  </data>
+  <data name="SearchAPIsAndServices" xml:space="preserve">
+    <value>Søk etter API-er og tjenester</value>
+  </data>
+  <data name="SearchApplications" xml:space="preserve">
+    <value>Søk etter kartløsninger</value>
+  </data>
+  <data name="SearchMapData" xml:space="preserve">
+    <value>Søk etter kartdata</value>
+  </data>
+  <data name="Themes" xml:space="preserve">
+    <value>Temaer</value>
+  </data>
+  <data name="TitleMissing" xml:space="preserve">
+    <value>Tittel mangler</value>
+  </data>
 </root>

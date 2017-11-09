@@ -1,4 +1,5 @@
-﻿<script type="text/x-template" id="showCoverageButtonTemplate">
+﻿@using Resources
+<script type="text/x-template" id="showCoverageButtonTemplate">
     <div v-html="htmlElement"></div>
 </script>
 
@@ -11,10 +12,10 @@
             computed: {
                 button: function () {
                     var button = {
-                        content: "Vis dekningskart",
+                        content: "@Html.Raw(UI.DisplayCoverageMap)",
                         className: this.defaultButtonClass,
                         url: this.resultItem.CoverageUrl,
-                        title: "Vis dekningskart for " + this.resultItem.Title,
+                        title: "@Html.Raw(UI.DisplayCoverageMap) for " + this.resultItem.Title,
                         icon: {
                             className: "fa fa-globe"
                         },

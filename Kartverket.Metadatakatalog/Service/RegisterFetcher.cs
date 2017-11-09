@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Kartverket.Metadatakatalog.Helpers;
+using Kartverket.Metadatakatalog.Models.Translations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 
 namespace Kartverket.Metadatakatalog.Service
@@ -8,28 +11,45 @@ namespace Kartverket.Metadatakatalog.Service
     public class RegisterFetcher
     {
         MemoryCacher memCacher = new MemoryCacher();
+        private static readonly WebClient _webClient = new WebClient();
 
         Dictionary<string, string> TopicCategories = new Dictionary<string, string>();
+        Dictionary<string, string> TopicCategoriesEnglish = new Dictionary<string, string>();
         Dictionary<string, string> SpatialRepresentations = new Dictionary<string, string>();
+        Dictionary<string, string> SpatialRepresentationsEnglish = new Dictionary<string, string>();
         Dictionary<string, string> MaintenanceFrequencyValues = new Dictionary<string, string>();
+        Dictionary<string, string> MaintenanceFrequencyValuesEnglish = new Dictionary<string, string>();
         Dictionary<string, string> ListOfStatusValues = new Dictionary<string, string>();
+        Dictionary<string, string> ListOfStatusValuesEnglish = new Dictionary<string, string>();
         Dictionary<string, string> ListOfClassificationValues = new Dictionary<string, string>();
+        Dictionary<string, string> ListOfClassificationValuesEnglish = new Dictionary<string, string>();
         Dictionary<string, string> ListOfRestrictionValues = new Dictionary<string, string>();
+        Dictionary<string, string> ListOfRestrictionValuesEnglish = new Dictionary<string, string>();
         Dictionary<string, string> ListOfCoordinatesystemNameValues = new Dictionary<string, string>();
+        Dictionary<string, string> ListOfCoordinatesystemNameValuesEnglish = new Dictionary<string, string>();
         Dictionary<string, string> ListOfDistributionTypes = new Dictionary<string, string>();
+        Dictionary<string, string> ListOfDistributionTypesEnglish = new Dictionary<string, string>();
         public Dictionary<string, string> OrganizationShortNames = new Dictionary<string, string>();
 
 
         public RegisterFetcher()
         {
             TopicCategories = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB100");
+            TopicCategoriesEnglish = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB100", Culture.EnglishCode);
             SpatialRepresentations = GetCodeList("4C54EB31-714E-4457-AF6A-44FE6DBE76C1");
+            SpatialRepresentationsEnglish = GetCodeList("4C54EB31-714E-4457-AF6A-44FE6DBE76C1", Culture.EnglishCode);
             MaintenanceFrequencyValues = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB124");
+            MaintenanceFrequencyValuesEnglish = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB124", Culture.EnglishCode);
             ListOfStatusValues = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB137");
+            ListOfStatusValuesEnglish = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB137", Culture.EnglishCode);
             ListOfClassificationValues = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB145");
+            ListOfClassificationValuesEnglish = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB145", Culture.EnglishCode);
             ListOfRestrictionValues = GetCodeList("D23E9F2F-66AB-427D-8AE4-5B6FD3556B57");
+            ListOfRestrictionValuesEnglish = GetCodeList("D23E9F2F-66AB-427D-8AE4-5B6FD3556B57", Culture.EnglishCode);
             ListOfCoordinatesystemNameValues = GetEPSGCodeList("37B9DC41-D868-4CBC-84F9-39557041FB2C");
+            ListOfCoordinatesystemNameValuesEnglish = GetEPSGCodeList("37B9DC41-D868-4CBC-84F9-39557041FB2C", Culture.EnglishCode);
             ListOfDistributionTypes = GetCodeList("94B5A165-7176-4F43-B6EC-1063F7ADE9EA");
+            ListOfDistributionTypesEnglish = GetCodeList("94B5A165-7176-4F43-B6EC-1063F7ADE9EA", Culture.EnglishCode );
             OrganizationShortNames = GetListOfOrganizations();
 
         }
@@ -49,9 +69,8 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (Organizations.Count < 1)
             {
-                System.Net.WebClient c = new System.Net.WebClient();
-                c.Encoding = System.Text.Encoding.UTF8;
-                var data = c.DownloadString(System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner");
+                _webClient.Encoding = System.Text.Encoding.UTF8;
+                var data = _webClient.DownloadString(System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner");
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
 
                 var orgs = response["containeditems"];
@@ -80,7 +99,10 @@ namespace Kartverket.Metadatakatalog.Service
 
         public string GetCoordinatesystemName(string value)
         {
-            KeyValuePair<string, string> dic = ListOfCoordinatesystemNameValues.Where(p => p.Key == value).FirstOrDefault();
+            var culture = CultureHelper.GetCurrentCulture();
+            KeyValuePair<string, string> dic = culture == Culture.NorwegianCode
+                ? ListOfCoordinatesystemNameValues.Where(p => p.Key == value).FirstOrDefault()
+                : ListOfCoordinatesystemNameValuesEnglish.Where(p => p.Key == value).FirstOrDefault();
             if (!dic.Equals(default(KeyValuePair<String, String>)))
                 value = dic.Value;
 
@@ -88,7 +110,10 @@ namespace Kartverket.Metadatakatalog.Service
         }
         public string GetDistributionType(string value)
         {
-            KeyValuePair<string, string> dic = ListOfDistributionTypes.Where(p => p.Key == value).FirstOrDefault();
+            var culture = CultureHelper.GetCurrentCulture();
+            KeyValuePair<string, string> dic = culture == Culture.NorwegianCode
+                ? ListOfDistributionTypes.Where(p => p.Key == value).FirstOrDefault() 
+                : ListOfDistributionTypesEnglish.Where(p => p.Key == value).FirstOrDefault();
             if (!dic.Equals(default(KeyValuePair<String, String>)))
                 value = dic.Value;
 
@@ -97,7 +122,10 @@ namespace Kartverket.Metadatakatalog.Service
 
         public string GetSpatialRepresentation(string value)
         {
-            KeyValuePair<string, string> dic = SpatialRepresentations.Where(p => p.Key == value).FirstOrDefault();
+            var culture = CultureHelper.GetCurrentCulture();
+            KeyValuePair<string, string> dic = culture == Culture.NorwegianCode
+                ? SpatialRepresentations.Where(p => p.Key == value).FirstOrDefault()
+                : SpatialRepresentationsEnglish.Where(p => p.Key == value).FirstOrDefault();
             if (!dic.Equals(default(KeyValuePair<String, String>)))
                 value = dic.Value;
 
@@ -106,7 +134,10 @@ namespace Kartverket.Metadatakatalog.Service
 
         public string GetTopicCategory(string value)
         {
-            KeyValuePair<string, string> dic = TopicCategories.Where(p => p.Key == value).FirstOrDefault();
+            var culture = CultureHelper.GetCurrentCulture();
+            KeyValuePair<string, string> dic = culture == Culture.NorwegianCode
+                ? TopicCategories.Where(p => p.Key == value).FirstOrDefault()
+                : TopicCategoriesEnglish.Where(p => p.Key == value).FirstOrDefault();
             if (!dic.Equals(default(KeyValuePair<String, String>)))
                 value = dic.Value;
 
@@ -115,7 +146,10 @@ namespace Kartverket.Metadatakatalog.Service
 
         public string GetMaintenanceFrequency(string value)
         {
-            KeyValuePair<string, string> dic = MaintenanceFrequencyValues.Where(p => p.Key == value).FirstOrDefault();
+            var culture = CultureHelper.GetCurrentCulture();
+            KeyValuePair<string, string> dic = culture == Culture.NorwegianCode
+                ? MaintenanceFrequencyValues.Where(p => p.Key == value).FirstOrDefault()
+                : MaintenanceFrequencyValuesEnglish.Where(p => p.Key == value).FirstOrDefault();
             if (!dic.Equals(default(KeyValuePair<String, String>)))
                 value = dic.Value;
 
@@ -124,7 +158,10 @@ namespace Kartverket.Metadatakatalog.Service
 
         public string GetStatus(string value)
         {
-            KeyValuePair<string, string> dic = ListOfStatusValues.Where(p => p.Key == value).FirstOrDefault();
+            var culture = CultureHelper.GetCurrentCulture();
+            KeyValuePair<string, string> dic = culture == Culture.NorwegianCode
+                ? ListOfStatusValues.Where(p => p.Key == value).FirstOrDefault()
+                : ListOfStatusValuesEnglish.Where(p => p.Key == value).FirstOrDefault();
             if (!dic.Equals(default(KeyValuePair<String, String>)))
                 value = dic.Value;
 
@@ -133,7 +170,10 @@ namespace Kartverket.Metadatakatalog.Service
 
         public string GetClassification(string value)
         {
-            KeyValuePair<string, string> dic = ListOfClassificationValues.Where(p => p.Key == value).FirstOrDefault();
+            var culture = CultureHelper.GetCurrentCulture();
+            KeyValuePair<string, string> dic = culture == Culture.NorwegianCode
+                ? ListOfClassificationValues.Where(p => p.Key == value).FirstOrDefault()
+                : ListOfClassificationValuesEnglish.Where(p => p.Key == value).FirstOrDefault();
             if (!dic.Equals(default(KeyValuePair<String, String>)))
                 value = dic.Value;
 
@@ -142,25 +182,40 @@ namespace Kartverket.Metadatakatalog.Service
 
         public string GetRestriction(string value, string OtherConstraintsAccess ="")
         {
-            KeyValuePair<string, string> dic = ListOfRestrictionValues.Where(p => p.Key == value).FirstOrDefault();
+            var culture = CultureHelper.GetCurrentCulture();
+            KeyValuePair<string, string> dic = culture == Culture.NorwegianCode
+                ? ListOfRestrictionValues.Where(p => p.Key == value).FirstOrDefault()
+                : ListOfRestrictionValuesEnglish.Where(p => p.Key == value).FirstOrDefault();
             if (!dic.Equals(default(KeyValuePair<String, String>)))
                 value = dic.Value;
-
-            if (value == "restricted")
-                value = "Skjermede data";
-            if (OtherConstraintsAccess == "no restrictions")
-                value = "Åpne data";
-            else if (OtherConstraintsAccess == "norway digital restricted")
-                value = "Norge digitalt-begrenset";
+            if (culture == Culture.NorwegianCode)
+            {
+                if (value == "restricted")
+                    value = "Skjermede data";
+                if (OtherConstraintsAccess == "no restrictions")
+                    value = "Åpne data";
+                else if (OtherConstraintsAccess == "norway digital restricted")
+                    value = "Norge digitalt-begrenset";
+            }
+            else
+            {
+                if (value == "restricted")
+                    value = "Restricted data";
+                if (OtherConstraintsAccess == "no restrictions")
+                    value = "Open data";
+                else if (OtherConstraintsAccess == "norway digital restricted")
+                    value = "Norway digitalt restricted";
+            }
 
             return value;
         }
 
 
 
-        public Dictionary<string, string> GetCodeList(string systemid)
+        public Dictionary<string, string> GetCodeList(string systemid, string culture = Culture.NorwegianCode)
         {
-            var cache = memCacher.GetValue(systemid);
+            var cacheId = systemid + "_" + culture;
+            var cache = memCacher.GetValue(cacheId);
 
             Dictionary<string, string> CodeValues = new Dictionary<string, string>();
 
@@ -172,11 +227,11 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
-                System.Net.WebClient c = new System.Net.WebClient();
-                c.Encoding = System.Text.Encoding.UTF8;
-                var data = c.DownloadString(url);
+                _webClient.Headers.Remove("Accept-Language");
+                _webClient.Headers.Add("Accept-Language", culture);
+                _webClient.Encoding = System.Text.Encoding.UTF8;
+                var data = _webClient.DownloadString(url);
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
-
                 var codeList = response["containeditems"];
 
                 foreach (var code in codeList)
@@ -193,16 +248,18 @@ namespace Kartverket.Metadatakatalog.Service
 
                 CodeValues = CodeValues.OrderBy(o => o.Value).ToDictionary(o => o.Key, o => o.Value);
 
-                memCacher.Add(systemid, CodeValues, new DateTimeOffset(DateTime.Now.AddHours(12)));
+                memCacher.Add(cacheId, CodeValues, new DateTimeOffset(DateTime.Now.AddHours(12)));
 
             }
 
             return CodeValues;
         }
 
-        public Dictionary<string, string> GetEPSGCodeList(string systemid)
+        public Dictionary<string, string> GetEPSGCodeList(string systemid, string culture = Culture.NorwegianCode)
         {
-            var cache = memCacher.GetValue(systemid);
+            var cacheId = systemid + "_" + culture;
+
+            var cache = memCacher.GetValue(cacheId);
 
             Dictionary<string, string> CodeValues = new Dictionary<string, string>();
 
@@ -214,9 +271,8 @@ namespace Kartverket.Metadatakatalog.Service
             {
 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
-                System.Net.WebClient c = new System.Net.WebClient();
-                c.Encoding = System.Text.Encoding.UTF8;
-                var data = c.DownloadString(url);
+                _webClient.Encoding = System.Text.Encoding.UTF8;
+                var data = _webClient.DownloadString(url);
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
 
                 var codeList = response["containeditems"];
@@ -235,7 +291,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                 CodeValues = CodeValues.OrderBy(o => o.Value).ToDictionary(o => o.Key, o => o.Value);
 
-                memCacher.Add(systemid, CodeValues, new DateTimeOffset(DateTime.Now.AddHours(12)));
+                memCacher.Add(cacheId, CodeValues, new DateTimeOffset(DateTime.Now.AddHours(12)));
 
             }
 

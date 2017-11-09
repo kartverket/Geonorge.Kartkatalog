@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using GeoNorgeAPI;
 
 namespace Kartverket.Metadatakatalog.Models.Api
 {
@@ -37,5 +35,38 @@ namespace Kartverket.Metadatakatalog.Models.Api
         }
 
     }
+    public class DistributionRow
+    {
+        public DistributionRow(SimpleDistribution distribution)
+        {
+            Organization = distribution.Organization;
+            Protocol = distribution.Protocol;
+            Url = distribution.URL;
+        }
 
+        public string Organization { get; }
+        public string Protocol { get; }
+        public string Url { get; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is DistributionRow other &&
+                   (other.Organization == Organization && other.Protocol == Protocol && other.Url == Url);
+        }
+        public override int GetHashCode()
+        {
+            var hash = 0;
+
+            if (Organization != null)
+                hash = hash + Organization.GetHashCode();
+
+            if (Protocol != null)
+                hash = hash + Protocol.GetHashCode();
+
+            if (Url != null)
+                hash = hash + Url.GetHashCode();
+
+            return hash;
+        }
+    }
 }

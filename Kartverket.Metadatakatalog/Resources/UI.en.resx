@@ -118,69 +118,560 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppPageTitle" xml:space="preserve">
-    <value>Kartkatalogen</value>
+    <value>Map Catalog</value>
   </data>
   <data name="Facet_area" xml:space="preserve">
-    <value>Område</value>
+    <value>Area</value>
   </data>
   <data name="Facet_DistributionProtocols" xml:space="preserve">
-    <value>Distribusjonsform</value>
+    <value>Distribution form</value>
   </data>
   <data name="Facet_keyword" xml:space="preserve">
-    <value>Nøkkelord</value>
+    <value>Keyword</value>
   </data>
   <data name="Facet_license" xml:space="preserve">
-    <value>Lisens</value>
+    <value>License</value>
   </data>
   <data name="Facet_nationalinitiative" xml:space="preserve">
-    <value>Samarbeid og lover</value>
+    <value>Cooperation and laws</value>
   </data>
   <data name="Facet_organization" xml:space="preserve">
-    <value>Organisasjon</value>
+    <value>Organization</value>
   </data>
   <data name="Facet_organizationgroup" xml:space="preserve">
-    <value>Organisasjon</value>
+    <value>Organization</value>
   </data>
   <data name="Facet_place" xml:space="preserve">
-    <value>Geografisk område</value>
+    <value>Geographical area</value>
   </data>
   <data name="Facet_placegroups" xml:space="preserve">
-    <value>Geografisk område</value>
+    <value>Geographical area</value>
   </data>
   <data name="Facet_theme" xml:space="preserve">
-    <value>Tema</value>
+    <value>Theme</value>
   </data>
   <data name="Facet_type" xml:space="preserve">
     <value>Type</value>
   </data>
   <data name="Facet_type_dataset" xml:space="preserve">
-    <value>Datasett</value>
+    <value>Dataset</value>
   </data>
   <data name="Facet_type_series" xml:space="preserve">
-    <value>Datasettserie</value>
+    <value>Dataset series</value>
   </data>
   <data name="Facet_type_service" xml:space="preserve">
-    <value>Tjeneste</value>
+    <value>Service</value>
   </data>
   <data name="Facet_type_servicelayer" xml:space="preserve">
-    <value>Tjenestelag</value>
+    <value>Servicelayer</value>
   </data>
   <data name="Facet_type_software" xml:space="preserve">
-    <value>Applikasjon</value>
+    <value>Application</value>
   </data>
   <data name="Facet_type_dimensionGroup" xml:space="preserve">
-    <value>Datapakke</value>
+    <value>Data package</value>
   </data>
   <data name="Facet_dataaccess" xml:space="preserve">
-    <value>Tilgang til data</value>
+    <value>Access to data</value>
   </data>
   <data name="Service_need_permission" xml:space="preserve">
-    <value>Tjenesten krever spesiell tilgang for å kunne vises - kontakt dataeier</value>
+    <value>The service requires special access to display - contact data owner</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Beskrivelse</value>
+    <value>Description</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Navn</value>
+    <value>Name</value>
+  </data>
+  <data name="AboutMapCatalog" xml:space="preserve">
+    <value>Here is an overview of data sets in Geonorge with information about available formats, associated services and APIs. Own overview of services / APIs and map solutions can be found on your own pages in the right column.</value>
+  </data>
+  <data name="DataOwner" xml:space="preserve">
+    <value>Data owner</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Hits" xml:space="preserve">
+    <value>hits</value>
+  </data>
+  <data name="HitsDisplay" xml:space="preserve">
+    <value>Showing</value>
+  </data>
+  <data name="HitsOf" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="Map" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="OpenData" xml:space="preserve">
+    <value>Open data</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="ApisAndServices" xml:space="preserve">
+    <value>APIs and services</value>
+  </data>
+  <data name="DepartmentalOverview" xml:space="preserve">
+    <value>Departmental overview</value>
+  </data>
+  <data name="FilterSearch" xml:space="preserve">
+    <value>Filter search on</value>
+  </data>
+  <data name="MapCatalogMainPage" xml:space="preserve">
+    <value>Map Catalog - main page</value>
+  </data>
+  <data name="MapServices" xml:space="preserve">
+    <value>Map services</value>
+  </data>
+  <data name="MetadataInMunicipality" xml:space="preserve">
+    <value>What is in municipality/county?</value>
+  </data>
+  <data name="Pages" xml:space="preserve">
+    <value>Pages</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Save As</value>
+  </data>
+  <data name="APIsAndServicesText" xml:space="preserve">
+    <value>APIs and services are machine-readable interface over map data and documentation. These are used in many internet solutions to update the information continuously.</value>
+  </data>
+  <data name="DepartmentalOverviewHeader" xml:space="preserve">
+    <value>Departmental overview of data</value>
+  </data>
+  <data name="MapServicesText" xml:space="preserve">
+    <value>Many departments, county counties and municipalities offer a map for use to the public. Here you can explore, for example, aerial photographs, elevation data, area plans or different theme maps.</value>
+  </data>
+  <data name="MunicipalitySelect" xml:space="preserve">
+    <value>Select municipality/county</value>
+  </data>
+  <data name="MunicipalitySelectInfo" xml:space="preserve">
+    <value>Select a municipality or county, and get an overview of which site-specific data exists</value>
+  </data>
+  <data name="OpenDataText" xml:space="preserve">
+    <value>Most map data in Norway are open data. These can be downloaded free of charge from Geonorge, which offers great opportunities for innovation and use. The data set license describes what you are allowed to do with the data.</value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>Select organization</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AddToBasket" xml:space="preserve">
+    <value>Add to basket</value>
+  </data>
+  <data name="CanNotBeAddedToBasket" xml:space="preserve">
+    <value>Can not be added to basket</value>
+  </data>
+  <data name="Display" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="DisplayAllDatasetsFrom" xml:space="preserve">
+    <value>Display all datasets from</value>
+  </data>
+  <data name="DisplayMetadataFor" xml:space="preserve">
+    <value>Display metadata for</value>
+  </data>
+  <data name="InMap" xml:space="preserve">
+    <value>in map</value>
+  </data>
+  <data name="IsAddedTo" xml:space="preserve">
+    <value>is added to</value>
+  </data>
+  <data name="IsRemovedFrom" xml:space="preserve">
+    <value>Is removed from</value>
+  </data>
+  <data name="OfflineData" xml:space="preserve">
+    <value>Restricted data</value>
+  </data>
+  <data name="RestrictedData" xml:space="preserve">
+    <value>Protected data</value>
+  </data>
+  <data name="ServiceCannotBeDisplayedMap" xml:space="preserve">
+    <value>The service can not be displayed on the map</value>
+  </data>
+  <data name="ServiceNotavailable" xml:space="preserve">
+    <value>Service is not available</value>
+  </data>
+  <data name="ServiceSlow" xml:space="preserve">
+    <value>The service may be slow to show</value>
+  </data>
+  <data name="ServiceSlowAndSpecialAccess" xml:space="preserve">
+    <value>The service may be slow to display and requires special access to display - contact data owner</value>
+  </data>
+  <data name="TheBasket" xml:space="preserve">
+    <value>the basket</value>
+  </data>
+  <data name="ToBasket" xml:space="preserve">
+    <value>to basket</value>
+  </data>
+  <data name="AvailableAs" xml:space="preserve">
+    <value>Available as</value>
+  </data>
+  <data name="CopyToClipboard" xml:space="preserve">
+    <value>Click to copy the url to clipboard</value>
+  </data>
+  <data name="UrlToService" xml:space="preserve">
+    <value>Url to service</value>
+  </data>
+  <data name="VisitWebsite" xml:space="preserve">
+    <value>Visit website for</value>
+  </data>
+  <data name="WebPage" xml:space="preserve">
+    <value>Webpage</value>
+  </data>
+  <data name="WebPageHeader" xml:space="preserve">
+    <value>web page</value>
+  </data>
+  <data name="ContactDataOwner" xml:space="preserve">
+    <value>Contact dataowner</value>
+  </data>
+  <data name="DisplayCartography" xml:space="preserve">
+    <value>Display cartography</value>
+  </data>
+  <data name="DisplayCoverageMap" xml:space="preserve">
+    <value>Display coverage map</value>
+  </data>
+  <data name="DisplayProductPage" xml:space="preserve">
+    <value>Display productpage</value>
+  </data>
+  <data name="DisplayProductSheet" xml:space="preserve">
+    <value>Display product sheet</value>
+  </data>
+  <data name="DisplayProductSpesification" xml:space="preserve">
+    <value>Display product spesification</value>
+  </data>
+  <data name="Distributions" xml:space="preserve">
+    <value>Distributions</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="NotSet" xml:space="preserve">
+    <value>not set</value>
+  </data>
+  <data name="AccessConstraints" xml:space="preserve">
+    <value>Access constraints</value>
+  </data>
+  <data name="Constraints" xml:space="preserve">
+    <value>Constraints</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Contact information</value>
+  </data>
+  <data name="ContactMetadata" xml:space="preserve">
+    <value>Contact metadata</value>
+  </data>
+  <data name="ContactOwner" xml:space="preserve">
+    <value>Contact owner</value>
+  </data>
+  <data name="ContactPublisher" xml:space="preserve">
+    <value>Contact publisher</value>
+  </data>
+  <data name="DetailedInformation" xml:space="preserve">
+    <value>Detailed information</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Distribution</value>
+  </data>
+  <data name="DistributionName" xml:space="preserve">
+    <value>Layer name</value>
+  </data>
+  <data name="DistributionType" xml:space="preserve">
+    <value>Distribution type</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Licence" xml:space="preserve">
+    <value>Licence</value>
+  </data>
+  <data name="OtherConstraints" xml:space="preserve">
+    <value>Other constraints</value>
+  </data>
+  <data name="Quality" xml:space="preserve">
+    <value>Quality</value>
+  </data>
+  <data name="ReferenceSystems" xml:space="preserve">
+    <value>Reference systems</value>
+  </data>
+  <data name="SecurityConstraints" xml:space="preserve">
+    <value>Security constraints</value>
+  </data>
+  <data name="SecurityConstraintsNote" xml:space="preserve">
+    <value>Reference laws</value>
+  </data>
+  <data name="SpatialRepresentation" xml:space="preserve">
+    <value>Spatial representation</value>
+  </data>
+  <data name="UnitsOfDistribution" xml:space="preserve">
+    <value>Units of distribution</value>
+  </data>
+  <data name="UseConstraints" xml:space="preserve">
+    <value>Use constraints</value>
+  </data>
+  <data name="UseLimitations" xml:space="preserve">
+    <value>Use limitations</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="AreaMustBeSelectedFirst" xml:space="preserve">
+    <value>Area must be selected first</value>
+  </data>
+  <data name="BoundingBox" xml:space="preserve">
+    <value>Bounding box</value>
+  </data>
+  <data name="Concepts" xml:space="preserve">
+    <value>Concepts</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="DownloadOrderLineHeader" xml:space="preserve">
+    <value>Common download options will apply to all data sets</value>
+  </data>
+  <data name="East" xml:space="preserve">
+    <value>East</value>
+  </data>
+  <data name="FileDownload" xml:space="preserve">
+    <value>File download</value>
+  </data>
+  <data name="FileDownloadDownload" xml:space="preserve">
+    <value>File download - download</value>
+  </data>
+  <data name="FileDownloadIntro" xml:space="preserve">
+    <value>&lt;p&gt; Downloading files requires that you choose the area, format, and coordinate system for each data set. &lt;/ p&gt;
+             &lt;p&gt;Should multiple files be downloaded, common options can be made at the top. Individual choices can be made for each dataset. &lt;/p&gt;
+             &lt;p&gt; Symbols indicate whether data from your selection is available. &lt;/p&gt;
+             &lt;p&gt; If an area is not displayed in a public choice, it must be individually selected for the data sets in the cart. &lt;/p&gt;</value>
+  </data>
+  <data name="FileDownloadOrder" xml:space="preserve">
+    <value>File download - order</value>
+  </data>
+  <data name="KeywordsPlace" xml:space="preserve">
+    <value>Geografisk område</value>
+  </data>
+  <data name="MaintenanceFrequency" xml:space="preserve">
+    <value>Maintenance frequency</value>
+  </data>
+  <data name="North" xml:space="preserve">
+    <value>North</value>
+  </data>
+  <data name="NotApproved" xml:space="preserve">
+    <value>Not approved</value>
+  </data>
+  <data name="OrderMore" xml:space="preserve">
+    <value>Order more</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="ProcessHistory" xml:space="preserve">
+    <value>Process history</value>
+  </data>
+  <data name="Projection" xml:space="preserve">
+    <value>Projection</value>
+  </data>
+  <data name="Published" xml:space="preserve">
+    <value>Published</value>
+  </data>
+  <data name="Purpose" xml:space="preserve">
+    <value>Purpose</value>
+  </data>
+  <data name="QualitySpecification" xml:space="preserve">
+    <value>Quality specification</value>
+  </data>
+  <data name="QualitySpecificationExplanation" xml:space="preserve">
+    <value>Explanation of results</value>
+  </data>
+  <data name="RemoveAll" xml:space="preserve">
+    <value>Remove all</value>
+  </data>
+  <data name="ResolutionScale" xml:space="preserve">
+    <value>Resolution scale</value>
+  </data>
+  <data name="Resource" xml:space="preserve">
+    <value>Resource</value>
+  </data>
+  <data name="South" xml:space="preserve">
+    <value>South</value>
+  </data>
+  <data name="TimeAndSpace" xml:space="preserve">
+    <value>Time and space</value>
+  </data>
+  <data name="TopicCategory" xml:space="preserve">
+    <value>Topic category</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+  <data name="ValidityPeriod" xml:space="preserve">
+    <value>Validity period</value>
+  </data>
+  <data name="West" xml:space="preserve">
+    <value>West</value>
+  </data>
+  <data name="AddedToBasket" xml:space="preserve">
+    <value>Added to basket</value>
+  </data>
+  <data name="AlreadyPutInBasket" xml:space="preserve">
+    <value>Already put in basket</value>
+  </data>
+  <data name="AreaHelpText" xml:space="preserve">
+    <value>&lt;p&gt;Here you can select finished files from fixed areas from drop-down list. &lt;/p&gt;
+                     &lt;p&gt;For some datasets you can also use the Map tool to select data from grid or define freely chosen polygon for download. &lt;/p&gt;
+                     &lt;p&gt;For freely chosen polygon, the file will be generated and you will be notified by email when the file is complete for download. &lt;/p&gt;</value>
+  </data>
+  <data name="ChooseFromMap" xml:space="preserve">
+    <value>Choose from map</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="DatasetIsCorrect" xml:space="preserve">
+    <value>Datasets are correctly filled out</value>
+  </data>
+  <data name="DeleteDataset" xml:space="preserve">
+    <value>Delete dataset</value>
+  </data>
+  <data name="DisplayErrors" xml:space="preserve">
+    <value>Display errors</value>
+  </data>
+  <data name="DisplayMessages" xml:space="preserve">
+    <value>Display messages</value>
+  </data>
+  <data name="DoesNotMatchCommonChoice" xml:space="preserve">
+    <value>does not match the common choice</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="FormatHelpText" xml:space="preserve">
+    <value>&lt;p&gt;Location-based information is available in different formats depending on the type of data set. Special tools are needed to read most formats. &lt;/p&gt;
+     &lt;p&gt;SOSI - Norwegian exchange format for site-based information. &lt;/p&gt;
+&lt;p&gt;GML - International XML Format for Location-based Information. &lt;/p&gt;</value>
+  </data>
+  <data name="IsNotAvailable" xml:space="preserve">
+    <value>is not available</value>
+  </data>
+  <data name="MissingFormatFor" xml:space="preserve">
+    <value>Missing format for</value>
+  </data>
+  <data name="MissingProjectionFor" xml:space="preserve">
+    <value>Missing projection for</value>
+  </data>
+  <data name="Nationwide" xml:space="preserve">
+    <value>Nationwide</value>
+  </data>
+  <data name="NavigateToDataset" xml:space="preserve">
+    <value>Navigate to dataset	</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="NoAreasAreAvailable" xml:space="preserve">
+    <value>No areas are available</value>
+  </data>
+  <data name="NoElementsInBasket" xml:space="preserve">
+    <value>You have no items in the basket</value>
+  </data>
+  <data name="ProjectionHelpText" xml:space="preserve">
+    <value>&lt;p&gt;Enter the desired data set coordinate system to be downloaded. &lt;/p&gt;
+                     &lt;p&gt;If you want data for the entire country, it is common to use EUREF89, UTM zone 33. &lt;/p&gt;</value>
+  </data>
+  <data name="RemovalOfDataset" xml:space="preserve">
+    <value>Removal of dataset</value>
+  </data>
+  <data name="RemoveAllDatasetsConfirm" xml:space="preserve">
+    <value>Are you sure you want to remove all data sets from the basket?</value>
+  </data>
+  <data name="SelectedFromMap" xml:space="preserve">
+    <value>Selected from map</value>
+  </data>
+  <data name="SelectGrid" xml:space="preserve">
+    <value>Select grid</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Area" xml:space="preserve">
+    <value>area</value>
+  </data>
+  <data name="Areas" xml:space="preserve">
+    <value>areas</value>
+  </data>
+  <data name="SelectedArea" xml:space="preserve">
+    <value>selected area</value>
+  </data>
+  <data name="SelectedAreas" xml:space="preserve">
+    <value>selected areas</value>
+  </data>
+  <data name="SelectedFormat" xml:space="preserve">
+    <value>selected format</value>
+  </data>
+  <data name="SelectedFormats" xml:space="preserve">
+    <value>selected formats</value>
+  </data>
+  <data name="SelectedProjection" xml:space="preserve">
+    <value>selected projection</value>
+  </data>
+  <data name="SelectedProjections" xml:space="preserve">
+    <value>selected projections</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Are you sure you want to delete?</value>
+  </data>
+  <data name="ConnectedDatasets" xml:space="preserve">
+    <value>Connected datasets</value>
+  </data>
+  <data name="ConnectToMetadata" xml:space="preserve">
+    <value>Connect to metadata</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="DatasetAlreadyConnected" xml:space="preserve">
+    <value>Dataset is already connected</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="EnterSearchCriteria" xml:space="preserve">
+    <value>Please enter search criteria</value>
+  </data>
+  <data name="NoMetadataFound" xml:space="preserve">
+    <value>No metadata found</value>
+  </data>
+  <data name="ParentTheme" xml:space="preserve">
+    <value>Parent theme</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchAPIsAndServices" xml:space="preserve">
+    <value>Search for APIs and services</value>
+  </data>
+  <data name="SearchApplications" xml:space="preserve">
+    <value>Search for applications</value>
+  </data>
+  <data name="SearchMapData" xml:space="preserve">
+    <value>Search for map data</value>
+  </data>
+  <data name="Themes" xml:space="preserve">
+    <value>Themes</value>
+  </data>
+  <data name="TitleMissing" xml:space="preserve">
+    <value>Title is missing</value>
   </data>
 </root>

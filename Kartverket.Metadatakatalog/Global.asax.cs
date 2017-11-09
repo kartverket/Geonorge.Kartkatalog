@@ -13,12 +13,18 @@ using System.Data.Entity;
 using System.Web.Configuration;
 using System.Web.Helpers;
 using System.Security.Claims;
+using System.Web;
+using Kartverket.Metadatakatalog.Models.Translations;
+using Castle.Windsor;
+using Castle.Facilities.SolrNetIntegration;
+using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog
 {
     public class MvcApplication : System.Web.HttpApplication
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(MvcApplication));
+        public static WindsorContainer indexContainer = new WindsorContainer();
 
         protected void Application_Start()
         {
@@ -43,11 +49,17 @@ namespace Kartverket.Metadatakatalog
 
             log4net.Config.XmlConfigurator.Configure();
 
-            Startup.Init<MetadataIndexDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata");
-            Startup.Init<MetadataIndexAllDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata_all");
-            Startup.Init<ServiceIndexDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/services");
-            Startup.Init<ApplicationIndexDoc>(WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications");
             //https://github.com/mausch/SolrNet/blob/master/Documentation/Multi-core-instance.md
+            var solrFacility = new SolrNetFacility(WebConfigurationManager.AppSettings["SolrServerUrl"]);
+            solrFacility.AddCore(SolrCores.Metadata, typeof(MetadataIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata");
+            solrFacility.AddCore(SolrCores.MetadataEnglish, typeof(MetadataIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata_en");
+            solrFacility.AddCore(SolrCores.MetadataAll, typeof(MetadataIndexAllDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata_all");
+            solrFacility.AddCore(SolrCores.MetadataAllEnglish, typeof(MetadataIndexAllDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/metadata_all_en");
+            solrFacility.AddCore(SolrCores.Services, typeof(ServiceIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/services");
+            solrFacility.AddCore(SolrCores.ServicesEnglish, typeof(ServiceIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/services_en");
+            solrFacility.AddCore(SolrCores.Applications, typeof(ApplicationIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications");
+            solrFacility.AddCore(SolrCores.ApplicationsEnglish, typeof(ApplicationIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications_en");
+            indexContainer.AddFacility(solrFacility);
 
         }
 
@@ -57,5 +69,23 @@ namespace Kartverket.Metadatakatalog
 
             log.Error("App_Error", ex);
         }
+
+        protected void Application_BeginRequest()
+        {
+            var cookie = Context.Request.Cookies["_culture"];
+            if (cookie == null)
+            {
+                cookie = new HttpCookie("_culture", Culture.NorwegianCode);
+                HttpContext.Current.Response.Cookies.Add(cookie);
+            }
+
+            if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+            {
+                var culture = new CultureInfo(cookie.Value);
+                Thread.CurrentThread.CurrentCulture = culture;
+                Thread.CurrentThread.CurrentUICulture = culture;
+            }
+        }
+
     }
 }

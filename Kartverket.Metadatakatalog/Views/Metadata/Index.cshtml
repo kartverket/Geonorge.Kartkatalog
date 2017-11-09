@@ -24,7 +24,7 @@ if (contact != null)
                     <text>@contact.Name, </text>
                 }
                 @contact.Email
-            </a> &ndash; @contact.Organization
+            </a> &ndash; @(!CultureHelper.IsNorwegian() && !string.IsNullOrEmpty(contact.OrganizationEnglish) ? contact.OrganizationEnglish : contact.Organization) 
         </p>
 }
 }
@@ -146,15 +146,15 @@ if (contact != null)
     <article>
         <div class="row">
             <div class="col-sm-12">
-                <h3>Distribusjoner</h3>
+                <h3>@UI.Distributions</h3>
 
                 <div class="row resultItemRowTableHeader">
-                    <div class="col-sm-3"><p>Tittel</p></div>
+                    <div class="col-sm-3"><p>@UI.Title</p></div>
                     <div class="col-sm-2"><p>Type</p></div>
-                    <div class="col-sm-2"><p>Dataeier</p></div>
-                    <div class="col-sm-1"><p>Åpne data</p></div>
-                    <div class="col-sm-1"><p>Kart</p></div>
-                    <div class="col-sm-1"><p>Last ned</p></div>
+                    <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                    <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                    <div class="col-sm-1"><p>@UI.Map</p></div>
+                    <div class="col-sm-1"><p>@UI.Download</p></div>
                     <div class="col-sm-2"><p>Format</p></div>
                 </div>
                 <div class="menu-separator search-results-table-heading"></div>
@@ -198,7 +198,7 @@ if (contact != null)
                         <div class="col-sm-2"><p>Dataeier</p></div>
                         <div class="col-sm-1"><p>Åpne data</p></div>
                         <div class="col-sm-1"><p>Kart</p></div>
-                        <div class="col-sm-1"><p>Last ned</p></div>
+                        <div class="col-sm-1"><p>@UI.Download</p></div>
                         <div class="col-sm-2"><p>Format</p></div>
                     </div>
 
@@ -219,23 +219,23 @@ if (contact != null)
             {
             @* ** Kontaktinformasjon ** *@
             <div class="col-sm-6">
-                <h3>Kontaktinformasjon</h3>
+                <h3>@UI.ContactInformation</h3>
                 @if (Model.ContactOwner != null)
                 {
-            <a href="@Url.Action("Organization", "Metadata", new {OrganizationSeoName = Model.OrganizationSeoName()})" title="Vis alle geografiske tjenester og datasett fra @Model.ContactOwner.Organization">
+            <a href="@Url.Action("Organization", "Metadata", new {OrganizationSeoName = Model.OrganizationSeoName()})" title="@UI.DisplayAllDatasetsFrom @Model.ContactOwner.Organization">
                 @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
                     {
             <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactOwner.Organization" width="100" class="image-margin-bottom" />
                     }
             </a>                    }
-                @ShowContact("Metadatakontakt", Model.ContactMetadata)
-                @ShowContact("Faglig kontakt", Model.ContactOwner)
-                @ShowContact("Teknisk kontakt", Model.ContactPublisher)
+                @ShowContact(UI.ContactMetadata, Model.ContactMetadata)
+                @ShowContact(UI.ContactOwner, Model.ContactOwner)
+                @ShowContact(UI.ContactPublisher, Model.ContactPublisher)
             </div>
 
             @* ** Distribusjon ** *@<div class="col-sm-6">
-                <h3>Distribusjon</h3>
-                @DisplayValue("Representasjonsform", Model.SpatialRepresentation)
+                <h3>@UI.Distribution</h3>
+                @DisplayValue(UI.SpatialRepresentation, Model.SpatialRepresentation)
                 @if (Model.DistributionFormats != null)
                 {
                     if (Model.DistributionFormats.Any())
@@ -258,7 +258,7 @@ if (contact != null)
                 }
                 @if (Model.DistributionDetails != null && Model.DistributionDetails.Protocol != null && Model.DistributionDetails.Protocol != "GEONORGE:OFFLINE")
                 {
-        <text>@DisplayValue("Distribusjonstype", Model.DistributionDetails.ProtocolName)</text>
+        <text>@DisplayValue(UI.DistributionType, Model.DistributionDetails.ProtocolName)</text>
                     if (!string.IsNullOrWhiteSpace(Model.DistributionDetails.URL))
                     {
                         if (Model.IsService() || Model.IsServiceLayer())
@@ -270,14 +270,14 @@ if (contact != null)
         </p>
                         }
                     }
-        <text>@DisplayValue("Geografisk distribusjonsinndeling", Model.UnitsOfDistribution)</text>
-        <text>@DisplayValue("Lagnavn", Model.DistributionDetails.Name)</text>
+        <text>@DisplayValue(UI.UnitsOfDistribution, Model.UnitsOfDistribution)</text>
+        <text>@DisplayValue(UI.DistributionName, Model.DistributionDetails.Name)</text>
                 }
                 @if (Model.ReferenceSystems != null)
                 {
                     if (Model.ReferenceSystems.Any())
                     {
-        <strong>Romlig referansesystem: </strong>
+        <strong>@UI.ReferenceSystems: </strong>
         <ul>
             @foreach (var refsys in Model.ReferenceSystems)
                             {
@@ -292,19 +292,19 @@ if (contact != null)
         if (Model.Constraints != null)
         {
             <div class="col-sm-6">
-                <h3>Restriksjoner</h3>
-                @DisplayValue("Bruksbegrensninger", Model.Constraints.UseLimitations)
-                @DisplayValue("Tilgangsrestriksjoner", Model.Constraints.AccessConstraints)
-                @DisplayValue("Brukerrestriksjoner", Model.Constraints.UseConstraints)
-                @DisplayValue("Andre restriksjoner", Model.Constraints.OtherConstraints)
+                <h3>@UI.Constraints</h3>
+                @DisplayValue(UI.UseLimitations, Model.Constraints.UseLimitations)
+                @DisplayValue(UI.AccessConstraints, Model.Constraints.AccessConstraints)
+                @DisplayValue(UI.UseConstraints, Model.Constraints.UseConstraints)
+                @DisplayValue(UI.OtherConstraints, Model.Constraints.OtherConstraints)
                 @if (Model.Constraints != null && Model.Constraints.OtherConstraintsLink != null)
                     {
             <p>
-                <strong>Lisens: </strong> <a href="@Model.Constraints.OtherConstraintsLink" target="_blank">@Model.Constraints.OtherConstraintsLinkText</a><i class="custom-icon-sm custom-icon-eksternlink"></i>
+                <strong>@UI.Licence: </strong> <a href="@Model.Constraints.OtherConstraintsLink" target="_blank">@Model.Constraints.OtherConstraintsLinkText</a><i class="custom-icon-sm custom-icon-eksternlink"></i>
             </p>
             }
-                @DisplayValue("Sikkerhetsnivå", Model.Constraints.SecurityConstraints)
-                @DisplayValue("Lovhenvisning", Model.Constraints.SecurityConstraintsNote)
+                @DisplayValue(UI.SecurityConstraints, Model.Constraints.SecurityConstraints)
+                @DisplayValue(UI.SecurityConstraintsNote, Model.Constraints.SecurityConstraintsNote)
             </div>
         }
 
@@ -312,7 +312,7 @@ if (contact != null)
         if (!string.IsNullOrEmpty(Model.SupplementalDescription) || !string.IsNullOrEmpty(Model.HelpUrl))
         {
             <div id="help" class="col-sm-12">
-                <h2>Hjelp</h2>
+                <h2>@UI.Help</h2>
             </div>
             <div class="col-sm-12">
                 @if (!string.IsNullOrEmpty(Model.SupplementalDescription))
@@ -321,7 +321,7 @@ if (contact != null)
                 }
                 @if (!string.IsNullOrEmpty(Model.HelpUrl))
                     {
-                <a href="@Model.HelpUrl" class="btn" target="_blank"><span class="custom-icon custom-icon-eksternlink"></span> Vis hjelp</a>
+                <a href="@Model.HelpUrl" class="btn" target="_blank"><span class="custom-icon custom-icon-eksternlink"></span>@UI.Display @UI.Help</a>
                 }
             </div>
         }
@@ -330,31 +330,31 @@ if (contact != null)
             <div class="col-sm-12">
                 <a href="#" data-content-toggle="detailed-info" class="toggle-content">
                     <h2>
-                        <span class="toggle-icon"></span>Detaljert informasjon
+                        <span class="toggle-icon"></span>@UI.DetailedInformation
                     </h2>
                 </a>
             </div><div id="metadata-text-details" class="detailed-info" style="display: none;">
                 @* ** Kvalitet ** *@
                 <div class="col-sm-6">
-                    <h3>Kvalitet</h3>
-                    @DisplayValue("Målestokkstall", Model.ResolutionScale)
+                    <h3>@UI.Quality</h3>
+                    @DisplayValue(UI.ResolutionScale, Model.ResolutionScale)
                     @DisplayValue("Status", Model.Status)
-                    @DisplayValue("Prosesshistorie", Model.ProcessHistory)
+                    @DisplayValue(UI.ProcessHistory, Model.ProcessHistory)
                     @if (Model.QualitySpecifications != null)
                 {
-                <h3>Konformitet</h3>
+                <h3>@UI.QualitySpecification</h3>
                     for (var s = 0; s < Model.QualitySpecifications.Count; s++)
                     {
                 <p>
                     <strong>Standard: </strong>@Model.QualitySpecifications[s].Title
                 </p>
                 <p>
-                    <strong>Dato: </strong>@Html.DisplayFor(m => Model.QualitySpecifications[s].Date) (@Model.QualitySpecifications[s].DateType)
+                    <strong>@UI.Date: </strong>@Html.DisplayFor(m => Model.QualitySpecifications[s].Date) (@Model.QualitySpecifications[s].DateType)
                 </p>
                 <p>
-                    <strong>Forklaring av resultat: </strong>@Model.QualitySpecifications[s].Explanation
+                    <strong>@UI.QualitySpecificationExplanation: </strong>@Model.QualitySpecifications[s].Explanation
                 </p>
-                <p> @(Model.QualitySpecifications[s].Result ? "Godkjent" : "Ikke godkjent") </p>
+                <p> @(Model.QualitySpecifications[s].Result ? UI.Approved : UI.NotApproved) </p>
                         if (Model.QualitySpecifications.Count > 1 && s != Model.QualitySpecifications.Count - 1)
                         {
                 <hr />
@@ -363,79 +363,79 @@ if (contact != null)
                 }
                     @if (!string.IsNullOrWhiteSpace(Model.Purpose))
                 {
-                <h3>Formål</h3>
+                <h3>@UI.Purpose</h3>
                 <p>@Model.Purpose</p>
                 }
                 </div>
                 @* ** Tid og rom ** *@
                 <div class="col-sm-6">
-                    <h3>Tid og rom</h3>
+                    <h3>@UI.TimeAndSpace</h3>
                     @if (Model.DateUpdated != null)
                 {
                 <p>
-                    <strong>Oppdatert(Ressurs):</strong> @Html.DisplayFor(m => m.DateUpdated)
+                    <strong>@UI.Updated (@UI.Resource):</strong> @Html.DisplayFor(m => m.DateUpdated)
                 </p>
                 }
                     @if (Model.DateMetadataUpdated != null)
                 {
                 <p>
-                    <strong>Oppdatert(Metadata):</strong> @Html.DisplayFor(m => m.DateMetadataUpdated)
+                    <strong>@UI.Updated (Metadata):</strong> @Html.DisplayFor(m => m.DateMetadataUpdated)
                 </p>
                 }
                     @if (Model.DatePublished != null)
                 {
                 <p>
-                    <strong>Publisert:</strong> @Html.DisplayFor(m => m.DatePublished)
+                    <strong>@UI.Published:</strong> @Html.DisplayFor(m => m.DatePublished)
                 </p>
                 }
                     @if (Model.DateCreated != null)
                 {
                 <p>
-                    <strong>Opprettet:</strong> @Html.DisplayFor(m => m.DateCreated)
+                    <strong>@UI.Created:</strong> @Html.DisplayFor(m => m.DateCreated)
                 </p>
                 }
                     @if (Model.DateMetadataValidFrom != null)
                 {
                 <p>
-                    <strong>Gyldighetsperiode:</strong> @Html.DisplayFor(m => m.DateMetadataValidFrom) - @Html.DisplayFor(m => m.DateMetadataValidTo)
+                    <strong>@UI.ValidityPeriod:</strong> @Html.DisplayFor(m => m.DateMetadataValidFrom) - @Html.DisplayFor(m => m.DateMetadataValidTo)
                 </p>
                 }
                     @if (Model.MaintenanceFrequency != null)
                 {
                 <p>
-                    <strong>Oppdateringshyppighet:</strong> @Model.MaintenanceFrequency
+                    <strong>@UI.MaintenanceFrequency:</strong> @Model.MaintenanceFrequency
                 </p>
                 }
                     @if (Model.KeywordsPlace != null && Model.KeywordsPlace.Count > 0)
                 {
-                @DisplayKeywords("Geografisk område", Model.KeywordsPlace)
+                @DisplayKeywords(UI.KeywordsPlace, Model.KeywordsPlace)
                 }
                     @if (Model.BoundingBox != null)
                 {
                 <p>
-                    <strong>Geografisk utstrekning:</strong>
+                    <strong>@UI.BoundingBox:</strong>
                     <ul>
-                        <li>Nord: @Model.BoundingBox.NorthBoundLatitude</li>
-                        <li>Sør: @Model.BoundingBox.SouthBoundLatitude</li>
-                        <li>Øst: @Model.BoundingBox.EastBoundLongitude</li>
-                        <li>Vest: @Model.BoundingBox.WestBoundLongitude</li>
+                        <li>@UI.North: @Model.BoundingBox.NorthBoundLatitude</li>
+                        <li>@UI.South: @Model.BoundingBox.SouthBoundLatitude</li>
+                        <li>@UI.East: @Model.BoundingBox.EastBoundLongitude</li>
+                        <li>@UI.West: @Model.BoundingBox.WestBoundLongitude</li>
                     </ul>
                 </p>
                 }
                 </div>
                 @* ** Nøkkelord ** *@
                 <div class="col-sm-6">
-                    <h3>Nøkkelord</h3>
-                    @DisplayKeywords("Tema", Model.KeywordsTheme)
-                    @DisplayKeywords("Nasjonal temakategori", Model.KeywordsNationalTheme)
-                    @DisplayKeywords("Samarbeid og lover", Model.KeywordsNationalInitiative)
+                    <h3>@UI.Facet_keyword</h3>
+                    @DisplayKeywords(UI.Facet_theme, Model.KeywordsTheme)
+                    @DisplayKeywords(UI.Facet_theme, Model.KeywordsNationalTheme)
+                    @DisplayKeywords(UI.Facet_nationalinitiative, Model.KeywordsNationalInitiative)
                     @DisplayKeywords("Inspire", Model.KeywordsInspire)
-                    @DisplayKeywords("Annet", Model.KeywordsOther)
-                    @DisplayKeywords("Begreper", Model.KeywordsConcept)
+                    @DisplayKeywords(UI.Other, Model.KeywordsOther)
+                    @DisplayKeywords(UI.Concepts, Model.KeywordsConcept)
                     @if (!string.IsNullOrWhiteSpace(Model.TopicCategory))
                 {
                 <p>
-                    <strong>Tematisk hovedkategori:</strong> @Model.TopicCategory
+                    <strong>@UI.TopicCategory:</strong> @Model.TopicCategory
                 </p>
                 }
                 </div>
@@ -447,8 +447,8 @@ if (contact != null)
 <div class="row">
     <div class="col-md-12">
         <div>
-            <a href="@Model.MetadataXmlUrl" class="btn show-loading-animation" data-loading-message="Henter XML data"><span class="glyphicon glyphicon-file"></span> Last ned metadata XML</a>
-            <a href="@Model.MetadataEditUrl" class="btn show-loading-animation" data-loading-message="Henter metadata"><span class="glyphicon glyphicon-pencil"></span> Rediger metadata</a>
+            <a href="@Model.MetadataXmlUrl" class="btn show-loading-animation" data-loading-message="Henter XML data"><span class="glyphicon glyphicon-file"></span> @UI.Download metadata XML</a>
+            <a href="@Model.MetadataEditUrl" class="btn show-loading-animation" data-loading-message="Henter metadata"><span class="glyphicon glyphicon-pencil"></span> @UI.Edit metadata</a>
         </div>
     </div>
 </div>
@@ -471,15 +471,16 @@ if (keywords != null && keywords.Any())
         <ul>
             @foreach (var keyword in keywords)
             {
+                var word = !CultureHelper.IsNorwegian() && !string.IsNullOrEmpty(keyword.EnglishKeyword) ? keyword.EnglishKeyword : keyword.KeywordValue;
                 if (!string.IsNullOrEmpty(keyword.KeywordLink))
                 {
                     <li>
-                        <a href="@keyword.KeywordLink" target="_blank">@keyword.KeywordValue</a>
+                        <a href="@keyword.KeywordLink" target="_blank">@word</a>
                     </li>
                 }
                 else
                 {
-                    <li>@keyword.KeywordValue</li>
+                    <li>@word</li>
                 }
             }
         </ul>
@@ -522,6 +523,7 @@ if (keywords != null && keywords.Any())
             data: {
                 tableBorder: "",
                 distributionlist: [],
+                distributionListRaw: [],
                 relatedDataList: [],
                 model: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
             },
@@ -534,6 +536,7 @@ if (keywords != null && keywords.Any())
                     url: "/api/distributions/" + uuid,
                     success: function (response) {
                         vueModel.distributionlist = vueModel.convertDistributionList(response);
+                        vueModel.distributionlistRaw = response;
                     }
                 });
                 this.relatedDataList = this.convertRelatedDataList();

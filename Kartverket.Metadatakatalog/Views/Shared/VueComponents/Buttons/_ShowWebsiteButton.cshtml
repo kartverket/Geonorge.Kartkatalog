@@ -1,4 +1,5 @@
-﻿<script type="text/x-template" id="showWebsiteButtonTemplate">
+﻿@using Resources
+<script type="text/x-template" id="showWebsiteButtonTemplate">
     <div v-html="htmlElement"></div>
 </script>
 
@@ -11,10 +12,10 @@
             computed: {
                 button: function () {
                     var button = {
-                        content: "Nettside",
+                        content: "@Html.Raw(UI.WebPage)",
                         className: this.defaultButtonClass,
                         url: this.resultItem.DistributionUrl,
-                        title: "Besøk nettside for " + this.resultItem.Title,
+                        title: "@Html.Raw(UI.VisitWebsite) " + this.resultItem.Title,
                         icon: {
                             className: "custom-icon custom-icon-eksternlink"
                         },
@@ -22,7 +23,9 @@
                             { key: "onClick", value: "ga('send', 'event', 'MerInfo', 'nettside')" }
                         ]
                     };
-                    if (button.url == null) {
+                    //if (button.url == null) {
+                    if (this.resultItem.ShowWebsiteUrl === false) {
+                        button.url = "",
                         button.attributes.push({ key: 'disabled', value: 'disabled' });
                         button.className += " disabled";
                     }

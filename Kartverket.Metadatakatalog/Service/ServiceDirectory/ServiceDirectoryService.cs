@@ -5,6 +5,7 @@ using SolrNet;
 using SolrNet.Commands.Parameters;
 using System;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
+using Kartverket.Metadatakatalog.Helpers;
 
 namespace Kartverket.Metadatakatalog.Service.Search
 {
@@ -16,7 +17,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
         public ServiceDirectoryService()
         {
-            _solrInstance = ServiceLocator.Current.GetInstance<ISolrOperations<ServiceIndexDoc>>();
+            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ServiceIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Services));
         }
 
         public SearchResult Services(SearchParameters parameters)
@@ -30,7 +31,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     FilterQueries = parameters.BuildFilterQueries(),
                     OrderBy = parameters.OrderBy(),
                     Rows = parameters.Limit,
-                    StartOrCursor = new StartOrCursor.Start(parameters.Offset - 1), //solr is zero-based - we use one-based indexing in api
+                    Start = parameters.Offset - 1, //solr is zero-based - we use one-based indexing in api
                     Facet = parameters.BuildFacetParameters(),
                     Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "organization_shortname", "placegroups", "organizationgroup",
                     "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",

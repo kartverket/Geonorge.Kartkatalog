@@ -9,30 +9,30 @@
     var Facets = Model.Result.Facets;
     List<SearchResultFacetValueViewModel> orderedList = new List<SearchResultFacetValueViewModel>();
 
-    var themeFacets = Facets.First(f => f.FacetField == "theme");
-    var themes = themeFacets.FacetResults;
+        var themeFacets = Facets.First(f => f.FacetField == "theme");
+        var themes = themeFacets.FacetResults;
 
-    var typeFacets = Facets.First(f => f.FacetField == "type");
-    var types = typeFacets.FacetResults;
+        var typeFacets = Facets.First(f => f.FacetField == "type");
+        var types = typeFacets.FacetResults;
 
-    var nationalinitiativeFacets = Facets.First(f => f.FacetField == "nationalinitiative");
-    var nationalinitiatives = nationalinitiativeFacets.FacetResults;
+        var nationalinitiativeFacets = Facets.First(f => f.FacetField == "nationalinitiative");
+        var nationalinitiatives = nationalinitiativeFacets.FacetResults;
 
-    var areaFacets = Facets.First(f => f.FacetField == "area");
-    var areas = areaFacets.FacetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.AreaLinkName(Model.areaDictionary)).ToList();
+        var areaFacets = Facets.First(f => f.FacetField == "area");
+        var areas = areaFacets.FacetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.AreaLinkName(Model.areaDictionary)).ToList();
 
-    var placeGroupFacets = Facets.First(f => f.FacetField == "placegroups");
-    var placeGroups = placeGroupFacets.FacetResults;
+        var placeGroupFacets = Facets.First(f => f.FacetField == "placegroups");
+        var placeGroups = placeGroupFacets.FacetResults;
 
-    var organizationFacets = Facets.First(f => f.FacetField == "organization");
-    var organizations = organizationFacets.FacetResults;
+        var organizationFacets = Facets.First(f => f.FacetField == "organization");
+        var organizations = organizationFacets.FacetResults;
 
-    var distributionProtocolFacets = Facets.First(f => f.FacetField == "DistributionProtocols");
-    var distributionProtocols = distributionProtocolFacets.FacetResults.Where(r => r.Name != "GEONORGE:OFFLINE");
+        var distributionProtocolFacets = Facets.First(f => f.FacetField == "DistributionProtocols");
+        var distributionProtocols = distributionProtocolFacets.FacetResults.Where(r => r.Name != "GEONORGE:OFFLINE");
 
-    var dataAccessFacets = Facets.First(f => f.FacetField == "dataaccess");
-    var dataAccesses = dataAccessFacets.FacetResults;
-
+        var dataAccessFacets = Facets.First(f => f.FacetField == "dataaccess");
+        var dataAccesses = dataAccessFacets.FacetResults;
+    
 }
 
 @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }

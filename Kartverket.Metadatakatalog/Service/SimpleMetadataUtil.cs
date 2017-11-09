@@ -1,18 +1,14 @@
 ﻿using GeoNorgeAPI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Kartverket.Metadatakatalog.Models;
 
 namespace Kartverket.Metadatakatalog.Service
 {
     public static class SimpleMetadataUtil
     {
-        public static string ConvertHierarchyLevelToType(string HierarchyLevel)
+        public static string ConvertHierarchyLevelToType(string hierarchyLevel)
         {
-            string res = "default";
-            switch (HierarchyLevel)
+            var res = "default";
+            switch (hierarchyLevel)
             {
                 case "dataset":
                     res = "Datasett";
@@ -37,182 +33,113 @@ namespace Kartverket.Metadatakatalog.Service
         }
         public static bool IsOpendata(SimpleMetadata simpleMetadata)
         {
-            if (simpleMetadata.Constraints != null && IsOpendata(simpleMetadata.Constraints.OtherConstraintsAccess))
-                return true;
-            else
-                return false;
+            return simpleMetadata.Constraints != null && IsOpendata(simpleMetadata.Constraints.OtherConstraintsAccess);
         }
-        public static bool IsOpendata(string OtherConstraintsAccess)
+        public static bool IsOpendata(string otherConstraintsAccess)
         {
-            if (!string.IsNullOrEmpty(OtherConstraintsAccess) && OtherConstraintsAccess.ToLower() == "no restrictions")
-                return true;
-            else
-                return false;
+            return !string.IsNullOrEmpty(otherConstraintsAccess) && otherConstraintsAccess.ToLower() == "no restrictions";
         }
         public static bool IsRestricted(SimpleMetadata simpleMetadata)
         {
-            if (simpleMetadata.Constraints != null && IsRestricted(simpleMetadata.Constraints.OtherConstraintsAccess))
-                return true;
-            else
-                return false;
+            return simpleMetadata.Constraints != null && IsRestricted(simpleMetadata.Constraints.OtherConstraintsAccess);
         }
-        public static bool IsRestricted(string OtherConstraintsAccess)
+        public static bool IsRestricted(string otherConstraintsAccess)
         {
-            if (string.IsNullOrEmpty(OtherConstraintsAccess)) return false;
-            return OtherConstraintsAccess.ToLower() == "norway digital restricted" ||
-                   OtherConstraintsAccess.ToLower() == "Beskyttet" || OtherConstraintsAccess.ToLower() == "restricted";
+            if (string.IsNullOrEmpty(otherConstraintsAccess)) return false;
+            return otherConstraintsAccess.ToLower() == "norway digital restricted" ||
+                   otherConstraintsAccess.ToLower() == "Beskyttet" || otherConstraintsAccess.ToLower() == "restricted";
         }
         public static bool IsProtected(SimpleMetadata simpleMetadata)
         {
-            if (simpleMetadata.Constraints != null && IsProtected(simpleMetadata.Constraints.AccessConstraints))
-                return true;
-            else
-                return false;
+            return simpleMetadata.Constraints != null && IsProtected(simpleMetadata.Constraints.AccessConstraints);
         }
-        public static bool IsProtected(string AccessConstraints)
+        public static bool IsProtected(string accessConstraints)
         {
-            if ((AccessConstraints == "Beskyttet" || AccessConstraints == "restricted"))
-                return true;
-            else
-                return false;
-        }
-        public static bool ShowDownloadLink(SimpleMetadata simpleMetadata)
-        {
-            if (simpleMetadata.DistributionDetails != null && !string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.URL) && !string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.Protocol) && (simpleMetadata.DistributionDetails.Protocol.Contains("WWW:DOWNLOAD") || simpleMetadata.DistributionDetails.Protocol.Contains("GEONORGE:FILEDOWNLOAD")) && (simpleMetadata.HierarchyLevel == "dataset" || simpleMetadata.HierarchyLevel == "series")) return true;
-            else return false;
+            return (accessConstraints == "Beskyttet" || accessConstraints == "restricted");
         }
 
-        public static bool ShowDownloadService(SimpleMetadata simpleMetadata)
+        internal static bool ShowMapLink(SimpleDistribution simpleMetadataDistribution, string hierarchyLevel)
         {
-            if (System.Web.Configuration.WebConfigurationManager.AppSettings["DownloadServiceEnabled"] == "true")
-            {
-                if (simpleMetadata.DistributionDetails != null && !string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.Protocol) && simpleMetadata.DistributionDetails.Protocol.Contains("GEONORGE:DOWNLOAD"))
-                    return true;
-            }
-
-            return false;
+            return !string.IsNullOrWhiteSpace(simpleMetadataDistribution?.URL) && !string.IsNullOrWhiteSpace(simpleMetadataDistribution.Protocol) && (simpleMetadataDistribution.Protocol.Contains("OGC:WMS") || simpleMetadataDistribution.Protocol.Contains("OGC:WFS")) && (hierarchyLevel == "service" || hierarchyLevel == "servicelayer");
         }
 
-        public static bool ShowMapLink(SimpleMetadata simpleMetadata)
+        public static string GetCapabilitiesUrl(string url, string protocol)
         {
-            if (simpleMetadata.DistributionDetails != null && !string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.URL) && !string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.Protocol) && (simpleMetadata.DistributionDetails.Protocol.Contains("OGC:WMS") || simpleMetadata.DistributionDetails.Protocol.Contains("OGC:WFS")) && (simpleMetadata.HierarchyLevel == "service" || simpleMetadata.HierarchyLevel == "servicelayer")) return true;
-            else return false;
-        }
-
-
-        public static bool ShowServiceMapLink(SimpleMetadata simpleMetadata)
-        {
-            if (!string.IsNullOrWhiteSpace(simpleMetadata.DistributionDetails.URL) && simpleMetadata.DistributionDetails.Protocol != "GEONORGE:DOWNLOAD") return true;
-            else return false;
-        }
-
-        public static String GetCapabilitiesUrl(string URL, string Protocol)
-        {
-            
-                if (!string.IsNullOrWhiteSpace(URL))
-                {
-                    string tmp = URL;
-                    int startQueryString = tmp.IndexOf("?");
-
-                    if (startQueryString != -1)
-                        tmp = tmp.Substring(0, startQueryString + 1);
-                    else
-                        tmp = tmp + "?";
-
-                    if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WMS")))
-                        return tmp + "request=GetCapabilities&service=WMS";
-                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WFS")))
-                        return tmp + "request=GetCapabilities&service=WFS";
-                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WCS")))
-                        return tmp + "request=GetCapabilities&service=WCS";
-                    else if (!string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:CSW")))
-                        return tmp + "request=GetCapabilities&service=CSW";
-                    else return tmp;
-                }
-                else return "";
-            
-        }
-
-        public static String MapUrl(SimpleMetadata simpleMetadata)
-        {
-                if (simpleMetadata.DistributionDetails != null )
-                {
-                    return MapUrl(simpleMetadata.DistributionDetails.URL, simpleMetadata.HierarchyLevel, simpleMetadata.DistributionDetails.Protocol, simpleMetadata.DistributionDetails.Name);
-                }
-                else return "";
-        }
-
-        public static String ServiceUrl(SimpleMetadata simpleMetadata)
-        {
-            if (simpleMetadata.DistributionDetails != null)
-            {
-                return ServiceUrl(simpleMetadata.DistributionDetails.URL, simpleMetadata.HierarchyLevel, simpleMetadata.DistributionDetails.Protocol, simpleMetadata.DistributionDetails.Name, simpleMetadata.DistributionDetails);
-            }
-            else return "";
-        }
-
-        public static String MapUrl(string URL, string HierarchyLevel, string Protocol, string Name)
-        {
-            if (HierarchyLevel == "service" || HierarchyLevel == "servicelayer")
-            {
-                if (!string.IsNullOrWhiteSpace(URL) && !string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WMS")))
-                {
-                    if (!string.IsNullOrWhiteSpace(Name))
-                        return "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(URL) + "]/+" + Name;
-                    else
-                        return "#5/355422/6668909/l/wms/[" + RemoveQueryString(URL) + "]";
-                }
-                else if (!string.IsNullOrWhiteSpace(URL) && !string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WFS")))
-                {
-                    if (!string.IsNullOrWhiteSpace(Name))
-                        return "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(URL) + "]/+" + Name;
-                    else
-                        return "#5/355422/6668909/l/wfs/[" + RemoveQueryString(URL) + "]";
-                }
-                else if (!string.IsNullOrWhiteSpace(URL) && !string.IsNullOrWhiteSpace(Protocol) && Protocol.Contains(("OGC:WCS")))
-                {
-                    if (!string.IsNullOrWhiteSpace(Name))
-                        return "#5/355422/6668909/*/l/wcs/[" + RemoveQueryString(URL) + "]/+" + Name;
-                    else
-                        return "#5/355422/6668909/l/wcs/[" + RemoveQueryString(URL) + "]";
-                }
-
-                else return "";
-            }
-            else return "";
-        }
-
-        public static string ServiceUrl(string url, string hierarchyLevel, string protocol, string name, SimpleDistributionDetails distributionDetails)
-        {
-            if (hierarchyLevel == "dataset" || hierarchyLevel == "datasett")
-            {
-                if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WMS")))
-                {
-                    if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(url))
-                        url = "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(url) + "]/+" + name;
-                    else if (!string.IsNullOrWhiteSpace(url))
-                        url = "#5/355422/6668909/l/wms/[" + RemoveQueryString(url) + "]";
-                }
-                else if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WFS")))
-                {
-                    if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(url))
-                        url = "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(url) + "]/+" + name;
-                    else if (distributionDetails != null && !string.IsNullOrWhiteSpace(distributionDetails.URL))
-                        url = "#5/355422/6668909/l/wfs/[" + RemoveQueryString(url) + "]";
-                }
-
-            }
-            return System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + url;
-        }
-
-        private static string RemoveQueryString(string URL)
-        {
-            int startQueryString = URL.IndexOf("?");
+            if (string.IsNullOrWhiteSpace(url)) return "";
+            var tmp = url;
+            var startQueryString = tmp.IndexOf("?", StringComparison.Ordinal);
 
             if (startQueryString != -1)
-                URL = URL.Substring(0, startQueryString);
+                tmp = tmp.Substring(0, startQueryString + 1);
+            else
+                tmp = tmp + "?";
 
-            return URL;
+            if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WMS")))
+                return tmp + "request=GetCapabilities&service=WMS";
+            if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WFS")))
+                return tmp + "request=GetCapabilities&service=WFS";
+            if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WCS")))
+                return tmp + "request=GetCapabilities&service=WCS";
+            if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:CSW")))
+                return tmp + "request=GetCapabilities&service=CSW";
+            return tmp;
+        }
+
+        internal static string MapUrl(SimpleDistribution simpleMetadataDistribution, string hierarchyLevel)
+        {
+            return simpleMetadataDistribution != null ? MapUrl(simpleMetadataDistribution.URL, hierarchyLevel, simpleMetadataDistribution.Protocol, simpleMetadataDistribution.Name) : "";
+        }
+
+        internal static bool ShowDownloadService(SimpleDistribution simpleMetadataDistribution)
+        {
+            if (System.Web.Configuration.WebConfigurationManager.AppSettings["DownloadServiceEnabled"] != "true") return false;
+            return !string.IsNullOrWhiteSpace(simpleMetadataDistribution?.Protocol) && simpleMetadataDistribution.Protocol.Contains("GEONORGE:DOWNLOAD");
+        }
+
+        internal static bool ShowDownloadLink(SimpleDistribution simpleMetadataDistribution, string hierarchyLevel)
+        {
+            return !string.IsNullOrWhiteSpace(simpleMetadataDistribution?.URL) && !string.IsNullOrWhiteSpace(simpleMetadataDistribution.Protocol) && (simpleMetadataDistribution.Protocol.Contains("WWW:DOWNLOAD") || simpleMetadataDistribution.Protocol.Contains("GEONORGE:FILEDOWNLOAD")) && (hierarchyLevel == "dataset" || hierarchyLevel == "series");
+        }
+
+        public static string MapUrl(string url, string hierarchyLevel, string protocol, string name)
+        {
+            if (hierarchyLevel == "service" || hierarchyLevel == "servicelayer")
+            {
+                if (!string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WMS")))
+                {
+                    if (!string.IsNullOrWhiteSpace(name))
+                        return "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(url) + "]/+" + name;
+                    else
+                        return "#5/355422/6668909/l/wms/[" + RemoveQueryString(url) + "]";
+                }
+                else if (!string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WFS")))
+                {
+                    if (!string.IsNullOrWhiteSpace(name))
+                        return "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(url) + "]/+" + name;
+                    else
+                        return "#5/355422/6668909/l/wfs/[" + RemoveQueryString(url) + "]";
+                }
+                else if (!string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WCS")))
+                {
+                    if (!string.IsNullOrWhiteSpace(name))
+                        return "#5/355422/6668909/*/l/wcs/[" + RemoveQueryString(url) + "]/+" + name;
+                    else
+                        return "#5/355422/6668909/l/wcs/[" + RemoveQueryString(url) + "]";
+                }
+
+                else return "";
+            }
+            else return "";
+        }
+
+        private static string RemoveQueryString(string url)
+        {
+            var startQueryString = url.IndexOf("?", StringComparison.Ordinal);
+
+            if (startQueryString != -1)
+                url = url.Substring(0, startQueryString);
+
+            return url;
         }
     }
 }

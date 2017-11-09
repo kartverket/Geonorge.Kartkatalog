@@ -1,8 +1,11 @@
 ﻿using GeoNorgeAPI;
+using Kartverket.Metadatakatalog.Helpers;
+using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Device.Location;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
@@ -115,9 +118,10 @@ namespace Kartverket.Metadatakatalog.Models
         public bool CanShowServiceMapUrl { get; set; }
         public bool CanShowDownloadService { get; set; }
         public bool CanShowDownloadUrl { get; set; }
+        public bool CanShowWebsiteUrl { get; set; }
         public string MapLink { get; set; }
         public string ServiceLink { get; set; }
-
+        public string DistributionUrl { get; set; }
 
         public SeoUrl CreateSeoUrl()
         {
@@ -397,11 +401,12 @@ namespace Kartverket.Metadatakatalog.Models
                 string.IsNullOrEmpty(BoundingBox.EastBoundLongitude) || string.IsNullOrEmpty(BoundingBox.NorthBoundLatitude))
                 return Convert.ToInt16(zoomLevel);
 
-            SolrNet.Location[] locations = new SolrNet.Location[] 
-            { 
-                new SolrNet.Location(Convert.ToDouble(BoundingBox.SouthBoundLatitude), Convert.ToDouble(BoundingBox.WestBoundLongitude)), 
-                new SolrNet.Location(Convert.ToDouble(BoundingBox.NorthBoundLatitude), Convert.ToDouble(BoundingBox.EastBoundLongitude)) 
-            };            
+            GeoCoordinate[] locations = new GeoCoordinate[]
+            {
+                new GeoCoordinate(Convert.ToDouble(BoundingBox.SouthBoundLatitude), Convert.ToDouble(BoundingBox.WestBoundLongitude)),
+                new GeoCoordinate(Convert.ToDouble(BoundingBox.NorthBoundLatitude), Convert.ToDouble(BoundingBox.EastBoundLongitude))
+            };
+
 
             double maxLat = -85;
             double minLat = 85;
@@ -481,12 +486,25 @@ namespace Kartverket.Metadatakatalog.Models
 
         public string GetHierarchyLevelTranslated()
         {
-            if (IsDataset()) return "Datasett";
-            if (IsServiceLayer()) return "Tjenestelag";
-            if (IsService()) return "Tjeneste";
-            if (IsApplication()) return "Applikasjon";
-            if (IsDatasetSeries()) return "Datasettserie";
-            if (IsDatasetBundle()) return "Datapakke";
+            var culture = CultureHelper.GetCurrentCulture();
+            if (culture == Culture.NorwegianCode)
+            {
+                if (IsDataset()) return "Datasett";
+                if (IsServiceLayer()) return "Tjenestelag";
+                if (IsService()) return "Tjeneste";
+                if (IsApplication()) return "Applikasjon";
+                if (IsDatasetSeries()) return "Datasettserie";
+                if (IsDatasetBundle()) return "Datapakke";
+            }
+            else
+            {
+                if (IsDataset()) return "Dataset";
+                if (IsServiceLayer()) return "Service layer";
+                if (IsService()) return "Service";
+                if (IsApplication()) return "Application";
+                if (IsDatasetSeries()) return "Dataset series";
+                if (IsDatasetBundle()) return "Data package";
+            }
 
             return HierarchyLevel;
         }

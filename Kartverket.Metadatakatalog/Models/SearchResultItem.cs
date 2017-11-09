@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Kartverket.Metadatakatalog.Helpers;
+using System.Collections.Generic;
 namespace Kartverket.Metadatakatalog.Models
 {
     public class SearchResultItem

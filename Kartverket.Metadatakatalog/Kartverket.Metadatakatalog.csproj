@@ -13,16 +13,18 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Kartverket.Metadatakatalog</RootNamespace>
     <AssemblyName>Kartverket.Metadatakatalog</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44311</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,19 +67,26 @@
     <Reference Include="Autofac.Integration.WebApi">
       <HintPath>..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.3.0.0.2001\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Facilities.SolrNetIntegration, Version=0.4.0.4001, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SolrNet.Windsor.0.4.0.4001\lib\Castle.Facilities.SolrNetIntegration.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Windsor.3.0.0.4001\lib\net40\Castle.Windsor.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="GeoNorgeAPI, Version=3.0.37.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GeoNorgeAPI.3.0.37.0\lib\net40\GeoNorgeAPI.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="GeoNorgeAPI, Version=3.0.41.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GeoNorgeAPI.3.0.41.0\lib\net40\GeoNorgeAPI.dll</HintPath>
     </Reference>
     <Reference Include="Kartverket.Geonorge.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.24\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.31\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Keen, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\KeenClient.0.3.11\lib\net45\Keen.dll</HintPath>
@@ -98,7 +107,6 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -113,9 +121,8 @@
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.24\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.31\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PCLStorage, Version=0.9.6.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
       <HintPath>..\packages\PCLStorage.0.9.6\lib\net45\PCLStorage.dll</HintPath>
@@ -125,12 +132,13 @@
       <HintPath>..\packages\PCLStorage.0.9.6\lib\net45\PCLStorage.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SolrNet, Version=0.4.0.2002, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SolrNet.0.4.0.2002\lib\SolrNet.dll</HintPath>
+    <Reference Include="SolrNet, Version=0.4.0.4001, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SolrNet.0.4.0.4001\lib\SolrNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.identitymodel.services" />
     <Reference Include="System.Net" />
@@ -139,8 +147,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.24\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.31\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Primitives, Version=4.2.22.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\net45\System.Net.Http.Primitives.dll</HintPath>
@@ -155,8 +162,7 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -192,9 +198,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
@@ -212,6 +216,7 @@
     <Reference Include="System.Web.Optimization">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebApi.BasicAuth, Version=0.3.0.0, Culture=neutral, PublicKeyToken=0cf429762e0a2a39, processorArchitecture=MSIL">
       <HintPath>..\packages\WebApi.BasicAuth.0.3.0\lib\net45\WebApi.BasicAuth.dll</HintPath>
       <Private>True</Private>
@@ -265,6 +270,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OpenDataController.cs" />
     <Compile Include="Controllers\ThemesController.cs" />
+    <Compile Include="Helpers\CultureHelper.cs" />
     <Compile Include="Migrations\201706090621035_AddTheme.cs" />
     <Compile Include="Migrations\201706090621035_AddTheme.Designer.cs">
       <DependentUpon>201706090621035_AddTheme.cs</DependentUpon>
@@ -362,6 +368,7 @@
     <Compile Include="Service\Search\SearchService.cs" />
     <Compile Include="Service\ServiceDirectory\ServiceDirectoryService.cs" />
     <Compile Include="Service\SimpleMetadataUtil.cs" />
+    <Compile Include="Service\SolrCores.cs" />
     <Compile Include="Service\SolrIndexDocumentCreator.cs" />
     <Compile Include="Service\SolrIndexerApplication.cs" />
     <Compile Include="Service\SolrIndexerMetadataAll.cs" />
@@ -549,19 +556,7 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer_eng.min.html" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_SharedMenu.html" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_SharedMenu.min.html" />
-    <Content Include="Content\bower_components\vue\.babelrc" />
-    <Content Include="Content\bower_components\vue\.bower.json" />
-    <Content Include="Content\bower_components\vue\.editorconfig" />
-    <Content Include="Content\bower_components\vue\.eslintignore" />
-    <Content Include="Content\bower_components\vue\.eslintrc" />
-    <Content Include="Content\bower_components\vue\.flowconfig" />
-    <Content Include="Content\bower_components\vue\.github\CODE_OF_CONDUCT.md" />
-    <Content Include="Content\bower_components\vue\.github\COMMIT_CONVENTION.md" />
-    <Content Include="Content\bower_components\vue\.github\CONTRIBUTING.md" />
-    <Content Include="Content\bower_components\vue\.github\ISSUE_TEMPLATE.md" />
-    <Content Include="Content\bower_components\vue\.github\PULL_REQUEST_TEMPLATE.md" />
     <Content Include="Content\bower_components\vue\.gitignore" />
-    <Content Include="Content\bower_components\vue\BACKERS.md" />
     <Content Include="Content\bower_components\vue\benchmarks\big-table\demo.css" />
     <Content Include="Content\bower_components\vue\benchmarks\big-table\index.html" />
     <Content Include="Content\bower_components\vue\benchmarks\big-table\style.css" />
@@ -573,24 +568,16 @@
     <Content Include="Content\bower_components\vue\benchmarks\dbmon\lib\styles.css" />
     <Content Include="Content\bower_components\vue\benchmarks\reorder-list\index.html" />
     <Content Include="Content\bower_components\vue\benchmarks\ssr\common.js" />
-    <Content Include="Content\bower_components\vue\benchmarks\ssr\README.md" />
     <Content Include="Content\bower_components\vue\benchmarks\ssr\renderToStream.js" />
     <Content Include="Content\bower_components\vue\benchmarks\ssr\renderToString.js" />
     <Content Include="Content\bower_components\vue\benchmarks\svg\index.html" />
     <Content Include="Content\bower_components\vue\benchmarks\uptime\index.html" />
     <Content Include="Content\bower_components\vue\build\alias.js" />
     <Content Include="Content\bower_components\vue\build\build.js" />
-    <Content Include="Content\bower_components\vue\build\ci.sh" />
     <Content Include="Content\bower_components\vue\build\config.js" />
     <Content Include="Content\bower_components\vue\build\gen-release-note.js" />
     <Content Include="Content\bower_components\vue\build\get-weex-version.js" />
-    <Content Include="Content\bower_components\vue\build\git-hooks\commit-msg" />
-    <Content Include="Content\bower_components\vue\build\git-hooks\pre-commit" />
     <Content Include="Content\bower_components\vue\build\install-hooks.js" />
-    <Content Include="Content\bower_components\vue\build\release-weex.sh" />
-    <Content Include="Content\bower_components\vue\build\release.sh" />
-    <Content Include="Content\bower_components\vue\circle.yml" />
-    <Content Include="Content\bower_components\vue\dist\README.md" />
     <Content Include="Content\bower_components\vue\dist\vue.common.js" />
     <Content Include="Content\bower_components\vue\dist\vue.esm.js" />
     <Content Include="Content\bower_components\vue\dist\vue.js" />
@@ -620,7 +607,6 @@
     <Content Include="Content\bower_components\vue\examples\svg\svg.js" />
     <Content Include="Content\bower_components\vue\examples\todomvc\app.js" />
     <Content Include="Content\bower_components\vue\examples\todomvc\index.html" />
-    <Content Include="Content\bower_components\vue\examples\todomvc\readme.md" />
     <Content Include="Content\bower_components\vue\examples\tree\index.html" />
     <Content Include="Content\bower_components\vue\examples\tree\tree.js" />
     <Content Include="Content\bower_components\vue\flow\compiler.js" />
@@ -630,29 +616,13 @@
     <Content Include="Content\bower_components\vue\flow\options.js" />
     <Content Include="Content\bower_components\vue\flow\ssr.js" />
     <Content Include="Content\bower_components\vue\flow\vnode.js" />
-    <Content Include="Content\bower_components\vue\LICENSE" />
-    <Content Include="Content\bower_components\vue\package.json" />
-    <Content Include="Content\bower_components\vue\packages\vue-server-renderer\basic.js" />
-    <Content Include="Content\bower_components\vue\packages\vue-server-renderer\build.js" />
-    <Content Include="Content\bower_components\vue\packages\vue-server-renderer\client-plugin.js" />
-    <Content Include="Content\bower_components\vue\packages\vue-server-renderer\index.js" />
-    <Content Include="Content\bower_components\vue\packages\vue-server-renderer\package.json" />
-    <Content Include="Content\bower_components\vue\packages\vue-server-renderer\README.md" />
-    <Content Include="Content\bower_components\vue\packages\vue-server-renderer\server-plugin.js" />
-    <Content Include="Content\bower_components\vue\packages\vue-server-renderer\types\tsconfig.json" />
+    <Content Include="Content\bower_components\vue\packages\vue-template-compiler\browser.js" />
     <Content Include="Content\bower_components\vue\packages\vue-template-compiler\build.js" />
     <Content Include="Content\bower_components\vue\packages\vue-template-compiler\index.js" />
-    <Content Include="Content\bower_components\vue\packages\vue-template-compiler\package.json" />
-    <Content Include="Content\bower_components\vue\packages\vue-template-compiler\README.md" />
     <Content Include="Content\bower_components\vue\packages\weex-template-compiler\build.js" />
     <Content Include="Content\bower_components\vue\packages\weex-template-compiler\index.js" />
-    <Content Include="Content\bower_components\vue\packages\weex-template-compiler\package.json" />
-    <Content Include="Content\bower_components\vue\packages\weex-template-compiler\README.md" />
     <Content Include="Content\bower_components\vue\packages\weex-vue-framework\factory.js" />
     <Content Include="Content\bower_components\vue\packages\weex-vue-framework\index.js" />
-    <Content Include="Content\bower_components\vue\packages\weex-vue-framework\package.json" />
-    <Content Include="Content\bower_components\vue\packages\weex-vue-framework\README.md" />
-    <Content Include="Content\bower_components\vue\README.md" />
     <Content Include="Content\bower_components\vue\src\compiler\codegen\events.js" />
     <Content Include="Content\bower_components\vue\src\compiler\codegen\index.js" />
     <Content Include="Content\bower_components\vue\src\compiler\create-compiler.js" />
@@ -688,6 +658,7 @@
     <Content Include="Content\bower_components\vue\src\core\instance\render-helpers\bind-object-listeners.js" />
     <Content Include="Content\bower_components\vue\src\core\instance\render-helpers\bind-object-props.js" />
     <Content Include="Content\bower_components\vue\src\core\instance\render-helpers\check-keycodes.js" />
+    <Content Include="Content\bower_components\vue\src\core\instance\render-helpers\index.js" />
     <Content Include="Content\bower_components\vue\src\core\instance\render-helpers\render-list.js" />
     <Content Include="Content\bower_components\vue\src\core\instance\render-helpers\render-slot.js" />
     <Content Include="Content\bower_components\vue\src\core\instance\render-helpers\render-static.js" />
@@ -705,6 +676,7 @@
     <Content Include="Content\bower_components\vue\src\core\util\error.js" />
     <Content Include="Content\bower_components\vue\src\core\util\index.js" />
     <Content Include="Content\bower_components\vue\src\core\util\lang.js" />
+    <Content Include="Content\bower_components\vue\src\core\util\next-tick.js" />
     <Content Include="Content\bower_components\vue\src\core\util\options.js" />
     <Content Include="Content\bower_components\vue\src\core\util\perf.js" />
     <Content Include="Content\bower_components\vue\src\core\util\props.js" />
@@ -714,6 +686,7 @@
     <Content Include="Content\bower_components\vue\src\core\vdom\helpers\extract-props.js" />
     <Content Include="Content\bower_components\vue\src\core\vdom\helpers\get-first-component-child.js" />
     <Content Include="Content\bower_components\vue\src\core\vdom\helpers\index.js" />
+    <Content Include="Content\bower_components\vue\src\core\vdom\helpers\is-async-placeholder.js" />
     <Content Include="Content\bower_components\vue\src\core\vdom\helpers\merge-hook.js" />
     <Content Include="Content\bower_components\vue\src\core\vdom\helpers\normalize-children.js" />
     <Content Include="Content\bower_components\vue\src\core\vdom\helpers\resolve-async-component.js" />
@@ -730,6 +703,7 @@
     <Content Include="Content\bower_components\vue\src\platforms\web\compiler\index.js" />
     <Content Include="Content\bower_components\vue\src\platforms\web\compiler\modules\class.js" />
     <Content Include="Content\bower_components\vue\src\platforms\web\compiler\modules\index.js" />
+    <Content Include="Content\bower_components\vue\src\platforms\web\compiler\modules\model.js" />
     <Content Include="Content\bower_components\vue\src\platforms\web\compiler\modules\style.js" />
     <Content Include="Content\bower_components\vue\src\platforms\web\compiler\options.js" />
     <Content Include="Content\bower_components\vue\src\platforms\web\compiler\util.js" />
@@ -783,6 +757,7 @@
     <Content Include="Content\bower_components\vue\src\platforms\weex\entry-framework.js" />
     <Content Include="Content\bower_components\vue\src\platforms\weex\entry-runtime-factory.js" />
     <Content Include="Content\bower_components\vue\src\platforms\weex\runtime\components\index.js" />
+    <Content Include="Content\bower_components\vue\src\platforms\weex\runtime\components\richtext.js" />
     <Content Include="Content\bower_components\vue\src\platforms\weex\runtime\components\transition-group.js" />
     <Content Include="Content\bower_components\vue\src\platforms\weex\runtime\components\transition.js" />
     <Content Include="Content\bower_components\vue\src\platforms\weex\runtime\directives\index.js" />
@@ -822,9 +797,12 @@
     <Content Include="Content\bower_components\vue\src\sfc\parser.js" />
     <Content Include="Content\bower_components\vue\src\shared\constants.js" />
     <Content Include="Content\bower_components\vue\src\shared\util.js" />
-    <Content Include="Content\bower_components\vue\test\e2e\.eslintrc" />
     <Content Include="Content\bower_components\vue\test\e2e\nightwatch.config.js" />
     <Content Include="Content\bower_components\vue\test\e2e\runner.js" />
+    <Content Include="Content\bower_components\vue\test\e2e\specs\async-edge-cases.html" />
+    <Content Include="Content\bower_components\vue\test\e2e\specs\async-edge-cases.js" />
+    <Content Include="Content\bower_components\vue\test\e2e\specs\basic-ssr.html" />
+    <Content Include="Content\bower_components\vue\test\e2e\specs\basic-ssr.js" />
     <Content Include="Content\bower_components\vue\test\e2e\specs\commits.js" />
     <Content Include="Content\bower_components\vue\test\e2e\specs\grid.js" />
     <Content Include="Content\bower_components\vue\test\e2e\specs\markdown.js" />
@@ -833,7 +811,6 @@
     <Content Include="Content\bower_components\vue\test\e2e\specs\svg.js" />
     <Content Include="Content\bower_components\vue\test\e2e\specs\todomvc.js" />
     <Content Include="Content\bower_components\vue\test\e2e\specs\tree.js" />
-    <Content Include="Content\bower_components\vue\test\helpers\.eslintrc" />
     <Content Include="Content\bower_components\vue\test\helpers\classlist.js" />
     <Content Include="Content\bower_components\vue\test\helpers\test-object-option.js" />
     <Content Include="Content\bower_components\vue\test\helpers\to-equal.js" />
@@ -841,7 +818,6 @@
     <Content Include="Content\bower_components\vue\test\helpers\trigger-event.js" />
     <Content Include="Content\bower_components\vue\test\helpers\vdom.js" />
     <Content Include="Content\bower_components\vue\test\helpers\wait-for-update.js" />
-    <Content Include="Content\bower_components\vue\test\ssr\.eslintrc" />
     <Content Include="Content\bower_components\vue\test\ssr\async-loader.js" />
     <Content Include="Content\bower_components\vue\test\ssr\compile-with-webpack.js" />
     <Content Include="Content\bower_components\vue\test\ssr\fixtures\app.js" />
@@ -850,17 +826,15 @@
     <Content Include="Content\bower_components\vue\test\ssr\fixtures\cache.js" />
     <Content Include="Content\bower_components\vue\test\ssr\fixtures\error.js" />
     <Content Include="Content\bower_components\vue\test\ssr\fixtures\nested-cache.js" />
+    <Content Include="Content\bower_components\vue\test\ssr\fixtures\promise-rejection.js" />
     <Content Include="Content\bower_components\vue\test\ssr\fixtures\split.js" />
     <Content Include="Content\bower_components\vue\test\ssr\fixtures\test.css" />
     <Content Include="Content\bower_components\vue\test\ssr\fixtures\test.png" />
-    <Content Include="Content\bower_components\vue\test\ssr\fixtures\test.woff2" />
-    <Content Include="Content\bower_components\vue\test\ssr\jasmine.json" />
     <Content Include="Content\bower_components\vue\test\ssr\ssr-basic-renderer.spec.js" />
     <Content Include="Content\bower_components\vue\test\ssr\ssr-bundle-render.spec.js" />
     <Content Include="Content\bower_components\vue\test\ssr\ssr-stream.spec.js" />
     <Content Include="Content\bower_components\vue\test\ssr\ssr-string.spec.js" />
     <Content Include="Content\bower_components\vue\test\ssr\ssr-template.spec.js" />
-    <Content Include="Content\bower_components\vue\test\unit\.eslintrc" />
     <Content Include="Content\bower_components\vue\test\unit\features\component\component-async.spec.js" />
     <Content Include="Content\bower_components\vue\test\unit\features\component\component-keep-alive.spec.js" />
     <Content Include="Content\bower_components\vue\test\unit\features\component\component-scoped-slot.spec.js" />
@@ -910,6 +884,7 @@
     <Content Include="Content\bower_components\vue\test\unit\features\options\delimiters.spec.js" />
     <Content Include="Content\bower_components\vue\test\unit\features\options\directives.spec.js" />
     <Content Include="Content\bower_components\vue\test\unit\features\options\el.spec.js" />
+    <Content Include="Content\bower_components\vue\test\unit\features\options\errorCaptured.spec.js" />
     <Content Include="Content\bower_components\vue\test\unit\features\options\extends.spec.js" />
     <Content Include="Content\bower_components\vue\test\unit\features\options\functional.spec.js" />
     <Content Include="Content\bower_components\vue\test\unit\features\options\inheritAttrs.spec.js" />
@@ -960,7 +935,6 @@
     <Content Include="Content\bower_components\vue\test\unit\modules\vdom\patch\element.spec.js" />
     <Content Include="Content\bower_components\vue\test\unit\modules\vdom\patch\hooks.spec.js" />
     <Content Include="Content\bower_components\vue\test\unit\modules\vdom\patch\hydration.spec.js" />
-    <Content Include="Content\bower_components\vue\test\weex\.eslintrc" />
     <Content Include="Content\bower_components\vue\test\weex\compiler\append.spec.js" />
     <Content Include="Content\bower_components\vue\test\weex\compiler\class.spec.js" />
     <Content Include="Content\bower_components\vue\test\weex\compiler\compile.spec.js" />
@@ -968,14 +942,13 @@
     <Content Include="Content\bower_components\vue\test\weex\compiler\style.spec.js" />
     <Content Include="Content\bower_components\vue\test\weex\compiler\v-model.spec.js" />
     <Content Include="Content\bower_components\vue\test\weex\helpers\index.js" />
-    <Content Include="Content\bower_components\vue\test\weex\jasmine.json" />
     <Content Include="Content\bower_components\vue\test\weex\runtime\attrs.spec.js" />
     <Content Include="Content\bower_components\vue\test\weex\runtime\class.spec.js" />
+    <Content Include="Content\bower_components\vue\test\weex\runtime\components\richtext.spec.js" />
     <Content Include="Content\bower_components\vue\test\weex\runtime\events.spec.js" />
     <Content Include="Content\bower_components\vue\test\weex\runtime\framework.spec.js" />
     <Content Include="Content\bower_components\vue\test\weex\runtime\node.spec.js" />
     <Content Include="Content\bower_components\vue\test\weex\runtime\style.spec.js" />
-    <Content Include="Content\bower_components\vue\yarn.lock" />
     <Content Include="Content\shopping-cart.css" />
     <Content Include="Content\temp.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -1067,7 +1040,6 @@
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
     <Content Include="authentication.default.config" />
-    <Content Include="authentication.config" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\.bower.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\702ZOKiLJc3WVjuplzInF5uFdDttMLvmWuJdhhgs.ttf" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.eot" />
@@ -1103,6 +1075,45 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\package-lock.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\README.md" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\yarn.lock" />
+    <Content Include="Content\bower_components\vue\.babelrc" />
+    <Content Include="Content\bower_components\vue\.bower.json" />
+    <Content Include="Content\bower_components\vue\.circleci\config.yml" />
+    <Content Include="Content\bower_components\vue\.editorconfig" />
+    <Content Include="Content\bower_components\vue\.eslintignore" />
+    <Content Include="Content\bower_components\vue\.eslintrc" />
+    <Content Include="Content\bower_components\vue\.flowconfig" />
+    <Content Include="Content\bower_components\vue\.github\CODE_OF_CONDUCT.md" />
+    <Content Include="Content\bower_components\vue\.github\COMMIT_CONVENTION.md" />
+    <Content Include="Content\bower_components\vue\.github\CONTRIBUTING.md" />
+    <Content Include="Content\bower_components\vue\.github\ISSUE_TEMPLATE.md" />
+    <Content Include="Content\bower_components\vue\.github\PULL_REQUEST_TEMPLATE.md" />
+    <Content Include="Content\bower_components\vue\BACKERS.md" />
+    <Content Include="Content\bower_components\vue\benchmarks\ssr\README.md" />
+    <Content Include="Content\bower_components\vue\build\git-hooks\commit-msg" />
+    <Content Include="Content\bower_components\vue\build\git-hooks\pre-commit" />
+    <Content Include="Content\bower_components\vue\build\release-weex.sh" />
+    <Content Include="Content\bower_components\vue\build\release.sh" />
+    <Content Include="Content\bower_components\vue\dist\README.md" />
+    <Content Include="Content\bower_components\vue\examples\todomvc\readme.md" />
+    <Content Include="Content\bower_components\vue\LICENSE" />
+    <Content Include="Content\bower_components\vue\package-lock.json" />
+    <Content Include="Content\bower_components\vue\package.json" />
+    <Content Include="Content\bower_components\vue\packages\vue-template-compiler\package.json" />
+    <Content Include="Content\bower_components\vue\packages\vue-template-compiler\README.md" />
+    <Content Include="Content\bower_components\vue\packages\weex-template-compiler\package.json" />
+    <Content Include="Content\bower_components\vue\packages\weex-template-compiler\README.md" />
+    <Content Include="Content\bower_components\vue\packages\weex-vue-framework\package.json" />
+    <Content Include="Content\bower_components\vue\packages\weex-vue-framework\README.md" />
+    <Content Include="Content\bower_components\vue\README.md" />
+    <Content Include="Content\bower_components\vue\test\e2e\.eslintrc" />
+    <Content Include="Content\bower_components\vue\test\helpers\.eslintrc" />
+    <Content Include="Content\bower_components\vue\test\ssr\.eslintrc" />
+    <Content Include="Content\bower_components\vue\test\ssr\fixtures\test.woff2" />
+    <Content Include="Content\bower_components\vue\test\ssr\jasmine.json" />
+    <Content Include="Content\bower_components\vue\test\unit\.eslintrc" />
+    <Content Include="Content\bower_components\vue\test\weex\.eslintrc" />
+    <Content Include="Content\bower_components\vue\test\weex\jasmine.json" />
+    <Content Include="authentication.config" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
@@ -1184,7 +1195,6 @@
     <Content Include="settings.default.config" />
     <Content Include="Views\ServiceDirectory\Index.cshtml" />
     <Content Include="Views\Application\Index.cshtml" />
-    <Content Include="settings.config" />
     <Content Include="Views\Search\Area.cshtml" />
     <Content Include="Views\Themes\Create.cshtml" />
     <Content Include="Views\Themes\Delete.cshtml" />
@@ -1196,6 +1206,11 @@
     <Content Include="Views\OpenData\Index.cshtml" />
     <Content Include="Views\Shared\VueComponents\Buttons\_CopyUrlButton.cshtml" />
     <Content Include="Content\Blocks\SurveyBlock\_SurveyBlock.cshtml" />
+    <Content Include="Views\Shared\_Pagination.cshtml" />
+    <Content Include="Views\Shared\_PaginationForArea.cshtml" />
+    <Content Include="Views\Shared\_PaginationForOrganization.cshtml" />
+    <Content Include="Views\Shared\_Resources.cshtml" />
+    <Content Include="settings.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

@@ -588,7 +588,7 @@ var OrderLine = {
 
                                                 this.$root.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid] = coordinatesString;
                                                 var polygonArea = {
-                                                    "name": "Valgt fra kart",
+                                                    "name": SelectedFromMap,
                                                     "type": "polygon",
                                                     "code": "Kart",
                                                     "isSelected": true,
@@ -790,7 +790,7 @@ var MasterOrderLine = {
 
                                                             this.$root.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid] = coordinatesString;
                                                             var polygonArea = {
-                                                                "name": "Valgt fra kart",
+                                                                "name": SelectedFromMap,
                                                                 "type": "polygon",
                                                                 "code": "Kart",
                                                                 "isSelected": true,

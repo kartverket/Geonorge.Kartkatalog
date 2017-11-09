@@ -10,6 +10,8 @@ using www.opengis.net;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
+using Kartverket.Metadatakatalog.Models.Translations;
+using System.Diagnostics;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -21,6 +23,7 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly ThemeResolver _themeResolver;
         private readonly PlaceResolver _placeResolver;
         private readonly GeoNetworkUtil _geoNetworkUtil;
+        private static readonly HttpClient _httpClient = new HttpClient();
 
         public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil)
         {
@@ -30,7 +33,7 @@ namespace Kartverket.Metadatakatalog.Service
             _placeResolver = new PlaceResolver();
         }
 
-        public List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems, IGeoNorge geoNorge)
+        public List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems, IGeoNorge geoNorge, string culture)
         {
             var documentsToIndex = new List<MetadataIndexDoc>();
             foreach (var item in searchResultItems)
@@ -41,7 +44,7 @@ namespace Kartverket.Metadatakatalog.Service
                     try
                     {
                         var simpleMetadata = new SimpleMetadata(metadataItem);
-                        var indexDoc = CreateIndexDoc(simpleMetadata, geoNorge);
+                        var indexDoc = CreateIndexDoc(simpleMetadata, geoNorge, culture);
                         if (indexDoc != null)
                         {
                             documentsToIndex.Add(indexDoc);    
@@ -162,23 +165,23 @@ namespace Kartverket.Metadatakatalog.Service
             return indexDoc;
 
         }
-        public MetadataIndexDoc CreateIndexDoc(SimpleMetadata simpleMetadata, IGeoNorge geoNorge)
+        public MetadataIndexDoc CreateIndexDoc(SimpleMetadata simpleMetadata, IGeoNorge geoNorge, string culture)
         {
             var indexDoc = new MetadataIndexDoc();
             
             try
             {
                 indexDoc.Uuid = simpleMetadata.Uuid;
-                indexDoc.Title = simpleMetadata.Title;
-                indexDoc.Abstract = simpleMetadata.Abstract;
-                indexDoc.Purpose = simpleMetadata.Purpose;
+                indexDoc.Title = culture == Culture.EnglishCode && !string.IsNullOrEmpty(simpleMetadata.EnglishTitle) ? simpleMetadata.EnglishTitle : simpleMetadata.Title;
+                indexDoc.Abstract = culture == Culture.EnglishCode && !string.IsNullOrEmpty(simpleMetadata.EnglishAbstract) ? simpleMetadata.EnglishAbstract : simpleMetadata.Abstract;
+                indexDoc.Purpose = culture == Culture.EnglishCode && !string.IsNullOrEmpty(simpleMetadata.EnglishPurpose) ? simpleMetadata.EnglishPurpose : simpleMetadata.Purpose;
                 indexDoc.Type = simpleMetadata.HierarchyLevel;
                 if (!string.IsNullOrEmpty(simpleMetadata.ParentIdentifier))
                     indexDoc.ParentIdentifier = simpleMetadata.ParentIdentifier;
 
                 if (simpleMetadata.ContactOwner != null)
                 {
-                    indexDoc.Organizationgroup = simpleMetadata.ContactOwner.Organization;
+                    indexDoc.Organizationgroup = culture == Culture.EnglishCode && !string.IsNullOrEmpty(simpleMetadata.ContactOwner.OrganizationEnglish) ? simpleMetadata.ContactOwner.OrganizationEnglish : simpleMetadata.ContactOwner.Organization;
                     indexDoc.Organization = indexDoc.Organizationgroup;
                     indexDoc.OrganizationContactname = simpleMetadata.ContactOwner.Name;
                     if (indexDoc.Organization != null) {
@@ -230,22 +233,28 @@ namespace Kartverket.Metadatakatalog.Service
                             indexDoc.OrganizationShortName = organization.ShortName;
 
                         indexDoc.OrganizationLogoUrl = organization.LogoUrl;
+                        var stopWatch = new Stopwatch();
                         try
                         {
-                            using (var client = new HttpClient())
-                            {
-                                client.DefaultRequestHeaders.Accept.Clear();
-                                HttpResponseMessage response = client.GetAsync(new Uri(indexDoc.OrganizationLogoUrl)).Result;
+                                _httpClient.DefaultRequestHeaders.Accept.Clear();
+                                Log.Debug("Connecting to: " + indexDoc.OrganizationLogoUrl);
+
+                                stopWatch.Start();
+                                HttpResponseMessage response = _httpClient.GetAsync(new Uri(indexDoc.OrganizationLogoUrl)).Result;
                                 if (response.StatusCode != HttpStatusCode.OK)
                                 {
                                     Log.Error("Feil ressurslenke til logo i metadata: " + simpleMetadata.Uuid + " til " + indexDoc.OrganizationLogoUrl + " statuskode: " + response.StatusCode + " fjernet fra index");
                                     indexDoc.OrganizationLogoUrl = "";
                                 }
-                            }
                         }
                         catch (Exception ex)
                         {
+                            stopWatch.Stop();
                             Log.Error("Exception while testing logo resurces for metadata: " + simpleMetadata.Uuid, ex);
+                        }
+                        finally
+                        {
+                            Log.Debug("Used " + stopWatch.ElapsedMilliseconds + "ms fetching " + indexDoc.OrganizationLogoUrl);
                         }
 
 
@@ -263,7 +272,7 @@ namespace Kartverket.Metadatakatalog.Service
                     indexDoc.Organization3Contactname = simpleMetadata.ContactPublisher.Name;
 
                 }
-                indexDoc.Theme = _themeResolver.Resolve(simpleMetadata);
+                indexDoc.Theme = _themeResolver.Resolve(simpleMetadata, culture);
 
                 // FIXME - BAD!! Move this error handling into GeoNorgeAPI
                 try
@@ -293,25 +302,30 @@ namespace Kartverket.Metadatakatalog.Service
                 List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;
                 if (thumbnails != null && thumbnails.Count > 0)
                 {
+                    var stopWatch = new Stopwatch();
                     try
                     {
                         indexDoc.ThumbnailUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMetadata.Uuid, thumbnails[thumbnails.Count-1].URL);
-                    
-                         //teste om 404 evt timeout? - settes tom om krav ikke følges
-                    
-                        using (var client = new HttpClient())
-                        {
-                            client.DefaultRequestHeaders.Accept.Clear();
-                            HttpResponseMessage response = client.GetAsync(new Uri(indexDoc.ThumbnailUrl)).Result;
+
+                            _httpClient.DefaultRequestHeaders.Accept.Clear();
+                            Log.Debug("Connecting to: " + indexDoc.ThumbnailUrl);
+
+                            stopWatch.Start();
+                            HttpResponseMessage response = _httpClient.GetAsync(new Uri(indexDoc.ThumbnailUrl)).Result;
+                            stopWatch.Stop();
                             if (response.StatusCode != HttpStatusCode.OK)
                             {
                                 Log.Error("Feil ressurslenke i metadata: " + simpleMetadata.Uuid + " til " + indexDoc.ThumbnailUrl + " statuskode: " + response.StatusCode + " fjernet fra index");
                                 indexDoc.ThumbnailUrl = "";
                             }
-                        }
                     }
                     catch (Exception ex) {
+                        stopWatch.Stop();
                         Log.Error("Exception while testing thumbnail resurces for metadata: " + simpleMetadata.Uuid, ex);
+                    }
+                    finally
+                    {
+                        Log.Debug("Used " + stopWatch.ElapsedMilliseconds + "ms fetching " + indexDoc.ThumbnailUrl);
                     }
 
 
@@ -320,11 +334,42 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.MaintenanceFrequency = simpleMetadata.MaintenanceFrequency;
 
                 indexDoc.TopicCategory = simpleMetadata.TopicCategory;
-                indexDoc.Keywords = simpleMetadata.Keywords.Select(k => k.Keyword).ToList();
 
-                indexDoc.NationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)).Select(k => k.KeywordValue).ToList();
-                indexDoc.Place = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)).Select(k => k.KeywordValue).ToList();
-                indexDoc.Placegroups = _placeResolver.Resolve(simpleMetadata);
+                List<string> keyWords = new List<string>();
+                foreach (var keyword in simpleMetadata.Keywords)
+                {
+                    if (culture == Culture.EnglishCode && !string.IsNullOrEmpty(keyword.EnglishKeyword))
+                        keyWords.Add(keyword.EnglishKeyword);
+                    else
+                        keyWords.Add(keyword.Keyword);
+
+                }
+                indexDoc.Keywords = keyWords;
+
+                var nationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)).ToList();
+                keyWords = new List<string>();
+                foreach (var keyword in nationalInitiative)
+                {
+                    if (culture == Culture.EnglishCode && !string.IsNullOrEmpty(keyword.EnglishKeyword))
+                        keyWords.Add(keyword.EnglishKeyword);
+                    else
+                        keyWords.Add(keyword.KeywordValue);
+                }
+
+                indexDoc.NationalInitiative = keyWords;
+
+                var place = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)).ToList();
+                keyWords = new List<string>();
+                foreach (var keyword in place)
+                {
+                    if (culture == Culture.EnglishCode && !string.IsNullOrEmpty(keyword.EnglishKeyword))
+                        keyWords.Add(keyword.EnglishKeyword);
+                    else
+                        keyWords.Add(keyword.KeywordValue);
+                }
+
+                indexDoc.Place = keyWords;
+                indexDoc.Placegroups = _placeResolver.Resolve(simpleMetadata, culture);
                 indexDoc.AccessConstraint = 
                         simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.AccessConstraints) 
                         ? simpleMetadata.Constraints.AccessConstraints : "";
@@ -335,7 +380,7 @@ namespace Kartverket.Metadatakatalog.Service
                 if (indexDoc.Type == "service" || indexDoc.Type == "servicelayer")
                     indexDoc.ServiceDistributionAccessConstraint = simpleMetadata.Constraints != null && !string.IsNullOrEmpty(simpleMetadata.Constraints.OtherConstraintsAccess) ? simpleMetadata.Constraints.OtherConstraintsAccess : "";
 
-                indexDoc.DataAccess = _themeResolver.ResolveAccess(indexDoc.AccessConstraint, indexDoc.OtherConstraintsAccess);
+                indexDoc.DataAccess = _themeResolver.ResolveAccess(indexDoc.AccessConstraint, indexDoc.OtherConstraintsAccess, culture);
 
                 //TODO tolke liste fra nøkkelord
                 indexDoc.Area = _placeResolver.ResolveArea(simpleMetadata);
@@ -370,7 +415,7 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.DistributionProtocols = new List<string>();
                 if (!String.IsNullOrEmpty(indexDoc.DistributionProtocol))
                 {
-                    indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.DistributionProtocol));
+                    indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.DistributionProtocol, culture));
                 }
                 //if (!String.IsNullOrEmpty(indexDoc.ServiceDistributionProtocolForDataset))
                 //{
@@ -983,19 +1028,36 @@ namespace Kartverket.Metadatakatalog.Service
             }
         }
 
-        private string ConvertProtocolToSimpleName(string protocol) {
-            if (protocol.ToLower().Contains("wmts")) return "WMTS-tjeneste";
-            else if (protocol.ToLower().Contains("wfs")) return "WFS-tjeneste";
-            else if (protocol.ToLower().Contains("wms")) return "WMS-tjeneste";
-            else if (protocol.ToLower().Contains("csw")) return "CSW-tjeneste";
-            else if (protocol.ToLower().Contains("sos")) return "SOS-tjeneste";
-            else if (protocol.ToLower().Contains("download")) return "Nedlastingsside";
-            else if (protocol.ToLower().Contains("link")) return "Webside";
-            else if (protocol.ToLower().Contains("rest")) return "REST-API";
-            else if (protocol.ToLower().Contains("wcs")) return "WCS-tjeneste";
-            else if (protocol.ToLower().Contains("ws")) return "Webservice";
-            else if (protocol.ToLower().Contains("wps")) return "WPS-tjeneste";
-            else return protocol;
+        private string ConvertProtocolToSimpleName(string protocol, string culture) {
+            if (culture == Culture.EnglishCode) {
+                if (protocol.ToLower().Contains("wmts")) return "WMTS-service";
+                else if (protocol.ToLower().Contains("wfs")) return "WFS-service";
+                else if (protocol.ToLower().Contains("wms")) return "WMS-service";
+                else if (protocol.ToLower().Contains("csw")) return "CSW-service";
+                else if (protocol.ToLower().Contains("sos")) return "SOS-service";
+                else if (protocol.ToLower().Contains("download")) return "Downloadpage";
+                else if (protocol.ToLower().Contains("link")) return "Webpage";
+                else if (protocol.ToLower().Contains("rest")) return "REST-API";
+                else if (protocol.ToLower().Contains("wcs")) return "WCS-service";
+                else if (protocol.ToLower().Contains("ws")) return "Webservice";
+                else if (protocol.ToLower().Contains("wps")) return "WPS-service";
+                else return protocol;
+            }
+            else
+            {
+                if (protocol.ToLower().Contains("wmts")) return "WMTS-tjeneste";
+                else if (protocol.ToLower().Contains("wfs")) return "WFS-tjeneste";
+                else if (protocol.ToLower().Contains("wms")) return "WMS-tjeneste";
+                else if (protocol.ToLower().Contains("csw")) return "CSW-tjeneste";
+                else if (protocol.ToLower().Contains("sos")) return "SOS-tjeneste";
+                else if (protocol.ToLower().Contains("download")) return "Nedlastingsside";
+                else if (protocol.ToLower().Contains("link")) return "Webside";
+                else if (protocol.ToLower().Contains("rest")) return "REST-API";
+                else if (protocol.ToLower().Contains("wcs")) return "WCS-tjeneste";
+                else if (protocol.ToLower().Contains("ws")) return "Webservice";
+                else if (protocol.ToLower().Contains("wps")) return "WPS-tjeneste";
+                else return protocol;
+            }
         }
 
         private List<Keyword> Convert(IEnumerable<SimpleKeyword> simpleKeywords)
