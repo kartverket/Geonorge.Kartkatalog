@@ -26,6 +26,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             HttpCookie cookie = Request.Cookies["_culture"];
             if (cookie != null) { 
                 cookie.Value = culture;   // update cookie value
+                cookie.Expires = DateTime.Now.AddYears(1);
                 cookie.Domain = ".geonorge.no";
             }
             else

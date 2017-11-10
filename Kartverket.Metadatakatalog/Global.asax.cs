@@ -77,6 +77,7 @@ namespace Kartverket.Metadatakatalog
             {
                 cookie = new HttpCookie("_culture", Culture.NorwegianCode);
                 cookie.Domain = ".geonorge.no";
+                cookie.Expires = DateTime.Now.AddYears(1);
                 HttpContext.Current.Response.Cookies.Add(cookie);
             }
 
