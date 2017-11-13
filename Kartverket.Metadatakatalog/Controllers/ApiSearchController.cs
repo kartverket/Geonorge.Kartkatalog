@@ -40,7 +40,7 @@ using System.Web.Http.Description;
 namespace Kartverket.Metadatakatalog.Controllers
 {
     [HandleError]
-    [EnableCors(origins: "http://kartkatalog.dev.geonorge.no,https://kartkatalog.dev.geonorge.no,http://kurv.dev.geonorge.no,https://kurv.dev.geonorge.no,https://kartkatalog.test.geonorge.no,https://kartkatalog.geonorge.no,https://register.dev.geonorge.no,http://register.dev.geonorge.no", headers: "*", methods: "*", SupportsCredentials = true)]
+    [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
     public class ApiSearchController : ApiController
     {
         private readonly ISearchService _searchService;
