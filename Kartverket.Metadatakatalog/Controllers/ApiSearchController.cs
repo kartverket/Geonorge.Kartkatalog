@@ -40,7 +40,7 @@ using System.Web.Http.Description;
 namespace Kartverket.Metadatakatalog.Controllers
 {
     [HandleError]
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
     public class ApiSearchController : ApiController
     {
         private readonly ISearchService _searchService;
