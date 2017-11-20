@@ -1209,7 +1209,7 @@
     <Content Include="Views\Themes\Edit.cshtml" />
     <Content Include="Views\Themes\Index.cshtml" />
     <Content Include="Views\Themes\_OperatesOn.cshtml" />
-    <Content Include="Views\Search\_ThemeGroup.cshtml" />
+    <Content Include="Views\Shared\_ThemeGroup.cshtml" />
     <Content Include="Views\Themes\Details.cshtml" />
     <Content Include="Views\OpenData\Index.cshtml" />
     <Content Include="Views\Shared\VueComponents\Buttons\_CopyUrlButton.cshtml" />
