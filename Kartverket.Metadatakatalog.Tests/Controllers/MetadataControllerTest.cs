@@ -29,7 +29,7 @@ namespace Kartverket.Metadatakatalog.Tests.Controllers
             var serviceMock = new Mock<IMetadataService>();
             var searchServiceMock = new Mock<ISearchService>();
 
-            serviceMock.Setup(m => m.GetMetadataByUuid(Uuid)).Returns(new MetadataViewModel
+            serviceMock.Setup(m => m.GetMetadataViewModelByUuid(Uuid)).Returns(new MetadataViewModel
             {
                 Title = "N50",
                 ContactOwner = new Contact {Organization = "Kartverket"}
@@ -45,7 +45,7 @@ namespace Kartverket.Metadatakatalog.Tests.Controllers
             var serviceMock = new Mock<IMetadataService>();
             var searchServiceMock = new Mock<ISearchService>();
 
-            serviceMock.Setup(m => m.GetMetadataByUuid(Uuid)).Returns(new MetadataViewModel
+            serviceMock.Setup(m => m.GetMetadataViewModelByUuid(Uuid)).Returns(new MetadataViewModel
             {
                 Title = "N50",
                 ContactOwner = new Contact {Organization = "Kartverket"}

@@ -6,9 +6,8 @@ namespace Kartverket.Metadatakatalog.Service
 {
     public interface IMetadataService
     {
-        MetadataViewModel GetMetadataByUuid(string uuid);
-
-        List<Models.Api.Distribution> GetRelatedDistributionsForUuid(string uuid);
+        MetadataViewModel GetMetadataViewModelByUuid(string uuid);
+        List<Models.Api.Distribution> GetRelatedDistributionsByUuid(string uuid);
         SearchResultItemViewModel Metadata(string uuid);
     }
 }

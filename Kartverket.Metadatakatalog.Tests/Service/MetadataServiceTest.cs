@@ -22,12 +22,11 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             var organizationServiceMock = new Mock<IOrganizationService>();
             var searchServiceMock = new Mock<ISearchService>();
             var searchServiceDirectoryServiceMock = new Mock<IServiceDirectoryService>();
-            var themeResolverMock = new Mock<ThemeResolver>();
             var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"),
                 geonorgeUrlResolverMock.Object, organizationServiceMock.Object, searchServiceMock.Object,
-                searchServiceDirectoryServiceMock.Object, themeResolverMock.Object);
+                searchServiceDirectoryServiceMock.Object);
 
-            var metadata = metadataService.GetMetadataByUuid(Uuid);
+            var metadata = metadataService.GetMetadataViewModelByUuid(Uuid);
 
             metadata.Should().BeNull();
         }
@@ -45,9 +44,9 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             var searchServiceDirectoryServiceMock = new Mock<IServiceDirectoryService>();
             var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"),
                 geonorgeUrlResolverMock.Object, organizationServiceMock.Object, searchServiceMock.Object,
-                searchServiceDirectoryServiceMock.Object, themeResolverMock.Object);
+                searchServiceDirectoryServiceMock.Object);
 
-            var metadata = metadataService.GetMetadataByUuid(Uuid);
+            var metadata = metadataService.GetMetadataViewModelByUuid(Uuid);
 
             metadata.Should().NotBeNull();
         }

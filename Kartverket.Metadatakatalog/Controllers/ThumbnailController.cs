@@ -24,7 +24,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             try
             {
-                MetadataViewModel model = _metadataService.GetMetadataByUuid(uuid);
+                MetadataViewModel model = _metadataService.GetMetadataViewModelByUuid(uuid);
 
                 if (model.Thumbnails != null && model.Thumbnails.Any())
                 {
