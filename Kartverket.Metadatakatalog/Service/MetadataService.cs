@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using GeoNorgeAPI;
 using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
-using www.opengis.net;
 using System;
-using System.Collections;
 using System.Linq;
 using Kartverket.Metadatakatalog.Models.Api;
 using Kartverket.Metadatakatalog.Models.ViewModels;
@@ -17,7 +14,6 @@ using Contact = Kartverket.Metadatakatalog.Models.Contact;
 using DistributionFormat = Kartverket.Metadatakatalog.Models.DistributionFormat;
 using Keyword = Kartverket.Metadatakatalog.Models.Keyword;
 using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
-using SearchResult = Kartverket.Metadatakatalog.Models.SearchResult;
 using SolrNet;
 using Kartverket.Metadatakatalog.Helpers;
 using Resources;
@@ -191,12 +187,27 @@ namespace Kartverket.Metadatakatalog.Service
             var distributionRow = distributionRows[row];
             distributionRow.DistributionFormats.Add(GetDistributionFormat(simpleMetadataDistribution));
         }
-       
+
+        private List<Distribution> GetServiceDirectoryRelatedDistributions(string uuid)
+        {
+            var distributionList = new List<Distribution>();
+
+            var parameters = new SearchParameters { Text = uuid };
+            var searchResult = _searchService.Search(parameters);
+
+            if (searchResult != null && searchResult.NumFound > 0)
+            {
+                distributionList = ConvertRelatedData(searchResult.Items[0].ServiceDatasets, distributionList);
+                distributionList = ConvertRelatedData(searchResult.Items[0].ServiceLayers, distributionList);
+            }
+            return distributionList;
+        }
+
         private List<Distribution> GetMetadataRelatedDistributions(string uuid)
         {
             var distributionList = new List<Distribution>();
 
-            var parameters = new SearchParameters {Text = uuid};
+            var parameters = new SearchParameters { Text = uuid };
             var searchResult = _searchService.Search(parameters);
 
             if (searchResult != null && searchResult.NumFound > 0)
@@ -239,6 +250,8 @@ namespace Kartverket.Metadatakatalog.Service
                         tmp.Title = relData[1] ?? "";
                         tmp.Type = ConvertType(relData[3], relData[2]);
                         tmp.DistributionFormats = GetDistributionFromats(tmp.Uuid);
+                        tmp.DistributionName = relData[5] ?? "";
+                        tmp.DistributionUrl = relData[7] ?? "";
 
                         tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
                         tmp.Organization = relData[4];
@@ -259,10 +272,10 @@ namespace Kartverket.Metadatakatalog.Service
 
                         relatedDistributions.Add(tmp);
                     }
-                    catch (Exception)
+                    catch
                     {
+                        // ignored
                     }
-
                 }
 
             }
@@ -339,21 +352,22 @@ namespace Kartverket.Metadatakatalog.Service
 
                     relatedMetadata.Add(md);
                 }
-                catch (Exception)
+                catch
                 {
+                    // ignored
                 }
-
             }
             return relatedMetadata;
         }
 
         private List<DistributionFormat> GetDistributionFromats(string tmpUuid)
         {
-            var distributions = new List<DistributionFormat>(); 
+            var distributions = new List<DistributionFormat>();
             var metadata = GetMetadataViewModelByUuid(tmpUuid);
             if (metadata != null)
             {
-                foreach (var distribution in metadata.DistributionFormats) {
+                foreach (var distribution in metadata.DistributionFormats)
+                {
                     var distributionFormat = new DistributionFormat();
                     distributionFormat.Name = distribution.Name;
                     distributionFormat.Version = distribution.Version;
@@ -373,10 +387,8 @@ namespace Kartverket.Metadatakatalog.Service
 
         private List<SimpleDistributionFormat> GetSimpleDistributionFromats(string uuid)
         {
-            // TODO 
-            var metadata = GetMetadataViewModelByUuid(uuid);
-
-            return metadata.DistributionFormats;
+            var simpleMetadata = GetSimpleMetadataByUuid(uuid);
+            return simpleMetadata?.DistributionFormats;
         }
 
         private string GetRelatedService(MetadataViewModel metadata)
@@ -730,13 +742,6 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
-
-
-
-
-
-        // ********  NOT IN USE.... *********
-
         private List<Distribution> GetApplicationRelatedDistributions(string uuid)
         {
             var distlist = new List<Distribution>();
@@ -805,116 +810,6 @@ namespace Kartverket.Metadatakatalog.Service
             catch (Exception) { }
 
             return new SearchResultItemViewModel(metadata);
-        }
-
-        private List<Distribution> GetServiceDirectoryRelatedDistributions(string uuid)
-        {
-            var distlist = new List<Distribution>();
-
-            var parameters = new SearchParameters { Text = uuid };
-            var searchResult = _searchServiceDirectoryService.Services(parameters);
-
-            if (searchResult != null && searchResult.NumFound > 0)
-            {
-                var serviceDatasets = searchResult.Items[0].ServiceDatasets;
-
-                if (serviceDatasets != null && serviceDatasets.Count > 0)
-                {
-                    foreach (var relatert in serviceDatasets)
-                    {
-                        var relData = relatert.Split('|');
-
-                        try
-                        {
-                            var tmp = new Distribution();
-                            tmp.Uuid = relData[0] != null ? relData[0] : "";
-                            tmp.Title = relData[1] != null ? relData[1] : "";
-                            tmp.Type = relData[3] != null ? relData[3] : "";
-                            tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
-                            //tmp.DistributionFormats.Add(new DistributionFormat()
-                            //{
-                            //    Name = /*relData[6] != null ? Register.GetDistributionType(relData[6]) :*/ "",
-                            //    Version = ""
-                            //});
-                            tmp.DistributionName = relData[5] != null ? relData[5] : "";
-                            tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
-                            tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
-                            tmp.Organization = relData[4];
-                            tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
-
-                            //Åpne data, begrenset, skjermet
-                            if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
-                            if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
-                            if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
-
-                            //Vis kart
-                            if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
-                            {
-                                tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
-                                tmp.CanShowMapUrl = true;
-                            }
-
-                            distlist.Add(tmp);
-
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-
-                var serviceLayers = searchResult.Items[0].ServiceLayers;
-
-                if (serviceLayers != null && serviceLayers.Count > 0)
-                {
-
-                    foreach (var relatert in serviceLayers)
-                    {
-                        var relData = relatert.Split('|');
-
-                        try
-                        {
-                            var tmp = new Distribution();
-                            tmp.Uuid = relData[0] != null ? relData[0] : "";
-                            tmp.Title = relData[1] != null ? relData[1] : "";
-                            string parentIdentifier = relData[2] != null ? relData[2] : "";
-                            tmp.Type = relData[3] != null ? relData[3] : "";
-                            if (tmp.Type == "service" && !IsNullOrEmpty(parentIdentifier))
-                                tmp.Type = "servicelayer";
-                            tmp.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(tmp.Type);
-                            //tmp.DistributionFormats.Add(new DistributionFormat()
-                            //{
-                            //    Name = /*relData[6] != null ? Register.GetDistributionType(relData[6]) :*/ "",
-                            //    Version = ""
-                            //});
-                            tmp.DistributionName = relData[5] != null ? relData[5] : "";
-                            tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
-                            tmp.DistributionUrl = relData[7] != null ? relData[7] : "";
-                            tmp.Organization = relData[4];
-                            tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
-
-                            //Åpne data, begrenset, skjermet
-                            if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
-                            if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
-                            if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
-                            tmp.ServiceDistributionAccessConstraint = !IsNullOrWhiteSpace(relData[12]) ? relData[12] : relData[11];
-
-                            //Vis kart
-                            if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
-                            {
-                                tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
-                                tmp.CanShowMapUrl = true;
-                            }
-
-                            distlist.Add(tmp);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-            }
-            return distlist;
         }
 
         private List<MetadataViewModel> GetServiceDatasets(List<string> serviceDatasets, List<MetadataViewModel> relatedMetadata)
