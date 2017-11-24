@@ -63,7 +63,6 @@ namespace Kartverket.Metadatakatalog.Models
         [Key]
         public string Uuid { get; set; }
         public string Title { get; set; }
-        public int Sorting { get; set; }
 
         public virtual List<Theme> Themes { get; set; }
     }

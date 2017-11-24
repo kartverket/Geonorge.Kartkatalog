@@ -279,10 +279,6 @@
     <Compile Include="Migrations\201710111145232_AddThemeTranslation.Designer.cs">
       <DependentUpon>201710111145232_AddThemeTranslation.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201711221337053_AddThemeMetadataSorting.cs" />
-    <Compile Include="Migrations\201711221337053_AddThemeMetadataSorting.Designer.cs">
-      <DependentUpon>201711221337053_AddThemeMetadataSorting.cs</DependentUpon>
-    </Compile>
     <Compile Include="Models\Api\Distribution.cs" />
     <Compile Include="Models\SearchIndex\MetadataIndexAllDoc.cs" />
     <Compile Include="Models\Theme.cs" />
@@ -1239,9 +1235,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710111145232_AddThemeTranslation.resx">
       <DependentUpon>201710111145232_AddThemeTranslation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201711221337053_AddThemeMetadataSorting.resx">
-      <DependentUpon>201711221337053_AddThemeMetadataSorting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UI.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
