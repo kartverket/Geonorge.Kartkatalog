@@ -64,9 +64,9 @@ namespace Kartverket.Metadatakatalog.Service
 
             //Hente inn indeks og relaterte services
             relatedDistributions.AddRange(GetMetadataRelatedDistributions(uuid));
-            //if (simpleMetadata.IsService())
-            //    distlist.AddRange(GetServiceDirectoryRelatedDistributions(uuid));
-            //distlist.AddRange(GetApplicationRelatedDistributions(uuid));
+            if (simpleMetadata.IsService())
+                relatedDistributions.AddRange(GetServiceDirectoryRelatedDistributions(uuid));
+            relatedDistributions.AddRange(GetApplicationRelatedDistributions(uuid));
             return relatedDistributions;
         }
 
