@@ -64,7 +64,7 @@ if (contact != null)
                 <div class="col-sm-2" is="table-owner" v-bind:metadata="resultItem"></div>
                 <div class="col-sm-1" is="table-open-data" v-bind:metadata="resultItem"></div>
                 <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton', 'addToCartButton']"></div>
-                <div class="col-sm-1" is="table-distribution-formats" v-bind:metadata="resultItem"></div>
+                <div class="col-sm-2" is="table-distribution-formats" v-bind:metadata="resultItem"></div>
             </div>
         </div>
 
@@ -523,7 +523,6 @@ if (keywords != null && keywords.Any())
             data: {
                 tableBorder: "",
                 distributionlist: [],
-                distributionListRaw: [],
                 relatedDataList: [],
                 model: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
             },

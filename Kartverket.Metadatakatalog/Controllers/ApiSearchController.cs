@@ -224,7 +224,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [System.Web.Http.HttpGet]
         public Models.MetadataViewModel GetData(string uuid)
         {
-            Models.MetadataViewModel model = _metadataService.GetMetadataByUuid(uuid);
+            Models.MetadataViewModel model = _metadataService.GetMetadataViewModelByUuid(uuid);
             model.CoverageUrl = model.GetCoverageParams();
             return model;
         }
@@ -238,7 +238,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
 
 
-            Models.MetadataViewModel result = _metadataService.GetMetadataByUuid(uuid);
+            Models.MetadataViewModel result = _metadataService.GetMetadataViewModelByUuid(uuid);
 
             Models.SearchResult relatedResult = CreateRelated(result);
                 var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
@@ -255,7 +255,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [System.Web.Http.HttpGet]
         public List<Distribution> GetDistributions(string uuid)
         {
-            return  _metadataService.GetRelatedDistributionsForUuid(uuid);
+            return  _metadataService.GetRelatedDistributionsByUuid(uuid);
         }
 
         private Models.SearchResult CreateRelated(MetadataViewModel result)

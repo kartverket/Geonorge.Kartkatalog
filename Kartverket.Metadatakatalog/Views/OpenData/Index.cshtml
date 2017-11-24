@@ -75,7 +75,7 @@
 
 <span class="separator-small separator-gray margin-bottom-10"></span>
 
-<div class="row resultItemTitleRow">
+<div class="row">
 
     <div class="col-md-9">
         @if (Model.Result != null)
@@ -101,8 +101,6 @@
 
 
 @section scripts {
-    @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
-
     <script>
 
         // Setter url for søkeresultat
