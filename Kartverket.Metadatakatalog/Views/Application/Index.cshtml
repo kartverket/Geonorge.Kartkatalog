@@ -43,7 +43,7 @@
             <div class="col-sm-1" is="header-website"></div>
         </div>
 
-        <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
+        <div v-if="$root.viewType == 'tableView'" class="menu-separator"></div>
         <div v-for="item in items" is="resultItem"
              v-bind:result-item="item"
              v-bind:selected-fields="[
@@ -110,10 +110,10 @@
     <div class="row">
 
         <div id="searchResultTable" class="col-md-9">
-            <span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
+            @*<span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
             <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
-            <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
-            <div class="clearfix"></div>
+            <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>*@
+            @*<div class="clearfix"></div>*@
 
             <div is="searchResult" v-bind:result-items="ResultItems"></div>
             <div class="margin-top-10">
@@ -158,26 +158,26 @@
                     ResultItem: ResultItemComponent
                 },
                 created: function() {
-                    this.viewType = this.getSelectedViewType();
+                    //this.viewType = this.getSelectedViewType();
                 },
                 methods: {
-                    view: function(type) {
-                        this.viewType = type;
-                        localStorage.setItem("layout", this.viewType);
-                        if (type === "galleryView") {
-                            this.tableBorder = "";
-                        } else {
-                            this.tableBorder = "table-border-bottom";
-                        }
-                    },
-                    getSelectedViewType: function() {
-                        var viewType = "tableView";
-                        if (localStorage.getItem("layout")) {
-                            viewType = localStorage.getItem("layout");
-                            this.view(viewType);
-                        }
-                        return viewType;
-                    }
+                    //view: function(type) {
+                    //    this.viewType = type;
+                    //    localStorage.setItem("layout", this.viewType);
+                    //    if (type === "galleryView") {
+                    //        this.tableBorder = "";
+                    //    } else {
+                    //        this.tableBorder = "table-border-bottom";
+                    //    }
+                    //},
+                    //getSelectedViewType: function() {
+                    //    var viewType = "tableView";
+                    //    if (localStorage.getItem("layout")) {
+                    //        viewType = localStorage.getItem("layout");
+                    //        this.view(viewType);
+                    //    }
+                    //    return viewType;
+                    //}
                 }
             });
 

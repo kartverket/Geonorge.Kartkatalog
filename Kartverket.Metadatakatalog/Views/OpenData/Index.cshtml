@@ -75,12 +75,12 @@
 
 <span class="separator-small separator-gray margin-bottom-10"></span>
 
-<div class="row resultItemTitleRow">
+<div class="row">
 
     <div class="col-md-9">
         @if (Model.Result != null)
         {
-            @Html.Partial("../Search/_ThemeGroup", Model)
+            @Html.Partial("_ThemeGroup", Model)
             <div class="margin-top-10">
                 @Html.Partial("_Pagination", Model)
             </div>
@@ -101,8 +101,6 @@
 
 
 @section scripts {
-    @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
-
     <script>
 
         // Setter url for søkeresultat

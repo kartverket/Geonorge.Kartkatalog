@@ -123,6 +123,13 @@ namespace Kartverket.Metadatakatalog.Models
         public string ServiceLink { get; set; }
         public string DistributionUrl { get; set; }
 
+
+        public MetadataViewModel()
+        {
+            Related = new List<MetadataViewModel>();
+            Thumbnails = new List<Thumbnail>();
+        }
+
         public SeoUrl CreateSeoUrl()
         {
             if (ContactOwner != null)
@@ -577,7 +584,15 @@ namespace Kartverket.Metadatakatalog.Models
             return this != null ? SimpleMetadataUtil.GetCapabilitiesUrl(URL, Protocol) : "";
         }
 
+        public bool IsWms()
+        {
+            return Protocol == "OGC:WMS";
+        }
 
+        public bool IsWfs()
+        {
+            return Protocol == "OGC:WFS";
+        }
 
     }
 

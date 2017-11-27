@@ -36,7 +36,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             MetadataViewModel model = null;
             try
             {
-                model = _metadataService.GetMetadataByUuid(uuid);
+                model = _metadataService.GetMetadataViewModelByUuid(uuid);
                 model = Sort(model, orderby);
             }
             catch (InvalidOperationException exception)
