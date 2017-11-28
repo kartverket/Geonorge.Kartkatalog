@@ -285,8 +285,8 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     var relData = relatert.Split('|');
 
-                    //try
-                    //{
+                    try
+                    {
                         var tmp = new Distribution();
                         tmp.Uuid = relData[0] ?? "";
                         tmp.Title = relData[1] ?? "";
@@ -316,11 +316,11 @@ namespace Kartverket.Metadatakatalog.Service
                         }
 
                         relatedDistributions.Add(tmp);
-                    //}
-                    //catch(Exception ex)
-                    //{
-                        
-                    //}
+                    }
+                    catch (Exception ex)
+                    {
+                       //Ignore
+                    }
                 }
 
             }
