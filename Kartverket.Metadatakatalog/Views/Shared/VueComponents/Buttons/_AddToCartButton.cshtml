@@ -9,74 +9,73 @@
 </script>
 
 <script>
-    function getAddToCartButton(resultItem) {
-        var ShowInMapButton = {
-            name: "addToCartButton",
-            template: "#addToCartButtonTemplate",
-            props: ["resultItem", "defaultButtonClass", "buttonType"],
-            computed: {
-                button: function () {
-                    return this.createButtonObject();
-                },
-                htmlElement: function () {
-                    return this.$parent.createButtonElement(this.button);
-                }
+    var AddToCartButton = {
+        name: "addToCartButton",
+        template: "#addToCartButtonTemplate",
+        props: ["resultItem", "defaultButtonClass", "buttonType"],
+        computed: {
+            button: function () {
+                return this.createButtonObject();
             },
-            mounted: function () {
-                var addToCartId = getParameterByName('addtocart_event_id');
-                if (addToCartId && this.resultItem.Uuid == addToCartId) {
-                    this.addToCart();
-                    removeParameterByNameFromUrl('addtocart_event_id');
-                }
-            },
-            methods: {
-                getCartButtonStatus: function () {
-                    var addedOrderitems = localStorage.getItem('orderItems');
-                    if (addedOrderitems !== null &&
-                        addedOrderitems !== "[]" &&
+            htmlElement: function () {
+                return this.$parent.createButtonElement(this.button);
+            }
+        },
+        mounted: function () {
+            var addToCartId = getParameterByName('addtocart_event_id');
+            if (addToCartId && this.resultItem.Uuid == addToCartId) {
+                this.addToCart();
+                removeParameterByNameFromUrl('addtocart_event_id');
+            }
+        },
+        methods: {
+            getCartButtonStatus: function () {
+                var addedOrderitems = localStorage.getItem('orderItems');
+                if (addedOrderitems !== null &&
+                    addedOrderitems !== "[]" &&
                     addedOrderitems !== "[null]" &&
                     addedOrderitems !== "") {
-                        addedOrderitems = JSON.parse(addedOrderitems);
-                        var addedToCart = false;
-                        addedOrderitems.forEach(function (addedOrderItemUuid) {
-                            if (addedOrderItemUuid !== null) {
-                                if (this.resultItem !== undefined) {
-                                    if (this.resultItem.Uuid == addedOrderItemUuid) {
-                                        addedToCart = true;
-                                    }
+                    addedOrderitems = JSON.parse(addedOrderitems);
+                    var addedToCart = false;
+                    addedOrderitems.forEach(function (addedOrderItemUuid) {
+                        if (addedOrderItemUuid !== null) {
+                            if (this.resultItem !== undefined) {
+                                if (this.resultItem.Uuid == addedOrderItemUuid) {
+                                    addedToCart = true;
                                 }
                             }
-                        }.bind(this));
-                        return addedToCart;
-                    }
-                },
-                createButtonObject: function () {
-                    var button = {
-                        id: "",
-                        content: "@Html.Raw(UI.AddToBasket)",
-                        className: this.defaultButtonClass,
-                        url: null,
-                        title: "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)",
-                        icon: {
-                            className: "custom-icon custom-icon-handlekurv"
-                        },
-                        attributes: [
-                            { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'leggikurv')" }
-                        ],
-                        showContent: true
-                    }
+                        }
+                    }.bind(this));
+                    return addedToCart;
+                }
+            },
+            createButtonObject: function () {
+                var button = {
+                    id: "",
+                    content: "@Html.Raw(UI.AddToBasket)",
+                    className: this.defaultButtonClass,
+                    url: null,
+                    title: "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)",
+                    icon: {
+                        className: "custom-icon custom-icon-handlekurv"
+                    },
+                    attributes: [
+                        { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'leggikurv')" }
+                    ],
+                    showContent: true
+                }
 
-                    if (this.buttonType === "tableRow") {
-                        button.content = "";
-                        button.showContent = false;
-                    }
+                if (this.buttonType === "tableRow") {
+                    button.content = "";
+                    button.showContent = false;
+                }
 
-                    if (this.resultItem.ShowDownloadService) {
-                        button.className += ' add-to-cart-btn-' + this.resultItem.Uuid;
+                if (this.resultItem.ShowDownloadService) {
+                    button.className += ' add-to-cart-btn-' + this.resultItem.Uuid;
 
-                        if (this.resultItem.IsRestricted || this.resultItem.IsOffline) {
-                            button.className += " add-to-cart-btn prevent-action";
-                            if (this.resultItem.IsRestricted) {
+                    if (this.resultItem.IsRestricted || this.resultItem.IsOffline) {
+                        button.className += " add-to-cart-btn prevent-action";
+                        if (this.resultItem.IsRestricted) {
                                 @{
                                     string baseUrl = Request.Url.AbsoluteUri;
                                     baseUrl = baseUrl.Replace("http://", "https://");
@@ -85,127 +84,125 @@
                                         baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
                                     }
                                 }
-                                var baseUrl = '@baseUrl';
-                                var addToCartEventParamater = "?addtocart_event_id=" + this.resultItem.Uuid;
+                            var baseUrl = '@baseUrl';
+                            var addToCartEventParamater = "?addtocart_event_id=" + this.resultItem.Uuid;
 
-                                if (baseUrl.indexOf("?") !== -1) {
-                                    addToCartEventParamater = "&addtocart_event_id=" + this.resultItem.Uuid;
-                                }
-
-                                var downloadSignInUrl = '@Html.DownloadUrl()' +
-                                    'AuthServices/SignIn?ReturnUrl=' +
-                                    encodeURIComponent(baseUrl) +
-                                    encodeURIComponent(addToCartEventParamater);
-
-                                button.url = addToCartUrl = '@Html.KartkatalogenUrl()'
-                                     + 'AuthServices/SignIn?ReturnUrl='
-                                     + encodeURIComponent(downloadSignInUrl);
+                            if (baseUrl.indexOf("?") !== -1) {
+                                addToCartEventParamater = "&addtocart_event_id=" + this.resultItem.Uuid;
                             }
-                        }
-                        var isAdded = this.getCartButtonStatus();
 
-                        if (isAdded) {
-                            button.className += " added";
-                            if (button.showContent) {
-                                button.content = "@UI.AddedToBasket";
-                            }
-                            button.title = "@UI.AlreadyPutInBasket";
-                        } else {
-                            if (button.showContent) {
-                                button.content = "@Html.Raw(UI.AddToBasket)";
-                            }
-                            button.title = "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)";
-                        }
-                    } else if (this.resultItem.ShowDownloadLink) {
-                        button.url = this.resultItem.DistributionUrl;
-                        button.title = "@Html.Raw(UI.Download) " + this.resultItem.Title;
-                        button.attributes = [
-                                { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'lastned')" },
-                                { key: "target", value: "_blank" }
-                        ];
-                        if (button.showContent) {
-                            button.content = "@Html.Raw(UI.Download)";
-                        }
-                        button.icon.className = "custom-icon custom-icon-lastned";
-                    } else {
-                        button.className = this.defaultButtonClass + " disabled";
-                        button.url = null;
-                        button.title = "@Html.Raw(UI.CanNotBeAddedToBasket)";
-                        button.attributes = [
-                                { key: "disabled", value: "disabled" }
-                        ];
-                        if (button.showContent) {
-                            button.content = "@Html.Raw(UI.Download)";
+                            var downloadSignInUrl = '@Html.DownloadUrl()' +
+                                'AuthServices/SignIn?ReturnUrl=' +
+                                encodeURIComponent(baseUrl) +
+                                encodeURIComponent(addToCartEventParamater);
+
+                            button.url = addToCartUrl = '@Html.KartkatalogenUrl()'
+                                + 'AuthServices/SignIn?ReturnUrl='
+                                + encodeURIComponent(downloadSignInUrl);
                         }
                     }
-                    return button;
-                },
-                addToCart: function () {
-                    var orderItems = [];
-
-                    var item = {
-                        name: this.resultItem.Title,
-                        uuid: this.resultItem.Uuid,
-                        url: "/metadata/uuid/" + this.resultItem.Uuid,
-                        organizationLogoUrl: this.organizationLogoUrl,
-                        distributionUrl: this.resultItem.DownloadUrl,
-                        theme: this.resultItem.Theme,
-                        organizationName: this.resultItem.Organization
-                    };
-
-                    if (localStorage.getItem('orderItems') != null) {
-                        orderItems = (JSON.parse(localStorage.getItem('orderItems')));
-                    }
-
-                    var button = this.button;
-
                     var isAdded = this.getCartButtonStatus();
 
-                    if (!isAdded) {
-
-                        orderItems.push(item.uuid);
-                        localStorage["orderItems"] = JSON.stringify(orderItems);
-                        localStorage[item.uuid + ".metadata"] = JSON.stringify(item);
-                        clearAlertMessage();
-                        showAlert(item.name + ' @Html.Raw(UI.IsAddedTo) <a href="/nedlasting">@Html.Raw(UI.TheBasket)</a>', 'success');
-
-                        var orderItemCount = $('#orderitem-count').text();
-                        if (orderItemCount == null || orderItemCount == '') {
-                            orderItemCount = 0;
-                            $('#orderitem-count-text').text(' datasett');
-                        } else {
-                            orderItemCount = parseInt($('#orderitem-count').text());
-                        }
-                        orderItemCount += 1;
-                        $('#orderitem-count').text(orderItemCount);
-                        updateShoppingCart();
+                    if (isAdded) {
+                        button.className += " added";
                         if (button.showContent) {
                             button.content = "@UI.AddedToBasket";
                         }
                         button.title = "@UI.AlreadyPutInBasket";
-                        $(".add-to-cart-btn-" + this.resultItem.Uuid).addClass("added");
-                        $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "@UI.AlreadyPutInBasket");
                     } else {
-                        var index = orderItems.indexOf(item.uuid);
-                        if (index > -1) {
-                            orderItems.splice(index, 1);
-                        }
-                        localStorage.removeItem(item.uuid + ".metadata");
-                        localStorage["orderItems"] = JSON.stringify(orderItems);
-
-                        updateShoppingCart();
-                        clearAlertMessage();
-                        showAlert(item.name + ' @Html.Raw(UI.IsRemovedFrom) <a href="/nedlasting">@Html.Raw(UI.TheBasket)</a>', 'warning');
                         if (button.showContent) {
                             button.content = "@Html.Raw(UI.AddToBasket)";
                         }
-                        this.button.title = "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)";
-                        $(".add-to-cart-btn-" + this.resultItem.Uuid).removeClass("added");
-                        $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)");
+                        button.title = "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)";
+                    }
+                } else if (this.resultItem.ShowDownloadLink) {
+                    button.url = this.resultItem.DistributionUrl;
+                    button.title = "@Html.Raw(UI.Download) " + this.resultItem.Title;
+                    button.attributes = [
+                        { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'lastned')" },
+                        { key: "target", value: "_blank" }
+                    ];
+                    if (button.showContent) {
+                        button.content = "@Html.Raw(UI.Download)";
+                    }
+                    button.icon.className = "custom-icon custom-icon-lastned";
+                } else {
+                    button.className = this.defaultButtonClass + " disabled";
+                    button.url = null;
+                    button.title = "@Html.Raw(UI.CanNotBeAddedToBasket)";
+                    button.attributes = [
+                        { key: "disabled", value: "disabled" }
+                    ];
+                    if (button.showContent) {
+                        button.content = "@Html.Raw(UI.Download)";
                     }
                 }
+                return button;
+            },
+            addToCart: function () {
+                var orderItems = [];
+
+                var item = {
+                    name: this.resultItem.Title,
+                    uuid: this.resultItem.Uuid,
+                    url: "/metadata/uuid/" + this.resultItem.Uuid,
+                    organizationLogoUrl: this.organizationLogoUrl,
+                    distributionUrl: this.resultItem.DownloadUrl,
+                    theme: this.resultItem.Theme,
+                    organizationName: this.resultItem.Organization
+                };
+
+                if (localStorage.getItem('orderItems') != null) {
+                    orderItems = (JSON.parse(localStorage.getItem('orderItems')));
+                }
+
+                var button = this.button;
+
+                var isAdded = this.getCartButtonStatus();
+
+                if (!isAdded) {
+
+                    orderItems.push(item.uuid);
+                    localStorage["orderItems"] = JSON.stringify(orderItems);
+                    localStorage[item.uuid + ".metadata"] = JSON.stringify(item);
+                    clearAlertMessage();
+                    showAlert(item.name + ' @Html.Raw(UI.IsAddedTo) <a href="/nedlasting">@Html.Raw(UI.TheBasket)</a>', 'success');
+
+                    var orderItemCount = $('#orderitem-count').text();
+                    if (orderItemCount == null || orderItemCount == '') {
+                        orderItemCount = 0;
+                        $('#orderitem-count-text').text(' datasett');
+                    } else {
+                        orderItemCount = parseInt($('#orderitem-count').text());
+                    }
+                    orderItemCount += 1;
+                    $('#orderitem-count').text(orderItemCount);
+                    updateShoppingCart();
+                    if (button.showContent) {
+                        button.content = "@UI.AddedToBasket";
+                    }
+                    button.title = "@UI.AlreadyPutInBasket";
+                    $(".add-to-cart-btn-" + this.resultItem.Uuid).addClass("added");
+                    $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "@UI.AlreadyPutInBasket");
+                } else {
+                    var index = orderItems.indexOf(item.uuid);
+                    if (index > -1) {
+                        orderItems.splice(index, 1);
+                    }
+                    localStorage.removeItem(item.uuid + ".metadata");
+                    localStorage["orderItems"] = JSON.stringify(orderItems);
+
+                    updateShoppingCart();
+                    clearAlertMessage();
+                    showAlert(item.name + ' @Html.Raw(UI.IsRemovedFrom) <a href="/nedlasting">@Html.Raw(UI.TheBasket)</a>', 'warning');
+                    if (button.showContent) {
+                        button.content = "@Html.Raw(UI.AddToBasket)";
+                    }
+                    this.button.title = "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)";
+                    $(".add-to-cart-btn-" + this.resultItem.Uuid).removeClass("added");
+                    $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)");
+                }
             }
-        };
-        return ShowInMapButton;
-    }
+        }
+    };
 </script>

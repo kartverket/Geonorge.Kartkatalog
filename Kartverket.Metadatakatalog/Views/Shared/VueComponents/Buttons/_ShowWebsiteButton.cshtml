@@ -4,41 +4,38 @@
 </script>
 
 <script>
-    function getShowWebsiteButton(resultItem) {
-        var ShowWebsiteButton = {
-            name: "showWebsiteButton",
-            template: "#showWebsiteButtonTemplate",
-            props: ["resultItem", "defaultButtonClass", "buttonType"],
-            computed: {
-                button: function () {
-                    var button = {
-                        content: "@Html.Raw(UI.WebPage)",
-                        className: this.defaultButtonClass,
-                        url: this.resultItem.DistributionUrl,
-                        title: "@Html.Raw(UI.VisitWebsite) " + this.resultItem.Title,
-                        icon: {
-                            className: "custom-icon custom-icon-eksternlink"
-                        },
-                        attributes: [
-                            { key: "onClick", value: "ga('send', 'event', 'MerInfo', 'nettside')" }
-                        ]
-                    };
-                    //if (button.url == null) {
-                    if (this.resultItem.ShowWebsiteUrl === false) {
-                        button.url = "",
+    var ShowWebsiteButton = {
+        name: "showWebsiteButton",
+        template: "#showWebsiteButtonTemplate",
+        props: ["resultItem", "defaultButtonClass", "buttonType"],
+        computed: {
+            button: function () {
+                var button = {
+                    content: "@Html.Raw(UI.WebPage)",
+                    className: this.defaultButtonClass,
+                    url: this.resultItem.DistributionUrl,
+                    title: "@Html.Raw(UI.VisitWebsite) " + this.resultItem.Title,
+                    icon: {
+                        className: "custom-icon custom-icon-eksternlink"
+                    },
+                    attributes: [
+                        { key: "onClick", value: "ga('send', 'event', 'MerInfo', 'nettside')" }
+                    ]
+                };
+                //if (button.url == null) {
+                if (this.resultItem.ShowWebsiteUrl === false) {
+                    button.url = "",
                         button.attributes.push({ key: 'disabled', value: 'disabled' });
-                        button.className += " disabled";
-                    }
-                    if (this.buttonType === "tableRow") {
-                        button.content = "";
-                    }
-                    return button;
-                },
-                htmlElement: function () {
-                    return this.$parent.createButtonElement(this.button);
+                    button.className += " disabled";
                 }
+                if (this.buttonType === "tableRow") {
+                    button.content = "";
+                }
+                return button;
+            },
+            htmlElement: function () {
+                return this.$parent.createButtonElement(this.button);
             }
-        };
-        return ShowWebsiteButton;
-    }
+        }
+    };
 </script>

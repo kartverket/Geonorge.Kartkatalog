@@ -4,44 +4,41 @@
 </script>
 
 <script>
-    function getHelpButton(resultItem) {
-        var HelpButton = {
-            name: "helpButton",
-            template: "#helpButtonTemplate",
-            props: ["resultItem", "defaultButtonClass", "buttonType"],
-            computed: {
-                button: function () {
-                    var button = {
-                        content: "@Html.Raw(UI.Help)",
-                        className: this.defaultButtonClass,
-                        url: null,
-                        title: "",
-                        icon: {
-                            className: "glyphicon glyphicon-question-sign"
-                        },
-                        attributes: []
-                    };
-                    if (this.hasHelpText()) {
-                        button.url = "#help";
-                    } else {
-                        button.attributes.push({ key: 'disabled', value: 'disabled' });
-                        button.className += " disabled";
-                    }
-                    if (this.buttonType === "tableRow") {
-                        button.content = "";
-                    }
-                    return button;
-                },
-                htmlElement: function () {
-                    return this.$parent.createButtonElement(this.button);
+    var HelpButton = {
+        name: "helpButton",
+        template: "#helpButtonTemplate",
+        props: ["resultItem", "defaultButtonClass", "buttonType"],
+        computed: {
+            button: function () {
+                var button = {
+                    content: "@Html.Raw(UI.Help)",
+                    className: this.defaultButtonClass,
+                    url: null,
+                    title: "",
+                    icon: {
+                        className: "glyphicon glyphicon-question-sign"
+                    },
+                    attributes: []
+                };
+                if (this.hasHelpText()) {
+                    button.url = "#help";
+                } else {
+                    button.attributes.push({ key: 'disabled', value: 'disabled' });
+                    button.className += " disabled";
                 }
+                if (this.buttonType === "tableRow") {
+                    button.content = "";
+                }
+                return button;
             },
-            methods: {
-                hasHelpText: function () {
-                    return this.resultItem.SupplementalDescription !== null || this.resultItem.HelpUrl !== null;
-                }
+            htmlElement: function () {
+                return this.$parent.createButtonElement(this.button);
             }
-        };
-        return HelpButton;
-    }
+        },
+        methods: {
+            hasHelpText: function () {
+                return this.resultItem.SupplementalDescription !== null || this.resultItem.HelpUrl !== null;
+            }
+        }
+    };
 </script>

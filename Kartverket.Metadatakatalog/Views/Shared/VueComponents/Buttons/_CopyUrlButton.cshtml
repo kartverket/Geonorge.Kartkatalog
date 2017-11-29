@@ -4,46 +4,43 @@
 </script>
 
 <script>
-    function getCopyUrlButton(resultItem) {
-        var CopyUrlButton = {
-            name: "copyUrlButton",
-            template: "#copyUrlButtonTemplate",
-            props: ["resultItem", "defaultButtonClass", "buttonType"],
-            computed: {
-                button: function () {
-                    var button = {
-                        content: "@Html.Raw(UI.UrlToService)",
-                        className: this.defaultButtonClass,
-                        url: null,
-                        title: "@Html.Raw(UI.CopyToClipboard)",
-                        icon: {
-                            className: "fa fa-clipboard"
-                        },
-                        attributes: []
-                    };
-                    if (this.resultItem.GetCapabilitiesUrl) {
-                        button.className += " btn-copy";
-                        button.attributes = [
-                             { key: "data-clipboard-text", value: this.resultItem.GetCapabilitiesUrl }
-                        ]
-                    }
-                    else {
-                        button.attributes.push({ key: 'disabled', value: 'disabled' });
-                        button.className += " disabled";
-                    }
-
-
-                    if (this.buttonType === "tableRow") {
-                        button.content = "";
-                        button.className += " table-row-icon";
-                    }
-                    return button;
-                },
-                htmlElement: function () {
-                    return this.$parent.createButtonElement(this.button);
+    var CopyUrlButton = {
+        name: "copyUrlButton",
+        template: "#copyUrlButtonTemplate",
+        props: ["resultItem", "defaultButtonClass", "buttonType"],
+        computed: {
+            button: function () {
+                var button = {
+                    content: "@Html.Raw(UI.UrlToService)",
+                    className: this.defaultButtonClass,
+                    url: null,
+                    title: "@Html.Raw(UI.CopyToClipboard)",
+                    icon: {
+                        className: "fa fa-clipboard"
+                    },
+                    attributes: []
+                };
+                if (this.resultItem.GetCapabilitiesUrl) {
+                    button.className += " btn-copy";
+                    button.attributes = [
+                        { key: "data-clipboard-text", value: this.resultItem.GetCapabilitiesUrl }
+                    ]
                 }
+                else {
+                    button.attributes.push({ key: 'disabled', value: 'disabled' });
+                    button.className += " disabled";
+                }
+
+
+                if (this.buttonType === "tableRow") {
+                    button.content = "";
+                    button.className += " table-row-icon";
+                }
+                return button;
+            },
+            htmlElement: function () {
+                return this.$parent.createButtonElement(this.button);
             }
-        };
-        return CopyUrlButton;
-    }
+        }
+    };
 </script>
