@@ -66,6 +66,9 @@
             TitleSeo: makeSeoFriendlyString(item.Title),
             Type: item.Protocol,
 
+            SupplementalDescription: item.SupplementalDescription !== undefined ? item.SupplementalDescription : null,
+            HelpUrl: item.HelpUrl !== undefined ? item.HelpUrl : null,
+
             Uuid: item.Uuid
         }
     }
