@@ -294,8 +294,9 @@ namespace Kartverket.Metadatakatalog.Service
                         tmp.DistributionFormats = GetDistributionFormats(tmp.Uuid);
                         tmp.DistributionName = relData[5] ?? "";
                         tmp.DistributionUrl = relData[7] ?? "";
-
                         tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
+                        if (tmp.Type == "servicelayer")
+                            tmp.Protocol = tmp.Protocol + "-lag";
                         tmp.Organization = relData[4];
                         tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
 
@@ -426,7 +427,7 @@ namespace Kartverket.Metadatakatalog.Service
         private string ConvertType(string type, string parentIdentifier)
         {
             if (type == "service" && !IsNullOrEmpty(parentIdentifier))
-                SimpleMetadataUtil.ConvertHierarchyLevelToType("servicelayer");
+                type = "servicelayer";
             return type;
         }
 
