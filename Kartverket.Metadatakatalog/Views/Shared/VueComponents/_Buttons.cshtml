@@ -50,17 +50,17 @@
         template: "#buttonsTemplate",
         props: ["resultItem", "selectedButtons", "buttonType"],
         components: {
-            CopyUrlButton: getCopyUrlButton(this.resultItem),
-            ShowInMapButton: getShowInMapButton(this.resultItem),
-            AddToCartButton: getAddToCartButton(this.resultItem),
-            ShowCoverageButton: getShowCoverageButton(this.resultItem),
-            HelpButton: getHelpButton(this.resultItem),
-            ContactOwnerButton: getContactOwnerButton(this.resultItem),
-            ShowProductSheetButton: getShowProductSheetButton(this.resultItem),
-            ShowProductSpecificationButton: getShowProductSpecificationButton(this.resultItem),
-            ShowLegendDescriptionButton: getShowLegendDescriptionButton(this.resultItem),
-            ShowWebsiteButton: getShowWebsiteButton(this.resultItem),
-            ShowProductPageButton: getShowProductPageButton(this.resultItem)
+            CopyUrlButton: CopyUrlButton,
+            ShowInMapButton: ShowInMapButton,
+            AddToCartButton: AddToCartButton,
+            ShowCoverageButton: ShowCoverageButton,
+            HelpButton: HelpButton,
+            ContactOwnerButton: ContactOwnerButton,
+            ShowProductSheetButton: ShowProductSheetButton,
+            ShowProductSpecificationButton: ShowProductSpecificationButton,
+            ShowLegendDescriptionButton: ShowLegendDescriptionButton,
+            ShowWebsiteButton: ShowWebsiteButton,
+            ShowProductPageButton: ShowProductPageButton
         },
         computed: {
             defaultButtonClass: function () {

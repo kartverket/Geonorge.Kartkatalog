@@ -4,40 +4,37 @@
 </script>
 
 <script>
-    function getContactOwnerButton(resultItem) {
-        var ContactOwnerButton = {
-            name: "contactOwnerButton",
-            template: "#contactOwnerButtonTemplate",
-            props: ["resultItem", "defaultButtonClass", "buttonType"],
-            computed: {
-                button: function () {
-                    var button = {
-                        content: "@Html.Raw(UI.ContactDataOwner)",
-                        className: this.defaultButtonClass,
-                        url: this.resultItem.ContactOwner.Email !== undefined ? "mailto:" + this.resultItem.ContactOwner.Email : null,
-                        title: "@Html.Raw(UI.ContactDataOwner) for " + this.resultItem.Title,
-                        icon: {
-                            className: "fa fa-envelope"
-                        },
-                        attributes: [
-                            { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'kontaktdataeier')" },
-                            { key: "target", value: "_blank" }
-                        ]
-                    };
-                    if (button.url == null) {
-                        button.attributes.push({ key: 'disabled', value: 'disabled' });
-                        button.className += " disabled";
-                    }
-                    if (this.buttonType === "tableRow") {
-                        button.content = "";
-                    }
-                    return button;
-                },
-                htmlElement: function () {
-                    return this.$parent.createButtonElement(this.button);
+    var ContactOwnerButton = {
+        name: "contactOwnerButton",
+        template: "#contactOwnerButtonTemplate",
+        props: ["resultItem", "defaultButtonClass", "buttonType"],
+        computed: {
+            button: function () {
+                var button = {
+                    content: "@Html.Raw(UI.ContactDataOwner)",
+                    className: this.defaultButtonClass,
+                    url: this.resultItem.ContactOwner.Email !== undefined ? "mailto:" + this.resultItem.ContactOwner.Email : null,
+                    title: "@Html.Raw(UI.ContactDataOwner) for " + this.resultItem.Title,
+                    icon: {
+                        className: "fa fa-envelope"
+                    },
+                    attributes: [
+                        { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'kontaktdataeier')" },
+                        { key: "target", value: "_blank" }
+                    ]
+                };
+                if (button.url == null) {
+                    button.attributes.push({ key: 'disabled', value: 'disabled' });
+                    button.className += " disabled";
                 }
+                if (this.buttonType === "tableRow") {
+                    button.content = "";
+                }
+                return button;
+            },
+            htmlElement: function () {
+                return this.$parent.createButtonElement(this.button);
             }
-        };
-        return ContactOwnerButton;
-    }
+        }
+    };
 </script>

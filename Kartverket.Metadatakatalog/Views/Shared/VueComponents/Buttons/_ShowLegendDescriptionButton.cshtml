@@ -4,39 +4,36 @@
 </script>
 
 <script>
-    function getShowLegendDescriptionButton(resultItem) {
-        var ShowLegendDescriptionButton = {
-            name: "showLegendDescriptionButton",
-            template: "#showLegendDescriptionButtonTemplate",
-            props: ["resultItem", "defaultButtonClass", "buttonType"],
-            computed: {
-                button: function () {
-                    var button = {
-                        content: "@Html.Raw(UI.DisplayCartography)",
-                        className: this.defaultButtonClass,
-                        url: this.resultItem.LegendDescriptionUrl !== undefined ? this.resultItem.LegendDescriptionUrl : null,
-                        title: "@Html.Raw(UI.DisplayCartography) for " + this.resultItem.Title,
-                        icon: {
-                            className: "glyphicon glyphicon-picture"
-                        },
-                        attributes: [
-                            { key: "onClick", value: "ga('send', 'event', 'MerInfo', 'tegneregler')" }
-                        ]
-                    };
-                    if (button.url == null) {
-                        button.attributes.push({ key: 'disabled', value: 'disabled' });
-                        button.className += " disabled";
-                    }
-                    if (this.buttonType === "tableRow") {
-                        button.content = "";
-                    }
-                    return button;
-                },
-                htmlElement: function () {
-                    return this.$parent.createButtonElement(this.button);
+    var ShowLegendDescriptionButton = {
+        name: "showLegendDescriptionButton",
+        template: "#showLegendDescriptionButtonTemplate",
+        props: ["resultItem", "defaultButtonClass", "buttonType"],
+        computed: {
+            button: function () {
+                var button = {
+                    content: "@Html.Raw(UI.DisplayCartography)",
+                    className: this.defaultButtonClass,
+                    url: this.resultItem.LegendDescriptionUrl !== undefined ? this.resultItem.LegendDescriptionUrl : null,
+                    title: "@Html.Raw(UI.DisplayCartography) for " + this.resultItem.Title,
+                    icon: {
+                        className: "glyphicon glyphicon-picture"
+                    },
+                    attributes: [
+                        { key: "onClick", value: "ga('send', 'event', 'MerInfo', 'tegneregler')" }
+                    ]
+                };
+                if (button.url == null) {
+                    button.attributes.push({ key: 'disabled', value: 'disabled' });
+                    button.className += " disabled";
                 }
+                if (this.buttonType === "tableRow") {
+                    button.content = "";
+                }
+                return button;
+            },
+            htmlElement: function () {
+                return this.$parent.createButtonElement(this.button);
             }
-        };
-        return ShowLegendDescriptionButton;
-    }
+        }
+    };
 </script>

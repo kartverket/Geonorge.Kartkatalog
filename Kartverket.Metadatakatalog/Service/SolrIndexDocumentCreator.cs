@@ -296,7 +296,7 @@ namespace Kartverket.Metadatakatalog.Service
                     indexDoc.DistributionProtocol = distributionDetails.Protocol;
                     indexDoc.DistributionUrl = distributionDetails.URL;
                     indexDoc.DistributionName = distributionDetails.Name;
-                    if (!string.IsNullOrEmpty(indexDoc.DistributionName)) indexDoc.Type = "servicelayer";
+                    if (!string.IsNullOrEmpty(indexDoc.DistributionName) && indexDoc.Type == "service") indexDoc.Type = "servicelayer";
                 }
 
                 List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;
