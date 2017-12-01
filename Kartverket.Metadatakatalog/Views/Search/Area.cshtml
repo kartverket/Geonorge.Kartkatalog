@@ -38,11 +38,11 @@
                         {
                             if (Model.AreaCode == countie.Code)
                             {
-                        <option selected value="@countie.Code">@countie.Name</option>
+                                <option selected value="@countie.Code">@countie.Name</option>
                             }
                             else
                             {
-                        <option value="@countie.Code">@countie.Name</option>
+                                <option value="@countie.Code">@countie.Name</option>
                             }
                         }
                     </optgroup>
@@ -51,11 +51,11 @@
                         {
                             if (Model.AreaCode == municipal.Code)
                             {
-                        <option selected value="@municipal.Code">@municipal.Name</option>
+                                <option selected value="@municipal.Code">@municipal.Name</option>
                             }
                             else
                             {
-                        <option value="@municipal.Code">@municipal.Name</option>
+                                <option value="@municipal.Code">@municipal.Name</option>
                             }
                         }
                     </optgroup>
@@ -68,7 +68,7 @@
 @Html.Partial("_resultItemRow")
 @Html.Partial("_searchResult")
 
-@*<script type="text/x-template" id="searchResultTemplate">
+<script type="text/x-template" id="searchResultTemplate">
     <div>
         <div v-if="$root.viewType == 'tableView' && items.length" class="row resultItemRowTableHeader">
             <div class="col-sm-4" is="header-title"></div>
@@ -94,7 +94,7 @@
         </div>
         <div class="clearfix"></div>
     </div>
-</script>*@
+</script>
 
 @{
             string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("hva-finnes-i-kommunen-eller-fylket", "api/search");
@@ -140,12 +140,12 @@
 
 <span class="separator-small separator-gray margin-bottom-10"></span>
 
-<div class="row">
-    <div class="col-md-9">
+<div class="row resultItemTitleRow">
+
+    <div id="searchResultTable" class="col-md-9">   
         @if (Model.Result != null)
         {
-            @Html.Partial("_ThemeGroup", Model)
-
+            <div is="searchResult" v-bind:result-items="ResultItems"></div>
             <div class="margin-top-10">
                 @Html.Partial("_PaginationForArea", Model)
             </div>
@@ -174,40 +174,39 @@
         setMainSearchApiUrl('search?facets[0]name=area&facets[0]value=@Model.AreaCode');
 
         //Main vue model
-        @*var vueModel = new Vue({
+        var vueModel = new Vue({
             el: '#searchResultTable',
             data: {
-                ResultItems: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.Result.Items)))
-                //viewType: "tableView"
+                ResultItems: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.Result.Items))),
+                viewType: "tableView"
             },
             components: {
                 SearchResult: SearchResult,
                 ResultItem: ResultItemComponent
             },
             created: function() {
-                //this.viewType = this.getSelectedViewType();
+                this.viewType = this.getSelectedViewType();
             },
             methods: {
-                //view: function(type) {
-                //    this.viewType = type;
-                //    localStorage.setItem("layout", this.viewType);
-                //    if (type === "galleryView") {
-                //        this.tableBorder = "";
-                //    } else {
-                //        this.tableBorder = "table-border-bottom";
-                //    }}
-
-                //getSelectedViewType: function() {
-                //    var viewType = "tableView";
-                //    if (localStorage.getItem("layout")) {
-                //        viewType = localStorage.getItem("layout");
-                //        this.view(viewType);
-                //    }
-                //    return viewType;
-                //}
-            
+                view: function(type) {
+                    this.viewType = type;
+                    localStorage.setItem("layout", this.viewType);
+                    if (type === "galleryView") {
+                        this.tableBorder = "";
+                    } else {
+                        this.tableBorder = "table-border-bottom";
+                    }
+                },
+                getSelectedViewType: function() {
+                    var viewType = "tableView";
+                    if (localStorage.getItem("layout")) {
+                        viewType = localStorage.getItem("layout");
+                        this.view(viewType);
+                    }
+                    return viewType;
+                }
             }
-        });*@
+        });
     </script>
 
     <script>
@@ -229,22 +228,22 @@
             @if (Html.DownloadServiceEnabled())
             {
                 <text>
-                    if (localStorage.getItem("orderItems") != null) {
-                        var storedOrderItems = JSON.parse(localStorage["orderItems"]);
-                        var orderitemCount = storedOrderItems.length;
-                        if (orderitemCount > 0) {
-                            $('#orderitem-count').text(orderitemCount);
-                            $('#orderitem-count-text').text(' datasett');
-                            updateAllCartButtons(storedOrderItems);
-                        } else {
-                            $('#orderitem-count').text('');
-                            $('#orderitem-count-text').text('Kurven er tom');
-                        }
-                    } else {
-                        $('#orderitem-count').text('');
-                        $('#orderitem-count-text').text('Kurven er tom');
-                    }
-                </text>
+            if (localStorage.getItem("orderItems") != null) {
+                var storedOrderItems = JSON.parse(localStorage["orderItems"]);
+                var orderitemCount = storedOrderItems.length;
+                if (orderitemCount > 0) {
+                    $('#orderitem-count').text(orderitemCount);
+                    $('#orderitem-count-text').text(' datasett');
+                    updateAllCartButtons(storedOrderItems);
+                } else {
+                    $('#orderitem-count').text('');
+                    $('#orderitem-count-text').text('Kurven er tom');
+                }
+            } else {
+                $('#orderitem-count').text('');
+                $('#orderitem-count-text').text('Kurven er tom');
+            }
+            </text>
             }
         });
 
