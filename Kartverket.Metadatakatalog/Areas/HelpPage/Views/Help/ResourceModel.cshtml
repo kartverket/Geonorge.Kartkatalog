@@ -1,7 +1,11 @@
-@using System.Web.Http
+﻿@using System.Web.Http
 @using Kartverket.Metadatakatalog.Areas.HelpPage.ModelDescriptions
+﻿@using Kartverket.Metadatakatalog.Helpers
 @model ModelDescription
 @section breadcrumb {
+    <li><a href="@Html.GeonorgeUrl()for-utviklere/">For utviklere</a></li>
+    <li><a href="@Html.GeonorgeUrl()for-utviklere/APIer-og-grensesnitt/">APIer og grensesnitt</a></li>
+    <li><a href="@Html.GeonorgeUrl()for-utviklere/APIer-og-grensesnitt/apier-for-kartkatalogen/">API-er for kartkatalogen</a></li>
     <li>@Html.ActionLink("API hjelp", "Index")</li>
     <li>@Model.Name</li>
 }
