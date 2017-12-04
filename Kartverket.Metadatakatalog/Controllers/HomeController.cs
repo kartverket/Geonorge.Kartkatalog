@@ -27,9 +27,9 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             if (cookie != null)
             {
-                if (cookie.Domain != ".geonorge.no") { 
-                    Response.Cookies.Remove("_culture");
-                    cookie = null;
+                if (cookie.Domain != ".geonorge.no") {
+                    cookie.Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies.Add(cookie);
                 }
             }
 
