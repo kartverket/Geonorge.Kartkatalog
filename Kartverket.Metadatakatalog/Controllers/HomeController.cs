@@ -28,8 +28,10 @@ namespace Kartverket.Metadatakatalog.Controllers
             if (cookie != null)
             {
                 if (cookie.Domain != ".geonorge.no") {
-                    cookie.Expires = DateTime.Now.AddDays(-1);
-                    Response.Cookies.Add(cookie);
+                    HttpCookie oldCookie = new HttpCookie("_culture");
+                    oldCookie.Domain = cookie.Domain;
+                    oldCookie.Expires = DateTime.Now.AddDays(-1d);
+                    Response.Cookies.Add(oldCookie);
                 }
             }
 
