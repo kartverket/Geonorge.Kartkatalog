@@ -38,7 +38,7 @@
 @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
 <div id="typetabs" style="position:relative; top:-100px;left:-750px; width:900px;">
-    @{ int datasetCount = types.Where(d => d.Name == "dataset").FirstOrDefault().Count;
+    @{  int datasetCount = types.Where(d => d.Name == "dataset").FirstOrDefault().Count;
         int applicationCount = types.Where(d => d.Name == "software").FirstOrDefault().Count;
         int serviceCount = types.Where(d => d.Name == "service").FirstOrDefault().Count;
         int servicelayerCount = types.Where(d => d.Name == "servicelayer").FirstOrDefault().Count;
@@ -49,6 +49,7 @@
         var highligtDataset = "";
         var highligtService = "";
         var highligtApplication = "";
+        var highlightAll = "";
         if (typeSelected == "dataset") {
             highligtDataset = highlight;
         }
@@ -56,12 +57,16 @@
         {
             highligtService = highlight;
         }
-        if (typeSelected == "software")
+        else if (typeSelected == "software")
         {
             highligtApplication = highlight;
         }
-
+        else {
+            highlightAll = highlight;
+        }
+        int totalCount = datasetCount + applicationCount + serviceCount;
     }
+    <a style="@highlightAll" href="search?text=@txt">Alle</a> (@totalCount) , 
     <a style="@highligtDataset" href="search?text=@txt&Facets%5B0%5D.name=type&Facets%5B0%5D.value=dataset">@UI.Facet_type_dataset</a> (@datasetCount) ,  
     <a style="@highligtService" href="search?text=@txt&Facets%5B0%5D.name=type&Facets%5B0%5D.value=service&Facets%5B1%5D.name=type&Facets%5B1%5D.value=servicelayer">@UI.Facet_type_service</a> (@serviceCount) ,  
     <a style="@highligtApplication" href="search?text=@txt&Facets%5B0%5D.name=type&Facets%5B0%5D.value=software">@UI.Facet_type_software</a> (@applicationCount)
