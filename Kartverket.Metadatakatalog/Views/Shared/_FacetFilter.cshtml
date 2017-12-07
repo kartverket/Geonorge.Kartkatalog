@@ -38,10 +38,30 @@
 @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
 <div id="typetabs" style="position:relative; top:-100px;left:-750px; width:900px;">
-    @{  int datasetCount = types.Where(d => d.Name == "dataset").FirstOrDefault().Count;
-        int applicationCount = types.Where(d => d.Name == "software").FirstOrDefault().Count;
-        int serviceCount = types.Where(d => d.Name == "service").FirstOrDefault().Count;
-        int servicelayerCount = types.Where(d => d.Name == "servicelayer").FirstOrDefault().Count;
+    @{  int datasetCount = 0;
+        var datasetType = types.Where(d => d.Name == "dataset").FirstOrDefault();
+        if (datasetType != null) {
+            datasetCount = datasetType.Count;
+        }
+        int applicationCount = 0;
+        var softwareType =  types.Where(d => d.Name == "software").FirstOrDefault();
+        if (softwareType != null)
+        {
+            applicationCount = softwareType.Count;
+        }
+        int serviceCount = 0;
+        var serviceType = types.Where(d => d.Name == "service").FirstOrDefault();
+        if (serviceType != null)
+        {
+            serviceCount = serviceType.Count;
+        }
+
+        int servicelayerCount = 0;
+        var servicelayerType = types.Where(d => d.Name == "servicelayer").FirstOrDefault();
+        if (servicelayerType != null)
+        {
+            servicelayerCount = servicelayerType.Count;
+        }
         serviceCount = serviceCount + servicelayerCount;
         var txt = Request.QueryString["text"];
         var typeSelected = Request.QueryString["Facets[0].value"];
