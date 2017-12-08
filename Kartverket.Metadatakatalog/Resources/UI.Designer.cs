@@ -106,6 +106,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Alle kartdata.
+        /// </summary>
+        public static string AllMapData {
+            get {
+                return ResourceManager.GetString("AllMapData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allerede lagt i kurv.
         /// </summary>
         public static string AlreadyPutInBasket {

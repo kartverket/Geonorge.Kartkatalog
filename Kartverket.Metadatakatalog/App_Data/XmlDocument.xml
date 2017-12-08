@@ -1047,6 +1047,11 @@
               Looks up a localized string similar to Legg i kurv.
             </summary>
         </member>
+        <member name="P:Resources.UI.AllMapData">
+            <summary>
+              Looks up a localized string similar to Alle kartdata.
+            </summary>
+        </member>
         <member name="P:Resources.UI.AlreadyPutInBasket">
             <summary>
               Looks up a localized string similar to Allerede lagt i kurv.

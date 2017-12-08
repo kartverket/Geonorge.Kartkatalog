@@ -86,7 +86,7 @@
         }
         int totalCount = datasetCount + applicationCount + serviceCount;
     }
-    <a style="@highlightAll" href="search?text=@txt">Alle</a> (@totalCount) , 
+    <a style="@highlightAll" href="search?text=@txt">@UI.AllMapData</a> (@totalCount) , 
     <a style="@highligtDataset" href="search?text=@txt&Facets%5B0%5D.name=type&Facets%5B0%5D.value=dataset">@UI.Facet_type_dataset</a> (@datasetCount) ,  
     <a style="@highligtService" href="search?text=@txt&Facets%5B0%5D.name=type&Facets%5B0%5D.value=service&Facets%5B1%5D.name=type&Facets%5B1%5D.value=servicelayer">@UI.Facet_type_service</a> (@serviceCount) ,  
     <a style="@highligtApplication" href="search?text=@txt&Facets%5B0%5D.name=type&Facets%5B0%5D.value=software">@UI.Facet_type_software</a> (@applicationCount)
