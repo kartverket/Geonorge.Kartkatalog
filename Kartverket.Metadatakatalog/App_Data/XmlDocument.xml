@@ -1249,9 +1249,19 @@
               Looks up a localized string similar to Vis .
             </summary>
         </member>
+        <member name="P:Resources.UI.DisplayAllApplicationsFrom">
+            <summary>
+              Looks up a localized string similar to Vis alle kartløsninger fra.
+            </summary>
+        </member>
         <member name="P:Resources.UI.DisplayAllDatasetsFrom">
             <summary>
               Looks up a localized string similar to Vis alle datasett fra.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DisplayAllServicesFrom">
+            <summary>
+              Looks up a localized string similar to Vis alle tjenester fra.
             </summary>
         </member>
         <member name="P:Resources.UI.DisplayCartography">

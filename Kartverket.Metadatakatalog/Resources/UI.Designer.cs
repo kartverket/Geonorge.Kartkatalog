@@ -468,11 +468,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vis alle kartløsninger fra.
+        /// </summary>
+        public static string DisplayAllApplicationsFrom {
+            get {
+                return ResourceManager.GetString("DisplayAllApplicationsFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vis alle datasett fra.
         /// </summary>
         public static string DisplayAllDatasetsFrom {
             get {
                 return ResourceManager.GetString("DisplayAllDatasetsFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis alle tjenester fra.
+        /// </summary>
+        public static string DisplayAllServicesFrom {
+            get {
+                return ResourceManager.GetString("DisplayAllServicesFrom", resourceCulture);
             }
         }
         
