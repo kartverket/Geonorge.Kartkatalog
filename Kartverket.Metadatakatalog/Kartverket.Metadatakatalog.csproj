@@ -17,9 +17,12 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44311</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
@@ -1219,6 +1222,7 @@
     <Content Include="Views\Shared\_PaginationForOrganization.cshtml" />
     <Content Include="Views\Shared\_Resources.cshtml" />
     <Content Include="settings.config" />
+    <Content Include="Views\Shared\VueComponents\_FilterTab.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="KartverketSharedMenu\Bundles\" />

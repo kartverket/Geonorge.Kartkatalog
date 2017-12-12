@@ -1,0 +1,26 @@
+﻿<script type="text/x-template" id="filter-tab-template">
+    <li class="tab">
+        <a v-on:click="$parent.toggleFilterTabs(filter.FacetResults)">
+            {{ filter.name }}
+            <span class="badge counter-badge">({{ filter.count }})</span>
+        </a>
+    
+    @*
+        <div v-bind:class="{'selected': facetResult.isSelected, 'is-empty': facetResult.Count == 0}" v-for="facetResult in FacetResults">
+            <div class="facet-checkbox  facet-link">
+                <span v-on:click="$root.toggleFilter(FacetField, facetResult)"
+                      data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
+                </span>
+                {{ facetResult.FacetName }} <span class="text-muted">({{ facetResult.Count }})</span>
+            </div>
+        </div>*@
+</li>
+</script>
+
+<script>
+    var FilterTab = {
+        name: 'FilterTab',
+        template: "#filter-tab-template",
+        props: ['filter']
+    };
+</script>
