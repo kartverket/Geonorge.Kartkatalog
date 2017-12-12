@@ -19,23 +19,23 @@
 
 @* Sett url og fiks linjeskift i data for themes *@
 @helper BuildMenu(List<Theme> data, int? parentId = null)
-{
-
-    foreach (var theme in data)
     {
-        theme.Name = theme.NameTranslated(); 
-        theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
-        theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
-    }
 
-    var items = data.Where(d => d.ParentId == parentId);
-    if (items.Any())
-    {
-        foreach (var item in items)
+        foreach (var theme in data)
         {
-            @BuildMenu(data, item.Id)
-    }
-}
+            theme.Name = theme.NameTranslated();
+            theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+            theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+        }
+
+        var items = data.Where(d => d.ParentId == parentId);
+        if (items.Any())
+        {
+            foreach (var item in items)
+            {
+                @BuildMenu(data, item.Id)
+            }
+        }
 }
 
 @BuildMenu(themes, null)
@@ -55,17 +55,18 @@
 
 
 @* Tabellen *@
-<div id="themesVueList">
-    <div class="row resultItemRowTableHeader">
-        <div class="col-sm-5" is="header-title"></div>
-        <div class="col-sm-4" is="header-organization"></div>
-        <div class="col-sm-1" is="header-open-data"></div>
-        <div class="col-sm-1" is="header-Map"></div>
-        <div class="col-sm-1" is="header-Add-to-cart"></div>
-    </div>
+<script type="text/x-template" id="theme-group-template">
+    <div>
+        <div class="row resultItemRowTableHeader">
+            <div class="col-sm-5" is="header-title"></div>
+            <div class="col-sm-4" is="header-organization"></div>
+            <div class="col-sm-1" is="header-open-data"></div>
+            <div class="col-sm-1" is="header-Map"></div>
+            <div class="col-sm-1" is="header-Add-to-cart"></div>
+        </div>
 
-    <div class="menu-separator search-results-table-heading"></div>
-    <div v-for="resultItem in searchResults">
+        <div class="menu-separator search-results-table-heading"></div>
+        <div v-for="resultItem in searchResults">
             <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes">
                 <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="-1"></div>
             </div>
@@ -79,12 +80,11 @@
                  v-bind:selected-buttons="[
                  'showInMapButton',
                  'addToCartButton'
-                 ]"
-             >
+                 ]">
             </div>
         </div>
     </div>
-
+</script>
 @* Metadata template *@
 <script type="text/x-template" id="metadata-item-template">
     <div>
@@ -95,11 +95,10 @@
                  {name: 'owner', size: '4'},
                  {name: 'openData', size: '1'}
                  ]"
-                 v-bind:selected-buttons="[
+             v-bind:selected-buttons="[
                  'showInMapButton',
                  'addToCartButton'
-                 ]"
-             >
+                 ]">
         </div>
     </div>
 </script>
@@ -107,7 +106,6 @@
 @* Tema template *@
 <script type="text/x-template" id="theme-item-template">
     <div>
-
         @* Tema *@
         <div class="table-border-bottom">
             <div class="resultItemRow" v-bind:style="'padding-left: ' + (18 * hierarchyLevel) + 'px;'">
@@ -185,13 +183,16 @@
         }
     };
 
-    var themesVueModel = new Vue({
-        el: "#themesVueList",
-        data: {
-            viewType: 'tableView',
-            searchResults: searchResults,
-            metadatasWithThemes: metadatasWithThemes,
-            addedTopLevelThemeIds: []
+    var ThemeGroup = {
+        template: "#theme-group-template",
+        name: "ThemeGroup",
+        data: function () {
+            return {
+                viewType: 'tableView',
+                searchResults: searchResults,
+                metadatasWithThemes: metadatasWithThemes,
+                addedTopLevelThemeIds: []
+            }
         },
         created: function () {
             this.searchResults.forEach(function(searchResultItem, index){
@@ -230,7 +231,7 @@
             },
             rootTopLevelThemeIsAllreadyAdded: function(topLevelTheme) {
                 var topLevelThemeIsAllreadyAdded = false;
-                this.$root.addedTopLevelThemeIds.forEach(function(addedTopLevelThemeId){
+                this.addedTopLevelThemeIds.forEach(function(addedTopLevelThemeId){
                     if (addedTopLevelThemeId == topLevelTheme.Id){
                         topLevelThemeIsAllreadyAdded = true;
                     }
@@ -242,7 +243,7 @@
                 if (theme.ParentId == null){
                     if (!this.rootTopLevelThemeIsAllreadyAdded(theme)){
                         topLevelTheme = theme;
-                        this.$root.addedTopLevelThemeIds.push(theme.Id);
+                        this.addedTopLevelThemeIds.push(theme.Id);
                     }
                 }else{
                     var childIsAdded = false;
@@ -271,7 +272,7 @@
             HeaderMap: HeaderMap,
             HeaderUrl: HeaderUrl
         }
-    });
+    };
 </script>
 
 

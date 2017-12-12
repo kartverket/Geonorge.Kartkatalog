@@ -70,13 +70,19 @@
 </div>
 
 <span class="separator-small separator-gray margin-bottom-10"></span>
+@Html.Partial("_ThemeGroup", Model)
+@Html.Partial("_FacetFilter", Model)
 
-<div class="row">
+<div id="vue-container" class="row">
 
     <div class="col-md-9">
+        <div is="facet-filter" filter-type="tabs" class="facet-filter"></div>
         @if (Model.Result != null)
         {
-            @Html.Partial("_ThemeGroup", Model)
+
+            <div id="vue-container">
+                <div is="theme-group"></div>
+            </div>
 
         }
         <div class="margin-top-10">
@@ -84,14 +90,31 @@
         </div>
     </div>
 
+
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
         <aside class="facet-filter-container">
             <h3 class="">@Resources.UI.FilterSearch:</h3>
             <span class="separator-small"></span>
-            @Html.Partial("_FacetFilter", Model)
+            <div is="facet-filter" filter-type="sidebar" class="facet-filter"></div>
             <h3 class="" style="padding-top: 40px;">@Resources.UI.Pages</h3>
             <span class="separator-small"></span>
             @Html.Partial("_FilterPages")
+
         </aside>
     </div>
+
 </div>
+
+
+<script>
+    var Search = new Vue({
+        el: "#vue-container",
+        components: {
+            ThemeGroup: ThemeGroup,
+            FacetFilter: FacetFilter
+        },
+        data: {
+            viewType: 'tableView'
+        }
+    });
+</script>
