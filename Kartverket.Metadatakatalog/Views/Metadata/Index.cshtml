@@ -527,7 +527,7 @@ if (keywords != null && keywords.Any())
                 model: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
             },
             components: {
-                ResultItem: ResultItemComponent,
+                ResultItem: ResultItem,
             },
             created: function() {
                 $.ajax({

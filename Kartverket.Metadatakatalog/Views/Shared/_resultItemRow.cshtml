@@ -15,9 +15,8 @@
 @Html.Partial("VueComponents/ResultItem/_Thumbnail")
 
 
-<script type="text/x-template" id="resultItemRow">
+<script type="text/x-template" id="result-item-template">
     <div>
-
         @* *** TABELL *** *@
         <div v-if="$root.viewType == 'tableView'" class="resultItemRow table-border-bottom">
             <div class="result-item-row-content">
@@ -61,8 +60,8 @@
 
 <script>
     //Component
-    var ResultItemComponent = {
-        template: "#resultItemRow",
+    var ResultItem = {
+        template: "#result-item-template",
         name: "resultItem",
         props: ["resultItem", "selectedFields", "selectedButtons"],
         data: function () {

@@ -66,12 +66,12 @@
 
     <div class="menu-separator search-results-table-heading"></div>
     <div v-for="resultItem in searchResults">
-        <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes">
-            <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="-1"></div>
-        </div>
-        <div is="resultItem" 
-             v-bind:result-item="resultItem"
-             v-bind:selected-fields="[
+            <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes">
+                <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="-1"></div>
+            </div>
+            <div is="result-item"
+                 v-bind:result-item="resultItem"
+                 v-bind:selected-fields="[
                  {name: 'title', size: '5'},
                  {name: 'owner', size: '4'},
                  {name: 'openData', size: '1'}
@@ -81,14 +81,14 @@
                  'addToCartButton'
                  ]"
              >
+            </div>
         </div>
     </div>
-</div>
 
 @* Metadata template *@
 <script type="text/x-template" id="metadata-item-template">
     <div>
-        <div is="resultItem" 
+        <div is="result-item"
              v-bind:result-item="apiData"
              v-bind:selected-fields="[
                  {name: 'title', size: '5'},
@@ -158,7 +158,7 @@
             }.bind(this));
         },
         components: {
-            ResultItem: ResultItemComponent,
+            ResultItem: ResultItem,
             SearchResult: SearchResult,
         }
     };
@@ -260,8 +260,8 @@
             }
         },
         components: {
-            themeItem: ThemeItem,
-            ResultItem: ResultItemComponent,
+            ThemeItem: ThemeItem,
+            ResultItem: ResultItem,
             HeaderTitle: HeaderTitle,
             HeaderType: HeaderType,
             HeaderOrganization: HeaderOrganization,
