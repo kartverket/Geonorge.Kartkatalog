@@ -541,7 +541,7 @@ namespace Kartverket.Metadatakatalog.Service
                 ReferenceSystem = Convert(simpleMetadata.ReferenceSystem),
                 ResolutionScale = simpleMetadata.ResolutionScale,
                 SpatialRepresentation = Register.GetSpatialRepresentation(simpleMetadata.SpatialRepresentation),
-                SpecificUsage = simpleMetadata.SpecificUsage,
+                SpecificUsage = GetTranslation(simpleMetadata.SpecificUsage, simpleMetadata.EnglishSpecificUsage),
                 SupplementalDescription = GetTranslation(simpleMetadata.SupplementalDescription, simpleMetadata.EnglishSupplementalDescription),
                 HelpUrl = simpleMetadata.HelpUrl,
                 Thumbnails = Convert(simpleMetadata.Thumbnails, simpleMetadata.Uuid),

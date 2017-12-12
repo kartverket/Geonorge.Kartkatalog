@@ -705,4 +705,10 @@
   <data name="DisplayAllServicesFrom" xml:space="preserve">
     <value>Display all services from</value>
   </data>
+  <data name="ParentIdentifier" xml:space="preserve">
+    <value>Parent identifier</value>
+  </data>
+  <data name="SpecificUsage" xml:space="preserve">
+    <value>Specific usage</value>
+  </data>
 </root>

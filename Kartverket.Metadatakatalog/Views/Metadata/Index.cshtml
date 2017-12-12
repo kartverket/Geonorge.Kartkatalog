@@ -112,7 +112,7 @@ if (contact != null)
 
                 @if (!string.IsNullOrWhiteSpace(Model.ParentIdentifier))
             {
-                    <h3>Overordnede data</h3>
+                    <h3>@UI.ParentIdentifier</h3>
                     <script>getMetadata('@Model.ParentIdentifier');</script>
                     <a id="related-@Model.ParentIdentifier" href="/metadata/org/title/@Model.ParentIdentifier" title="Overordnede metadata for @Model.Title">
                     </a>
@@ -120,7 +120,7 @@ if (contact != null)
 
                 @if (!string.IsNullOrWhiteSpace(Model.SpecificUsage))
             {
-                    <h2>Bruksområde</h2>
+                    <h2>@UI.SpecificUsage</h2>
                     <p>@Model.SpecificUsage</p>
                 }
 

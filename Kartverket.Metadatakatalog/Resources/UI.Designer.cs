@@ -1275,6 +1275,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overordnede data.
+        /// </summary>
+        public static string ParentIdentifier {
+            get {
+                return ResourceManager.GetString("ParentIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tilkyttet tema.
         /// </summary>
         public static string ParentTheme {
@@ -1641,6 +1650,15 @@ namespace Resources {
         public static string SpatialRepresentation {
             get {
                 return ResourceManager.GetString("SpatialRepresentation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bruksområde.
+        /// </summary>
+        public static string SpecificUsage {
+            get {
+                return ResourceManager.GetString("SpecificUsage", resourceCulture);
             }
         }
         

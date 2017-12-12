@@ -1700,6 +1700,11 @@
               Looks up a localized string similar to Sider.
             </summary>
         </member>
+        <member name="P:Resources.UI.ParentIdentifier">
+            <summary>
+              Looks up a localized string similar to Overordnede data.
+            </summary>
+        </member>
         <member name="P:Resources.UI.ParentTheme">
             <summary>
               Looks up a localized string similar to Tilkyttet tema.
@@ -1904,6 +1909,11 @@
         <member name="P:Resources.UI.SpatialRepresentation">
             <summary>
               Looks up a localized string similar to Representasjonsform.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SpecificUsage">
+            <summary>
+              Looks up a localized string similar to Bruksområde.
             </summary>
         </member>
         <member name="P:Resources.UI.TheBasket">
