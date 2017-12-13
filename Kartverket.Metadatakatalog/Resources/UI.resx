@@ -696,4 +696,19 @@
     <value>&lt;p&gt;Feilen er logget og vil sjekkes av systemansvarlig.&lt;/p&gt;
 &lt;p&gt;Du kan også rapportere feilen til &lt;a mailto:"post@norgedigitalt.no"&gt;post@norgedigitalt.no&lt;/a&gt;.&lt;/p&gt;</value>
   </data>
+  <data name="AllMapData" xml:space="preserve">
+    <value>Alle kartdata</value>
+  </data>
+  <data name="DisplayAllApplicationsFrom" xml:space="preserve">
+    <value>Vis alle kartløsninger fra</value>
+  </data>
+  <data name="DisplayAllServicesFrom" xml:space="preserve">
+    <value>Vis alle tjenester fra</value>
+  </data>
+  <data name="ParentIdentifier" xml:space="preserve">
+    <value>Overordnede data</value>
+  </data>
+  <data name="SpecificUsage" xml:space="preserve">
+    <value>Bruksområde</value>
+  </data>
 </root>

@@ -106,6 +106,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Alle kartdata.
+        /// </summary>
+        public static string AllMapData {
+            get {
+                return ResourceManager.GetString("AllMapData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allerede lagt i kurv.
         /// </summary>
         public static string AlreadyPutInBasket {
@@ -468,11 +477,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vis alle kartløsninger fra.
+        /// </summary>
+        public static string DisplayAllApplicationsFrom {
+            get {
+                return ResourceManager.GetString("DisplayAllApplicationsFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vis alle datasett fra.
         /// </summary>
         public static string DisplayAllDatasetsFrom {
             get {
                 return ResourceManager.GetString("DisplayAllDatasetsFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis alle tjenester fra.
+        /// </summary>
+        public static string DisplayAllServicesFrom {
+            get {
+                return ResourceManager.GetString("DisplayAllServicesFrom", resourceCulture);
             }
         }
         
@@ -1248,6 +1275,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overordnede data.
+        /// </summary>
+        public static string ParentIdentifier {
+            get {
+                return ResourceManager.GetString("ParentIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tilkyttet tema.
         /// </summary>
         public static string ParentTheme {
@@ -1614,6 +1650,15 @@ namespace Resources {
         public static string SpatialRepresentation {
             get {
                 return ResourceManager.GetString("SpatialRepresentation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bruksområde.
+        /// </summary>
+        public static string SpecificUsage {
+            get {
+                return ResourceManager.GetString("SpecificUsage", resourceCulture);
             }
         }
         

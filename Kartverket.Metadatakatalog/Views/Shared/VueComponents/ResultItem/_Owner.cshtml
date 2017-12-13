@@ -1,13 +1,31 @@
 ﻿@using Resources
+@{
+    var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    var searchText = Request.QueryString["text"];
+}
 <script type="text/x-template" id="ownerContentTemplate">
     <div>
         <a v-if="$root.viewType == 'listView'" v-bind:href="'/etatvis-oversikt/' + this.metadata.OrganizationSeoName" class="show-loading-animation" data-loading-message="Henter innhold">
             <img v-bind:src="metadata.OrganizationLogoUrl" class="img-responsive center-block" v-bind:alt="metadata.Organization" v-bind:title="'@UI.DisplayAllDatasetsFrom ' + metadata.Organization" />
         </a>
-
-        <a v-else v-bind:href="'/etatvis-oversikt/' + this.metadata.OrganizationSeoName" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="'@UI.DisplayAllDatasetsFrom ' + metadata.Organization">
-            {{metadata.Organization}}
-        </a>
+        @if (controllerName == "Application")
+        {
+            <a v-else v-bind:href="'?text=@searchText&Facets%5B0%5D.name=organization&Facets%5B0%5D.value=' + this.metadata.Organization" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="'@Html.Raw(UI.DisplayAllApplicationsFrom) ' + metadata.Organization">
+                {{metadata.Organization}}
+            </a>
+        }
+        else if (controllerName == "ServiceDirectory")
+        {
+            <a v-else v-bind:href="'?text=@searchText&Facets%5B0%5D.name=organization&Facets%5B0%5D.value=' + this.metadata.Organization" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="'@UI.DisplayAllServicesFrom ' + metadata.Organization">
+                {{metadata.Organization}}
+            </a>
+        }
+        else
+        {
+            <a v-else v-bind:href="'/etatvis-oversikt/' + this.metadata.OrganizationSeoName" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="'@UI.DisplayAllDatasetsFrom ' + metadata.Organization">
+                {{metadata.Organization}}
+            </a>
+        }
     </div>
 </script>
 

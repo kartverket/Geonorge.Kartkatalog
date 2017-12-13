@@ -11,9 +11,9 @@ namespace Kartverket.Metadatakatalog.Controllers
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly ISearchService _searchService;
+        private readonly ISearchServiceAll _searchService;
 
-        public SearchController(ISearchService searchService)
+        public SearchController(ISearchServiceAll searchService)
         {
             _searchService = searchService;
         }

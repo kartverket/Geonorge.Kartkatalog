@@ -112,7 +112,7 @@ if (contact != null)
 
                 @if (!string.IsNullOrWhiteSpace(Model.ParentIdentifier))
             {
-                    <h3>Overordnede data</h3>
+                    <h3>@UI.ParentIdentifier</h3>
                     <script>getMetadata('@Model.ParentIdentifier');</script>
                     <a id="related-@Model.ParentIdentifier" href="/metadata/org/title/@Model.ParentIdentifier" title="Overordnede metadata for @Model.Title">
                     </a>
@@ -120,7 +120,7 @@ if (contact != null)
 
                 @if (!string.IsNullOrWhiteSpace(Model.SpecificUsage))
             {
-                    <h2>Bruksområde</h2>
+                    <h2>@UI.SpecificUsage</h2>
                     <p>@Model.SpecificUsage</p>
                 }
 
@@ -446,7 +446,7 @@ if (contact != null)
 @* Last ned XML og rediger metadata knapper*@
 <div class="row">
     <div class="col-md-12">
-        <div>
+        <div class="pull-right">
             <a href="@Model.MetadataXmlUrl" class="btn show-loading-animation" data-loading-message="Henter XML data"><span class="glyphicon glyphicon-file"></span> @UI.Download metadata XML</a>
             <a href="@Model.MetadataEditUrl" class="btn show-loading-animation" data-loading-message="Henter metadata"><span class="glyphicon glyphicon-pencil"></span> @UI.Edit metadata</a>
         </div>

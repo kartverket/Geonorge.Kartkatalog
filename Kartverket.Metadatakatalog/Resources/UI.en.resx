@@ -696,4 +696,19 @@
     <value>&lt;p&gt;The error is logged and will be checked by the system administrator.&lt;/p&gt;
 &lt;p&gt;You can also report the error to &lt;a mailto:"post@norgedigitalt.no"&gt;post@norgedigitalt.no &lt;/a&gt;. &lt;/p&gt;</value>
   </data>
+  <data name="AllMapData" xml:space="preserve">
+    <value>All map data</value>
+  </data>
+  <data name="DisplayAllApplicationsFrom" xml:space="preserve">
+    <value>Display all applications from</value>
+  </data>
+  <data name="DisplayAllServicesFrom" xml:space="preserve">
+    <value>Display all services from</value>
+  </data>
+  <data name="ParentIdentifier" xml:space="preserve">
+    <value>Parent identifier</value>
+  </data>
+  <data name="SpecificUsage" xml:space="preserve">
+    <value>Specific usage</value>
+  </data>
 </root>
