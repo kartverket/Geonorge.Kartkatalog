@@ -5,6 +5,7 @@
 
 @{
     ViewBag.Title = UI.Facet_theme + " - " + Model.NameTranslated();
+    Model.Metadata = Model.SortMetadata(Model);
 }
 
 @section breadcrumb {
@@ -239,25 +240,22 @@ foreach (var item in theme.Children)
             methods: {
                 getApiData: function () {
                     this.items.forEach(function (metadata, index) {
-                        $.getJSON('/api/metadata/' + metadata.Uuid,
+                        $.ajax({
+                            type: "GET",
+                            url: '/api/metadata/' + metadata.Uuid,
+                            async: false,
+                            success :
                             function (result) {
                                 if (result.length != 0) {
                                     this.metadataArray.push(result);
-                                    this.metadataArray.sort(compareTitle);
+                                    console.log(this.metadataArray);
                                 }
-                            }.bind(this));
+                            }.bind(this)
+                        });
                     }.bind(this));
 
                 }
             }
         })
-
-        function compareTitle(a,b) {
-            if (a.Title < b.Title)
-                return -1;
-            if (a.Title > b.Title)
-                return 1;
-            return 0;
-        }
     </script>
 }

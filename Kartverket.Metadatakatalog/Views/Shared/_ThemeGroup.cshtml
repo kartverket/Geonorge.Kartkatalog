@@ -19,35 +19,44 @@
 
 @* Sett url og fiks linjeskift i data for themes *@
 @helper BuildMenu(List<Theme> data, int? parentId = null)
+{
+
+foreach (var theme in data)
+{
+    theme.Name = theme.NameTranslated();
+    theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+    theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+}
+
+var items = data.Where(d => d.ParentId == parentId);
+if (items.Any())
+{
+    foreach (var item in items)
     {
-
-        foreach (var theme in data)
-        {
-            theme.Name = theme.NameTranslated();
-            theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
-            theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+            @BuildMenu(data, item.Id)
         }
-
-        var items = data.Where(d => d.ParentId == parentId);
-        if (items.Any())
-        {
-            foreach (var item in items)
-            {
-                @BuildMenu(data, item.Id)
-            }
-        }
+    }
 }
 
 @BuildMenu(themes, null)
 
 @{
-
-    var metadatasWithThemes = JsonConvert.SerializeObject(metadataWithThemesList,
-        Formatting.None,
-        new JsonSerializerSettings()
+    var metadataWithThemesListSorted = metadataWithThemesList.ToList();
+    for (int m = 0; m < metadataWithThemesListSorted.Count; m++)
+    {
+        for (int t = 0;t < metadataWithThemesListSorted[m].Themes.Count; t++)
         {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        });
+            metadataWithThemesListSorted[m].Themes[t].Metadata = metadataWithThemesListSorted[m].Themes[t].SortMetadata(metadataWithThemesListSorted[m].Themes[t]);
+        }
+    }
+    var metadatasWithThemes = JsonConvert.SerializeObject(metadataWithThemesListSorted,
+Formatting.None,
+new JsonSerializerSettings()
+{
+    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+    //ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+    //PreserveReferencesHandling = PreserveReferencesHandling.Objects
+});
 }
 
 @Html.Partial("_resultItemRow")
@@ -163,6 +172,7 @@
 
     var searchResults = @Html.Raw(JsonConvert.SerializeObject(Model.Result.Items));
     var metadatasWithThemes = @Html.Raw(metadatasWithThemes);
+    console.log(metadatasWithThemes);
 
     var ThemeItem = {
         name: 'themeItem',
@@ -217,7 +227,7 @@
                 this.metadatasWithThemes.forEach(function(metadataWithThemes){
                     if (searchResultItem.Uuid == metadataWithThemes.Uuid){
                         metadataWithThemes.Themes.forEach(function(theme){
-                            theme.Metadata.push(searchResultItem);
+                            theme.Metadata.splice(metadataWithThemes.Sorting, 0, searchResultItem);
                             var topLevelTheme = this.getTopLevelTheme(theme);
                             if (topLevelTheme !== null){
                                 if (!this.localTopLevelThemeAllreadyAdded(topLevelThemes, topLevelTheme)){
