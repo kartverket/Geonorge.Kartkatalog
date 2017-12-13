@@ -57,11 +57,7 @@
         <div is="facet-filter" filter-type="tabs" class="facet-filter"></div>
         @if (Model.Result != null)
         {
-
-            <div id="vue-container">
-                <div is="theme-group"></div>
-            </div>
-
+            <div is="theme-group"></div>
         }
         <div class="margin-top-10">
             @Html.Partial("_Pagination", Model)
