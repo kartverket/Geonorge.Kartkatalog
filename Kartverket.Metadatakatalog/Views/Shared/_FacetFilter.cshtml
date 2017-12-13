@@ -598,23 +598,27 @@
 
         this.filterTabs.filters = [
             {
-                name: '@UI.AllMapData',
-                FacetResults: this.filterTabs.FacetResults,
+                FacetName: '@UI.AllMapData',
+                name: 'all',
+                FacetResults: [],
                 count: @totalCount
             },
             {
-                name: '@UI.Facet_type_dataset',
+                FacetName: '@UI.Facet_type_dataset',
+                name: 'dataset',
                 FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['dataset']),
                 count: @datasetCount
             },
             {
-                name: '@UI.Facet_type_service',
+                FacetName: '@UI.Facet_type_service',
+                name: 'serviceAndServicelayer',
                 FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['service', 'servicelayer']),
                 count: @serviceCount
             },
             {
-                name: '@UI.Facet_type_software',
-                FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['application']),
+                FacetName: '@UI.Facet_type_software',
+                name: 'software',
+                FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['software']),
                 count: @applicationCount
             }
         ];
@@ -653,13 +657,23 @@
             },
             hasSelected: function(facetResults) {
                 var hasSelected = false;
-                facetResults.forEach(function(facetResult) {
+                facetResults.forEach(function (facetResult) {
                     if (facetResult.isSelected) {
                         hasSelected = true;
                         return;
                     }
-                })
+                });
                 return hasSelected;
+            },
+            facetsWithSpesificNameIsSelected: function (name) {
+                var facetsWithSpesificNameIsSelected = false;
+                this.selectedFacets.forEach(function (selectedFacet) {
+                    if (selectedFacet.name == name) {
+                        facetsWithSpesificNameIsSelected = true;
+                        return;
+                    }
+                });
+                return facetsWithSpesificNameIsSelected;
             },
             getAllUrlParameters: function() {
                 var url = location.search;
