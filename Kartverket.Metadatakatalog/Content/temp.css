@@ -107,3 +107,9 @@
     color: #FFF;
 }
 
+
+
+/* 'Save as' select */
+.save-as-menu .save-as-dropdown .custom-select {
+    width: 185px;
+}
