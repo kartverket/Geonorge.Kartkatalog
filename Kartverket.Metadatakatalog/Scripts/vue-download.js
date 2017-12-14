@@ -872,6 +872,7 @@ var mainVueModel = new Vue({
         orderLines: [],
         email: "",
         orderRequests: {},
+        orderRequestsAdditionalInfo: {},
         orderResponse: {},
         emailRequired: false,
 
@@ -905,16 +906,31 @@ var mainVueModel = new Vue({
                 this.orderResponse.forEach(function (distribution) {
                     var orderResponseGroup = {
                         distributionUrl: distribution.distributionUrl,
-                        files: {}
+                        datasets: {},
+                        additionalInfo: null,
+                        orderBundleUrl: null
                     }
-                    distribution.data.files.forEach(function (file) {
-                        if (orderResponseGroup.files[file.metadataName] == undefined) {
-                            orderResponseGroup.files[file.metadataName] = [];
+                    distribution.data._links.forEach(function (link) {
+                        if (link.rel == 'http://rel.geonorge.no/download/order/bundle') {
+                            orderResponseGroup.orderBundleUrl = link.href;
+                            return;
                         }
-                        orderResponseGroup.files[file.metadataName].push(file);
                     });
+                    distribution.data.files.forEach(function (file) {
+                        if (orderResponseGroup.datasets[file.metadataName] == undefined) {
+                            orderResponseGroup.datasets[file.metadataName] = {
+                                files: [],
+                            };
+                        }
+                        orderResponseGroup.datasets[file.metadataName].files.push(file);
+
+                        if (orderResponseGroup.additionalInfo == null) {
+                            orderResponseGroup.additionalInfo = this.getOrderRequestAdditionalInfo(distribution.distributionUrl, file.metadataUuid);
+                        }
+
+                    }.bind(this));
                     orderResponseGrouped.push(orderResponseGroup);
-                })
+                }.bind(this))
             }
             return orderResponseGrouped;
         }
@@ -1542,6 +1558,7 @@ var mainVueModel = new Vue({
         },
         updateOrderRequests: function () {
             var orderRequests = {};
+            var orderRequestsAdditionalInfo = {};
             if (this.orderLines.length) {
                 this.orderLines.forEach(function (orderLine) {
                     if (orderLine.metadata !== undefined) {
@@ -1621,10 +1638,27 @@ var mainVueModel = new Vue({
                         }
 
                         orderRequests[orderLine.metadata.orderDistributionUrl].orderLines.push(orderRequest);
+
+                        if (orderRequestsAdditionalInfo[orderLine.metadata.orderDistributionUrl] == undefined) {
+                            orderRequestsAdditionalInfo[orderLine.metadata.orderDistributionUrl] = {};
+                        }
+                        if (orderRequestsAdditionalInfo[orderLine.metadata.orderDistributionUrl][orderLine.metadata.uuid] == undefined) {
+                            orderRequestsAdditionalInfo[orderLine.metadata.orderDistributionUrl][orderLine.metadata.uuid] = {};
+                        }
+                        orderRequestsAdditionalInfo[orderLine.metadata.orderDistributionUrl][orderLine.metadata.uuid] = {
+                            "distributedBy": orderLine.capabilities.distributedBy,
+                            "supportsDownloadBundling": orderLine.capabilities.supportsDownloadBundling
+                        }
+
+
                     }
                 }.bind(this));
             }
             this.orderRequests = orderRequests;
+            this.orderRequestsAdditionalInfo = orderRequestsAdditionalInfo;
+        },
+        getOrderRequestAdditionalInfo: function (distributionUrl, metadataUuid) {
+            return this.orderRequestsAdditionalInfo[distributionUrl] != undefined && this.orderRequestsAdditionalInfo[distributionUrl][metadataUuid] != undefined ? this.orderRequestsAdditionalInfo[distributionUrl][metadataUuid] : {};
         },
         sendRequests: function () {
             this.updateEmailForOrderRequests();
@@ -1668,6 +1702,24 @@ var mainVueModel = new Vue({
                 this.removeSelectedMasterOrderLineValuesFromLocalStorage();
             }
             this.orderResponse = responseData;
+        },
+
+        sendOrderBundleRequest: function (responseItem) {
+            if (this.emailAddressIsValid(this.email)) {
+                var emailAddress = this.email;
+                $.ajax({
+                    url: responseItem.orderBundleUrl,
+                    type: 'PUT',
+                    xhrFields: { withCredentials: IsGeonorge(responseItem.distributionUrl) },
+                    data: {
+                        email: emailAddress,
+                        downloadAsBundle: true
+                    },
+                    success: function (data) {
+                        alert('Pakken med alle datasett vil bli sendt til ' + emailAddress + ' så snart den er klar');
+                    }
+                });
+            }
         },
 
         removeFromLocalStorage: function (uuid) {

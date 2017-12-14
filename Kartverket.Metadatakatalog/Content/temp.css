@@ -113,3 +113,8 @@
 .save-as-menu .save-as-dropdown .custom-select {
     width: 185px;
 }
+
+
+.input-group .input-group-addon.btn{
+    line-height: 12pt;
+}

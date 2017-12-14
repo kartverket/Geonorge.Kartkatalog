@@ -367,58 +367,68 @@
     <article id="responseList" v-show="orderResponseGrouped.length">
         <div class="row">
             <div class="col-md-12">
-                <div v-for="responseItem in orderResponseGrouped">
-                    <div class="orderlines">
-                        <div v-for="(orderLineFiles, orderLineName) in responseItem.files" class="orderline">
-                            <h2>{{ orderLineName }}</h2>
-                            <div v-if="file.status == 'ReadyForDownload'" v-for="file in orderLineFiles" class="download-list-subitem">
-                                <div class="row">
-                                    <div class="col-sm-5 col-md-6">
-                                        <span class="download-list-item-name">
-                                            <span class="inline-block">{{ file.areaName }}</span>
-                                        </span>
-                                    </div>
-                                    <div class="col-sm-4 col-md-3">
-                                        <span class="label label-success auto-width">{{ file.projectionName }}</span>
-                                    </div>
-                                    <div class="col-sm-2 col-md-2">
-                                        <span class="label label-info">{{file.format}}</span>
-                                    </div>
-                                    <div class="col-sm-1 col-md-1 icon-col">
-                                        <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name" class="btn icon-btn">
-                                            <span class="custom-icon custom-icon-lastned"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-if="file.status == 'WaitingForProcessing'" v-for="file in orderLineFiles" class="download-list-subitem">
-                                <div class="row">
-                                    <div class="col-sm-5 col-md-6">
+                <div v-for="responseItem in orderResponseGrouped" class="distribution-group-container">
+                    <div class="orderlines panel panel-primary">
+                        <div class="panel-heading">{{ responseItem.additionalInfo.distributedBy }}</div>
+                        <div class="panel-body">
+                            <div v-for="(dataset, datasetName) in responseItem.datasets">
+                                <h2>{{ datasetName }}</h2>
+                                <div v-if="file.status == 'ReadyForDownload'" v-for="file in dataset.files" class="download-list-subitem">
+                                    <div class="row">
+                                        <div class="col-sm-5 col-md-6">
+                                            <span class="download-list-item-name">
+                                                <span class="inline-block">
+                                                    <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
+                                                        {{ file.areaName }}
+                                                    </a>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-4 col-md-3">
+                                            <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                        </div>
+                                        <div class="col-sm-3 col-md-3">
+                                            <span class="label label-info auto-width">{{file.format}}</span>
+                                        </div>
 
-                                        <span class="download-list-item-name">
-                                            {{ file.metadataName }}, <span class="inline-block">@UI.SelectedFromMap</span> <small class="inline-block">(Under behandling)</small>
-                                        </span>
                                     </div>
-                                    <div class="col-sm-4 col-md-3">
-                                        <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                </div>
+                                <div v-if="file.status == 'WaitingForProcessing'" v-for="file in dataset.files" class="download-list-subitem">
+                                    <div class="row">
+                                        <div class="col-sm-5 col-md-6">
+
+                                            <span class="download-list-item-name">
+                                                {{ file.metadataName }}, <span class="inline-block">@UI.SelectedFromMap</span> <small class="inline-block">(Under behandling)</small>
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-4 col-md-3">
+                                            <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                        </div>
+                                        <div class="col-sm-2 col-md-2">
+                                            <span class="label label-info auto-width">{{file.format}}</span>
+                                        </div>
+                                        <div class="col-sm-1 col-md-1 icon-col">
+                                            <span class="custom-icon custom-icon-info"></span>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-2 col-md-2">
-                                        <span class="label label-info">{{file.format}}</span>
-                                    </div>
-                                    <div class="col-sm-1 col-md-1 icon-col">
-                                        <span class="custom-icon custom-icon-info"></span>
+                                </div>
+                                <div v-if="!file.status && file.name" v-for="file in dataset.files" class="list-group-subitem">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12">
+                                            <span class="custom-icon custom-icon-info"></span>
+                                            <span class="download-list-item-name">
+                                                {{ file.name }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="!file.status && file.name" v-for="file in orderLineFiles" class="list-group-subitem">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12">
-                                        <span class="custom-icon custom-icon-info"></span>
-                                        <span class="download-list-item-name">
-                                            {{ file.name }}
-                                        </span>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="panel-footer" v-if="responseItem.additionalInfo.supportsDownloadBundling">
+                            <div class="input-group">
+                                <span class="input-group-addon">@UI.Email: <span class="required-indicator"></span></span>
+                                <input type="text" v-model="email" name="email" class="form-control" />
+                                <span v-on:click="sendOrderBundleRequest(responseItem)" v-bind:class="{disabled: !emailAddressIsValid(email)}" class="input-group-addon btn">Bestill pakke med alle datasett</span>
                             </div>
                         </div>
                     </div>
