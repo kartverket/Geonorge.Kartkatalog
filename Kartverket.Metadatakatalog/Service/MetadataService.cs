@@ -58,12 +58,13 @@ namespace Kartverket.Metadatakatalog.Service
                     }
             }
 
+            
             //Hente inn indeks og relaterte services
             if (simpleMetadata.IsDataset() || simpleMetadata.IsDimensionGroup())
             {
                 relatedDistributions.AddRange(GetMetadataRelatedDistributions(uuid));
                 if (simpleMetadata.IsDataset())
-                    relatedDistributions.AddRange(GetApplicationRelatedDistributions(uuid));
+                    relatedDistributions.AddRange(GetApplicationsRelatedDistributions(uuid));
             }
             else if (simpleMetadata.IsService())
                 relatedDistributions.AddRange(GetServiceDirectoryRelatedDistributions(uuid));
@@ -83,6 +84,20 @@ namespace Kartverket.Metadatakatalog.Service
             if (metadata != null)
             {
                 distributionList = ConvertRelatedData(metadata.ApplicationDatasets, distributionList);
+            }
+            return distributionList;
+        }
+
+        private Distributions GetApplicationRelatedDistributions(string uuid)
+        {
+            var distributionList = new Distributions();
+
+            var metadata = GetMetadataForApplication(uuid);
+
+            if (metadata != null)
+            {
+                distributionList.RelatedApplications = ConvertRelatedData(metadata.DatasetServices);
+                distributionList.RelatedApplications = ConvertRelatedData(metadata.ApplicationDatasets);
             }
             return distributionList;
         }
@@ -164,7 +179,82 @@ namespace Kartverket.Metadatakatalog.Service
 
             metadata.CoverageUrl = metadata.GetCoverageLink();
 
+            //metadata.Distributions = GetDistributions(metadata);
+
             return metadata;
+        }
+
+        public Distributions GetDistributions(MetadataViewModel metadata)
+        {
+            // Self ...
+            var simpleMetadata = GetSimpleMetadataByUuid(metadata.Uuid);
+            if (simpleMetadata.DistributionsFormats != null && simpleMetadata.DistributionsFormats.Any())
+            {
+                var distributionRows = CreateDistributionRows(metadata.Uuid, simpleMetadata);
+                if (distributionRows != null)
+                    foreach (var distribution in distributionRows)
+                    {
+                        metadata.Distributions.SelfDistribution.Add(distribution.Value);
+                    }
+            }
+
+
+            if (metadata.IsDataset())
+            {
+                var metadataIndexDocResult = GetMetadata(metadata.Uuid);
+                // Applikasjoner
+                metadata.Distributions.RelatedApplications = GetApplicationsRelatedDistributions(metadata.Uuid);
+                metadata.Distributions.ShowRelatedApplications = metadata.Distributions.ShowApplications();
+
+                // Tjenester
+                metadata.Distributions.RelatedServices = ConvertRelatedData(metadataIndexDocResult.DatasetServices);
+                metadata.Distributions.ShowRelatedServices = metadata.Distributions.ShowServices();
+
+                // Tjenestelag
+                metadata.Distributions.RelatedServiceLayer = ConvertRelatedData(metadataIndexDocResult.DatasetServices);
+                metadata.Distributions.ShowRelatedServiceLayer = metadata.Distributions.ShowServicLayers();
+
+            }
+            
+            else if (metadata.IsService())
+            {
+                // Vis Datasett, Tjenestelag
+                metadata.Distributions = GetServiceRelatedDistributions(metadata.Uuid);
+                metadata.Distributions.RelatedServices = GetServiceDirectoryRelatedDistributions(metadata.Uuid);
+            }
+            else if (metadata.IsServiceLayer())
+            {
+                // Vis Vis datasett, tjeneste
+                metadata.Distributions.RelatedServices = GetServiceDirectoryRelatedDistributions(metadata.Uuid);
+            }
+
+            else if (metadata.IsApplication())
+            {
+                // vis Datasett
+                metadata.Distributions = GetApplicationRelatedDistributions(metadata.Uuid);
+                metadata.Distributions.RelatedApplications = GetApplicationDatasetRelatedDistributions(metadata.Uuid);
+            }
+
+            return metadata.Distributions;
+        }
+
+        private Distributions GetDatasetRelatedDistributions(string uuid)
+        {
+            var relatedDistributions = new Distributions();
+
+            relatedDistributions.RelatedApplications = GetApplicationsRelatedDistributions(uuid);
+            relatedDistributions.ShowRelatedApplications = relatedDistributions.ShowApplications();
+
+            //relatedDistributions.RelatedDataset = ConvertRelatedData(metadata.ServiceDatasets);
+            //relatedDistributions.ShowRelatedDataset = true;
+            //relatedDistributions.RelatedServiceLayer = ConvertRelatedData(metadata.ServiceLayers);
+            //relatedDistributions.ShowRelatedServiceLayer = true;
+
+
+            // Tjenester..
+            // Tjenestelag..
+
+            return relatedDistributions;
         }
 
         private Dictionary<DistributionRow, Distribution> CreateDistributionRows(string uuid, SimpleMetadata simpleMetadata)
@@ -246,6 +336,23 @@ namespace Kartverket.Metadatakatalog.Service
             return distributionList;
         }
 
+        private Distributions GetServiceRelatedDistributions(string uuid)
+        {
+            var relatedDistributions = new Distributions();;
+
+            var metadata = GetMetadataForService(uuid);
+
+            if (metadata != null)
+            {
+                relatedDistributions.RelatedDataset = ConvertRelatedData(metadata.ServiceDatasets);
+                relatedDistributions.ShowRelatedDataset = true;
+                relatedDistributions.RelatedServiceLayer = ConvertRelatedData(metadata.ServiceLayers);
+                relatedDistributions.ShowRelatedServiceLayer = true;
+            }
+            return relatedDistributions;
+        }
+
+       
         private List<Distribution> GetMetadataRelatedDistributions(string uuid)
         {
             var distributionList = new List<Distribution>();
@@ -255,7 +362,6 @@ namespace Kartverket.Metadatakatalog.Service
             if (metadata != null)
             {
                 distributionList = ConvertRelatedData(metadata.DatasetServices, distributionList);
-                distributionList = ConvertRelatedData(metadata.Bundles, distributionList);
             }
             return distributionList;
         }
@@ -277,8 +383,10 @@ namespace Kartverket.Metadatakatalog.Service
             };
         }
 
-        private List<Distribution> ConvertRelatedData(List<string> relatedData, List<Distribution> relatedDistributions)
+        private List<Distribution> ConvertRelatedData(List<string> relatedData, List<Distribution> relatedDistributions = null)
         {
+            if (relatedDistributions == null) relatedDistributions = new List<Distribution>();
+            
             if (relatedData != null && relatedData.Any())
             {
                 foreach (var relatert in relatedData)
@@ -310,7 +418,7 @@ namespace Kartverket.Metadatakatalog.Service
                         }
 
                     //Vis kart
-                    if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
+                        if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
                         {
                             tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
                             tmp.CanShowMapUrl = true;
@@ -788,7 +896,7 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
-        private List<Distribution> GetApplicationRelatedDistributions(string uuid)
+        private List<Distribution> GetApplicationsRelatedDistributions(string uuid)
         {
             var distlist = new List<Distribution>();
 

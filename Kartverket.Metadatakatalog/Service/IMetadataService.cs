@@ -9,5 +9,7 @@ namespace Kartverket.Metadatakatalog.Service
         MetadataViewModel GetMetadataViewModelByUuid(string uuid);
         List<Models.Api.Distribution> GetRelatedDistributionsByUuid(string uuid);
         SearchResultItemViewModel Metadata(string uuid);
+
+        Distributions GetDistributions(MetadataViewModel metadata);
     }
 }
