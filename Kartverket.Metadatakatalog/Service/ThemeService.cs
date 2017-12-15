@@ -44,9 +44,11 @@ namespace Kartverket.Metadatakatalog.Service
         public void UpdateTheme(Theme theme, string[] metadataRelated)
         {
             _dbContext.Database.ExecuteSqlCommand("DELETE FROM ThemeMetadatas WHERE Theme_Id = {0}", theme.Id);
+            _dbContext.Database.ExecuteSqlCommand("DELETE FROM ThemeMetadataSortings WHERE Theme_Id = {0}", theme.Id);
 
             if (metadataRelated != null)
             {
+                int sorting = 1;
 
                 foreach (var uuid in metadataRelated)
                 {
@@ -59,6 +61,8 @@ namespace Kartverket.Metadatakatalog.Service
                     }
 
                     _dbContext.Database.ExecuteSqlCommand("INSERT INTO ThemeMetadatas(Theme_Id, Metadata_Uuid) VALUES({0}, {1})", theme.Id, uuid);
+                    _dbContext.Database.ExecuteSqlCommand("INSERT INTO ThemeMetadataSortings(Theme_Id, Metadata_Uuid, Sorting) VALUES({0}, {1}, {2})", theme.Id, uuid, sorting);
+                    sorting++;
                 }
             }
 

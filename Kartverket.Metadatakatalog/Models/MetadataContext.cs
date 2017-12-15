@@ -22,6 +22,14 @@ namespace Kartverket.Metadatakatalog.Models
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Configurations.Add(new ThemeTranslationConfiguration());
+
+            modelBuilder.Entity<Theme>().HasMany(m => m.ThemeMetadataSortings)
+            .WithRequired(tm => tm.Theme)
+            .HasForeignKey(tm => tm.Theme_Id);
+
+            modelBuilder.Entity<Metadata>().HasMany(m => m.ThemeMetadataSortings)
+                .WithRequired(tm => tm.Metadata)
+                .HasForeignKey(tm => tm.Metadata_Uuid);
         }
 
     }

@@ -55,7 +55,7 @@ if (contact != null)
 
 @*Template for a table row*@
 
-<script type="text/x-template" id="resultItemRow">
+<script type="text/x-template" id="result-item-template">
     <div>
         <div class="resultItemRow">
             <div class="row">
@@ -141,7 +141,6 @@ if (contact != null)
 </div>
 
 <div id="metadata">
-
     @* *** Distribusjoner ****@
     <article>
         <div class="row">
@@ -527,7 +526,7 @@ if (keywords != null && keywords.Any())
                 model: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
             },
             components: {
-                ResultItem: ResultItemComponent,
+                ResultItem: ResultItem,
             },
             created: function() {
                 $.ajax({

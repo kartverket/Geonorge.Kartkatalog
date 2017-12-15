@@ -95,3 +95,26 @@
 .label-datapakke {
     border-color: #5d4777;
 }
+
+
+/* Filter tabs */
+.nav-tabs > li > a .badge {
+    background-color: #fff;
+    color: #333;
+}
+.nav-tabs > li.active > a .badge {
+    background-color: #fe5000;
+    color: #FFF;
+}
+
+
+
+/* 'Save as' select */
+.save-as-menu .save-as-dropdown .custom-select {
+    width: 185px;
+}
+
+
+.input-group .input-group-addon.btn{
+    line-height: 12pt;
+}

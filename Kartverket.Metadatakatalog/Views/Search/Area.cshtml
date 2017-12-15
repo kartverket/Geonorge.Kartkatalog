@@ -65,9 +65,6 @@
     </div>
 </section>
 
-@Html.Partial("_resultItemRow")
-@Html.Partial("_searchResult")
-
 <script type="text/x-template" id="searchResultTemplate">
     <div>
         <div v-if="$root.viewType == 'tableView' && items.length" class="row resultItemRowTableHeader">
@@ -97,69 +94,65 @@
 </script>
 
 @{
-            string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("hva-finnes-i-kommunen-eller-fylket", "api/search");
-            Uri uri = new Uri(url);
-            string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
-            Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
-            var qs = HttpUtility.ParseQueryString("");
+    string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("hva-finnes-i-kommunen-eller-fylket", "api/search");
+    Uri uri = new Uri(url);
+    string path = String.Format("{0}{1}{2}{3}", uri.Scheme,
+    Uri.SchemeDelimiter, uri.Authority, uri.AbsolutePath);
+    var qs = HttpUtility.ParseQueryString("");
 
-            for (int f = 0; f < Model.FacetParameters.Count; f++)
-            {
-                var facet = Model.FacetParameters[f];
+    for (int f = 0; f < Model.FacetParameters.Count; f++)
+    {
+        var facet = Model.FacetParameters[f];
 
-                qs.Add("facets[" + f + "]name", facet.Name);
-                qs.Add("facets[" + f + "]value", facet.Value);
-            }
-            qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
-            string query = qs.ToString(); string urlCSV = path + "?" + query;
+        qs.Add("facets[" + f + "]name", facet.Name);
+        qs.Add("facets[" + f + "]value", facet.Value);
+    }
+    qs.Set("Offset", "1"); qs.Set("limit", Model.NumFound.ToString()); qs.Add("mediatype", "csv");
+    string query = qs.ToString(); string urlCSV = path + "?" + query;
 }
 
+@Html.Partial("_ThemeGroup", Model)
+@Html.Partial("_FacetFilter", Model)
 
-<div class="row search-result-navigation">
-    <div class="col-md-4">
-        @Html.Partial("_PaginationForArea", Model)
-    </div>
-    <div class="col-md-4 pull-right">
-        <div class="save-as-menu pull-right">
-            <label>@Resources.UI.SaveAs:</label>
-            <div class="no-padding-bottom save-as-dropdown">
-                <div class="custom-select">
-                    <select onchange="additionalView(this.value)" class="form-control">
-                        <option value="csvUrl" selected="selected">CSV</option>
-                    </select>
-                </div>
-            </div>
-            <div id="saveButtons" class="no-padding-bottom save-as-buttons">
-                <a class="btn" id="csvUrl" href="@urlCSV">@Resources.UI.Save</a>
-            </div>
-        </div>
-    </div>
-    <div class="clearfix"></div>
 
-</div>
 
-<span class="separator-small separator-gray margin-bottom-10"></span>
+<div id="vue-container" class="row">
 
-<div class="row resultItemTitleRow">
-
-    <div id="searchResultTable" class="col-md-9">   
+    <div id="searchResultTable" class="col-md-9">
+        <div is="facet-filter" filter-type="tabs" class="facet-filter"></div>
         @if (Model.Result != null)
-        {
-            <div is="searchResult" v-bind:result-items="ResultItems"></div>
-            <div class="margin-top-10">
-                @Html.Partial("_PaginationForArea", Model)
-            </div>
-        }
+    {
+        <div is="theme-group"></div>
+        <div class="margin-top-10">
+            @Html.Partial("_PaginationForArea", Model)
+        </div>
+}
     </div>
 
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
-        <aside class="facet-filter-container">
+        <aside>
             <h3 class="">@Resources.UI.FilterSearch:</h3>
             <span class="separator-small"></span>
-            @Html.Partial("_FacetFilter", Model)
+            <div is="facet-filter" filter-type="sidebar" class="facet-filter"></div>
             <h3 class="" style="padding-top: 40px;">@Resources.UI.Pages</h3>
             <span class="separator-small"></span>
             @Html.Partial("_FilterPages")
+
+            <div class="save-as-menu">
+                <h3 style="padding-top: 40px;">@Resources.UI.SaveAs:</h3>
+                <span class="separator-small"></span>
+
+                <div class="no-padding-bottom save-as-dropdown">
+                    <div class="custom-select">
+                        <select onchange="additionalView(this.value)" class="form-control">
+                            <option value="csvUrl" selected="selected">CSV</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="saveButtons" class="no-padding-bottom save-as-buttons">
+                    <a class="btn" id="csvUrl" href="@urlCSV">@Resources.UI.Save</a>
+                </div>
+            </div>
         </aside>
     </div>
 </div>
@@ -173,40 +166,6 @@
         setMainSearchUrl('hva-finnes-i-kommunen-eller-fylket');
         setMainSearchApiUrl('search?facets[0]name=area&facets[0]value=@Model.AreaCode');
 
-        //Main vue model
-        var vueModel = new Vue({
-            el: '#searchResultTable',
-            data: {
-                ResultItems: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.Result.Items))),
-                viewType: "tableView"
-            },
-            components: {
-                SearchResult: SearchResult,
-                ResultItem: ResultItemComponent
-            },
-            created: function() {
-                this.viewType = this.getSelectedViewType();
-            },
-            methods: {
-                view: function(type) {
-                    this.viewType = type;
-                    localStorage.setItem("layout", this.viewType);
-                    if (type === "galleryView") {
-                        this.tableBorder = "";
-                    } else {
-                        this.tableBorder = "table-border-bottom";
-                    }
-                },
-                getSelectedViewType: function() {
-                    var viewType = "tableView";
-                    if (localStorage.getItem("layout")) {
-                        viewType = localStorage.getItem("layout");
-                        this.view(viewType);
-                    }
-                    return viewType;
-                }
-            }
-        });
     </script>
 
     <script>
@@ -249,3 +208,17 @@
 
     </script>
 }
+
+
+<script>
+    var Area = new Vue({
+        el: "#vue-container",
+        components: {
+            ThemeGroup: ThemeGroup,
+            FacetFilter: FacetFilter
+        },
+        data: {
+            viewType: 'tableView'
+        }
+    });
+</script>

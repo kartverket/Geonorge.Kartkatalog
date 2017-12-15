@@ -4,47 +4,48 @@
 
 @model SearchViewModel
 
+@Html.Partial("VueComponents/_FilterTab")
 
 @{
     var Facets = Model.Result.Facets;
     List<SearchResultFacetValueViewModel> orderedList = new List<SearchResultFacetValueViewModel>();
 
-        var themeFacets = Facets.First(f => f.FacetField == "theme");
-        var themes = themeFacets.FacetResults;
+    var themeFacets = Facets.First(f => f.FacetField == "theme");
+    var themes = themeFacets.FacetResults;
 
-        var typeFacets = Facets.First(f => f.FacetField == "type");
-        var types = typeFacets.FacetResults;
+    var typeFacets = Facets.First(f => f.FacetField == "type");
+    var types = typeFacets.FacetResults;
 
-        var nationalinitiativeFacets = Facets.First(f => f.FacetField == "nationalinitiative");
-        var nationalinitiatives = nationalinitiativeFacets.FacetResults;
+    var nationalinitiativeFacets = Facets.First(f => f.FacetField == "nationalinitiative");
+    var nationalinitiatives = nationalinitiativeFacets.FacetResults;
 
-        var areaFacets = Facets.First(f => f.FacetField == "area");
-        var areas = areaFacets.FacetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.AreaLinkName(Model.areaDictionary)).ToList();
+    var areaFacets = Facets.First(f => f.FacetField == "area");
+    var areas = areaFacets.FacetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.AreaLinkName(Model.areaDictionary)).ToList();
 
-        var placeGroupFacets = Facets.First(f => f.FacetField == "placegroups");
-        var placeGroups = placeGroupFacets.FacetResults;
+    var placeGroupFacets = Facets.First(f => f.FacetField == "placegroups");
+    var placeGroups = placeGroupFacets.FacetResults;
 
-        var organizationFacets = Facets.First(f => f.FacetField == "organization");
-        var organizations = organizationFacets.FacetResults;
+    var organizationFacets = Facets.First(f => f.FacetField == "organization");
+    var organizations = organizationFacets.FacetResults;
 
-        var distributionProtocolFacets = Facets.First(f => f.FacetField == "DistributionProtocols");
-        var distributionProtocols = distributionProtocolFacets.FacetResults.Where(r => r.Name != "GEONORGE:OFFLINE");
+    var distributionProtocolFacets = Facets.First(f => f.FacetField == "DistributionProtocols");
+    var distributionProtocols = distributionProtocolFacets.FacetResults.Where(r => r.Name != "GEONORGE:OFFLINE");
 
-        var dataAccessFacets = Facets.First(f => f.FacetField == "dataaccess");
-        var dataAccesses = dataAccessFacets.FacetResults;
-    
+    var dataAccessFacets = Facets.First(f => f.FacetField == "dataaccess");
+    var dataAccesses = dataAccessFacets.FacetResults;
+
 }
 
 @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
-<div id="typetabs" style="position:relative; top:-100px;left:-750px; width:900px;">
-    @{  int datasetCount = 0;
+    @{ int datasetCount = 0;
         var datasetType = types.Where(d => d.Name == "dataset").FirstOrDefault();
-        if (datasetType != null) {
+        if (datasetType != null)
+        {
             datasetCount = datasetType.Count;
         }
         int applicationCount = 0;
-        var softwareType =  types.Where(d => d.Name == "software").FirstOrDefault();
+        var softwareType = types.Where(d => d.Name == "software").FirstOrDefault();
         if (softwareType != null)
         {
             applicationCount = softwareType.Count;
@@ -70,7 +71,8 @@
         var highligtService = "";
         var highligtApplication = "";
         var highlightAll = "";
-        if (typeSelected == "dataset") {
+        if (typeSelected == "dataset")
+        {
             highligtDataset = highlight;
         }
         else if (typeSelected == "service")
@@ -81,19 +83,17 @@
         {
             highligtApplication = highlight;
         }
-        else {
+        else
+        {
             highlightAll = highlight;
         }
         int totalCount = datasetCount + applicationCount + serviceCount;
     }
-    <a style="@highlightAll" href="search?text=@txt">@UI.AllMapData</a> (@totalCount) , 
-    <a style="@highligtDataset" href="search?text=@txt&Facets%5B0%5D.name=type&Facets%5B0%5D.value=dataset">@UI.Facet_type_dataset</a> (@datasetCount) ,  
-    <a style="@highligtService" href="search?text=@txt&Facets%5B0%5D.name=type&Facets%5B0%5D.value=service&Facets%5B1%5D.name=type&Facets%5B1%5D.value=servicelayer">@UI.Facet_type_service</a> (@serviceCount) ,  
-    <a style="@highligtApplication" href="search?text=@txt&Facets%5B0%5D.name=type&Facets%5B0%5D.value=software">@UI.Facet_type_software</a> (@applicationCount)
-</div>
 
-<div id="facet-filter" class="facet-filter">
-    <div class="facet-filter-item">
+
+
+<script type="text/x-template" id="facet-filter-template">
+    <div v-if="filterType == 'sidebar'" class="facet-filter-item">
         <div class="hidden" v-if="EnableFacet('types')" is="types"></div>
         <div v-if="EnableFacet('themes')" is="themes"></div>
         <div v-if="EnableFacet('nationalinitiatives')" is="nationalinitiatives"></div>
@@ -102,7 +102,14 @@
         <div v-if="EnableFacet('organizations')" is="organizations"></div>
         <div v-if="EnableFacet('dataAccesses')" is="dataAccesses"></div>
     </div>
-</div>
+    <div v-else-if="filterType == 'tabs'">
+        <ul class="nav nav-tabs">
+            <li is="filter-tab" v-bind:filter="filter" v-for="filter in filterTabs.filters">
+            </li>
+        </ul>
+    </div>
+</script>
+
 
 
 <script type="text/x-template" id="default-template">
@@ -112,7 +119,7 @@
         <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
             <div v-bind:class="{'selected': facetResult.isSelected, 'is-empty': facetResult.Count == 0}" v-for="facetResult in FacetResults">
                 <div class="facet-checkbox  facet-link">
-                    <span v-on:click="$root.toggleFilter(FacetField, facetResult)"
+                    <span v-on:click="$parent.toggleFilter(FacetField, facetResult)"
                           data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
                     </span>
                     {{ facetResult.FacetName }} <span class="text-muted">({{ facetResult.Count }})</span>
@@ -129,11 +136,12 @@
         <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
             <div v-bind:class="{'selected': facetResult.isSelected, 'is-empty': facetResult.Count == 0}" v-for="facetResult in FacetResults">
                 <div class="facet-checkbox  facet-link">
-                    <span v-on:click="$root.toggleFilter(FacetField, facetResult)"
+                    <span v-on:click="$parent.toggleFilter(FacetField, facetResult)"
                           data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
                     </span>
                     <a data-toggle='tooltip' data-placement='bottom' v-bind:title="facetResult.FacetName">
-                        {{ facetResult.FacetNameShort }} </a> <span class="text-muted">({{ facetResult.Count }})</span>
+                        {{ facetResult.FacetNameShort }}
+                    </a> <span class="text-muted">({{ facetResult.Count }})</span>
                 </div>
             </div>
         </div>
@@ -145,37 +153,37 @@
         <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="indicator"></span>
         <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="facet-filter-title">{{ FacetName }}</span>
         <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
-            
+
             @*Henter ut alle placegroups (Norge, Havområder, Jan Mayen, Svalbard)*@
             <div v-bind:class="{'selected': placeGroup.isSelected, 'is-empty': placeGroup.Count == 0}" v-for="placeGroup in PlaceGroups">
                 <span v-bind:class="{'no-indicator': !placeGroup.hasChildren}" class="indicator"></span>
                 <div class="facet-checkbox facet-link">
-                    <span v-on:click="$root.toggleFilter('placegroups', placeGroup)"
+                    <span v-on:click="$parent.toggleFilter('placegroups', placeGroup)"
                           data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
                     </span>
                     {{ placeGroup.Name }} <span class="text-muted">({{ placeGroup.Count }})</span>
                 </div>
             </div>
-            
+
             @*Henter ut alle Fylker*@
             <div v-for="area in FacetResults">
                 <div v-bind:class="{'selected': area.isSelected, 'is-empty': area.Count == 0}">
                     <span v-on:click="area.isActive = !area.isActive" v-bind:class="{'active': area.isActive, 'no-indicator': !area.hasChildren}" class="indicator"></span>
                     <div class="facet-checkbox facet-link">
-                        <span v-on:click="$root.toggleFilter(FacetField, area)"
+                        <span v-on:click="$parent.toggleFilter(FacetField, area)"
                               data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
                         </span>
                         <span v-on:click="area.isActive = !area.isActive" class="facet-filter-title">{{area.FacetName}}</span>
                         <span class="text-muted">({{ area.Count }})</span>
                     </div>
                 </div>
-                
+
                 @*Henter ut alle kommuner*@
                 <div v-bind:class="{'active': area.isActive}" class="facet-filter-sub-item-list">
                     <div v-bind:class="{'selected': municipality.isSelected, 'is-empty': municipality.Count == 0}" v-for="municipality in area.municipalities">
                         <span class="indicator no-indicator"></span>
                         <div class="facet-checkbox facet-link">
-                            <span v-on:click="$root.toggleFilter(FacetField, municipality)"
+                            <span v-on:click="$parent.toggleFilter(FacetField, municipality)"
                                   data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
                             </span>
                             {{ municipality.FacetName }} <span class="text-muted">({{ municipality.Count }})</span>
@@ -256,6 +264,7 @@
                     @:data.FacetResults[@typeIndex].hasChildren = false;
 
                     typeIndex++;
+
                 }
 
                 @:data.hasChildren = data.FacetResults.length > 0;
@@ -531,22 +540,85 @@
 
 
     // Vue model
-    var facetFilterVueModel = new Vue({
-        el: '#facet-filter',
-        data: {
-            selectedFacets: [],
-            urlParameters: [],
-            enabledFacetsArray: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.EnabledFacets)))
-            },
-        computed: {
+    var FacetFilter = {
+        name: 'FacetFilter',
+        template: '#facet-filter-template',
+        props: ['filterType'],
+        data: function () {
+            var data = {
+                selectedFacets: [],
+                urlParameters: [],
+                enabledFacetsArray: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.EnabledFacets))),
 
+            };
+            if (this.filterType == 'tabs') {
+                data.filterTabs = {
+
+                    FacetField: "@typeFacets.FacetField",
+                    FacetName: '',
+                    isSelected: false,
+                    hasChildren: false,
+                    FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(types)))
+                };
+
+
+
+            }
+            return data;
         },
+
         created: function() {
             this.getSelectedFacets();
             if (this.selectedFacets.length > 0) {
                 var scrollTopOffset = localStorage.getItem("scrollTopOffset")
                 $(window).scrollTop(scrollTopOffset);
             }
+            if (this.filterType == 'tabs') {
+                @{
+                    int filterTabsIndex = 0;
+                    foreach(var type in types)
+                    {
+                        @:this.filterTabs.FacetResults[@filterTabsIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(type.LinkName()))";
+
+                        @:this.filterTabs.FacetResults[@filterTabsIndex].isSelected = this.isSelected(this.filterTabs.FacetField, this.filterTabs.FacetResults[@filterTabsIndex]);
+
+                        @:this.filterTabs.FacetResults[@filterTabsIndex].hasChildren = false;
+
+                        filterTabsIndex++;
+                    }
+
+                    @:this.filterTabs.hasChildren = this.filterTabs.FacetResults.length > 0;
+                }
+
+        this.filterTabs.filters = [
+            {
+                FacetName: '@UI.AllMapData',
+                name: 'all',
+                FacetResults: [],
+                count: @totalCount
+            },
+            {
+                FacetName: '@UI.Facet_type_dataset',
+                name: 'dataset',
+                FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['dataset']),
+                count: @datasetCount
+            },
+            {
+                FacetName: '@UI.Facet_type_service',
+                name: 'serviceAndServicelayer',
+                FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['service', 'servicelayer']),
+                count: @serviceCount
+            },
+            {
+                FacetName: '@UI.Facet_type_software',
+                name: 'software',
+                FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['software']),
+                count: @applicationCount
+            }
+        ];
+            }
+
+
         },
         components: {
             'areas': Areas,
@@ -555,7 +627,8 @@
             'nationalinitiatives': Nationalinitiatives,
             'organizations': Organizations,
             'dataAccesses': DataAccesses,
-            'distributionProtocols': DistributionProtocols
+            'distributionProtocols': DistributionProtocols,
+            'FilterTab': FilterTab
         },
         methods: {
             toggleActive: function(vueObject) {
@@ -578,13 +651,23 @@
             },
             hasSelected: function(facetResults) {
                 var hasSelected = false;
-                facetResults.forEach(function(facetResult) {
+                facetResults.forEach(function (facetResult) {
                     if (facetResult.isSelected) {
                         hasSelected = true;
                         return;
                     }
-                })
+                });
                 return hasSelected;
+            },
+            facetsWithSpesificNameIsSelected: function (name) {
+                var facetsWithSpesificNameIsSelected = false;
+                this.selectedFacets.forEach(function (selectedFacet) {
+                    if (selectedFacet.name == name) {
+                        facetsWithSpesificNameIsSelected = true;
+                        return;
+                    }
+                });
+                return facetsWithSpesificNameIsSelected;
             },
             getAllUrlParameters: function() {
                 var url = location.search;
@@ -740,6 +823,25 @@
                 window.location.href = url;
             },
 
+            toggleFilterTabs: function (facets) {
+
+                this.filterTabs.FacetResults.forEach(function (facetResult) {
+                        this.removeSelectedFacet(this.filterTabs.FacetField, facetResult);
+                }.bind(this));
+
+                facets.forEach(function (facet) {
+
+                        this.addSelectedFacet('type', facet);
+                }.bind(this));
+
+
+                var url = this.createUrlWithParameters();
+                var doc = document.documentElement;
+                var scrollTopOffset = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+                localStorage.setItem("scrollTopOffset", scrollTopOffset)
+                window.location.href = url;
+            },
+
             EnableFacet: function(facetText) {
                 var isEnabled = true;
                 if (this.enabledFacetsArray) {
@@ -751,9 +853,27 @@
                     });
                 }
                 return isEnabled;
+            },
+            filterFacetResultByName: function(facetResults, name) {
+                var filteredFacetResult = null;
+                facetResults.forEach(function (facetResult) {
+                    if (facetResult.Name == name) {
+                        filteredFacetResult = facetResult;
+                        return;
+                    }
+                })
+                return filteredFacetResult;
+            },
+            filterFacetResultsByNames: function(facetResults, names) {
+                var filteredFacetResults = [];
+                names.forEach(function (name) {
+                    var partialFilteredFacetResult = this.filterFacetResultByName(facetResults, name);
+                    if (partialFilteredFacetResult !== null) filteredFacetResults.push(partialFilteredFacetResult);
+                }.bind(this));
+                return filteredFacetResults;
             }
 
         }
 
-    });
+    };
 </script>

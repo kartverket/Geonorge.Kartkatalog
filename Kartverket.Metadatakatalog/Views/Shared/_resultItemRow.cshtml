@@ -15,9 +15,8 @@
 @Html.Partial("VueComponents/ResultItem/_Thumbnail")
 
 
-<script type="text/x-template" id="resultItemRow">
+<script type="text/x-template" id="result-item-template">
     <div>
-
         @* *** TABELL *** *@
         <div v-if="$root.viewType == 'tableView'" class="resultItemRow table-border-bottom">
             <div class="result-item-row-content">
@@ -61,8 +60,8 @@
 
 <script>
     //Component
-    var ResultItemComponent = {
-        template: "#resultItemRow",
+    var ResultItem = {
+        template: "#result-item-template",
         name: "resultItem",
         props: ["resultItem", "selectedFields", "selectedButtons"],
         data: function () {
@@ -89,120 +88,6 @@
             if (addToCartId && this.resultItem.Uuid == addToCartId) {
                 this.addToCart();
                 removeParameterByNameFromUrl('addtocart_event_id');
-            }
-        },
-        created: function () {
-        },
-        computed: {
-            addedToCart: function () {
-                return this.getCartButtonStatus();
-            },
-            openData: function () {
-                var openData = {
-                    className: "",
-                    title: ""
-                };
-                if (this.resultItem.IsRestricted) {
-                    openData.className = "custom-icon custom-icon-hengelaas-closed-yellow";
-                    openData.title = "@Html.Raw(UI.RestrictedData)";
-                } else if (this.resultItem.IsOffline) {
-                    openData.className = "custom-icon custom-icon-hengelaas-closed-red";
-                    openData.title = "@Html.Raw(UI.OfflineData)";
-                } else if (this.resultItem.IsOpendata) {
-                    openData.className = "custom-icon custom-icon-hengelaas-open-green";
-                    openData.title = "@Html.Raw(UI.OpenData)";
-                }
-                return openData;
-            },
-            mapLink: function () {
-                var mapLink = {
-                    mapLinkButtonId: "mapmacrolink-button-" + this.resultItem.Uuid,
-                    mapMacroButtonId: "mapmacro-button-" + this.resultItem.Uuid,
-                    mapLinkId: "mapmacrolink-" + this.resultItem.Uuid,
-                    mapMacroId: "mapmacro-" + this.resultItem.Uuid,
-                    onClick: "ga('send', 'event', 'Nedlasting', 'viskart')",
-                    mapLinkClassButton: "btn btn-default",
-                    mapLinkClassLink: "",
-                    iconPermission: "custom-icon",
-                    mapTitleTag: this.resultItem.MapTitleTag,
-                    url: ""
-                };
-
-                if (this.resultItem.ShowMapLink) {
-                    mapLink.iconPermission += " custom-icon-kartmarkoer";
-                    mapLink.url = this.resultItem.MapUrl;
-
-                } else if (this.resultItem.ShowServiceMapLink) {
-                    mapLink.iconPermission += this.restrictedServiceClass();
-                    mapLink.url = this.resultItem.ServiceUrl;
-                } else {
-                    mapLink.mapLinkClassLink = "disabled";
-                    mapLink.mapLinkClassButton += " disabled";
-                    mapLink.iconPermission += " custom-icon-kartmarkoer";
-                    mapLink.mapLinkButtonId = "";
-                    mapLink.mapMacroButtonId = "";
-                    mapLink.mapLinkId = "";
-                    mapLink.mapMacroId = "";
-                    mapLink.onClick = "";
-                    mapLink.mapTitleTag = "Vis " + this.resultItem.Title + " i kart";
-                }
-                return mapLink;
-            },
-            itemAddToCart: function () {
-                var itemAddToCart = {
-                    buttonClass: "btn btn-default add-to-cart-btn",
-                };
-
-                if (this.resultItem.IsRestricted || this.resultItem.IsOffline) {
-                    itemAddToCart.buttonClass += " add-to-cart-btn prevent-action";
-                }
-                if (this.resultItem.IsRestricted) {
-                    @{
-                        string baseUrl = Request.Url.AbsoluteUri;
-                        baseUrl = baseUrl.Replace("http://", "https://");
-                        if (baseUrl.Contains("addtocart_event_id"))
-                        {
-                            baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
-                        }
-                    }
-                    var baseUrl = '@baseUrl';
-                    var addToCartEventParamater = "?addtocart_event_id=" + this.resultItem.Uuid;
-
-                    if (baseUrl.indexOf("?") !== -1) {
-                        addToCartEventParamater = "&addtocart_event_id=" + this.resultItem.Uuid;
-                    }
-
-                    var downloadSignInUrl = '@Html.DownloadUrl()'
-                   + 'AuthServices/SignIn?ReturnUrl='
-                   + encodeURIComponent(baseUrl)
-                   + encodeURIComponent(addToCartEventParamater);
-
-                    var addToCartUrl = '@Html.KartkatalogenUrl()'
-                         + 'AuthServices/SignIn?ReturnUrl='
-                         + encodeURIComponent(downloadSignInUrl);
-                    itemAddToCart.href = addToCartUrl;
-                }
-                return itemAddToCart;
-            },
-            organizationUrl: function () {
-                url = "/etatvis-oversikt/" + this.resultItem.OrganizationSeoName;
-                return url;
-            },
-            readMoreUrl: function () {
-                var organization = this.resultItem.OrganizationSeoName;
-                var title = this.resultItem.TitleSeo;
-                var uuid = this.resultItem.Uuid;
-                var url = "/metadata/" + organization + "/" + title + "/" + uuid;
-                return url;
-            },
-            description: function () {
-                var description;
-                if (this.resultItem.Abstract.length > 250) {
-                    description = this.resultItem.Abstract.substring(0, 251) + " ...";
-                } else {
-                    description = this.resultItem.Abstract;
-                }
-                return description;
             }
         },
         methods: {
