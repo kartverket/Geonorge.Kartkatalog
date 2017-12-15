@@ -32,41 +32,7 @@
     </div>
 </section>
 
-@Html.Partial("_resultItemRow")
-@Html.Partial("_searchResult")
 
-<script type="text/x-template" id="searchResultTemplate">
-    <div>
-        <div v-if="$root.viewType == 'tableView' && items.length" class="row resultItemRowTableHeader">
-            <div class="col-sm-4" is="header-title"></div>
-            <div class="col-sm-2" is="header-type"></div>
-            <div class="col-sm-3" is="header-organization"></div>
-            <div class="col-sm-1" is="header-open-data"></div>
-            <div class="col-sm-1" is="header-url"></div>
-            <div class="col-sm-1" is="header-map"></div>
-        </div>
-
-        <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
-
-        <div v-for="item in items"
-             is="resultItem"
-             v-bind:result-item="item"
-             v-bind:selected-fields="[
-                 {name: 'title', size: '4'},
-                 {name: 'distributionType', size: '2'},
-                 {name: 'owner', size: '3'},
-                 {name: 'openData', size: '1'}
-             ]"
-             v-bind:selected-buttons="[
-                 'copyUrlButton',
-                 'showInMapButton'
-                 ]">
-        </div>
-
-
-        <div class="clearfix"></div>
-    </div>
-</script>
 
 @{
 
@@ -87,53 +53,50 @@
     string query = qs.ToString(); string urlCSV = path + "?" + query;
 }
 
-<div class="row search-result-navigation">
-    <div class="col-md-4">
-        @Html.Partial("_Pagination", Model)
-    </div>
-    <div class="col-md-4 pull-right">
-        <div class="save-as-menu pull-right">
-            <label>@Resources.UI.SaveAs:</label>
-            <div class="no-padding-bottom save-as-dropdown">
-                <div class="custom-select">
-                    <select onchange="additionalView(this.value)" class="form-control">
-                        <option value="csvUrl" selected="selected">CSV</option>
-                    </select>
-                </div>
-            </div>
-            <div id="saveButtons" class="no-padding-bottom save-as-buttons">
-                <a class="btn" id="csvUrl" href="@urlCSV">@Resources.UI.Save</a>
-            </div>
-        </div>
-    </div>
-    <div class="clearfix"></div>
 
+@Html.Partial("_ThemeGroup", Model)
+@Html.Partial("_FacetFilter", Model)
 
-</div>
+<div id="vue-container" class="row">
 
-<span class="separator-small separator-gray margin-bottom-10"></span>
-
-<div class="row">
-    <div id="searchResultTable" class="col-md-9">
-        @*<span v-on:click="view('galleryView')" class="pull-right fa fa-th-large"></span>
-        <span v-on:click="view('listView')" class="pull-right fa fa-list"></span>
-        <span v-on:click="view('tableView')" class="pull-right fa fa-table"></span>
-        <div class="clearfix"></div>*@
-        <div is="searchResult" v-bind:result-items="ResultItems"></div>
+    <div class="col-md-9">
+        <!--  <div is="facet-filter" filter-type="tabs" class="facet-filter"></div>-->
+        @if (Model.Result != null)
+        {
+            <div is="theme-group"></div>
+        }
         <div class="margin-top-10">
             @Html.Partial("_Pagination", Model)
         </div>
     </div>
+
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
-        <aside class="facet-filter-container">
+        <aside>
             <h3 class="">@Resources.UI.FilterSearch:</h3>
             <span class="separator-small"></span>
-            @Html.Partial("_FacetFilter", Model)
+            <div is="facet-filter" filter-type="sidebar" class="facet-filter"></div>
             <h3 class="" style="padding-top: 40px;">@Resources.UI.Pages</h3>
             <span class="separator-small"></span>
             @Html.Partial("_FilterPages")
+
+            <div class="save-as-menu">
+                <h3 style="padding-top: 40px;">@Resources.UI.SaveAs:</h3>
+                <span class="separator-small"></span>
+
+                <div class="no-padding-bottom save-as-dropdown">
+                    <div class="custom-select">
+                        <select onchange="additionalView(this.value)" class="form-control">
+                            <option value="csvUrl" selected="selected">CSV</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="saveButtons" class="no-padding-bottom save-as-buttons">
+                    <a class="btn" id="csvUrl" href="@urlCSV">@Resources.UI.Save</a>
+                </div>
+            </div>
         </aside>
     </div>
+
 </div>
 
 <script>
@@ -186,36 +149,23 @@
 
         //Main vue model
         var vueModel = new Vue({
-            el: '#searchResultTable',
-            data: {
-                ResultItems: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model.Result.Items))),
-                viewType: "tableView"
-            },
+            el: '#vue-container',
             components: {
-                SearchResult: SearchResult,
-                ResultItem: ResultItem
+                ThemeGroup: ThemeGroup,
+                FacetFilter: FacetFilter
             },
-            created: function() {
-                //this.viewType = this.getSelectedViewType();
-            },
-            methods: {
-                //view: function(type) {
-                //    this.viewType = type;
-                //    localStorage.setItem("layout", this.viewType);
-                //    if (type === "galleryView") {
-                //        this.tableBorder = "";
-                //    } else {
-                //        this.tableBorder = "table-border-bottom";
-                //    }
-                //},
-                //getSelectedViewType: function() {
-                //    var viewType = "tableView";
-                //    if (localStorage.getItem("layout")) {
-                //        viewType = localStorage.getItem("layout");
-                //        this.view(viewType);
-                //    }
-                //    return viewType;
-                //}
+            data: {
+                viewType: 'tableView',
+                selectedFields: [
+                    { name: 'title', size: '4' },
+                    { name: 'distributionType', size: '2' },
+                    { name: 'owner', size: '3' },
+                    { name: 'openData', size: '1' }
+                ],
+                selectedButtons: [
+                    'copyUrlButton',
+                    'showInMapButton'
+                ]
             }
         });
     </script>

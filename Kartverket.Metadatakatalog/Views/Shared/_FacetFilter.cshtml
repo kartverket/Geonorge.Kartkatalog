@@ -595,25 +595,62 @@
                 FacetName: '@UI.AllMapData',
                 name: 'all',
                 FacetResults: [],
-                count: @totalCount
+                count: @totalCount,
+                selectedFields: [
+                    { name: 'title', size: '5' },
+                    { name: 'owner', size: '4' },
+                    { name: 'openData', size: '1' }
+                ],
+                selectedButtons: [
+                    'showInMapButton',
+                    'addToCartButton'
+                ]
             },
             {
                 FacetName: '@UI.Facet_type_dataset',
                 name: 'dataset',
                 FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['dataset']),
-                count: @datasetCount
+                count: @datasetCount,
+                selectedFields: [
+                    { name: 'title', size: '5' },
+                    { name: 'owner', size: '4' },
+                    { name: 'openData', size: '1' }
+                ],
+                selectedButtons: [
+                    'showInMapButton',
+                    'addToCartButton'
+                ]
             },
             {
                 FacetName: '@UI.Facet_type_service',
                 name: 'serviceAndServicelayer',
                 FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['service', 'servicelayer']),
-                count: @serviceCount
+                count: @serviceCount,
+                selectedFields: [
+                    { name: 'title', size: '4' },
+                    { name: 'distributionType', size: '2' },
+                    { name: 'owner', size: '3' },
+                    { name: 'openData', size: '1' }
+                ],
+                selectedButtons: [
+                    'copyUrlButton',
+                    'showInMapButton'
+                ]
             },
             {
                 FacetName: '@UI.Facet_type_software',
                 name: 'software',
                 FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['software']),
-                count: @applicationCount
+                count: @applicationCount,
+                selectedFields: [
+                    { name: 'title', size: '4' },
+                    { name: 'distributionType', size: '2' },
+                    { name: 'owner', size: '4' },
+                    { name: 'openData', size: '1' }
+                ],
+                selectedButtons: [
+                    'showWebsiteButton'
+                ]
             }
         ];
             }
@@ -823,17 +860,15 @@
                 window.location.href = url;
             },
 
-            toggleFilterTabs: function (facets) {
+            toggleFilterTabs: function (facets, selectedFields, selectedButtons) {
 
                 this.filterTabs.FacetResults.forEach(function (facetResult) {
                         this.removeSelectedFacet(this.filterTabs.FacetField, facetResult);
                 }.bind(this));
 
                 facets.forEach(function (facet) {
-
-                        this.addSelectedFacet('type', facet);
+                    this.addSelectedFacet('type', facet);
                 }.bind(this));
-
 
                 var url = this.createUrlWithParameters();
                 var doc = document.documentElement;

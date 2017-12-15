@@ -1,6 +1,8 @@
 ﻿<script type="text/x-template" id="filter-tab-template">
     <li class="tab" v-bind:class="{'active': hasSelected}">
-        <a v-on:click="$parent.toggleFilterTabs(filter.FacetResults)">
+        <a v-on:click="$parent.toggleFilterTabs(filter.FacetResults, filter.selectedFields, filter.selectedButtons)" 
+           data-loading-message="Filtrerer søkeresultat" 
+           class="facet-checkbox-icon show-loading-animation">
             {{ filter.FacetName }}
             <span class="badge counter-badge">{{ filter.count }}</span>
         </a>
@@ -26,9 +28,15 @@
             hasSelected: function () {
                 var hasSelected = false;
                 if (this.filter.FacetResults.length) { // Select the active tab
-                    if (this.$parent.hasSelected(this.filter.FacetResults)) hasSelected = true; 
+                    if (this.$parent.hasSelected(this.filter.FacetResults)) {
+                        hasSelected = true;
+                        this.$root.selectedFields = this.filter.selectedFields;
+                        this.$root.selectedButtons = this.filter.selectedButtons;
+                    }
                 } else if (!this.$parent.facetsWithSpesificNameIsSelected('type')){ // Select 'All'-tab if no 'type'-facet is selected
                     hasSelected = true;
+                    this.$root.selectedFields = this.filter.selectedFields;
+                    this.$root.selectedButtons = this.filter.selectedButtons;
                 }
                 return hasSelected;
             }

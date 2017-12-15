@@ -1719,14 +1719,17 @@ var mainVueModel = new Vue({
         sendOrderBundleRequest: function (responseItem) {
             if (this.emailAddressIsValid(this.email)) {
                 var emailAddress = this.email;
+                var data = {
+                    email: emailAddress,
+                    downloadAsBundle: true
+                };
                 $.ajax({
                     url: responseItem.orderBundleUrl,
                     type: 'PUT',
+                    dataType: 'json',
+                    contentType: "application/json",
                     xhrFields: { withCredentials: IsGeonorge(responseItem.distributionUrl) },
-                    data: {
-                        email: emailAddress,
-                        downloadAsBundle: true
-                    },
+                    data: JSON.stringify(data),
                     success: function (data) {
                         alert('Pakken med alle datasett vil bli sendt til ' + emailAddress + ' så snart den er klar');
                     }
@@ -1794,7 +1797,6 @@ var mainVueModel = new Vue({
             this.updateAvailableProjectionsAndFormatsForMasterOrderLine();
             this.removeUnavailableSelectedProjectionsForMasterOrderLine();
             this.removeUnavailableSelectedFormatsForMasterOrderLine();
-            this.updateOrderRequests();
             this.addSelectedOrderLineValuesToLocalStorage();
             this.addSelectedMasterOrderLineValuesToLocalStorage();
         },
