@@ -1794,7 +1794,6 @@ var mainVueModel = new Vue({
             this.updateAvailableProjectionsAndFormatsForMasterOrderLine();
             this.removeUnavailableSelectedProjectionsForMasterOrderLine();
             this.removeUnavailableSelectedFormatsForMasterOrderLine();
-            this.updateOrderRequests();
             this.addSelectedOrderLineValuesToLocalStorage();
             this.addSelectedMasterOrderLineValuesToLocalStorage();
         },
