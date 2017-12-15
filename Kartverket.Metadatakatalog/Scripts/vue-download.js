@@ -910,25 +910,37 @@ var mainVueModel = new Vue({
                         additionalInfo: null,
                         orderBundleUrl: null
                     }
-                    distribution.data._links.forEach(function (link) {
-                        if (link.rel == 'http://rel.geonorge.no/download/order/bundle') {
-                            orderResponseGroup.orderBundleUrl = link.href;
-                            return;
-                        }
-                    });
-                    distribution.data.files.forEach(function (file) {
-                        if (orderResponseGroup.datasets[file.metadataName] == undefined) {
-                            orderResponseGroup.datasets[file.metadataName] = {
-                                files: [],
-                            };
-                        }
-                        orderResponseGroup.datasets[file.metadataName].files.push(file);
 
-                        if (orderResponseGroup.additionalInfo == null) {
-                            orderResponseGroup.additionalInfo = this.getOrderRequestAdditionalInfo(distribution.distributionUrl, file.metadataUuid);
+                    if (distribution.data != undefined) {
+
+                        if (distribution.data._links != undefined && distribution.data._links.length) {
+                            distribution.data._links.forEach(function (link) {
+                                if (link.rel == 'http://rel.geonorge.no/download/order/bundle') {
+                                    orderResponseGroup.orderBundleUrl = link.href;
+                                    return;
+                                }
+                            });
                         }
 
-                    }.bind(this));
+                        if (distribution.data.files != undefined && distribution.data.files.length) {
+                            distribution.data.files.forEach(function (file) {
+                                if (orderResponseGroup.datasets[file.metadataName] == undefined) {
+                                    orderResponseGroup.datasets[file.metadataName] = {
+                                        files: [],
+                                    };
+                                }
+                                orderResponseGroup.datasets[file.metadataName].files.push(file);
+
+                                if (orderResponseGroup.additionalInfo == null) {
+                                    orderResponseGroup.additionalInfo = this.getOrderRequestAdditionalInfo(distribution.distributionUrl, file.metadataUuid);
+                                }
+
+                            }.bind(this));
+                        }
+
+                    }
+
+
                     orderResponseGrouped.push(orderResponseGroup);
                 }.bind(this))
             }
