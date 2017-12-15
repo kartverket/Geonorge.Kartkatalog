@@ -51,54 +51,40 @@
 }
 
 @Html.Partial("_resultItemRow")
-@Html.Partial("_searchResult")
-
+@Html.Partial("VueComponents/_TableHeader")
 
 @* Tabellen *@
 <script type="text/x-template" id="theme-group-template">
     <div>
-        <div class="row resultItemRowTableHeader">
-            <div class="col-sm-5" is="header-title"></div>
-            <div class="col-sm-4" is="header-organization"></div>
-            <div class="col-sm-1" is="header-open-data"></div>
-            <div class="col-sm-1" is="header-Map"></div>
-            <div class="col-sm-1" is="header-Add-to-cart"></div>
+        <div v-if="$root.viewType == 'tableView'" is="table-header"
+             v-bind:selected-fields="$root.selectedFields"
+             v-bind:selected-buttons="$root.selectedButtons">
         </div>
 
-        <div class="menu-separator search-results-table-heading"></div>
+        <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
         <div v-for="resultItem in searchResults">
             <div v-if="resultItem.topLevelThemes.length" v-for="topLevelTheme in resultItem.topLevelThemes">
-                <div is="theme-item" v-bind:theme="topLevelTheme" v-bind:parent-hierarchy-level="-1"></div>
+                <div is="theme-item"
+                     v-bind:theme="topLevelTheme"
+                     v-bind:parent-hierarchy-level="-1">
+                </div>
             </div>
             <div is="result-item"
                  v-bind:result-item="resultItem"
-                 v-bind:selected-fields="[
-                 {name: 'title', size: '5'},
-                 {name: 'owner', size: '4'},
-                 {name: 'openData', size: '1'}
-                 ]"
-                 v-bind:selected-buttons="[
-                 'showInMapButton',
-                 'addToCartButton'
-                 ]">
+                 v-bind:selected-fields="$root.selectedFields"
+                 v-bind:selected-buttons="$root.selectedButtons">
             </div>
         </div>
     </div>
 </script>
+
 @* Metadata template *@
 <script type="text/x-template" id="metadata-item-template">
     <div>
         <div is="result-item"
              v-bind:result-item="apiData"
-             v-bind:selected-fields="[
-                 {name: 'title', size: '5'},
-                 {name: 'owner', size: '4'},
-                 {name: 'openData', size: '1'}
-                 ]"
-             v-bind:selected-buttons="[
-                 'showInMapButton',
-                 'addToCartButton'
-                 ]">
+             v-bind:selected-fields="$root.selectedFields"
+             v-bind:selected-buttons="$root.selectedButtons">
         </div>
     </div>
 </script>
@@ -156,14 +142,12 @@
             }.bind(this));
         },
         components: {
-            ResultItem: ResultItem,
-            SearchResult: SearchResult,
+            ResultItem: ResultItem
         }
     };
 
     var searchResults = @Html.Raw(JsonConvert.SerializeObject(Model.Result.Items));
     var metadatasWithThemes = @Html.Raw(metadatasWithThemes);
-    console.log(metadatasWithThemes);
 
     var ThemeItem = {
         name: 'themeItem',
@@ -264,14 +248,7 @@
         components: {
             ThemeItem: ThemeItem,
             ResultItem: ResultItem,
-            HeaderTitle: HeaderTitle,
-            HeaderType: HeaderType,
-            HeaderOrganization: HeaderOrganization,
-            HeaderOpenData: HeaderOpenData,
-            HeaderWebsite: HeaderWebsite,
-            HeaderAddToCart: HeaderAddToCart,
-            HeaderMap: HeaderMap,
-            HeaderUrl: HeaderUrl
+            TableHeader: TableHeader
         }
     };
 </script>
