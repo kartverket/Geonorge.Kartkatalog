@@ -19,44 +19,35 @@
 
 @* Sett url og fiks linjeskift i data for themes *@
 @helper BuildMenu(List<Theme> data, int? parentId = null)
-{
-
-foreach (var theme in data)
-{
-    theme.Name = theme.NameTranslated();
-    theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
-    theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
-}
-
-var items = data.Where(d => d.ParentId == parentId);
-if (items.Any())
-{
-    foreach (var item in items)
     {
-            @BuildMenu(data, item.Id)
+
+        foreach (var theme in data)
+        {
+            theme.Metadata = theme.SortMetadata(theme);
+            theme.Name = theme.NameTranslated();
+            theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+            theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
         }
-    }
+
+        var items = data.Where(d => d.ParentId == parentId);
+        if (items.Any())
+        {
+            foreach (var item in items)
+            {
+                @BuildMenu(data, item.Id)
+            }
+        }
 }
 
 @BuildMenu(themes, null)
 
 @{
-    var metadataWithThemesListSorted = metadataWithThemesList.ToList();
-    for (int m = 0; m < metadataWithThemesListSorted.Count; m++)
+    var metadatasWithThemes = JsonConvert.SerializeObject(metadataWithThemesList,
+    Formatting.None,
+    new JsonSerializerSettings()
     {
-        for (int t = 0;t < metadataWithThemesListSorted[m].Themes.Count; t++)
-        {
-            metadataWithThemesListSorted[m].Themes[t].Metadata = metadataWithThemesListSorted[m].Themes[t].SortMetadata(metadataWithThemesListSorted[m].Themes[t]);
-        }
-    }
-    var metadatasWithThemes = JsonConvert.SerializeObject(metadataWithThemesListSorted,
-Formatting.None,
-new JsonSerializerSettings()
-{
-    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-    //ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-    //PreserveReferencesHandling = PreserveReferencesHandling.Objects
-});
+        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+    });
 }
 
 @Html.Partial("_resultItemRow")
