@@ -1114,6 +1114,16 @@ namespace Kartverket.Metadatakatalog.Service
                 distributionProtocols.Add(simpleMetadata.DistributionProtocols[0]);
                 indexDoc.DistributionProtocols = distributionProtocols;
             }
+
+            if (indexDoc.Type == "dataset")
+            {
+                indexDoc.ServiceDistributionProtocolForDataset = simpleMetadata.ServiceDistributionProtocolForDataset;
+                indexDoc.ServiceDistributionUrlForDataset = simpleMetadata.ServiceDistributionUrlForDataset;
+                indexDoc.ServiceDistributionNameForDataset = simpleMetadata.ServiceDistributionNameForDataset;
+                indexDoc.ServiceDistributionUuidForDataset = simpleMetadata.ServiceDistributionUuidForDataset;
+                indexDoc.ServiceDistributionAccessConstraint = simpleMetadata.ServiceDistributionAccessConstraint;
+            }
+
             indexDoc.DistributionUrl = simpleMetadata.DistributionUrl;
             indexDoc.DistributionName = simpleMetadata.DistributionName;
             indexDoc.ThumbnailUrl = simpleMetadata.ThumbnailUrl;
