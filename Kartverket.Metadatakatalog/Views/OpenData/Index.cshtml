@@ -154,7 +154,16 @@
             FacetFilter: FacetFilter
         },
         data: {
-            viewType: 'tableView'
+            viewType: 'tableView',
+            selectedFields: [
+                { name: 'title', size: '5' },
+                { name: 'owner', size: '4' },
+                { name: 'openData', size: '1' }
+            ],
+            selectedButtons: [
+                'showInMapButton',
+                'addToCartButton'
+            ]
         }
     });
 </script>

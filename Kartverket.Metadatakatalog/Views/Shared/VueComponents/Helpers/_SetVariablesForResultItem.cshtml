@@ -55,7 +55,7 @@
 
     @if (Model.ShowMapLink())
     {
-        @:showInMapUrl = "@Html.NorgeskartUrl()@Model.MapUrl()/";
+        @:showInMapUrl = "@Model.MapUrl()/";
                     if (Model.IsRestrictedService()) {
             @:showInMapIsRestricted = true;
                     }

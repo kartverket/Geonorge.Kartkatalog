@@ -1,4 +1,4 @@
-﻿<script type="text/x-template" theme="tabell" id="titleHeaderTemplate">
+﻿<script type="text/x-template" theme="tabell" id="table-header-title-template">
     <div v-bind:class="orderByTitle.className" v-bind:id="orderByTitle.id">
         <p>
             <a href="@Url.Action(ViewContext.RouteData.GetRequiredString("action"), Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
@@ -8,11 +8,11 @@
     </div>
 </script>
 
-<script type="text/x-template" theme="tabell" id="typeHeaderTemplate">
+<script type="text/x-template" theme="tabell" id="table-header-distribution-type-template">
     <div><p>Type</p></div>
 </script>
 
-<script type="text/x-template" theme="tabell" id="organizationHeaderTemplate">
+<script type="text/x-template" theme="tabell" id="table-header-owner-template">
     <div v-bind:class="orderByOrganization.className" v-bind:id="orderByOrganization.id">
         <p>
             <a href="@Url.Action(ViewContext.RouteData.GetRequiredString("action"), Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
@@ -22,100 +22,232 @@
     </div>
 </script>
 
-<script type="text/x-template" theme="tabell" id="openDataHeaderTemplate">
+<script type="text/x-template" theme="tabell" id="table-header-open-data-template">
     <div><p>@Resources.UI.OpenData</p></div>
 </script>
 
-<script type="text/x-template" theme="tabell" id="websiteHeaderTemplate">
-    <div><p>@Resources.UI.WebPageHeader</p></div>
-</script>
-
-<script type="text/x-template" theme="tabell" id="mapHeaderTemplate">
-    <div><p>@Resources.UI.Map</p></div>
-</script>
-
-<script type="text/x-template" theme="tabell" id="addToCartHeaderTemplate">
-    <div><p>@Resources.UI.Download</p></div>
-</script>
-
-<script type="text/x-template" theme="tabell" id="urlHeaderTemplate">
+<script type="text/x-template" theme="tabell" id="table-header-copy-url-button-template">
     <div><p>Url</p></div>
 </script>
 
+<script type="text/x-template" theme="tabell" id="table-header-show-in-map-button-template">
+    <div><p>@Resources.UI.Map</p></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="table-header-add-to-cart-button-template">
+    <div><p>@Resources.UI.Download</p></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="table-header-show-coverage-button-template">
+    <div></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="table-header-help-button-template">
+    <div></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="table-header-contact-owner-templatee">
+    <div></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="table-header-show-product-sheet-button-template">
+    <div></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="table-header-show-product-specification-button-template">
+    <div></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="table-header-show-legend-description-button-template">
+    <div></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="table-header-show-website-button-template">
+    <div><p>@Resources.UI.WebPageHeader</p></div>
+</script>
+
+<script type="text/x-template" theme="tabell" id="table-header-show-product-page-button-template">
+    <div></div>
+</script>
+
+
+<script type="text/x-template" theme="tabell" id="table-header-template">
+    <div class="row resultItemRowTableHeader">
+        <div v-bind:class="getFieldSizeClass('title')" v-show="isSelectedField('title')" is="table-header-title"></div>
+        <div v-bind:class="getFieldSizeClass('distributionType')" v-show="isSelectedField('distributionType')" is="table-header-distribution-type"></div>
+        <div v-bind:class="getFieldSizeClass('owner')" v-if="isSelectedField('owner')" is="table-header-owner"></div>
+        <div v-bind:class="getFieldSizeClass('openData')" v-if="isSelectedField('openData')" is="table-header-open-data"></div>
+        <div class="col-sm-1" v-if="isSelectedButton('copyUrlButton')" is="table-header-copy-url-button"></div>
+        <div class="col-sm-1" v-if="isSelectedButton('showInMapButton')" is="table-header-show-in-map-button"></div>
+        <div class="col-sm-1" v-if="isSelectedButton('addToCartButton')" is="table-header-add-to-cart-button"></div>
+        <div class="col-sm-1" v-if="isSelectedButton('showCoverageButton')" is="table-header-show-coverage-button"></div>
+        <div class="col-sm-1" v-if="isSelectedButton('helpButton')" is="table-header-help-button"></div>
+        <div class="col-sm-1" v-if="isSelectedButton('contactOwnerButton')" is="table-header-contact-owner-button"></div>
+        <div class="col-sm-1" v-if="isSelectedButton('showProductSheetButton')" is="table-header-show-product-sheet-button"></div>
+        <div class="col-sm-1" v-if="isSelectedButton('showProductSpecificationButton')" is="table-header-show-product-specification-button"></div>
+        <div class="col-sm-1" v-if="isSelectedButton('showLegendDescriptionButton')" is="table-header-show-legend-description-button"></div>
+        <div class="col-sm-1" v-if="isSelectedButton('showWebsiteButton')" is="table-header-show-website-button"></div>
+        <div class="col-sm-1" v-if="isSelectedButton('showProductPageButton')" is="table-header-show-product-page-button"></div>
+    </div>
+</script>
+
 <script>
-        var HeaderTitle = {
-            name: "header-title",
-            template: "#titleHeaderTemplate",
-            data: function () {
-                var data = {
-                    orderByTitle: {
-                        className: "orderby orderby-title orderby-asc",
-                        id: "orderby-title-asc"
-                    }
-                };
-                return data;
-            },
-            created: function () {
-                if (this.$parent.currentOrderByParameter === "title_desc") {
-                    this.orderByTitle.id = "orderby-title-desc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-desc";
-                } else {
-                    this.orderByTitle.id = "orderby-title-asc";
-                    this.orderByTitle.className = "orderby orderby-title orderby-asc";
+
+    var TableHeaderTitle = {
+        name: "TableHeaderTitle",
+        template: "#table-header-title-template",
+        data: function () {
+            var data = {
+                orderByTitle: {
+                    className: "orderby orderby-title orderby-asc",
+                    id: "orderby-title-asc"
                 }
+            };
+            return data;
+        },
+        created: function () {
+            if (this.$parent.currentOrderByParameter === "title_desc") {
+                this.orderByTitle.id = "orderby-title-desc";
+                this.orderByTitle.className = "orderby orderby-title orderby-desc";
+            } else {
+                this.orderByTitle.id = "orderby-title-asc";
+                this.orderByTitle.className = "orderby orderby-title orderby-asc";
             }
-        };
+        }
+    };
 
-        var HeaderOrganization = {
-            name: "header-organization",
-            template: "#organizationHeaderTemplate",
-            data: function () {
-                var data = {
-                    orderByOrganization: {
-                        className: "orderby orderby-organization orderby-asc",
-                        id: "orderby-organization-asc"
-                    }
-                };
-                return data;
-            },
-            created: function () {
-                if (this.$parent.currentOrderByParameter === "organization_desc") {
-                    this.orderByOrganization.id = "orderby-organization-desc";
-                    this.orderByOrganization.className = "orderby orderby-organization orderby-desc";
-                } else {
-                    this.orderByOrganization.id = "orderby-organization-asc";
-                    this.orderByOrganization.className = "orderby orderby-organization orderby-asc";
+    var TableHeaderDistributionType = {
+        name: "TableHeaderDistributionType",
+        template: "#table-header-distribution-type-template"
+    };
+
+    var TableHeaderOwner = {
+        name: "TableHeaderOwner",
+        template: "#table-header-owner-template",
+        data: function () {
+            var data = {
+                orderByOrganization: {
+                    className: "orderby orderby-organization orderby-asc",
+                    id: "orderby-organization-asc"
                 }
+            };
+            return data;
+        },
+        created: function () {
+            if (this.$parent.currentOrderByParameter === "organization_desc") {
+                this.orderByOrganization.id = "orderby-organization-desc";
+                this.orderByOrganization.className = "orderby orderby-organization orderby-desc";
+            } else {
+                this.orderByOrganization.id = "orderby-organization-asc";
+                this.orderByOrganization.className = "orderby orderby-organization orderby-asc";
             }
-        };
+        }
+    };
 
-        var HeaderType = {
-            name: "header-type",
-            template: "#typeHeaderTemplate"
-        };
+    var TableHeaderOpenData = {
+        name: "TableHeaderOpenData",
+        template: "#table-header-open-data-template"
+    };
 
-        var HeaderOpenData = {
-            name: "header-open-data",
-            template: "#openDataHeaderTemplate"
-        };
+    var TableHeaderCopyUrlButton = {
+        name: "TableHeaderCopyUrlButton",
+        template: "#table-header-copy-url-button-template"
+    };
 
-        var HeaderWebsite = {
-            name: "header-website",
-            template: "#websiteHeaderTemplate"
-        };
+    var TableHeaderShowInMapButton = {
+        name: "TableHeaderShowInMapButton",
+        template: "#table-header-show-in-map-button-template"
+    };
 
-        var HeaderMap = {
-            name: "header-map",
-            template: "#mapHeaderTemplate"
-        };
+    var TableHeaderAddToCartButton = {
+        name: "TableHeaderAddToCartButton",
+        template: "#table-header-add-to-cart-button-template"
+    };
 
-        var HeaderAddToCart = {
-            name: "header-add-to-cart",
-            template: "#addToCartHeaderTemplate"
-        };
+    var TableHeaderShowCoverageButton = {
+        name: 'TableHeaderShowCoverageButton',
+        template: "#table-header-show-coverage-button-template"
+    }
 
-        var HeaderUrl = {
-            name: "header-url",
-            template: "#urlHeaderTemplate"
-        };
+    var TableHeaderHelpButton = {
+        name: 'TableHeaderHelpButton',
+        template: "#table-header-help-button-template"
+    }
+
+    var TableHeaderContactOwnerButton = {
+        name: 'TableHeaderContactOwnerButton',
+        template: "#table-header-contact-owner-template"
+    }
+
+    var TableHeaderShowProductSheetButton = {
+        name: 'TableHeaderShowProductSheetButton',
+        template: "#table-header-show-product-sheet-button-template"
+    }
+
+    var TableHeaderShowProductSpecificationButton = {
+        name: 'TableHeaderShowProductSpecificationButton',
+        template: "#table-header-show-product-specification-button-template"
+    }
+
+    var TableHeaderShowLegendDescriptionButton = {
+        name: 'TableHeaderShowLegendDescriptionButton',
+        template: "#table-header-show-legend-description-button-template"
+    }
+
+    var TableHeaderShowWebsiteButton = {
+        name: "TableHeaderShowWebsiteButton",
+        template: "#table-header-show-website-button-template"
+    };
+
+    var TableHeaderShowProductPageButton = {
+        name: "TableHeaderShowProductPageButton",
+        template: "#table-header-show-product-page-button-template"
+    };
+
+
+    var TableHeader = {
+        name: "TableHeader",
+        template: "#table-header-template",
+        props: ["selectedFields", "selectedButtons"],
+        components: {
+            TableHeaderTitle: TableHeaderTitle,
+            TableHeaderDistributionType: TableHeaderDistributionType,
+            TableHeaderOwner: TableHeaderOwner,
+            TableHeaderOpenData: TableHeaderOpenData,
+            TableHeaderCopyUrlButton: TableHeaderCopyUrlButton,
+            TableHeaderShowInMapButton: TableHeaderShowInMapButton,
+            TableHeaderAddToCartButton: TableHeaderAddToCartButton,
+            TableHeaderShowCoverageButton: TableHeaderShowCoverageButton,
+            TableHeaderHelpButton: TableHeaderHelpButton,
+            TableHeaderContactOwnerButton: TableHeaderContactOwnerButton,
+            TableHeaderShowProductSheetButton: TableHeaderShowProductSheetButton,
+            TableHeaderShowProductSpecificationButton: TableHeaderShowProductSpecificationButton,
+            TableHeaderShowLegendDescriptionButton: TableHeaderShowLegendDescriptionButton,
+            TableHeaderShowWebsiteButton: TableHeaderShowWebsiteButton,
+            TableHeaderShowProductPageButton: TableHeaderShowProductPageButton
+        },
+        methods: {
+            isSelectedField: function (fieldName) {
+                var isSelected = false;
+                this.selectedFields.forEach(function (selectedField) {
+                    if (selectedField.name == fieldName) isSelected = true;
+                });
+                return isSelected;
+            },
+            getFieldSizeClass: function (fieldName) {
+                var fieldSizeClass = "";
+                this.selectedFields.forEach(function (selectedField) {
+                    if (selectedField.name == fieldName) fieldSizeClass = "col-sm-" + selectedField.size;
+                });
+                return fieldSizeClass;
+            },
+            isSelectedButton: function (buttonName) {
+                var isSelected = false;
+                this.selectedButtons.forEach(function (selectedButtonName) {
+                    if (selectedButtonName == buttonName) isSelected = true;
+                });
+                return isSelected;
+            }
+        }
+    };
 </script>
