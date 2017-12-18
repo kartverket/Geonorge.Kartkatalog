@@ -759,7 +759,7 @@ namespace Kartverket.Metadatakatalog.Service
                 output = new Constraints
                 {
                     AccessConstraints = Register.GetRestriction(simpleConstraints.AccessConstraints, simpleConstraints.OtherConstraintsAccess),
-                    OtherConstraints = simpleConstraints.OtherConstraints,
+                    OtherConstraints = GetTranslation(simpleConstraints.OtherConstraints,simpleConstraints.EnglishOtherConstraints),
                     OtherConstraintsLink = simpleConstraints.OtherConstraintsLink,
                     OtherConstraintsLinkText = simpleConstraints.OtherConstraintsLinkText,
                     SecurityConstraints = Register.GetClassification(simpleConstraints.SecurityConstraints),
