@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Models;
+using Kartverket.Metadatakatalog.Models.Translations;
 
 namespace Kartverket.Metadatakatalog.Helpers
 {
@@ -19,7 +20,12 @@ namespace Kartverket.Metadatakatalog.Helpers
         }
         public static string GeonorgeUrl(this HtmlHelper helper)
         {
-            return WebConfigurationManager.AppSettings["GeonorgeUrl"];
+            var url = WebConfigurationManager.AppSettings["GeonorgeUrl"];
+            var culture = CultureHelper.GetCurrentCulture();
+            if (culture != Culture.NorwegianCode)
+                url = url + Culture.EnglishCode;
+
+            return url;
         }
         public static string GeonorgeArtiklerUrl(this HtmlHelper helper)
         {

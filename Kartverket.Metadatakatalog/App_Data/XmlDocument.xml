@@ -1339,6 +1339,11 @@
               Looks up a localized string similar to Last ned.
             </summary>
         </member>
+        <member name="P:Resources.UI.DownloadHeader">
+            <summary>
+              Looks up a localized string similar to Last ned.
+            </summary>
+        </member>
         <member name="P:Resources.UI.DownloadOrderLineHeader">
             <summary>
               Looks up a localized string similar to Felles valg for nedlastning, vil gjelde for alle datasett.
