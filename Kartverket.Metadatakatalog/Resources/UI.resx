@@ -711,4 +711,7 @@
   <data name="SpecificUsage" xml:space="preserve">
     <value>Bruksområde</value>
   </data>
+  <data name="DownloadHeader" xml:space="preserve">
+    <value>Last ned</value>
+  </data>
 </root>
