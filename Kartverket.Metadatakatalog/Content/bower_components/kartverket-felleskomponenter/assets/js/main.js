@@ -26,6 +26,11 @@ function environmentIsProduction() {
 }
 
 var geonorgeUrl = environmentIsProduction() ? "https://www.geonorge.no/" : "https://www.test.geonorge.no/";
+if (cultureData !== {}) {
+    if (cultureData.currentCulture == 'en'){
+        geonorgeUrl += 'en';
+    }
+}
 
 // Check if string contains parameters
 function containsParameters(string) {
