@@ -147,8 +147,7 @@ if (contact != null)
             <div class="col-sm-12">
                 <h3>@UI.Distributions</h3>
                     
-             
-                    <h4>Filnedlasting</h4>
+                <div v-if="distributions.ShowSelfDistributions" style="margin-bottom:50px">
                     <div class="row resultItemRowTableHeader">
                         <div class="col-sm-3"><p>@UI.Title</p></div>
                         <div class="col-sm-2"><p>Type</p></div>
@@ -163,83 +162,119 @@ if (contact != null)
                         <div is="resultItem" v-bind:result-item="item">
                         </div>
                     </div>
-                
-                
-                <div v-if="distributions.ShowRelatedDataset">
-                    <h4>Dataset</h4>
-                    <div class="row resultItemRowTableHeader">
-                        <div class="col-sm-3"><p>@UI.Title</p></div>
-                        <div class="col-sm-2"><p>Type</p></div>
-                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                        <div class="col-sm-1"><p>@UI.Map</p></div>
-                        <div class="col-sm-1"><p>@UI.Download</p></div>
-                        <div class="col-sm-2"><p>Format</p></div>
-                    </div>
-                    <div class="menu-separator search-results-table-heading"></div>
-                    <div v-for="item in RelatedDataset" class="table-border-bottom">
-                        <div is="resultItem" v-bind:result-item="item">
-                        </div>
-                    </div>
                 </div>
 
-                <div v-if="distributions.ShowRelatedServices">
-                    <h4>Tjeneste</h4>
-                    <div class="row resultItemRowTableHeader">
-                        <div class="col-sm-3"><p>@UI.Title</p></div>
-                        <div class="col-sm-2"><p>Type</p></div>
-                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                        <div class="col-sm-1"><p>@UI.Map</p></div>
-                        <div class="col-sm-1"><p>@UI.Download</p></div>
-                        <div class="col-sm-2"><p>Format</p></div>
-                    </div>
-                    <div class="menu-separator search-results-table-heading"></div>
-                    <div v-for="item in RelatedServices" class="table-border-bottom">
-                        <div is="resultItem" v-bind:result-item="item">
+                    <div v-if="distributions.ShowRelatedViewServices" style="margin-bottom:50px">
+                        <p class="h3">Visningstjenester</p>
+                        <div class="row resultItemRowTableHeader">
+                            <div class="col-sm-3"><p>@UI.Title</p></div>
+                            <div class="col-sm-2"><p>Type</p></div>
+                            <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                            <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                            <div class="col-sm-1"><p>@UI.Map</p></div>
+                            <div class="col-sm-1"><p>@UI.Download</p></div>
+                            <div class="col-sm-2"><p>Format</p></div>
+                        </div>
+                        <div class="menu-separator search-results-table-heading"></div>
+                        <div v-for="item in RelatedViewServices" class="table-border-bottom">
+                            <div is="resultItem" v-bind:result-item="item">
+                            </div>
                         </div>
                     </div>
-                    <div class="clearfix"></div>
-                </div>
 
-                <div v-if="distributions.ShowRelatedServiceLayer">
-                    <h4>Tjenestelag</h4>
-                    <div class="row resultItemRowTableHeader">
-                        <div class="col-sm-3"><p>@UI.Title</p></div>
-                        <div class="col-sm-2"><p>Type</p></div>
-                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                        <div class="col-sm-1"><p>@UI.Map</p></div>
-                        <div class="col-sm-1"><p>@UI.Download</p></div>
-                        <div class="col-sm-2"><p>Format</p></div>
-                    </div>
-                    <div class="menu-separator search-results-table-heading"></div>
-                    <div v-for="item in RelatedServiceLayer" class="table-border-bottom">
-                        <div is="resultItem" v-bind:result-item="item">
+                    <div v-if="distributions.ShowRelatedDownloadServices" style="margin-bottom:50px">
+                        <p class="h3">Nedlastingstjenester</p>
+                        <div class="row resultItemRowTableHeader">
+                            <div class="col-sm-3"><p>@UI.Title</p></div>
+                            <div class="col-sm-2"><p>Type</p></div>
+                            <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                            <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                            <div class="col-sm-1"><p>@UI.Map</p></div>
+                            <div class="col-sm-1"><p>@UI.Download</p></div>
+                            <div class="col-sm-2"><p>Format</p></div>
+                        </div>
+                        <div class="menu-separator search-results-table-heading"></div>
+                        <div v-for="item in RelatedDownloadServices" class="table-border-bottom">
+                            <div is="resultItem" v-bind:result-item="item">
+                            </div>
                         </div>
                     </div>
-                    <div class="clearfix"></div>
-                </div>
 
-                <div v-if="distributions.ShowRelatedApplications">
-                    <h4>Applikasjoner</h4>
-                    <div class="row resultItemRowTableHeader">
-                        <div class="col-sm-3"><p>@UI.Title</p></div>
-                        <div class="col-sm-2"><p>Type</p></div>
-                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                        <div class="col-sm-1"><p>@UI.Map</p></div>
-                        <div class="col-sm-1"><p>@UI.Download</p></div>
-                        <div class="col-sm-2"><p>Format</p></div>
-                    </div>
-                    <div class="menu-separator search-results-table-heading"></div>
-                    <div v-for="item in RelatedApplications" class="table-border-bottom">
-                        <div is="resultItem" v-bind:result-item="item">
+                    <div v-if="distributions.ShowRelatedDataset" style="margin-bottom:50px">
+                        <p class="h3">Dataset</p>
+                        <div class="row resultItemRowTableHeader">
+                            <div class="col-sm-3"><p>@UI.Title</p></div>
+                            <div class="col-sm-2"><p>Type</p></div>
+                            <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                            <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                            <div class="col-sm-1"><p>@UI.Map</p></div>
+                            <div class="col-sm-1"><p>@UI.Download</p></div>
+                            <div class="col-sm-2"><p>Format</p></div>
+                        </div>
+                        <div class="menu-separator search-results-table-heading"></div>
+                        <div v-for="item in RelatedDataset" class="table-border-bottom">
+                            <div is="resultItem" v-bind:result-item="item">
+                            </div>
                         </div>
                     </div>
-                    <div class="clearfix"></div>
+
+                    <div v-if="distributions.ShowRelatedServices" style="margin-bottom:50px">
+                        <p class="h3">Tjeneste</p>
+                        <div class="row resultItemRowTableHeader">
+                            <div class="col-sm-3"><p>@UI.Title</p></div>
+                            <div class="col-sm-2"><p>Type</p></div>
+                            <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                            <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                            <div class="col-sm-1"><p>@UI.Map</p></div>
+                            <div class="col-sm-1"><p>@UI.Download</p></div>
+                            <div class="col-sm-2"><p>Format</p></div>
+                        </div>
+                        <div class="menu-separator search-results-table-heading"></div>
+                        <div v-for="item in RelatedServices" class="table-border-bottom">
+                            <div is="resultItem" v-bind:result-item="item">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div v-if="distributions.ShowRelatedServiceLayer" style="margin-bottom:50px">
+                        <p class="h3">Tjenestelag</p>
+                        <div class="row resultItemRowTableHeader">
+                            <div class="col-sm-3"><p>@UI.Title</p></div>
+                            <div class="col-sm-2"><p>Type</p></div>
+                            <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                            <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                            <div class="col-sm-1"><p>@UI.Map</p></div>
+                            <div class="col-sm-1"><p>@UI.Download</p></div>
+                            <div class="col-sm-2"><p>Format</p></div>
+                        </div>
+                        <div class="menu-separator search-results-table-heading"></div>
+                        <div v-for="item in RelatedServiceLayer" class="table-border-bottom">
+                            <div is="resultItem" v-bind:result-item="item">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div v-if="distributions.ShowRelatedApplications" style="margin-bottom:50px">
+                        <p class="h3">Applikasjoner</p>
+                        <div class="row resultItemRowTableHeader">
+                            <div class="col-sm-3"><p>@UI.Title</p></div>
+                            <div class="col-sm-2"><p>Type</p></div>
+                            <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                            <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                            <div class="col-sm-1"><p>@UI.Map</p></div>
+                            <div class="col-sm-1"><p>@UI.Download</p></div>
+                            <div class="col-sm-2"><p>Format</p></div>
+                        </div>
+                        <div class="menu-separator search-results-table-heading"></div>
+                        <div v-for="item in RelatedApplications" class="table-border-bottom">
+                            <div is="resultItem" v-bind:result-item="item">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
-            </div>
         </div>
 
         @* *** Relaterte data ****@
@@ -642,7 +677,13 @@ if (keywords != null && keywords.Any())
                 },
                 RelatedServices: function() {
                     return this.convertDistributionList(this.distributions.RelatedServices);
-                }
+                },
+                RelatedViewServices: function () {
+                    return this.convertDistributionList(this.distributions.RelatedViewServices);
+                },
+                RelatedDownloadServices: function () {
+                    return this.convertDistributionList(this.distributions.RelatedDownloadServices);
+                },
             },
             methods: {
                 convertDistributionList: function(distributionList) {

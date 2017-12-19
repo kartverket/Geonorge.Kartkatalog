@@ -528,11 +528,16 @@ namespace Kartverket.Metadatakatalog.Models
         public List<Distribution> RelatedApplications { get; set; }
         public List<Distribution> RelatedServices { get; set; }
         public List<Distribution> RelatedServiceLayer { get; set; }
+        public List<Distribution> RelatedViewServices { get; set; }
+        public List<Distribution> RelatedDownloadServices { get; set; }
 
         public bool ShowRelatedDataset { get; set; }
         public bool ShowRelatedApplications { get; set; }
         public bool ShowRelatedServices { get; set; }
         public bool ShowRelatedServiceLayer { get; set; }
+        public bool ShowRelatedViewServices { get; set; }
+        public bool ShowRelatedDownloadServices { get; set; }
+        public bool ShowSelfDistributions { get; set; }
 
         public Distributions()
         {
@@ -541,11 +546,16 @@ namespace Kartverket.Metadatakatalog.Models
             RelatedApplications = new List<Distribution>();
             RelatedServices = new List<Distribution>();
             RelatedServiceLayer = new List<Distribution>();
+            RelatedViewServices = new List<Distribution>();
+            RelatedDownloadServices = new List<Distribution>();
 
             ShowRelatedDataset = false;
             ShowRelatedApplications = false;
             ShowRelatedServices = false;
             ShowRelatedServiceLayer = false;
+            ShowRelatedViewServices = false;
+            ShowRelatedDownloadServices = false;
+            ShowSelfDistributions = true;
         }
 
         public bool ShowApplications()
@@ -556,6 +566,16 @@ namespace Kartverket.Metadatakatalog.Models
         public bool ShowServices()
         {
             return RelatedServices.Any();
+        }
+
+        public bool ShowViewServices()
+        {
+            return RelatedViewServices.Any();
+        }
+
+        public bool ShowDownloadServices()
+        {
+            return RelatedViewServices.Any();
         }
 
         public bool ShowDatasets()

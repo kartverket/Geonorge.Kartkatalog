@@ -58,7 +58,7 @@ namespace Kartverket.Metadatakatalog.Service
                     }
             }
 
-            
+
             //Hente inn indeks og relaterte services
             if (simpleMetadata.IsDataset() || simpleMetadata.IsDimensionGroup())
             {
@@ -198,29 +198,45 @@ namespace Kartverket.Metadatakatalog.Service
                     }
             }
 
+            //else if (simpleMetadata.IsService())
+            //    relatedDistributions.AddRange(GetServiceDirectoryRelatedDistributions(uuid));
+            //else if (simpleMetadata.HierarchyLevel == "software")
+            //    relatedDistributions.AddRange(GetApplicationDatasetRelatedDistributions(uuid));
+
+
+
 
             if (metadata.IsDataset())
             {
                 var metadataIndexDocResult = GetMetadata(metadata.Uuid);
-                // Applikasjoner
+                
+                // Nedlastingstjenester - WWW:DOWNLOAD-1.0-http--download, GEONORGE:FILEDOWNLOAD, GEONORGE:DOWNLOAD
+
+                // Visningstjenester - OGC:WMS, OGC:WMTS, WMS-C
+                metadata.Distributions.RelatedViewServices = GetRelatedViewService(metadataIndexDocResult.DatasetServices);             
+                metadata.Distributions.ShowRelatedViewServices = metadata.Distributions.ShowViewServices();
+               
+                // Nedlastingstjenester - OGC:WFS, OGC:WCS, W3C:REST, W3C:WS, W3C:AtomFeed
+                metadata.Distributions.RelatedDownloadServices = GetRelatedDownloadService(metadataIndexDocResult.DatasetServices);
+                metadata.Distributions.ShowRelatedDownloadServices = metadata.Distributions.ShowServicLayers();
+                
+                // Kartløsninger - hierarchyLevel="software" (evt protokoll=WWW:LINK-1.0-http--link)
                 metadata.Distributions.RelatedApplications = GetApplicationsRelatedDistributions(metadata.Uuid);
                 metadata.Distributions.ShowRelatedApplications = metadata.Distributions.ShowApplications();
-
-                // Tjenester
-                metadata.Distributions.RelatedServices = ConvertRelatedData(metadataIndexDocResult.DatasetServices);
-                metadata.Distributions.ShowRelatedServices = metadata.Distributions.ShowServices();
-
-                // Tjenestelag
-                metadata.Distributions.RelatedServiceLayer = ConvertRelatedData(metadataIndexDocResult.DatasetServices);
-                metadata.Distributions.ShowRelatedServiceLayer = metadata.Distributions.ShowServicLayers();
-
             }
-            
+
             else if (metadata.IsService())
             {
-                // Vis Datasett, Tjenestelag
-                metadata.Distributions = GetServiceRelatedDistributions(metadata.Uuid);
-                metadata.Distributions.RelatedServices = GetServiceDirectoryRelatedDistributions(metadata.Uuid);
+                var serviceIndexDoc = GetMetadataForService(metadata.Uuid);
+
+                // Datasett
+                metadata.Distributions.RelatedDataset = ConvertRelatedData(serviceIndexDoc.ServiceDatasets);
+                metadata.Distributions.ShowRelatedDataset = metadata.Distributions.ShowDatasets();
+
+                // Tjenestelag
+                metadata.Distributions.RelatedServiceLayer = ConvertRelatedData(serviceIndexDoc.ServiceLayers);
+                metadata.Distributions.ShowRelatedServiceLayer = metadata.Distributions.ShowServicLayers();
+
             }
             else if (metadata.IsServiceLayer())
             {
@@ -236,6 +252,56 @@ namespace Kartverket.Metadatakatalog.Service
             }
 
             return metadata.Distributions;
+        }
+
+        private List<Distribution> GetRelatedDownloadService(List<string> relatedData)
+        {
+            var downloadServices = new List<Distribution>();
+            if (relatedData != null && relatedData.Any())
+            {
+                foreach (var relatert in relatedData)
+                {
+                    var relData = relatert.Split('|');
+                    var protocol = relData[6];
+
+                    try
+                    {
+                        if (protocol == "OGC:WFS" || protocol == "OGC:WCS" || protocol == "W3C:REST" || protocol == "W3C:WS" || protocol == "W3C:AtomFeed")
+                        {
+                            downloadServices.Add(ConvertRelatedData(relatert));
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            return downloadServices;
+        }
+
+        private List<Distribution> GetRelatedViewService(List<string> relatedData)
+        {
+            var viewServices = new List<Distribution>();
+            if (relatedData != null && relatedData.Any())
+            {
+                foreach (var relatert in relatedData)
+                {
+                    var relData = relatert.Split('|');
+                    var protocol = relData[6];
+
+                    try
+                    {
+                        if (protocol == "OGC:WMS" || protocol == "OGC:WMTS" || protocol == "WMS-C")
+                        {
+                            viewServices.Add(ConvertRelatedData(relatert));
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            return viewServices;
         }
 
         private Distributions GetDatasetRelatedDistributions(string uuid)
@@ -338,7 +404,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         private Distributions GetServiceRelatedDistributions(string uuid)
         {
-            var relatedDistributions = new Distributions();;
+            var relatedDistributions = new Distributions(); ;
 
             var metadata = GetMetadataForService(uuid);
 
@@ -352,7 +418,7 @@ namespace Kartverket.Metadatakatalog.Service
             return relatedDistributions;
         }
 
-       
+
         private List<Distribution> GetMetadataRelatedDistributions(string uuid)
         {
             var distributionList = new List<Distribution>();
@@ -386,7 +452,7 @@ namespace Kartverket.Metadatakatalog.Service
         private List<Distribution> ConvertRelatedData(List<string> relatedData, List<Distribution> relatedDistributions = null)
         {
             if (relatedDistributions == null) relatedDistributions = new List<Distribution>();
-            
+
             if (relatedData != null && relatedData.Any())
             {
                 foreach (var relatert in relatedData)
@@ -410,14 +476,14 @@ namespace Kartverket.Metadatakatalog.Service
 
                         //Åpne data, begrenset, skjermet
                         if (relData.Length > 11)
-                        { 
+                        {
                             if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
                             if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
                             if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
                             tmp.ServiceDistributionAccessConstraint = !IsNullOrWhiteSpace(relData[12]) ? relData[12] : relData[11];
                         }
 
-                    //Vis kart
+                        //Vis kart
                         if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
                         {
                             tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
@@ -428,13 +494,58 @@ namespace Kartverket.Metadatakatalog.Service
                     }
                     catch (Exception ex)
                     {
-                       //Ignore
+                        //Ignore
                     }
                 }
 
             }
 
             return relatedDistributions;
+        }
+
+        private Distribution ConvertRelatedData(string relatedData)
+        {
+
+            var relData = relatedData.Split('|');
+
+            try
+            {
+                var tmp = new Distribution();
+                tmp.Uuid = relData[0] ?? "";
+                tmp.Title = relData[1] ?? "";
+                tmp.Type = ConvertType(relData[3], relData[2]);
+                tmp.DistributionFormats = GetDistributionFormats(tmp.Uuid);
+                tmp.DistributionName = relData[5] ?? "";
+                tmp.DistributionUrl = relData[7] ?? "";
+                tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
+                if (tmp.Type == "servicelayer")
+                    tmp.Protocol = tmp.Protocol + "lag";
+                tmp.Organization = relData[4];
+                tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
+
+                //Åpne data, begrenset, skjermet
+                if (relData.Length > 11)
+                {
+                    if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
+                    if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
+                    if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
+                    tmp.ServiceDistributionAccessConstraint = !IsNullOrWhiteSpace(relData[12]) ? relData[12] : relData[11];
+                }
+
+                //Vis kart
+                if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
+                {
+                    tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
+                    tmp.CanShowMapUrl = true;
+                }
+
+                return tmp;
+            }
+            catch (Exception ex)
+            {
+                //Ignore
+            }
+            return null;
         }
 
         private List<MetadataViewModel> ConvertRelatedData(List<string> relatedData, List<MetadataViewModel> relatedMetadata)
