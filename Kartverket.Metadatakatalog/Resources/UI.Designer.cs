@@ -630,6 +630,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last ned.
+        /// </summary>
+        public static string DownloadHeader {
+            get {
+                return ResourceManager.GetString("DownloadHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Felles valg for nedlastning, vil gjelde for alle datasett.
         /// </summary>
         public static string DownloadOrderLineHeader {

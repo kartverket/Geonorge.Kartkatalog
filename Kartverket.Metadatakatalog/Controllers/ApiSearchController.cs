@@ -255,7 +255,15 @@ namespace Kartverket.Metadatakatalog.Controllers
         [System.Web.Http.HttpGet]
         public List<Distribution> GetDistributions(string uuid)
         {
-            return  _metadataService.GetRelatedDistributionsByUuid(uuid);
+            return _metadataService.GetRelatedDistributionsByUuid(uuid);
+        }
+
+        [System.Web.Http.Route("api/distribution-lists/{uuid}")]
+        [System.Web.Http.HttpGet]
+        public Distributions GetDistributionLists(string uuid)
+        {
+            var metadata = _metadataService.GetMetadataViewModelByUuid(uuid);
+            return _metadataService.GetDistributions(metadata);
         }
 
         private Models.SearchResult CreateRelated(MetadataViewModel result)

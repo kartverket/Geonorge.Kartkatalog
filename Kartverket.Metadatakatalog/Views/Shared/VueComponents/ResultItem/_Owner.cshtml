@@ -16,13 +16,13 @@
         }
         else if (controllerName == "ServiceDirectory")
         {
-            <a v-else v-bind:href="'?text=@searchText&Facets%5B0%5D.name=organization&Facets%5B0%5D.value=' + this.metadata.Organization" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="'@UI.DisplayAllServicesFrom ' + metadata.Organization">
+            <a v-else v-bind:href="'?text=@searchText&Facets%5B0%5D.name=organization&Facets%5B0%5D.value=' + this.metadata.Organization" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="'@Html.Raw(UI.DisplayAllServicesFrom) ' + metadata.Organization">
                 {{metadata.Organization}}
             </a>
         }
         else
         {
-            <a v-else v-bind:href="'/etatvis-oversikt/' + this.metadata.OrganizationSeoName" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="'@UI.DisplayAllDatasetsFrom ' + metadata.Organization">
+            <a v-else v-bind:href="'/search?text=@searchText&Facets%5B0%5D.name=organization&Facets%5B0%5D.value=' + this.metadata.Organization" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="'@Html.Raw(UI.DisplayMetadataFor) ' + metadata.Organization">
                 {{metadata.Organization}}
             </a>
         }
