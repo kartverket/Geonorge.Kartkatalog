@@ -575,7 +575,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowDownloadServices()
         {
-            return RelatedViewServices.Any();
+            return RelatedDownloadServices.Any();
         }
 
         public bool ShowDatasets()
