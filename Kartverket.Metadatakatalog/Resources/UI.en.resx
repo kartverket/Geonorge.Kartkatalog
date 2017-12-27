@@ -714,4 +714,7 @@
   <data name="DownloadHeader" xml:space="preserve">
     <value>Down-&lt;br /&gt;load</value>
   </data>
+  <data name="ServiceDeclaration" xml:space="preserve">
+    <value>Service declaration</value>
+  </data>
 </root>

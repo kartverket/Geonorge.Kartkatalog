@@ -730,9 +730,11 @@ namespace Kartverket.Metadatakatalog.Service
                 UnitsOfDistribution = GetUnitsOfDistribution(simpleMetadata),
                 ReferenceSystems = GetReferenceSystems(simpleMetadata),
                 ResourceReferenceCode = GetResourceReferenceCode(simpleMetadata.ResourceReference),
-                ResourceReferenceCodespace = GetResourceReferenceCodespace(simpleMetadata.ResourceReference)
+                ResourceReferenceCodespace = GetResourceReferenceCodespace(simpleMetadata.ResourceReference),
+                OrderingInstructions = (simpleMetadata.AccessProperties != null && !string.IsNullOrEmpty(simpleMetadata.AccessProperties.OrderingInstructions)) ? simpleMetadata.AccessProperties.OrderingInstructions : ""
             };
 
+            metadata.OrderingInstructionsLinkText = Register.GetServiceDeclaration(metadata.OrderingInstructions);
             metadata.SetDistributionUrl();
             metadata.OrganizationLogoUrl = GetOrganizationLogoUrl(metadata.ContactOwner);
 

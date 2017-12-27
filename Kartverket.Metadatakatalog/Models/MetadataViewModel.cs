@@ -91,6 +91,8 @@ namespace Kartverket.Metadatakatalog.Models
         // Summary:
         //     Values from codelist: http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_ProgressCode
         public string Status { get; set; }
+        public string OrderingInstructions { get; set; }
+        public string OrderingInstructionsLinkText { get; set; }
         public string SupplementalDescription { get; set; }
         public string HelpUrl { get; set; }
         public List<Thumbnail> Thumbnails { get; set; }

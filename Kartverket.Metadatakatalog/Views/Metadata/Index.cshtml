@@ -451,6 +451,10 @@ if (contact != null)
                     @DisplayValue(UI.ResolutionScale, Model.ResolutionScale)
                     @DisplayValue("Status", Model.Status)
                     @DisplayValue(UI.ProcessHistory, Model.ProcessHistory)
+                    @if (Model.IsService())
+                    {
+                    <p><strong>@UI.ServiceDeclaration:</strong> <a href="@Model.OrderingInstructions" target="_blank">@Model.OrderingInstructionsLinkText</a></p>
+                    }
                     @if (Model.QualitySpecifications != null)
                 {
                         <h3>@UI.QualitySpecification</h3>

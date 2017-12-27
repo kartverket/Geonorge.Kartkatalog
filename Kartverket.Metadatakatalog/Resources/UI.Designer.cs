@@ -1618,6 +1618,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tjenesteerklæring.
+        /// </summary>
+        public static string ServiceDeclaration {
+            get {
+                return ResourceManager.GetString("ServiceDeclaration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tjenesten er utilgjengelig for øyeblikket.
         /// </summary>
         public static string ServiceNotavailable {

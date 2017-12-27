@@ -30,6 +30,8 @@ namespace Kartverket.Metadatakatalog.Service
         Dictionary<string, string> ListOfDistributionTypes = new Dictionary<string, string>();
         Dictionary<string, string> ListOfDistributionTypesEnglish = new Dictionary<string, string>();
         public Dictionary<string, string> OrganizationShortNames = new Dictionary<string, string>();
+        Dictionary<string, string> ListOfOrderingInstructions = new Dictionary<string, string>();
+        Dictionary<string, string> ListOfOrderingInstructionsEnglish = new Dictionary<string, string>();
 
 
         public RegisterFetcher()
@@ -51,6 +53,8 @@ namespace Kartverket.Metadatakatalog.Service
             ListOfDistributionTypes = GetCodeList("94B5A165-7176-4F43-B6EC-1063F7ADE9EA");
             ListOfDistributionTypesEnglish = GetCodeList("94B5A165-7176-4F43-B6EC-1063F7ADE9EA", Culture.EnglishCode );
             OrganizationShortNames = GetListOfOrganizations();
+            ListOfOrderingInstructions = GetSubRegister("metadata-kodelister/kartverket/norge-digitalt-tjenesteerklaering");
+            ListOfOrderingInstructionsEnglish = GetSubRegister("metadata-kodelister/kartverket/norge-digitalt-tjenesteerklaering", Culture.EnglishCode);
 
         }
 
@@ -210,7 +214,17 @@ namespace Kartverket.Metadatakatalog.Service
             return value;
         }
 
+        public string GetServiceDeclaration(string value)
+        {
+            var culture = CultureHelper.GetCurrentCulture();
+            KeyValuePair<string, string> dic = culture == Culture.NorwegianCode
+                ? ListOfOrderingInstructions.Where(p => p.Key == value).FirstOrDefault()
+                : ListOfOrderingInstructionsEnglish.Where(p => p.Key == value).FirstOrDefault();
+            if (!dic.Equals(default(KeyValuePair<String, String>)))
+                value = dic.Value;
 
+            return value;
+        }
 
         public Dictionary<string, string> GetCodeList(string systemid, string culture = Culture.NorwegianCode)
         {
@@ -253,6 +267,49 @@ namespace Kartverket.Metadatakatalog.Service
             }
 
             return CodeValues;
+        }
+
+        public Dictionary<string, string> GetSubRegister(string registername, string culture = Culture.NorwegianCode)
+        {
+            MemoryCacher memCacher = new MemoryCacher();
+
+            var cache = memCacher.GetValue("subregisteritem-" + registername);
+
+            Dictionary<string, string> RegisterItems = new Dictionary<string, string>();
+
+            if (cache != null)
+            {
+                RegisterItems = cache as Dictionary<string, string>;
+            }
+
+            if (RegisterItems.Count < 1)
+            {
+
+                _webClient.Headers.Remove("Accept-Language");
+                _webClient.Headers.Add("Accept-Language", culture);
+                _webClient.Encoding = System.Text.Encoding.UTF8;
+                var data = _webClient.DownloadString(System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/subregister/" + registername);
+                var response = Newtonsoft.Json.Linq.JObject.Parse(data);
+
+                var items = response["containeditems"];
+
+                foreach (var item in items)
+                {
+                    var id = item["id"].ToString();
+                    var owner = item["owner"].ToString();
+                    string organization = item["owner"].ToString();
+
+                    if (!RegisterItems.ContainsKey(id))
+                    {
+                        RegisterItems.Add(id, item["label"].ToString());
+                    }
+                }
+
+                RegisterItems = RegisterItems.OrderBy(o => o.Value).ToDictionary(o => o.Key, o => o.Value);
+                memCacher.Add("subregisteritem-" + registername, RegisterItems, new DateTimeOffset(DateTime.Now.AddYears(1)));
+            }
+
+            return RegisterItems;
         }
 
         public Dictionary<string, string> GetEPSGCodeList(string systemid, string culture = Culture.NorwegianCode)
