@@ -148,7 +148,7 @@
     <value>Geographical area</value>
   </data>
   <data name="Facet_theme" xml:space="preserve">
-    <value>Theme</value>
+    <value>Topic</value>
   </data>
   <data name="Facet_type" xml:space="preserve">
     <value>Type</value>
@@ -184,7 +184,7 @@
     <value>Name</value>
   </data>
   <data name="AboutMapCatalog" xml:space="preserve">
-    <value>Here is an overview of data sets in Geonorge with information about available formats, associated services and APIs. Own overview of services / APIs and map solutions can be found on your own pages in the right column.</value>
+    <value>Here is an overview of data sets in Geonorge with information about available formats, associated services and APIs.</value>
   </data>
   <data name="DataOwner" xml:space="preserve">
     <value>Data owner</value>
