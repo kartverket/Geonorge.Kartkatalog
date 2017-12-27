@@ -432,7 +432,9 @@
                             <div class="input-group">
                                 <span class="input-group-addon">@UI.Email: <span class="required-indicator"></span></span>
                                 <input type="text" v-model="email" name="email" class="form-control" />
-                                <span v-on:click="sendOrderBundleRequest(responseItem)" v-bind:class="{disabled: !emailAddressIsValid(email)}" class="input-group-addon btn">Bestill pakke med alle datasett</span>
+                                <span v-on:click="sendOrderBundleRequest(responseItem)" v-bind:class="{disabled: !emailAddressIsValid(email)}" class="input-group-addon btn" v-bind:id="'order-bundle-button-' + responseItem.additionalInfo.distributedBy">Bestill pakke med alle datasett</span>
+                            </div>
+                            <div v-bind:id="'order-bundle-message-' + responseItem.additionalInfo.distributedBy" class="">   
                             </div>
                         </div>
                     </div>

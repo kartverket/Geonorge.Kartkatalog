@@ -1731,7 +1731,9 @@ var mainVueModel = new Vue({
                     xhrFields: { withCredentials: IsGeonorge(responseItem.distributionUrl) },
                     data: JSON.stringify(data),
                     success: function (data) {
-                        alert('Pakken med alle datasett vil bli sendt til ' + emailAddress + ' så snart den er klar');
+                        $('#order-bundle-btn-' + responseItem.additionalInfo.distributedBy).addClass("disabled");
+                        $('#order-bundle-message-' + responseItem.additionalInfo.distributedBy).addClass("alert alert-success");
+                        $('#order-bundle-message-' + responseItem.additionalInfo.distributedBy).text('Pakken med alle datasett vil bli sendt til ' + emailAddress + ' så snart den er klar');
                     }
                 });
             }
