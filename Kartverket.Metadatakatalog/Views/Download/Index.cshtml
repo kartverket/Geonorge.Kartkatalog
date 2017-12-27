@@ -428,7 +428,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel-footer" v-if="responseItem.additionalInfo.supportsDownloadBundling">
+                        <div class="panel-footer" v-if="responseItem.additionalInfo.supportsDownloadBundling && responseItem.datasets > 1">
                             <div class="input-group">
                                 <span class="input-group-addon">@UI.Email: <span class="required-indicator"></span></span>
                                 <input type="text" v-model="email" name="email" class="form-control" />
