@@ -20,6 +20,7 @@ namespace Kartverket.Metadatakatalog.Service
         public const string DokForurensning = "Forurensning";
         public const string DokFriluftsliv = "Friluftsliv";
         public const string DokAnnen = "Annen";
+        public const string DokAnnenEnglish = "Other";
         public const string DokKystFiskeri = "Kyst / fiskeri";
         public const string DokLandskap = "Landskap";
         public const string DokKulturminner = "Kulturminner";
@@ -110,7 +111,11 @@ namespace Kartverket.Metadatakatalog.Service
             string theme = ResolveThemeFromDokKeywords(metadata, culture);
             if (string.IsNullOrWhiteSpace(theme))
             {
-                theme = DokAnnen;
+                if (culture == Culture.NorwegianCode)
+                    theme = DokAnnen;
+                else
+                    theme = DokAnnenEnglish;
+
             }
             //if (string.IsNullOrWhiteSpace(theme))
             //{
