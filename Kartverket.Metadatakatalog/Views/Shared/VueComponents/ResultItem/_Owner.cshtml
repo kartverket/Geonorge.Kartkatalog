@@ -8,24 +8,10 @@
         <a v-if="$root.viewType == 'listView'" v-bind:href="'/etatvis-oversikt/' + this.metadata.OrganizationSeoName" class="show-loading-animation" data-loading-message="Henter innhold">
             <img v-bind:src="metadata.OrganizationLogoUrl" class="img-responsive center-block" v-bind:alt="metadata.Organization" v-bind:title="'@UI.DisplayAllDatasetsFrom ' + metadata.Organization" />
         </a>
-        @if (controllerName == "Application")
-        {
-            <a v-else v-bind:href="'?text=@searchText&Facets%5B0%5D.name=organization&Facets%5B0%5D.value=' + this.metadata.Organization" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="'@Html.Raw(UI.DisplayAllApplicationsFrom) ' + metadata.Organization">
-                {{metadata.Organization}}
-            </a>
-        }
-        else if (controllerName == "ServiceDirectory")
-        {
-            <a v-else v-bind:href="'?text=@searchText&Facets%5B0%5D.name=organization&Facets%5B0%5D.value=' + this.metadata.Organization" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="'@Html.Raw(UI.DisplayAllServicesFrom) ' + metadata.Organization">
-                {{metadata.Organization}}
-            </a>
-        }
-        else
-        {
-            <a v-else v-bind:href="'/search?text=@searchText&Facets%5B0%5D.name=organization&Facets%5B0%5D.value=' + this.metadata.Organization" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="'@Html.Raw(UI.DisplayMetadataFor) ' + metadata.Organization">
-                {{metadata.Organization}}
-            </a>
-        }
+        <a v-if="url" v-bind:href="url" class="show-loading-animation" data-toggle='tooltip' data-placement='bottom' v-bind:data-loading-message="'Henter innhold fra ' + metadata.Organization" v-bind:title="title">
+            {{metadata.Organization}}
+        </a>
+        <span v-else>{{metadata.Organization}}</span>
     </div>
 </script>
 
@@ -33,6 +19,32 @@
     var TableOwner = {
         name: "table-owner",
         template: "#ownerContentTemplate",
-        props: ["metadata"]
+        props: ["metadata"],
+        data: function () {
+            return {
+                controllerName: '@controllerName',
+                searchText: '@searchText'
+
+            }
+        },
+        computed: {
+            url: function () {
+                var url = window.location.origin + window.location.pathname + '?text=' + this.searchText + '&Facets%5B0%5D.name=organization&Facets%5B0%5D.value=' + this.metadata.Organization;
+                if (window.location.href == url) {
+                    return '';
+                } else {
+                    return url;
+                }
+            },
+            title: function () {
+                if (this.controllerName == 'Application') {
+                    return '@Html.Raw(UI.DisplayAllApplicationsFrom) ' + this.metadata.Organization;
+                } else if (this.controllerName == 'ServiceDirectory') {
+                    return '@Html.Raw(UI.DisplayAllServicesFrom) ' + this.metadata.Organization;
+                } else {
+                    return '@Html.Raw(UI.DisplayMetadataFor) ' + this.metadata.Organization;
+                }
+            }
+        }
     };
 </script>
