@@ -1739,7 +1739,7 @@ var mainVueModel = new Vue({
                     },
                     error: function (xhr, status, errorThrown) {
                         hideLoadingAnimation();
-                        showAlert("Feil: " + xhr.status + ": " + xhr.responseText, 'danger');
+                        showAlert("Feil: " + errorThrown, 'danger');
                     }
                 });
             }
