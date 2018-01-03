@@ -1720,6 +1720,7 @@ var mainVueModel = new Vue({
             if (this.emailAddressIsValid(this.email)) {
                 var emailAddress = this.email;
                 $('#order-bundle-button-' + responseItem.additionalInfo.distributedBy).addClass("disabled");
+                showLoadingAnimation("Laster..");
                 var data = {
                     email: emailAddress,
                     downloadAsBundle: true
@@ -1732,8 +1733,15 @@ var mainVueModel = new Vue({
                     xhrFields: { withCredentials: IsGeonorge(responseItem.distributionUrl) },
                     data: JSON.stringify(data),
                     success: function (data) {
+                        hideLoadingAnimation();
                         $('#order-bundle-message-' + responseItem.additionalInfo.distributedBy).addClass("alert alert-success");
                         $('#order-bundle-message-' + responseItem.additionalInfo.distributedBy).text('Pakken med alle datasett vil bli sendt til ' + emailAddress + ' så snart den er klar');
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        hideLoadingAnimation();
+                        showAlert("Feil: " + xhr.status + ": " + xhr.responseText, 'danger');
+                        consolexhr.status;
+                        xhr.responseText;
                     }
                 });
             }
