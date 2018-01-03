@@ -1004,6 +1004,42 @@ var mainVueModel = new Vue({
                                             availableArea.isSelected = false;
                                             this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
                                         }.bind(this))
+
+                                        //start set fixed sort order for area types
+
+                                        var orderedAreas = ["fylke", "kommune", "celle"];
+
+                                        //Add available area types not fixed sorted
+                                        for (areaType in this.masterOrderLine.allAvailableAreas[uuid]) {
+                                            if (orderedAreas.indexOf(areaType) == -1)
+                                                orderedAreas.push(areaType);
+                                        }
+
+                                        //Remove fixed area types not available
+                                        for (keyType in orderedAreas) {
+                                            areaType = orderedAreas[keyType];
+                                            if (this.masterOrderLine.allAvailableAreas[uuid][areaType] == null)
+                                                orderedAreas.splice(keyType, 1);
+                                        }
+
+                                        //Re-organize according to fixed order
+                                        var allAvailableAreasForUuid = this.masterOrderLine.allAvailableAreas[uuid];
+                                        this.masterOrderLine.allAvailableAreas[uuid] = {};
+
+                                        for (keyType in orderedAreas) {
+                                            areaType = orderedAreas[keyType];
+                                            allAvailableAreasForUuid[areaType].forEach(function (availableArea)
+                                            {
+                                                if (this.masterOrderLine.allAvailableAreas[uuid][areaType] == undefined) {
+                                                    this.masterOrderLine.allAvailableAreas[uuid][areaType] = [];
+                                                }
+                                                availableArea.isSelected = false;
+                                                this.masterOrderLine.allAvailableAreas[uuid][areaType].push(availableArea);
+                                            }.bind(this))
+                                        }
+
+                                        //end set fixed sort order
+
                                     }
                                     if (link.rel == "http://rel.geonorge.no/download/projection") {
                                         var defaultProjections = getJsonData(link.href)
