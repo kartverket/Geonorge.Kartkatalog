@@ -643,6 +643,9 @@ var OrderLine = {
         'projections': Projections,
         'formats': Formats
     },
+    mounted: function () {
+        this.expanded = this.$root.orderLines.length == 1;
+    }
 };
 
 var MasterOrderLine = {
