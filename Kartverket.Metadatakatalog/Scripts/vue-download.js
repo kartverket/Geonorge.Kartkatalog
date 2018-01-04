@@ -1019,11 +1019,13 @@ var mainVueModel = new Vue({
                                         }
 
                                         //Remove fixed area types not available
-                                        for (keyType in orderedAreas) {
-                                            areaType = orderedAreas[keyType];
-                                            if (this.masterOrderLine.allAvailableAreas[uuid][areaType] == null)
-                                                orderedAreas.splice(keyType, 1);
-                                        }
+                                        var notAvailableAreaTypes = [];
+                                        orderedAreas.forEach(function (areaType) {
+                                            if (this.masterOrderLine.allAvailableAreas[uuid][areaType] == null) {
+                                                notAvailableAreaTypes.push(areaType);
+                                            }
+                                        }.bind(this));
+                                        removeFromArray(orderedAreas, notAvailableAreaTypes);
 
                                         //Re-organize according to fixed order
                                         var allAvailableAreasForUuid = this.masterOrderLine.allAvailableAreas[uuid];
