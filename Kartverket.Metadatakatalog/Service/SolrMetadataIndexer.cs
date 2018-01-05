@@ -42,23 +42,23 @@ namespace Kartverket.Metadatakatalog.Service
            
             try
             {
-                MD_Metadata_Type metadata = _geoNorge.GetRecordByUuid(uuid);
 
                 SetNorwegianIndexCores();
                 RemoveIndexDocument(uuid);
 
-                if (metadata != null)
-                {
-                    MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.NorwegianCode);
-                    RunIndex(metadataIndexDoc, Culture.NorwegianCode);
-                }
-
                 SetEnglishIndexCores();
                 RemoveIndexDocument(uuid);
 
+                MD_Metadata_Type metadata = _geoNorge.GetRecordByUuid(uuid);
+
                 if (metadata != null)
                 {
-                    MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.EnglishCode);
+                    SetNorwegianIndexCores();
+                    MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.NorwegianCode);
+                    RunIndex(metadataIndexDoc, Culture.NorwegianCode);
+
+                    SetEnglishIndexCores();
+                    metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.EnglishCode);
                     RunIndex(metadataIndexDoc, Culture.EnglishCode);
                 }
 
