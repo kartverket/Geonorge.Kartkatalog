@@ -114,7 +114,7 @@ var Areas = {
                         this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type].forEach(function (availableArea, index) {
                             if (availableArea.code == area.code) {
                                 this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type][index].isSelected = false;
-
+                                this.$root.removePreSelectedAreaFromLocalStorage(orderLineUuid, area);
                             }
                         }.bind(this));
                     }
@@ -136,6 +136,7 @@ var Areas = {
                     this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type].forEach(function (availableArea, index) {
                         if (availableArea.code == area.code) {
                             this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type][index].isSelected = false;
+                            this.$root.removePreSelectedAreaFromLocalStorage(orderLineUuid, area);
                         }
                     }.bind(this));
                 }
@@ -1033,8 +1034,7 @@ var mainVueModel = new Vue({
 
                                         for (keyType in orderedAreas) {
                                             areaType = orderedAreas[keyType];
-                                            allAvailableAreasForUuid[areaType].forEach(function (availableArea)
-                                            {
+                                            allAvailableAreasForUuid[areaType].forEach(function (availableArea) {
                                                 if (this.masterOrderLine.allAvailableAreas[uuid][areaType] == undefined) {
                                                     this.masterOrderLine.allAvailableAreas[uuid][areaType] = [];
                                                 }
@@ -1921,26 +1921,59 @@ var mainVueModel = new Vue({
             localStorage.removeItem('allSelectedFormats');
             localStorage.removeItem('allSelectedCoordinates');
         },
+        getPreSelectedOrderLineValuesFromLocalStorage: function () {
+            var preSelectedOrderLineValues = {
+                preSelectedAreas: localStorage.getItem('preSelectedAreas') !== null ? JSON.parse(localStorage.getItem('preSelectedAreas')) : null
+            };
+            return preSelectedOrderLineValues;
+        },
+        removePreSelectedAreaFromLocalStorage: function (orderLineUuid, area) {
+            var preSelectedAreas = localStorage.getItem('preSelectedAreas') !== null ? JSON.parse(localStorage.getItem('preSelectedAreas')) : null;
+            var isPreSelectedArea = preSelectedAreas[orderLineUuid] !== undefined && preSelectedAreas[orderLineUuid].code == area.code;
+
+            if (isPreSelectedArea) {
+                delete preSelectedAreas[orderLineUuid];
+                localStorage.setItem('preSelectedAreas', JSON.stringify(preSelectedAreas));
+            }
+        },
         autoselectWithOrderLineValuesFromLocalStorage: function () {
             var selectedOrderLineValues = this.getSelectedOrderLineValuesFromLocalStorage();
+            var preSelectedOrderLineValues = this.getPreSelectedOrderLineValuesFromLocalStorage();
+
 
             // Autoselect areas
             for (orderLineUuid in this.masterOrderLine.allAvailableAreas) {
-                if (selectedOrderLineValues.allSelectedAreas !== null && selectedOrderLineValues.allSelectedAreas[orderLineUuid] !== undefined && selectedOrderLineValues.allSelectedAreas[orderLineUuid].length) {
+                var hasSelectedAreas = selectedOrderLineValues.allSelectedAreas !== null && selectedOrderLineValues.allSelectedAreas[orderLineUuid] !== undefined && selectedOrderLineValues.allSelectedAreas[orderLineUuid].length;
+                var hasPreSelecteAreas = preSelectedOrderLineValues.preSelectedAreas !== null && preSelectedOrderLineValues.preSelectedAreas[orderLineUuid] !== undefined;
+
+                if (hasSelectedAreas || hasPreSelecteAreas) {
                     for (areaType in this.masterOrderLine.allAvailableAreas[orderLineUuid]) {
-                        selectedOrderLineValues.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
-                            if (selectedArea.type == 'polygon') {
-                                this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'] = [];
-                                this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'].push(selectedArea);
-                                this.masterOrderLine.allSelectedCoordinates[orderLineUuid] = selectedArea.coordinates;
-                            } else {
-                                this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
-                                    if (availableArea.code == selectedArea.code) {
-                                        this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
-                                    }
-                                }.bind(this));
-                            }
-                        }.bind(this));
+                        if (hasSelectedAreas) {
+                            selectedOrderLineValues.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
+                                if (selectedArea.type == 'polygon') {
+                                    this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'] = [];
+                                    this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'].push(selectedArea);
+                                    this.masterOrderLine.allSelectedCoordinates[orderLineUuid] = selectedArea.coordinates;
+                                } else {
+                                    this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
+                                        if (availableArea.code == selectedArea.code) {
+                                            this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
+                                        }
+                                    }.bind(this));
+                                }
+                            }.bind(this));
+                        }
+
+                        // Autoselected area from "hva-finnes-i-kommunen-eller-fylket":
+                        if (hasPreSelecteAreas) {
+                            var preSelectedArea = preSelectedOrderLineValues.preSelectedAreas[orderLineUuid];
+                            this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
+                                if (availableArea.code == preSelectedArea.code) {
+                                    this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
+                                }
+                            }.bind(this));
+                        }
+
                     }
                 }
             }
