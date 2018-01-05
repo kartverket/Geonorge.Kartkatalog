@@ -949,6 +949,11 @@ var mainVueModel = new Vue({
                 }.bind(this))
             }
             return orderResponseGrouped;
+        },
+        showMasterOrderLine: function () {
+            var availableAreaTypes = Object.keys(this.masterOrderLine.masterAvailableAreas);
+            var containsSupportedType = this.containsSupportedType(availableAreaTypes) || this.containsLandsdekkende(availableAreaTypes);
+            return this.orderLines.length > 1 && containsSupportedType;
         }
     },
     created: function () {
@@ -1113,6 +1118,26 @@ var mainVueModel = new Vue({
                 if (areaType == supportedAreaType) isSupportedType = true;
             })
             return isSupportedType;
+        },
+        containsSupportedType: function (areaTypes) {
+            var containsSupportedType = false;
+            areaTypes.forEach(function (areaType) {
+                if (this.isSupportedType(areaType)) {
+                    containsSupportedType = true;
+                    return;
+                }
+            }.bind(this));
+            return containsSupportedType;
+        },
+        containsLandsdekkende: function (areaTypes) {
+            var containsLandsdekkende = false;
+            areaTypes.forEach(function (areaType) {
+                if (areaType == 'landsdekkende') {
+                    containsLandsdekkende = true;
+                    return;
+                }
+            }.bind(this));
+            return containsLandsdekkende;
         },
         hasMasterSelectedProjections: function () {
             return this.masterOrderLine.masterSelectedProjections.length > 0;

@@ -275,7 +275,7 @@
             @Html.Raw(UI.FileDownloadIntro)
         </div>
         <div id="downloadformVue" class="download-form">
-            <div v-show="orderLines.length > 1" class="orderline orderline-master">
+            <div v-show="showMasterOrderLine" class="orderline orderline-master">
                 <div is="masterOrderLine"
                      v-bind:all-available-areas="masterOrderLine.allAvailableAreas"
                      v-bind:available-areas="masterOrderLine.masterAvailableAreas"
