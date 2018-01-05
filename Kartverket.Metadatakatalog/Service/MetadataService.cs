@@ -172,8 +172,10 @@ namespace Kartverket.Metadatakatalog.Service
 
         public Distributions GetDistributions(MetadataViewModel metadata)
         {
+            string type = null;
+
             // Self ...
-            var simpleMetadata = GetSimpleMetadataByUuid(metadata.Uuid);
+            var simpleMetadata = GetSimpleMetadataByUuid(metadata.Uuid) ?? throw new ArgumentNullException("GetSimpleMetadataByUuid(metadata.Uuid)");
             if (simpleMetadata.DistributionsFormats != null && simpleMetadata.DistributionsFormats.Any())
             {
                 var distributionRows = CreateDistributionRows(metadata.Uuid, simpleMetadata);
@@ -186,7 +188,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (metadata.IsDataset())
             {
-                var metadataIndexDocResult = GetMetadata(metadata.Uuid);
+                var metadataIndexDocResult = GetMetadata(metadata.Uuid) ?? throw new ArgumentNullException("GetMetadata(metadata.Uuid)");
 
                 // Nedlastingstjenester - WWW:DOWNLOAD-1.0-http--download, GEONORGE:FILEDOWNLOAD, GEONORGE:DOWNLOAD
 
@@ -202,7 +204,8 @@ namespace Kartverket.Metadatakatalog.Service
 
             else if (metadata.IsService() || metadata.IsServiceLayer())
             {
-                var serviceIndexDoc = GetMetadataForService(metadata.Uuid);
+                var serviceIndexDoc = GetMetadataForService(metadata.Uuid) ?? throw new ArgumentNullException("GetMetadataForService(metadata.Uuid)");
+                type = serviceIndexDoc.Type;
 
                 if (serviceIndexDoc.Type == "servicelayer")
                 {
@@ -225,7 +228,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             else if (metadata.IsApplication())
             {
-                var applicationIndexDoc = GetMetadataForApplication(metadata.Uuid);
+                var applicationIndexDoc = GetMetadataForApplication(metadata.Uuid) ?? throw new ArgumentNullException("GetMetadataForApplication(metadata.Uuid)");
 
                 // Datasett
                 metadata.Distributions.RelatedDataset = ConvertRelatedData(applicationIndexDoc.ApplicationDatasets);
@@ -238,8 +241,7 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.Distributions.ShowRelatedServiceLayer = metadata.Distributions.ShowServicLayers();
             metadata.Distributions.ShowRelatedDownloadServices = metadata.Distributions.ShowDownloadServices();
             metadata.Distributions.ShowRelatedViewServices = metadata.Distributions.ShowViewServices();
-
-
+            metadata.Distributions = metadata.Distributions.GetTitle(metadata, type);
 
             return metadata.Distributions;
         }

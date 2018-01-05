@@ -148,7 +148,8 @@ if (contact != null)
                 <h3>@UI.Distributions</h3>
                     
                 <div v-if="distributions.ShowSelfDistributions" style="margin-bottom:50px">
-                    <div class="row resultItemRowTableHeader">
+                    <p class="h3">{{TitleSelf}}</p>
+                    <div class="row resultItemRowTableHeaderSmall">
                         <div class="col-sm-3"><p>@UI.Title</p></div>
                         <div class="col-sm-2"><p>Type</p></div>
                         <div class="col-sm-2"><p>@UI.DataOwner</p></div>
@@ -166,7 +167,7 @@ if (contact != null)
 
                     <div v-if="distributions.ShowRelatedViewServices" style="margin-bottom:50px">
                         <p class="h3">Visningstjenester</p>
-                        <div class="row resultItemRowTableHeader">
+                        <div class="row resultItemRowTableHeaderSmall">
                             <div class="col-sm-3"><p>@UI.Title</p></div>
                             <div class="col-sm-2"><p>Type</p></div>
                             <div class="col-sm-2"><p>@UI.DataOwner</p></div>
@@ -184,7 +185,7 @@ if (contact != null)
 
                     <div v-if="distributions.ShowRelatedDownloadServices" style="margin-bottom:50px">
                         <p class="h3">Nedlastingstjenester</p>
-                        <div class="row resultItemRowTableHeader">
+                        <div class="row resultItemRowTableHeaderSmall">
                             <div class="col-sm-3"><p>@UI.Title</p></div>
                             <div class="col-sm-2"><p>Type</p></div>
                             <div class="col-sm-2"><p>@UI.DataOwner</p></div>
@@ -201,8 +202,8 @@ if (contact != null)
                     </div>
 
                     <div v-if="distributions.ShowRelatedDataset" style="margin-bottom:50px">
-                        <p class="h3">Dataset</p>
-                        <div class="row resultItemRowTableHeader">
+                        <p class="h3">{{TitleRelatedDataset}}</p>
+                        <div class="row resultItemRowTableHeaderSmall">
                             <div class="col-sm-3"><p>@UI.Title</p></div>
                             <div class="col-sm-2"><p>Type</p></div>
                             <div class="col-sm-2"><p>@UI.DataOwner</p></div>
@@ -219,8 +220,8 @@ if (contact != null)
                     </div>
 
                     <div v-if="distributions.ShowRelatedServices" style="margin-bottom:50px">
-                        <p class="h3">Tjeneste</p>
-                        <div class="row resultItemRowTableHeader">
+                        <p class="h3">{{TitleRelatedServices}}</p>
+                        <div class="row resultItemRowTableHeaderSmall">
                             <div class="col-sm-3"><p>@UI.Title</p></div>
                             <div class="col-sm-2"><p>Type</p></div>
                             <div class="col-sm-2"><p>@UI.DataOwner</p></div>
@@ -238,8 +239,8 @@ if (contact != null)
                     </div>
 
                     <div v-if="distributions.ShowRelatedServiceLayer" style="margin-bottom:50px">
-                        <p class="h3">Tjenestelag</p>
-                        <div class="row resultItemRowTableHeader">
+                        <p class="h3">{{TitleRelatedServiceLayer}}</p>
+                        <div class="row resultItemRowTableHeaderSmall">
                             <div class="col-sm-3"><p>@UI.Title</p></div>
                             <div class="col-sm-2"><p>Type</p></div>
                             <div class="col-sm-2"><p>@UI.DataOwner</p></div>
@@ -257,8 +258,8 @@ if (contact != null)
                     </div>
 
                     <div v-if="distributions.ShowRelatedApplications" style="margin-bottom:50px">
-                        <p class="h3">Applikasjoner</p>
-                        <div class="row resultItemRowTableHeader">
+                        <p class="h3">{{TitleRelatedApplications}}</p>
+                        <div class="row resultItemRowTableHeaderSmall">
                             <div class="col-sm-3"><p>@UI.Title</p></div>
                             <div class="col-sm-2"><p>Type</p></div>
                             <div class="col-sm-2"><p>@UI.DataOwner</p></div>
@@ -303,7 +304,7 @@ if (contact != null)
                     </div>
                 </div>
                 <div class="clearfix"></div>
-                <div class="row resultItemRowTableHeader">
+                <div class="row resultItemRowTableHeaderSmall">
                     <div class="col-sm-3"><p>Tittel</p></div>
                     <div class="col-sm-2"><p>Type</p></div>
                     <div class="col-sm-2"><p>Dataeier</p></div>
@@ -666,21 +667,35 @@ if (keywords != null && keywords.Any())
                 this.relatedDataList = this.convertRelatedDataList();
             },
             computed: {
-
                 SelfDistributions: function () {
                     return this.convertDistributionList(this.distributions.SelfDistribution);
+                },
+                TitleSelf: function () {
+                    return this.distributions.TitleSelf;
                 },
                 RelatedApplications: function () {
                     return this.convertDistributionList(this.distributions.RelatedApplications);
                 },
-                RelatedDataset: function() {
+                TitleRelatedApplications: function () {
+                    return this.distributions.TitleRelatedApplications;
+                },
+                RelatedDataset: function () {
                     return this.convertDistributionList(this.distributions.RelatedDataset);
+                },
+                TitleRelatedDataset: function() {
+                    return this.distributions.TitleRelatedDataset;
                 },
                 RelatedServiceLayer: function() {
                     return this.convertDistributionList(this.distributions.RelatedServiceLayer);
                 },
+                TitleRelatedServiceLayer: function () {
+                    return this.distributions.TitleRelatedServiceLayer;
+                },
                 RelatedServices: function() {
                     return this.convertDistributionList(this.distributions.RelatedServices);
+                },
+                TitleRelatedServices: function () {
+                    return this.distributions.TitleRelatedServices;
                 },
                 RelatedViewServices: function () {
                     return this.convertDistributionList(this.distributions.RelatedViewServices);
@@ -718,8 +733,6 @@ if (keywords != null && keywords.Any())
                     return this.relatedDataList;
                 },
             },
-
-
         });
 
         function getServiceFeed() {
@@ -782,8 +795,6 @@ if (keywords != null && keywords.Any())
             }
 
         });
-
-
 
         @if (Model.ShowMapLink() || Model.ShowServiceMapLink())
         {

@@ -541,6 +541,16 @@ namespace Kartverket.Metadatakatalog.Models
         public bool ShowRelatedDownloadServices { get; set; }
         public bool ShowSelfDistributions { get; set; }
 
+        public string TitleSelf { get; set; }
+        public string TitleRelatedDataset { get; set; }
+        public string TitleRelatedApplications { get; set; }
+        public string TitleRelatedServices { get; set; }
+        public string TitleRelatedServiceLayer { get; set; }
+        public string TitleRelatedViewServices { get; set; }
+        public string TitleRelatedDownloadServices { get; set; }
+
+
+
         public Distributions()
         {
             SelfDistribution = new List<Distribution>();
@@ -588,6 +598,39 @@ namespace Kartverket.Metadatakatalog.Models
         public bool ShowServicLayers()
         {
             return RelatedServiceLayer.Any();
+        }
+
+        public Distributions GetTitle(MetadataViewModel metadata, string type)
+        {
+            if (metadata == null) throw new ArgumentNullException(nameof(metadata));
+
+            if (metadata.IsDataset())
+            {
+                TitleSelf = "Filnedlasting";
+                TitleRelatedApplications = "Kartløsninger";
+            }
+            if (metadata.IsService() || metadata.IsServiceLayer())
+            {
+                if (type == "servicelayer")
+                {
+                    TitleSelf = "Tjenestelag";
+                    TitleRelatedDataset = "Datasett som tjenesten opererer på";
+                    TitleRelatedServices = "Tjenesten som laget inngår i";
+                }
+                else
+                {
+                    TitleSelf = "Tjenesten";
+                    TitleRelatedDataset = "Datasett tjenesten opererer på";
+                    TitleRelatedServiceLayer = "WMS-lag i tjenesten";
+                }
+            }
+            if (metadata.IsApplication())
+            {
+                TitleSelf = "Kartløsning";
+                TitleRelatedDataset = "Datasett som vises i kartløsningen";
+            }
+
+            return this;
         }
     }
 
