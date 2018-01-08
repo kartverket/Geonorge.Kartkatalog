@@ -714,4 +714,7 @@
   <data name="DownloadHeader" xml:space="preserve">
     <value>Last ned</value>
   </data>
+  <data name="ServiceDeclaration" xml:space="preserve">
+    <value>Tjenesteerklæring</value>
+  </data>
 </root>

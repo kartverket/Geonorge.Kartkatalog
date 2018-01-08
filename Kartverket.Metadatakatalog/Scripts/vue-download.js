@@ -114,7 +114,7 @@ var Areas = {
                         this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type].forEach(function (availableArea, index) {
                             if (availableArea.code == area.code) {
                                 this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type][index].isSelected = false;
-
+                                this.$root.removePreSelectedAreaFromLocalStorage(orderLineUuid, area);
                             }
                         }.bind(this));
                     }
@@ -136,6 +136,7 @@ var Areas = {
                     this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type].forEach(function (availableArea, index) {
                         if (availableArea.code == area.code) {
                             this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type][index].isSelected = false;
+                            this.$root.removePreSelectedAreaFromLocalStorage(orderLineUuid, area);
                         }
                     }.bind(this));
                 }
@@ -643,6 +644,9 @@ var OrderLine = {
         'projections': Projections,
         'formats': Formats
     },
+    mounted: function () {
+        this.expanded = this.$root.orderLines.length == 1;
+    }
 };
 
 var MasterOrderLine = {
@@ -945,6 +949,11 @@ var mainVueModel = new Vue({
                 }.bind(this))
             }
             return orderResponseGrouped;
+        },
+        showMasterOrderLine: function () {
+            var availableAreaTypes = Object.keys(this.masterOrderLine.masterAvailableAreas);
+            var containsSupportedType = this.containsSupportedType(availableAreaTypes) || this.containsLandsdekkende(availableAreaTypes);
+            return this.orderLines.length > 1 && containsSupportedType;
         }
     },
     created: function () {
@@ -1004,6 +1013,43 @@ var mainVueModel = new Vue({
                                             availableArea.isSelected = false;
                                             this.masterOrderLine.allAvailableAreas[uuid][availableArea.type].push(availableArea);
                                         }.bind(this))
+
+                                        //start set fixed sort order for area types
+
+                                        var orderedAreas = ["fylke", "kommune", "celle"];
+
+                                        //Add available area types not fixed sorted
+                                        for (areaType in this.masterOrderLine.allAvailableAreas[uuid]) {
+                                            if (orderedAreas.indexOf(areaType) == -1)
+                                                orderedAreas.push(areaType);
+                                        }
+
+                                        //Remove fixed area types not available
+                                        var notAvailableAreaTypes = [];
+                                        orderedAreas.forEach(function (areaType) {
+                                            if (this.masterOrderLine.allAvailableAreas[uuid][areaType] == null) {
+                                                notAvailableAreaTypes.push(areaType);
+                                            }
+                                        }.bind(this));
+                                        removeFromArray(orderedAreas, notAvailableAreaTypes);
+
+                                        //Re-organize according to fixed order
+                                        var allAvailableAreasForUuid = this.masterOrderLine.allAvailableAreas[uuid];
+                                        this.masterOrderLine.allAvailableAreas[uuid] = {};
+
+                                        for (keyType in orderedAreas) {
+                                            areaType = orderedAreas[keyType];
+                                            allAvailableAreasForUuid[areaType].forEach(function (availableArea) {
+                                                if (this.masterOrderLine.allAvailableAreas[uuid][areaType] == undefined) {
+                                                    this.masterOrderLine.allAvailableAreas[uuid][areaType] = [];
+                                                }
+                                                availableArea.isSelected = false;
+                                                this.masterOrderLine.allAvailableAreas[uuid][areaType].push(availableArea);
+                                            }.bind(this))
+                                        }
+
+                                        //end set fixed sort order
+
                                     }
                                     if (link.rel == "http://rel.geonorge.no/download/projection") {
                                         var defaultProjections = getJsonData(link.href)
@@ -1072,6 +1118,26 @@ var mainVueModel = new Vue({
                 if (areaType == supportedAreaType) isSupportedType = true;
             })
             return isSupportedType;
+        },
+        containsSupportedType: function (areaTypes) {
+            var containsSupportedType = false;
+            areaTypes.forEach(function (areaType) {
+                if (this.isSupportedType(areaType)) {
+                    containsSupportedType = true;
+                    return;
+                }
+            }.bind(this));
+            return containsSupportedType;
+        },
+        containsLandsdekkende: function (areaTypes) {
+            var containsLandsdekkende = false;
+            areaTypes.forEach(function (areaType) {
+                if (areaType == 'landsdekkende') {
+                    containsLandsdekkende = true;
+                    return;
+                }
+            }.bind(this));
+            return containsLandsdekkende;
         },
         hasMasterSelectedProjections: function () {
             return this.masterOrderLine.masterSelectedProjections.length > 0;
@@ -1886,26 +1952,59 @@ var mainVueModel = new Vue({
             localStorage.removeItem('allSelectedFormats');
             localStorage.removeItem('allSelectedCoordinates');
         },
+        getPreSelectedOrderLineValuesFromLocalStorage: function () {
+            var preSelectedOrderLineValues = {
+                preSelectedAreas: localStorage.getItem('preSelectedAreas') !== null ? JSON.parse(localStorage.getItem('preSelectedAreas')) : null
+            };
+            return preSelectedOrderLineValues;
+        },
+        removePreSelectedAreaFromLocalStorage: function (orderLineUuid, area) {
+            var preSelectedAreas = localStorage.getItem('preSelectedAreas') !== null ? JSON.parse(localStorage.getItem('preSelectedAreas')) : null;
+            var isPreSelectedArea = preSelectedAreas[orderLineUuid] !== undefined && preSelectedAreas[orderLineUuid].code == area.code;
+
+            if (isPreSelectedArea) {
+                delete preSelectedAreas[orderLineUuid];
+                localStorage.setItem('preSelectedAreas', JSON.stringify(preSelectedAreas));
+            }
+        },
         autoselectWithOrderLineValuesFromLocalStorage: function () {
             var selectedOrderLineValues = this.getSelectedOrderLineValuesFromLocalStorage();
+            var preSelectedOrderLineValues = this.getPreSelectedOrderLineValuesFromLocalStorage();
+
 
             // Autoselect areas
             for (orderLineUuid in this.masterOrderLine.allAvailableAreas) {
-                if (selectedOrderLineValues.allSelectedAreas !== null && selectedOrderLineValues.allSelectedAreas[orderLineUuid] !== undefined && selectedOrderLineValues.allSelectedAreas[orderLineUuid].length) {
+                var hasSelectedAreas = selectedOrderLineValues.allSelectedAreas !== null && selectedOrderLineValues.allSelectedAreas[orderLineUuid] !== undefined && selectedOrderLineValues.allSelectedAreas[orderLineUuid].length;
+                var hasPreSelecteAreas = preSelectedOrderLineValues.preSelectedAreas !== null && preSelectedOrderLineValues.preSelectedAreas[orderLineUuid] !== undefined;
+
+                if (hasSelectedAreas || hasPreSelecteAreas) {
                     for (areaType in this.masterOrderLine.allAvailableAreas[orderLineUuid]) {
-                        selectedOrderLineValues.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
-                            if (selectedArea.type == 'polygon') {
-                                this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'] = [];
-                                this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'].push(selectedArea);
-                                this.masterOrderLine.allSelectedCoordinates[orderLineUuid] = selectedArea.coordinates;
-                            } else {
-                                this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
-                                    if (availableArea.code == selectedArea.code) {
-                                        this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
-                                    }
-                                }.bind(this));
-                            }
-                        }.bind(this));
+                        if (hasSelectedAreas) {
+                            selectedOrderLineValues.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
+                                if (selectedArea.type == 'polygon') {
+                                    this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'] = [];
+                                    this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'].push(selectedArea);
+                                    this.masterOrderLine.allSelectedCoordinates[orderLineUuid] = selectedArea.coordinates;
+                                } else {
+                                    this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
+                                        if (availableArea.code == selectedArea.code) {
+                                            this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
+                                        }
+                                    }.bind(this));
+                                }
+                            }.bind(this));
+                        }
+
+                        // Autoselected area from "hva-finnes-i-kommunen-eller-fylket":
+                        if (hasPreSelecteAreas) {
+                            var preSelectedArea = preSelectedOrderLineValues.preSelectedAreas[orderLineUuid];
+                            this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
+                                if (availableArea.code == preSelectedArea.code) {
+                                    this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
+                                }
+                            }.bind(this));
+                        }
+
                     }
                 }
             }

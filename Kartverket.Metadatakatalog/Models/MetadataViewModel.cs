@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Routing;
+using Kartverket.Metadatakatalog.Models.Api;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -90,6 +91,8 @@ namespace Kartverket.Metadatakatalog.Models
         // Summary:
         //     Values from codelist: http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_ProgressCode
         public string Status { get; set; }
+        public string OrderingInstructions { get; set; }
+        public string OrderingInstructionsLinkText { get; set; }
         public string SupplementalDescription { get; set; }
         public string HelpUrl { get; set; }
         public List<Thumbnail> Thumbnails { get; set; }
@@ -122,12 +125,14 @@ namespace Kartverket.Metadatakatalog.Models
         public string MapLink { get; set; }
         public string ServiceLink { get; set; }
         public string DistributionUrl { get; set; }
+        public Distributions Distributions { get; set; }
 
 
         public MetadataViewModel()
         {
             Related = new List<MetadataViewModel>();
             Thumbnails = new List<Thumbnail>();
+            Distributions = new Distributions();
         }
 
         public SeoUrl CreateSeoUrl()
@@ -516,6 +521,117 @@ namespace Kartverket.Metadatakatalog.Models
             return HierarchyLevel;
         }
 
+    }
+
+    public class Distributions
+    {
+        public List<Distribution> SelfDistribution { get; set; }
+        public List<Distribution> RelatedDataset { get; set; }
+        public List<Distribution> RelatedApplications { get; set; }
+        public List<Distribution> RelatedServices { get; set; }
+        public List<Distribution> RelatedServiceLayer { get; set; }
+        public List<Distribution> RelatedViewServices { get; set; }
+        public List<Distribution> RelatedDownloadServices { get; set; }
+
+        public bool ShowRelatedDataset { get; set; }
+        public bool ShowRelatedApplications { get; set; }
+        public bool ShowRelatedServices { get; set; }
+        public bool ShowRelatedServiceLayer { get; set; }
+        public bool ShowRelatedViewServices { get; set; }
+        public bool ShowRelatedDownloadServices { get; set; }
+        public bool ShowSelfDistributions { get; set; }
+
+        public string TitleSelf { get; set; }
+        public string TitleRelatedDataset { get; set; }
+        public string TitleRelatedApplications { get; set; }
+        public string TitleRelatedServices { get; set; }
+        public string TitleRelatedServiceLayer { get; set; }
+        public string TitleRelatedViewServices { get; set; }
+        public string TitleRelatedDownloadServices { get; set; }
+
+
+
+        public Distributions()
+        {
+            SelfDistribution = new List<Distribution>();
+            RelatedDataset = new List<Distribution>();
+            RelatedApplications = new List<Distribution>();
+            RelatedServices = new List<Distribution>();
+            RelatedServiceLayer = new List<Distribution>();
+            RelatedViewServices = new List<Distribution>();
+            RelatedDownloadServices = new List<Distribution>();
+
+            ShowRelatedDataset = false;
+            ShowRelatedApplications = false;
+            ShowRelatedServices = false;
+            ShowRelatedServiceLayer = false;
+            ShowRelatedViewServices = false;
+            ShowRelatedDownloadServices = false;
+            ShowSelfDistributions = true;
+        }
+
+        public bool ShowApplications()
+        {
+            return RelatedApplications.Any();
+        }
+
+        public bool ShowServices()
+        {
+            return RelatedServices.Any();
+        }
+
+        public bool ShowViewServices()
+        {
+            return RelatedViewServices.Any();
+        }
+
+        public bool ShowDownloadServices()
+        {
+            return RelatedDownloadServices.Any();
+        }
+
+        public bool ShowDatasets()
+        {
+            return RelatedDataset.Any();
+        }
+
+        public bool ShowServicLayers()
+        {
+            return RelatedServiceLayer.Any();
+        }
+
+        public Distributions GetTitle(MetadataViewModel metadata, string type)
+        {
+            if (metadata == null) throw new ArgumentNullException(nameof(metadata));
+
+            if (metadata.IsDataset())
+            {
+                TitleSelf = "Filnedlasting";
+                TitleRelatedApplications = "Kartløsninger";
+            }
+            if (metadata.IsService() || metadata.IsServiceLayer())
+            {
+                if (type == "servicelayer")
+                {
+                    TitleSelf = "Tjenestelag";
+                    TitleRelatedDataset = "Datasett som tjenesten opererer på";
+                    TitleRelatedServices = "Tjenesten som laget inngår i";
+                }
+                else
+                {
+                    TitleSelf = "Tjenesten";
+                    TitleRelatedDataset = "Datasett tjenesten opererer på";
+                    TitleRelatedServiceLayer = "WMS-lag i tjenesten";
+                }
+            }
+            if (metadata.IsApplication())
+            {
+                TitleSelf = "Kartløsning";
+                TitleRelatedDataset = "Datasett som vises i kartløsningen";
+            }
+
+            return this;
+        }
     }
 
     public class BoundingBox

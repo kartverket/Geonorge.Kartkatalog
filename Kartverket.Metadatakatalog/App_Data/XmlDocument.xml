@@ -1891,6 +1891,11 @@
               Looks up a localized string similar to Tjenesten kan ikke vises i kart.
             </summary>
         </member>
+        <member name="P:Resources.UI.ServiceDeclaration">
+            <summary>
+              Looks up a localized string similar to Tjenesteerklæring.
+            </summary>
+        </member>
         <member name="P:Resources.UI.ServiceNotavailable">
             <summary>
               Looks up a localized string similar to Tjenesten er utilgjengelig for øyeblikket.

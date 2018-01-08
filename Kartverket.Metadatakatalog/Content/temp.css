@@ -64,6 +64,23 @@
             text-transform: uppercase;
         }
 
+.resultItemRowTableHeaderSmall {
+}
+
+    .resultItemRowTableHeaderSmall > div {
+        height: 40px;
+    }
+
+        .resultItemRowTableHeaderSmall > div p,
+        .resultItemRowTableHeaderSmall > div a {
+            position: absolute;
+            bottom: 0;
+            margin-bottom: 4px;
+            font-size: 12pt;
+            line-height: 14pt;
+            text-transform: uppercase;
+        }
+
 .resultItemRowGallery {
     margin: 15px -15px 10px -15px;
 }
@@ -117,4 +134,9 @@
 
 .input-group .input-group-addon.btn{
     line-height: 12pt;
+}
+
+
+.resultItemRowTableHeader > div {
+    height: 40px;
 }

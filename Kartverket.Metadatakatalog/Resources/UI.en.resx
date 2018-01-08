@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppPageTitle" xml:space="preserve">
-    <value>Map Catalog</value>
+    <value>Map Catalogue</value>
   </data>
   <data name="Facet_area" xml:space="preserve">
     <value>Area</value>
@@ -220,7 +220,7 @@
     <value>Filter search on</value>
   </data>
   <data name="MapCatalogMainPage" xml:space="preserve">
-    <value>Map Catalog - main page</value>
+    <value>Map Catalogue - main page</value>
   </data>
   <data name="MapServices" xml:space="preserve">
     <value>Map services</value>
@@ -713,5 +713,8 @@
   </data>
   <data name="DownloadHeader" xml:space="preserve">
     <value>Down-&lt;br /&gt;load</value>
+  </data>
+  <data name="ServiceDeclaration" xml:space="preserve">
+    <value>Service declaration</value>
   </data>
 </root>

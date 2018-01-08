@@ -184,6 +184,20 @@
                     button.title = "@UI.AlreadyPutInBasket";
                     $(".add-to-cart-btn-" + this.resultItem.Uuid).addClass("added");
                     $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "@UI.AlreadyPutInBasket");
+
+                    // Add preselected area
+                    var areaCodeUrlParameter = getURLParameter('AreaCode');
+                    if (areaCodeUrlParameter) {
+                        var preSelectedAreas = localStorage.getItem('preSelectedAreas') !== null ? JSON.parse(localStorage.getItem('preSelectedAreas')) : {};
+                        var lastSlashIndex = areaCodeUrlParameter.lastIndexOf('/');
+                        var areaCode = areaCodeUrlParameter.substring(lastSlashIndex + 1);
+                        var areaType = areaCode.length == 2 ? 'fylke' : 'kommune';
+                        preSelectedAreas[this.resultItem.Uuid] = {
+                            type: areaType,
+                            code: areaCode
+                        };
+                        localStorage.setItem('preSelectedAreas', JSON.stringify(preSelectedAreas));
+                    }
                 } else {
                     var index = orderItems.indexOf(item.uuid);
                     if (index > -1) {
