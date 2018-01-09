@@ -912,7 +912,8 @@ var mainVueModel = new Vue({
                         distributionUrl: distribution.distributionUrl,
                         datasets: {},
                         additionalInfo: null,
-                        orderBundleUrl: null
+                        orderBundleUrl: null,
+                        numberOfFiles: distribution.data.files != undefined ? distribution.data.files.length : 0
                     }
 
                     if (distribution.data != undefined) {
