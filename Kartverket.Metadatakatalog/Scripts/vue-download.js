@@ -1961,7 +1961,7 @@ var mainVueModel = new Vue({
         },
         removePreSelectedAreaFromLocalStorage: function (orderLineUuid, area) {
             var preSelectedAreas = localStorage.getItem('preSelectedAreas') !== null ? JSON.parse(localStorage.getItem('preSelectedAreas')) : null;
-            var isPreSelectedArea = preSelectedAreas[orderLineUuid] !== undefined && preSelectedAreas[orderLineUuid].code == area.code;
+            var isPreSelectedArea = preSelectedAreas !== null && preSelectedAreas[orderLineUuid] !== undefined && preSelectedAreas[orderLineUuid].code == area.code;
 
             if (isPreSelectedArea) {
                 delete preSelectedAreas[orderLineUuid];
