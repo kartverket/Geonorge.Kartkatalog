@@ -2002,6 +2002,13 @@ var mainVueModel = new Vue({
                             this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
                                 if (availableArea.code == preSelectedArea.code) {
                                     this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
+
+                                    // Autoselected area from "hva-finnes-i-kommunen-eller-fylket" to master order line
+                                    var isAllreadyAddedInfo = this.isAllreadyAdded(this.masterOrderLine.masterSelectedAreas, availableArea, "code");
+                                    if (!isAllreadyAddedInfo.added) {
+                                        this.$root.masterOrderLine.masterSelectedAreas.push(availableArea);
+                                    }
+
                                 }
                             }.bind(this));
                         }
@@ -2058,6 +2065,7 @@ var mainVueModel = new Vue({
                 masterSelectedProjections: localStorage.getItem('masterSelectedProjections') !== null ? JSON.parse(localStorage.getItem('masterSelectedProjections')) : null,
                 masterSelectedFormats: localStorage.getItem('masterSelectedFormats') !== null ? JSON.parse(localStorage.getItem('masterSelectedFormats')) : null,
             }
+
             return selectedMasterOrderLineValues;
         },
         removeSelectedMasterOrderLineValuesFromLocalStorage: function () {
