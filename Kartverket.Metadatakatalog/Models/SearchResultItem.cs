@@ -58,6 +58,9 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 MetadataIndexAllDoc metadataIndexAllDoc = (MetadataIndexAllDoc)doc;
                 SetSearchIndexDoc(metadataIndexAllDoc);
+                DistributionDetails.Name = metadataIndexAllDoc.DistributionName;
+                DistributionDetails.Protocol = metadataIndexAllDoc.DistributionProtocol;
+                DistributionDetails.URL = metadataIndexAllDoc.DistributionUrl;
             }
             else if (doc is ServiceIndexDoc)
             {
