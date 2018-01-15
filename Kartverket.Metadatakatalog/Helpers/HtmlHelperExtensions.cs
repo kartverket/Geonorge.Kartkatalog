@@ -110,7 +110,7 @@ namespace Kartverket.Metadatakatalog.Helpers
 
         public static string HierarchyLevelLabel(string hierarchyLevelLabelText)
         {
-            return "label-" + hierarchyLevelLabelText.ToLower();
+            return "label-" + hierarchyLevelLabelText.Replace(" ", "").ToLower();
         }
 
         public static string SeoFriendlyString(string text)
