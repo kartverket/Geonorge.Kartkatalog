@@ -3492,16 +3492,20 @@ h1 .label {
   margin-left: 26px;
   vertical-align: middle; }
 
-.label-datasett {
+.label-datasett,
+.label-dataset {
   border-color: #5d4777; }
 
-.label-applikasjon {
+.label-applikasjon,
+.label-application {
   border-color: #7da1c4; }
 
-.label-tjeneste {
+.label-tjeneste,
+.label-service {
   border-color: #a9c47f; }
 
-.label-tjenestelag {
+.label-tjenestelag,
+.label-servicelayer {
   border-color: #f0b323; }
 
 .label-datasettserie {

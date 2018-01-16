@@ -50,6 +50,7 @@ namespace Kartverket.Metadatakatalog.Models
         public List<ReferenceSystem> ReferenceSystems { get; set; }
         public string EnglishAbstract { get; set; }
         public string EnglishTitle { get; set; }
+        public string NorwegianTitle { get; set; }
         //
         // Summary:
         //     Note: Only supporting one hierarchyLevel element. Array is overwritten with
@@ -139,10 +140,10 @@ namespace Kartverket.Metadatakatalog.Models
         {
             if (ContactOwner != null)
             {
-                return new SeoUrl((ContactOwner.Organization != null ? ContactOwner.Organization : ""), Title);
+                return new SeoUrl((ContactOwner.Organization != null ? ContactOwner.Organization : ""), NorwegianTitle);
             }
             else
-                return new SeoUrl("", Title);
+                return new SeoUrl("", NorwegianTitle);
         }
         
 

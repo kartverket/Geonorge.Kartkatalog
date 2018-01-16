@@ -41,6 +41,34 @@
             htmlElement: function () {
                 return this.$parent.createButtonElement(this.button);
             }
+        },
+        mounted: function () {
+            var btn = this.$el.firstChild;
+            var clipboard = new Clipboard(btn);
+
+            clipboard.on('success', function (e) {
+                this.setTooltip(btn, 'Kopiert');
+                this.hideTooltip(btn);
+            }.bind(this));
+
+            clipboard.on('error', function (e) {
+                this.setTooltip(btn, 'Feilet!');
+                this.hideTooltip(btn);
+            }.bind(this));
+        },
+        methods: {
+
+            setTooltip: function (btn, message) {
+                $(btn).tooltip('hide')
+                    .attr('data-original-title', message)
+                    .tooltip('show');
+            },
+            hideTooltip: function (btn) {
+                setTimeout(function () {
+                    $(btn).tooltip('hide');
+                }, 1000);
+            },
+
         }
     };
 </script>

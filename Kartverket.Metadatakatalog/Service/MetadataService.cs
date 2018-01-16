@@ -676,6 +676,7 @@ namespace Kartverket.Metadatakatalog.Service
             var metadata = new MetadataViewModel
             {
                 Title = GetTranslation(simpleMetadata.Title, simpleMetadata.EnglishTitle),
+                NorwegianTitle = simpleMetadata.Title,
                 Uuid = simpleMetadata.Uuid,
                 Abstract = GetTranslation(simpleMetadata.Abstract, simpleMetadata.EnglishAbstract),
                 Status = Register.GetStatus(simpleMetadata.Status),

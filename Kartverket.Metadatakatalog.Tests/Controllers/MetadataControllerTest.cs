@@ -32,6 +32,7 @@ namespace Kartverket.Metadatakatalog.Tests.Controllers
             serviceMock.Setup(m => m.GetMetadataViewModelByUuid(Uuid)).Returns(new MetadataViewModel
             {
                 Title = "N50",
+                NorwegianTitle = "N50",
                 ContactOwner = new Contact {Organization = "Kartverket"}
             });
             var controller = new MetadataController(serviceMock.Object, searchServiceMock.Object);
