@@ -364,7 +364,7 @@
         </div>
     </article>
 
-    <article v-show="orderResponse.length && !Object.keys(orderResponseGrouped.datasets).length">
+    <article v-show="orderResponse.length && !orderResponse[0].data.files.length">
         <div class="row">
             <div class="col-md-12">
                 <p>Ingen filer å laste ned, vennligst prøv med andre valg</p>
