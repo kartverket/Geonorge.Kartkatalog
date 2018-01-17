@@ -911,7 +911,7 @@ var mainVueModel = new Vue({
                     var orderResponseGroup = {
                         distributionUrl: distribution.distributionUrl,
                         datasets: {},
-                        additionalInfo: null,
+                        additionalInfo: { distributedBy: "Geonorge", supportsDownloadBundling: false},
                         orderBundleUrl: null,
                         numberOfFiles: distribution.data.files != undefined ? distribution.data.files.length : 0
                     }
