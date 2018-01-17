@@ -1765,6 +1765,10 @@ a {
   a:hover {
     color: #3867C8;
     cursor: pointer; }
+  a.disabled {
+    color: #CFCFCF; }
+    a.disabled:hover {
+      color: #CFCFCF; }
 
 .control-text {
   padding-top: 7px; }
