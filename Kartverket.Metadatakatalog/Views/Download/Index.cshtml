@@ -364,6 +364,14 @@
         </div>
     </article>
 
+    <article v-show="orderResponse.length && !Object.keys(orderResponseGrouped.datasets).length">
+        <div class="row">
+            <div class="col-md-12">
+                <p>Ingen filer å laste ned, vennligst prøv med andre valg</p>
+            </div>
+        </div>
+    </article>
+
     <article id="responseList" v-show="orderResponseGrouped.length">
         <div class="row">
             <div class="col-md-12">
@@ -434,7 +442,7 @@
                                 <input type="text" v-model="email" name="email" class="form-control" />
                                 <span v-on:click="sendOrderBundleRequest(responseItem)" v-bind:class="{disabled: !emailAddressIsValid(email)}" class="input-group-addon btn" v-bind:id="'order-bundle-button-' + responseItem.additionalInfo.distributedBy">Bestill pakke med alle datasett</span>
                             </div>
-                            <div v-bind:id="'order-bundle-message-' + responseItem.additionalInfo.distributedBy" class="">   
+                            <div v-bind:id="'order-bundle-message-' + responseItem.additionalInfo.distributedBy" class="">
                             </div>
                         </div>
                     </div>
