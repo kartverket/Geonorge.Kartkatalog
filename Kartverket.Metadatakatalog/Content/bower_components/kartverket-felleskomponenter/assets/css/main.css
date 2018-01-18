@@ -1398,7 +1398,8 @@ iframe {
   .navbar-nav-container {
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
-    box-shadow: none; }
+    box-shadow: none;
+    display: none; }
   .navbar-nav .dropdown .dropdown-menu > li > ul > li > a {
     font-size: 14pt; }
   .navbar-nav .dropdown .dropdown-menu ul {
@@ -1768,7 +1769,8 @@ a {
   a.disabled {
     color: #CFCFCF; }
     a.disabled:hover {
-      color: #CFCFCF; }
+      color: #CFCFCF;
+      cursor: not-allowed; }
 
 .control-text {
   padding-top: 7px; }

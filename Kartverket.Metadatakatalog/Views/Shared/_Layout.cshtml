@@ -25,6 +25,42 @@
 
     @RenderSection("head", false)
 
+    
+    @Html.Partial("_Resources")
+    
+</head>
+<body class="geonorge-container prototype  geonorge ng-scope" ng-app="geonorge">
+
+    <div id="loading-animation" class="loading-animation" style="display: none;"></div>
+
+    @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_SharedMenu.min.cshtml")
+
+
+    @{
+        var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    }
+
+
+    <div class="container container-breadcrumbs" id="navTabCont">
+        <ul class="breadcrumbs col-md-12">
+            <li><a href="@Html.GeonorgeUrl()">Geonorge</a></li>
+            @if (controllerName != "Help")
+            {
+                <li><a href="/">@Resources.UI.AppPageTitle </a></li>
+            }
+            @RenderSection("breadcrumb", false)
+        </ul>
+    </div>
+
+    <div class="body-content">
+        <div class="container">
+            @RenderBody()
+        </div>
+
+    </div>
+
+
+
     <script>
         var applicationEnvironment = '@Html.EnvironmentName()';
         var applicationVersionNumber = '@Html.ApplicationVersionNumber()';
@@ -51,41 +87,14 @@
             currentCulture: '@CultureHelper.GetCurrentCulture()'
         };
     </script>
-    @Html.Partial("_Resources")
     @Scripts.Render("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts")
+    @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_Analytics.min.cshtml")
+    @RenderSection("scripts", false)
+
+
     <script>
         setMainSearchPlaceholder('@Html.Raw(UI.SearchMapData)');
     </script>
-</head>
-<body class="geonorge-container prototype  geonorge ng-scope" ng-app="geonorge">
-
-    <div id="loading-animation" class="loading-animation" style="display: none;"></div>
-
-    @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_Analytics.min.cshtml")
-    @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_SharedMenu.min.cshtml")
-    
-
-    @{
-        var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
-    }
-
-
-    <div class="container container-breadcrumbs" id="navTabCont">
-        <ul class="breadcrumbs col-md-12">
-            <li><a href="@Html.GeonorgeUrl()">Geonorge</a></li>
-            @if(controllerName != "Help") {
-            <li><a href="/">@Resources.UI.AppPageTitle </a></li>
-            }
-            @RenderSection("breadcrumb", false)
-        </ul>
-    </div>
-
-    <div class="body-content">
-        <div class="container">
-            @RenderBody()
-        </div>
-
-    </div>
 
     @if (CultureHelper.IsNorwegian())
     {
@@ -96,7 +105,6 @@
         @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_Footer_eng.min.cshtml");
     }
 
-    @RenderSection("scripts", false)
 </body>
 
 </html>

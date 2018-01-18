@@ -50,17 +50,16 @@
     string query = qs.ToString(); string urlCSV = path + "?" + query;
 }
 
-@Html.Partial("_ThemeGroup", Model)
-@Html.Partial("_FacetFilter", Model)
+
 
 <div id="vue-container" class="row">
 
     <div class="col-md-9">
         <!--  <div is="facet-filter" filter-type="tabs" class="facet-filter"></div>-->
         @if (Model.Result != null)
-    {
-        <div is="theme-group"></div>
-}
+        {
+            <div is="theme-group"></div>
+        }
         <div class="margin-top-10">
             @Html.Partial("_Pagination", Model)
         </div>
@@ -97,6 +96,9 @@
 
 
 @section scripts {
+    @Html.Partial("_ThemeGroup", Model)
+    @Html.Partial("_FacetFilter", Model)
+
     <script>
 
         // Setter url for søkeresultat
@@ -143,27 +145,25 @@
             }
         });
     </script>
+    <script>
+        var Search = new Vue({
+            el: "#vue-container",
+            components: {
+                ThemeGroup: ThemeGroup,
+                FacetFilter: FacetFilter
+            },
+            data: {
+                viewType: 'tableView',
+                selectedFields: [
+                    { name: 'title', size: '5' },
+                    { name: 'owner', size: '4' },
+                    { name: 'openData', size: '1' }
+                ],
+                selectedButtons: [
+                    'showInMapButton',
+                    'addToCartButton'
+                ]
+            }
+        });
+    </script>
 }
-
-
-<script>
-    var Search = new Vue({
-        el: "#vue-container",
-        components: {
-            ThemeGroup: ThemeGroup,
-            FacetFilter: FacetFilter
-        },
-        data: {
-            viewType: 'tableView',
-            selectedFields: [
-                { name: 'title', size: '5' },
-                { name: 'owner', size: '4' },
-                { name: 'openData', size: '1' }
-            ],
-            selectedButtons: [
-                'showInMapButton',
-                'addToCartButton'
-            ]
-        }
-    });
-</script>

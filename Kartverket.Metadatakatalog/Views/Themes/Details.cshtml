@@ -19,14 +19,14 @@
 @{
     @* Sett url og fiks linjeskift i data for themes *@
     @helper BuildMenu(Theme theme)
-    {
-theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
-theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
-theme.Name = theme.NameTranslated();
-foreach (var item in theme.Children)
-{
-        @BuildMenu(item)
-}
+        {
+            theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+            theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+            theme.Name = theme.NameTranslated();
+            foreach (var item in theme.Children)
+            {
+                @BuildMenu(item)
+            }
 }
     @BuildMenu(Model)
 }
@@ -71,8 +71,7 @@ foreach (var item in theme.Children)
 
 
 @* Metadata*@
-@* Vue code for resultitem*@
-@Html.Partial("_resultItemRow")
+
 
 
 <div id="themesVueList">
@@ -174,9 +173,10 @@ foreach (var item in theme.Children)
 }
 
 @section scripts {
+    @* Vue code for resultitem*@
+    @Html.Partial("_resultItemRow")
 
     <script>
-
         var MetadataItem = {
             name: 'metadataItem',
             template: '#metadata-item-template',
