@@ -44,7 +44,6 @@ function getJsonData(url) {
     return returnData;
 }
 
-showLoadingAnimation("Laster inn kurv");
 
 $(window).load(function () {
     hideLoadingAnimation();
@@ -879,6 +878,7 @@ var mainVueModel = new Vue({
         orderRequestsAdditionalInfo: {},
         orderResponse: {},
         emailRequired: false,
+        contentLoaded: false,
 
         masterOrderLine: {
             allAvailableAreas: {},
@@ -958,10 +958,10 @@ var mainVueModel = new Vue({
         }
     },
     created: function () {
-        $("#vueContainer").removeClass("hidden");
         var defaultUrl = "https://nedlasting.geonorge.no/api/capabilities/";
         var orderItemsJson = (localStorage["orderItems"] != null) ? JSON.parse(localStorage["orderItems"]) : [];
         var orderLines = [];
+       
         if (orderItemsJson.length) {
             var key = 0;
             $(orderItemsJson).each(function (index, val) {
@@ -1088,6 +1088,7 @@ var mainVueModel = new Vue({
         this.updateNotAvailableSelectedProjectionsForAllOrderLines();
         this.updateNotAvailableSelectedFormatsForAllOrderLines();
         this.validateAreas();
+        this.contentLoaded = true;
     },
     components: {
         'orderLine': OrderLine,
