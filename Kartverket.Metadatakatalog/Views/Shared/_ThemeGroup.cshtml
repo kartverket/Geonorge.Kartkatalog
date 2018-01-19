@@ -55,7 +55,7 @@
 
 @* Tabellen *@
 <script type="text/x-template" id="theme-group-template">
-    <div>
+    <div v-bind:class="{'table-view': $root.viewType == 'tableView'}">
         <div v-if="$root.viewType == 'tableView'" is="table-header"
              v-bind:selected-fields="$root.selectedFields"
              v-bind:selected-buttons="$root.selectedButtons">

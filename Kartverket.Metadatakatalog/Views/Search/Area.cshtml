@@ -144,7 +144,7 @@
                 <div class="col-sm-1" is="header-map"></div>
                 <div class="col-sm-1" is="header-add-to-cart"></div>
             </div>
-            <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
+            <div v-if="$root.viewType == 'tableView'" class="menu-separator"></div>
             <div v-for="item in items" is="resultItem"
                  v-bind:result-item="item"
                  v-bind:selected-fields="[

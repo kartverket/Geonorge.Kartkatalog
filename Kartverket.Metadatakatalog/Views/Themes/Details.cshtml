@@ -74,15 +74,15 @@
 
 
 
-<div id="themesVueList">
-    <div class="row resultItemRowTableHeader">
+<div id="themesVueList" v-bind:class="{'table-view': $root.viewType == 'tableView'}">
+    <div class="row search-results-table-heading">
         <div class="col-sm-5"><p>@Resources.UI.Title</p></div>
         <div class="col-sm-4"><p>@Resources.UI.DataOwner</p></div>
         <div class="col-sm-1"><p>@Resources.UI.OpenData</p></div>
         <div class="col-sm-1"><p>@Resources.UI.Map</p></div>
         <div class="col-sm-1"><p>@Resources.UI.Download</p></div>
     </div>
-    <div class="menu-separator search-results-table-heading"></div>
+    <div class="menu-separator"></div>
     <div v-if="children.length" v-for="theme in children">
         <div is="theme-item" v-bind:theme="theme" v-bind:parent-hierarchy-level="-1"></div>
     </div>
@@ -248,7 +248,6 @@
                             function (result) {
                                 if (result.length != 0) {
                                     this.metadataArray.push(result);
-                                    console.log(this.metadataArray);
                                 }
                             }.bind(this)
                         });

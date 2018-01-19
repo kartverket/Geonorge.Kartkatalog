@@ -1802,6 +1802,15 @@ aside ul li,
   background-color: #fe5000;
   color: #fff; }
 
+/* Filter tabs */
+.nav-tabs > li > a .badge {
+  background-color: #fff;
+  color: #333; }
+
+.nav-tabs > li.active > a .badge {
+  background-color: #fe5000;
+  color: #FFF; }
+
 .btn,
 a.btn,
 button.btn,
@@ -3498,6 +3507,9 @@ h1 .label {
   margin-left: 26px;
   vertical-align: middle; }
 
+.heading .label {
+  margin-bottom: 8px; }
+
 .label-datasett,
 .label-dataset {
   border-color: #5d4777; }
@@ -4004,7 +4016,7 @@ header.main-header {
   line-height: 14pt; }
   #tableView .search-results-table-heading > div,
   .table-view .search-results-table-heading > div {
-    height: 60px; }
+    height: 40px; }
     #tableView .search-results-table-heading > div > p,
     .table-view .search-results-table-heading > div > p {
       position: absolute;
@@ -4012,8 +4024,7 @@ header.main-header {
       line-height: inherit;
       margin-bottom: 4px;
       font-size: 12pt;
-      line-height: 14pt;
-      width: 100%; }
+      line-height: 14pt; }
       #tableView .search-results-table-heading > div > p a,
       .table-view .search-results-table-heading > div > p a {
         font-size: 12pt;
