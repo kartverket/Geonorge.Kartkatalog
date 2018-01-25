@@ -13,17 +13,17 @@ namespace Kartverket.Metadatakatalog
 
             routes.MapRoute("DisplayMetadataUuidAndSlug", "metadata/{organization}/{title}/{uuid}",
                 new { controller = "Metadata", action = "Index" },
-                new { uuid = @"[a-zA-Z0-9-]+$" }
+                new { uuid = @"[a-zA-Z0-9-_]+$" }
             );
 
             routes.MapRoute("DisplayMetadataUuidAndTitle", "metadata/{title}/{uuid}",
                 new { controller = "Metadata", action = "Index" },
-                new { uuid = @"[a-zA-Z0-9-]+$" }
+                new { uuid = @"[a-zA-Z0-9-_]+$" }
             );
 
             routes.MapRoute("DisplayMetadataUuid", "metadata/uuid/{uuid}",
                 new { controller = "Metadata", action = "Index" },
-                new { uuid = @"[a-zA-Z0-9-]+$" }
+                new { uuid = @"[a-zA-Z0-9-_]+$" }
             );
 
             routes.MapRoute("DisplayOrganizationMetadata", "metadata/{OrganizationSeoName}",
