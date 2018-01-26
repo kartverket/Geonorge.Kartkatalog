@@ -1597,7 +1597,7 @@
         </member>
         <member name="P:Resources.UI.MissingFormatFor">
             <summary>
-              Looks up a localized string similar to Mangler format for.
+              Looks up a localized string similar to Mangler format/projeksjon for.
             </summary>
         </member>
         <member name="P:Resources.UI.MissingProjectionFor">

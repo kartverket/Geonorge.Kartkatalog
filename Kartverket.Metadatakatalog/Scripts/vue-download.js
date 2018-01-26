@@ -1175,7 +1175,20 @@ var mainVueModel = new Vue({
                     if (this.masterOrderLine.allSelectedFormats[orderLine] !== undefined && this.masterOrderLine.allSelectedFormats[orderLine].length) {
                         this.masterOrderLine.allSelectedFormats[orderLine].forEach(function (selectedFormat) {
                             if (selectedFormat.name == availableFormat.name) {
-                                hasSelectedFormats = true
+                                if (selectedFormat.projections !== undefined) {
+                                    //check if selectedFormat.projections is in allSelectedProjections 
+                                    selectedFormat.projections.forEach(function (projection) {
+                                        this.masterOrderLine.allSelectedProjections[orderLine].forEach(function (projectionSelected) {
+                                            if (projectionSelected.code == projection.code)
+                                                hasSelectedFormats = true
+
+                                        }.bind(this))
+
+                                    }.bind(this))
+                                }
+                                else {
+                                    hasSelectedFormats = true
+                                }
                             }
                         }.bind(this))
                     }
@@ -1185,6 +1198,7 @@ var mainVueModel = new Vue({
                 var errorMessage = "Støttet format for " + area.name + " mangler";
                 this.masterOrderLine.allOrderLineErrors[orderLine]["format"].push(errorMessage);
             }
+
             return hasSelectedFormats;
         },
         hasSelectedProjectionsDifferentFromMasterSelectedProjections: function (orderLineUuid) {
