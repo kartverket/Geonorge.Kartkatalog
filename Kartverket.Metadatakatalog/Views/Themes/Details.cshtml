@@ -19,14 +19,14 @@
 @{
     @* Sett url og fiks linjeskift i data for themes *@
     @helper BuildMenu(Theme theme)
-    {
-theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
-theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
-theme.Name = theme.NameTranslated();
-foreach (var item in theme.Children)
-{
-        @BuildMenu(item)
-}
+        {
+            theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+            theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+            theme.Name = theme.NameTranslated();
+            foreach (var item in theme.Children)
+            {
+                @BuildMenu(item)
+            }
 }
     @BuildMenu(Model)
 }
@@ -71,19 +71,18 @@ foreach (var item in theme.Children)
 
 
 @* Metadata*@
-@* Vue code for resultitem*@
-@Html.Partial("_resultItemRow")
 
 
-<div id="themesVueList">
-    <div class="row resultItemRowTableHeader">
+
+<div id="themesVueList" v-bind:class="{'table-view': $root.viewType == 'tableView'}">
+    <div class="row search-results-table-heading">
         <div class="col-sm-5"><p>@Resources.UI.Title</p></div>
         <div class="col-sm-4"><p>@Resources.UI.DataOwner</p></div>
         <div class="col-sm-1"><p>@Resources.UI.OpenData</p></div>
         <div class="col-sm-1"><p>@Resources.UI.Map</p></div>
         <div class="col-sm-1"><p>@Resources.UI.Download</p></div>
     </div>
-    <div class="menu-separator search-results-table-heading"></div>
+    <div class="menu-separator"></div>
     <div v-if="children.length" v-for="theme in children">
         <div is="theme-item" v-bind:theme="theme" v-bind:parent-hierarchy-level="-1"></div>
     </div>
@@ -174,9 +173,10 @@ foreach (var item in theme.Children)
 }
 
 @section scripts {
+    @* Vue code for resultitem*@
+    @Html.Partial("_resultItemRow")
 
     <script>
-
         var MetadataItem = {
             name: 'metadataItem',
             template: '#metadata-item-template',
@@ -248,7 +248,6 @@ foreach (var item in theme.Children)
                             function (result) {
                                 if (result.length != 0) {
                                     this.metadataArray.push(result);
-                                    console.log(this.metadataArray);
                                 }
                             }.bind(this)
                         });

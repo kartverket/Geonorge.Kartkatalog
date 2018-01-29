@@ -44,7 +44,6 @@ function getJsonData(url) {
     return returnData;
 }
 
-showLoadingAnimation("Laster inn kurv");
 
 $(window).load(function () {
     hideLoadingAnimation();
@@ -879,6 +878,7 @@ var mainVueModel = new Vue({
         orderRequestsAdditionalInfo: {},
         orderResponse: {},
         emailRequired: false,
+        contentLoaded: false,
 
         masterOrderLine: {
             allAvailableAreas: {},
@@ -911,7 +911,7 @@ var mainVueModel = new Vue({
                     var orderResponseGroup = {
                         distributionUrl: distribution.distributionUrl,
                         datasets: {},
-                        additionalInfo: null,
+                        additionalInfo: { distributedBy: "Geonorge", supportsDownloadBundling: false},
                         orderBundleUrl: null,
                         numberOfFiles: distribution.data.files != undefined ? distribution.data.files.length : 0
                     }
@@ -958,10 +958,10 @@ var mainVueModel = new Vue({
         }
     },
     created: function () {
-        $("#vueContainer").removeClass("hidden");
         var defaultUrl = "https://nedlasting.geonorge.no/api/capabilities/";
         var orderItemsJson = (localStorage["orderItems"] != null) ? JSON.parse(localStorage["orderItems"]) : [];
         var orderLines = [];
+       
         if (orderItemsJson.length) {
             var key = 0;
             $(orderItemsJson).each(function (index, val) {
@@ -1088,6 +1088,7 @@ var mainVueModel = new Vue({
         this.updateNotAvailableSelectedProjectionsForAllOrderLines();
         this.updateNotAvailableSelectedFormatsForAllOrderLines();
         this.validateAreas();
+        this.contentLoaded = true;
     },
     components: {
         'orderLine': OrderLine,
@@ -1174,7 +1175,20 @@ var mainVueModel = new Vue({
                     if (this.masterOrderLine.allSelectedFormats[orderLine] !== undefined && this.masterOrderLine.allSelectedFormats[orderLine].length) {
                         this.masterOrderLine.allSelectedFormats[orderLine].forEach(function (selectedFormat) {
                             if (selectedFormat.name == availableFormat.name) {
-                                hasSelectedFormats = true
+                                if (selectedFormat.projections !== undefined) {
+                                    //check if selectedFormat.projections is in allSelectedProjections 
+                                    selectedFormat.projections.forEach(function (projection) {
+                                        this.masterOrderLine.allSelectedProjections[orderLine].forEach(function (projectionSelected) {
+                                            if (projectionSelected.code == projection.code)
+                                                hasSelectedFormats = true
+
+                                        }.bind(this))
+
+                                    }.bind(this))
+                                }
+                                else {
+                                    hasSelectedFormats = true
+                                }
                             }
                         }.bind(this))
                     }
@@ -1184,6 +1198,7 @@ var mainVueModel = new Vue({
                 var errorMessage = "Støttet format for " + area.name + " mangler";
                 this.masterOrderLine.allOrderLineErrors[orderLine]["format"].push(errorMessage);
             }
+
             return hasSelectedFormats;
         },
         hasSelectedProjectionsDifferentFromMasterSelectedProjections: function (orderLineUuid) {
@@ -2002,6 +2017,13 @@ var mainVueModel = new Vue({
                             this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
                                 if (availableArea.code == preSelectedArea.code) {
                                     this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
+
+                                    // Autoselected area from "hva-finnes-i-kommunen-eller-fylket" to master order line
+                                    var isAllreadyAddedInfo = this.isAllreadyAdded(this.masterOrderLine.masterSelectedAreas, availableArea, "code");
+                                    if (!isAllreadyAddedInfo.added) {
+                                        this.$root.masterOrderLine.masterSelectedAreas.push(availableArea);
+                                    }
+
                                 }
                             }.bind(this));
                         }
@@ -2058,6 +2080,7 @@ var mainVueModel = new Vue({
                 masterSelectedProjections: localStorage.getItem('masterSelectedProjections') !== null ? JSON.parse(localStorage.getItem('masterSelectedProjections')) : null,
                 masterSelectedFormats: localStorage.getItem('masterSelectedFormats') !== null ? JSON.parse(localStorage.getItem('masterSelectedFormats')) : null,
             }
+
             return selectedMasterOrderLineValues;
         },
         removeSelectedMasterOrderLineValuesFromLocalStorage: function () {

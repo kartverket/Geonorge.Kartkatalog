@@ -1086,7 +1086,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mangler format for.
+        ///   Looks up a localized string similar to Mangler format/projeksjon for.
         /// </summary>
         public static string MissingFormatFor {
             get {

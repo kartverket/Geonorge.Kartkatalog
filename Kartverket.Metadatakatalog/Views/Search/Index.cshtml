@@ -48,8 +48,6 @@
 }
 
 
-@Html.Partial("_ThemeGroup", Model)
-@Html.Partial("_FacetFilter", Model)
 
 <div id="vue-container" class="row">
 
@@ -95,24 +93,31 @@
 </div>
 
 
-<script>
-    var Search = new Vue({
-        el: "#vue-container",
-        components: {
-            ThemeGroup: ThemeGroup,
-            FacetFilter: FacetFilter
-        },
-        data: {
-            viewType: 'tableView',
-            selectedFields: [
-                { name: 'title', size: '5' },
-                { name: 'owner', size: '4' },
-                { name: 'openData', size: '1' }
-            ],
-            selectedButtons: [
-                'showInMapButton',
-                'addToCartButton'
-            ]
-        }
-    });
-</script>
+
+
+
+@section scripts{
+    @Html.Partial("_ThemeGroup", Model)
+    @Html.Partial("_FacetFilter", Model)
+    <script>
+        var Search = new Vue({
+            el: "#vue-container",
+            components: {
+                ThemeGroup: ThemeGroup,
+                FacetFilter: FacetFilter
+            },
+            data: {
+                viewType: 'tableView',
+                selectedFields: [
+                    { name: 'title', size: '5' },
+                    { name: 'owner', size: '4' },
+                    { name: 'openData', size: '1' }
+                ],
+                selectedButtons: [
+                    'showInMapButton',
+                    'addToCartButton'
+                ]
+            }
+        });
+    </script>
+}

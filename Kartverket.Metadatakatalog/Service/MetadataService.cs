@@ -694,6 +694,7 @@ namespace Kartverket.Metadatakatalog.Service
                 DistributionDetails = Convert(simpleMetadata.DistributionDetails),
                 DistributionUrl = GetDistributionUrl(simpleMetadata.DistributionDetails),
                 DistributionFormat = Convert(simpleMetadata.DistributionFormat),
+                DistributionsFormats = simpleMetadata.DistributionsFormats,
                 HierarchyLevel = simpleMetadata.HierarchyLevel,
                 KeywordsPlace = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)),
                 KeywordsTheme = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_THEME, null)),

@@ -46,6 +46,7 @@ namespace Kartverket.Metadatakatalog.Models
         public DistributionDetails DistributionDetails { get; set; }
         public DistributionFormat DistributionFormat { get; set; }
         public List<SimpleDistributionFormat> DistributionFormats { get; set; }
+        public List<SimpleDistribution> DistributionsFormats { get; set; }
         public string UnitsOfDistribution { get; set; }
         public List<ReferenceSystem> ReferenceSystems { get; set; }
         public string EnglishAbstract { get; set; }
@@ -189,6 +190,20 @@ namespace Kartverket.Metadatakatalog.Models
 
             if (IsDataset())
             {
+                if(string.IsNullOrWhiteSpace(ServiceDistributionProtocolForDataset) && string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
+                {
+                    foreach(var distribution in DistributionsFormats)
+                    {
+                        if (distribution.Protocol == "OGC:WMS")
+                        {
+                            ServiceDistributionProtocolForDataset = "OGC:WMS";
+                            ServiceDistributionUrlForDataset = distribution.URL;
+                            break;
+                        }
+                    }
+                }
+
+
                 if (!string.IsNullOrWhiteSpace(ServiceDistributionProtocolForDataset) && ServiceDistributionProtocolForDataset.Contains(("OGC:WMS")))
                 {
                     if (!string.IsNullOrWhiteSpace(ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))

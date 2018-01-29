@@ -14,7 +14,7 @@
                     content: "@Html.Raw(UI.UrlToService)",
                     className: this.defaultButtonClass,
                     url: null,
-                    title: "@Html.Raw(UI.CopyToClipboard)",
+                    title: "",
                     icon: {
                         className: "fa fa-clipboard"
                     },
@@ -22,13 +22,14 @@
                 };
                 if (this.resultItem.GetCapabilitiesUrl) {
                     button.className += " btn-copy";
+                    button.title = "@Html.Raw(UI.CopyToClipboard)";
                     button.attributes = [
                         { key: "data-clipboard-text", value: this.resultItem.GetCapabilitiesUrl }
                     ]
                 }
                 else {
-                    button.attributes.push({ key: 'disabled', value: 'disabled' });
                     button.className += " disabled";
+                    button.attributes.push({ key: 'disabled', value: 'disabled' });
                 }
                 if (this.buttonType === "tableRow") {
                     button.content = "";

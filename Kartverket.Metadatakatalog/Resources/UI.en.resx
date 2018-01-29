@@ -563,7 +563,7 @@
     <value>is not available</value>
   </data>
   <data name="MissingFormatFor" xml:space="preserve">
-    <value>Missing format for</value>
+    <value>Missing format/projection for</value>
   </data>
   <data name="MissingProjectionFor" xml:space="preserve">
     <value>Missing projection for</value>

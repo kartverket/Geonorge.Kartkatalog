@@ -563,7 +563,7 @@
     <value>er ikke tilgjengelig</value>
   </data>
   <data name="MissingFormatFor" xml:space="preserve">
-    <value>Mangler format for</value>
+    <value>Mangler format/projeksjon for</value>
   </data>
   <data name="MissingProjectionFor" xml:space="preserve">
     <value>Mangler projeksjon for</value>

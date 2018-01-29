@@ -65,33 +65,7 @@
     </div>
 </section>
 
-<script type="text/x-template" id="searchResultTemplate">
-    <div>
-        <div v-if="$root.viewType == 'tableView' && items.length" class="row resultItemRowTableHeader">
-            <div class="col-sm-4" is="header-title"></div>
-            <div class="col-sm-2" is="header-type"></div>
-            <div class="col-sm-3" is="header-organization"></div>
-            <div class="col-sm-1" is="header-open-data"></div>
-            <div class="col-sm-1" is="header-map"></div>
-            <div class="col-sm-1" is="header-add-to-cart"></div>
-        </div>
-        <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
-        <div v-for="item in items" is="resultItem"
-             v-bind:result-item="item"
-             v-bind:selected-fields="[
-                 {name: 'title', size: '4'},
-                 {name: 'distributionType', size: '2'},
-                 {name: 'owner', size: '3'},
-                 {name: 'openData', size: '1'}
-                 ]"
-             v-bind:selected-buttons="[
-                 'showInMapButton',
-                 'addToCartButton'
-                 ]">
-        </div>
-        <div class="clearfix"></div>
-    </div>
-</script>
+
 
 @{
     string url = HttpContext.Current.Request.Url.AbsoluteUri; url = url.Replace("hva-finnes-i-kommunen-eller-fylket", "api/search");
@@ -111,8 +85,7 @@
     string query = qs.ToString(); string urlCSV = path + "?" + query;
 }
 
-@Html.Partial("_ThemeGroup", Model)
-@Html.Partial("_FacetFilter", Model)
+
 
 
 
@@ -121,12 +94,12 @@
     <div id="searchResultTable" class="col-md-9">
         <div is="facet-filter" filter-type="tabs" class="facet-filter"></div>
         @if (Model.Result != null)
-    {
-        <div is="theme-group"></div>
-        <div class="margin-top-10">
-            @Html.Partial("_PaginationForArea", Model)
-        </div>
-}
+        {
+            <div is="theme-group"></div>
+            <div class="margin-top-10">
+                @Html.Partial("_PaginationForArea", Model)
+            </div>
+        }
     </div>
 
     <div class="col-sm-12 col-md-3 pull-left hidden-sm hidden-xs">
@@ -158,6 +131,37 @@
 </div>
 
 @section scripts {
+    @Html.Partial("_ThemeGroup", Model)
+    @Html.Partial("_FacetFilter", Model)
+
+    <script type="text/x-template" id="searchResultTemplate">
+        <div>
+            <div v-if="$root.viewType == 'tableView' && items.length" class="row resultItemRowTableHeader">
+                <div class="col-sm-4" is="header-title"></div>
+                <div class="col-sm-2" is="header-type"></div>
+                <div class="col-sm-3" is="header-organization"></div>
+                <div class="col-sm-1" is="header-open-data"></div>
+                <div class="col-sm-1" is="header-map"></div>
+                <div class="col-sm-1" is="header-add-to-cart"></div>
+            </div>
+            <div v-if="$root.viewType == 'tableView'" class="menu-separator"></div>
+            <div v-for="item in items" is="resultItem"
+                 v-bind:result-item="item"
+                 v-bind:selected-fields="[
+                 {name: 'title', size: '4'},
+                 {name: 'distributionType', size: '2'},
+                 {name: 'owner', size: '3'},
+                 {name: 'openData', size: '1'}
+                 ]"
+                 v-bind:selected-buttons="[
+                 'showInMapButton',
+                 'addToCartButton'
+                 ]">
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </script>
+
     @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
     <script>
@@ -207,27 +211,26 @@
         });
 
     </script>
+
+    <script>
+        var Area = new Vue({
+            el: "#vue-container",
+            components: {
+                ThemeGroup: ThemeGroup,
+                FacetFilter: FacetFilter
+            },
+            data: {
+                viewType: 'tableView',
+                selectedFields: [
+                    { name: 'title', size: '5' },
+                    { name: 'owner', size: '4' },
+                    { name: 'openData', size: '1' }
+                ],
+                selectedButtons: [
+                    'showInMapButton',
+                    'addToCartButton'
+                ]
+            }
+        });
+    </script>
 }
-
-
-<script>
-    var Area = new Vue({
-        el: "#vue-container",
-        components: {
-            ThemeGroup: ThemeGroup,
-            FacetFilter: FacetFilter
-        },
-        data: {
-            viewType: 'tableView',
-            selectedFields: [
-                { name: 'title', size: '5' },
-                { name: 'owner', size: '4' },
-                { name: 'openData', size: '1' }
-            ],
-            selectedButtons: [
-                'showInMapButton',
-                'addToCartButton'
-            ]
-        }
-    });
-</script>

@@ -13,20 +13,20 @@
 
 
 @helper ShowContact(string label, Contact contact)
-{
-if (contact != null)
-{
-        <p>
-            <strong>@label:</strong><br />
-            <a href="mailto:@contact.Email">
-                @if (!string.IsNullOrWhiteSpace(contact.Name))
-                {
-                    <text>@contact.Name, </text>
-                }
-                @contact.Email
-            </a> &ndash; @(!CultureHelper.IsNorwegian() && !string.IsNullOrEmpty(contact.OrganizationEnglish) ? contact.OrganizationEnglish : contact.Organization)
-        </p>
-}
+    {
+        if (contact != null)
+        {
+            <p>
+                <strong>@label:</strong><br />
+                <a href="mailto:@contact.Email">
+                    @if (!string.IsNullOrWhiteSpace(contact.Name))
+                    {
+                        <text>@contact.Name, </text>
+                    }
+                    @contact.Email
+                </a> &ndash; @(!CultureHelper.IsNorwegian() && !string.IsNullOrEmpty(contact.OrganizationEnglish) ? contact.OrganizationEnglish : contact.Organization)
+            </p>
+        }
 }
 
 <div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
@@ -40,10 +40,10 @@ if (contact != null)
     <div class="row">
         <div class="col-sm-12">
             <h1>@Model.Title</h1>
-            <span class="label @HtmlHelperExtensions.HierarchyLevelLabel(Model.GetHierarchyLevelTranslated())">@Model.GetHierarchyLevelTranslated()</span>
         </div>
         <div class="col-sm-12">
             <span class="separator-lg"></span>
+            <span class="label @HtmlHelperExtensions.HierarchyLevelLabel(Model.GetHierarchyLevelTranslated())">@Model.GetHierarchyLevelTranslated()</span>
         </div>
     </div>
 </section>
@@ -79,8 +79,6 @@ if (contact != null)
 </div>
 
 
-@* Vue code for resultitem*@
-@Html.Partial("_resultItemRow")
 
 
 <div class="row margin-top-10">
@@ -111,7 +109,7 @@ if (contact != null)
                 </script>
 
                 @if (!string.IsNullOrWhiteSpace(Model.ParentIdentifier))
-            {
+                {
                     <h3>@UI.ParentIdentifier</h3>
                     <script>getMetadata('@Model.ParentIdentifier');</script>
                     <a id="related-@Model.ParentIdentifier" href="/metadata/org/title/@Model.ParentIdentifier" title="Overordnede metadata for @Model.Title">
@@ -119,7 +117,7 @@ if (contact != null)
                 }
 
                 @if (!string.IsNullOrWhiteSpace(Model.SpecificUsage))
-            {
+                {
                     <h2>@UI.SpecificUsage</h2>
                     <p>@Model.SpecificUsage</p>
                 }
@@ -146,7 +144,7 @@ if (contact != null)
         <div class="row">
             <div class="col-sm-12">
                 <h3>@UI.Distributions</h3>
-                    
+
                 <div v-if="distributions.ShowSelfDistributions" style="margin-bottom:30px">
                     <p class="h3">{{TitleSelf}}</p>
                     <div class="row resultItemRowTableHeaderSmall">
@@ -158,124 +156,124 @@ if (contact != null)
                         <div class="col-sm-1"><p>@UI.Download</p></div>
                         <div class="col-sm-2"><p>Format</p></div>
                     </div>
-                    <div class="menu-separator search-results-table-heading"></div>
+                    <div class="menu-separator"></div>
                     <div v-for="item in SelfDistributions" class="table-border-bottom">
                         <div is="resultItem" v-bind:result-item="item">
                         </div>
                     </div>
                 </div>
 
-                    <div v-if="distributions.ShowRelatedViewServices" style="margin-bottom:30px">
-                        <p class="h3">Visningstjenester</p>
-                        <div class="row resultItemRowTableHeaderSmall">
-                            <div class="col-sm-3"><p>@UI.Title</p></div>
-                            <div class="col-sm-2"><p>Type</p></div>
-                            <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                            <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                            <div class="col-sm-1"><p>@UI.Map</p></div>
-                            <div class="col-sm-1"><p>@UI.Download</p></div>
-                            <div class="col-sm-2"><p>Format</p></div>
-                        </div>
-                        <div class="menu-separator search-results-table-heading"></div>
-                        <div v-for="item in RelatedViewServices" class="table-border-bottom">
-                            <div is="resultItem" v-bind:result-item="item">
-                            </div>
-                        </div>
+                <div v-if="distributions.ShowRelatedViewServices" style="margin-bottom:30px">
+                    <p class="h3">Visningstjenester</p>
+                    <div class="row resultItemRowTableHeaderSmall">
+                        <div class="col-sm-3"><p>@UI.Title</p></div>
+                        <div class="col-sm-2"><p>Type</p></div>
+                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                        <div class="col-sm-1"><p>@UI.Map</p></div>
+                        <div class="col-sm-1"><p>@UI.Download</p></div>
+                        <div class="col-sm-2"><p>Format</p></div>
                     </div>
-
-                    <div v-if="distributions.ShowRelatedDownloadServices" style="margin-bottom:30px">
-                        <p class="h3">Nedlastingstjenester</p>
-                        <div class="row resultItemRowTableHeaderSmall">
-                            <div class="col-sm-3"><p>@UI.Title</p></div>
-                            <div class="col-sm-2"><p>Type</p></div>
-                            <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                            <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                            <div class="col-sm-1"><p>@UI.Map</p></div>
-                            <div class="col-sm-1"><p>@UI.Download</p></div>
-                            <div class="col-sm-2"><p>Format</p></div>
+                    <div class="menu-separator"></div>
+                    <div v-for="item in RelatedViewServices" class="table-border-bottom">
+                        <div is="resultItem" v-bind:result-item="item">
                         </div>
-                        <div class="menu-separator search-results-table-heading"></div>
-                        <div v-for="item in RelatedDownloadServices" class="table-border-bottom">
-                            <div is="resultItem" v-bind:result-item="item">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div v-if="distributions.ShowRelatedDataset" style="margin-bottom:30px">
-                        <p class="h3">{{TitleRelatedDataset}}</p>
-                        <div class="row resultItemRowTableHeaderSmall">
-                            <div class="col-sm-3"><p>@UI.Title</p></div>
-                            <div class="col-sm-2"><p>Type</p></div>
-                            <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                            <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                            <div class="col-sm-1"><p>@UI.Map</p></div>
-                            <div class="col-sm-1"><p>@UI.Download</p></div>
-                            <div class="col-sm-2"><p>Format</p></div>
-                        </div>
-                        <div class="menu-separator search-results-table-heading"></div>
-                        <div v-for="item in RelatedDataset" class="table-border-bottom">
-                            <div is="resultItem" v-bind:result-item="item">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div v-if="distributions.ShowRelatedServices" style="margin-bottom:30px">
-                        <p class="h3">{{TitleRelatedServices}}</p>
-                        <div class="row resultItemRowTableHeaderSmall">
-                            <div class="col-sm-3"><p>@UI.Title</p></div>
-                            <div class="col-sm-2"><p>Type</p></div>
-                            <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                            <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                            <div class="col-sm-1"><p>@UI.Map</p></div>
-                            <div class="col-sm-1"><p>@UI.Download</p></div>
-                            <div class="col-sm-2"><p>Format</p></div>
-                        </div>
-                        <div class="menu-separator search-results-table-heading"></div>
-                        <div v-for="item in RelatedServices" class="table-border-bottom">
-                            <div is="resultItem" v-bind:result-item="item">
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-
-                    <div v-if="distributions.ShowRelatedServiceLayer" style="margin-bottom:30px">
-                        <p class="h3">{{TitleRelatedServiceLayer}}</p>
-                        <div class="row resultItemRowTableHeaderSmall">
-                            <div class="col-sm-3"><p>@UI.Title</p></div>
-                            <div class="col-sm-2"><p>Type</p></div>
-                            <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                            <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                            <div class="col-sm-1"><p>@UI.Map</p></div>
-                            <div class="col-sm-1"><p>@UI.Download</p></div>
-                            <div class="col-sm-2"><p>Format</p></div>
-                        </div>
-                        <div class="menu-separator search-results-table-heading"></div>
-                        <div v-for="item in RelatedServiceLayer" class="table-border-bottom">
-                            <div is="resultItem" v-bind:result-item="item">
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-
-                    <div v-if="distributions.ShowRelatedApplications" style="margin-bottom:30px">
-                        <p class="h3">{{TitleRelatedApplications}}</p>
-                        <div class="row resultItemRowTableHeaderSmall">
-                            <div class="col-sm-3"><p>@UI.Title</p></div>
-                            <div class="col-sm-2"><p>Type</p></div>
-                            <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                            <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                            <div class="col-sm-1"><p>@UI.Map</p></div>
-                            <div class="col-sm-1"><p>@UI.Download</p></div>
-                            <div class="col-sm-2"><p>Format</p></div>
-                        </div>
-                        <div class="menu-separator search-results-table-heading"></div>
-                        <div v-for="item in RelatedApplications" class="table-border-bottom">
-                            <div is="resultItem" v-bind:result-item="item">
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
                     </div>
                 </div>
+
+                <div v-if="distributions.ShowRelatedDownloadServices" style="margin-bottom:30px">
+                    <p class="h3">Nedlastingstjenester</p>
+                    <div class="row resultItemRowTableHeaderSmall">
+                        <div class="col-sm-3"><p>@UI.Title</p></div>
+                        <div class="col-sm-2"><p>Type</p></div>
+                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                        <div class="col-sm-1"><p>@UI.Map</p></div>
+                        <div class="col-sm-1"><p>@UI.Download</p></div>
+                        <div class="col-sm-2"><p>Format</p></div>
+                    </div>
+                    <div class="menu-separator"></div>
+                    <div v-for="item in RelatedDownloadServices" class="table-border-bottom">
+                        <div is="resultItem" v-bind:result-item="item">
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="distributions.ShowRelatedDataset" style="margin-bottom:30px">
+                    <p class="h3">{{TitleRelatedDataset}}</p>
+                    <div class="row resultItemRowTableHeaderSmall">
+                        <div class="col-sm-3"><p>@UI.Title</p></div>
+                        <div class="col-sm-2"><p>Type</p></div>
+                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                        <div class="col-sm-1"><p>@UI.Map</p></div>
+                        <div class="col-sm-1"><p>@UI.Download</p></div>
+                        <div class="col-sm-2"><p>Format</p></div>
+                    </div>
+                    <div class="menu-separator"></div>
+                    <div v-for="item in RelatedDataset" class="table-border-bottom">
+                        <div is="resultItem" v-bind:result-item="item">
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="distributions.ShowRelatedServices" style="margin-bottom:30px">
+                    <p class="h3">{{TitleRelatedServices}}</p>
+                    <div class="row resultItemRowTableHeaderSmall">
+                        <div class="col-sm-3"><p>@UI.Title</p></div>
+                        <div class="col-sm-2"><p>Type</p></div>
+                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                        <div class="col-sm-1"><p>@UI.Map</p></div>
+                        <div class="col-sm-1"><p>@UI.Download</p></div>
+                        <div class="col-sm-2"><p>Format</p></div>
+                    </div>
+                    <div class="menu-separator"></div>
+                    <div v-for="item in RelatedServices" class="table-border-bottom">
+                        <div is="resultItem" v-bind:result-item="item">
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div v-if="distributions.ShowRelatedServiceLayer" style="margin-bottom:30px">
+                    <p class="h3">{{TitleRelatedServiceLayer}}</p>
+                    <div class="row resultItemRowTableHeaderSmall">
+                        <div class="col-sm-3"><p>@UI.Title</p></div>
+                        <div class="col-sm-2"><p>Type</p></div>
+                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                        <div class="col-sm-1"><p>@UI.Map</p></div>
+                        <div class="col-sm-1"><p>@UI.Download</p></div>
+                        <div class="col-sm-2"><p>Format</p></div>
+                    </div>
+                    <div class="menu-separator"></div>
+                    <div v-for="item in RelatedServiceLayer" class="table-border-bottom">
+                        <div is="resultItem" v-bind:result-item="item">
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div v-if="distributions.ShowRelatedApplications" style="margin-bottom:30px">
+                    <p class="h3">{{TitleRelatedApplications}}</p>
+                    <div class="row resultItemRowTableHeaderSmall">
+                        <div class="col-sm-3"><p>@UI.Title</p></div>
+                        <div class="col-sm-2"><p>Type</p></div>
+                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
+                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
+                        <div class="col-sm-1"><p>@UI.Map</p></div>
+                        <div class="col-sm-1"><p>@UI.Download</p></div>
+                        <div class="col-sm-2"><p>Format</p></div>
+                    </div>
+                    <div class="menu-separator"></div>
+                    <div v-for="item in RelatedApplications" class="table-border-bottom">
+                        <div is="resultItem" v-bind:result-item="item">
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
         </div>
 
         @* *** Relaterte data ****@
@@ -314,7 +312,7 @@ if (contact != null)
                     <div class="col-sm-2"><p>Format</p></div>
                 </div>
 
-                <div class="menu-separator search-results-table-heading"></div>
+                <div class="menu-separator"></div>
 
                 <div v-for="item in relatedDataList" v-bind:class="tableBorder">
                     <div is="resultItem" v-bind:result-item="item"></div>
@@ -328,7 +326,7 @@ if (contact != null)
 <article>
     <div class="row">
         @if (!Model.IsDatasetBundle())
-            {
+        {
             @* ** Kontaktinformasjon ** *@
             <div class="col-sm-6">
                 <h3>@UI.ContactInformation</h3>
@@ -336,10 +334,10 @@ if (contact != null)
                 {
                     <a href="@Url.Action("Organization", "Metadata", new {OrganizationSeoName = Model.OrganizationSeoName()})" title="@UI.DisplayAllDatasetsFrom @Model.ContactOwner.Organization">
                         @if (!string.IsNullOrWhiteSpace(Model.OrganizationLogoUrl))
-                    {
+                        {
                             <img src="@Model.OrganizationLogoUrl" alt="Logo @Model.ContactOwner.Organization" width="100" class="image-margin-bottom" />
                         }
-                    </a>                    }
+                    </a>}
                 @ShowContact(UI.ContactMetadata, Model.ContactMetadata)
                 @ShowContact(UI.ContactOwner, Model.ContactOwner)
                 @ShowContact(UI.ContactPublisher, Model.ContactPublisher)
@@ -401,44 +399,44 @@ if (contact != null)
             </div>
 
             @* *** Restriksjoner *** *@
-        if (Model.Constraints != null)
-        {
-            <div class="col-sm-6">
-                <h3>@UI.Constraints</h3>
-                @DisplayValue(UI.UseLimitations, Model.Constraints.UseLimitations)
-                @DisplayValue(UI.AccessConstraints, Model.Constraints.AccessConstraints)
-                @DisplayValue(UI.UseConstraints, Model.Constraints.UseConstraints)
-                @DisplayValue(UI.OtherConstraints, Model.Constraints.OtherConstraints)
-                @if (Model.Constraints != null && Model.Constraints.OtherConstraintsLink != null)
+            if (Model.Constraints != null)
+            {
+                <div class="col-sm-6">
+                    <h3>@UI.Constraints</h3>
+                    @DisplayValue(UI.UseLimitations, Model.Constraints.UseLimitations)
+                    @DisplayValue(UI.AccessConstraints, Model.Constraints.AccessConstraints)
+                    @DisplayValue(UI.UseConstraints, Model.Constraints.UseConstraints)
+                    @DisplayValue(UI.OtherConstraints, Model.Constraints.OtherConstraints)
+                    @if (Model.Constraints != null && Model.Constraints.OtherConstraintsLink != null)
                     {
-                    <p>
-                        <strong>@UI.Licence: </strong> <a href="@Model.Constraints.OtherConstraintsLink" target="_blank">@Model.Constraints.OtherConstraintsLinkText</a><i class="custom-icon-sm custom-icon-eksternlink"></i>
-                    </p>
-                }
-                @DisplayValue(UI.SecurityConstraints, Model.Constraints.SecurityConstraints)
-                @DisplayValue(UI.SecurityConstraintsNote, Model.Constraints.SecurityConstraintsNote)
-            </div>
-        }
+                        <p>
+                            <strong>@UI.Licence: </strong> <a href="@Model.Constraints.OtherConstraintsLink" target="_blank">@Model.Constraints.OtherConstraintsLinkText</a><i class="custom-icon-sm custom-icon-eksternlink"></i>
+                        </p>
+                    }
+                    @DisplayValue(UI.SecurityConstraints, Model.Constraints.SecurityConstraints)
+                    @DisplayValue(UI.SecurityConstraintsNote, Model.Constraints.SecurityConstraintsNote)
+                </div>
+            }
 
-        @* *** Hjelp *** *@
-        if (!string.IsNullOrEmpty(Model.SupplementalDescription) || !string.IsNullOrEmpty(Model.HelpUrl))
-        {
-            <div id="help" class="col-sm-12">
-                <h2>@UI.Help</h2>
-            </div>
-            <div class="col-sm-12">
-                @if (!string.IsNullOrEmpty(Model.SupplementalDescription))
+            @* *** Hjelp *** *@
+            if (!string.IsNullOrEmpty(Model.SupplementalDescription) || !string.IsNullOrEmpty(Model.HelpUrl))
+            {
+                <div id="help" class="col-sm-12">
+                    <h2>@UI.Help</h2>
+                </div>
+                <div class="col-sm-12">
+                    @if (!string.IsNullOrEmpty(Model.SupplementalDescription))
                     {
-                    <p>@Model.SupplementalDescription</p>
-                }
-                @if (!string.IsNullOrEmpty(Model.HelpUrl))
+                        <p>@Model.SupplementalDescription</p>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.HelpUrl))
                     {
-                    <a href="@Model.HelpUrl" class="btn" target="_blank"><span class="custom-icon custom-icon-eksternlink"></span>@UI.Display @UI.Help</a>
-                }
-            </div>
-        }
+                        <a href="@Model.HelpUrl" class="btn" target="_blank"><span class="custom-icon custom-icon-eksternlink"></span>@UI.Display @UI.Help</a>
+                    }
+                </div>
+            }
 
-        @* *** Detaljert informasjon *** *@
+            @* *** Detaljert informasjon *** *@
             <div class="col-sm-12">
                 <a href="#" data-content-toggle="detailed-info" class="toggle-content">
                     <h2>
@@ -454,10 +452,10 @@ if (contact != null)
                     @DisplayValue(UI.ProcessHistory, Model.ProcessHistory)
                     @if (Model.IsService())
                     {
-                    <p><strong>@UI.ServiceDeclaration:</strong> <a href="@Model.OrderingInstructions" target="_blank">@Model.OrderingInstructionsLinkText</a></p>
+                        <p><strong>@UI.ServiceDeclaration:</strong> <a href="@Model.OrderingInstructions" target="_blank">@Model.OrderingInstructionsLinkText</a></p>
                     }
                     @if (Model.QualitySpecifications != null)
-                {
+                    {
                         <h3>@UI.QualitySpecification</h3>
                         for (var s = 0; s < Model.QualitySpecifications.Count; s++)
                         {
@@ -478,7 +476,7 @@ if (contact != null)
                         }
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Purpose))
-                {
+                    {
                         <h3>@UI.Purpose</h3>
                         <p>@Model.Purpose</p>
                     }
@@ -487,47 +485,47 @@ if (contact != null)
                 <div class="col-sm-6">
                     <h3>@UI.TimeAndSpace</h3>
                     @if (Model.DateUpdated != null)
-                {
+                    {
                         <p>
                             <strong>@UI.Updated (@UI.Resource):</strong> @Html.DisplayFor(m => m.DateUpdated)
                         </p>
                     }
                     @if (Model.DateMetadataUpdated != null)
-                {
+                    {
                         <p>
                             <strong>@UI.Updated (Metadata):</strong> @Html.DisplayFor(m => m.DateMetadataUpdated)
                         </p>
                     }
                     @if (Model.DatePublished != null)
-                {
+                    {
                         <p>
                             <strong>@UI.Published:</strong> @Html.DisplayFor(m => m.DatePublished)
                         </p>
                     }
                     @if (Model.DateCreated != null)
-                {
+                    {
                         <p>
                             <strong>@UI.Created:</strong> @Html.DisplayFor(m => m.DateCreated)
                         </p>
                     }
                     @if (Model.DateMetadataValidFrom != null)
-                {
+                    {
                         <p>
                             <strong>@UI.ValidityPeriod:</strong> @Html.DisplayFor(m => m.DateMetadataValidFrom) - @Html.DisplayFor(m => m.DateMetadataValidTo)
                         </p>
                     }
                     @if (Model.MaintenanceFrequency != null)
-                {
+                    {
                         <p>
                             <strong>@UI.MaintenanceFrequency:</strong> @Model.MaintenanceFrequency
                         </p>
                     }
                     @if (Model.KeywordsPlace != null && Model.KeywordsPlace.Count > 0)
-                {
+                    {
                         @DisplayKeywords(UI.KeywordsPlace, Model.KeywordsPlace)
                     }
                     @if (Model.BoundingBox != null)
-                {
+                    {
                         <p>
                             <strong>@UI.BoundingBox:</strong>
                             <ul>
@@ -549,13 +547,13 @@ if (contact != null)
                     @DisplayKeywords(UI.Other, Model.KeywordsOther)
                     @DisplayKeywords(UI.Concepts, Model.KeywordsConcept)
                     @if (!string.IsNullOrWhiteSpace(Model.TopicCategory))
-                {
+                    {
                         <p>
                             <strong>@UI.TopicCategory:</strong> @Model.TopicCategory
                         </p>
                     }
                 </div>
-            </div>            }
+            </div>}
     </div>
 </article>
 
@@ -570,43 +568,50 @@ if (contact != null)
 </div>
 
 @helper DisplayValue(string label, string value)
-{
-if (!string.IsNullOrWhiteSpace(value))
-{
-        <p>
-            <strong>@label: </strong>@value
-        </p>
-}
+    {
+        if (!string.IsNullOrWhiteSpace(value))
+        {
+            <p>
+                <strong>@label: </strong>@value
+            </p>
+        }
 }
 
 @helper DisplayKeywords(string label, List<Keyword> keywords)
-{
-if (keywords != null && keywords.Any())
-{
-        <strong>@label:</strong>
-        <ul>
-            @foreach (var keyword in keywords)
-            {
-                var word = !CultureHelper.IsNorwegian() && !string.IsNullOrEmpty(keyword.EnglishKeyword) ? keyword.EnglishKeyword : keyword.KeywordValue;
-                if (!string.IsNullOrEmpty(keyword.KeywordLink))
+    {
+        if (keywords != null && keywords.Any())
+        {
+            <strong>@label:</strong>
+            <ul>
+                @foreach (var keyword in keywords)
                 {
-                    <li>
-                        <a href="@keyword.KeywordLink" target="_blank">@word</a>
-                    </li>
+                    var word = !CultureHelper.IsNorwegian() && !string.IsNullOrEmpty(keyword.EnglishKeyword) ? keyword.EnglishKeyword : keyword.KeywordValue;
+                    if (!string.IsNullOrEmpty(keyword.KeywordLink))
+                    {
+                        <li>
+                            <a href="@keyword.KeywordLink" target="_blank">@word</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>@word</li>
+                    }
                 }
-                else
-                {
-                    <li>@word</li>
-                }
-            }
-        </ul>
-}
+            </ul>
+        }
 }
 
-@Html.Partial("VueComponents/Helpers/_ConvertModelToResultItem")
 
 
 @section scripts {
+
+
+    @Html.Partial("VueComponents/Helpers/_ConvertModelToResultItem")
+
+
+    @* Vue code for resultitem*@
+    @Html.Partial("_resultItemRow")
+
 
     <script>
         @{

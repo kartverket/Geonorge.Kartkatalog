@@ -6,6 +6,7 @@
 @section breadcrumb {
     <li class="active">@UI.FileDownload</li>
 }
+
 <div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
@@ -256,192 +257,206 @@
 </script>
 
 
-<div id="vueContainer" class="hidden">
-    <section class="heading">
-        <div class="row">
-            <div class="col-sm-12">
-                <h1 v-show="!orderResponse.length">@UI.FileDownloadOrder</h1>
-                <h1 v-show="orderResponse.length">@UI.FileDownloadDownload</h1>
-            </div>
-            <div class="col-sm-12">
-                <span class="separator-lg"></span>
-            </div>
-        </div>
-    </section>
-
-    <article id="orderlist" v-show="orderLines.length && !orderResponse.length">
-
-        <div class="intro-text">
-            @Html.Raw(UI.FileDownloadIntro)
-        </div>
-        <div id="downloadformVue" class="download-form">
-            <div v-show="showMasterOrderLine" class="orderline orderline-master">
-                <div is="masterOrderLine"
-                     v-bind:all-available-areas="masterOrderLine.allAvailableAreas"
-                     v-bind:available-areas="masterOrderLine.masterAvailableAreas"
-                     v-bind:available-projections="masterOrderLine.masterAvailableProjections"
-                     v-bind:available-formats="masterOrderLine.masterAvailableFormats"
-                     v-bind:all-selected-areas="masterOrderLine.allSelectedAreas"
-                     v-bind:all-selected-projections="masterOrderLine.allSelectedProjections"
-                     v-bind:all-selected-formats="masterOrderLine.allSelectedFormats"
-                     v-bind:selected-areas="masterOrderLine.masterSelectedAreas"
-                     v-bind:selected-projections="masterOrderLine.masterSelectedProjections"
-                     v-bind:selected-formats="masterOrderLine.masterSelectedFormats"
-                     v-bind:all-order-line-errors="masterOrderLine.allOrderLineErrors">
-
+<div id="vueContainer">
+    <div class="loading-animation" v-show="!contentLoaded">
+        Laster inn kurv
+    </div>
+    <div v-show="contentLoaded" style="display: none">
+        <section class="heading">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 v-show="!orderResponse.length">@UI.FileDownloadOrder</h1>
+                    <h1 v-show="orderResponse.length">@UI.FileDownloadDownload</h1>
+                </div>
+                <div class="col-sm-12">
+                    <span class="separator-lg"></span>
                 </div>
             </div>
-            <div class="orderlines">
-                <div v-for="(orderLine, index) in orderLines" class="orderline">
-                    <div is="orderLine"
-                         v-bind:metadata="orderLine.metadata"
-                         v-bind:capabilities="orderLine.capabilities"
-                         v-bind:available-areas="masterOrderLine.allAvailableAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableAreas[orderLine.metadata.uuid] : []"
-                         v-bind:available-projections="masterOrderLine.allAvailableProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableProjections[orderLine.metadata.uuid] : []"
-                         v-bind:available-formats="masterOrderLine.allAvailableFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableFormats[orderLine.metadata.uuid] : []"
-                         v-bind:selected-areas="masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] : []"
-                         v-bind:selected-projections="masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] : []"
-                         v-bind:selected-formats="masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] : []"
-                         v-bind:selected-coordinates="masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] : ''"
-                         v-bind:default-projections="masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] : []"
-                         v-bind:default-formats="masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] : []"
-                         v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}"
-                         v-bind:order-line-info-messages="masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] : {}"
-                         v-bind:not-available-selected-areas="masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] : []"
-                         v-bind:not-available-selected-projections="masterOrderLine.allNotAvailableSelectedProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedProjections[orderLine.metadata.uuid] : []"
-                         v-bind:not-available-selected-formats="masterOrderLine.allNotAvailableSelectedFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedFormats[orderLine.metadata.uuid] : []">
+        </section>
+
+        <article id="orderlist" v-show="orderLines.length && !orderResponse.length">
+
+            <div class="intro-text">
+                @Html.Raw(UI.FileDownloadIntro)
+            </div>
+            <div id="downloadformVue" class="download-form">
+                <div v-show="showMasterOrderLine" class="orderline orderline-master">
+                    <div is="masterOrderLine"
+                         v-bind:all-available-areas="masterOrderLine.allAvailableAreas"
+                         v-bind:available-areas="masterOrderLine.masterAvailableAreas"
+                         v-bind:available-projections="masterOrderLine.masterAvailableProjections"
+                         v-bind:available-formats="masterOrderLine.masterAvailableFormats"
+                         v-bind:all-selected-areas="masterOrderLine.allSelectedAreas"
+                         v-bind:all-selected-projections="masterOrderLine.allSelectedProjections"
+                         v-bind:all-selected-formats="masterOrderLine.allSelectedFormats"
+                         v-bind:selected-areas="masterOrderLine.masterSelectedAreas"
+                         v-bind:selected-projections="masterOrderLine.masterSelectedProjections"
+                         v-bind:selected-formats="masterOrderLine.masterSelectedFormats"
+                         v-bind:all-order-line-errors="masterOrderLine.allOrderLineErrors">
+
                     </div>
                 </div>
-            </div>
-
-
-            <div class="download-form">
-                <div v-show="emailRequired" class="row margin-bottom-10">
-                    <div id="emailField" class="col-sm-6 margin-bottom-10">
-                        <p class="article-p">@UI.Email: <span class="required-indicator"></span></p>
-                        <input type="text" v-model="email" name="email" class="form-control" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <div class="pull-right">
-                                <a class="btn" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> @UI.RemoveAll</a>
-                                <a href="/" class="btn"><span class="glyphicon glyphicon-shopping-cart"></span> @UI.OrderMore</a>
-                                <button v-on:click="sendRequests()" v-bind:disabled="!formIsValid()" class="btn"><span class="glyphicon glyphicon-save"></span> @UI.Download</button>
-                            </div>
-                            <div class="clearfix"></div>
+                <div class="orderlines">
+                    <div v-for="(orderLine, index) in orderLines" class="orderline">
+                        <div is="orderLine"
+                             v-bind:metadata="orderLine.metadata"
+                             v-bind:capabilities="orderLine.capabilities"
+                             v-bind:available-areas="masterOrderLine.allAvailableAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableAreas[orderLine.metadata.uuid] : []"
+                             v-bind:available-projections="masterOrderLine.allAvailableProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableProjections[orderLine.metadata.uuid] : []"
+                             v-bind:available-formats="masterOrderLine.allAvailableFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableFormats[orderLine.metadata.uuid] : []"
+                             v-bind:selected-areas="masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedAreas[orderLine.metadata.uuid] : []"
+                             v-bind:selected-projections="masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] : []"
+                             v-bind:selected-formats="masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] : []"
+                             v-bind:selected-coordinates="masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] : ''"
+                             v-bind:default-projections="masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] : []"
+                             v-bind:default-formats="masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] : []"
+                             v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}"
+                             v-bind:order-line-info-messages="masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineInfoMessages[orderLine.metadata.uuid] : {}"
+                             v-bind:not-available-selected-areas="masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] : []"
+                             v-bind:not-available-selected-projections="masterOrderLine.allNotAvailableSelectedProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedProjections[orderLine.metadata.uuid] : []"
+                             v-bind:not-available-selected-formats="masterOrderLine.allNotAvailableSelectedFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedFormats[orderLine.metadata.uuid] : []">
                         </div>
                     </div>
                 </div>
 
-                <div class="modal fade" id="remove-all-items-modal">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">@UI.RemovalOfDataset</h4>
+
+                <div class="download-form">
+                    <div v-show="emailRequired" class="row margin-bottom-10">
+                        <div id="emailField" class="col-sm-6 margin-bottom-10">
+                            <p class="article-p">@UI.Email: <span class="required-indicator"></span></p>
+                            <input type="text" v-model="email" name="email" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <a class="btn" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> @UI.RemoveAll</a>
+                                    <a href="/" class="btn"><span class="glyphicon glyphicon-shopping-cart"></span> @UI.OrderMore</a>
+                                    <button v-on:click="sendRequests()" v-bind:disabled="!formIsValid()" class="btn"><span class="glyphicon glyphicon-save"></span> @UI.Download</button>
+                                </div>
+                                <div class="clearfix"></div>
                             </div>
-                            <div class="modal-body">
-                                @UI.RemoveAllDatasetsConfirm
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn" data-dismiss="modal">@UI.No</button>
-                                <button type="button" v-on:click="removeAllOrderLines()" id="remove-all-items-submit" class="btn">@UI.Yes</button>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="remove-all-items-modal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">@UI.RemovalOfDataset</h4>
+                                </div>
+                                <div class="modal-body">
+                                    @UI.RemoveAllDatasetsConfirm
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn" data-dismiss="modal">@UI.No</button>
+                                    <button type="button" v-on:click="removeAllOrderLines()" id="remove-all-items-submit" class="btn">@UI.Yes</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </article>
+        </article>
 
-    <article v-show="!orderLines.length && !orderResponse.length">
-        <div class="row">
-            <div class="col-md-12">
-                <p>@UI.NoElementsInBasket</p>
+        <article v-show="!orderLines.length && !orderResponse.length">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>@UI.NoElementsInBasket</p>
+                </div>
             </div>
-        </div>
-    </article>
+        </article>
 
-    <article id="responseList" v-show="orderResponseGrouped.length">
-        <div class="row">
-            <div class="col-md-12">
-                <div v-for="responseItem in orderResponseGrouped" class="distribution-group-container">
-                    <div class="orderlines panel panel-primary">
-                        <div class="panel-heading">{{ responseItem.additionalInfo.distributedBy }}</div>
-                        <div class="panel-body">
-                            <div v-for="(dataset, datasetName) in responseItem.datasets">
-                                <h2>{{ datasetName }}</h2>
-                                <div v-if="file.status == 'ReadyForDownload'" v-for="file in dataset.files" class="download-list-subitem">
-                                    <div class="row">
-                                        <div class="col-sm-5 col-md-6">
-                                            <span class="download-list-item-name">
-                                                <span class="inline-block">
-                                                    <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
-                                                        {{ file.areaName }}
-                                                    </a>
+        <article v-show="orderResponse.length && !orderResponse[0].data.files.length">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>Ingen filer å laste ned, vennligst prøv med andre valg</p>
+                </div>
+            </div>
+        </article>
+
+        <article id="responseList" v-show="orderResponseGrouped.length">
+            <div class="row">
+                <div class="col-md-12">
+                    <div v-for="responseItem in orderResponseGrouped" class="distribution-group-container">
+                        <div class="orderlines panel panel-primary">
+                            <div class="panel-heading">{{ responseItem.additionalInfo.distributedBy }}</div>
+                            <div class="panel-body">
+                                <div v-for="(dataset, datasetName) in responseItem.datasets">
+                                    <h2>{{ datasetName }}</h2>
+                                    <div v-if="file.status == 'ReadyForDownload'" v-for="file in dataset.files" class="download-list-subitem">
+                                        <div class="row">
+                                            <div class="col-sm-5 col-md-6">
+                                                <span class="download-list-item-name">
+                                                    <span class="inline-block">
+                                                        <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
+                                                            {{ file.areaName }}
+                                                        </a>
+                                                    </span>
                                                 </span>
-                                            </span>
-                                        </div>
-                                        <div class="col-sm-4 col-md-3">
-                                            <span class="label label-success auto-width">{{ file.projectionName }}</span>
-                                        </div>
-                                        <div class="col-sm-2 col-md-2">
-                                            <span class="label label-info auto-width">{{file.format}}</span>
-                                        </div>
-                                        <div class="col-sm-1 col-md-1 icon-col">
-                                            <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name" class="btn">
-                                                <span class="custom-icon custom-icon-lastned"></span>
-                                            </a>
+                                            </div>
+                                            <div class="col-sm-4 col-md-3">
+                                                <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                            </div>
+                                            <div class="col-sm-2 col-md-2">
+                                                <span class="label label-info auto-width">{{file.format}}</span>
+                                            </div>
+                                            <div class="col-sm-1 col-md-1 icon-col">
+                                                <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name" class="btn">
+                                                    <span class="custom-icon custom-icon-lastned"></span>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div v-if="file.status == 'WaitingForProcessing'" v-for="file in dataset.files" class="download-list-subitem">
-                                    <div class="row">
-                                        <div class="col-sm-5 col-md-6">
+                                    <div v-if="file.status == 'WaitingForProcessing'" v-for="file in dataset.files" class="download-list-subitem">
+                                        <div class="row">
+                                            <div class="col-sm-5 col-md-6">
 
-                                            <span class="download-list-item-name">
-                                                {{ file.metadataName }}, <span class="inline-block">@UI.SelectedFromMap</span> <small class="inline-block">(Under behandling)</small>
-                                            </span>
-                                        </div>
-                                        <div class="col-sm-4 col-md-3">
-                                            <span class="label label-success auto-width">{{ file.projectionName }}</span>
-                                        </div>
-                                        <div class="col-sm-2 col-md-2">
-                                            <span class="label label-info auto-width">{{file.format}}</span>
-                                        </div>
-                                        <div class="col-sm-1 col-md-1 icon-col">
-                                            <span class="custom-icon custom-icon-info"></span>
+                                                <span class="download-list-item-name">
+                                                    {{ file.metadataName }}, <span class="inline-block">@UI.SelectedFromMap</span> <small class="inline-block">(Under behandling)</small>
+                                                </span>
+                                            </div>
+                                            <div class="col-sm-4 col-md-3">
+                                                <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                            </div>
+                                            <div class="col-sm-2 col-md-2">
+                                                <span class="label label-info auto-width">{{file.format}}</span>
+                                            </div>
+                                            <div class="col-sm-1 col-md-1 icon-col">
+                                                <span class="custom-icon custom-icon-info"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div v-if="!file.status && file.name" v-for="file in dataset.files" class="list-group-subitem">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12">
-                                            <span class="custom-icon custom-icon-info"></span>
-                                            <span class="download-list-item-name">
-                                                {{ file.name }}
-                                            </span>
+                                    <div v-if="!file.status && file.name" v-for="file in dataset.files" class="list-group-subitem">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12">
+                                                <span class="custom-icon custom-icon-info"></span>
+                                                <span class="download-list-item-name">
+                                                    {{ file.name }}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel-footer" v-if="responseItem.additionalInfo.supportsDownloadBundling && responseItem.numberOfFiles > 1">
-                            <div class="input-group">
-                                <span class="input-group-addon">@UI.Email: <span class="required-indicator"></span></span>
-                                <input type="text" v-model="email" name="email" class="form-control" />
-                                <span v-on:click="sendOrderBundleRequest(responseItem)" v-bind:class="{disabled: !emailAddressIsValid(email)}" class="input-group-addon btn" v-bind:id="'order-bundle-button-' + responseItem.additionalInfo.distributedBy">Bestill pakke med alle datasett</span>
-                            </div>
-                            <div v-bind:id="'order-bundle-message-' + responseItem.additionalInfo.distributedBy" class="">   
+                            <div class="panel-footer" v-if="responseItem.additionalInfo.supportsDownloadBundling && responseItem.numberOfFiles > 1">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@UI.Email: <span class="required-indicator"></span></span>
+                                    <input type="text" v-model="email" name="email" class="form-control" />
+                                    <span v-on:click="sendOrderBundleRequest(responseItem)" v-bind:class="{disabled: !emailAddressIsValid(email)}" class="input-group-addon btn" v-bind:id="'order-bundle-button-' + responseItem.additionalInfo.distributedBy">Bestill pakke med alle datasett</span>
+                                </div>
+                                <div v-bind:id="'order-bundle-message-' + responseItem.additionalInfo.distributedBy" class="">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </article>
+        </article>
+    </div>
 </div>
-@Scripts.Render("~/Content/download")
-
+@section scripts{
+    @Scripts.Render("~/Content/download")
+}
