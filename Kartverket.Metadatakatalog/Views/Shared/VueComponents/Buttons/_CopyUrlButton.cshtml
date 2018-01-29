@@ -31,8 +31,6 @@
                     button.className += " disabled";
                     button.attributes.push({ key: 'disabled', value: 'disabled' });
                 }
-
-
                 if (this.buttonType === "tableRow") {
                     button.content = "";
                     button.className += " table-row-icon";
@@ -48,27 +46,24 @@
             var clipboard = new Clipboard(btn);
 
             clipboard.on('success', function (e) {
+                this.resetTooltips();
                 this.setTooltip(btn, 'Kopiert');
-                this.hideTooltip(btn);
             }.bind(this));
-
             clipboard.on('error', function (e) {
+                this.resetTooltips();
                 this.setTooltip(btn, 'Feilet!');
-                this.hideTooltip(btn);
             }.bind(this));
         },
         methods: {
-
             setTooltip: function (btn, message) {
-                $(btn).tooltip('hide')
-                    .attr('data-original-title', message)
+                $(btn).attr('data-original-title', message)
                     .tooltip('show');
             },
-            hideTooltip: function (btn) {
-                setTimeout(function () {
-                    $(btn).tooltip('hide');
-                }, 1000);
-            },
+            resetTooltips: function () {
+                $(".btn-copy").each(function () {
+                    $(this).attr('data-original-title', "@Html.Raw(UI.CopyToClipboard)");
+                });
+            }
 
         }
     };
