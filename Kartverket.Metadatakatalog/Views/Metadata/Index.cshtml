@@ -53,33 +53,10 @@
 @Html.Partial("VueComponents/_TopRowButtons")
 @Html.Partial("VueComponents/Helpers/_SetVariablesForResultItem", Model)
 
-@*Template for a table row*@
-
-<script type="text/x-template" id="result-item-template">
-    <div>
-        <div class="resultItemRow">
-            <div class="row">
-                <div class="col-sm-3" is="table-title" v-bind:metadata="resultItem"></div>
-                <div class="col-sm-2" is="table-distribution-type" v-bind:metadata="resultItem"></div>
-                <div class="col-sm-2" is="table-owner" v-bind:metadata="resultItem"></div>
-                <div class="col-sm-1" is="table-open-data" v-bind:metadata="resultItem"></div>
-                <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="['showInMapButton', 'addToCartButton']"></div>
-                <div class="col-sm-2" is="table-distribution-formats" v-bind:metadata="resultItem"></div>
-            </div>
-        </div>
-
-        <div class="clearfix"></div>
-    </div>
-
-</script>
-
 @* *** HANDLINGSKNAPPER *** *@
 <div id="topRowButtons" class="margin-bottom-10">
     <div is="top-row-buttons" v-bind:metadata="@Json.Encode(Model)"></div>
 </div>
-
-
-
 
 <div class="row margin-top-10">
 
@@ -143,182 +120,25 @@
     <article>
         <div class="row">
             <div class="col-sm-12">
+                <h3>@UI.Distributions løkke</h3>
+                <div v-for="distributionList in relatedDistributionsLists" v-bind:class="{'table-view': $root.viewType == 'tableView'}">
+                    <p class="h3">{{ distributionList.title }}</p>
+                    <div is="table-header"
+                         v-bind:selected-fields="distributionList.selectedFields"
+                         v-bind:selected-buttons="distributionList.selectedButtons">
+                    </div>
+                    <div v-if="$root.viewType == 'tableView'" class="menu-separator search-results-table-heading"></div>
+                    <div v-for="resultItem in distributionList.resultItems">
+                        <div is="result-item"
+                             v-bind:result-item="resultItem"
+                             v-bind:selected-fields="distributionList.selectedFields"
+                             v-bind:selected-buttons="distributionList.selectedButtons">
+                        </div>
+                    </div>
+                </div>
+
                 <h3>@UI.Distributions</h3>
-
-                <div v-if="distributions.ShowSelfDistributions" style="margin-bottom:30px">
-                    <p class="h3">{{TitleSelf}}</p>
-                    <div class="row resultItemRowTableHeaderSmall">
-                        <div class="col-sm-3"><p>@UI.Title</p></div>
-                        <div class="col-sm-2"><p>Type</p></div>
-                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                        <div class="col-sm-1"><p>@UI.Map</p></div>
-                        <div class="col-sm-1"><p>@UI.Download</p></div>
-                        <div class="col-sm-2"><p>Format</p></div>
-                    </div>
-                    <div class="menu-separator"></div>
-                    <div v-for="item in SelfDistributions" class="table-border-bottom">
-                        <div is="resultItem" v-bind:result-item="item">
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="distributions.ShowRelatedViewServices" style="margin-bottom:30px">
-                    <p class="h3">Visningstjenester</p>
-                    <div class="row resultItemRowTableHeaderSmall">
-                        <div class="col-sm-3"><p>@UI.Title</p></div>
-                        <div class="col-sm-2"><p>Type</p></div>
-                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                        <div class="col-sm-1"><p>@UI.Map</p></div>
-                        <div class="col-sm-1"><p>@UI.Download</p></div>
-                        <div class="col-sm-2"><p>Format</p></div>
-                    </div>
-                    <div class="menu-separator"></div>
-                    <div v-for="item in RelatedViewServices" class="table-border-bottom">
-                        <div is="resultItem" v-bind:result-item="item">
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="distributions.ShowRelatedDownloadServices" style="margin-bottom:30px">
-                    <p class="h3">Nedlastingstjenester</p>
-                    <div class="row resultItemRowTableHeaderSmall">
-                        <div class="col-sm-3"><p>@UI.Title</p></div>
-                        <div class="col-sm-2"><p>Type</p></div>
-                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                        <div class="col-sm-1"><p>@UI.Map</p></div>
-                        <div class="col-sm-1"><p>@UI.Download</p></div>
-                        <div class="col-sm-2"><p>Format</p></div>
-                    </div>
-                    <div class="menu-separator"></div>
-                    <div v-for="item in RelatedDownloadServices" class="table-border-bottom">
-                        <div is="resultItem" v-bind:result-item="item">
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="distributions.ShowRelatedDataset" style="margin-bottom:30px">
-                    <p class="h3">{{TitleRelatedDataset}}</p>
-                    <div class="row resultItemRowTableHeaderSmall">
-                        <div class="col-sm-3"><p>@UI.Title</p></div>
-                        <div class="col-sm-2"><p>Type</p></div>
-                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                        <div class="col-sm-1"><p>@UI.Map</p></div>
-                        <div class="col-sm-1"><p>@UI.Download</p></div>
-                        <div class="col-sm-2"><p>Format</p></div>
-                    </div>
-                    <div class="menu-separator"></div>
-                    <div v-for="item in RelatedDataset" class="table-border-bottom">
-                        <div is="resultItem" v-bind:result-item="item">
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="distributions.ShowRelatedServices" style="margin-bottom:30px">
-                    <p class="h3">{{TitleRelatedServices}}</p>
-                    <div class="row resultItemRowTableHeaderSmall">
-                        <div class="col-sm-3"><p>@UI.Title</p></div>
-                        <div class="col-sm-2"><p>Type</p></div>
-                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                        <div class="col-sm-1"><p>@UI.Map</p></div>
-                        <div class="col-sm-1"><p>@UI.Download</p></div>
-                        <div class="col-sm-2"><p>Format</p></div>
-                    </div>
-                    <div class="menu-separator"></div>
-                    <div v-for="item in RelatedServices" class="table-border-bottom">
-                        <div is="resultItem" v-bind:result-item="item">
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-
-                <div v-if="distributions.ShowRelatedServiceLayer" style="margin-bottom:30px">
-                    <p class="h3">{{TitleRelatedServiceLayer}}</p>
-                    <div class="row resultItemRowTableHeaderSmall">
-                        <div class="col-sm-3"><p>@UI.Title</p></div>
-                        <div class="col-sm-2"><p>Type</p></div>
-                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                        <div class="col-sm-1"><p>@UI.Map</p></div>
-                        <div class="col-sm-1"><p>@UI.Download</p></div>
-                        <div class="col-sm-2"><p>Format</p></div>
-                    </div>
-                    <div class="menu-separator"></div>
-                    <div v-for="item in RelatedServiceLayer" class="table-border-bottom">
-                        <div is="resultItem" v-bind:result-item="item">
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-
-                <div v-if="distributions.ShowRelatedApplications" style="margin-bottom:30px">
-                    <p class="h3">{{TitleRelatedApplications}}</p>
-                    <div class="row resultItemRowTableHeaderSmall">
-                        <div class="col-sm-3"><p>@UI.Title</p></div>
-                        <div class="col-sm-2"><p>Type</p></div>
-                        <div class="col-sm-2"><p>@UI.DataOwner</p></div>
-                        <div class="col-sm-1"><p>@UI.OpenData</p></div>
-                        <div class="col-sm-1"><p>@UI.Map</p></div>
-                        <div class="col-sm-1"><p>@UI.Download</p></div>
-                        <div class="col-sm-2"><p>Format</p></div>
-                    </div>
-                    <div class="menu-separator"></div>
-                    <div v-for="item in RelatedApplications" class="table-border-bottom">
-                        <div is="resultItem" v-bind:result-item="item">
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
             </div>
-        </div>
-
-        @* *** Relaterte data ****@
-        <div v-if="model.HierarchyLevel == 'service' && model.Related && model.Related.length > 0" class="col-md-12">
-            @if (Model.Related != null && Model.Related.Count > 0)
-            {
-                <div class="row search-result-navigation">
-                    <div class="col-sm-8">
-                        <h3>Relaterte data</h3>
-                        <span class="separator-lg"></span>
-                    </div>
-
-                    <div class="col-md-4 pull-right">
-                        <div class="save-as-menu pull-right" style="margin-top: 50px">
-                            <div class="no-padding-bottom save-as-dropdown">
-                                <div class="custom-select">
-                                    <select onchange="additionalView(this.value)" class="form-control">
-                                        <option value="csvUrl" selected="selected">CSV</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div id="saveButtons" class="no-padding-bottom save-as-buttons">
-                                <a class="btn" id="csvUrl" href="@urlCSV">Lagre</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-                <div class="row resultItemRowTableHeaderSmall">
-                    <div class="col-sm-3"><p>Tittel</p></div>
-                    <div class="col-sm-2"><p>Type</p></div>
-                    <div class="col-sm-2"><p>Dataeier</p></div>
-                    <div class="col-sm-1"><p>Åpne data</p></div>
-                    <div class="col-sm-1"><p>Kart</p></div>
-                    <div class="col-sm-1"><p>@UI.Download</p></div>
-                    <div class="col-sm-2"><p>Format</p></div>
-                </div>
-
-                <div class="menu-separator"></div>
-
-                <div v-for="item in relatedDataList" v-bind:class="tableBorder">
-                    <div is="resultItem" v-bind:result-item="item"></div>
-                </div>
-                <div class="clearfix"></div>
-            }
         </div>
     </article>
 </div>
@@ -611,6 +431,7 @@
 
     @* Vue code for resultitem*@
     @Html.Partial("_resultItemRow")
+    @Html.Partial("VueComponents/_TableHeader")
 
 
     <script>
@@ -647,10 +468,23 @@
                 distributionlist: [],
                 relatedDataList: [],
                 model: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
-                distributions: {}
+                distributions: {},
+                viewType: 'tableView',
+                selectedFields: [
+                    { name: 'title', size: 3 },
+                    { name: 'distributionType', size: 2 },
+                    { name: 'owner', size: 2 },
+                    { name: 'openData', size: 1 },
+                    { name: 'distributionFormats', size: 1 }
+                ],
+                selectedButtons: [
+                    'showInMapButton',
+                    'addToCartButton'
+                ]
             },
             components: {
-                ResultItem: ResultItem,
+                TableHeader: TableHeader,
+                ResultItem: ResultItem
             },
             created: function() {
                 $.ajax({
@@ -672,42 +506,67 @@
                 this.relatedDataList = this.convertRelatedDataList();
             },
             computed: {
-                SelfDistributions: function () {
-                    return this.convertDistributionList(this.distributions.SelfDistribution);
-                },
-                TitleSelf: function () {
-                    return this.distributions.TitleSelf;
-                },
-                RelatedApplications: function () {
-                    return this.convertDistributionList(this.distributions.RelatedApplications);
-                },
-                TitleRelatedApplications: function () {
-                    return this.distributions.TitleRelatedApplications;
-                },
-                RelatedDataset: function () {
-                    return this.convertDistributionList(this.distributions.RelatedDataset);
-                },
-                TitleRelatedDataset: function() {
-                    return this.distributions.TitleRelatedDataset;
-                },
-                RelatedServiceLayer: function() {
-                    return this.convertDistributionList(this.distributions.RelatedServiceLayer);
-                },
-                TitleRelatedServiceLayer: function () {
-                    return this.distributions.TitleRelatedServiceLayer;
-                },
-                RelatedServices: function() {
-                    return this.convertDistributionList(this.distributions.RelatedServices);
-                },
-                TitleRelatedServices: function () {
-                    return this.distributions.TitleRelatedServices;
-                },
-                RelatedViewServices: function () {
-                    return this.convertDistributionList(this.distributions.RelatedViewServices);
-                },
-                RelatedDownloadServices: function () {
-                    return this.convertDistributionList(this.distributions.RelatedDownloadServices);
-                },
+                relatedDistributionsLists: function () {
+                    var relatedDistributionsLists = [];
+
+                    if (this.distributions.ShowSelfDistributions) {
+                        relatedDistributionsLists.push({
+                            title: this.distributions.TitleSelf,
+                            selectedFields: this.$root.selectedFields,
+                            selectedButtons: this.$root.selectedButtons,
+                            resultItems: this.convertDistributionList(this.distributions.SelfDistribution)
+                        });
+                    }
+                    if (this.distributions.ShowRelatedViewServices) {
+                        relatedDistributionsLists.push({
+                            title: 'Visningstjenester',
+                            selectedFields: this.$root.selectedFields,
+                            selectedButtons: this.$root.selectedButtons,
+                            resultItems: this.convertDistributionList(this.distributions.RelatedViewServices)
+                        });
+                    }
+                    if (this.distributions.ShowRelatedDownloadServices) {
+                        relatedDistributionsLists.push({
+                            title: 'Nedlastingstjenester',
+                            selectedFields: this.$root.selectedFields,
+                            selectedButtons: this.$root.selectedButtons,
+                            resultItems: this.convertDistributionList(this.distributions.RelatedDownloadServices)
+                        });
+                    }
+                    if (this.distributions.ShowRelatedDataset) {
+                        relatedDistributionsLists.push({
+                            title: this.distributions.TitleRelatedDataset,
+                            selectedFields: this.$root.selectedFields,
+                            selectedButtons: this.$root.selectedButtons,
+                            resultItems: this.convertDistributionList(this.distributions.RelatedDataset)
+                        });
+                    }
+                    if (this.distributions.ShowRelatedServices) {
+                        relatedDistributionsLists.push({
+                            title: this.distributions.TitleRelatedServices,
+                            selectedFields: this.$root.selectedFields,
+                            selectedButtons: this.$root.selectedButtons,
+                            resultItems: this.convertDistributionList(this.distributions.RelatedServices)
+                        });
+                    }
+                    if (this.distributions.ShowRelatedServiceLayer) {
+                        relatedDistributionsLists.push({
+                            title: this.distributions.TitleRelatedServiceLayer,
+                            selectedFields: this.$root.selectedFields,
+                            selectedButtons: this.$root.selectedButtons,
+                            resultItems: this.convertDistributionList(this.distributions.RelatedServiceLayer)
+                        });
+                    }
+                    if (this.distributions.ShowRelatedApplications) {
+                        relatedDistributionsLists.push({
+                            title: this.distributions.TitleRelatedApplications,
+                            selectedFields: this.$root.selectedFields,
+                            selectedButtons: this.$root.selectedButtons,
+                            resultItems: this.convertDistributionList(this.distributions.RelatedApplications)
+                        });
+                    }
+                    return relatedDistributionsLists;
+                }
             },
             methods: {
                 convertDistributionList: function(distributionList) {

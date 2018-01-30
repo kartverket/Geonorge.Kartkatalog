@@ -1,9 +1,14 @@
 ﻿<script type="text/x-template" theme="tabell" id="table-header-title-template">
     <div v-bind:class="orderByTitle.className" v-bind:id="orderByTitle.id">
         <p>
-            <a href="@Url.Action(ViewContext.RouteData.GetRequiredString("action"), Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
-                @Resources.UI.Title<span class="orderby-indicator"></span>
-            </a>
+            @if (Model is MetadataViewModel){
+                @Resources.UI.Title
+            }
+            else {
+                <a href="@Url.Action(ViewContext.RouteData.GetRequiredString("action"), Model.ParamsForOrderByTitle())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
+                    @Resources.UI.Title<span class="orderby-indicator"></span>
+                </a>
+            }
         </p>
     </div>
 </script>
@@ -15,9 +20,14 @@
 <script type="text/x-template" theme="tabell" id="table-header-owner-template">
     <div v-bind:class="orderByOrganization.className" v-bind:id="orderByOrganization.id">
         <p>
-            <a href="@Url.Action(ViewContext.RouteData.GetRequiredString("action"), Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
-                @Resources.UI.DataOwner<span class="orderby-indicator"></span>
-            </a>
+            @if (Model is MetadataViewModel)
+            {
+                @Resources.UI.DataOwner
+            } else {
+                <a href="@Url.Action(ViewContext.RouteData.GetRequiredString("action"), Model.ParamsForOrderByOrganization())" class="table-ordering show-loading-animation" data-loading-message="Sorterer innhold">
+                    @Resources.UI.DataOwner<span class="orderby-indicator"></span>
+                </a>
+            }
         </p>
     </div>
 </script>
