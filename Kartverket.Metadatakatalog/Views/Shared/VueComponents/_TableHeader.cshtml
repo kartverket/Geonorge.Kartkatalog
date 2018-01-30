@@ -70,6 +70,10 @@
     <div></div>
 </script>
 
+<script type="text/x-template" theme="tabell" id="table-header-distribution-formats-template">
+    <div>Format</div>
+</script>
+
 
 <script type="text/x-template" theme="tabell" id="table-header-template">
     <div class="row search-results-table-heading">
@@ -88,6 +92,7 @@
         <div class="col-sm-1" v-if="isSelectedButton('showLegendDescriptionButton')" is="table-header-show-legend-description-button"></div>
         <div class="col-sm-1" v-if="isSelectedButton('showWebsiteButton')" is="table-header-show-website-button"></div>
         <div class="col-sm-1" v-if="isSelectedButton('showProductPageButton')" is="table-header-show-product-page-button"></div>
+        <div v-bind:class="getFieldSizeClass('distributionFormats')" v-if="isSelectedField('distributionFormats')" is="table-header-distribution-formats"></div>
     </div>
 </script>
 
@@ -204,6 +209,11 @@
         template: "#table-header-show-product-page-button-template"
     };
 
+    var TableHeaderDistributionFormats = {
+        name: "TableHeaderDistributionFormats",
+        template: "#table-header-distribution-formats-template"
+    };
+
 
     var TableHeader = {
         name: "TableHeader",
@@ -224,7 +234,8 @@
             TableHeaderShowProductSpecificationButton: TableHeaderShowProductSpecificationButton,
             TableHeaderShowLegendDescriptionButton: TableHeaderShowLegendDescriptionButton,
             TableHeaderShowWebsiteButton: TableHeaderShowWebsiteButton,
-            TableHeaderShowProductPageButton: TableHeaderShowProductPageButton
+            TableHeaderShowProductPageButton: TableHeaderShowProductPageButton,
+            TableHeaderDistributionFormats: TableHeaderDistributionFormats
         },
         methods: {
             isSelectedField: function (fieldName) {
