@@ -936,9 +936,7 @@ var mainVueModel = new Vue({
                                 }
                                 orderResponseGroup.datasets[file.metadataName].files.push(file);
 
-                                if (orderResponseGroup.additionalInfo == null) {
-                                    orderResponseGroup.additionalInfo = this.getOrderRequestAdditionalInfo(distribution.distributionUrl, file.metadataUuid);
-                                }
+                                orderResponseGroup.additionalInfo = this.getOrderRequestAdditionalInfo(distribution.distributionUrl, file.metadataUuid);
 
                             }.bind(this));
                         }
