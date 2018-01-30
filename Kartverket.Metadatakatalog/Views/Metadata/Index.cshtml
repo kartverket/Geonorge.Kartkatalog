@@ -494,15 +494,6 @@
                         vueModel.distributionlist = vueModel.convertDistributionList(response);
                     }
                 });
-
-                $.ajax({
-                    type: "GET",
-                    url: "/api/distribution-lists/" + uuid,
-                    success: function(response) {
-                        vueModel.distributions = response;
-                    }
-                });
-
                 this.relatedDataList = this.convertRelatedDataList();
             },
             computed: {
