@@ -176,16 +176,17 @@ namespace Kartverket.Metadatakatalog.Service
 
             // Self ...
             var simpleMetadata = GetSimpleMetadataByUuid(metadata.Uuid) ?? throw new ArgumentNullException("GetSimpleMetadataByUuid(metadata.Uuid)");
-            if (simpleMetadata.DistributionsFormats != null && simpleMetadata.DistributionsFormats.Any())
+            if (simpleMetadata.DistributionsFormats.Any())
             {
                 var distributionRows = CreateDistributionRows(metadata.Uuid, simpleMetadata);
                 if (distributionRows != null)
                     foreach (var distribution in distributionRows)
                     {
+                        distribution.Value.RemoveDetailsUrl = true;
                         metadata.Distributions.SelfDistribution.Add(distribution.Value);
                     }
             }
-
+                       
             if (metadata.IsDataset())
             {
                 var metadataIndexDocResult = GetMetadata(metadata.Uuid) ?? throw new ArgumentNullException("GetMetadata(metadata.Uuid)");
@@ -235,6 +236,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             }
 
+            metadata.Distributions.ShowSelfDistributions = metadata.Distributions.ShowSelf();
             metadata.Distributions.ShowRelatedDataset = metadata.Distributions.ShowDatasets();
             metadata.Distributions.ShowRelatedServices = metadata.Distributions.ShowServices();
             metadata.Distributions.ShowRelatedApplications = metadata.Distributions.ShowApplications();

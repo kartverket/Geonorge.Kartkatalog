@@ -11,6 +11,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public string Type { get; set; }
         public string Organization { get; set; }
         public string ShowDetailsUrl { get; set; }
+        public bool RemoveDetailsUrl { get; set; }
         public bool CanShowMapUrl { get; set; }
         public bool CanShowServiceMapUrl { get; set; }
         public bool CanShowDownloadUrl { get; set; }
