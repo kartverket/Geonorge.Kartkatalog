@@ -120,7 +120,7 @@
     <article>
         <div class="row">
             <div class="col-sm-12">
-                <h3>@UI.Distributions løkke</h3>
+                <h3>@UI.Distributions</h3>
                 <div v-for="distributionList in relatedDistributionsLists" v-bind:class="{'table-view': $root.viewType == 'tableView'}">
                     <p class="h3">{{ distributionList.title }}</p>
                     <div is="table-header"
@@ -136,8 +136,6 @@
                         </div>
                     </div>
                 </div>
-
-                <h3>@UI.Distributions</h3>
             </div>
         </div>
     </article>
@@ -466,7 +464,6 @@
             data: {
                 tableBorder: "",
                 distributionlist: [],
-                relatedDataList: [],
                 model: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(Model))),
                 distributions: {},
                 viewType: 'tableView',
@@ -489,15 +486,14 @@
             created: function() {
                 $.ajax({
                     type: "GET",
-                    url: "/api/distributions/" + uuid,
+                    url: "/api/distribution-lists/" + uuid,
                     success: function(response) {
-                        vueModel.distributionlist = vueModel.convertDistributionList(response);
+                        vueModel.distributions = response;
                     }
                 });
-                this.relatedDataList = this.convertRelatedDataList();
             },
             computed: {
-                relatedDistributionsLists: function () {
+                relatedDistributionsLists: function() {
                     var relatedDistributionsLists = [];
 
                     if (this.distributions.ShowSelfDistributions) {
@@ -575,19 +571,8 @@
                         version += ' ${format}';
                     }
                     return ' (${version})';
-                },
-
-                convertRelatedDataList: function() {
-                    if (this.model.Related) {
-                        this.model.Related.forEach(function(item) {
-                            var resultItem = convertMetadataToResultItem(item);
-
-                            this.relatedDataList.push(resultItem);
-                        }.bind(this));
-                    }
-                    return this.relatedDataList;
-                },
-            },
+                }
+            }
         });
 
         function getServiceFeed() {

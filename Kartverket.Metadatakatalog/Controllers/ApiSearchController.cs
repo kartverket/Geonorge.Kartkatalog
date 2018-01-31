@@ -248,6 +248,8 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         }
 
+
+        // TODO kan denne fjernes?? Er ikke lenger i bruk i kartkatalogen...
         /// <summary>
         /// Get distributions for uuid
         /// </summary>

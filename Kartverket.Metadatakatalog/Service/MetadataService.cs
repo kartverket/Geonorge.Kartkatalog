@@ -42,6 +42,8 @@ namespace Kartverket.Metadatakatalog.Service
         }
 
 
+
+        // TODO Utgått?
         public List<Distribution> GetRelatedDistributionsByUuid(string uuid)
         {
             var relatedDistributions = new List<Distribution>();
@@ -75,99 +77,10 @@ namespace Kartverket.Metadatakatalog.Service
             return relatedDistributions;
         }
 
-        private List<Distribution> GetApplicationDatasetRelatedDistributions(string uuid)
-        {
-            var distributionList = new List<Distribution>();
-
-            var metadata = GetMetadataForApplication(uuid);
-
-            if (metadata != null)
-            {
-                distributionList = ConvertRelatedData(metadata.ApplicationDatasets, distributionList);
-            }
-            return distributionList;
-        }
-
-        private ApplicationIndexDoc GetMetadataForApplication(string uuid)
-        {
-            ApplicationIndexDoc metadata = null;
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Applications));
-
-            ISolrQuery query = new SolrQuery("uuid:" + uuid);
-            try
-            {
-                SolrQueryResults<ApplicationIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
-                {
-                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
-                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
-                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "applicationdataset" }
-                });
-
-                metadata = queryResults.FirstOrDefault();
-
-            }
-            catch (Exception) { }
-
-            return metadata;
-        }
-
         public MetadataViewModel GetMetadataViewModelByUuid(string uuid)
         {
             var simpleMetadata = GetSimpleMetadataByUuid(uuid);
             return simpleMetadata == null ? null : CreateMetadataViewModel(simpleMetadata);
-        }
-
-
-        private SimpleMetadata GetSimpleMetadataByUuid(string uuid)
-        {
-            var mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
-            return mdMetadataType == null ? null : new SimpleMetadata(mdMetadataType);
-        }
-
-        private MetadataViewModel CreateMetadataViewModel(SimpleMetadata simpleMetadata)
-        {
-            Culture = CultureHelper.GetCurrentCulture();
-
-            var metadata = ConvertSimpleMetadataToMetadata(simpleMetadata);
-
-            var parameters = new SearchParameters { Text = simpleMetadata.Uuid };
-            var searchResult = _searchService.Search(parameters);
-
-            if (searchResult != null && searchResult.NumFound > 0)
-            {
-                if (metadata.IsDataset())
-                {
-                    metadata.ServiceDistributionProtocolForDataset = searchResult.Items[0].ServiceDistributionProtocolForDataset;
-                    metadata.ServiceDistributionUrlForDataset = searchResult.Items[0].ServiceDistributionUrlForDataset;
-                    metadata.ServiceDistributionNameForDataset = searchResult.Items[0].ServiceDistributionNameForDataset;
-                    metadata.ServiceUuid = searchResult.Items[0].ServiceDistributionUuidForDataset;
-                    metadata.Related = ConvertRelatedData(searchResult.Items[0].DatasetServices, metadata.Related);
-                }
-                metadata.ServiceDistributionAccessConstraint = searchResult.Items[0].ServiceDistributionAccessConstraint;
-
-                metadata.Related = ConvertRelatedData(searchResult.Items[0].Bundles, metadata.Related);
-                metadata.Related = ConvertRelatedData(searchResult.Items[0].ServiceLayers, metadata.Related);
-                metadata.Related = ConvertRelatedData(searchResult.Items[0].ServiceDatasets, metadata.Related);
-            }
-
-            metadata.AccessIsRestricted = metadata.IsRestricted();
-            metadata.AccessIsOpendata = metadata.IsOpendata();
-            metadata.AccessIsProtected = metadata.IsOffline();
-
-            metadata.CanShowMapUrl = metadata.ShowMapLink();
-            metadata.CanShowServiceMapUrl = metadata.ShowServiceMapLink();
-            metadata.CanShowDownloadService = metadata.ShowDownloadService();
-            metadata.CanShowDownloadUrl = metadata.ShowDownloadLink();
-            metadata.CanShowWebsiteUrl = metadata.ShowWebsiteLink();
-
-            metadata.MapLink = metadata.MapUrl();
-            metadata.ServiceLink = metadata.ServiceUrl();
-
-            metadata.CoverageUrl = metadata.GetCoverageLink();
-
-            //metadata.Distributions = GetDistributions(metadata);
-
-            return metadata;
         }
 
         public Distributions GetDistributions(MetadataViewModel metadata)
@@ -190,8 +103,6 @@ namespace Kartverket.Metadatakatalog.Service
             if (metadata.IsDataset())
             {
                 var metadataIndexDocResult = GetMetadata(metadata.Uuid) ?? throw new ArgumentNullException("GetMetadata(metadata.Uuid)");
-
-                // Nedlastingstjenester - WWW:DOWNLOAD-1.0-http--download, GEONORGE:FILEDOWNLOAD, GEONORGE:DOWNLOAD
 
                 // Visningstjenester - OGC:WMS, OGC:WMTS, WMS-C
                 metadata.Distributions.RelatedViewServices = GetRelatedViewService(metadataIndexDocResult.DatasetServices);
@@ -224,7 +135,6 @@ namespace Kartverket.Metadatakatalog.Service
                     // Tjenestelag
                     metadata.Distributions.RelatedServiceLayer = ConvertRelatedData(serviceIndexDoc.ServiceLayers);
                 }
-
             }
 
             else if (metadata.IsApplication())
@@ -248,57 +158,130 @@ namespace Kartverket.Metadatakatalog.Service
             return metadata.Distributions;
         }
 
-        private List<Distribution> GetRelatedDownloadService(List<string> relatedData)
+        public SearchResultItemViewModel Metadata(string uuid)
         {
-            var downloadServices = new List<Distribution>();
-            if (relatedData != null && relatedData.Any())
-            {
-                foreach (var relatert in relatedData)
-                {
-                    var relData = relatert.Split('|');
-                    var protocol = relData[6];
+            SearchResultItem metadata = null;
 
-                    try
-                    {
-                        if (protocol == "OGC:WFS" || protocol == "OGC:WCS" || protocol == "W3C:REST" || protocol == "W3C:WS" || protocol == "W3C:AtomFeed")
-                        {
-                            downloadServices.Add(ConvertRelatedData(relatert));
-                        }
-                    }
-                    catch
-                    {
-                    }
-                }
+            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+
+            ISolrQuery query = new SolrQuery("uuid:" + uuid);
+            try
+            {
+                SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                {
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier" }
+                });
+
+                metadata = new SearchResultItem(queryResults.FirstOrDefault());
+
             }
-            return downloadServices;
+            catch (Exception) { }
+
+            return new SearchResultItemViewModel(metadata);
         }
 
-        private List<Distribution> GetRelatedViewService(List<string> relatedData)
+        public MetadataIndexDoc GetMetadata(string uuid)
         {
-            var viewServices = new List<Distribution>();
-            if (relatedData != null && relatedData.Any())
-            {
-                foreach (var relatert in relatedData)
-                {
-                    var relData = relatert.Split('|');
-                    var protocol = relData[6];
+            MetadataIndexDoc metadata = null;
+            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
 
-                    try
-                    {
-                        if (protocol == "OGC:WMS" || protocol == "OGC:WMTS" || protocol == "WMS-C")
-                        {
-                            viewServices.Add(ConvertRelatedData(relatert));
-                        }
-                    }
-                    catch
-                    {
-                    }
-                }
+            ISolrQuery query = new SolrQuery("uuid:" + uuid);
+            try
+            {
+                SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                {
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier" }
+                });
+
+                metadata = queryResults.FirstOrDefault();
+
             }
-            return viewServices;
+            catch (Exception) { }
+
+            return metadata;
+        }
+
+        public ServiceIndexDoc GetMetadataForService(string uuid)
+        {
+            ServiceIndexDoc metadata = null;
+            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ServiceIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Services));
+
+            ISolrQuery query = new SolrQuery("uuid:" + uuid);
+            try
+            {
+                SolrQueryResults<ServiceIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                {
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier" }
+                });
+
+                metadata = queryResults.FirstOrDefault();
+
+            }
+            catch (Exception) { }
+
+            return metadata;
         }
 
 
+
+
+        private SimpleMetadata GetSimpleMetadataByUuid(string uuid)
+        {
+            var mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
+            return mdMetadataType == null ? null : new SimpleMetadata(mdMetadataType);
+        }
+
+        private MetadataViewModel CreateMetadataViewModel(SimpleMetadata simpleMetadata)
+        {
+            Culture = CultureHelper.GetCurrentCulture();
+
+            var metadata = ConvertSimpleMetadataToMetadata(simpleMetadata);
+
+            var parameters = new SearchParameters { Text = simpleMetadata.Uuid };
+            var searchResult = _searchService.Search(parameters);
+
+            if (searchResult != null && searchResult.NumFound > 0)
+            {
+                if (metadata.IsDataset())
+                {
+                    metadata.ServiceDistributionProtocolForDataset = searchResult.Items[0].ServiceDistributionProtocolForDataset;
+                    metadata.ServiceDistributionUrlForDataset = searchResult.Items[0].ServiceDistributionUrlForDataset;
+                    metadata.ServiceDistributionNameForDataset = searchResult.Items[0].ServiceDistributionNameForDataset;
+                    metadata.ServiceUuid = searchResult.Items[0].ServiceDistributionUuidForDataset;
+                }
+                metadata.ServiceDistributionAccessConstraint = searchResult.Items[0].ServiceDistributionAccessConstraint;
+            }
+
+            metadata.AccessIsRestricted = metadata.IsRestricted();
+            metadata.AccessIsOpendata = metadata.IsOpendata();
+            metadata.AccessIsProtected = metadata.IsOffline();
+
+            metadata.CanShowMapUrl = metadata.ShowMapLink();
+            metadata.CanShowServiceMapUrl = metadata.ShowServiceMapLink();
+            metadata.CanShowDownloadService = metadata.ShowDownloadService();
+            metadata.CanShowDownloadUrl = metadata.ShowDownloadLink();
+            metadata.CanShowWebsiteUrl = metadata.ShowWebsiteLink();
+
+            metadata.MapLink = metadata.MapUrl();
+            metadata.ServiceLink = metadata.ServiceUrl();
+
+            metadata.CoverageUrl = metadata.GetCoverageLink();
+
+            return metadata;
+        }
+
+        /// <summary>
+        /// Add rows for each distribution url. Update row if it's the same url.
+        /// </summary>
+        /// <param name="uuid">Metadata uuid</param>
+        /// <param name="simpleMetadata">SimpleMetadata</param>
+        /// <returns></returns>
         private Dictionary<DistributionRow, Distribution> CreateDistributionRows(string uuid, SimpleMetadata simpleMetadata)
         {
             var distributionRows = new Dictionary<DistributionRow, Distribution>();
@@ -364,6 +347,106 @@ namespace Kartverket.Metadatakatalog.Service
             distributionRow.DistributionFormats.Add(GetDistributionFormat(simpleMetadataDistribution));
         }
 
+        private DistributionFormat GetDistributionFormat(SimpleDistribution simpleMetadataDistribution)
+        {
+            return new DistributionFormat
+            {
+                Name = Register.GetDistributionType(simpleMetadataDistribution.FormatName),
+                Version = simpleMetadataDistribution.FormatVersion
+            };
+        }
+
+        private List<DistributionFormat> GetDistributionFormats(string tmpUuid)
+        {
+            var distributions = new List<DistributionFormat>();
+            var metadata = GetMetadataViewModelByUuid(tmpUuid);
+            if (metadata != null)
+            {
+                foreach (var distribution in metadata.DistributionFormats)
+                {
+                    var distributionFormat = new DistributionFormat();
+                    distributionFormat.Name = distribution.Name;
+                    distributionFormat.Version = distribution.Version;
+
+                    distributions.Add(distributionFormat);
+                }
+            }
+            return distributions;
+        }
+
+
+
+        private List<Distribution> GetRelatedDownloadService(List<string> relatedData)
+        {
+            var downloadServices = new List<Distribution>();
+            if (relatedData != null && relatedData.Any())
+            {
+                foreach (var relatert in relatedData)
+                {
+                    var relData = relatert.Split('|');
+                    var protocol = relData[6];
+
+                    try
+                    {
+                        if (protocol == "OGC:WFS" || protocol == "OGC:WCS" || protocol == "W3C:REST" || protocol == "W3C:WS" || protocol == "W3C:AtomFeed")
+                        {
+                            var uuid = relData[0] ?? "";
+                            var simpleMetadata = GetSimpleMetadataByUuid(uuid) ?? throw new ArgumentNullException("Not found");
+
+                            if (simpleMetadata.DistributionsFormats.Any())
+                            {
+                                var distributionRows = CreateDistributionRows(uuid, simpleMetadata);
+                                if (distributionRows != null)
+                                    foreach (var distribution in distributionRows)
+                                    {
+                                        downloadServices.Add(distribution.Value);
+                                    }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            return downloadServices;
+        }
+
+        private List<Distribution> GetRelatedViewService(List<string> relatedData)
+        {
+            var viewServices = new List<Distribution>();
+            if (relatedData != null && relatedData.Any())
+            {
+                foreach (var relatert in relatedData)
+                {
+                    var relData = relatert.Split('|');
+                    var protocol = relData[6];
+                    try
+                    {
+                        if (protocol == "OGC:WMS" || protocol == "OGC:WMTS" || protocol == "WMS-C")
+                        {
+                            var uuid = relData[0] ?? "";
+                            var simpleMetadata = GetSimpleMetadataByUuid(uuid) ?? throw new ArgumentNullException("Not found");
+
+                            if (simpleMetadata.DistributionsFormats.Any())
+                            {
+                                var distributionRows = CreateDistributionRows(uuid, simpleMetadata);
+                                if (distributionRows != null)
+                                    foreach (var distribution in distributionRows)
+                                    {
+                                        viewServices.Add(distribution.Value);
+                                    }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            return viewServices;
+        }
+
         private List<Distribution> GetServiceDirectoryRelatedDistributions(string uuid)
         {
             var distributionList = new List<Distribution>();
@@ -391,6 +474,91 @@ namespace Kartverket.Metadatakatalog.Service
             return distributionList;
         }
 
+        private List<Distribution> GetApplicationDatasetRelatedDistributions(string uuid)
+        {
+            var distributionList = new List<Distribution>();
+
+            var metadata = GetMetadataForApplication(uuid);
+
+            if (metadata != null)
+            {
+                distributionList = ConvertRelatedData(metadata.ApplicationDatasets, distributionList);
+            }
+            return distributionList;
+        }
+
+        private ApplicationIndexDoc GetMetadataForApplication(string uuid)
+        {
+            ApplicationIndexDoc metadata = null;
+            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Applications));
+
+            ISolrQuery query = new SolrQuery("uuid:" + uuid);
+            try
+            {
+                SolrQueryResults<ApplicationIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                {
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "applicationdataset" }
+                });
+
+                metadata = queryResults.FirstOrDefault();
+
+            }
+            catch (Exception) { }
+
+            return metadata;
+        }
+
+        private List<Distribution> GetApplicationsRelatedDistributions(string uuid)
+        {
+            var distlist = new List<Distribution>();
+
+            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Applications));
+
+            ISolrQuery query = new SolrQuery("applicationdataset:" + uuid + "*");
+            try
+            {
+                SolrQueryResults<ApplicationIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                {
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier" }
+
+                });
+
+                foreach (var result in queryResults)
+                {
+                    var md = new Distribution();
+                    try
+                    {
+                        md.Uuid = result.Uuid;
+                        md.Title = result.Title;
+                        md.Type = "Applikasjon";
+                        md.Organization = result.Organization;
+                        md.DistributionFormats = GetDistributionFormats(result.Uuid);
+                        md.Protocol = result.DistributionProtocol != null ? Register.GetDistributionType(result.DistributionProtocol) : "";
+
+                        md.DownloadUrl = result.DistributionUrl;
+
+                        //Åpne data, begrenset, skjermet
+                        if (SimpleMetadataUtil.IsOpendata(result.OtherConstraintsAccess)) md.AccessIsOpendata = true;
+                        if (SimpleMetadataUtil.IsRestricted(result.OtherConstraintsAccess)) md.AccessIsRestricted = true;
+                        if (SimpleMetadataUtil.IsProtected(result.AccessConstraint)) md.AccessIsProtected = true;
+
+                        distlist.Add(md);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+            catch (Exception) { }
+
+            return distlist;
+        }
+
+
         private string GetOrganizationFromContactMetadata(SimpleContact contact)
         {
             return contact != null
@@ -399,278 +567,27 @@ namespace Kartverket.Metadatakatalog.Service
                 : UI.NotSet;
         }
 
-        private DistributionFormat GetDistributionFormat(SimpleDistribution simpleMetadataDistribution)
-        {
-            return new DistributionFormat
-            {
-                Name = Register.GetDistributionType(simpleMetadataDistribution.FormatName),
-                Version = simpleMetadataDistribution.FormatVersion
-            };
-        }
-
         private List<Distribution> ConvertRelatedData(List<string> relatedData, List<Distribution> relatedDistributions = null)
         {
             if (relatedDistributions == null) relatedDistributions = new List<Distribution>();
-
-            if (relatedData != null && relatedData.Any())
+            if (relatedData == null) return relatedDistributions;
+            foreach (var item in relatedData)
             {
-                foreach (var relatert in relatedData)
+                var relData = item.Split('|');
+                var uuid = relData[0] ?? "";
+                var simpleMetadata = GetSimpleMetadataByUuid(uuid) ?? throw new ArgumentNullException("Not found");
+
+                if (simpleMetadata.DistributionsFormats.Any())
                 {
-                    var relData = relatert.Split('|');
-
-                    try
-                    {
-                        var tmp = new Distribution();
-                        tmp.Uuid = relData[0] ?? "";
-                        tmp.Title = relData[1] ?? "";
-                        tmp.Type = ConvertType(relData[3], relData[2]);
-                        tmp.DistributionFormats = GetDistributionFormats(tmp.Uuid);
-                        tmp.DistributionName = relData[5] ?? "";
-                        tmp.DistributionUrl = relData[7] ?? "";
-                        tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
-                        if (tmp.Type == "servicelayer")
-                            tmp.Protocol = tmp.Protocol + "lag";
-                        tmp.Organization = relData[4];
-                        tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
-
-                        //Åpne data, begrenset, skjermet
-                        if (relData.Length > 11)
+                    var distributionRows = CreateDistributionRows(uuid, simpleMetadata);
+                    if (distributionRows != null)
+                        foreach (var distribution in distributionRows)
                         {
-                            if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
-                            if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
-                            if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
-                            tmp.ServiceDistributionAccessConstraint = !IsNullOrWhiteSpace(relData[12]) ? relData[12] : relData[11];
+                            relatedDistributions.Add(distribution.Value);
                         }
-
-                        //Vis kart
-                        if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
-                        {
-                            tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
-                            tmp.CanShowMapUrl = true;
-                        }
-
-                        relatedDistributions.Add(tmp);
-                    }
-                    catch (Exception ex)
-                    {
-                        //Ignore
-                    }
                 }
-
             }
-
             return relatedDistributions;
-        }
-
-        private Distribution ConvertRelatedData(string relatedData)
-        {
-
-            var relData = relatedData.Split('|');
-
-            try
-            {
-                var tmp = new Distribution();
-                tmp.Uuid = relData[0] ?? "";
-                tmp.Title = relData[1] ?? "";
-                tmp.Type = ConvertType(relData[3], relData[2]);
-                tmp.DistributionFormats = GetDistributionFormats(tmp.Uuid);
-                tmp.DistributionName = relData[5] ?? "";
-                tmp.DistributionUrl = relData[7] ?? "";
-                tmp.Protocol = relData[6] != null ? Register.GetDistributionType(relData[6]) : "";
-                if (tmp.Type == "servicelayer")
-                    tmp.Protocol = tmp.Protocol + "lag";
-                tmp.Organization = relData[4];
-                tmp.ShowDetailsUrl = "/metadata/org/title/" + tmp.Uuid;
-
-                //Åpne data, begrenset, skjermet
-                if (relData.Length > 11)
-                {
-                    if (SimpleMetadataUtil.IsOpendata(relData[12])) tmp.AccessIsOpendata = true;
-                    if (SimpleMetadataUtil.IsRestricted(relData[12])) tmp.AccessIsRestricted = true;
-                    if (SimpleMetadataUtil.IsProtected(relData[11])) tmp.AccessIsProtected = true;
-                    tmp.ServiceDistributionAccessConstraint = !IsNullOrWhiteSpace(relData[12]) ? relData[12] : relData[11];
-                }
-
-                //Vis kart
-                if (relData[6] == "OGC:WMS" || relData[6] == "OGC:WFS")
-                {
-                    tmp.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(relData[7], relData[3], relData[6], relData[5]);
-                    tmp.CanShowMapUrl = true;
-                }
-
-                return tmp;
-            }
-            catch (Exception ex)
-            {
-                //Ignore
-            }
-            return null;
-        }
-
-        private List<MetadataViewModel> ConvertRelatedData(List<string> relatedData, List<MetadataViewModel> relatedMetadata)
-        {
-            if (relatedData == null) return relatedMetadata;
-
-            foreach (var relatert in relatedData)
-            {
-                var relData = relatert.Split('|');
-
-                try
-                {
-                    var md = new MetadataViewModel();
-                    md.Uuid = relData[0] ?? "";
-                    md.Title = relData[1] ?? "";
-                    md.ParentIdentifier = relData[2] ?? "";
-                    md.HierarchyLevel = SimpleMetadataUtil.ConvertHierarchyLevelToType(relData[3] ?? "");
-                    md.ContactOwner = ConvertContactOwner(relData[4]);
-                    md.DistributionDetails = ConvertDistributionDetails(relData[5], relData[6], relData[7]);
-                    md.KeywordsNationalTheme = ConvertKeywordsNationalTheme(relData[8]);
-                    md.OrganizationLogoUrl = relData[9];
-                    md.Thumbnails.Add(GetThumbnail(relData[10]));
-                    md.Constraints = ConvertConstraint(relData[11], relData[12]);
-                    md.DistributionFormats = GetSimpleDistributionFromats(md.Uuid); // TODO fiks?
-
-
-                    if (md.IsService())
-                    {
-                        md.ServiceUuid = md.Uuid;
-                        md.ServiceDistributionAccessConstraint = relData[12];
-                        if (md.DistributionDetails.IsWms())
-                        {
-                            md.ServiceDistributionProtocolForDataset = relData[6];
-                            md.ServiceDistributionUrlForDataset = relData[7];
-                        }
-                        if (md.DistributionDetails.IsWfs())
-                        {
-                            md.ServiceWfsDistributionUrlForDataset = relData[7];
-                        }
-                    }
-
-                    if (relData.ElementAtOrDefault(13) != null)
-                        md.ServiceUuid = relData[13];
-                    if (relData.ElementAtOrDefault(14) != null)
-                        md.ServiceDistributionProtocolForDataset = relData[14];
-                    if (relData.ElementAtOrDefault(15) != null)
-                        md.ServiceDistributionUrlForDataset = relData[15];
-                    if (relData.ElementAtOrDefault(16) != null)
-                        md.ServiceDistributionNameForDataset = relData[16];
-                    if (relData.ElementAtOrDefault(17) != null)
-                        md.ServiceWfsDistributionUrlForDataset = relData[17];
-                    if (relData.ElementAtOrDefault(18) != null)
-                        md.ServiceDistributionAccessConstraint = relData[18];
-                    if (relData.ElementAtOrDefault(19) != null)
-                        md.ServiceWfsDistributionAccessConstraint = relData[19];
-
-                    md.ServiceUuid = GetRelatedService(md);
-
-                    md.AccessIsRestricted = md.IsRestricted();
-                    md.AccessIsOpendata = md.IsOpendata();
-                    md.AccessIsProtected = md.IsOffline();
-
-                    md.CanShowMapUrl = md.ShowMapLink();
-                    md.CanShowServiceMapUrl = md.ShowServiceMapLink();
-                    md.CanShowDownloadService = md.ShowDownloadService();
-                    md.CanShowDownloadUrl = md.ShowDownloadLink();
-                    md.MapLink = md.MapUrl();
-                    md.ServiceLink = md.ServiceUrl();
-
-                    relatedMetadata.Add(md);
-                }
-                catch
-                {
-                    // ignored
-                }
-            }
-            return relatedMetadata;
-        }
-
-        private List<DistributionFormat> GetDistributionFormats(string tmpUuid)
-        {
-            var distributions = new List<DistributionFormat>();
-            var metadata = GetMetadataViewModelByUuid(tmpUuid);
-            if (metadata != null)
-            {
-                foreach (var distribution in metadata.DistributionFormats)
-                {
-                    var distributionFormat = new DistributionFormat();
-                    distributionFormat.Name = distribution.Name;
-                    distributionFormat.Version = distribution.Version;
-
-                    distributions.Add(distributionFormat);
-                }
-            }
-            return distributions;
-        }
-
-        private string ConvertType(string type, string parentIdentifier)
-        {
-            if (type == "service" && !IsNullOrEmpty(parentIdentifier))
-                type = "servicelayer";
-            return type;
-        }
-
-        private List<SimpleDistributionFormat> GetSimpleDistributionFromats(string uuid)
-        {
-            var simpleMetadata = GetSimpleMetadataByUuid(uuid);
-            return simpleMetadata?.DistributionFormats;
-        }
-
-        private string GetRelatedService(MetadataViewModel metadata)
-        {
-            var searchResultRelated = _searchService.Search(new SearchParameters { Text = metadata.Uuid });
-
-            if (searchResultRelated != null && searchResultRelated.Items.Any())
-            {
-                if (metadata.IsDataset())
-                    return searchResultRelated.Items[0].ServiceDistributionUuidForDataset;
-            }
-            return metadata.Uuid;
-        }
-
-        private Constraints ConvertConstraint(string accessConstraints, string otherConstraintsAccess)
-        {
-            return new Constraints
-            {
-                AccessConstraints = accessConstraints,
-                OtherConstraintsAccess = otherConstraintsAccess
-            };
-        }
-
-        private Thumbnail GetThumbnail(string thumbnailsUrl)
-        {
-            return !IsNullOrEmpty(thumbnailsUrl) ? new Thumbnail { Type = "miniatyrbilde", URL = thumbnailsUrl } : null;
-        }
-
-        private List<Keyword> ConvertKeywordsNationalTheme(string keywordsNationalTheme)
-        {
-            if (!IsNullOrEmpty(keywordsNationalTheme))
-                return new List<Keyword>
-                {
-                    new Keyword
-                    {
-                        KeywordValue = keywordsNationalTheme,
-                        Thesaurus = SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE
-                    }
-                };
-            return null;
-        }
-
-        private DistributionDetails ConvertDistributionDetails(string name, string protocol, string url)
-        {
-            return new DistributionDetails
-            {
-                Name = name ?? "",
-                Protocol = protocol ?? "",
-                ProtocolName = protocol != null ? Register.GetDistributionType(protocol) : "",
-                URL = url ?? ""
-            };
-        }
-
-        private Contact ConvertContactOwner(string contactOwner)
-        {
-            return contactOwner != null
-                ? new Contact { Role = "owner", Organization = contactOwner }
-                : new Contact { Role = "owner", Organization = "" };
         }
 
         private MetadataViewModel ConvertSimpleMetadataToMetadata(SimpleMetadata simpleMetadata)
@@ -970,122 +887,7 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
-        private List<Distribution> GetApplicationsRelatedDistributions(string uuid)
-        {
-            var distlist = new List<Distribution>();
+       
 
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Applications));
-
-            ISolrQuery query = new SolrQuery("applicationdataset:" + uuid + "*");
-            try
-            {
-                SolrQueryResults<ApplicationIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
-                {
-                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
-                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
-                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier" }
-
-                });
-
-                foreach (var result in queryResults)
-                {
-                    var md = new Distribution();
-                    try
-                    {
-                        md.Uuid = result.Uuid;
-                        md.Title = result.Title;
-                        md.Type = "Applikasjon";
-                        md.Organization = result.Organization;
-                        md.DistributionFormats = GetDistributionFormats(result.Uuid);
-                        md.Protocol = result.DistributionProtocol != null ? Register.GetDistributionType(result.DistributionProtocol) : "";
-
-                        md.DownloadUrl = result.DistributionUrl;
-
-                        //Åpne data, begrenset, skjermet
-                        if (SimpleMetadataUtil.IsOpendata(result.OtherConstraintsAccess)) md.AccessIsOpendata = true;
-                        if (SimpleMetadataUtil.IsRestricted(result.OtherConstraintsAccess)) md.AccessIsRestricted = true;
-                        if (SimpleMetadataUtil.IsProtected(result.AccessConstraint)) md.AccessIsProtected = true;
-
-                        distlist.Add(md);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-            }
-            catch (Exception) { }
-
-            return distlist;
-        }
-
-        public SearchResultItemViewModel Metadata(string uuid)
-        {
-            SearchResultItem metadata = null;
-
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
-
-            ISolrQuery query = new SolrQuery("uuid:" + uuid);
-            try
-            {
-                SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
-                {
-                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
-                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
-                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier" }
-                });
-
-                metadata = new SearchResultItem(queryResults.FirstOrDefault());
-
-            }
-            catch (Exception) { }
-
-            return new SearchResultItemViewModel(metadata);
-        }
-
-        public MetadataIndexDoc GetMetadata(string uuid)
-        {
-            MetadataIndexDoc metadata = null;
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
-
-            ISolrQuery query = new SolrQuery("uuid:" + uuid);
-            try
-            {
-                SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
-                {
-                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
-                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
-                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier" }
-                });
-
-                metadata = queryResults.FirstOrDefault();
-
-            }
-            catch (Exception) { }
-
-            return metadata;
-        }
-
-        public ServiceIndexDoc GetMetadataForService(string uuid)
-        {
-            ServiceIndexDoc metadata = null;
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ServiceIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Services));
-
-            ISolrQuery query = new SolrQuery("uuid:" + uuid);
-            try
-            {
-                SolrQueryResults<ServiceIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
-                {
-                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
-                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
-                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier" }
-                });
-
-                metadata = queryResults.FirstOrDefault();
-
-            }
-            catch (Exception) { }
-
-            return metadata;
-        }
     }
 }
