@@ -340,6 +340,13 @@ namespace Kartverket.Metadatakatalog.Service
                 distribution.GetCapabilitiesUrl = simpleMetadataDistribution.URL;
             }
 
+            //Nettside
+            if (simpleMetadata.HierarchyLevel == "software")
+            {
+                distribution.DistributionUrl = simpleMetadataDistribution.URL;
+                distribution.CanShowMapUrl = true;
+            }
+
             //Åpne data, begrenset, skjermet
             if (SimpleMetadataUtil.IsOpendata(simpleMetadata)) distribution.AccessIsOpendata = true;
             if (SimpleMetadataUtil.IsRestricted(simpleMetadata)) distribution.AccessIsRestricted = true;
