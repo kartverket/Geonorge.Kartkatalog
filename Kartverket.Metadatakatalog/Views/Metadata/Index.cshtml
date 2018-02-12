@@ -472,7 +472,7 @@
                     { name: 'distributionType', size: 2 },
                     { name: 'owner', size: 2 },
                     { name: 'openData', size: 1 },
-                    { name: 'distributionFormats', size: 1 }
+                    { name: 'distributionFormats', size: 2 }
                 ],
                 selectedButtons: [
                     'showInMapButton',
@@ -500,7 +500,7 @@
                         relatedDistributionsLists.push({
                             title: this.distributions.TitleSelf,
                             selectedFields: this.$root.selectedFields,
-                            selectedButtons: this.$root.selectedButtons,
+                            selectedButtons: this.GetSelfSelectedButtons(),
                             resultItems: this.convertDistributionList(this.distributions.SelfDistribution)
                         });
                     }
@@ -508,7 +508,7 @@
                         relatedDistributionsLists.push({
                             title: 'Visningstjenester',
                             selectedFields: this.$root.selectedFields,
-                            selectedButtons: this.$root.selectedButtons,
+                            selectedButtons: ["showInMapButton", "copyUrlButton"],
                             resultItems: this.convertDistributionList(this.distributions.RelatedViewServices)
                         });
                     }
@@ -516,7 +516,7 @@
                         relatedDistributionsLists.push({
                             title: 'Nedlastingstjenester',
                             selectedFields: this.$root.selectedFields,
-                            selectedButtons: this.$root.selectedButtons,
+                            selectedButtons: ["copyUrlButton"],
                             resultItems: this.convertDistributionList(this.distributions.RelatedDownloadServices)
                         });
                     }
@@ -524,7 +524,7 @@
                         relatedDistributionsLists.push({
                             title: this.distributions.TitleRelatedDataset,
                             selectedFields: this.$root.selectedFields,
-                            selectedButtons: this.$root.selectedButtons,
+                            selectedButtons: ["addToCartButton"],
                             resultItems: this.convertDistributionList(this.distributions.RelatedDataset)
                         });
                     }
@@ -532,7 +532,7 @@
                         relatedDistributionsLists.push({
                             title: this.distributions.TitleRelatedServices,
                             selectedFields: this.$root.selectedFields,
-                            selectedButtons: this.$root.selectedButtons,
+                            selectedButtons: ["showInMapButton", "copyUrlButton"],
                             resultItems: this.convertDistributionList(this.distributions.RelatedServices)
                         });
                     }
@@ -540,7 +540,7 @@
                         relatedDistributionsLists.push({
                             title: this.distributions.TitleRelatedServiceLayer,
                             selectedFields: this.$root.selectedFields,
-                            selectedButtons: this.$root.selectedButtons,
+                            selectedButtons: ["showInMapButton", "copyUrlButton"],
                             resultItems: this.convertDistributionList(this.distributions.RelatedServiceLayer)
                         });
                     }
@@ -548,7 +548,7 @@
                         relatedDistributionsLists.push({
                             title: this.distributions.TitleRelatedApplications,
                             selectedFields: this.$root.selectedFields,
-                            selectedButtons: this.$root.selectedButtons,
+                            selectedButtons: ["showWebsiteButton"],
                             resultItems: this.convertDistributionList(this.distributions.RelatedApplications)
                         });
                     }
@@ -571,6 +571,18 @@
                         version += ' ${format}';
                     }
                     return ' (${version})';
+                },
+                GetSelfSelectedButtons: function () {
+                    if (this.model.HierarchyLevel == "dataset") {
+                        return ["addToCartButton"];
+                    }
+                    if (this.model.HierarchyLevel == "service") {
+                        return ["showInMapButton", "copyUrlButton"];
+                    }
+                    if (this.model.HierarchyLevel == "software" || this.model.HierarchyLevel == "Applikasjon") {
+                        return ["showWebsiteButton"];
+                    }
+                    return this.$root.selectedButtons;
                 }
             }
         });

@@ -26,7 +26,7 @@
                     <div v-bind:class="getFieldSizeClass('owner')" v-if="isSelectedField('owner')" is="table-owner" v-bind:metadata="resultItem"></div>
                     <div v-bind:class="getFieldSizeClass('openData')" v-if="isSelectedField('openData')" is="table-open-data" v-bind:metadata="resultItem"></div>
                     <div is="table-row-buttons" v-bind:metadata="resultItem" v-bind:listOfButtons="selectedButtons"></div>
-                    <div v-bind:class="getFieldSizeClass('distributionFormats')" v-if="isSelectedField('distributionFormats')" is="table-distribution-formats" v-bind:metadata="resultItem"></div>
+                    <div v-bind:class="getFieldSizeClass('distributionFormats')" v-if="isSelectedField('distributionFormats')" is="table-distribution-formats" style="float:right" v-bind:metadata="resultItem"></div>
                 </div>
             </div>
         </div>
