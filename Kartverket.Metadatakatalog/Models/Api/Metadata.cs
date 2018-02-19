@@ -155,7 +155,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
                 OrganizationUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/" + s;
             }
 
-            if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data"))
+            if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data") || item.DataAccess == "Åpne data")
                 IsOpenData = true;
             else IsOpenData = false;
 

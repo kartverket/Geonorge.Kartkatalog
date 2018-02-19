@@ -648,6 +648,11 @@ namespace Kartverket.Metadatakatalog.Models
 
             return this;
         }
+
+        public bool ShowSelf()
+        {
+            return SelfDistribution.Any();
+        }
     }
 
     public class BoundingBox

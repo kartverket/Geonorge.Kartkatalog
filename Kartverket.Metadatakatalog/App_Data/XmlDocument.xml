@@ -835,6 +835,14 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Service.MetadataService.CreateDistributionRows(System.String,GeoNorgeAPI.SimpleMetadata)">
+            <summary>
+            Add rows for each distribution url. Update row if it's the same url.
+            </summary>
+            <param name="uuid">Metadata uuid</param>
+            <param name="simpleMetadata">SimpleMetadata</param>
+            <returns></returns>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Service.PlaceResolver.GetAreas">
             <summary>
             Gets fylke og kommuner fra register i et dictionary

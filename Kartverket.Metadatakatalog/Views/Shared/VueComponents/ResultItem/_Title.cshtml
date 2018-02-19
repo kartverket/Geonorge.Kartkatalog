@@ -27,7 +27,8 @@
 
     @*Tabell*@
     <div v-else class="resultItemRowTitle">
-        <a v-bind:href="href"
+        <p v-if="metadata.RemoveDetailPageUrl">{{ metadata.Title }}</p>
+        <a v-else v-bind:href="href"
            class="show-loading-animation"
            data-toggle="tooltip"
            data-placement="bottom"
