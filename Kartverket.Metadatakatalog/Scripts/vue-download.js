@@ -1255,6 +1255,13 @@ var mainVueModel = new Vue({
                     this.masterOrderLine.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
                         selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLineUuid);
                         selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLineUuid);
+
+                        var hasDeliveryNotificationByEmail = false;
+                        this.orderLines.forEach(function (orderLine) {
+                            if (orderLine.metadata.uuid == orderLineUuid) {
+                                emailRequired = orderLine.capabilities.deliveryNotificationByEmail !== undefined ? orderLine.capabilities.deliveryNotificationByEmail : false;
+                            }
+                        }.bind(this));
                         if (selectedArea.type == "polygon") {
                             emailRequired = true;
                         }
