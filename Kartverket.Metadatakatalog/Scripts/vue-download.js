@@ -581,7 +581,12 @@ var OrderLine = {
                                         if (data !== null) {
                                             if (!data.canDownload) {
                                                 clearAlertMessage();
-                                                showAlert("Området er for stort til å laste ned, vennligst velg mindre område", "danger");
+                                                if (data.message !== undefined && data.message !== null && data.message !== '') {
+                                                    showAlert("Det oppstod et problem ved valg av område: " + data.message, "danger");
+                                                }
+                                                else {
+                                                    showAlert("Området er for stort til å laste ned, vennligst velg mindre område", "danger");
+                                                }
                                             } else {
                                                 clearAlertMessage();
                                                 hideAlert();
@@ -782,7 +787,13 @@ var MasterOrderLine = {
                                         if (data !== null) {
                                             if (!data.canDownload) {
                                                 clearAlertMessage();
-                                                showAlert("Området er for stort til å laste ned, vennligst velg mindre område", "danger");
+                                                if (data.message !== undefined && data.message !== null && data.message !== '')
+                                                {
+                                                    showAlert("Det oppstod et problem ved valg av område: " + data.message , "danger");
+                                                }
+                                                else {
+                                                    showAlert("Området er for stort til å laste ned, vennligst velg mindre område", "danger");
+                                                }
                                             } else {
                                                 clearAlertMessage();
                                                 hideAlert();
@@ -936,9 +947,7 @@ var mainVueModel = new Vue({
                                 }
                                 orderResponseGroup.datasets[file.metadataName].files.push(file);
 
-                                if (orderResponseGroup.additionalInfo == null) {
-                                    orderResponseGroup.additionalInfo = this.getOrderRequestAdditionalInfo(distribution.distributionUrl, file.metadataUuid);
-                                }
+                                orderResponseGroup.additionalInfo = this.getOrderRequestAdditionalInfo(distribution.distributionUrl, file.metadataUuid);
 
                             }.bind(this));
                         }

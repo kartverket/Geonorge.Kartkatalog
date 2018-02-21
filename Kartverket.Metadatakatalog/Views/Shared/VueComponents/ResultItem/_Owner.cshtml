@@ -29,7 +29,7 @@
         },
         computed: {
             url: function () {
-                var url = window.location.origin + window.location.pathname + '?text=' + this.searchText + '&Facets%5B0%5D.name=organization&Facets%5B0%5D.value=' + this.metadata.Organization;
+                var url = window.location.origin + window.location.pathname + '?text=@Server.UrlEncode(searchText)&Facets%5B0%5D.name=organization&Facets%5B0%5D.value=' + this.metadata.Organization;
                 if (window.location.href == url) {
                     return '';
                 } else {
