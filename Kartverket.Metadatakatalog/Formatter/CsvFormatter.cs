@@ -131,7 +131,7 @@ namespace Kartverket.Metadatakatalog.Formatter
                     Escape(meta.Type) + ";" +
                     Escape(meta.Theme) + ";" +
                     Escape(meta.Organization) + ";" +
-                    Escape(meta.IsOpenData ? UI.OpenData : "") + ";" +
+                    Escape(meta.DataAccess) + ";" +
                     Escape(meta.IsDokData ? "Det offentlige kartgrunnlaget" : "") + ";" +
                     Escape(meta.Uuid) + ";" +
                     Escape(meta.ServiceDistributionUrlForDataset) + ";" +
