@@ -670,6 +670,18 @@ namespace Kartverket.Metadatakatalog.Service
                 OrderingInstructions = (simpleMetadata.AccessProperties != null && !string.IsNullOrEmpty(simpleMetadata.AccessProperties.OrderingInstructions)) ? simpleMetadata.AccessProperties.OrderingInstructions : ""
             };
 
+            if (string.IsNullOrEmpty(metadata.CoverageUrl))
+            {
+                if (metadata.Thumbnails != null)
+                {
+                    foreach(var thumbnail in metadata.Thumbnails)
+                    {
+                        if (thumbnail.Type == "dekningsoversikt")
+                            metadata.CoverageUrl = thumbnail.URL;
+                    }
+                }
+            }
+
             metadata.OrderingInstructionsLinkText = Register.GetServiceDeclaration(metadata.OrderingInstructions);
             metadata.SetDistributionUrl();
             metadata.OrganizationLogoUrl = GetOrganizationLogoUrl(metadata.ContactOwner);
