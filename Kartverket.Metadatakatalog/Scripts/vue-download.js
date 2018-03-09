@@ -1675,25 +1675,8 @@ var mainVueModel = new Vue({
                         if (orderRequests[orderLine.metadata.orderDistributionUrl] == undefined) {
                             orderRequests[orderLine.metadata.orderDistributionUrl] = {
                                 "email": "",
-                                "_links": "",
                                 "orderLines": []
                             }
-                        }
-
-                        var links = [];
-                        if (orderLine.capabilities._links !== undefined && orderLine.capabilities._links.length) {
-                            orderLine.capabilities._links.forEach(function (capabilityLink) {
-                                var link = {
-                                    "href": capabilityLink.href,
-                                    "rel": capabilityLink.rel,
-                                    "templated": capabilityLink.templatedSpecified,
-                                    "type": "",
-                                    "deprecation": "",
-                                    "name": "",
-                                    "title": ""
-                                }
-                                links.push(link);
-                            })
                         }
 
                         var areas = [];
@@ -1703,7 +1686,6 @@ var mainVueModel = new Vue({
                                     "code": selectedArea.code,
                                     "name": selectedArea.name,
                                     "type": selectedArea.type,
-                                    "_links": []
                                 }
                                 areas.push(area);
                             });
@@ -1716,7 +1698,6 @@ var mainVueModel = new Vue({
                                     "code": selectedProjection.code,
                                     "name": selectedProjection.name,
                                     "codespace": selectedProjection.codespace,
-                                    "_links": []
                                 }
                                 projections.push(projection);
                             });
@@ -1729,7 +1710,6 @@ var mainVueModel = new Vue({
                                     "code": "",
                                     "name": selectedFormat.name,
                                     "type": "",
-                                    "_links": []
                                 }
                                 formats.push(format);
                             });
@@ -1740,7 +1720,6 @@ var mainVueModel = new Vue({
                             "areas": areas,
                             "projections": projections,
                             "formats": formats,
-                            "_links": links
                         }
 
                         if (this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
