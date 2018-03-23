@@ -272,6 +272,8 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.ServiceLink = metadata.ServiceUrl();
 
             metadata.CoverageUrl = metadata.GetCoverageLink();
+            if(simpleMetadata.IsService())
+                metadata.ServiceType = simpleMetadata.ServiceType;
 
             return metadata;
         }

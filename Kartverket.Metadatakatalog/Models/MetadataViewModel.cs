@@ -129,6 +129,8 @@ namespace Kartverket.Metadatakatalog.Models
         public string DistributionUrl { get; set; }
         public Distributions Distributions { get; set; }
 
+        public string ServiceType { get; set; }
+
 
         public MetadataViewModel()
         {
