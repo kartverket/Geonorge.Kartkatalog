@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Routing;
 using Kartverket.Metadatakatalog.Models.Api;
+using Resources;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -631,21 +632,21 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 if (type == "servicelayer")
                 {
-                    TitleSelf = "Tjenestelag";
-                    TitleRelatedDataset = "Datasett som tjenesten opererer på";
-                    TitleRelatedServices = "Tjenesten som laget inngår i";
+                    TitleSelf = UI.Facet_type_servicelayer;
+                    TitleRelatedDataset = UI.DatasetsServiceOperatesOn;
+                    TitleRelatedServices = UI.TitleRelatedServices;
                 }
                 else
                 {
-                    TitleSelf = "Tjenesten";
-                    TitleRelatedDataset = "Datasett tjenesten opererer på";
-                    TitleRelatedServiceLayer = "WMS-lag i tjenesten";
+                    TitleSelf = UI.TheService;
+                    TitleRelatedDataset = UI.DatasetsServiceOperatesOn;
+                    TitleRelatedServiceLayer = UI.TitleRelatedServiceLayer;
                 }
             }
             if (metadata.IsApplication())
             {
-                TitleSelf = "Kartløsning";
-                TitleRelatedDataset = "Datasett som vises i kartløsningen";
+                TitleSelf = UI.MapServices;
+                TitleRelatedDataset = UI.TitleRelatedDataset;
             }
 
             return this;

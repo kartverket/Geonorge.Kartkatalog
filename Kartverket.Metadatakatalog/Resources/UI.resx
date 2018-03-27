@@ -717,4 +717,19 @@
   <data name="ServiceDeclaration" xml:space="preserve">
     <value>Tjenesteerklæring</value>
   </data>
+  <data name="DatasetsServiceOperatesOn" xml:space="preserve">
+    <value>Datasett tjenesten opererer på</value>
+  </data>
+  <data name="TheService" xml:space="preserve">
+    <value>Tjenesten</value>
+  </data>
+  <data name="TitleRelatedDataset" xml:space="preserve">
+    <value>Datasett som vises i kartløsningen</value>
+  </data>
+  <data name="TitleRelatedServiceLayer" xml:space="preserve">
+    <value>WMS-lag i tjenesten</value>
+  </data>
+  <data name="TitleRelatedServices" xml:space="preserve">
+    <value>Tjenesten som laget inngår i</value>
+  </data>
 </root>

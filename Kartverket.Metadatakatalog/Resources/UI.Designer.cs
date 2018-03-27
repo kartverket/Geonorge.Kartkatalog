@@ -405,6 +405,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Datasett tjenesten opererer på.
+        /// </summary>
+        public static string DatasetsServiceOperatesOn {
+            get {
+                return ResourceManager.GetString("DatasetsServiceOperatesOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dato.
         /// </summary>
         public static string Date {
@@ -1699,6 +1708,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tjenesten.
+        /// </summary>
+        public static string TheService {
+            get {
+                return ResourceManager.GetString("TheService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tid og rom.
         /// </summary>
         public static string TimeAndSpace {
@@ -1722,6 +1740,33 @@ namespace Resources {
         public static string TitleMissing {
             get {
                 return ResourceManager.GetString("TitleMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Datasett som vises i kartløsningen.
+        /// </summary>
+        public static string TitleRelatedDataset {
+            get {
+                return ResourceManager.GetString("TitleRelatedDataset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WMS-lag i tjenesten.
+        /// </summary>
+        public static string TitleRelatedServiceLayer {
+            get {
+                return ResourceManager.GetString("TitleRelatedServiceLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tjenesten som laget inngår i.
+        /// </summary>
+        public static string TitleRelatedServices {
+            get {
+                return ResourceManager.GetString("TitleRelatedServices", resourceCulture);
             }
         }
         
