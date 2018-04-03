@@ -732,4 +732,10 @@
   <data name="TitleRelatedServices" xml:space="preserve">
     <value>The service in which the layer is part of</value>
   </data>
+  <data name="DisplayServices" xml:space="preserve">
+    <value>Display services</value>
+  </data>
+  <data name="DownloadServices" xml:space="preserve">
+    <value>Download services</value>
+  </data>
 </root>

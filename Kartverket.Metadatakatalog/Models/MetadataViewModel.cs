@@ -625,8 +625,8 @@ namespace Kartverket.Metadatakatalog.Models
 
             if (metadata.IsDataset())
             {
-                TitleSelf = "Filnedlasting";
-                TitleRelatedApplications = "Kartløsninger";
+                TitleSelf = UI.FileDownload;
+                TitleRelatedApplications = UI.MapServices;
             }
             if (metadata.IsService() || metadata.IsServiceLayer())
             {

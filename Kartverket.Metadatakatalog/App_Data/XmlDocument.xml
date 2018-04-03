@@ -1322,6 +1322,11 @@
               Looks up a localized string similar to Vis produktspesifikasjon.
             </summary>
         </member>
+        <member name="P:Resources.UI.DisplayServices">
+            <summary>
+              Looks up a localized string similar to Visningstjenester.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Distribution">
             <summary>
               Looks up a localized string similar to Distribusjon.
@@ -1360,6 +1365,11 @@
         <member name="P:Resources.UI.DownloadOrderLineHeader">
             <summary>
               Looks up a localized string similar to Felles valg for nedlastning, vil gjelde for alle datasett.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DownloadServices">
+            <summary>
+              Looks up a localized string similar to Nedlastingstjenester.
             </summary>
         </member>
         <member name="P:Resources.UI.East">

@@ -585,6 +585,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Visningstjenester.
+        /// </summary>
+        public static string DisplayServices {
+            get {
+                return ResourceManager.GetString("DisplayServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Distribusjon.
         /// </summary>
         public static string Distribution {
@@ -653,6 +662,15 @@ namespace Resources {
         public static string DownloadOrderLineHeader {
             get {
                 return ResourceManager.GetString("DownloadOrderLineHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nedlastingstjenester.
+        /// </summary>
+        public static string DownloadServices {
+            get {
+                return ResourceManager.GetString("DownloadServices", resourceCulture);
             }
         }
         
