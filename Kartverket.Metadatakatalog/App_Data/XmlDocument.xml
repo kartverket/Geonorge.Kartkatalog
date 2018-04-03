@@ -1222,6 +1222,11 @@
               Looks up a localized string similar to Datasett er korrekt utfylt.
             </summary>
         </member>
+        <member name="P:Resources.UI.DatasetsServiceOperatesOn">
+            <summary>
+              Looks up a localized string similar to Datasett tjenesten opererer på.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Date">
             <summary>
               Looks up a localized string similar to Dato.
@@ -1317,6 +1322,11 @@
               Looks up a localized string similar to Vis produktspesifikasjon.
             </summary>
         </member>
+        <member name="P:Resources.UI.DisplayServices">
+            <summary>
+              Looks up a localized string similar to Visningstjenester.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Distribution">
             <summary>
               Looks up a localized string similar to Distribusjon.
@@ -1355,6 +1365,11 @@
         <member name="P:Resources.UI.DownloadOrderLineHeader">
             <summary>
               Looks up a localized string similar to Felles valg for nedlastning, vil gjelde for alle datasett.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.DownloadServices">
+            <summary>
+              Looks up a localized string similar to Nedlastingstjenester.
             </summary>
         </member>
         <member name="P:Resources.UI.East">
@@ -1944,6 +1959,11 @@
               Looks up a localized string similar to Temaer.
             </summary>
         </member>
+        <member name="P:Resources.UI.TheService">
+            <summary>
+              Looks up a localized string similar to Tjenesten.
+            </summary>
+        </member>
         <member name="P:Resources.UI.TimeAndSpace">
             <summary>
               Looks up a localized string similar to Tid og rom.
@@ -1957,6 +1977,21 @@
         <member name="P:Resources.UI.TitleMissing">
             <summary>
               Looks up a localized string similar to Tittel mangler.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.TitleRelatedDataset">
+            <summary>
+              Looks up a localized string similar to Datasett som vises i kartløsningen.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.TitleRelatedServiceLayer">
+            <summary>
+              Looks up a localized string similar to WMS-lag i tjenesten.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.TitleRelatedServices">
+            <summary>
+              Looks up a localized string similar to Tjenesten som laget inngår i.
             </summary>
         </member>
         <member name="P:Resources.UI.ToBasket">

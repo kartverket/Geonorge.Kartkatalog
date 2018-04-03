@@ -87,7 +87,7 @@ function updateShoppingCartCookie() {
 }
 
 
-$(window).load(function () {
+document.addEventListener("DOMContentLoaded", function (event) {
     removeBrokenOrderItems();
     updateShoppingCart();
 });

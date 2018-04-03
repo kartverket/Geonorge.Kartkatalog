@@ -21,20 +21,28 @@
         }
         @Resources.UI.AppPageTitle
     </title>
-    @Styles.Render("~/Content/bower_components/kartverket-felleskomponenter/assets/css/styles")
 
     @RenderSection("head", false)
 
-    
     @Html.Partial("_Resources")
-    
+
+    <script>
+        var applicationVersionNumber = '@Html.ApplicationVersionNumber()';
+        var applicationEnvironment = '@Html.EnvironmentName()';
+
+        var cultureData = {
+            friendlyUrlEN: '@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Request.Url }))',
+            friendlyUrlNO: '@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url }))',
+            currentCulture: '@CultureHelper.GetCurrentCulture()'
+            };
+    </script>
 </head>
-<body class="geonorge-container prototype  geonorge ng-scope" ng-app="geonorge">
+<body class="geonorge-container prototype  geonorge ng-scope">
 
     <div id="loading-animation" class="loading-animation" style="display: none;"></div>
 
-    @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_SharedMenu.min.cshtml")
-
+    @Html.Raw(File.ReadAllText(Server.MapPath("~/dist/partials/Header.html")))
+    @Styles.Render("~/Content/bower_components/kartverket-felleskomponenter/assets/css/styles")
 
     @{
         var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
@@ -62,39 +70,9 @@
 
 
     <script>
-        var applicationEnvironment = '@Html.EnvironmentName()';
-        var applicationVersionNumber = '@Html.ApplicationVersionNumber()';
-        var authenticationData = {
-            supportsLogin: false,
-            isAuthenticated: @Request.IsAuthenticated.ToString().ToLower(),
-            urlActionSignOut: '@Url.Action("SignOut", "AuthServices")',
-            urlActionSignIn: '@Url.Action("SignIn", "AuthServices")'
-            @if (Request.IsAuthenticated)
-            {
-                foreach (var c in System.Security.Claims.ClaimsPrincipal.Current.Claims) {
-                    if (c.Type == "urn:oid:0.9.2342.19200300.100.1.1" || c.Type == "username") {
-                       <text>, userName: '@c.Value'</text>
-                    }
-                }
-            }
-        }
         var statusApi = '@Html.StatusApiUrl()';
-
-        var cultureData = {
-            supportsMultiCulture: @(Html.SupportsMultiCulture() ? "true" : "false"),
-            urlSetCulture: '@Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Request.Url })',
-            urlSetCultureNorwegian: '@Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url })',
-            currentCulture: '@CultureHelper.GetCurrentCulture()'
-        };
     </script>
-    @Scripts.Render("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts")
-    @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_Analytics.min.cshtml")
-    @RenderSection("scripts", false)
 
-
-    <script>
-        setMainSearchPlaceholder('@Html.Raw(UI.SearchMapData)');
-    </script>
 
     @if (CultureHelper.IsNorwegian())
     {
@@ -104,6 +82,27 @@
     {
         @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_Footer_eng.min.cshtml");
     }
+
+    <script>
+        searchOption.loginUrl = '@Html.Raw(Url.Action("SignIn", "AuthServices", new { ReturnUrl = Request.Url }))';
+        searchOption.logoutUrl = '@Html.Raw(Url.Action("SignOut", "AuthServices"))';
+        searchOption.loggedIn = @Request.IsAuthenticated.ToString().ToLower();
+        searchOption.epiBaseUrl = '@Html.GeonorgeUrl()';
+        var orderItems = Cookies.get('orderitems');
+        if (orderItems && orderItems > 0) {
+            $('.downloads__count').show();
+            $('.downloads__count').text(orderItems);
+        }
+
+
+    </script>
+
+    @Scripts.Render("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts")
+    @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_Analytics.min.cshtml")
+    <script>
+        setMainSearchPlaceholder('@Html.Raw(UI.SearchMapData)');
+    </script>
+    @RenderSection("scripts", required: false)
 
 </body>
 

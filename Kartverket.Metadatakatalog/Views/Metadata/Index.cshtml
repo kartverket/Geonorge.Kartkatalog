@@ -506,7 +506,7 @@
                     }
                     if (this.distributions.ShowRelatedViewServices) {
                         relatedDistributionsLists.push({
-                            title: 'Visningstjenester',
+                            title: '@UI.DisplayServices',
                             selectedFields: this.$root.selectedFields,
                             selectedButtons: ["showInMapButton", "copyUrlButton"],
                             resultItems: this.convertDistributionList(this.distributions.RelatedViewServices)
@@ -514,7 +514,7 @@
                     }
                     if (this.distributions.ShowRelatedDownloadServices) {
                         relatedDistributionsLists.push({
-                            title: 'Nedlastingstjenester',
+                            title: '@UI.DownloadServices',
                             selectedFields: this.$root.selectedFields,
                             selectedButtons: ["copyUrlButton"],
                             resultItems: this.convertDistributionList(this.distributions.RelatedDownloadServices)
@@ -643,7 +643,7 @@
         });
 
 
-        $(window).load(function() {
+        document.addEventListener("DOMContentLoaded", function (event) {
             @if (Html.DownloadServiceEnabled())
             {
                 <text>

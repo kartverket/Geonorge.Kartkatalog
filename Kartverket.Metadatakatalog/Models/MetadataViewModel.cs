@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Routing;
 using Kartverket.Metadatakatalog.Models.Api;
+using Resources;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -128,6 +129,8 @@ namespace Kartverket.Metadatakatalog.Models
         public string ServiceLink { get; set; }
         public string DistributionUrl { get; set; }
         public Distributions Distributions { get; set; }
+
+        public string ServiceType { get; set; }
 
 
         public MetadataViewModel()
@@ -622,28 +625,28 @@ namespace Kartverket.Metadatakatalog.Models
 
             if (metadata.IsDataset())
             {
-                TitleSelf = "Filnedlasting";
-                TitleRelatedApplications = "Kartløsninger";
+                TitleSelf = UI.FileDownload;
+                TitleRelatedApplications = UI.MapServices;
             }
             if (metadata.IsService() || metadata.IsServiceLayer())
             {
                 if (type == "servicelayer")
                 {
-                    TitleSelf = "Tjenestelag";
-                    TitleRelatedDataset = "Datasett som tjenesten opererer på";
-                    TitleRelatedServices = "Tjenesten som laget inngår i";
+                    TitleSelf = UI.Facet_type_servicelayer;
+                    TitleRelatedDataset = UI.DatasetsServiceOperatesOn;
+                    TitleRelatedServices = UI.TitleRelatedServices;
                 }
                 else
                 {
-                    TitleSelf = "Tjenesten";
-                    TitleRelatedDataset = "Datasett tjenesten opererer på";
-                    TitleRelatedServiceLayer = "WMS-lag i tjenesten";
+                    TitleSelf = UI.TheService;
+                    TitleRelatedDataset = UI.DatasetsServiceOperatesOn;
+                    TitleRelatedServiceLayer = UI.TitleRelatedServiceLayer;
                 }
             }
             if (metadata.IsApplication())
             {
-                TitleSelf = "Kartløsning";
-                TitleRelatedDataset = "Datasett som vises i kartløsningen";
+                TitleSelf = UI.MapServices;
+                TitleRelatedDataset = UI.TitleRelatedDataset;
             }
 
             return this;

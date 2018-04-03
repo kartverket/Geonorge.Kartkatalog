@@ -272,6 +272,8 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.ServiceLink = metadata.ServiceUrl();
 
             metadata.CoverageUrl = metadata.GetCoverageLink();
+            if(simpleMetadata.IsService())
+                metadata.ServiceType = simpleMetadata.ServiceType;
 
             return metadata;
         }
@@ -314,6 +316,9 @@ namespace Kartverket.Metadatakatalog.Service
             if (simpleMetadata.Constraints != null)
                 distribution.ServiceDistributionAccessConstraint = simpleMetadata.Constraints.AccessConstraints;
             distribution.Protocol = Register.GetDistributionType(simpleMetadataDistribution.Protocol);
+
+            if (!string.IsNullOrEmpty(simpleMetadata.ParentIdentifier) && (distribution.Protocol == "WMS-tjeneste" || distribution.Protocol == "WMS service"))
+                distribution.Protocol = UI.Facet_type_servicelayer;
 
             //Vis kart
             if (SimpleMetadataUtil.ShowMapLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
