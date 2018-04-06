@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Optimization;
 
 namespace Kartverket.Metadatakatalog
@@ -43,7 +44,10 @@ namespace Kartverket.Metadatakatalog
             bundles.Add(new ScriptBundle("~/bundles/shopping-cart").Include(
                 "~/Scripts/shopping-cart.js"));
 
-            BundleTable.EnableOptimizations = false;
+            if (WebConfigurationManager.AppSettings["EnvironmentName"] == "dev")
+                BundleTable.EnableOptimizations = false;
+            else
+                BundleTable.EnableOptimizations = true;
         }
     }
 }
