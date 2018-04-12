@@ -75,7 +75,7 @@
 
                     if (this.resultItem.IsRestricted || this.resultItem.IsOffline) {
                         button.className += " add-to-cart-btn prevent-action";
-                        if (this.resultItem.IsRestricted && !authenticationData.isAuthenticated) {
+                        if (this.resultItem.IsRestricted && !searchOption.loggedIn) {
                                 @{
                                     string baseUrl = Request.Url.AbsoluteUri;
                                     baseUrl = baseUrl.Replace("http://", "https://");
