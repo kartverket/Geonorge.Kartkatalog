@@ -1,5 +1,6 @@
 ﻿﻿@using Kartverket.Metadatakatalog.Helpers
 @using Resources
+@using System.Web.Configuration;
 <!DOCTYPE html>
 <html class="js flexbox no-flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg no-smil svgclippaths">
 <head>
@@ -84,7 +85,7 @@
     }
 
     <script>
-        searchOption.loginUrl = '@Html.Raw(Url.Action("SignIn", "AuthServices", new { ReturnUrl = Request.Url }))';
+        searchOption.loginUrl = '@Html.Raw(Url.Action("SignIn", "AuthServices", new { ReturnUrl = Server.UrlEncode(WebConfigurationManager.AppSettings["DownloadUrl"]) + "%2FAuthServices%2FSignIn%3FReturnUrl%3D" + Request.Url }))';
         searchOption.logoutUrl = '@Html.Raw(Url.Action("SignOut", "AuthServices"))';
         searchOption.loggedIn = @Request.IsAuthenticated.ToString().ToLower();
         searchOption.epiBaseUrl = '@Html.GeonorgeUrl()';
