@@ -81,7 +81,14 @@ namespace Kartverket.Metadatakatalog.Service
 
         private void populateAreas()
         {
-            if (_areas == null || _areas.Count == 0)
+            MemoryCacher memCacher = new MemoryCacher();
+            var cache = memCacher.GetValue("areas");
+
+            if (cache != null)
+            {
+                _areas = cache as Dictionary<string, string>;
+            }
+            else
             {
                 _areas = new Dictionary<string, string>();
                 //call register fylker og kommuner
@@ -115,6 +122,7 @@ namespace Kartverket.Metadatakatalog.Service
                     }
                 }
 
+                memCacher.Add("areas", _areas, new DateTimeOffset(DateTime.Now.AddHours(12)));
             }
 
         }
