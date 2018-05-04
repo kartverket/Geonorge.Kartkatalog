@@ -3,7 +3,7 @@
 
 <script type="text/x-template" id="addToCartButtonTemplate">
     <div class="text-center">
-        <div v-if="resultItem.ShowDownloadService && (!resultItem.IsRestricted || 'authenticationData.isAuthenticated')" v-on:click="addToCart()" v-html="htmlElement"></div>
+        <div v-if="resultItem.ShowDownloadService && (!resultItem.IsRestricted || 'searchOption.loggedIn')" v-on:click="addToCart()" v-html="htmlElement"></div>
         <div v-else v-html="htmlElement"></div>
     </div>
 </script>
@@ -75,7 +75,7 @@
 
                     if (this.resultItem.IsRestricted || this.resultItem.IsOffline) {
                         button.className += " add-to-cart-btn prevent-action";
-                        if (this.resultItem.IsRestricted && !authenticationData.isAuthenticated) {
+                        if (this.resultItem.IsRestricted && !searchOption.loggedIn) {
                                 @{
                                     string baseUrl = Request.Url.AbsoluteUri;
                                     baseUrl = baseUrl.Replace("http://", "https://");
