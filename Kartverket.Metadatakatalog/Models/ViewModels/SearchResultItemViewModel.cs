@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Routing;
+using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
 {
@@ -153,16 +154,16 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 if (!string.IsNullOrWhiteSpace(item.ServiceDistributionProtocolForDataset) && item.ServiceDistributionProtocolForDataset.Contains(("OGC:WMS")))
                 {
                     if (!string.IsNullOrWhiteSpace(item.ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(item.ServiceDistributionUrlForDataset))
-                        ServiceUrl = "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]/+" + item.ServiceDistributionNameForDataset;
+                        ServiceUrl = $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/*/l/wms/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]/+" + item.ServiceDistributionNameForDataset;
                     else if (!string.IsNullOrWhiteSpace(item.ServiceDistributionUrlForDataset))
-                        ServiceUrl = "#5/355422/6668909/l/wms/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]";
+                        ServiceUrl = $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/l/wms/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]";
                 }
                 else if (!string.IsNullOrWhiteSpace(item.ServiceDistributionProtocolForDataset) && item.ServiceDistributionProtocolForDataset.Contains(("OGC:WFS")))
                 {
                     if (!string.IsNullOrWhiteSpace(item.ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(item.ServiceDistributionUrlForDataset))
-                        ServiceUrl = "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]/+" + item.ServiceDistributionNameForDataset;
+                        ServiceUrl = $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/*/l/wfs/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]/+" + item.ServiceDistributionNameForDataset;
                     else if (!string.IsNullOrWhiteSpace(item.DistributionUrl))
-                        ServiceUrl = "#5/355422/6668909/l/wfs/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]";
+                        ServiceUrl = $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/l/wfs/[" + RemoveQueryString(item.ServiceDistributionUrlForDataset) + "]";
                 }
 
             }
@@ -172,16 +173,16 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 if (!string.IsNullOrWhiteSpace(item.DistributionProtocol) && item.DistributionProtocol.Contains(("OGC:WMS")))
                 {
                     if (!string.IsNullOrWhiteSpace(item.DistributionName) && !string.IsNullOrWhiteSpace(item.DistributionUrl))
-                        DownloadUrl = "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(item.DistributionUrl) + "]/+" + item.DistributionName;
+                        DownloadUrl = $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/*/l/wms/[" + RemoveQueryString(item.DistributionUrl) + "]/+" + item.DistributionName;
                     else if (!string.IsNullOrWhiteSpace(item.DistributionUrl))
-                        DownloadUrl = "#5/355422/6668909/l/wms/[" + RemoveQueryString(item.DistributionUrl) + "]";
+                        DownloadUrl = $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/l/wms/[" + RemoveQueryString(item.DistributionUrl) + "]";
                 }
                 else if (!string.IsNullOrWhiteSpace(item.DistributionProtocol) && item.DistributionProtocol.Contains(("OGC:WFS")))
                 {
                     if (!string.IsNullOrWhiteSpace(item.DistributionName) && !string.IsNullOrWhiteSpace(item.DistributionUrl))
-                        DownloadUrl = "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(item.DistributionUrl) + "]/+" + item.DistributionName;
+                        DownloadUrl = $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/*/l/wfs/[" + RemoveQueryString(item.DistributionUrl) + "]/+" + item.DistributionName;
                     else if (!string.IsNullOrWhiteSpace(item.DistributionUrl))
-                        DownloadUrl = "#5/355422/6668909/l/wfs/[" + RemoveQueryString(item.DistributionUrl) + "]";
+                        DownloadUrl = $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/l/wfs/[" + RemoveQueryString(item.DistributionUrl) + "]";
                 }
             }
             else {

@@ -5,6 +5,10 @@ namespace Kartverket.Metadatakatalog.Service
 {
     public static class SimpleMetadataUtil
     {
+        public const string ZoomLevel = "3";
+        public const string Longitude = "306722";
+        public const string Latitude = "7197864";
+
         public static string ConvertHierarchyLevelToType(string hierarchyLevel)
         {
             var res = "default";
@@ -108,23 +112,23 @@ namespace Kartverket.Metadatakatalog.Service
                 if (!string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WMS")))
                 {
                     if (!string.IsNullOrWhiteSpace(name))
-                        return "#5/355422/6668909/*/l/wms/[" + RemoveQueryString(url) + "]/+" + name;
+                        return $"#{ZoomLevel}/{Longitude}/{Latitude}/*/l/wms/[" + RemoveQueryString(url) + "]/+" + name;
                     else
-                        return "#5/355422/6668909/l/wms/[" + RemoveQueryString(url) + "]";
+                        return $"#{ZoomLevel}/{Longitude}/{Latitude}/l/wms/[" + RemoveQueryString(url) + "]";
                 }
                 else if (!string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WFS")))
                 {
                     if (!string.IsNullOrWhiteSpace(name))
-                        return "#5/355422/6668909/*/l/wfs/[" + RemoveQueryString(url) + "]/+" + name;
+                        return $"#{ZoomLevel}/{Longitude}/{Latitude}/*/l/wfs/[" + RemoveQueryString(url) + "]/+" + name;
                     else
-                        return "#5/355422/6668909/l/wfs/[" + RemoveQueryString(url) + "]";
+                        return "#3/306722/7197864/l/wfs/[" + RemoveQueryString(url) + "]";
                 }
                 else if (!string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WCS")))
                 {
                     if (!string.IsNullOrWhiteSpace(name))
-                        return "#5/355422/6668909/*/l/wcs/[" + RemoveQueryString(url) + "]/+" + name;
+                        return $"#{ZoomLevel}/{Longitude}/{Latitude}/*/l/wcs/[" + RemoveQueryString(url) + "]/+" + name;
                     else
-                        return "#5/355422/6668909/l/wcs/[" + RemoveQueryString(url) + "]";
+                        return $"#{ZoomLevel}/{Longitude}/{Latitude}4/l/wcs/[" + RemoveQueryString(url) + "]";
                 }
 
                 else return "";
