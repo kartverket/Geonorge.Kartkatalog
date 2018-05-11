@@ -158,64 +158,70 @@
 
                 var button = this.button;
 
-                var isAdded = this.getCartButtonStatus();
+                var hasAccess = true;
+                if (this.resultItem.IsRestricted && !searchOption.loggedIn)
+                    hasAccess = false;
 
-                if (!isAdded) {
+                    if (hasAccess)
+                    {
+                        var isAdded = this.getCartButtonStatus();
+                        if (!isAdded) {
 
-                    orderItems.push(item.uuid);
-                    localStorage["orderItems"] = JSON.stringify(orderItems);
-                    localStorage[item.uuid + ".metadata"] = JSON.stringify(item);
-                    clearAlertMessage();
-                    showAlert(item.name + ' @Html.Raw(UI.IsAddedTo) <a href="/nedlasting">@Html.Raw(UI.TheBasket)</a>', 'success');
+                            orderItems.push(item.uuid);
+                            localStorage["orderItems"] = JSON.stringify(orderItems);
+                            localStorage[item.uuid + ".metadata"] = JSON.stringify(item);
+                            clearAlertMessage();
+                            showAlert(item.name + ' @Html.Raw(UI.IsAddedTo) <a href="/nedlasting">@Html.Raw(UI.TheBasket)</a>', 'success');
 
-                    var orderItemCount = $('#orderitem-count').text();
-                    if (orderItemCount == null || orderItemCount == '') {
-                        orderItemCount = 0;
-                        $('#orderitem-count-text').text(' datasett');
-                    } else {
-                        orderItemCount = parseInt($('#orderitem-count').text());
-                    }
-                    orderItemCount += 1;
-                    $('#orderitem-count').text(orderItemCount);
-                    updateShoppingCart();
-                    if (button.showContent) {
-                        button.content = "@UI.AddedToBasket";
-                    }
-                    button.title = "@UI.AlreadyPutInBasket";
-                    $(".add-to-cart-btn-" + this.resultItem.Uuid).addClass("added");
-                    $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "@UI.AlreadyPutInBasket");
+                            var orderItemCount = $('#orderitem-count').text();
+                            if (orderItemCount == null || orderItemCount == '') {
+                                orderItemCount = 0;
+                                $('#orderitem-count-text').text(' datasett');
+                            } else {
+                                orderItemCount = parseInt($('#orderitem-count').text());
+                            }
+                            orderItemCount += 1;
+                            $('#orderitem-count').text(orderItemCount);
+                            updateShoppingCart();
+                            if (button.showContent) {
+                                button.content = "@UI.AddedToBasket";
+                            }
+                            button.title = "@UI.AlreadyPutInBasket";
+                            $(".add-to-cart-btn-" + this.resultItem.Uuid).addClass("added");
+                            $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "@UI.AlreadyPutInBasket");
 
-                    // Add preselected area
-                    var areaCodeUrlParameter = getURLParameter('AreaCode');
-                    if (areaCodeUrlParameter) {
-                        var preSelectedAreas = localStorage.getItem('preSelectedAreas') !== null ? JSON.parse(localStorage.getItem('preSelectedAreas')) : {};
-                        var lastSlashIndex = areaCodeUrlParameter.lastIndexOf('/');
-                        var areaCode = areaCodeUrlParameter.substring(lastSlashIndex + 1);
-                        var areaType = areaCode.length == 2 ? 'fylke' : 'kommune';
-                        preSelectedAreas[this.resultItem.Uuid] = {
-                            type: areaType,
-                            code: areaCode
-                        };
-                        localStorage.setItem('preSelectedAreas', JSON.stringify(preSelectedAreas));
-                    }
-                } else {
-                    var index = orderItems.indexOf(item.uuid);
-                    if (index > -1) {
-                        orderItems.splice(index, 1);
-                    }
-                    localStorage.removeItem(item.uuid + ".metadata");
-                    localStorage["orderItems"] = JSON.stringify(orderItems);
+                            // Add preselected area
+                            var areaCodeUrlParameter = getURLParameter('AreaCode');
+                            if (areaCodeUrlParameter) {
+                                var preSelectedAreas = localStorage.getItem('preSelectedAreas') !== null ? JSON.parse(localStorage.getItem('preSelectedAreas')) : {};
+                                var lastSlashIndex = areaCodeUrlParameter.lastIndexOf('/');
+                                var areaCode = areaCodeUrlParameter.substring(lastSlashIndex + 1);
+                                var areaType = areaCode.length == 2 ? 'fylke' : 'kommune';
+                                preSelectedAreas[this.resultItem.Uuid] = {
+                                    type: areaType,
+                                    code: areaCode
+                                };
+                                localStorage.setItem('preSelectedAreas', JSON.stringify(preSelectedAreas));
+                            }
+                        } else {
+                            var index = orderItems.indexOf(item.uuid);
+                            if (index > -1) {
+                                orderItems.splice(index, 1);
+                            }
+                            localStorage.removeItem(item.uuid + ".metadata");
+                            localStorage["orderItems"] = JSON.stringify(orderItems);
 
-                    updateShoppingCart();
-                    clearAlertMessage();
-                    showAlert(item.name + ' @Html.Raw(UI.IsRemovedFrom) <a href="/nedlasting">@Html.Raw(UI.TheBasket)</a>', 'warning');
-                    if (button.showContent) {
-                        button.content = "@Html.Raw(UI.AddToBasket)";
+                            updateShoppingCart();
+                            clearAlertMessage();
+                            showAlert(item.name + ' @Html.Raw(UI.IsRemovedFrom) <a href="/nedlasting">@Html.Raw(UI.TheBasket)</a>', 'warning');
+                            if (button.showContent) {
+                                button.content = "@Html.Raw(UI.AddToBasket)";
+                            }
+                            this.button.title = "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)";
+                            $(".add-to-cart-btn-" + this.resultItem.Uuid).removeClass("added");
+                            $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)");
+                        }
                     }
-                    this.button.title = "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)";
-                    $(".add-to-cart-btn-" + this.resultItem.Uuid).removeClass("added");
-                    $(".add-to-cart-btn-" + this.resultItem.Uuid).attr("data-original-title", "@Html.Raw(UI.Add) " + this.resultItem.Title + " @Html.Raw(UI.ToBasket)");
-                }
             }
         }
     };
