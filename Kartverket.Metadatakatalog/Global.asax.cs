@@ -100,10 +100,7 @@ namespace Kartverket.Metadatakatalog
                 var returnUrl = queryString.Get("returnUrl");
                 if (!string.IsNullOrEmpty(returnUrl))
                 {
-                    returnUrl = returnUrl.Replace("http://", "");
-                    returnUrl = returnUrl.Replace("https://", "");
-
-                    if (!returnUrl.StartsWith(Request.Url.Host))
+                    if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]))
                         HttpContext.Current.Response.StatusCode = 400;
                 }
             }
