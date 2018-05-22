@@ -100,7 +100,8 @@ namespace Kartverket.Metadatakatalog
                 var returnUrl = queryString.Get("returnUrl");
                 if (!string.IsNullOrEmpty(returnUrl))
                 {
-                    if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]))
+                    if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]) 
+                        && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["GeonorgeUrl"]))
                         HttpContext.Current.Response.StatusCode = 400;
                 }
             }
