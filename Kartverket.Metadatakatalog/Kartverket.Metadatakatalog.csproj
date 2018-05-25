@@ -17,9 +17,12 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44311</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
@@ -472,6 +475,12 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\dekningskart.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\den-norske-loeve.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\dok.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\download-cloud-added.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\download-cloud-disabled-added.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\download-cloud-disabled.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\download-cloud-white-added.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\download-cloud-white.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\download-cloud.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\eksternlink-disabled.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\eksternlink-white.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\eksternlink.svg" />
@@ -526,7 +535,9 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\lastned-white.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\lastned.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\lukk_968c83_50px-01-01.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\metadata-i-soketjeneste.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\metadatatjeneste.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\netverkstjeneste.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\norge-digitalt.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\open_fe5000_50px-01.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\produktark.svg" />
@@ -547,7 +558,9 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\smile-yellow.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\soek.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\sosi.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\spatialdataservice.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\tick_fe5000_16px.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\tjenestestatus.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\totop_3867c8_75px-01.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\warning.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\wfs.svg" />
@@ -1103,6 +1116,10 @@
     <Content Include="dist\maps\main.js.map" />
     <Content Include="dist\maps\vendor.css.map" />
     <Content Include="dist\maps\vendor.js.map" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\.bower.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\702ZOKiLJc3WVjuplzInF5uFdDttMLvmWuJdhhgs.ttf" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.eot" />
@@ -1132,10 +1149,6 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\package-lock.json" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\README.md" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\yarn.lock" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
