@@ -19,6 +19,7 @@ using Castle.Windsor;
 using Castle.Facilities.SolrNetIntegration;
 using Kartverket.Metadatakatalog.Service;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -97,8 +98,6 @@ namespace Kartverket.Metadatakatalog
         {
             try
             {
-                log.Info("Setting _loggedIn cookie");
-
                 //set logged in cookie for menu
                 bool loggedIn;
                 if (Request.IsAuthenticated)
@@ -117,10 +116,10 @@ namespace Kartverket.Metadatakatalog
                     loggedInCookie = new HttpCookie("_loggedIn", loggedIn.ToString().ToLower());
                     if (!Request.IsLocal)
                         loggedInCookie.Domain = ".geonorge.no";
-                    HttpContext.Current.Response.Cookies.Add(loggedInCookie);
-                }
 
-                log.Info("Finished setting _loggedIn cookie");
+                    if(!HttpContext.Current.Response.Cookies.AllKeys.Contains("_loggedIn"))
+                        HttpContext.Current.Response.Cookies.Add(loggedInCookie);
+                }
             }
 
             catch(Exception ex)
