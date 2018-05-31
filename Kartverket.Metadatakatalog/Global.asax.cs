@@ -97,6 +97,8 @@ namespace Kartverket.Metadatakatalog
         {
             try
             {
+                log.Info("Setting _loggedIn cookie");
+
                 //set logged in cookie for menu
                 bool loggedIn;
                 if (Request.IsAuthenticated)
@@ -117,6 +119,8 @@ namespace Kartverket.Metadatakatalog
                         loggedInCookie.Domain = ".geonorge.no";
                     HttpContext.Current.Response.Cookies.Add(loggedInCookie);
                 }
+
+                log.Info("Finished setting _loggedIn cookie");
             }
 
             catch(Exception ex)
