@@ -19,6 +19,7 @@ using Castle.Windsor;
 using Castle.Facilities.SolrNetIntegration;
 using Kartverket.Metadatakatalog.Service;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -93,6 +94,41 @@ namespace Kartverket.Metadatakatalog
             }
         }
 
+        protected void Application_EndRequest()
+        {
+            try
+            {
+                //set logged in cookie for menu
+                bool loggedIn;
+                if (Request.IsAuthenticated)
+                    loggedIn = true;
+                else
+                    loggedIn = false;
+
+                var loggedInCookie = Context.Request.Cookies["_loggedIn"];
+                if (loggedInCookie != null)
+                {
+                    loggedInCookie.Value = loggedIn.ToString().ToLower();
+                    HttpContext.Current.Response.Cookies.Set(loggedInCookie);
+                }
+                else
+                {
+                    loggedInCookie = new HttpCookie("_loggedIn", loggedIn.ToString().ToLower());
+                    if (!Request.IsLocal)
+                        loggedInCookie.Domain = ".geonorge.no";
+
+                    if(!HttpContext.Current.Response.Cookies.AllKeys.Contains("_loggedIn"))
+                        HttpContext.Current.Response.Cookies.Add(loggedInCookie);
+                }
+            }
+
+            catch(Exception ex)
+            {
+                log.Error(ex);
+            }
+        }
+
+
         void ValidateReturnUrl(NameValueCollection queryString)
         {
             if (queryString != null)
@@ -100,7 +136,8 @@ namespace Kartverket.Metadatakatalog
                 var returnUrl = queryString.Get("returnUrl");
                 if (!string.IsNullOrEmpty(returnUrl))
                 {
-                    if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]))
+                    if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]) 
+                        && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["GeonorgeUrl"]))
                         HttpContext.Current.Response.StatusCode = 400;
                 }
             }
