@@ -8,6 +8,13 @@ namespace Kartverket.Metadatakatalog.Service
         public const string ZoomLevel = "3";
         public const string Longitude = "306722";
         public const string Latitude = "7197864";
+        public const string OgcWms = "OGC:WMS";
+        public const string OgcWfs = "OGC:WFS";
+        public const string OgcWcs = "OGC:WCS";
+        public const string OgcCsw = "OGC:CSW";
+        public const string Wms = "wms";
+        public const string Wfs = "wfs";
+        public const string Wcs = "wcs";
 
         public static string ConvertHierarchyLevelToType(string hierarchyLevel)
         {
@@ -105,35 +112,47 @@ namespace Kartverket.Metadatakatalog.Service
             return !string.IsNullOrWhiteSpace(simpleMetadataDistribution?.URL) && !string.IsNullOrWhiteSpace(simpleMetadataDistribution.Protocol) && (simpleMetadataDistribution.Protocol.Contains("WWW:DOWNLOAD") || simpleMetadataDistribution.Protocol.Contains("GEONORGE:FILEDOWNLOAD")) && (hierarchyLevel == "dataset" || hierarchyLevel == "series");
         }
 
-        public static string MapUrl(string url, string hierarchyLevel, string protocol, string name)
+        // @TODO doNotCheckHierarchyLevel: check if multiple different methods are really necessary to check hierarchy level in this class and MetadataViewModel.
+        public static string MapUrl(string url, string hierarchyLevel, string protocol, string name, bool doNotCheckHierarchyLevel = false)
         {
-            if (hierarchyLevel == "service" || hierarchyLevel == "servicelayer")
+            string mappedUrl = "";
+
+            if (AreUrlParamsValid(url, hierarchyLevel, protocol, doNotCheckHierarchyLevel))
             {
-                if (!string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WMS")))
+                string urlWithoutQueryString = RemoveQueryString(url);
+                string commonPart = $"#{ZoomLevel}/{Longitude}/{Latitude}/";
+                string protocolName = null;
+
+                if (protocol.Contains(OgcWms))
                 {
-                    if (!string.IsNullOrWhiteSpace(name))
-                        return $"#{ZoomLevel}/{Longitude}/{Latitude}/*/l/wms/[" + RemoveQueryString(url) + "]/+" + name;
-                    else
-                        return $"#{ZoomLevel}/{Longitude}/{Latitude}/l/wms/[" + RemoveQueryString(url) + "]";
+                    protocolName = Wms;
                 }
-                else if (!string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WFS")))
+                else if (protocol.Contains(OgcWfs))
                 {
-                    if (!string.IsNullOrWhiteSpace(name))
-                        return $"#{ZoomLevel}/{Longitude}/{Latitude}/*/l/wfs/[" + RemoveQueryString(url) + "]/+" + name;
-                    else
-                        return "#3/306722/7197864/l/wfs/[" + RemoveQueryString(url) + "]";
+                    protocolName = OgcWfs;
                 }
-                else if (!string.IsNullOrWhiteSpace(url) && !string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WCS")))
+                else if (protocol.Contains(OgcWcs))
                 {
-                    if (!string.IsNullOrWhiteSpace(name))
-                        return $"#{ZoomLevel}/{Longitude}/{Latitude}/*/l/wcs/[" + RemoveQueryString(url) + "]/+" + name;
-                    else
-                        return $"#{ZoomLevel}/{Longitude}/{Latitude}4/l/wcs/[" + RemoveQueryString(url) + "]";
+                    protocolName = OgcWcs;
                 }
 
-                else return "";
+                if (protocolName != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(name))
+                        mappedUrl = $"{commonPart}*/l/{Wms}/[{urlWithoutQueryString}]/+{name}";
+                    else
+                        mappedUrl = $"{commonPart}/l/{Wms}/[{urlWithoutQueryString}]";
+                }
             }
-            else return "";
+            return mappedUrl;
+        }
+
+        private static bool AreUrlParamsValid(string url, string hierarchyLevel, string protocol, bool doNotCheckHierarchyLevel)
+        {
+            return
+                (doNotCheckHierarchyLevel || hierarchyLevel == "service" || hierarchyLevel == "servicelayer")
+                && !string.IsNullOrWhiteSpace(url)
+                && !string.IsNullOrWhiteSpace(protocol);
         }
 
         private static string RemoveQueryString(string url)
