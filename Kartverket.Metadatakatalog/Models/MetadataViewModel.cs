@@ -161,12 +161,12 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 if (DistributionDetails != null)
                 {
-                    mappedUrl = SimpleMetadataUtil.MapUrl(DistributionDetails.URL, HierarchyLevel, DistributionDetails.Protocol, DistributionDetails.Name, true);
+                    mappedUrl = norgeskartUrl + SimpleMetadataUtil.MapUrl(DistributionDetails.URL, HierarchyLevel, DistributionDetails.Protocol, DistributionDetails.Name, true);
                 }
             }
             else if (IsDataset())
             {
-                return WebConfigurationManager.AppSettings["NorgeskartUrl"] + ServiceUrl() + "/";
+                return norgeskartUrl + ServiceUrl() + "/";
             }
             return mappedUrl;
         }

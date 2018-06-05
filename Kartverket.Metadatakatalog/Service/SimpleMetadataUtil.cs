@@ -141,7 +141,7 @@ namespace Kartverket.Metadatakatalog.Service
                     if (!string.IsNullOrWhiteSpace(name))
                         mappedUrl = $"{commonPart}*/l/{Wms}/[{urlWithoutQueryString}]/+{name}";
                     else
-                        mappedUrl = $"{commonPart}/l/{Wms}/[{urlWithoutQueryString}]";
+                        mappedUrl = $"{commonPart}l/{Wms}/[{urlWithoutQueryString}]";
                 }
             }
             return mappedUrl;
