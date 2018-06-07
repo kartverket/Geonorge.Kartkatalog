@@ -137,7 +137,8 @@ namespace Kartverket.Metadatakatalog
                 if (!string.IsNullOrEmpty(returnUrl))
                 {
                     if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]) 
-                        && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["GeonorgeUrl"]))
+                        && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["GeonorgeUrl"])
+                        && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["KartkatalogenUrl"]))
                         HttpContext.Current.Response.StatusCode = 400;
                 }
             }
