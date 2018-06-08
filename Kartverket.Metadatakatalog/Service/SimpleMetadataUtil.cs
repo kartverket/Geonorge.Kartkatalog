@@ -1,5 +1,7 @@
 ﻿using GeoNorgeAPI;
 using System;
+using System.Text;
+using System.Web.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -15,6 +17,8 @@ namespace Kartverket.Metadatakatalog.Service
         public const string Wms = "wms";
         public const string Wfs = "wfs";
         public const string Wcs = "wcs";
+
+        public static readonly string NorgeskartUrl = WebConfigurationManager.AppSettings["NorgeskartUrl"];
 
         public static string ConvertHierarchyLevelToType(string hierarchyLevel)
         {
@@ -115,12 +119,10 @@ namespace Kartverket.Metadatakatalog.Service
         // @TODO doNotCheckHierarchyLevel: check if multiple different methods are really necessary to check hierarchy level in this class and MetadataViewModel.
         public static string MapUrl(string url, string hierarchyLevel, string protocol, string name, bool doNotCheckHierarchyLevel = false)
         {
-            string mappedUrl = "";
+            StringBuilder mappedUrl = new StringBuilder();
 
             if (AreUrlParamsValid(url, hierarchyLevel, protocol, doNotCheckHierarchyLevel))
             {
-                string urlWithoutQueryString = RemoveQueryString(url);
-                string commonPart = $"#{ZoomLevel}/{Longitude}/{Latitude}/";
                 string protocolName = null;
 
                 if (protocol.Contains(OgcWms))
@@ -129,22 +131,43 @@ namespace Kartverket.Metadatakatalog.Service
                 }
                 else if (protocol.Contains(OgcWfs))
                 {
-                    protocolName = OgcWfs;
+                    protocolName = Wfs;
                 }
                 else if (protocol.Contains(OgcWcs))
                 {
-                    protocolName = OgcWcs;
+                    protocolName = Wcs;
                 }
 
                 if (protocolName != null)
                 {
-                    if (!string.IsNullOrWhiteSpace(name))
-                        mappedUrl = $"{commonPart}*/l/{Wms}/[{urlWithoutQueryString}]/+{name}";
-                    else
-                        mappedUrl = $"{commonPart}l/{Wms}/[{urlWithoutQueryString}]";
+                    string commonPart = GetCommonPartOfNorgeskartUrl(protocolName);
+                    string urlWithoutQueryString = RemoveQueryString(url);
+
+                    if (!String.IsNullOrWhiteSpace(commonPart) && !String.IsNullOrWhiteSpace(urlWithoutQueryString))
+                    {
+                        mappedUrl.Append($"{commonPart}{urlWithoutQueryString}");
+
+                        if (!string.IsNullOrWhiteSpace(name))
+                        {
+                            mappedUrl.Append($"&addLayers={name}");
+                        }
+                    }
                 }
             }
-            return mappedUrl;
+            return mappedUrl.ToString();
+        }
+
+        public static string GetCommonPartOfNorgeskartUrl(string protocol, bool relativePath = false)
+        {
+            StringBuilder url = new StringBuilder();
+
+            if (!relativePath)
+            {
+                url.Append(NorgeskartUrl);
+            }
+            url.Append($"#!?zoom={ZoomLevel}&lon={Longitude}&lat={Latitude}&{protocol}=");
+
+            return url.ToString();
         }
 
         private static bool AreUrlParamsValid(string url, string hierarchyLevel, string protocol, bool doNotCheckHierarchyLevel)
