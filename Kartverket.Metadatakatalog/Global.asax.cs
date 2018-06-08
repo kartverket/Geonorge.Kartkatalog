@@ -134,6 +134,10 @@ namespace Kartverket.Metadatakatalog
             if (queryString != null)
             {
                 var returnUrl = queryString.Get("returnUrl");
+
+                if (!returnUrl.StartsWith("https://"))
+                    returnUrl = returnUrl.Replace("http://", "https://");
+
                 if (!string.IsNullOrEmpty(returnUrl))
                 {
                     if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]) 
