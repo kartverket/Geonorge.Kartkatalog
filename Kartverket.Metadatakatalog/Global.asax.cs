@@ -135,11 +135,11 @@ namespace Kartverket.Metadatakatalog
             {
                 var returnUrl = queryString.Get("returnUrl");
 
-                if (!returnUrl.StartsWith("https://"))
-                    returnUrl = returnUrl.Replace("http://", "https://");
-
                 if (!string.IsNullOrEmpty(returnUrl))
                 {
+                    if (!returnUrl.StartsWith("https://"))
+                        returnUrl = returnUrl.Replace("http://", "https://");
+
                     if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]) 
                         && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["GeonorgeUrl"])
                         && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["KartkatalogenUrl"]))
