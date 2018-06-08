@@ -134,10 +134,15 @@ namespace Kartverket.Metadatakatalog
             if (queryString != null)
             {
                 var returnUrl = queryString.Get("returnUrl");
+
                 if (!string.IsNullOrEmpty(returnUrl))
                 {
+                    if (!returnUrl.StartsWith("https://"))
+                        returnUrl = returnUrl.Replace("http://", "https://");
+
                     if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]) 
-                        && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["GeonorgeUrl"]))
+                        && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["GeonorgeUrl"])
+                        && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["KartkatalogenUrl"]))
                         HttpContext.Current.Response.StatusCode = 400;
                 }
             }
