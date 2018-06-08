@@ -1329,6 +1329,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vi trenger eposten din for å kunne sende deg link når pakken er klar.
+        /// </summary>
+        public static string PrivacyEmailRequiredBundling {
+            get {
+                return ResourceManager.GetString("PrivacyEmailRequiredBundling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vi trenger eposten din for å kunne sende deg link til datasettet når det er ferdig klippet.
+        /// </summary>
+        public static string PrivacyEmailRequiredCropping {
+            get {
+                return ResourceManager.GetString("PrivacyEmailRequiredCropping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Prosesshistorie.
         /// </summary>
         public static string ProcessHistory {

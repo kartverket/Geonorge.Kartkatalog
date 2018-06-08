@@ -1738,6 +1738,16 @@
               Looks up a localized string similar to Tilkyttet tema.
             </summary>
         </member>
+        <member name="P:Resources.UI.PrivacyEmailRequiredBundling">
+            <summary>
+              Looks up a localized string similar to Vi trenger eposten din for å kunne sende deg link når pakken er klar.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.PrivacyEmailRequiredCropping">
+            <summary>
+              Looks up a localized string similar to Vi trenger eposten din for å kunne sende deg link til datasettet når det er ferdig klippet.
+            </summary>
+        </member>
         <member name="P:Resources.UI.ProcessHistory">
             <summary>
               Looks up a localized string similar to Prosesshistorie.
