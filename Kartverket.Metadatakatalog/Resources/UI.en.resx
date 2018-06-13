@@ -744,4 +744,7 @@
   <data name="PrivacyEmailRequiredCropping" xml:space="preserve">
     <value>We need your email to send you a link to the dataset when it's cropped</value>
   </data>
+  <data name="NotEvaluated" xml:space="preserve">
+    <value>Not evaluated</value>
+  </data>
 </root>

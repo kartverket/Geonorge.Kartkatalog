@@ -744,4 +744,7 @@
   <data name="PrivacyEmailRequiredCropping" xml:space="preserve">
     <value>Vi trenger eposten din for å kunne sende deg link til datasettet når det er ferdig klippet</value>
   </data>
+  <data name="NotEvaluated" xml:space="preserve">
+    <value>Ikke vurdert</value>
+  </data>
 </root>

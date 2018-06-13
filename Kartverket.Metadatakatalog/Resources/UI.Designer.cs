@@ -1230,6 +1230,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ikke vurdert.
+        /// </summary>
+        public static string NotEvaluated {
+            get {
+                return ResourceManager.GetString("NotEvaluated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vi finner ikke siden du leter etter, men Geonorge skal hjelpe deg videre..
         /// </summary>
         public static string NotFoundText {

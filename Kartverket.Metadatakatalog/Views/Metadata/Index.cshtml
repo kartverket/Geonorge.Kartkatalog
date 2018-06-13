@@ -286,7 +286,7 @@
                             <p>
                                 <strong>@UI.QualitySpecificationExplanation: </strong>@Model.QualitySpecifications[s].Explanation
                             </p>
-                            <p> @(Model.QualitySpecifications[s].Result ? UI.Approved : UI.NotApproved) </p>
+                            <p> @(Model.QualitySpecifications[s].Result == null ? UI.NotEvaluated : (Model.QualitySpecifications[s].Result.Value == true ? UI.Approved : UI.NotApproved)) </p>
                             if (Model.QualitySpecifications.Count > 1 && s != Model.QualitySpecifications.Count - 1)
                             {
                                 <hr />

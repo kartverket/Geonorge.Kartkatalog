@@ -34,16 +34,16 @@ namespace Kartverket.Metadatakatalog.Controllers
         public ActionResult Index(string uuid, string organization = null, string title = null, string orderby = "title")
         {
             MetadataViewModel model = null;
-            try
-            {
+            //try
+            //{
                 model = _metadataService.GetMetadataViewModelByUuid(uuid);
                 model = Sort(model, orderby);
-            }
-            catch (InvalidOperationException exception)
-            {
-                Log.Error("Metadata with uuid: " + uuid + " not found in Geonetwork.", exception);
-                //throw new Exception("Metadata with uuid: " + uuid + " not found in Geonetwork.");
-            }
+            //}
+            //catch (InvalidOperationException exception)
+            //{
+            //    Log.Error("Metadata with uuid: " + uuid + " not found in Geonetwork.", exception);
+            //    //throw new Exception("Metadata with uuid: " + uuid + " not found in Geonetwork.");
+            //}
             if (model == null)
             {
                 Log.Error("Metadata with uuid: " + uuid + " not found.");

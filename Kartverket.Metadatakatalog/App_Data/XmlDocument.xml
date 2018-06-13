@@ -1683,6 +1683,11 @@
               Looks up a localized string similar to Ikke godkjent.
             </summary>
         </member>
+        <member name="P:Resources.UI.NotEvaluated">
+            <summary>
+              Looks up a localized string similar to Ikke vurdert.
+            </summary>
+        </member>
         <member name="P:Resources.UI.NotFoundText">
             <summary>
               Looks up a localized string similar to Vi finner ikke siden du leter etter, men Geonorge skal hjelpe deg videre..

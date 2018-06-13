@@ -825,7 +825,7 @@ namespace Kartverket.Metadatakatalog.Service
                         //Date = simpleQualitySpecification.Date,
                         DateType = spec.DateType,
                         Explanation = GetTranslation(spec.Explanation, spec.EnglishExplanation),
-                        Result = spec.Result
+                        Result = spec.Result ?? null
                     }
                     );
                 }

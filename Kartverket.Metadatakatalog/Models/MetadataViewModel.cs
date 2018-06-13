@@ -758,7 +758,7 @@ namespace Kartverket.Metadatakatalog.Models
         public DateTime? Date { get; set; }
         public string DateType { get; set; }
         public string Explanation { get; set; }
-        public bool Result { get; set; }
+        public bool? Result { get; set; }
         public string Title { get; set; }
     }
 
