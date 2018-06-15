@@ -224,16 +224,15 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         private string GetMapUrl()
         {
-            var norgeskartUrl = WebConfigurationManager.AppSettings["NorgeskartUrl"];
             if (ShowMaplink())
             {
                 ShowMapLink = true;
-                return norgeskartUrl + DownloadUrl + "/";
+                return SimpleMetadataUtil.NorgeskartUrl + DownloadUrl;
             }
             if (ShowServiceMaplink())
             {
                 ShowServiceMapLink = true; 
-                return norgeskartUrl + ServiceUrl + "/";
+                return SimpleMetadataUtil.NorgeskartUrl + ServiceUrl;
             }
             return "";
         }
