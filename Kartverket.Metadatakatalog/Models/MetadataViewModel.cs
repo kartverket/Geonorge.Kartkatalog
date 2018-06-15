@@ -359,24 +359,21 @@ namespace Kartverket.Metadatakatalog.Models
                     var endLayer = coverageStr.Length - startLayer;
                     var layerStr = coverageStr.Substring(startLayer, endLayer);
 
-                    int zoomLevel = ZoomLevel();
+                    string commonPart = $"{SimpleMetadataUtil.NorgeskartUrl}#!?zoom={ZoomLevel()}&";
 
                     if (typeStr == "WMS")
                     {
-                        CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel +
-                                       "/269663/6802350/l/wms/[" + pathStr + "]/+" + layerStr;
+                        CoverageLink = $"{commonPart}&lat=269663&long=6802350&wms={pathStr}&addLayer={layerStr}";
                     }
 
                     else if (typeStr == "WFS")
                     {
-                        CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel +
-                                       "/255216/6653881/l/wfs/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                        CoverageLink = $"{commonPart}&lat=255216&long=6653881&wfs={RemoveQueryString(pathStr)}&addLayer={layerStr}";
                     }
 
                     else if (typeStr == "GeoJSON")
                     {
-                        CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel +
-                                       "/355422/6668909/l/geojson/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                        CoverageLink = $"{commonPart}&lat=355422&long=6668909&geojson={RemoveQueryString(pathStr)}&addLayer={layerStr}";
                     }
 
                     return CoverageLink;

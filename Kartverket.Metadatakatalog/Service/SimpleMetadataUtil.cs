@@ -123,34 +123,16 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (AreUrlParamsValid(url, hierarchyLevel, protocol, doNotCheckHierarchyLevel))
             {
-                string protocolName = null;
+                string commonPart = GetCommonPartOfNorgeskartUrl(protocol);
+                string urlWithoutQueryString = RemoveQueryString(url);
 
-                if (protocol.Contains(OgcWms))
+                if (!String.IsNullOrWhiteSpace(commonPart) && !String.IsNullOrWhiteSpace(urlWithoutQueryString))
                 {
-                    protocolName = Wms;
-                }
-                else if (protocol.Contains(OgcWfs))
-                {
-                    protocolName = Wfs;
-                }
-                else if (protocol.Contains(OgcWcs))
-                {
-                    protocolName = Wcs;
-                }
+                    mappedUrl.Append($"{commonPart}{urlWithoutQueryString}");
 
-                if (protocolName != null)
-                {
-                    string commonPart = GetCommonPartOfNorgeskartUrl(protocolName);
-                    string urlWithoutQueryString = RemoveQueryString(url);
-
-                    if (!String.IsNullOrWhiteSpace(commonPart) && !String.IsNullOrWhiteSpace(urlWithoutQueryString))
+                    if (!string.IsNullOrWhiteSpace(name))
                     {
-                        mappedUrl.Append($"{commonPart}{urlWithoutQueryString}");
-
-                        if (!string.IsNullOrWhiteSpace(name))
-                        {
-                            mappedUrl.Append($"&addLayers={name}");
-                        }
+                        mappedUrl.Append($"&addLayers={name}");
                     }
                 }
             }
@@ -160,13 +142,29 @@ namespace Kartverket.Metadatakatalog.Service
         public static string GetCommonPartOfNorgeskartUrl(string protocol, bool relativePath = false)
         {
             StringBuilder url = new StringBuilder();
+            string protocolName = null;
 
-            if (!relativePath)
+            if (protocol.Contains(OgcWms))
             {
-                url.Append(NorgeskartUrl);
+                protocolName = Wms;
             }
-            url.Append($"#!?zoom={ZoomLevel}&lon={Longitude}&lat={Latitude}&{protocol}=");
+            else if (protocol.Contains(OgcWfs))
+            {
+                protocolName = Wfs;
+            }
+            else if (protocol.Contains(OgcWcs))
+            {
+                protocolName = Wcs;
+            }
 
+            if (protocolName != null)
+            {
+                if (!relativePath)
+                {
+                    url.Append(NorgeskartUrl);
+                }
+                url.Append($"#!?zoom={ZoomLevel}&lon={Longitude}&lat={Latitude}&{protocolName}=");
+            }
             return url.ToString();
         }
 
