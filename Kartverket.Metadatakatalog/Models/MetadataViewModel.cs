@@ -400,20 +400,24 @@ namespace Kartverket.Metadatakatalog.Models
                 var endLayer = coverageStr.Length - startLayer;
                 var layerStr = coverageStr.Substring(startLayer, endLayer);
 
-
                 if (typeStr == "WMS")
                 {
-                    CoverageParams = "#4/355422/6668909/l/wms/[" + pathStr + "]/+" + layerStr;
+                    CoverageParams = $"#!?zoom=4&lat=355422&long=6668909&wms={pathStr}";
                 }
 
                 else if (typeStr == "WFS")
                 {
-                    CoverageParams = "#5/255216/6653881/l/wfs/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                    CoverageParams = $"#!?zoom=5&lat=255216&long=6653881&wfs={RemoveQueryString(pathStr)}";
                 }
 
                 else if (typeStr == "GeoJSON")
                 {
-                    CoverageParams = "#5/355422/6668909/l/geojson/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                    CoverageParams = $"#!?zoom=5&lat=355422&long=6668909&geojson={RemoveQueryString(pathStr)}";
+                }
+
+                if (!string.IsNullOrWhiteSpace(layerStr))
+                {
+                    CoverageParams += $"&addLayers={layerStr}";
                 }
             }
 
