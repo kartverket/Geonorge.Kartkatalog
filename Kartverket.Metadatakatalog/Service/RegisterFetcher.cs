@@ -74,6 +74,8 @@ namespace Kartverket.Metadatakatalog.Service
             if (Organizations.Count < 1)
             {
                 _webClient.Encoding = System.Text.Encoding.UTF8;
+                _webClient.Headers.Remove("Accept-Language");
+                _webClient.Headers.Add("Accept-Language", Culture.NorwegianCode);
                 var data = _webClient.DownloadString(System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner");
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
 
