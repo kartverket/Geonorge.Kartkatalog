@@ -88,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lagt i kurv.
+        ///   Looks up a localized string similar to Lagt til nedlasting.
         /// </summary>
         public static string AddedToBasket {
             get {
@@ -97,7 +97,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Legg i kurv.
+        ///   Looks up a localized string similar to Legg til nedlasting.
         /// </summary>
         public static string AddToBasket {
             get {
@@ -115,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allerede lagt i kurv.
+        ///   Looks up a localized string similar to Allerede lagt til nedlasting.
         /// </summary>
         public static string AlreadyPutInBasket {
             get {
@@ -225,7 +225,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kan ikke legges i kurv.
+        ///   Looks up a localized string similar to Kan ikke legges til nedlasting.
         /// </summary>
         public static string CanNotBeAddedToBasket {
             get {
@@ -922,7 +922,7 @@ namespace Resources {
         ///   Looks up a localized string similar to &lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;
         ///            &lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;
         ///            &lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;
-        ///            &lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene i handlekurven.&lt;/p&gt;.
+        ///            &lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene til nedlasting.&lt;/p&gt;.
         /// </summary>
         public static string FileDownloadIntro {
             get {
@@ -1194,7 +1194,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Du har ingen elementer i kurven.
+        ///   Looks up a localized string similar to Du har ingen elementer til nedlasting.
         /// </summary>
         public static string NoElementsInBasket {
             get {
@@ -1456,7 +1456,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Er du sikker på at du vil fjerne alle datasett fra kurven?.
+        ///   Looks up a localized string similar to Er du sikker på at du vil fjerne alle datasett til nedlastning?.
         /// </summary>
         public static string RemoveAllDatasetsConfirm {
             get {
@@ -1735,7 +1735,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to kurven.
+        ///   Looks up a localized string similar to nedlastingen.
         /// </summary>
         public static string TheBasket {
             get {
@@ -1816,7 +1816,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to i kurv.
+        ///   Looks up a localized string similar to til nedlastning.
         /// </summary>
         public static string ToBasket {
             get {

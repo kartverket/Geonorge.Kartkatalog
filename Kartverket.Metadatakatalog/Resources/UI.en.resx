@@ -262,10 +262,10 @@
     <value>Add</value>
   </data>
   <data name="AddToBasket" xml:space="preserve">
-    <value>Add to basket</value>
+    <value>Add for download</value>
   </data>
   <data name="CanNotBeAddedToBasket" xml:space="preserve">
-    <value>Can not be added to basket</value>
+    <value>Can not be added for download</value>
   </data>
   <data name="Display" xml:space="preserve">
     <value>Display</value>
@@ -304,10 +304,10 @@
     <value>The service may be slow to display and requires special access to display - contact data owner</value>
   </data>
   <data name="TheBasket" xml:space="preserve">
-    <value>the basket</value>
+    <value>the download</value>
   </data>
   <data name="ToBasket" xml:space="preserve">
-    <value>to basket</value>
+    <value>for download</value>
   </data>
   <data name="AvailableAs" xml:space="preserve">
     <value>Available as</value>
@@ -451,7 +451,7 @@
     <value>&lt;p&gt; Downloading files requires that you choose the area, format, and coordinate system for each data set. &lt;/ p&gt;
              &lt;p&gt;Should multiple files be downloaded, common options can be made at the top. Individual choices can be made for each dataset. &lt;/p&gt;
              &lt;p&gt; Symbols indicate whether data from your selection is available. &lt;/p&gt;
-             &lt;p&gt; If an area is not displayed in a public choice, it must be individually selected for the data sets in the cart. &lt;/p&gt;</value>
+             &lt;p&gt; If an area is not displayed in a public choice, it must be individually selected for the data sets to download. &lt;/p&gt;</value>
   </data>
   <data name="FileDownloadOrder" xml:space="preserve">
     <value>File download - order</value>
@@ -520,10 +520,10 @@
     <value>West</value>
   </data>
   <data name="AddedToBasket" xml:space="preserve">
-    <value>Added to basket</value>
+    <value>Added for download</value>
   </data>
   <data name="AlreadyPutInBasket" xml:space="preserve">
-    <value>Already put in basket</value>
+    <value>Already put for download</value>
   </data>
   <data name="AreaHelpText" xml:space="preserve">
     <value>&lt;p&gt;Here you can select finished files from fixed areas from drop-down list. &lt;/p&gt;
@@ -581,7 +581,7 @@
     <value>No areas are available</value>
   </data>
   <data name="NoElementsInBasket" xml:space="preserve">
-    <value>You have no items in the basket</value>
+    <value>You have no items for download</value>
   </data>
   <data name="ProjectionHelpText" xml:space="preserve">
     <value>&lt;p&gt;Enter the desired data set coordinate system to be downloaded. &lt;/p&gt;
@@ -591,7 +591,7 @@
     <value>Removal of dataset</value>
   </data>
   <data name="RemoveAllDatasetsConfirm" xml:space="preserve">
-    <value>Are you sure you want to remove all data sets from the basket?</value>
+    <value>Are you sure you want to remove all data sets for download?</value>
   </data>
   <data name="SelectedFromMap" xml:space="preserve">
     <value>Selected from map</value>

@@ -262,10 +262,10 @@
     <value>Legg</value>
   </data>
   <data name="AddToBasket" xml:space="preserve">
-    <value>Legg i kurv</value>
+    <value>Legg til nedlasting</value>
   </data>
   <data name="CanNotBeAddedToBasket" xml:space="preserve">
-    <value>Kan ikke legges i kurv</value>
+    <value>Kan ikke legges til nedlasting</value>
   </data>
   <data name="Display" xml:space="preserve">
     <value>Vis </value>
@@ -304,10 +304,10 @@
     <value>Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier</value>
   </data>
   <data name="TheBasket" xml:space="preserve">
-    <value>kurven</value>
+    <value>nedlastingen</value>
   </data>
   <data name="ToBasket" xml:space="preserve">
-    <value>i kurv</value>
+    <value>til nedlastning</value>
   </data>
   <data name="AvailableAs" xml:space="preserve">
     <value>Tilgjengelig som</value>
@@ -451,7 +451,7 @@
     <value>&lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;
             &lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;
             &lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;
-            &lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene i handlekurven.&lt;/p&gt;</value>
+            &lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene til nedlasting.&lt;/p&gt;</value>
   </data>
   <data name="FileDownloadOrder" xml:space="preserve">
     <value>Filnedlastning - bestilling</value>
@@ -520,10 +520,10 @@
     <value>Vest</value>
   </data>
   <data name="AddedToBasket" xml:space="preserve">
-    <value>Lagt i kurv</value>
+    <value>Lagt til nedlasting</value>
   </data>
   <data name="AlreadyPutInBasket" xml:space="preserve">
-    <value>Allerede lagt i kurv</value>
+    <value>Allerede lagt til nedlasting</value>
   </data>
   <data name="AreaHelpText" xml:space="preserve">
     <value>&lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;
@@ -581,7 +581,7 @@
     <value>Ingen områder er tilgjengelig</value>
   </data>
   <data name="NoElementsInBasket" xml:space="preserve">
-    <value>Du har ingen elementer i kurven</value>
+    <value>Du har ingen elementer til nedlasting</value>
   </data>
   <data name="ProjectionHelpText" xml:space="preserve">
     <value>&lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;
@@ -591,7 +591,7 @@
     <value>Fjerning av datasett</value>
   </data>
   <data name="RemoveAllDatasetsConfirm" xml:space="preserve">
-    <value>Er du sikker på at du vil fjerne alle datasett fra kurven?</value>
+    <value>Er du sikker på at du vil fjerne alle datasett til nedlastning?</value>
   </data>
   <data name="SelectedFromMap" xml:space="preserve">
     <value>Valgt fra kart</value>
