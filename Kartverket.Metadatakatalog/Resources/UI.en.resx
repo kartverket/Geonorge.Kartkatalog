@@ -738,4 +738,13 @@
   <data name="DownloadServices" xml:space="preserve">
     <value>Download services</value>
   </data>
+  <data name="PrivacyEmailRequiredBundling" xml:space="preserve">
+    <value>We need your email to send you a link when the package is ready</value>
+  </data>
+  <data name="PrivacyEmailRequiredCropping" xml:space="preserve">
+    <value>We need your email to send you a link to the dataset when it's cropped</value>
+  </data>
+  <data name="NotEvaluated" xml:space="preserve">
+    <value>Not evaluated</value>
+  </data>
 </root>

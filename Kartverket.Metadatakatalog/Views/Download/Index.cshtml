@@ -323,7 +323,7 @@
                 <div class="download-form">
                     <div v-show="emailRequired" class="row margin-bottom-10">
                         <div id="emailField" class="col-sm-6 margin-bottom-10">
-                            <p class="article-p">@UI.Email: <span class="required-indicator"></span></p>
+                            <p class="article-p">@UI.Email: <span class="required-indicator"></span><small>(@UI.PrivacyEmailRequiredCropping)</small></p>
                             <input type="text" v-model="email" name="email" class="form-control" />
                         </div>
                     </div>
@@ -443,7 +443,7 @@
                             </div>
                             <div class="panel-footer" v-if="responseItem.additionalInfo.supportsDownloadBundling && responseItem.numberOfFiles > 1">
                                 <div class="input-group">
-                                    <span class="input-group-addon">@UI.Email: <span class="required-indicator"></span></span>
+                                    <span class="input-group-addon">@UI.Email: <span class="required-indicator"></span><small>(@UI.PrivacyEmailRequiredBundling)</small></span>
                                     <input type="text" v-model="email" name="email" class="form-control" />
                                     <span v-on:click="sendOrderBundleRequest(responseItem)" v-bind:class="{disabled: !emailAddressIsValid(email)}" class="input-group-addon btn" v-bind:id="'order-bundle-button-' + responseItem.additionalInfo.distributedBy">Bestill pakke med alle datasett</span>
                                 </div>

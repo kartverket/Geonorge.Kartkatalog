@@ -1683,6 +1683,11 @@
               Looks up a localized string similar to Ikke godkjent.
             </summary>
         </member>
+        <member name="P:Resources.UI.NotEvaluated">
+            <summary>
+              Looks up a localized string similar to Ikke vurdert.
+            </summary>
+        </member>
         <member name="P:Resources.UI.NotFoundText">
             <summary>
               Looks up a localized string similar to Vi finner ikke siden du leter etter, men Geonorge skal hjelpe deg videre..
@@ -1736,6 +1741,16 @@
         <member name="P:Resources.UI.ParentTheme">
             <summary>
               Looks up a localized string similar to Tilkyttet tema.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.PrivacyEmailRequiredBundling">
+            <summary>
+              Looks up a localized string similar to Vi trenger eposten din for å kunne sende deg link når pakken er klar.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.PrivacyEmailRequiredCropping">
+            <summary>
+              Looks up a localized string similar to Vi trenger eposten din for å kunne sende deg link til datasettet når det er ferdig klippet.
             </summary>
         </member>
         <member name="P:Resources.UI.ProcessHistory">

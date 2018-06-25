@@ -1230,6 +1230,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ikke vurdert.
+        /// </summary>
+        public static string NotEvaluated {
+            get {
+                return ResourceManager.GetString("NotEvaluated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vi finner ikke siden du leter etter, men Geonorge skal hjelpe deg videre..
         /// </summary>
         public static string NotFoundText {
@@ -1325,6 +1334,24 @@ namespace Resources {
         public static string ParentTheme {
             get {
                 return ResourceManager.GetString("ParentTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vi trenger eposten din for å kunne sende deg link når pakken er klar.
+        /// </summary>
+        public static string PrivacyEmailRequiredBundling {
+            get {
+                return ResourceManager.GetString("PrivacyEmailRequiredBundling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vi trenger eposten din for å kunne sende deg link til datasettet når det er ferdig klippet.
+        /// </summary>
+        public static string PrivacyEmailRequiredCropping {
+            get {
+                return ResourceManager.GetString("PrivacyEmailRequiredCropping", resourceCulture);
             }
         }
         

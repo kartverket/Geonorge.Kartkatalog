@@ -323,7 +323,7 @@ namespace Kartverket.Metadatakatalog.Service
             //Vis kart
             if (SimpleMetadataUtil.ShowMapLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
             {
-                distribution.MapUrl = System.Web.Configuration.WebConfigurationManager.AppSettings["NorgeskartUrl"] + SimpleMetadataUtil.MapUrl(simpleMetadataDistribution, simpleMetadata.HierarchyLevel);
+                distribution.MapUrl = SimpleMetadataUtil.MapUrl(simpleMetadataDistribution, simpleMetadata.HierarchyLevel);
                 distribution.CanShowMapUrl = true;
             }
             //Last ned
@@ -825,7 +825,7 @@ namespace Kartverket.Metadatakatalog.Service
                         //Date = simpleQualitySpecification.Date,
                         DateType = spec.DateType,
                         Explanation = GetTranslation(spec.Explanation, spec.EnglishExplanation),
-                        Result = spec.Result
+                        Result = spec.Result ?? null
                     }
                     );
                 }

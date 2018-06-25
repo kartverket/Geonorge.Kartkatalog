@@ -13,6 +13,7 @@ using System.Web.Routing;
 using Kartverket.Metadatakatalog.Models.Api;
 using Resources;
 using Kartverket.Metadatakatalog.Service;
+using System.Text;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -154,43 +155,25 @@ namespace Kartverket.Metadatakatalog.Models
 
         public String MapUrl()
         {
-            var norgeskartUrl = WebConfigurationManager.AppSettings["NorgeskartUrl"];
+            string mappedUrl = "";
+
             if (IsService() || IsServiceLayer())
             {
-                if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:WMS")))
+                if (DistributionDetails != null)
                 {
-                    if (!string.IsNullOrWhiteSpace(DistributionDetails.Name))
-                        return norgeskartUrl + $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/*/l/wms/[" + RemoveQueryString(DistributionDetails.URL) + "]/+" + DistributionDetails.Name + "/";
-                    else
-                        return norgeskartUrl + $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/l/wms/[" + RemoveQueryString(DistributionDetails.URL) + "]" + "/";
+                    mappedUrl = SimpleMetadataUtil.MapUrl(DistributionDetails.URL, HierarchyLevel, DistributionDetails.Protocol, DistributionDetails.Name, true);
                 }
-                else if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:WFS")))
-                {
-                    if (!string.IsNullOrWhiteSpace(DistributionDetails.Name))
-                        return norgeskartUrl + $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/*/l/wfs/[" + RemoveQueryString(DistributionDetails.URL) + "]/+" + DistributionDetails.Name + "/";
-                    else
-                        return norgeskartUrl + $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/l/wfs/[" + RemoveQueryString(DistributionDetails.URL) + "]" + "/";
-                }
-                else if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains(("OGC:WCS")))
-                {
-                    if (!string.IsNullOrWhiteSpace(DistributionDetails.Name))
-                        return norgeskartUrl + $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/*/l/wcs/[" + RemoveQueryString(DistributionDetails.URL) + "]/+" + DistributionDetails.Name + "/";
-                    else
-                        return norgeskartUrl + $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/l/wcs/[" + RemoveQueryString(DistributionDetails.URL) + "]" + "/";
-                }
-
-                else return "";
             }
             else if (IsDataset())
             {
-                return WebConfigurationManager.AppSettings["NorgeskartUrl"] + ServiceUrl() + "/";
+                return SimpleMetadataUtil.NorgeskartUrl + ServiceUrl() + "/";
             }
-            else return "";
+            return mappedUrl;
         }
 
         public string ServiceUrl()
         {
-            string url = "";
+            StringBuilder url = new StringBuilder();
 
             if (IsDataset())
             {
@@ -198,34 +181,53 @@ namespace Kartverket.Metadatakatalog.Models
                 {
                     foreach(var distribution in DistributionsFormats)
                     {
-                        if (distribution.Protocol == "OGC:WMS")
+                        if (distribution.Protocol == SimpleMetadataUtil.OgcWms)
                         {
-                            ServiceDistributionProtocolForDataset = "OGC:WMS";
+                            ServiceDistributionProtocolForDataset = SimpleMetadataUtil.OgcWms;
                             ServiceDistributionUrlForDataset = distribution.URL;
                             break;
                         }
                     }
                 }
 
-
-                if (!string.IsNullOrWhiteSpace(ServiceDistributionProtocolForDataset) && ServiceDistributionProtocolForDataset.Contains(("OGC:WMS")))
+                if (!string.IsNullOrWhiteSpace(ServiceDistributionProtocolForDataset))
                 {
-                    if (!string.IsNullOrWhiteSpace(ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
-                        url = $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/*/l/wms/[" + RemoveQueryString(ServiceDistributionUrlForDataset) + "]/+" + ServiceDistributionNameForDataset;
-                    else if (!string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
-                        url = $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/l/wms/[" + RemoveQueryString(ServiceDistributionUrlForDataset) + "]";
-                }
-                else if (!string.IsNullOrWhiteSpace(ServiceDistributionProtocolForDataset) && ServiceDistributionProtocolForDataset.Contains(("OGC:WFS")))
-                {
-                    if (!string.IsNullOrWhiteSpace(ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
-                        url = $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/*/l/wfs/[" + RemoveQueryString(ServiceDistributionUrlForDataset) + "]/+" + ServiceDistributionNameForDataset;
-                    else if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL))
-                        url = $"#{SimpleMetadataUtil.ZoomLevel}/{SimpleMetadataUtil.Longitude}/{SimpleMetadataUtil.Latitude}/l/wfs/[" + RemoveQueryString(ServiceDistributionUrlForDataset) + "]";
-                }
+                    string urlWithoutQueryString = RemoveQueryString(ServiceDistributionUrlForDataset);
 
+                    if (!String.IsNullOrWhiteSpace(urlWithoutQueryString))
+                    {
+                        if (ServiceDistributionProtocolForDataset.Contains(SimpleMetadataUtil.OgcWms))
+                        {
+                            string commonPart = SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(SimpleMetadataUtil.Wms, true);
+
+                            if (!string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
+                            {
+                                url.Append($"{commonPart}{urlWithoutQueryString}");
+                                
+                                if (!string.IsNullOrWhiteSpace(ServiceDistributionNameForDataset))
+                                { 
+                                    url.Append($"&addLayers={ServiceDistributionNameForDataset}");
+                                }
+                            }
+                        }
+                        else if (ServiceDistributionProtocolForDataset.Contains(SimpleMetadataUtil.OgcWfs))
+                        {
+                            string commonPart = SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(SimpleMetadataUtil.Wfs, true);
+
+                            if (!string.IsNullOrWhiteSpace(ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
+                            {
+                                url.Append($"{commonPart}{urlWithoutQueryString}&addLayers={ServiceDistributionNameForDataset}");
+                            }
+                            else if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL))
+                            {
+                                url.Append($"{commonPart}{urlWithoutQueryString}");
+                            }
+                        }
+                    }
+                }
             }
 
-            return url;
+            return url.ToString();
         }
 
         string RemoveQueryString(string URL) 
@@ -357,24 +359,21 @@ namespace Kartverket.Metadatakatalog.Models
                     var endLayer = coverageStr.Length - startLayer;
                     var layerStr = coverageStr.Substring(startLayer, endLayer);
 
-                    int zoomLevel = ZoomLevel();
+                    string commonPart = $"{SimpleMetadataUtil.NorgeskartUrl}#!?zoom={ZoomLevel()}&";
 
                     if (typeStr == "WMS")
                     {
-                        CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel +
-                                       "/269663/6802350/l/wms/[" + pathStr + "]/+" + layerStr;
+                        CoverageLink = $"{commonPart}&lat=269663&long=6802350&wms={pathStr}&addLayer={layerStr}";
                     }
 
                     else if (typeStr == "WFS")
                     {
-                        CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel +
-                                       "/255216/6653881/l/wfs/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                        CoverageLink = $"{commonPart}&lat=255216&long=6653881&wfs={RemoveQueryString(pathStr)}&addLayer={layerStr}";
                     }
 
                     else if (typeStr == "GeoJSON")
                     {
-                        CoverageLink = WebConfigurationManager.AppSettings["NorgeskartUrl"] + "#" + zoomLevel +
-                                       "/355422/6668909/l/geojson/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                        CoverageLink = $"{commonPart}&lat=355422&long=6668909&geojson={RemoveQueryString(pathStr)}&addLayer={layerStr}";
                     }
 
                     return CoverageLink;
@@ -401,20 +400,24 @@ namespace Kartverket.Metadatakatalog.Models
                 var endLayer = coverageStr.Length - startLayer;
                 var layerStr = coverageStr.Substring(startLayer, endLayer);
 
-
                 if (typeStr == "WMS")
                 {
-                    CoverageParams = "#4/355422/6668909/l/wms/[" + pathStr + "]/+" + layerStr;
+                    CoverageParams = $"#!?zoom=4&lat=355422&long=6668909&wms={pathStr}";
                 }
 
                 else if (typeStr == "WFS")
                 {
-                    CoverageParams = "#5/255216/6653881/l/wfs/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                    CoverageParams = $"#!?zoom=5&lat=255216&long=6653881&wfs={RemoveQueryString(pathStr)}";
                 }
 
                 else if (typeStr == "GeoJSON")
                 {
-                    CoverageParams = "#5/355422/6668909/l/geojson/[" + RemoveQueryString(pathStr) + "]/+" + layerStr;
+                    CoverageParams = $"#!?zoom=5&lat=355422&long=6668909&geojson={RemoveQueryString(pathStr)}";
+                }
+
+                if (!string.IsNullOrWhiteSpace(layerStr))
+                {
+                    CoverageParams += $"&addLayers={layerStr}";
                 }
             }
 
@@ -734,7 +737,6 @@ namespace Kartverket.Metadatakatalog.Models
         {
             return Protocol == "OGC:WFS";
         }
-
     }
 
     public class DistributionFormat
@@ -758,7 +760,7 @@ namespace Kartverket.Metadatakatalog.Models
         public DateTime? Date { get; set; }
         public string DateType { get; set; }
         public string Explanation { get; set; }
-        public bool Result { get; set; }
+        public bool? Result { get; set; }
         public string Title { get; set; }
     }
 

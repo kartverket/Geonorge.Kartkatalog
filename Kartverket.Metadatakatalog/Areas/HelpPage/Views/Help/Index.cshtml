@@ -13,9 +13,9 @@
     ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
 }
 @section breadcrumb {
-    <li><a href="@Html.GeonorgeUrl()for-utviklere/">For utviklere</a></li>
-    <li><a href="@Html.GeonorgeUrl()for-utviklere/APIer-og-grensesnitt/">APIer og grensesnitt</a></li>
-    <li><a href="@Html.GeonorgeUrl()for-utviklere/APIer-og-grensesnitt/apier-for-kartkatalogen/">API-er for kartkatalogen</a></li>
+    <li><a href="@Html.GeonorgeUrl()verktoy/">For utviklere</a></li>
+    <li><a href="@Html.GeonorgeUrl()verktoy/APIer-og-grensesnitt/">APIer og grensesnitt</a></li>
+    <li><a href="@Html.GeonorgeUrl()verktoy/APIer-og-grensesnitt/apier-for-kartkatalogen/">API-er for kartkatalogen</a></li>
     <li class="active">API hjelp</li>
 }
 <link type="text/css" href="~/Areas/HelpPage/HelpPage.css" rel="stylesheet" />
