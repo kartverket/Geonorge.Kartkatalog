@@ -28,7 +28,7 @@ function getJsonData(url) {
             dataType: 'json',
             async: false,
             error: function (jqXHR, textStatus, errorThrown) {
-                showAlert("Kunne ikke legge til " + name + " i kurv. Feilmelding: " + errorThrown + "<br/>", "danger");
+                showAlert("Kunne ikke legge til " + name + " til nedlastning. Feilmelding: " + errorThrown + "<br/>", "danger");
                 returnData = "error";
             },
             success: function (data) {
@@ -36,7 +36,7 @@ function getJsonData(url) {
                     returnData = data;
                 }
                 else {
-                    showAlert("Data mangler for å kunne lastes ned. Vennligst fjern " + name + " fra kurv. <br/>", "danger");
+                    showAlert("Data mangler for å kunne lastes ned. Vennligst fjern " + name + " for nedlastning. <br/>", "danger");
                 }
             }
         });
