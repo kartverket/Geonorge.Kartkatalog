@@ -198,7 +198,7 @@ namespace Kartverket.Metadatakatalog.Models
                     {
                         if (ServiceDistributionProtocolForDataset.Contains(SimpleMetadataUtil.OgcWms))
                         {
-                            string commonPart = SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(SimpleMetadataUtil.Wms, true);
+                            string commonPart = SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(SimpleMetadataUtil.OgcWms, true);
 
                             if (!string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
                             {
@@ -212,7 +212,7 @@ namespace Kartverket.Metadatakatalog.Models
                         }
                         else if (ServiceDistributionProtocolForDataset.Contains(SimpleMetadataUtil.OgcWfs))
                         {
-                            string commonPart = SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(SimpleMetadataUtil.Wfs, true);
+                            string commonPart = SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(SimpleMetadataUtil.OgcWfs, true);
 
                             if (!string.IsNullOrWhiteSpace(ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
                             {
