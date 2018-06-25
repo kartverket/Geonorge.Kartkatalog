@@ -1068,7 +1068,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kart.
+        ///   Looks up a localized string similar to Vis i kart.
         /// </summary>
         public static string Map {
             get {

@@ -1595,7 +1595,7 @@
         </member>
         <member name="P:Resources.UI.Map">
             <summary>
-              Looks up a localized string similar to Kart.
+              Looks up a localized string similar to Vis i kart.
             </summary>
         </member>
         <member name="P:Resources.UI.MapCatalogMainPage">
