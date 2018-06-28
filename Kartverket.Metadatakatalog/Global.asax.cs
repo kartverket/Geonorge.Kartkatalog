@@ -20,6 +20,7 @@ using Castle.Facilities.SolrNetIntegration;
 using Kartverket.Metadatakatalog.Service;
 using System.Collections.Specialized;
 using System.Linq;
+using Kartverket.Metadatakatalog.Helpers;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -79,7 +80,15 @@ namespace Kartverket.Metadatakatalog
             var cookie = Context.Request.Cookies["_culture"];
             if (cookie == null)
             {
-                cookie = new HttpCookie("_culture", Culture.NorwegianCode);
+                var cultureName = Request.UserLanguages != null && Request.UserLanguages.Length > 0 ?
+                    Request.UserLanguages[0] : null;
+
+                cultureName = CultureHelper.GetImplementedCulture(cultureName);
+                if(CultureHelper.IsNorwegian(cultureName))
+                    cookie = new HttpCookie("_culture", Culture.NorwegianCode);
+                else
+                    cookie = new HttpCookie("_culture", Culture.EnglishCode);
+
                 if (!Request.IsLocal)
                     cookie.Domain = ".geonorge.no";
                 cookie.Expires = DateTime.Now.AddYears(1);
