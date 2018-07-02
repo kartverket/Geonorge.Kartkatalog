@@ -180,7 +180,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                     }
                 }
             }
-            else if (Type == "service" || Type == "servicelayer")
+
+            if (Type == "service" || Type == "servicelayer")
             {
                 if (!string.IsNullOrWhiteSpace(item.DistributionProtocol) && !string.IsNullOrWhiteSpace(item.DistributionUrl))
                 {
