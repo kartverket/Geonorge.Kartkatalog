@@ -78,10 +78,18 @@ namespace Kartverket.Metadatakatalog
             ValidateReturnUrl(Context.Request.QueryString);
 
             var cookie = Context.Request.Cookies["_culture"];
+
+            var lang = Context.Request.QueryString["lang"];
+            if (!string.IsNullOrEmpty(lang))
+                cookie = null;
+
             if (cookie == null)
             {
                 var cultureName = Request.UserLanguages != null && Request.UserLanguages.Length > 0 ?
                     Request.UserLanguages[0] : null;
+
+                if (!string.IsNullOrEmpty(lang))
+                    cultureName = lang;
 
                 cultureName = CultureHelper.GetImplementedCulture(cultureName);
                 if(CultureHelper.IsNorwegian(cultureName))
