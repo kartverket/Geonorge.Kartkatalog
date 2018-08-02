@@ -157,12 +157,19 @@ namespace Kartverket.Metadatakatalog
                     if (!returnUrl.StartsWith("https://"))
                         returnUrl = returnUrl.Replace("http://", "https://");
 
-                    if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]) 
-                        && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["GeonorgeUrl"])
-                        && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["KartkatalogenUrl"]))
-                        HttpContext.Current.Response.StatusCode = 400;
+                    if (IsValidDomainName(returnUrl))
+                    { 
+                        if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]) 
+                            && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["GeonorgeUrl"])
+                            && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["KartkatalogenUrl"]))
+                            HttpContext.Current.Response.StatusCode = 400;
+                    }
                 }
             }
+        }
+        private static bool IsValidDomainName(string name)
+        {
+            return Uri.CheckHostName(name) != UriHostNameType.Unknown;
         }
 
     }
