@@ -20,6 +20,7 @@ using Castle.Facilities.SolrNetIntegration;
 using Kartverket.Metadatakatalog.Service;
 using System.Collections.Specialized;
 using System.Linq;
+using Kartverket.Metadatakatalog.Helpers;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -77,9 +78,25 @@ namespace Kartverket.Metadatakatalog
             ValidateReturnUrl(Context.Request.QueryString);
 
             var cookie = Context.Request.Cookies["_culture"];
+
+            var lang = Context.Request.QueryString["lang"];
+            if (!string.IsNullOrEmpty(lang))
+                cookie = null;
+
             if (cookie == null)
             {
-                cookie = new HttpCookie("_culture", Culture.NorwegianCode);
+                var cultureName = Request.UserLanguages != null && Request.UserLanguages.Length > 0 ?
+                    Request.UserLanguages[0] : null;
+
+                if (!string.IsNullOrEmpty(lang))
+                    cultureName = lang;
+
+                cultureName = CultureHelper.GetImplementedCulture(cultureName);
+                if(CultureHelper.IsNorwegian(cultureName))
+                    cookie = new HttpCookie("_culture", Culture.NorwegianCode);
+                else
+                    cookie = new HttpCookie("_culture", Culture.EnglishCode);
+
                 if (!Request.IsLocal)
                     cookie.Domain = ".geonorge.no";
                 cookie.Expires = DateTime.Now.AddYears(1);
@@ -140,12 +157,19 @@ namespace Kartverket.Metadatakatalog
                     if (!returnUrl.StartsWith("https://"))
                         returnUrl = returnUrl.Replace("http://", "https://");
 
-                    if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]) 
-                        && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["GeonorgeUrl"])
-                        && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["KartkatalogenUrl"]))
-                        HttpContext.Current.Response.StatusCode = 400;
+                    if (IsValidDomainName(returnUrl))
+                    { 
+                        if (!returnUrl.StartsWith(WebConfigurationManager.AppSettings["DownloadUrl"]) 
+                            && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["GeonorgeUrl"])
+                            && !returnUrl.StartsWith(WebConfigurationManager.AppSettings["KartkatalogenUrl"]))
+                            HttpContext.Current.Response.StatusCode = 400;
+                    }
                 }
             }
+        }
+        private static bool IsValidDomainName(string name)
+        {
+            return Uri.CheckHostName(name) != UriHostNameType.Unknown;
         }
 
     }
