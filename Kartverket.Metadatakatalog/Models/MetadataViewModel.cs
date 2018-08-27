@@ -166,7 +166,7 @@ namespace Kartverket.Metadatakatalog.Models
             }
             else if (IsDataset())
             {
-                return SimpleMetadataUtil.NorgeskartUrl + ServiceUrl() + "/";
+                return SimpleMetadataUtil.NorgeskartUrl + ServiceUrl();
             }
             return mappedUrl;
         }
