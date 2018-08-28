@@ -21,6 +21,11 @@ namespace Kartverket.Metadatakatalog
                 "~/Content/Blocks/SurveyBlock/SurveyBlockStyle.css"
                 ));
 
+            bundles.Add(new StyleBundle("~/shared-partials-styles").Include(
+                "~/dist/vendor.css",
+                "~/dist/main.css"
+                ));
+
             bundles.Add(new ScriptBundle("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts").Include(
                "~/Content/bower_components/kartverket-felleskomponenter/assets/js/vendor.min.js",
                "~/Content/bower_components/vue/dist/vue.js",
@@ -31,6 +36,12 @@ namespace Kartverket.Metadatakatalog
                "~/Scripts/visninger.js",
                 "~/Content/Blocks/SurveyBlock/SurveyBlockScript.js"
            ));
+
+            bundles.Add(new ScriptBundle("~/shared-partials-scripts").Include(
+               "~/dist/vendor.js",
+               "~/dist/main.js"
+               ));
+
 
             bundles.Add(new ScriptBundle("~/Content/download").Include(
                "~/Scripts/vue-download.js"
