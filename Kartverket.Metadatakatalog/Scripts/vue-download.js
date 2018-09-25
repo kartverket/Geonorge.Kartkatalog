@@ -445,8 +445,10 @@ var OrderLine = {
             return true;
         },
 
-        loadGridMap: function (orderItem) {
+        loadGridMap: function () {
+            var orderItem = this;
             orderItem.mapIsLoaded = true;
+            this.$root.activeMapUuid = orderItem.metadata.uuid;
             orderItem.mapData.defaultConfigurations = {
                 "service_name": orderItem.capabilities.mapSelectionLayer,
                 "center_longitude": "378604",
@@ -461,8 +463,6 @@ var OrderLine = {
                     hideLoadingAnimation();
                     var msg = JSON.parse(e.data);
                     if (msg.type === "mapInitialized") {
-
-
                         iframeMessage = {
                             "cmd": "setCenter",
                             "x": orderItem.mapData.defaultConfigurations.center_longitude,
@@ -477,17 +477,16 @@ var OrderLine = {
                         };
                         iframeElement.contentWindow.postMessage(JSON.stringify(iframeMessage), '*');
 
-                    } else {
+                    } else if (orderItem.metadata.uuid == this.$root.activeMapUuid) {
                         if (msg.cmd === "setVisible") return;
                         var obj = msg;
-
                         if (this.isJson(msg)) {
                             var data = JSON.parse(msg);
                             if (data["type"] == "mapInitialized") return;
                             var areaname = data["attributes"]["n"];
                             if (data["cmd"] == "featureSelected") {
-                                for (areaType in this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid]) {
-                                    this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][areaType].forEach(function (availableArea) {
+                                for (areaType in this.$root.masterOrderLine.allAvailableAreas[this.$root.activeMapUuid]) {
+                                    this.$root.masterOrderLine.allAvailableAreas[this.$root.activeMapUuid][areaType].forEach(function (availableArea) {
                                         if (availableArea.code == areaname) {
                                             availableArea.isSelected = true;
                                         }
@@ -495,16 +494,16 @@ var OrderLine = {
                                 }
                             }
                             if (data["cmd"] == "featureUnselected") {
-                                for (areaType in this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid]) {
-                                    this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][areaType].forEach(function (availableArea) {
+                                for (areaType in this.$root.masterOrderLine.allAvailableAreas[this.$root.activeMapUuid]) {
+                                    this.$root.masterOrderLine.allAvailableAreas[this.$root.activeMapUuid][areaType].forEach(function (availableArea) {
                                         if (availableArea.code == areaname) {
                                             availableArea.isSelected = false;
                                         }
                                     })
                                 }
                             }
-                            this.$root.updateSelectedAreasForSingleOrderLine(orderItem.metadata.uuid, true);
-                            this.$root.updateAvailableProjectionsAndFormatsForSingleOrderLine(orderItem.metadata.uuid);
+                            this.$root.updateSelectedAreasForSingleOrderLine(this.$root.activeMapUuid, true);
+                            this.$root.updateAvailableProjectionsAndFormatsForSingleOrderLine(this.$root.activeMapUuid);
                             this.$root.validateAreas();
                         }
                     }
@@ -890,6 +889,7 @@ var mainVueModel = new Vue({
         orderResponse: {},
         emailRequired: false,
         contentLoaded: false,
+        activeMapUuid: false,
 
         masterOrderLine: {
             allAvailableAreas: {},

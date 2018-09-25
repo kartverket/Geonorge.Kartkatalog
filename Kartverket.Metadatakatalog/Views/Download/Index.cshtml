@@ -20,7 +20,7 @@
                 <iframe v-if="master" id="masterorderline-iframe" v-bind:src="mapSrc" name="iframe" style="height:100%"></iframe>
                 <iframe v-else v-bind:id="$parent.$parent.metadata.uuid + '-iframe'" v-bind:src="mapSrc" name="iframe" style="height:100%"></iframe>
                 <div class="modal-footer">
-                    <button type="button" v-on:click="$parent.$parent.showMap = false" class="btn btn-default" data-dismiss="modal">@UI.Close</button>
+                    <button type="button" v-on:click="$parent.$parent.showMap = false; $root.activeMapUuid = false;" class="btn btn-default" data-dismiss="modal">@UI.Close</button>
                 </div>
             </div>
         </div>
