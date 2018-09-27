@@ -1265,9 +1265,8 @@ var mainVueModel = new Vue({
                         selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLineUuid);
                         selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLineUuid);
 
-                        var hasDeliveryNotificationByEmail = false;
                         this.orderLines.forEach(function (orderLine) {
-                            if (orderLine.metadata.uuid == orderLineUuid) {
+                            if (orderLine.metadata.uuid == orderLineUuid && !emailRequired) {
                                 emailRequired = orderLine.capabilities.deliveryNotificationByEmail !== undefined ? orderLine.capabilities.deliveryNotificationByEmail : false;
                             }
                         }.bind(this));
