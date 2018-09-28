@@ -361,7 +361,11 @@ namespace Kartverket.Metadatakatalog.Models
 
                     string commonPart = $"{SimpleMetadataUtil.NorgeskartUrl}#!?zoom={ZoomLevel()}&";
 
-                    if (typeStr == "WMS")
+                    if (typeStr == "GEONORGE-WMS" && BoundingBox != null)
+                    {
+                        CoverageLink = $"{WebConfigurationManager.AppSettings["GeonorgeWmsUrl"]}cgi-bin/geonorge_dekningskart?service=WMS&request=GetMap&version=1.3.0&BGCOLOR=0xFFFFFF&crs=EPSG:32633&bbox={BoundingBox.WestBoundLongitude.Replace(",",".")},{BoundingBox.SouthBoundLatitude.Replace(",", ".")},{BoundingBox.EastBoundLongitude.Replace(",", ".")},{BoundingBox.NorthBoundLatitude.Replace(",", ".")}&layers=datasett_dekning&width=2210&height=1026&format=image/png&datasett={layerStr}";
+                    }
+                    else if (typeStr == "WMS")
                     {
                         CoverageLink = $"{commonPart}&lat=269663&long=6802350&wms={pathStr}&addLayer={layerStr}";
                     }
