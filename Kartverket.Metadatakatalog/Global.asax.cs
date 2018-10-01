@@ -21,6 +21,7 @@ using Kartverket.Metadatakatalog.Service;
 using System.Collections.Specialized;
 using System.Linq;
 using Kartverket.Metadatakatalog.Helpers;
+using Kartverket.Metadatakatalog.Models.SearchIndex;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -62,6 +63,7 @@ namespace Kartverket.Metadatakatalog
             solrFacility.AddCore(SolrCores.ServicesEnglish, typeof(ServiceIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/services_en");
             solrFacility.AddCore(SolrCores.Applications, typeof(ApplicationIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications");
             solrFacility.AddCore(SolrCores.ApplicationsEnglish, typeof(ApplicationIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications_en");
+            solrFacility.AddCore(SolrCores.Articles, typeof(ArticleIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/articles");
             indexContainer.AddFacility(solrFacility);
 
         }

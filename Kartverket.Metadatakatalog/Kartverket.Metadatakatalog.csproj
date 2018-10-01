@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -262,6 +262,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\ApiArticlesController.cs" />
     <Compile Include="Controllers\ApiMetadataController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
@@ -282,7 +283,13 @@
     <Compile Include="Migrations\201712050646062_AddThemeMetadataSortings.Designer.cs">
       <DependentUpon>201712050646062_AddThemeMetadataSortings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Api\Article.cs" />
     <Compile Include="Models\Api\Distribution.cs" />
+    <Compile Include="Models\Article\ArticleDocument.cs" />
+    <Compile Include="Models\Article\SearchParameters.cs" />
+    <Compile Include="Models\Article\SearchResult.cs" />
+    <Compile Include="Models\Article\SearchResultItem.cs" />
+    <Compile Include="Models\SearchIndex\ArticleIndexDoc.cs" />
     <Compile Include="Models\SearchIndex\MetadataIndexAllDoc.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\SearchByAreaParameters.cs" />
@@ -301,6 +308,16 @@
     <Compile Include="Service\Application\IApplicationService.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Service\Application\ApplicationService.cs" />
+    <Compile Include="Service\Article\ArticleFetcher.cs" />
+    <Compile Include="Service\Article\ArticleIndexer.cs" />
+    <Compile Include="Service\Article\IArticleFetcher.cs" />
+    <Compile Include="Service\Article\IArticleService.cs" />
+    <Compile Include="Service\Article\ArticleService.cs" />
+    <Compile Include="Service\Article\IndexArticleDocumentCreator.cs" />
+    <Compile Include="Service\Article\IndexerArticle.cs" />
+    <Compile Include="Service\Article\SolrArticleIndexer.cs" />
+    <Compile Include="Service\Article\SolrIndexArticleDocumentCreator.cs" />
+    <Compile Include="Service\Article\SolrIndexerArticle.cs" />
     <Compile Include="Service\IndexerAll.cs" />
     <Compile Include="Service\IThemeService.cs" />
     <Compile Include="Service\Search\ISearchServiceAll.cs" />

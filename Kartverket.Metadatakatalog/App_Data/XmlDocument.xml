@@ -481,6 +481,21 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiArticlesController.MetadataUpdated(System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            Article updated
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiArticlesController.Index">
+            <summary>
+            Run article indexing
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiArticlesController.ReIndex">
+            <summary>
+            Run article re-indexing
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.MetadataUpdated(System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             Metadata updated
@@ -597,6 +612,21 @@
             Returns default culture name which is the first name decalared (e.g. en-US)
             </summary>
             <returns></returns>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Uuid">
+            <summary>
+            The uniqueidentifier
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Title">
+            <summary>
+            The title
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.DetailsUrl">
+            <summary>
+            Link to article
+            </summary>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Facet.FacetField">
             <summary>
@@ -816,6 +846,18 @@
             <summary>
             Result grouped by facets
             </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Models.Article.SearchParameters.OrderBy">
+            <summary>
+            Gets a sort order based on "Orderby" parameter
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Models.Article.SearchParameters.BuildQuery">
+            <summary>
+            Builds a Solr query based on "Text" parameter
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Kartverket.Metadatakatalog.Models.SearchParameters.OrderBy">
             <summary>
