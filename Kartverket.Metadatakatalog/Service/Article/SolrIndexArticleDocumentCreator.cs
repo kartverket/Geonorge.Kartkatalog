@@ -58,7 +58,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
                 //    indexDoc.LinkArea.Add(linkArea.ToString());
                 //}
 
-                Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Id,
+                Log.Info(string.Format("Indexing metadata with uuid={0}, Heading={1}", indexDoc.Id,
                     indexDoc.Heading));
 
 

@@ -560,6 +560,11 @@
             Catalogue search for services
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Articles(Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters)">
+            <summary>
+            Catalogue search for articles
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetData(System.String)">
             <summary>
             Get metadata for uuid
@@ -613,19 +618,59 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Uuid">
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Uuid">
             <summary>
             The uniqueidentifier
             </summary>
         </member>
-        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Title">
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Title">
             <summary>
             The title
             </summary>
         </member>
-        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.DetailsUrl">
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.ShowDetailsUrl">
             <summary>
             Link to article
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters.text">
+            <summary>
+            The text to search for
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters.offset">
+            <summary>
+            This param indicates an offset into the list of constraints to allow paging. Default is 1.
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters.limit">
+            <summary>
+            This param indicates the maximum number of constraint counts that should be returned. Default is 10.
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters.orderby">
+            <summary>
+            Field to order by, ex: orderby=title, default order is score desc.
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchResult.NumFound">
+            <summary>
+            Number of items found
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchResult.Limit">
+            <summary>
+            The maximum number of constraint counts that is returned
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchResult.Offset">
+            <summary>
+            The offset into the list
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchResult.Results">
+            <summary>
+            Items in the searchresult
             </summary>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Facet.FacetField">

@@ -76,8 +76,8 @@ namespace Kartverket.Metadatakatalog.Models.Article
                 {
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
-                        new SolrQuery("titleText:"+ Text + "^50"),
-                        new SolrQuery("titleText:"+ Text + "*^40"),
+                        new SolrQuery("TitleText:"+ Text + "^50"),
+                        new SolrQuery("TitleText:"+ Text + "*^40"),
                         new SolrQuery("allText:" + Text + "^1.2"),
                         new SolrQuery("allText:" + Text + "*^1.1"),
                         new SolrQuery("!boost b=typenumber")
@@ -87,9 +87,9 @@ namespace Kartverket.Metadatakatalog.Models.Article
                 {
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
-                        new SolrQuery("titleText:"+ Text + "^50"),
-                        new SolrQuery("titleText:"+ Text + "*^40"),
-                        new SolrQuery("titleText:"+ Text + "~2^1.1"),
+                        new SolrQuery("TitleText:"+ Text + "^50"),
+                        new SolrQuery("TitleText:"+ Text + "*^40"),
+                        new SolrQuery("TitleText:"+ Text + "~2^1.1"),
                         new SolrQuery("allText:" + Text + "^1.2"),
                         new SolrQuery("allText:" + Text + "*^1.1"),
                         new SolrQuery("allText:\"" + Text + "\"~1"),   //Fuzzy

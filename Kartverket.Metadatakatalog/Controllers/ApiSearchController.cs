@@ -15,6 +15,8 @@ using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using System.Web.Http.Description;
+using Kartverket.Metadatakatalog.Service.Article;
+using Kartverket.Metadatakatalog.Models.Article;
 
 
 // Metadata search api examples
@@ -47,17 +49,19 @@ namespace Kartverket.Metadatakatalog.Controllers
         private readonly ISearchServiceAll _searchServiceAll;
         private readonly IApplicationService _applicationService;
         private readonly IServiceDirectoryService _serviceDirectoryService;
+        private readonly IArticleService _articleService;
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IMetadataService _metadataService;
 
-        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll)
+        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll, IArticleService articleService)
         {
             _searchService = searchService;
             _metadataService = metadataService;
             _applicationService = applicationService;
             _serviceDirectoryService = serviceDirectoryService;
             _searchServiceAll = searchServiceAll;
+            _articleService = articleService;
         }
 
         /// <summary>
@@ -201,6 +205,31 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
         }
 
+        /// <summary>
+        /// Catalogue search for articles
+        /// </summary>
+        [System.Web.Http.Route("api/articles")]
+        [System.Web.Http.HttpGet]
+        public Models.Api.Article.SearchResult Articles([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters parameters)
+        {
+            try
+            {
+                if (parameters == null)
+                    parameters = new Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters();
+
+                Models.Article.SearchParameters searchParameters = CreateSearchParameters(parameters);
+
+                Models.Article.SearchResult searchResult = _articleService.Search(searchParameters);
+
+                return new Models.Api.Article.SearchResult(searchResult);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return null;
+            }
+        }
+
         [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/metadata/{uuid}")]
         [System.Web.Http.HttpGet]
@@ -277,13 +306,13 @@ namespace Kartverket.Metadatakatalog.Controllers
                 res.NumFound = result.Related.Count();
                 res.Offset = 1;
                 res.Limit = result.Related.Count();
-                res.Items = new List<SearchResultItem>();
+                res.Items = new List<Models.SearchResultItem>();
                 res.Facets = new List<Models.Facet>();
                 res.Facets.Add(new Models.Facet { FacetField = "relateddata", FacetResults = new List<Models.Facet.FacetValue> { new Models.Facet.FacetValue { Count = result.Related.Count(), Name = "relateddata" } } });
 
                 foreach (var related in result.Related)
                 {
-                    SearchResultItem item = new SearchResultItem();
+                    Models.SearchResultItem item = new Models.SearchResultItem();
                     item.Title = related.Title;
                     item.Type = related.HierarchyLevel;
                     item.Theme = related.KeywordsNationalTheme != null && related.KeywordsNationalTheme.Count > 0 ? related.KeywordsNationalTheme.FirstOrDefault().KeywordValue : "";
@@ -308,6 +337,17 @@ namespace Kartverket.Metadatakatalog.Controllers
             {
                 Text = parameters.text,
                 Facets = CreateFacetParameters(parameters.facets),
+                Offset = parameters.offset,
+                Limit = parameters.limit,
+                orderby = parameters.orderby
+            };
+        }
+
+        private Models.Article.SearchParameters CreateSearchParameters(Models.Api.Article.SearchParameters parameters)
+        {
+            return new Models.Article.SearchParameters
+            {
+                Text = parameters.text,
                 Offset = parameters.offset,
                 Limit = parameters.limit,
                 orderby = parameters.orderby

@@ -4,6 +4,6 @@ namespace Kartverket.Metadatakatalog.Service.Article
 {
     public interface IArticleService
     {
-        Kartverket.Metadatakatalog.Models.Article.SearchResult Articles(Kartverket.Metadatakatalog.Models.Article.SearchParameters parameters);
+        Kartverket.Metadatakatalog.Models.Article.SearchResult Search(Kartverket.Metadatakatalog.Models.Article.SearchParameters parameters);
     }
 }

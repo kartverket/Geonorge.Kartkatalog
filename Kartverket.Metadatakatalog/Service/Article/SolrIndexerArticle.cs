@@ -35,7 +35,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
         public void Index(ArticleIndexDoc doc)
         {
-            Log.Info(string.Format("Indexing single document Id={0} title={1}", doc.Id, doc.Heading));
+            Log.Info(string.Format("Indexing single document Id={0} Heading={1}", doc.Id, doc.Heading));
             _solr.Add(doc);
             _solr.Commit();
         }

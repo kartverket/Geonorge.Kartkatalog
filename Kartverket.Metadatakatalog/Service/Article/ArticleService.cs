@@ -20,7 +20,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
             _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ArticleIndexDoc>>(SolrCores.Articles);
         }
 
-        public Kartverket.Metadatakatalog.Models.Article.SearchResult Articles(Kartverket.Metadatakatalog.Models.Article.SearchParameters parameters)
+        public Kartverket.Metadatakatalog.Models.Article.SearchResult Search(Kartverket.Metadatakatalog.Models.Article.SearchParameters parameters)
         {
             ISolrQuery query = parameters.BuildQuery();
             try
@@ -30,7 +30,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
                     OrderBy = parameters.OrderBy(),
                     Rows = parameters.Limit,
                     Start = parameters.Offset - 1, //solr is zero-based - we use one-based indexing in api
-                    Fields = new[] { "Id", "Heading", "MainIntro", "MainBody", "StartPublish", "Author", "LinkArea", "score" }
+                    Fields = new[] { "Id", "title", "LinkUrl", "MainIntro", "MainBody", "StartPublish", "Author", "LinkArea", "score" }
                 });
 
                 return CreateSearchResults(queryResults, parameters);
