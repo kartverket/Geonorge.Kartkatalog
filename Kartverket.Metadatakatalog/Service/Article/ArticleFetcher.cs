@@ -39,9 +39,9 @@ namespace Kartverket.Metadatakatalog.Service.Article
             return await response.Content.ReadAsAsync<List<ArticleDocument>>().ConfigureAwait(false);
         }
 
-        public async Task<List<ArticleDocument>> FetchArticleDocumentAsync(string articleId)
+        public async Task<ArticleDocument> FetchArticleDocumentAsync(string articleId)
         {
-            string url = endPointUri + "app-api/geonorgeapi/getarticle" + articleId;
+            string url = endPointUri + "app-api/geonorgeapi/getarticle/" + articleId;
             Log.Info("Fetching articles uri: " + url);
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             request.Headers.Add("Accept", "application/json");
@@ -50,7 +50,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadAsAsync<List<ArticleDocument>>().ConfigureAwait(false);
+            return await response.Content.ReadAsAsync<ArticleDocument>().ConfigureAwait(false);
         }
 
     }

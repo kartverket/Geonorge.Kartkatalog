@@ -37,11 +37,11 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
                 RemoveIndexDocument(uuid);
 
-                var article = _articleFether.FetchArticleDocumentAsync(uuid).Result.ToList();
+                var article = _articleFether.FetchArticleDocumentAsync(uuid).Result;
 
                 if (article != null)
                 {
-                    ArticleIndexDoc articleIndexDoc = _indexDocumentCreator.CreateIndexDoc(article.FirstOrDefault());
+                    ArticleIndexDoc articleIndexDoc = _indexDocumentCreator.CreateIndexDoc(article);
                     RunIndex(articleIndexDoc);
                 }
 
@@ -69,8 +69,10 @@ namespace Kartverket.Metadatakatalog.Service.Article
             List<ArticleDocument> documents = null;
             try
             {
-                if (!string.IsNullOrEmpty(articleId))
-                    documents = _articleFether.FetchArticleDocumentAsync(articleId).Result.ToList();
+                if (!string.IsNullOrEmpty(articleId)) { 
+                    documents = new List<ArticleDocument>();
+                    documents.Add(_articleFether.FetchArticleDocumentAsync(articleId).Result);
+                }
                 else
                     documents = _articleFether.FetchArticleDocumentsAsync().Result.ToList();
 

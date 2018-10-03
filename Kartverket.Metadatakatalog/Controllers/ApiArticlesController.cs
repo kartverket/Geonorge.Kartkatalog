@@ -26,10 +26,9 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Article updated
         /// </summary>
-        // Add security token
         [System.Web.Http.Route("api/articleupdated")]
         [System.Web.Http.HttpPost]
-        public IHttpActionResult MetadataUpdated(FormDataCollection article)
+        public IHttpActionResult ArticleUpdated(FormDataCollection article)
         {
             HttpStatusCode statusCode;
 
@@ -66,7 +65,6 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Run article indexing
         /// </summary>
-        // Add security token
         [System.Web.Http.Route("api/index-articles")]
         [System.Web.Http.HttpGet]
         public IHttpActionResult Index()
@@ -98,7 +96,6 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Run article re-indexing
         /// </summary>
-        // Add security token
         [System.Web.Http.Route("api/reindex-articles")]
         [System.Web.Http.HttpGet]
         public IHttpActionResult ReIndex()
