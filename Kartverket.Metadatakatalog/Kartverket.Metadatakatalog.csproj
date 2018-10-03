@@ -283,6 +283,7 @@
     <Compile Include="Migrations\201712050646062_AddThemeMetadataSortings.Designer.cs">
       <DependentUpon>201712050646062_AddThemeMetadataSortings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ApiAuthorizeAttribute.cs" />
     <Compile Include="Models\Api\Article\Article.cs" />
     <Compile Include="Models\Api\Article\SearchParameters.cs" />
     <Compile Include="Models\Api\Article\SearchResult.cs" />

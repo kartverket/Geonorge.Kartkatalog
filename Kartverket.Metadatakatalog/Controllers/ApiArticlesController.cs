@@ -1,4 +1,6 @@
-﻿using Kartverket.Metadatakatalog.Service;
+﻿using Kartverket.Metadatakatalog.ActionFilters;
+using Kartverket.Metadatakatalog.Models;
+using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Article;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using System.Web.Http;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
+    [ApiAuthorize]
     public class ApiArticlesController : ApiController
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
