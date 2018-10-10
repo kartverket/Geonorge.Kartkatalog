@@ -11,6 +11,9 @@ namespace Kartverket.Metadatakatalog.Models.SearchIndex
         [SolrUniqueKey("Id")]
         public string Id { get; set; }
 
+        [SolrUniqueKey("Type")]
+        public string Type { get; set; }
+
         [SolrField("title")]
         public string Heading { get; set; }
 

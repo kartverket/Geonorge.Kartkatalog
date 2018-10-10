@@ -48,11 +48,16 @@ namespace Kartverket.Metadatakatalog.Service.Article
             try
             {
                 indexDoc.Id = document.Id;
+                indexDoc.Type = document.Type;
                 indexDoc.Heading = document.Heading;
-                //indexDoc.MainIntro = document.MainIntro.ToString();
+                if(document.MainIntro != null)
+                    indexDoc.MainIntro = document.MainIntro.ToString();
                 indexDoc.MainBody = document.MainBody;
                 indexDoc.StartPublish = document.StartPublish;
-                indexDoc.LinkUrl = WebConfigurationManager.AppSettings["GeonorgeUrl"] + document.LinkUrl;
+                if(document.LinkUrl.StartsWith("/"))
+                    indexDoc.LinkUrl = WebConfigurationManager.AppSettings["GeonorgeUrl"] + document.LinkUrl.TrimStart('/');
+                else
+                    indexDoc.LinkUrl = document.LinkUrl;
                 //foreach (var linkArea in document.LinkArea)
                 //{
                 //    indexDoc.LinkArea.Add(linkArea.ToString());

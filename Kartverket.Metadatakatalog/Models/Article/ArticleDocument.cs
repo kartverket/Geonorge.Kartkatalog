@@ -10,6 +10,7 @@ namespace Kartverket.Metadatakatalog.Models.Article
     public class ArticleDocument
     {
         public string Id { get; set; }
+        public string Type { get; set; }
         public string Heading { get; set; }
         public string LinkUrl { get; set; }
         public object MainIntro { get; set; }
