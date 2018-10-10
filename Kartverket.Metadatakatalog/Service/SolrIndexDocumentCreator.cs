@@ -1035,7 +1035,9 @@ namespace Kartverket.Metadatakatalog.Service
                 else if (protocol.ToLower().Contains("wms")) return "WMS-service";
                 else if (protocol.ToLower().Contains("csw")) return "CSW-service";
                 else if (protocol.ToLower().Contains("sos")) return "SOS-service";
-                else if (protocol.ToLower().Contains("download")) return "Downloadpage";
+                else if (protocol.ToLower().Contains("www:download")) return "Downloadpage";
+                else if (protocol.ToLower().Contains("geonorge:download")) return "Geonorge";
+                else if (protocol.ToLower().Contains("geonorge:filedownload")) return "Filedownload";
                 else if (protocol.ToLower().Contains("link")) return "Webpage";
                 else if (protocol.ToLower().Contains("rest")) return "REST-API";
                 else if (protocol.ToLower().Contains("wcs")) return "WCS-service";
@@ -1050,7 +1052,9 @@ namespace Kartverket.Metadatakatalog.Service
                 else if (protocol.ToLower().Contains("wms")) return "WMS-tjeneste";
                 else if (protocol.ToLower().Contains("csw")) return "CSW-tjeneste";
                 else if (protocol.ToLower().Contains("sos")) return "SOS-tjeneste";
-                else if (protocol.ToLower().Contains("download")) return "Nedlastingsside";
+                else if (protocol.ToLower().Contains("www:download")) return "Nedlastingsside";
+                else if (protocol.ToLower().Contains("geonorge:download")) return "Geonorge";
+                else if (protocol.ToLower().Contains("geonorge:filedownload")) return "Filnedlastning";
                 else if (protocol.ToLower().Contains("link")) return "Webside";
                 else if (protocol.ToLower().Contains("rest")) return "REST-API";
                 else if (protocol.ToLower().Contains("wcs")) return "WCS-tjeneste";
