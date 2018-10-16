@@ -147,6 +147,7 @@
     };
 
     var searchResults = @Html.Raw(JsonConvert.SerializeObject(Model.Result.Items));
+    var searchResultArticles = @Html.Raw(JsonConvert.SerializeObject(Model.ResultArticles));
     var metadatasWithThemes = @Html.Raw(metadatasWithThemes);
 
     var ThemeItem = {

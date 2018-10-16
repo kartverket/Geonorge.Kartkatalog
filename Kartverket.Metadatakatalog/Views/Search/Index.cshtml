@@ -14,9 +14,15 @@
 <section class="heading">
     <div class="row">
         <div class="col-sm-12">
-            <h1 class="small-h1">
-                @Resources.UI.AppPageTitle
-            </h1>
+            @if (!string.IsNullOrEmpty(Model.Text))
+            {
+                <h1 class="small-h1">Søk etter '@Model.Text' gav @Model.NumFoundTotal treff</h1>
+            }
+            else
+            {
+                <h1 class="small-h1">@Resources.UI.AppPageTitle</h1>
+            }
+
         </div>
         <div class="col-sm-12">
             <span class="separator-lg"></span>
