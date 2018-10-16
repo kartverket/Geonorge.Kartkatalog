@@ -10,6 +10,7 @@ namespace Kartverket.Metadatakatalog.Models.Article
     {
 
         public string Uuid { get; set; }
+        public string Type { get; set; }
         public string Title { get; set; }
         public string Intro { get; set; }
         public string Body { get; set; }
@@ -18,6 +19,7 @@ namespace Kartverket.Metadatakatalog.Models.Article
         public SearchResultItem(ArticleIndexDoc doc)
         {
             Uuid = doc.Id;
+            Type = doc.Type;
             Title = doc.Heading;
             Intro = doc.MainIntro;
             Body = doc.MainBody;

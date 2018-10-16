@@ -30,7 +30,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
                     OrderBy = parameters.OrderBy(),
                     Rows = parameters.Limit,
                     Start = parameters.Offset - 1, //solr is zero-based - we use one-based indexing in api
-                    Fields = new[] { "Id", "title", "LinkUrl", "MainIntro", "MainBody", "StartPublish", "Author", "LinkArea", "score" }
+                    Fields = new[] { "Id", "Type", "title", "LinkUrl", "MainIntro", "MainBody", "StartPublish", "Author", "LinkArea", "score" }
                 });
 
                 return CreateSearchResults(queryResults, parameters);

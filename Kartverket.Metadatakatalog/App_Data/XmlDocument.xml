@@ -623,6 +623,11 @@
             The uniqueidentifier
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Type">
+            <summary>
+            The type
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Title">
             <summary>
             The title

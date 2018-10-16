@@ -13,6 +13,10 @@ namespace Kartverket.Metadatakatalog.Models.Api.Article
         /// </summary>
         public string Uuid { get; set; }
         /// <summary>
+        /// The type
+        /// </summary>
+        public string Type { get; set; }
+        /// <summary>
         /// The title
         /// </summary>
         public string Title { get; set; }
@@ -24,6 +28,7 @@ namespace Kartverket.Metadatakatalog.Models.Api.Article
         public Article(Models.Article.SearchResultItem item)
         {
             Uuid = item.Uuid;
+            Type = item.Type;
             Title = item.Title;
             ShowDetailsUrl = item.DetailsUrl;
 
