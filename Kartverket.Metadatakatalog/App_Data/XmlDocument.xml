@@ -628,9 +628,19 @@
             The type
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Date">
+            <summary>
+            The type
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Title">
             <summary>
             The title
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Intro">
+            <summary>
+            Short description
             </summary>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.ShowDetailsUrl">

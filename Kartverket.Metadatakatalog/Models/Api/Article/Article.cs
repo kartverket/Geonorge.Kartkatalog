@@ -17,9 +17,17 @@ namespace Kartverket.Metadatakatalog.Models.Api.Article
         /// </summary>
         public string Type { get; set; }
         /// <summary>
+        /// The type
+        /// </summary>
+        public DateTime? Date { get; set; }
+        /// <summary>
         /// The title
         /// </summary>
         public string Title { get; set; }
+        /// <summary>
+        /// Short description
+        /// </summary>
+        public string Intro { get; set; }
         /// <summary>
         /// Link to article
         /// </summary>
@@ -29,7 +37,9 @@ namespace Kartverket.Metadatakatalog.Models.Api.Article
         {
             Uuid = item.Uuid;
             Type = item.Type;
+            Date = item.StartPublish;
             Title = item.Title;
+            Intro = !string.IsNullOrEmpty(item.Intro) ? item.Intro : "";
             ShowDetailsUrl = item.DetailsUrl;
 
         }
