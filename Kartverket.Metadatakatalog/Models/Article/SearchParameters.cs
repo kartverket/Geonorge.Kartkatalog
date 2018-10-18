@@ -16,7 +16,6 @@ namespace Kartverket.Metadatakatalog.Models.Article
             this.value = value;
         }
 
-        public static readonly OrderBy score = new OrderBy("score");
 
         public override string ToString()
         {
@@ -47,6 +46,10 @@ namespace Kartverket.Metadatakatalog.Models.Article
         public SortOrder[] OrderBy()
         {
             var order = new[] { new SortOrder("score", Order.DESC) };
+            if (orderby == "StartPublish")
+            {
+                order = new[] { new SortOrder("StartPublish", Order.DESC) };
+            }
             return order;
         }
 

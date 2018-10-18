@@ -34,6 +34,8 @@ namespace Kartverket.Metadatakatalog.Controllers
             Kartverket.Metadatakatalog.Models.Article.SearchParameters articleParameters = new Models.Article.SearchParameters();
             articleParameters.Text = parameters.Text;
             articleParameters.Limit = 200;
+            if (string.IsNullOrEmpty(parameters.Text))
+                articleParameters.orderby = "StartPublish";
             var articleResult = _articleService.Search(articleParameters);
 
 
