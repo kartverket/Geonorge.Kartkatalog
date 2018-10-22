@@ -481,7 +481,7 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiArticlesController.ArticleUpdated(System.Net.Http.Formatting.FormDataCollection)">
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiArticlesController.ArticleUpdated(Kartverket.Metadatakatalog.Controllers.ArticleStatus)">
             <summary>
             Article updated
             </summary>

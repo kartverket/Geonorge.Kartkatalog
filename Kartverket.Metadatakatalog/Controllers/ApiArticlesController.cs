@@ -31,12 +31,12 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [System.Web.Http.Route("api/articleupdated")]
         [System.Web.Http.HttpPost]
-        public IHttpActionResult ArticleUpdated(FormDataCollection article)
+        public IHttpActionResult ArticleUpdated(ArticleStatus article)
         {
             HttpStatusCode statusCode;
 
-            string Id = article.Get("id");
-            string status = article.Get("status");
+            string Id = article.Id;
+            string status = article.Status;
 
             try
             {
@@ -126,5 +126,11 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             return StatusCode(statusCode);
         }
+    }
+
+    public class ArticleStatus
+    {
+        public string Id { get; set; }
+        public string Status { get; set; }
     }
 }
