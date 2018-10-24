@@ -33,6 +33,10 @@ namespace Kartverket.Metadatakatalog.Service
         Dictionary<string, string> ListOfOrderingInstructions = new Dictionary<string, string>();
         Dictionary<string, string> ListOfOrderingInstructionsEnglish = new Dictionary<string, string>();
 
+        Dictionary<string, string> DownloadUseGroups = new Dictionary<string, string>();
+        Dictionary<string, string> DownloadUseGroupsEnglish = new Dictionary<string, string>();
+        Dictionary<string, string> DownloadPurposes = new Dictionary<string, string>();
+        Dictionary<string, string> DownloadPurposesEnglish = new Dictionary<string, string>();
 
         public RegisterFetcher()
         {
@@ -56,6 +60,29 @@ namespace Kartverket.Metadatakatalog.Service
             ListOfOrderingInstructions = GetSubRegister("metadata-kodelister/kartverket/norge-digitalt-tjenesteerklaering");
             ListOfOrderingInstructionsEnglish = GetSubRegister("metadata-kodelister/kartverket/norge-digitalt-tjenesteerklaering", Culture.EnglishCode);
 
+            DownloadUseGroups = GetCodeListByName("brukergrupper");
+            DownloadUseGroupsEnglish = GetCodeListByName("brukergrupper", Culture.EnglishCode);
+            DownloadPurposes = GetCodeListByName("formal");
+            DownloadPurposesEnglish = GetCodeListByName("formal", Culture.EnglishCode);
+
+        }
+
+        public Dictionary<string, string> GetDownloadUseGroups()
+        {
+            var culture = CultureHelper.GetCurrentCulture();
+            if (culture == Culture.NorwegianCode)
+                return DownloadUseGroups;
+            else
+                return DownloadUseGroupsEnglish;
+        }
+
+        public Dictionary<string, string> GetDownloadPurposes()
+        {
+            var culture = CultureHelper.GetCurrentCulture();
+            if (culture == Culture.NorwegianCode)
+                return DownloadPurposes;
+            else
+                return DownloadPurposesEnglish;
         }
 
         public Dictionary<string, string> GetListOfOrganizations()
@@ -243,6 +270,49 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
+                _webClient.Headers.Remove("Accept-Language");
+                _webClient.Headers.Add("Accept-Language", culture);
+                _webClient.Encoding = System.Text.Encoding.UTF8;
+                var data = _webClient.DownloadString(url);
+                var response = Newtonsoft.Json.Linq.JObject.Parse(data);
+                var codeList = response["containeditems"];
+
+                foreach (var code in codeList)
+                {
+                    var codevalue = code["codevalue"].ToString();
+                    if (string.IsNullOrWhiteSpace(codevalue))
+                        codevalue = code["label"].ToString();
+
+                    if (!CodeValues.ContainsKey(codevalue))
+                    {
+                        CodeValues.Add(codevalue, code["label"].ToString());
+                    }
+                }
+
+                CodeValues = CodeValues.OrderBy(o => o.Value).ToDictionary(o => o.Key, o => o.Value);
+
+                memCacher.Add(cacheId, CodeValues, new DateTimeOffset(DateTime.Now.AddHours(12)));
+
+            }
+
+            return CodeValues;
+        }
+
+        public Dictionary<string, string> GetCodeListByName(string name, string culture = Culture.NorwegianCode)
+        {
+            var cacheId = name + "_" + culture;
+            var cache = memCacher.GetValue(cacheId);
+
+            Dictionary<string, string> CodeValues = new Dictionary<string, string>();
+
+            if (cache != null)
+            {
+                CodeValues = cache as Dictionary<string, string>;
+            }
+            else
+            {
+
+                string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/metadata-kodelister/" + name;
                 _webClient.Headers.Remove("Accept-Language");
                 _webClient.Headers.Add("Accept-Language", culture);
                 _webClient.Encoding = System.Text.Encoding.UTF8;

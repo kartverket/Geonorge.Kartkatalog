@@ -1,5 +1,6 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
 @using Resources
+@using Newtonsoft.Json
 @{
     ViewBag.Title = UI.FileDownload;
 }
@@ -457,6 +458,10 @@
         </article>
     </div>
 </div>
+<script>
+    var downloadUseGroups = @Html.Raw(JsonConvert.SerializeObject(ViewBag.DownloadUseGroups));
+    var downloadPurposes = @Html.Raw(JsonConvert.SerializeObject(ViewBag.DownloadPurposes));
+</script>
 @section scripts{
     @Scripts.Render("~/Content/download")
 }

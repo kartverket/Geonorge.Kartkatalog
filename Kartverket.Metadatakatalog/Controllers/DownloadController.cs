@@ -15,6 +15,9 @@ namespace Kartverket.Metadatakatalog.Controllers
         // GET: Download
         public ActionResult Index()
         {
+            RegisterFetcher registerFetcher = new RegisterFetcher();
+            ViewBag.DownloadUseGroups = registerFetcher.GetDownloadUseGroups();
+            ViewBag.DownloadPurposes = registerFetcher.GetDownloadPurposes();
             return View();
         }
 
