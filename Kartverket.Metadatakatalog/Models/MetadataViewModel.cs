@@ -232,10 +232,13 @@ namespace Kartverket.Metadatakatalog.Models
 
         string RemoveQueryString(string URL) 
         {
-            int startQueryString = URL.IndexOf("?");
+            if (!string.IsNullOrEmpty(URL))
+            { 
+                int startQueryString = URL.IndexOf("?");
 
-            if (startQueryString != -1)
-                URL = URL.Substring(0, startQueryString);
+                if (startQueryString != -1)
+                    URL = URL.Substring(0, startQueryString);
+            }
 
             return URL;
         }
