@@ -884,6 +884,10 @@ var mainVueModel = new Vue({
     data: {
         orderLines: [],
         email: "",
+        usageGroup: "",
+        usageGroupsAvailable: downloadUseGroups,
+        usagePurposes: [],
+        usagePurposesAvailable: downloadPurposes,
         orderRequests: {},
         orderRequestsAdditionalInfo: {},
         orderResponse: {},
@@ -1674,6 +1678,7 @@ var mainVueModel = new Vue({
                         if (orderRequests[orderLine.metadata.orderDistributionUrl] == undefined) {
                             orderRequests[orderLine.metadata.orderDistributionUrl] = {
                                 "email": "",
+                                "usageGroup": this.usageGroup,
                                 "orderLines": []
                             }
                         }
@@ -1719,6 +1724,7 @@ var mainVueModel = new Vue({
                             "areas": areas,
                             "projections": projections,
                             "formats": formats,
+                            "usagePurpose": this.usagePurposes
                         }
 
                         if (this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
@@ -1749,6 +1755,7 @@ var mainVueModel = new Vue({
             return this.orderRequestsAdditionalInfo[distributionUrl] != undefined && this.orderRequestsAdditionalInfo[distributionUrl][metadataUuid] != undefined ? this.orderRequestsAdditionalInfo[distributionUrl][metadataUuid] : {};
         },
         sendRequests: function () {
+            this.updateUsageForOrderRequests();
             this.updateEmailForOrderRequests();
             var responseData = [];
             var responseFailed = false;
@@ -1936,6 +1943,16 @@ var mainVueModel = new Vue({
             if (this.orderRequests !== undefined) {
                 for (orderDistributionUrl in this.orderRequests) {
                     this.orderRequests[orderDistributionUrl].email = this.email;
+                }
+            }
+        },
+
+        updateUsageForOrderRequests: function () {
+            if (this.orderRequests !== undefined) {
+                for (orderDistributionUrl in this.orderRequests) {
+                    this.orderRequests[orderDistributionUrl].usageGroup = this.usageGroup;
+                    for (o = 0; o < this.orderRequests[orderDistributionUrl].orderLines.length; o++)
+                        this.orderRequests[orderDistributionUrl].orderLines[o].usagePurpose = this.usagePurposes;
                 }
             }
         },
