@@ -487,6 +487,8 @@
 <script>
     var downloadUseGroups = @Html.Raw(JsonConvert.SerializeObject(ViewBag.DownloadUseGroups));
     var downloadPurposes = @Html.Raw(JsonConvert.SerializeObject(ViewBag.DownloadPurposes));
+    var downloadSoftwareClient = 'Kartkatalogen';
+    var downloadSoftwareClientVersion = '@Html.ApplicationVersionNumber()';
 </script>
 @section scripts{
     @Scripts.Render("~/Content/download")

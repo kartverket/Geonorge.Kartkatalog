@@ -888,6 +888,8 @@ var mainVueModel = new Vue({
         usageGroupsAvailable: downloadUseGroups,
         usagePurposes: [],
         usagePurposesAvailable: downloadPurposes,
+        softwareClient : downloadSoftwareClient,
+        softwareClientVersion : downloadSoftwareClientVersion,
         orderRequests: {},
         orderRequestsAdditionalInfo: {},
         orderResponse: {},
@@ -1679,6 +1681,8 @@ var mainVueModel = new Vue({
                             orderRequests[orderLine.metadata.orderDistributionUrl] = {
                                 "email": "",
                                 "usageGroup": this.usageGroup,
+                                "softwareClient": this.softwareClient,
+                                "softwareClientVersion": this.softwareClientVersion,
                                 "orderLines": []
                             }
                         }
@@ -1951,6 +1955,8 @@ var mainVueModel = new Vue({
             if (this.orderRequests !== undefined) {
                 for (orderDistributionUrl in this.orderRequests) {
                     this.orderRequests[orderDistributionUrl].usageGroup = this.usageGroup;
+                    this.orderRequests[orderDistributionUrl].softwareClient = this.softwareClient;
+                    this.orderRequests[orderDistributionUrl].softwareClientVersion = this.softwareClientVersion;
                     for (o = 0; o < this.orderRequests[orderDistributionUrl].orderLines.length; o++)
                         this.orderRequests[orderDistributionUrl].orderLines[o].usagePurpose = this.usagePurposes;
                 }
