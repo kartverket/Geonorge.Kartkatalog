@@ -884,9 +884,9 @@ var mainVueModel = new Vue({
     data: {
         orderLines: [],
         email: "",
-        usageGroup: "",
+        usageGroup: localStorage.getItem('preSelectedUsageGroup') !== null ? JSON.parse(localStorage.getItem('preSelectedUsageGroup')) : "",
         usageGroupsAvailable: downloadUseGroups,
-        usagePurposes: [],
+        usagePurposes: localStorage.getItem('preSelectedUsagePurposes') !== null ? JSON.parse(localStorage.getItem('preSelectedUsagePurposes')) : [] ,
         usagePurposesAvailable: downloadPurposes,
         softwareClient : downloadSoftwareClient,
         softwareClientVersion : downloadSoftwareClientVersion,
@@ -1957,9 +1957,11 @@ var mainVueModel = new Vue({
         updateUsageForOrderRequests: function () {
             if (this.orderRequests !== undefined) {
                 for (orderDistributionUrl in this.orderRequests) {
+                    localStorage.setItem('preSelectedUsageGroup', JSON.stringify(this.usageGroup));
                     this.orderRequests[orderDistributionUrl].usageGroup = this.usageGroup;
                     this.orderRequests[orderDistributionUrl].softwareClient = this.softwareClient;
                     this.orderRequests[orderDistributionUrl].softwareClientVersion = this.softwareClientVersion;
+                    localStorage.setItem('preSelectedUsagePurposes', JSON.stringify(this.usagePurposes));
                     for (o = 0; o < this.orderRequests[orderDistributionUrl].orderLines.length; o++)
                         this.orderRequests[orderDistributionUrl].orderLines[o].usagePurpose = this.usagePurposes;
                 }
