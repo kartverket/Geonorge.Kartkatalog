@@ -1976,6 +1976,16 @@
               Looks up a localized string similar to Lovhenvisning.
             </summary>
         </member>
+        <member name="P:Resources.UI.SelectDownloadPurpose">
+            <summary>
+              Looks up a localized string similar to Velg formål.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SelectDownloadUsegroup">
+            <summary>
+              Looks up a localized string similar to Velg brukergruppe.
+            </summary>
+        </member>
         <member name="P:Resources.UI.SelectedArea">
             <summary>
               Looks up a localized string similar to valgt område.

@@ -747,4 +747,10 @@
   <data name="NotEvaluated" xml:space="preserve">
     <value>Not evaluated</value>
   </data>
+  <data name="SelectDownloadPurpose" xml:space="preserve">
+    <value>Select puprose</value>
+  </data>
+  <data name="SelectDownloadUsegroup" xml:space="preserve">
+    <value>Select usegroup</value>
+  </data>
 </root>

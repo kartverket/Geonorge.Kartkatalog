@@ -319,15 +319,13 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="download-form">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="pull-right">
                                     <select v-model="usageGroup">
-                                        <option disabled value="">Velg brukergruppe</option>
+                                        <option disabled value="">@UI.SelectDownloadUsegroup</option>
                                         <option v-for="(item, key) in usageGroupsAvailable" v-bind:value="key">
                                             {{ item }}
                                         </option>
@@ -338,7 +336,7 @@
                             <div class="form-group">
                                 <div class="pull-right">
                                     <select v-model="usagePurposes" multiple>
-                                        <option disabled value="">Velg formål</option>
+                                        <option disabled value="">@UI.SelectDownloadPurpose</option>
                                         <option v-for="(item, key) in usagePurposesAvailable" v-bind:value="key">
                                             {{ item }}
                                         </option>

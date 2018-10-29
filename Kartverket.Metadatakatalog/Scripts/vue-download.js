@@ -1935,7 +1935,10 @@ var mainVueModel = new Vue({
             var emailAddressIsValid = this.emailAddressIsValid(this.email);
             var formHasNoErrors = this.forHasNoErrors();
             var emailRequired = this.emailRequired;
-            var formIsValid = ((emailFieldNotEmpty && emailRequired && emailAddressIsValid && formHasNoErrors) || (!emailRequired && formHasNoErrors)) ? true : false;
+            var usageGroupFieldNotEmpty = (this.usageGroup !== "") ? true : false;
+            var usagePurposeNotEmpty = Object.keys(this.usagePurposes).length === 0 ? false : true;
+            var usageNotEmpty = usageGroupFieldNotEmpty && usagePurposeNotEmpty;
+            var formIsValid = (((emailFieldNotEmpty && emailRequired && emailAddressIsValid && formHasNoErrors) || (!emailRequired && formHasNoErrors)) ? true : false) && usageNotEmpty;
             return formIsValid;
         },
         projectionAndFormatIsRequired: function (orderItem) {

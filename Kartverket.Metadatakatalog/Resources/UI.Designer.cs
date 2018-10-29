@@ -1573,6 +1573,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Velg formål.
+        /// </summary>
+        public static string SelectDownloadPurpose {
+            get {
+                return ResourceManager.GetString("SelectDownloadPurpose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Velg brukergruppe.
+        /// </summary>
+        public static string SelectDownloadUsegroup {
+            get {
+                return ResourceManager.GetString("SelectDownloadUsegroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to valgt område.
         /// </summary>
         public static string SelectedArea {
