@@ -1110,6 +1110,38 @@ var mainVueModel = new Vue({
         'masterOrderLine': MasterOrderLine
     },
     methods: {
+        getPurposeName: function (purpose) {
+
+            for (var item in this.usagePurposesAvailable)
+                if (purpose === item)
+                    return this.usagePurposesAvailable[item];
+
+            return purpose;
+        },
+        purposeIsSelected: function (purpose) {
+            for (var item in this.usagePurposes) {
+                if (purpose === this.usagePurposes[item])
+                    return true;
+            }
+            return false;
+        },
+        selectPurpose: function (purposeName, purpose) {
+            var purposeAdded = false;
+            for (var i = 0; i < this.usagePurposes.length; i++) {
+                if (this.usagePurposes[i] === purpose) {
+                    purposeAdded = true;
+                }
+            }
+
+            if (!purposeAdded)
+                this.usagePurposes.push(purpose);
+
+        },
+
+        removeSelectedPurpose: function (purpose) {
+            this.usagePurposes.splice(purpose, 1);
+        }
+        ,
         isAllreadyAdded: function (array, item, propertyToCompare) {
             var isAllreadyAdded = {
                 added: false,

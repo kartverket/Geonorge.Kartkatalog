@@ -321,11 +321,11 @@
                 </div>
                 <div class="download-form">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
+                            <p>@UI.SelectDownloadUsegroup: <span class="required-indicator"></span></p>
                             <div class="form-group">
-                                <div class="pull-right custom-select">
+                                <div class="custom-select">
                                     <select v-model="usageGroup" class="form-control">
-                                        <option disabled value="">@UI.SelectDownloadUsegroup</option>
                                         <option v-for="(item, key) in usageGroupsAvailable" v-bind:value="key">
                                             {{ item }}
                                         </option>
@@ -333,17 +333,28 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="form-group">
-                                <div class="pull-right">
-                                    <select v-model="usagePurposes" multiple>
-                                        <option disabled value="">@UI.SelectDownloadPurpose</option>
-                                        <option v-for="(item, key) in usagePurposesAvailable" v-bind:value="key">
-                                            {{ item }}
-                                        </option>
-                                    </select>
+                        </div>
+                        <div class="col-md-6">
+                            <p>@UI.SelectDownloadPurpose: <span class="required-indicator"></span></p>
+                            <div class="custom-select-list">
+                                <div class="custom-select-list-input-container">
+                                    <span v-for="(purpose, index) in usagePurposes" class="custom-select-list-selected">
+                                        {{ getPurposeName(purpose) }}
+                                        <span v-on:click="removeSelectedPurpose(index)" class="custom-select-list-remove-button"></span>
+                                    </span>
+                                    <input type="text" class="custom-select-list-input" />
                                 </div>
-                                <div class="clearfix"></div>
+                                <div class="custom-select-list-dropdown-container">
+                                    <div class="custom-select-list-dropdown">
+                                        <div class="custom-select-list-dropdown-content">
+                                            <ul class="custom-select-list-options usagePurposes-option-list">
+                                                <li v-on:click="selectPurpose(purposeName, purpose)" v-bind:class="{'is-selected': purposeIsSelected(purpose)}" v-for="(purposeName, purpose) in usagePurposesAvailable">{{ purposeName }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <p>&nbsp;</p>
                         </div>
                     </div>
                     <div v-show="emailRequired" class="row margin-bottom-10">
