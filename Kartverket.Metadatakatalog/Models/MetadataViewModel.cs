@@ -366,7 +366,7 @@ namespace Kartverket.Metadatakatalog.Models
 
                     if (typeStr == "GEONORGE-WMS" && BoundingBox != null)
                     {
-                        CoverageLink = $"{WebConfigurationManager.AppSettings["GeonorgeWmsUrl"]}skwms1/wms.geonorge_dekningskart?service=WMS&request=GetMap&version=1.3.0&BGCOLOR=0xFFFFFF&crs=EPSG:4326&bbox={BoundingBox.SouthBoundLatitude.Replace(",",".")},{BoundingBox.WestBoundLongitude.Replace(",", ".")},{BoundingBox.NorthBoundLatitude.Replace(",", ".")},{BoundingBox.EastBoundLongitude.Replace(",", ".")}&layers=datasett_dekning&width=2210&height=1026&format=image/png&datasett={layerStr}";
+                        CoverageLink = $"{commonPart}&lon=96090.37&lat=6564869.00&wms={pathStr.Replace("wms?", "")}skwms1%2Fwms.geonorge_dekningskart%3Fdatasett%3D{layerStr}&project=geonorge&layers=1002&addLayers=datasett_dekning";
                     }
                     else if (typeStr == "WMS")
                     {
