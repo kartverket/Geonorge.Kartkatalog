@@ -84,8 +84,19 @@
 }
 
 
-.input-group .input-group-addon.btn{
+.input-group .input-group-addon.btn {
     line-height: 12pt;
 }
 
 
+.articles-list-item {
+    padding: 16px 0;
+}
+
+    .articles-list-item .title {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .articles-list-item .intro {
+    }

@@ -19,24 +19,24 @@
 
 @* Sett url og fiks linjeskift i data for themes *@
 @helper BuildMenu(List<Theme> data, int? parentId = null)
+{
+
+    foreach (var theme in data)
     {
+        theme.Metadata = theme.SortMetadata(theme);
+        theme.Name = theme.NameTranslated();
+        theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
+        theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+    }
 
-        foreach (var theme in data)
+    var items = data.Where(d => d.ParentId == parentId);
+    if (items.Any())
+    {
+        foreach (var item in items)
         {
-            theme.Metadata = theme.SortMetadata(theme);
-            theme.Name = theme.NameTranslated();
-            theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
-            theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+            @BuildMenu(data, item.Id)
         }
-
-        var items = data.Where(d => d.ParentId == parentId);
-        if (items.Any())
-        {
-            foreach (var item in items)
-            {
-                @BuildMenu(data, item.Id)
-            }
-        }
+    }
 }
 
 @BuildMenu(themes, null)
@@ -55,7 +55,7 @@
 
 @* Tabellen *@
 <script type="text/x-template" id="theme-group-template">
-    <div v-bind:class="{'table-view': $root.viewType == 'tableView'}">
+    <div v-if="$root.viewType == 'tableView'" class="table-view">
         <div v-if="$root.viewType == 'tableView'" is="table-header"
              v-bind:selected-fields="$root.selectedFields"
              v-bind:selected-buttons="$root.selectedButtons">
@@ -74,6 +74,16 @@
                  v-bind:selected-fields="$root.selectedFields"
                  v-bind:selected-buttons="$root.selectedButtons">
             </div>
+        </div>
+    </div>
+
+    @* Artikler *@
+    <div v-else-if="$root.viewType == 'articlesList'">
+        <div v-for="article in searchResultArticles" class="resultItemRow table-border-bottom articles-list-item">
+            <a v-bind:href="article.DetailsUrl">
+                <p class="title">{{ article.Title }}</p>
+            </a>
+            <div class="intro">{{ article.Intro }}</div>
         </div>
     </div>
 </script>
@@ -147,7 +157,7 @@
     };
 
     var searchResults = @Html.Raw(JsonConvert.SerializeObject(Model.Result.Items));
-    var searchResultArticles = @Html.Raw(JsonConvert.SerializeObject(Model.ResultArticles));
+    var searchResultArticles = @Html.Raw(JsonConvert.SerializeObject(Model.ResultArticles.Items));
     var metadatasWithThemes = @Html.Raw(metadatasWithThemes);
 
     var ThemeItem = {
@@ -177,6 +187,7 @@
                 viewType: 'tableView',
                 searchResults: searchResults,
                 metadatasWithThemes: metadatasWithThemes,
+                searchResultArticles: searchResultArticles,
                 addedTopLevelThemeIds: []
             }
         },
