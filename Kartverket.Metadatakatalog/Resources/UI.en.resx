@@ -753,4 +753,7 @@
   <data name="SelectDownloadUsegroup" xml:space="preserve">
     <value>Select usegroup</value>
   </data>
+  <data name="Articles" xml:space="preserve">
+    <value>Articles</value>
+  </data>
 </root>

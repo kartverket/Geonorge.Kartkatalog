@@ -753,4 +753,7 @@
   <data name="SelectDownloadUsegroup" xml:space="preserve">
     <value>Velg brukergruppe</value>
   </data>
+  <data name="Articles" xml:space="preserve">
+    <value>Artikler</value>
+  </data>
 </root>

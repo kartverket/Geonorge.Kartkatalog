@@ -198,6 +198,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Artikler.
+        /// </summary>
+        public static string Articles {
+            get {
+                return ResourceManager.GetString("Articles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tilgjengelig som.
         /// </summary>
         public static string AvailableAs {

@@ -1209,6 +1209,11 @@
               Looks up a localized string similar to områder.
             </summary>
         </member>
+        <member name="P:Resources.UI.Articles">
+            <summary>
+              Looks up a localized string similar to Artikler.
+            </summary>
+        </member>
         <member name="P:Resources.UI.AvailableAs">
             <summary>
               Looks up a localized string similar to Tilgjengelig som.
