@@ -85,6 +85,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
         public string CoverageUrl { get; set; }
+        public string CoverageGridUrl { get; set; }
         public string DownloadUrl { get; set; }
         public string Purpose { get; set; }
         public List<QualitySpecification> QualitySpecifications { get; set; }
@@ -345,28 +346,58 @@ namespace Kartverket.Metadatakatalog.Models
         public string GetCoverageLink()
         {
 
-            if (!string.IsNullOrEmpty(CoverageUrl))
+            if (!string.IsNullOrEmpty(CoverageUrl) || !string.IsNullOrEmpty(CoverageGridUrl))
             {
-                if (CoverageUrl.IndexOf("TYPE:") != -1)
+                if (CoverageUrl.IndexOf("TYPE:") != -1 || CoverageGridUrl.IndexOf("TYPE:") != -1)
                 {
                     string CoverageLink = "";
                     var coverageStr = CoverageUrl;
+                    var coverageStrGrid = CoverageGridUrl;
+
                     var startPos = 5;
-                    var endPosType = coverageStr.IndexOf("@PATH");
-                    var typeStr = coverageStr.Substring(startPos, endPosType - startPos);
 
-                    var endPath = coverageStr.IndexOf("@LAYER");
-                    var pathStr = coverageStr.Substring(endPosType + startPos + 1, endPath - (endPosType + startPos + 1));
+                    string typeStr = "", pathStr ="",layerStr = "";
+                    int endPosType, endPath, startLayer, endLayer;
 
-                    var startLayer = endPath + 7;
-                    var endLayer = coverageStr.Length - startLayer;
-                    var layerStr = coverageStr.Substring(startLayer, endLayer);
+                    if (!string.IsNullOrEmpty(coverageStr))
+                    { 
+                    endPosType = coverageStr.IndexOf("@PATH");
+                    typeStr = coverageStr.Substring(startPos, endPosType - startPos);
+
+                    endPath = coverageStr.IndexOf("@LAYER");
+                    pathStr = coverageStr.Substring(endPosType + startPos + 1, endPath - (endPosType + startPos + 1));
+
+                    startLayer = endPath + 7;
+                    endLayer = coverageStr.Length - startLayer;
+                    layerStr = coverageStr.Substring(startLayer, endLayer);
+                    }
+
+                    string typeStrGrid = "", pathStrGrid = "", layerStrGrid = "";
+                    int endPosTypeGrid, endPathGrid, startLayerGrid, endLayerGrid;
+
+                    if (!string.IsNullOrEmpty(coverageStrGrid))
+                    {
+                        endPosTypeGrid = coverageStrGrid.IndexOf("@PATH");
+                        typeStrGrid = coverageStrGrid.Substring(startPos, endPosTypeGrid - startPos);
+
+                        endPathGrid = coverageStrGrid.IndexOf("@LAYER");
+                        pathStrGrid = coverageStrGrid.Substring(endPosTypeGrid + startPos + 1, endPathGrid - (endPosTypeGrid + startPos + 1));
+
+                        startLayerGrid = endPathGrid + 7;
+                        endLayerGrid = coverageStrGrid.Length - startLayerGrid;
+                        layerStrGrid = coverageStrGrid.Substring(startLayerGrid, endLayerGrid);
+                    }
 
                     string commonPart = $"{SimpleMetadataUtil.NorgeskartUrl}#!?zoom={ZoomLevel()}&";
 
-                    if (typeStr == "GEONORGE-WMS" && BoundingBox != null)
+                    if (typeStr == "GEONORGE-WMS")
                     {
-                        CoverageLink = $"{commonPart}&lon=96090.37&lat=6564869.00&wms={pathStr.Replace("wms?", "")}skwms1%2Fwms.geonorge_dekningskart%3Fdatasett%3D{layerStr}&project=geonorge&layers=1002&addLayers=datasett_dekning";
+                        if(!string.IsNullOrEmpty(CoverageUrl) && !string.IsNullOrEmpty(CoverageGridUrl))
+                            CoverageLink = $"{commonPart}project=geonorge&layers=1002&lat=6768825.17&lon=217236.30&wms=https://wms.geonorge.no/skwms1/wms.geonorge_dekningskart?datasett={layerStr},https://openwms.statkart.no/skwms1/wms.gp_dek_oversikt?datasett={layerStrGrid}&addLayers=geonorgedekningskart";
+                        else if (string.IsNullOrEmpty(CoverageUrl) && !string.IsNullOrEmpty(CoverageGridUrl))
+                            CoverageLink = $"{commonPart}&lon=96090.37&lat=6564869.00&wms={pathStr.Replace("wms?", "")}skwms1%2Fwms.geonorge_dekningskart%3Fdatasett%3D{layerStrGrid}&project=geonorge&layers=1002&addLayers=datasett_dekning";
+                        else 
+                            CoverageLink = $"{commonPart}&lon=96090.37&lat=6564869.00&wms={pathStr.Replace("wms?", "")}skwms1%2Fwms.geonorge_dekningskart%3Fdatasett%3D{layerStr}&project=geonorge&layers=1002&addLayers=datasett_dekning";
                     }
                     else if (typeStr == "WMS")
                     {
