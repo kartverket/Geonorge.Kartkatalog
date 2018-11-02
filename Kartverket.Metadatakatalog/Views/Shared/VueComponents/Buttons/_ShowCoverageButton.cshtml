@@ -1,6 +1,16 @@
 ﻿@using Resources
 <script type="text/x-template" id="showCoverageButtonTemplate">
-    <div v-html="htmlElement"></div>
+    <div>
+        <div v-on:click="showModal = !showModal && resultItem.CoverageUrl" v-html="htmlElement"></div>
+        <div v-show="showModal" class="custom-modal">
+            <div class="custom-modal-container">
+                <iframe v-bind:src="resultItem.CoverageUrl" style="height: 100%;"></iframe>
+                <div class="modal-footer" style="padding: 4px;">
+                    <button v-on:click="showModal = false" type="button" data-dismiss="modal" class="btn btn-default">Lukk</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </script>
 
 <script>
@@ -8,12 +18,17 @@
         name: "showCoverageButton",
         template: "#showCoverageButtonTemplate",
         props: ["resultItem", "defaultButtonClass", "buttonType"],
+        data: function() {
+            return {
+                showModal: false
+            }
+        },
         computed: {
             button: function () {
                 var button = {
                     content: "@Html.Raw(UI.DisplayCoverageMap)",
                     className: this.defaultButtonClass,
-                    url: this.resultItem.CoverageUrl,
+                    url: null,
                     title: "@Html.Raw(UI.DisplayCoverageMap) for " + this.resultItem.Title,
                     icon: {
                         className: "fa fa-globe"
@@ -22,7 +37,7 @@
                         { key: "onClick", value: "ga('send', 'event', 'Nedlasting', 'visdekningskart')" }
                     ]
                 };
-                if (button.url == null) {
+                if (this.resultItem.CoverageUrl == null) {
                     button.attributes.push({ key: 'disabled', value: 'disabled' });
                     button.className += " disabled";
                 }
