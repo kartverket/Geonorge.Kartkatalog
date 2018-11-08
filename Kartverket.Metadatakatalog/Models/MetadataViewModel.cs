@@ -348,7 +348,10 @@ namespace Kartverket.Metadatakatalog.Models
 
             if (!string.IsNullOrEmpty(CoverageUrl) || !string.IsNullOrEmpty(CoverageGridUrl))
             {
-                if (CoverageUrl.IndexOf("TYPE:") != -1 || CoverageGridUrl.IndexOf("TYPE:") != -1)
+                var coverageUrlIndex = CoverageUrl?.IndexOf("TYPE:");
+                var coverageGridUrlIndex = CoverageGridUrl?.IndexOf("TYPE:");
+
+                if ((coverageUrlIndex.HasValue && coverageUrlIndex != -1 ) || (coverageGridUrlIndex.HasValue && coverageGridUrlIndex != -1))
                 {
                     string CoverageLink = "";
                     var coverageStr = CoverageUrl;
