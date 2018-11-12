@@ -97,7 +97,8 @@ namespace Kartverket.Metadatakatalog.Models.Article
                         new SolrQuery("allText:" + Text + "*^1.1"),
                         new SolrQuery("allText:\"" + Text + "\"~1"),   //Fuzzy
                         new SolrQuery("allText2:" + Text + ""), //Stemmer
-                        new SolrQuery("!boost b=typenumber")
+                        new SolrQuery("!boost b=typenumber"),
+                        new SolrQuery("allText3:" + Text)        //Fonetisk
                     });
                 }
             }
