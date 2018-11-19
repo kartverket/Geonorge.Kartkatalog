@@ -1,6 +1,6 @@
 ﻿@using Resources
 <script type="text/x-template" id="showInMapButtonTemplate">
-    <div class="text-center" v-html="htmlElement"></div>
+    <div v-on:click="addToMap()" class="text-center" v-html="htmlElement"></div>
 </script>
 
 <script>
@@ -14,7 +14,7 @@
                     id: "mapmacrolink-" + this.resultItem.Uuid,
                     content: "@Html.Raw(UI.Display) @Html.Raw(UI.InMap)",
                     className: this.defaultButtonClass,
-                    url: this.resultItem.MapUrl,
+                    url: null,
                     title: "@Html.Raw(UI.Display) " + this.resultItem.Title + " @Html.Raw(UI.InMap)",
                     icon: {
                         id: "mapmacro-button-" + this.resultItem.Uuid,
@@ -59,6 +59,14 @@
             }
         },
         methods: {
+            addToMap: function () {
+                var mapItems = localStorage.mapItems ? JSON.parse(localStorage.mapItems) : [];
+                mapItems.push({
+                    name: this.resultItem.Title,
+                    url: this.resultItem.MapUrl
+                });
+                localStorage.mapItems = JSON.stringify(mapItems);
+            },
             isRestrictedService: function () {
                 if (this.resultItem.IsRestricted) {
                     return true;

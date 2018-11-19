@@ -26,7 +26,7 @@
         theme.Metadata = theme.SortMetadata(theme);
         theme.Name = theme.NameTranslated();
         theme.Description = string.IsNullOrEmpty(theme.Description) ? "" : theme.Description.Replace(System.Environment.NewLine, "<br/>");
-        theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
+        theme.ShowDetailsUrl = Url.Action("Details", "Themes", new { id = @theme.Id, ThemeSeoName = Kartverket.Metadatakatalog.Helpers.HtmlHelperExtensions.SeoFriendlyString(theme.Name) });
     }
 
     var items = data.Where(d => d.ParentId == parentId);

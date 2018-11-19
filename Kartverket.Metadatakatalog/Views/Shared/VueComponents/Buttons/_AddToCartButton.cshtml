@@ -81,7 +81,7 @@
                                     baseUrl = baseUrl.Replace("http://", "https://");
                                     if (baseUrl.Contains("addtocart_event_id"))
                                     {
-                                        baseUrl = HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
+                                        baseUrl = Kartverket.Metadatakatalog.Helpers.HtmlHelperExtensions.RemoveQueryStringByKey(baseUrl, "addtocart_event_id");
                                     }
                                 }
                             var baseUrl = '@baseUrl';
