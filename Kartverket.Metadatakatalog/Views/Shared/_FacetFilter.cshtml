@@ -91,7 +91,15 @@
     int totalCount = datasetCount + serviceCount + applicationCount;
 }
 
-
+<style>
+    .filter-tab .main-filter{
+        list-style: none;
+        padding: 0;
+    }
+    .filter-tab .main-filter li {
+        display: inline-block;
+    }
+</style>
 
 <script type="text/x-template" id="facet-filter-template">
     <div v-if="filterType == 'sidebar'" class="facet-filter-item">
@@ -104,10 +112,22 @@
         <div v-if="EnableFacet('dataAccesses')" is="dataAccesses"></div>
     </div>
     <div v-else-if="filterType == 'tabs'">
-        <ul class="nav nav-tabs">
-            <li is="filter-tab" v-bind:filter="filter" v-for="filter in filterTabs.filters">
-            </li>
-        </ul>
+        <div class="filter-tab">
+            <ul class="main-filter">
+                <li is="filter-tab" v-bind:filter="filter" v-for="filter in filterTabs.tabs"></li>
+            </ul>
+            <div v-show="$root.viewType == 'tableView'">
+                <ul class="nav nav-tabs">
+                    <li is="filter-tab" v-bind:filter="filter" v-for="filter in filterTabs.filters.mapCatalog"></li>
+                </ul>
+            </div>
+            <div v-show="$root.viewType == 'articlesList'">
+                <ul class="nav nav-tabs">
+                    <li is="filter-tab" v-bind:filter="filter" v-for="filter in filterTabs.filters.articles"></li>
+                </ul>
+            </div>
+        </div>
+
     </div>
 </script>
 
@@ -591,80 +611,112 @@
                     @:this.filterTabs.hasChildren = this.filterTabs.FacetResults.length > 0;
                 }
 
-        this.filterTabs.filters = [
-            {
-                FacetName: '@UI.AllMapData',
-                name: 'all',
-                FacetResults: [],
-                count: @totalCount,
-                selectedFields: [
-                    { name: 'title', size: '4' },
-                    { name: 'distributionType', size: '2' },
-                    { name: 'owner', size: '3' },
-                    { name: 'openData', size: '1' }
-                ],
-                selectedButtons: [
-                    'showInMapButton',
-                    'addToCartButton'
-                ]
-            },
-            {
-                FacetName: '@UI.Facet_type_dataset',
-                name: 'dataset',
-                FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['dataset']),
-                count: @datasetCount,
-                selectedFields: [
-                    { name: 'title', size: '5' },
-                    { name: 'owner', size: '4' },
-                    { name: 'openData', size: '1' }
-                ],
-                selectedButtons: [
-                    'showInMapButton',
-                    'addToCartButton'
-                ]
-            },
-            {
-                FacetName: '@UI.Facet_type_service',
-                name: 'serviceAndServicelayer',
-                FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['service', 'servicelayer']),
-                count: @serviceCount,
-                selectedFields: [
-                    { name: 'title', size: '4' },
-                    { name: 'distributionType', size: '2' },
-                    { name: 'owner', size: '3' },
-                    { name: 'openData', size: '1' }
-                ],
-                selectedButtons: [
-                    'copyUrlButton',
-                    'showInMapButton'
-                ]
-            },
-            {
-                FacetName: '@UI.Facet_type_software',
-                name: 'software',
-                FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['software']),
-                count: @applicationCount,
-                selectedFields: [
-                    { name: 'title', size: '4' },
-                    { name: 'distributionType', size: '2' },
-                    { name: 'owner', size: '4' },
-                    { name: 'openData', size: '1' }
-                ],
-                selectedButtons: [
-                    'showWebsiteButton'
-                ]
-            },
-            {
-                FacetName: '@UI.Articles',
-                name: 'articles',
-                FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['articles']),
-                count: @articlesCount,
-                selectedFields: [
-                ],
-                selectedButtons: [
-                ]
-            }
-        ];
+                this.filterTabs.tabs = [
+                        {
+                            FacetName: '@UI.AllMapData',
+                            name: 'all',
+                            FacetResults: [],
+                            count: @totalCount,
+                            selectedFields: [
+                                { name: 'title', size: '4' },
+                                { name: 'distributionType', size: '2' },
+                                { name: 'owner', size: '3' },
+                                { name: 'openData', size: '1' }
+                            ],
+                            selectedButtons: [
+                                'showInMapButton',
+                                'addToCartButton'
+                            ]
+                        },
+                        {
+                            FacetName: '@UI.Articles',
+                            name: 'articles',
+                            FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['articles']),
+                            count: @articlesCount,
+                            selectedFields: [
+                            ],
+                            selectedButtons: [
+                            ]
+                        }
+                ];
+                this.filterTabs.filters = {
+                    mapCatalog: [
+                        {
+                            FacetName: '@UI.AllMapData',
+                            name: 'all',
+                            FacetResults: [],
+                            count: @totalCount,
+                            selectedFields: [
+                                { name: 'title', size: '4' },
+                                { name: 'distributionType', size: '2' },
+                                { name: 'owner', size: '3' },
+                                { name: 'openData', size: '1' }
+                            ],
+                            selectedButtons: [
+                                'showInMapButton',
+                                'addToCartButton'
+                            ]
+                        },
+                        {
+                            FacetName: '@UI.Facet_type_dataset',
+                            name: 'dataset',
+                            FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['dataset']),
+                            count: @datasetCount,
+                            selectedFields: [
+                                { name: 'title', size: '5' },
+                                { name: 'owner', size: '4' },
+                                { name: 'openData', size: '1' }
+                            ],
+                            selectedButtons: [
+                                'showInMapButton',
+                                'addToCartButton'
+                            ]
+                        },
+                        {
+                            FacetName: '@UI.Facet_type_service',
+                            name: 'serviceAndServicelayer',
+                            FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['service', 'servicelayer']),
+                            count: @serviceCount,
+                            selectedFields: [
+                                { name: 'title', size: '4' },
+                                { name: 'distributionType', size: '2' },
+                                { name: 'owner', size: '3' },
+                                { name: 'openData', size: '1' }
+                            ],
+                            selectedButtons: [
+                                'copyUrlButton',
+                                'showInMapButton'
+                            ]
+                        },
+                        {
+                            FacetName: '@UI.Facet_type_software',
+                            name: 'software',
+                            FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['software']),
+                            count: @applicationCount,
+                            selectedFields: [
+                                { name: 'title', size: '4' },
+                                { name: 'distributionType', size: '2' },
+                                { name: 'owner', size: '4' },
+                                { name: 'openData', size: '1' }
+                            ],
+                            selectedButtons: [
+                                'showWebsiteButton'
+                            ]
+                        },
+                    ],
+                    articles: [
+                        {
+                            FacetName: '@UI.Articles',
+                            name: 'articles',
+                            FacetResults: this.filterFacetResultsByNames(this.filterTabs.FacetResults, ['articles']),
+                            count: @articlesCount,
+                            selectedFields: [
+                            ],
+                            selectedButtons: [
+                            ]
+                        }
+                    ]
+                }
             }
 
 
