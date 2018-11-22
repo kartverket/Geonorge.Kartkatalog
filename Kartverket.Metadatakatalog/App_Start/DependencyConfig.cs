@@ -16,6 +16,7 @@ using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Models;
+using Kartverket.Metadatakatalog.Service.Article;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -97,7 +98,11 @@ namespace Kartverket.Metadatakatalog
             builder.RegisterType<MetadataContext>().InstancePerRequest().AsSelf();
             builder.RegisterType<ThemeService>().As<IThemeService>();
 
-
+            builder.RegisterType<ArticleService>().As<IArticleService>();
+            builder.RegisterType<SolrArticleIndexer>().As<ArticleIndexer>();
+            builder.RegisterType<SolrIndexerArticle>().As<IndexerArticle>();
+            builder.RegisterType<SolrIndexArticleDocumentCreator>().As<IndexArticleDocumentCreator>();
+            builder.RegisterType<ArticleFetcher>().As<IArticleFetcher>();
         }
     }
 }

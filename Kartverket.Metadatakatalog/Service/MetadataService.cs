@@ -651,6 +651,7 @@ namespace Kartverket.Metadatakatalog.Service
                 ProductSheetUrl = simpleMetadata.ProductSheetUrl,
                 ProductSpecificationUrl = simpleMetadata.ProductSpecificationUrl,
                 CoverageUrl = simpleMetadata.CoverageUrl,
+                CoverageGridUrl = simpleMetadata.CoverageGridUrl,
                 Purpose = GetTranslation(simpleMetadata.Purpose, simpleMetadata.EnglishPurpose),
                 QualitySpecifications = Convert(simpleMetadata.QualitySpecifications),
                 ReferenceSystem = Convert(simpleMetadata.ReferenceSystem),

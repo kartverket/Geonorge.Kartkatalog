@@ -19,5 +19,7 @@ namespace Kartverket.Metadatakatalog.Service
         public const string Applications = "applications";
         public const string ApplicationsEnglish = "applications_en";
 
+        public const string Articles = "articles";
+
     }
 }

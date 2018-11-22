@@ -1,22 +1,13 @@
 ﻿<script type="text/x-template" id="filter-tab-template">
-    <li class="tab" v-bind:class="{'active': hasSelected}">
-        <a v-on:click="$parent.toggleFilterTabs(filter.FacetResults, filter.selectedFields, filter.selectedButtons)" 
-           data-loading-message="Filtrerer søkeresultat" 
-           class="facet-checkbox-icon show-loading-animation">
+    <li class="tab" v-bind:class="{'active': hasSelected && hasActiveViewType}">
+        <a v-on:click="toggleFilterTab()"
+           data-loading-message="Filtrerer søkeresultat"
+           class="facet-checkbox-icon"
+           v-bind:class="{'show-loading-animation': showLoadingAnimation}">
             {{ filter.FacetName }}
             <span class="badge counter-badge">{{ filter.count }}</span>
         </a>
-    
-    @*
-        <div v-bind:class="{'selected': facetResult.isSelected, 'is-empty': facetResult.Count == 0}" v-for="facetResult in FacetResults">
-            <div class="facet-checkbox  facet-link">
-                <span v-on:click="$root.toggleFilter(FacetField, facetResult)"
-                      data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
-                </span>
-                {{ facetResult.FacetName }} <span class="text-muted">({{ facetResult.Count }})</span>
-            </div>
-        </div>*@
-</li>
+    </li>
 </script>
 
 <script>
@@ -24,19 +15,51 @@
         name: 'FilterTab',
         template: "#filter-tab-template",
         props: ['filter'],
+        methods: {
+            toggleFilterTab: function () {
+                if (this.filter.name == 'articles') {
+                    this.$root.viewType = 'articlesList';
+                    localStorage.viewType = 'articlesList';
+                }
+                else {
+                    this.$root.viewType = 'tableView';
+                    localStorage.viewType = 'tableView';
+                    if (!this.hasSelected) {
+                        this.$parent.toggleFilterTabs(this.filter.FacetResults, this.filter.selectedFields, this.filter.selectedButtons);
+                    }
+                }
+            }
+        },
         computed: {
+            showLoadingAnimation: function () {
+                return this.filter.name != 'articles' && !this.hasSelected;
+            },
+            hasActiveViewType: function () {
+                if (this.filter.name == 'articles' && this.$root.viewType == 'articlesList')
+                    return true
+                else if (this.filter.name != 'articles' && this.$root.viewType == 'tableView')
+                    return true;
+                else
+                    return false;
+            },
             hasSelected: function () {
                 var hasSelected = false;
-                if (this.filter.FacetResults.length) { // Select the active tab
-                    if (this.$parent.hasSelected(this.filter.FacetResults)) {
+
+                if (this.filter.name == 'articles') {
+                    hasSelected = this.$root.viewType == 'articlesList';
+                }
+                else {
+                    if (this.filter.FacetResults.length) { // Select the active tab
+                        if (this.$parent.hasSelected(this.filter.FacetResults)) {
+                            hasSelected = true;
+                            this.$root.selectedFields = this.filter.selectedFields;
+                            this.$root.selectedButtons = this.filter.selectedButtons;
+                        }
+                    } else if (!this.$parent.facetsWithSpesificNameIsSelected('type')) { // Select 'All'-tab if no 'type'-facet is selected
                         hasSelected = true;
                         this.$root.selectedFields = this.filter.selectedFields;
                         this.$root.selectedButtons = this.filter.selectedButtons;
                     }
-                } else if (!this.$parent.facetsWithSpesificNameIsSelected('type')){ // Select 'All'-tab if no 'type'-facet is selected
-                    hasSelected = true;
-                    this.$root.selectedFields = this.filter.selectedFields;
-                    this.$root.selectedButtons = this.filter.selectedButtons;
                 }
                 return hasSelected;
             }

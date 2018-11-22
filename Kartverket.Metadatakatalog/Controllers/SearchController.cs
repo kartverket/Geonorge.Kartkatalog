@@ -2,6 +2,7 @@
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
+using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog.Controllers
@@ -12,10 +13,12 @@ namespace Kartverket.Metadatakatalog.Controllers
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly ISearchServiceAll _searchService;
+        private readonly IArticleService _articleService;
 
-        public SearchController(ISearchServiceAll searchService)
+        public SearchController(ISearchServiceAll searchService, IArticleService articleSevice)
         {
             _searchService = searchService;
+            _articleService = articleSevice;
         }
 
 
@@ -28,8 +31,15 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             parameters.AddComplexFacetsIfMissing();
             var searchResult = _searchService.Search(parameters);
+            Kartverket.Metadatakatalog.Models.Article.SearchParameters articleParameters = new Models.Article.SearchParameters();
+            articleParameters.Text = parameters.Text;
+            articleParameters.Limit = 200;
+            if (string.IsNullOrEmpty(parameters.Text))
+                articleParameters.orderby = "StartPublish";
+            var articleResult = _articleService.Search(articleParameters);
 
-            var model = new SearchViewModel(parameters, searchResult);
+
+            var model = new SearchViewModel(parameters, searchResult, articleResult);
 
             return View(model);
         }

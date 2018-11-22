@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -50,12 +50,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Arkitektum.GIS.Lib.MetadataCSW, Version=1.9.98.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Arkitektum.GIS.Lib.MetadataCSW.1.9.98\lib\net40\Arkitektum.GIS.Lib.MetadataCSW.dll</HintPath>
+    <Reference Include="Arkitektum.GIS.Lib.MetadataCSW, Version=1.9.100.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arkitektum.GIS.Lib.MetadataCSW.1.9.100\lib\net40\Arkitektum.GIS.Lib.MetadataCSW.dll</HintPath>
     </Reference>
-    <Reference Include="Arkitektum.GIS.Lib.SerializeUtil, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Arkitektum.GIS.Lib.SerializeUtil.1.3.0.0\lib\net40\Arkitektum.GIS.Lib.SerializeUtil.dll</HintPath>
+    <Reference Include="Arkitektum.GIS.Lib.SerializeUtil, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Arkitektum.GIS.Lib.SerializeUtil.1.3.1\lib\net40\Arkitektum.GIS.Lib.SerializeUtil.dll</HintPath>
     </Reference>
     <Reference Include="Autofac">
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
@@ -81,8 +80,8 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="GeoNorgeAPI, Version=3.0.62.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GeoNorgeAPI.3.0.62\lib\net40\GeoNorgeAPI.dll</HintPath>
+    <Reference Include="GeoNorgeAPI, Version=3.0.72.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GeoNorgeAPI.3.0.72\lib\net40\GeoNorgeAPI.dll</HintPath>
     </Reference>
     <Reference Include="Kartverket.Geonorge.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.43\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
@@ -262,6 +261,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\ApiArticlesController.cs" />
     <Compile Include="Controllers\ApiMetadataController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
@@ -282,7 +282,16 @@
     <Compile Include="Migrations\201712050646062_AddThemeMetadataSortings.Designer.cs">
       <DependentUpon>201712050646062_AddThemeMetadataSortings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ApiAuthorizeAttribute.cs" />
+    <Compile Include="Models\Api\Article\Article.cs" />
+    <Compile Include="Models\Api\Article\SearchParameters.cs" />
+    <Compile Include="Models\Api\Article\SearchResult.cs" />
     <Compile Include="Models\Api\Distribution.cs" />
+    <Compile Include="Models\Article\ArticleDocument.cs" />
+    <Compile Include="Models\Article\SearchParameters.cs" />
+    <Compile Include="Models\Article\SearchResult.cs" />
+    <Compile Include="Models\Article\SearchResultItem.cs" />
+    <Compile Include="Models\SearchIndex\ArticleIndexDoc.cs" />
     <Compile Include="Models\SearchIndex\MetadataIndexAllDoc.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\SearchByAreaParameters.cs" />
@@ -301,6 +310,16 @@
     <Compile Include="Service\Application\IApplicationService.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Service\Application\ApplicationService.cs" />
+    <Compile Include="Service\Article\ArticleFetcher.cs" />
+    <Compile Include="Service\Article\ArticleIndexer.cs" />
+    <Compile Include="Service\Article\IArticleFetcher.cs" />
+    <Compile Include="Service\Article\IArticleService.cs" />
+    <Compile Include="Service\Article\ArticleService.cs" />
+    <Compile Include="Service\Article\IndexArticleDocumentCreator.cs" />
+    <Compile Include="Service\Article\IndexerArticle.cs" />
+    <Compile Include="Service\Article\SolrArticleIndexer.cs" />
+    <Compile Include="Service\Article\SolrIndexArticleDocumentCreator.cs" />
+    <Compile Include="Service\Article\SolrIndexerArticle.cs" />
     <Compile Include="Service\IndexerAll.cs" />
     <Compile Include="Service\IThemeService.cs" />
     <Compile Include="Service\Search\ISearchServiceAll.cs" />

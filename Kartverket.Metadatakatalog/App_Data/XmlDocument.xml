@@ -481,6 +481,21 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiArticlesController.ArticleUpdated(Kartverket.Metadatakatalog.Controllers.ArticleStatus)">
+            <summary>
+            Article updated
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiArticlesController.Index">
+            <summary>
+            Run article indexing
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiArticlesController.ReIndex">
+            <summary>
+            Run article re-indexing
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.MetadataUpdated(System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             Metadata updated
@@ -545,6 +560,11 @@
             Catalogue search for services
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Articles(Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters)">
+            <summary>
+            Catalogue search for articles
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetData(System.String)">
             <summary>
             Get metadata for uuid
@@ -597,6 +617,76 @@
             Returns default culture name which is the first name decalared (e.g. en-US)
             </summary>
             <returns></returns>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Uuid">
+            <summary>
+            The uniqueidentifier
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Type">
+            <summary>
+            The type
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Date">
+            <summary>
+            The type
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Title">
+            <summary>
+            The title
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Intro">
+            <summary>
+            Short description
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.ShowDetailsUrl">
+            <summary>
+            Link to article
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters.text">
+            <summary>
+            The text to search for
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters.offset">
+            <summary>
+            This param indicates an offset into the list of constraints to allow paging. Default is 1.
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters.limit">
+            <summary>
+            This param indicates the maximum number of constraint counts that should be returned. Default is 10.
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters.orderby">
+            <summary>
+            Field to order by, ex: orderby=title, default order is score desc.
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchResult.NumFound">
+            <summary>
+            Number of items found
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchResult.Limit">
+            <summary>
+            The maximum number of constraint counts that is returned
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchResult.Offset">
+            <summary>
+            The offset into the list
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchResult.Results">
+            <summary>
+            Items in the searchresult
+            </summary>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Facet.FacetField">
             <summary>
@@ -816,6 +906,18 @@
             <summary>
             Result grouped by facets
             </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Models.Article.SearchParameters.OrderBy">
+            <summary>
+            Gets a sort order based on "Orderby" parameter
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Models.Article.SearchParameters.BuildQuery">
+            <summary>
+            Builds a Solr query based on "Text" parameter
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Kartverket.Metadatakatalog.Models.SearchParameters.OrderBy">
             <summary>
@@ -1105,6 +1207,11 @@
         <member name="P:Resources.UI.Areas">
             <summary>
               Looks up a localized string similar to områder.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Articles">
+            <summary>
+              Looks up a localized string similar to Artikler.
             </summary>
         </member>
         <member name="P:Resources.UI.AvailableAs">
@@ -1872,6 +1979,16 @@
         <member name="P:Resources.UI.SecurityConstraintsNote">
             <summary>
               Looks up a localized string similar to Lovhenvisning.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SelectDownloadPurpose">
+            <summary>
+              Looks up a localized string similar to Velg formål.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.SelectDownloadUsegroup">
+            <summary>
+              Looks up a localized string similar to Velg brukergruppe.
             </summary>
         </member>
         <member name="P:Resources.UI.SelectedArea">

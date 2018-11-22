@@ -11,9 +11,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public int Limit { get; set; }
         public int Offset { get; set; }
         public int NumFound { get; set; }
+        public int NumFoundTotal { get; set; }
         public string orderby { get; set; }
         public List<FacetParameter> FacetParameters { get; set; }
         public SearchResultViewModel Result { get; set; }
+        public Article.SearchResult ResultArticles { get; set; }
         public int pages { get; set; }
         public int page { get; set; }
         public int startPage { get; set; }
@@ -21,14 +23,16 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public Dictionary<string, string> areaDictionary { get; set; }
         public List<string> EnabledFacets { get; set; }
 
-        public SearchViewModel(SearchParameters parameters, SearchResult searchResult)
+        public SearchViewModel(SearchParameters parameters, SearchResult searchResult, Article.SearchResult articleResult = null)
         {
             Text = parameters.Text;
             FacetParameters = parameters.Facets;
             Result = new SearchResultViewModel(searchResult);
+            ResultArticles = articleResult;
             Limit = searchResult.Limit;
             Offset = searchResult.Offset;
             NumFound = searchResult.NumFound;
+            NumFoundTotal = searchResult.NumFound + articleResult.NumFound;
             orderby = parameters.orderby.ToString();
             page = 1;
             var placeResolver = new Service.PlaceResolver();

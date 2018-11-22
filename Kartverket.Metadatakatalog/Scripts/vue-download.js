@@ -884,6 +884,12 @@ var mainVueModel = new Vue({
     data: {
         orderLines: [],
         email: "",
+        usageGroup: localStorage.getItem('preSelectedUsageGroup') !== null ? JSON.parse(localStorage.getItem('preSelectedUsageGroup')) : "",
+        usageGroupsAvailable: downloadUseGroups,
+        usagePurposes: localStorage.getItem('preSelectedUsagePurposes') !== null ? JSON.parse(localStorage.getItem('preSelectedUsagePurposes')) : [] ,
+        usagePurposesAvailable: downloadPurposes,
+        softwareClient : downloadSoftwareClient,
+        softwareClientVersion : downloadSoftwareClientVersion,
         orderRequests: {},
         orderRequestsAdditionalInfo: {},
         orderResponse: {},
@@ -1104,6 +1110,38 @@ var mainVueModel = new Vue({
         'masterOrderLine': MasterOrderLine
     },
     methods: {
+        getPurposeName: function (purpose) {
+
+            for (var item in this.usagePurposesAvailable)
+                if (purpose === item)
+                    return this.usagePurposesAvailable[item];
+
+            return purpose;
+        },
+        purposeIsSelected: function (purpose) {
+            for (var item in this.usagePurposes) {
+                if (purpose === this.usagePurposes[item])
+                    return true;
+            }
+            return false;
+        },
+        selectPurpose: function (purposeName, purpose) {
+            var purposeAdded = false;
+            for (var i = 0; i < this.usagePurposes.length; i++) {
+                if (this.usagePurposes[i] === purpose) {
+                    purposeAdded = true;
+                }
+            }
+
+            if (!purposeAdded)
+                this.usagePurposes.push(purpose);
+
+        },
+
+        removeSelectedPurpose: function (purpose) {
+            this.usagePurposes.splice(purpose, 1);
+        }
+        ,
         isAllreadyAdded: function (array, item, propertyToCompare) {
             var isAllreadyAdded = {
                 added: false,
@@ -1674,6 +1712,9 @@ var mainVueModel = new Vue({
                         if (orderRequests[orderLine.metadata.orderDistributionUrl] == undefined) {
                             orderRequests[orderLine.metadata.orderDistributionUrl] = {
                                 "email": "",
+                                "usageGroup": this.usageGroup,
+                                "softwareClient": this.softwareClient,
+                                "softwareClientVersion": this.softwareClientVersion,
                                 "orderLines": []
                             }
                         }
@@ -1719,6 +1760,7 @@ var mainVueModel = new Vue({
                             "areas": areas,
                             "projections": projections,
                             "formats": formats,
+                            "usagePurpose": this.usagePurposes
                         }
 
                         if (this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
@@ -1749,6 +1791,7 @@ var mainVueModel = new Vue({
             return this.orderRequestsAdditionalInfo[distributionUrl] != undefined && this.orderRequestsAdditionalInfo[distributionUrl][metadataUuid] != undefined ? this.orderRequestsAdditionalInfo[distributionUrl][metadataUuid] : {};
         },
         sendRequests: function () {
+            this.updateUsageForOrderRequests();
             this.updateEmailForOrderRequests();
             var responseData = [];
             var responseFailed = false;
@@ -1924,7 +1967,10 @@ var mainVueModel = new Vue({
             var emailAddressIsValid = this.emailAddressIsValid(this.email);
             var formHasNoErrors = this.forHasNoErrors();
             var emailRequired = this.emailRequired;
-            var formIsValid = ((emailFieldNotEmpty && emailRequired && emailAddressIsValid && formHasNoErrors) || (!emailRequired && formHasNoErrors)) ? true : false;
+            var usageGroupFieldNotEmpty = (this.usageGroup !== "") ? true : false;
+            var usagePurposeNotEmpty = Object.keys(this.usagePurposes).length === 0 ? false : true;
+            var usageNotEmpty = usageGroupFieldNotEmpty && usagePurposeNotEmpty;
+            var formIsValid = (((emailFieldNotEmpty && emailRequired && emailAddressIsValid && formHasNoErrors) || (!emailRequired && formHasNoErrors)) ? true : false) && usageNotEmpty;
             return formIsValid;
         },
         projectionAndFormatIsRequired: function (orderItem) {
@@ -1936,6 +1982,20 @@ var mainVueModel = new Vue({
             if (this.orderRequests !== undefined) {
                 for (orderDistributionUrl in this.orderRequests) {
                     this.orderRequests[orderDistributionUrl].email = this.email;
+                }
+            }
+        },
+
+        updateUsageForOrderRequests: function () {
+            if (this.orderRequests !== undefined) {
+                for (orderDistributionUrl in this.orderRequests) {
+                    localStorage.setItem('preSelectedUsageGroup', JSON.stringify(this.usageGroup));
+                    this.orderRequests[orderDistributionUrl].usageGroup = this.usageGroup;
+                    this.orderRequests[orderDistributionUrl].softwareClient = this.softwareClient;
+                    this.orderRequests[orderDistributionUrl].softwareClientVersion = this.softwareClientVersion;
+                    localStorage.setItem('preSelectedUsagePurposes', JSON.stringify(this.usagePurposes));
+                    for (o = 0; o < this.orderRequests[orderDistributionUrl].orderLines.length; o++)
+                        this.orderRequests[orderDistributionUrl].orderLines[o].usagePurpose = this.usagePurposes;
                 }
             }
         },
