@@ -756,4 +756,7 @@
   <data name="Articles" xml:space="preserve">
     <value>Artikler</value>
   </data>
+  <data name="KeywordsAdministrativeUnits" xml:space="preserve">
+    <value>Administrative enheter</value>
+  </data>
 </root>

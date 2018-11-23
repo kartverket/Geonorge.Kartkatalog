@@ -1050,6 +1050,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Administrative enheter.
+        /// </summary>
+        public static string KeywordsAdministrativeUnits {
+            get {
+                return ResourceManager.GetString("KeywordsAdministrativeUnits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Geografisk område.
         /// </summary>
         public static string KeywordsPlace {

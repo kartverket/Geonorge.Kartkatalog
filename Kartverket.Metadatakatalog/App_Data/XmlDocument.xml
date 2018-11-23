@@ -1685,6 +1685,11 @@
               Looks up a localized string similar to er fjernet fra.
             </summary>
         </member>
+        <member name="P:Resources.UI.KeywordsAdministrativeUnits">
+            <summary>
+              Looks up a localized string similar to Administrative enheter.
+            </summary>
+        </member>
         <member name="P:Resources.UI.KeywordsPlace">
             <summary>
               Looks up a localized string similar to Geografisk område.
