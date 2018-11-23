@@ -69,6 +69,7 @@ namespace Kartverket.Metadatakatalog.Models
         public List<Keyword> KeywordsNationalTheme { get; set; }
         public List<Keyword> KeywordsOther { get; set; }
         public List<Keyword> KeywordsConcept { get; set; }
+        public List<Keyword> KeywordsAdministrativeUnits { get; set; }
 
         public string LegendDescriptionUrl { get; set; }
         //
