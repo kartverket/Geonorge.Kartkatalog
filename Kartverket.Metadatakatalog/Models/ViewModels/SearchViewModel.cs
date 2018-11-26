@@ -102,8 +102,12 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             {
                 routeValues["Facets[" + index + "]" + ".name"] = facetParameter.Name;
                 routeValues["Facets[" + index++ + "]" + ".value"] = facetParameter.Value;
+                if (facetParameter.Name == "area")
+                    routeValues["areacode"] = facetParameter.Value;
             }
+
             routeValues["text"] = Text;
+            
 
             return routeValues;
         }
