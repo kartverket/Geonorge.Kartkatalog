@@ -25,6 +25,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         public SearchViewModel(SearchParameters parameters, SearchResult searchResult, Article.SearchResult articleResult = null)
         {
+            if(articleResult == null)
+            {
+                articleResult = new Article.SearchResult { NumFound = 0, Items = new List<Article.SearchResultItem>() };
+            }
+
             Text = parameters.Text;
             FacetParameters = parameters.Facets;
             Result = new SearchResultViewModel(searchResult);
