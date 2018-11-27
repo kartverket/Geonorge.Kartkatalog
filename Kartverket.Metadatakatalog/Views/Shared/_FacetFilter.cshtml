@@ -92,13 +92,47 @@
 }
 
 <style>
-    .filter-tab .main-filter{
-        list-style: none;
-        padding: 0;
+    .main-header {
+        background-color: #f8f8f7;
     }
-    .filter-tab .main-filter li {
-        display: inline-block;
-    }
+
+        .main-header h1 {
+            font-size: 24pt;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .filter-tab .main-filter {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .filter-tab .main-filter li.tab {
+            display: inline-block;
+            border-bottom: 6px solid transparent;
+            color: #333;
+            font-size: 12pt;
+            font-weight: 600;
+            margin-right: 16px;
+        }
+
+            .filter-tab .main-filter li.tab.active {
+                border-color: #fe5000;
+            }
+
+            .filter-tab .main-filter li.tab a {
+                color: #333;
+            }
+
+                .filter-tab .main-filter li.tab a .badge {
+                    color: #fff;
+                    background-color: #fe5000;
+                }
+
+                .nav.nav-tabs {
+                    margin-top: 16px;
+                }
 </style>
 
 <script type="text/x-template" id="facet-filter-template">
@@ -111,22 +145,29 @@
         <div v-if="EnableFacet('organizations')" is="organizations"></div>
         <div v-if="EnableFacet('dataAccesses')" is="dataAccesses"></div>
     </div>
-    <div v-else-if="filterType == 'tabs'">
-        <div class="filter-tab">
-            <ul class="main-filter">
-                <li is="filter-tab" v-bind:filter="filter" v-for="filter in filterTabs.tabs"></li>
-            </ul>
-            <div v-show="$root.viewType == 'tableView'">
-                <ul class="nav nav-tabs">
-                    <li is="filter-tab" v-bind:filter="filter" v-for="filter in filterTabs.filters.mapCatalog"></li>
-                </ul>
-            </div>
-            <div v-show="$root.viewType == 'articlesList'">
-                <ul class="nav nav-tabs">
-                    <li is="filter-tab" v-bind:filter="filter" v-for="filter in filterTabs.filters.articles"></li>
-                </ul>
+    <div v-else-if="filterType == 'tabs'" class="filter-tab-container">
+        <div class="main-header">
+            <div class="container">
+                <h1>{{ $root.getTitle() }}</h1>
+                <div class="filter-tab">
+                    <ul class="main-filter">
+                        <li is="filter-tab" v-bind:filter="filter" v-for="filter in filterTabs.tabs"></li>
+                    </ul>
+                </div>
             </div>
         </div>
+        <div v-show="$root.viewType == 'tableView'" class="container">
+            <ul class="nav nav-tabs">
+                <li is="filter-tab" v-bind:filter="filter" v-for="filter in filterTabs.filters.mapCatalog"></li>
+            </ul>
+        </div>
+        <div v-show="$root.viewType == 'articlesList'" class="container">
+
+            <ul class="nav nav-tabs">
+                <li is="filter-tab" v-bind:filter="filter" v-for="filter in filterTabs.filters.articles"></li>
+            </ul>
+        </div>
+
 
     </div>
 </script>
