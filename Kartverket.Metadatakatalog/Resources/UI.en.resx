@@ -748,10 +748,10 @@
     <value>Not evaluated</value>
   </data>
   <data name="SelectDownloadPurpose" xml:space="preserve">
-    <value>Select puprose</value>
+    <value>Select purpose</value>
   </data>
   <data name="SelectDownloadUsegroup" xml:space="preserve">
-    <value>Select usegroup</value>
+    <value>Select usergroup</value>
   </data>
   <data name="Articles" xml:space="preserve">
     <value>Articles</value>
