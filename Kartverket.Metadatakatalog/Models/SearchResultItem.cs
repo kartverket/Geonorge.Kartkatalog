@@ -1,4 +1,5 @@
 ﻿using Kartverket.Metadatakatalog.Helpers;
+using System;
 using System.Collections.Generic;
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -38,6 +39,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string OtherConstraintsAccess { get; set; }
         public string DataAccess { get; set; }
         public string ParentIdentifier { get; set; }
+        public DateTime? Date { get; set; }
         public DistributionDetails DistributionDetails { get; set; }
         
 
@@ -110,6 +112,7 @@ namespace Kartverket.Metadatakatalog.Models
             ServiceDistributionAccessConstraint = doc.ServiceDistributionAccessConstraint;
             ParentIdentifier = doc.ParentIdentifier;
             DistributionType = doc.DistributionType;
+            Date = doc.DatePublished;
         }
     }
 }
