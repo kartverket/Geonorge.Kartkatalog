@@ -130,6 +130,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public string GetCapabilitiesUrl { get; set; }
 
+        public DateTime? Date { get; set; }
+
 
         public Metadata() { 
         }
@@ -176,6 +178,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             DataAccess = item.DataAccess;
             ServiceDistributionUrlForDataset = item.ServiceDistributionUrlForDataset;
             ServiceWfsDistributionUrlForDataset = item.ServiceWfsDistributionUrlForDataset != null ? item.ServiceWfsDistributionUrlForDataset : WfsServiceUrl();
+            Date = item.Date;
         }
 
         private string GetGetCapabilitiesUrl(SearchResultItem item)
