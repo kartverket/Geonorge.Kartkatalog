@@ -112,7 +112,7 @@ namespace Kartverket.Metadatakatalog.Models
             ServiceDistributionAccessConstraint = doc.ServiceDistributionAccessConstraint;
             ParentIdentifier = doc.ParentIdentifier;
             DistributionType = doc.DistributionType;
-            Date = doc.DatePublished;
+            Date = doc.DateUpdated;
         }
     }
 }
