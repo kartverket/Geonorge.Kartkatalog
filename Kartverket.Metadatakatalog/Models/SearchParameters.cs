@@ -146,28 +146,29 @@ namespace Kartverket.Metadatakatalog.Models
         {
             log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             ISolrQuery query;
-            if (!string.IsNullOrEmpty(Text))
+            var text = Text;
+            if (!string.IsNullOrEmpty(text))
             {
-                Text = Text.Replace(":", " ");
-                Text = Text.Replace("!", " ");
-                Text = Text.Replace("{", " ");
-                Text = Text.Replace("}", " ");
-                Text = Text.Replace("[", " ");
-                Text = Text.Replace("]", " ");
-                Text = Text.Replace("(", " ");
-                Text = Text.Replace(")", " ");
-                Text = Text.Replace("^", " ");
-                Text = Text.Replace("-", "\\-");
+                text = text.Replace(":", " ");
+                text = text.Replace("!", " ");
+                text = text.Replace("{", " ");
+                text = text.Replace("}", " ");
+                text = text.Replace("[", " ");
+                text = text.Replace("]", " ");
+                text = text.Replace("(", " ");
+                text = text.Replace(")", " ");
+                text = text.Replace("^", " ");
+                text = text.Replace("-", "\\-");
 
-                if (Text.Trim().Length == 0) query = SolrQuery.All;
-                else if (Text.Trim().Length < 5)
+                if (text.Trim().Length == 0) query = SolrQuery.All;
+                else if (text.Trim().Length < 5)
                 {
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
-                        new SolrQuery("titleText:"+ Text + "^50"),
-                        new SolrQuery("titleText:"+ Text + "*^40"),
-                        new SolrQuery("allText:" + Text + "^1.2"),
-                        new SolrQuery("allText:" + Text + "*^1.1"),
+                        new SolrQuery("titleText:"+ text + "^50"),
+                        new SolrQuery("titleText:"+ text + "*^40"),
+                        new SolrQuery("allText:" + text + "^1.2"),
+                        new SolrQuery("allText:" + text + "*^1.1"),
                         new SolrQuery("!boost b=typenumber")
                     });
                 }
@@ -175,13 +176,13 @@ namespace Kartverket.Metadatakatalog.Models
                 {
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
-                        new SolrQuery("titleText:"+ Text + "^50"),
-                        new SolrQuery("titleText:"+ Text + "*^40"),
-                        new SolrQuery("titleText:"+ Text + "~2^1.1"),
-                        new SolrQuery("allText:" + Text + "^1.2"),
-                        new SolrQuery("allText:" + Text + "*^1.1"),
-                        new SolrQuery("allText:\"" + Text + "\"~1"),   //Fuzzy
-                        new SolrQuery("allText2:" + Text + ""), //Stemmer
+                        new SolrQuery("titleText:"+ text + "^50"),
+                        new SolrQuery("titleText:"+ text + "*^40"),
+                        new SolrQuery("titleText:"+ text + "~2^1.1"),
+                        new SolrQuery("allText:" + text + "^1.2"),
+                        new SolrQuery("allText:" + text + "*^1.1"),
+                        new SolrQuery("allText:\"" + text + "\"~1"),   //Fuzzy
+                        new SolrQuery("allText2:" + text + ""), //Stemmer
                         new SolrQuery("!boost b=typenumber"),
                         //new SolrQuery("allText3:" + text)        //Fonetisk
                     });
