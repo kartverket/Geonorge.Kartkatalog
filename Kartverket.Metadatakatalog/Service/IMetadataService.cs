@@ -11,5 +11,6 @@ namespace Kartverket.Metadatakatalog.Service
         SearchResultItemViewModel Metadata(string uuid);
 
         Distributions GetDistributions(MetadataViewModel metadata);
+        List<MetadataIndexDoc> GetMetadataForNamespace(string @namespace);
     }
 }

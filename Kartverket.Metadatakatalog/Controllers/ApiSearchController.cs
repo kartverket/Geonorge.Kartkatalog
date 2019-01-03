@@ -17,6 +17,7 @@ using Kartverket.Metadatakatalog.Models.ViewModels;
 using System.Web.Http.Description;
 using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Models.Article;
+using System.Web.Configuration;
 
 
 // Metadata search api examples
@@ -229,6 +230,31 @@ namespace Kartverket.Metadatakatalog.Controllers
                 return null;
             }
         }
+
+        /// <summary>
+        /// Catalogue search for articles
+        /// </summary>
+        [System.Web.Http.Route("api/datasets-namespace")]
+        [System.Web.Http.HttpGet]
+        public List<Models.Api.Metadata> DatasetsNamespace(string @namespace)
+        {
+            try
+            {
+                List<Models.Api.Metadata> metadata = new List<Models.Api.Metadata>();
+
+                List<MetadataIndexDoc> searchResult = _metadataService.GetMetadataForNamespace(@namespace);
+                foreach(var item in searchResult)
+                    metadata.Add( new Models.Api.Metadata { Uuid = item.Uuid, Title = item.Title, ShowDetailsUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/uuid/" + item.Uuid, Theme = item.Theme, Organization = item.Organization, DatasetName = item.ResourceReferenceCodeName });
+
+                return metadata;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return null;
+            }
+        }
+
 
         [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/metadata/{uuid}")]

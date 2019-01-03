@@ -565,6 +565,11 @@
             Catalogue search for articles
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.DatasetsNamespace(System.String)">
+            <summary>
+            Catalogue search for articles
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetData(System.String)">
             <summary>
             Get metadata for uuid
@@ -857,6 +862,11 @@
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.GetCapabilitiesUrl">
             <summary>
             URL for Get Capabilities
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.DatasetName">
+            <summary>
+            The full dataset name
             </summary>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.text">
