@@ -255,6 +255,25 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
         }
 
+        /// <summary>
+        /// Valid metadata dataset name
+        /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [System.Web.Http.Route("api/valid-dataset-name")]
+        [System.Web.Http.HttpGet]
+        public DatasetNameValidationResult ValidDatasetsName(string @namespace, string datasetName, string uuid)
+        {
+            try
+            {
+                return _metadataService.ValidDatasetsName(@namespace, datasetName, uuid);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return new DatasetNameValidationResult { IsValid = false, Result = ex.Message };
+            }
+        }
+
 
         [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/metadata/{uuid}")]

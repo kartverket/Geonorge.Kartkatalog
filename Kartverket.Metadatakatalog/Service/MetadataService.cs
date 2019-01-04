@@ -255,7 +255,39 @@ namespace Kartverket.Metadatakatalog.Service
             return metadata;
         }
 
+        public DatasetNameValidationResult ValidDatasetsName(string @namespace, string datasetName, string uuid)
+        {
+            List<MetadataIndexDoc> metadata = null;
+            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+            @namespace = @namespace.Replace(@"\", @"\\");
+            @namespace = @namespace.Replace(@"/", @"\/");
+            @namespace = @namespace.Replace(@":", @"\:");
 
+            ISolrQuery query = new SolrQuery("resourceReferenceCodespace:"+ @namespace + " AND resourceReferenceCodeName:\""+ datasetName + "\" AND -uuid:"+ uuid);
+            try
+            {
+                SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                {
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "resourceReferenceCodeName" }
+                });
+
+                metadata = queryResults.ToList();
+                if(metadata.Count > 0)
+                {
+                    return new DatasetNameValidationResult { IsValid = false, Result = metadata.FirstOrDefault().Uuid };
+                }
+                else
+                    return new DatasetNameValidationResult { IsValid = true };
+
+            }
+            catch (Exception ex) {
+                return new DatasetNameValidationResult { IsValid = false, Result = ex.Message };
+            }
+
+ 
+        }
 
 
         private SimpleMetadata GetSimpleMetadataByUuid(string uuid)
@@ -945,8 +977,11 @@ namespace Kartverket.Metadatakatalog.Service
             }
             return output;
         }
+    }
 
-       
-
+    public class DatasetNameValidationResult
+    {
+        public bool IsValid { get; set; }
+        public string Result { get; set; }
     }
 }
