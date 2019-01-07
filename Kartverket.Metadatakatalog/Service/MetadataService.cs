@@ -236,6 +236,8 @@ namespace Kartverket.Metadatakatalog.Service
             @namespace = @namespace.Replace(@"\", @"\\");
             @namespace = @namespace.Replace(@"/", @"\/");
             @namespace = @namespace.Replace(@":", @"\:");
+            if (searchParameters.Offset == 0)
+                searchParameters.Offset = 1;
 
             ISolrQuery query = new SolrQuery("resourceReferenceCodespace:" + @namespace);
             try
