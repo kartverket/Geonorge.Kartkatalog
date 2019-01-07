@@ -83,7 +83,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
         }
 
 
-        private SearchResult CreateSearchResults(SolrQueryResults<MetadataIndexDoc> queryResults, SearchParameters parameters)
+        public SearchResult CreateSearchResults(SolrQueryResults<MetadataIndexDoc> queryResults, SearchParameters parameters)
         {
             List<SearchResultItem> items = ParseResultDocuments(queryResults);
 

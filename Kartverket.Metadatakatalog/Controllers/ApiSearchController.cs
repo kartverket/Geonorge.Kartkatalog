@@ -236,17 +236,19 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [System.Web.Http.Route("api/datasets-namespace")]
         [System.Web.Http.HttpGet]
-        public List<Models.Api.Metadata> DatasetsNamespace(string @namespace)
+        public SearchResult DatasetsNamespace(string @namespace, int limit = 10, int offset = 0)
         {
             try
             {
-                List<Models.Api.Metadata> metadata = new List<Models.Api.Metadata>();
+                Models.SearchParameters searchParameters = new Models.SearchParameters();
+                searchParameters.Limit = limit;
+                searchParameters.Offset = offset;
 
-                List<MetadataIndexDoc> searchResult = _metadataService.GetMetadataForNamespace(@namespace);
-                foreach(var item in searchResult)
-                    metadata.Add( new Models.Api.Metadata { Uuid = item.Uuid, Title = item.Title, ShowDetailsUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/uuid/" + item.Uuid, Theme = item.Theme, Organization = item.Organization, DatasetName = item.ResourceReferenceCodeName });
+                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
 
-                return metadata;
+                Models.SearchResult searchResult = _metadataService.GetMetadataForNamespace(@namespace, searchParameters);
+
+                return new SearchResult(searchResult, urlHelper) ;
             }
             catch (Exception ex)
             {

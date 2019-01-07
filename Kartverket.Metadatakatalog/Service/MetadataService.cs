@@ -18,6 +18,7 @@ using SolrNet;
 using Kartverket.Metadatakatalog.Helpers;
 using Resources;
 using System.Text.RegularExpressions;
+using System.Web.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -229,9 +230,8 @@ namespace Kartverket.Metadatakatalog.Service
             return metadata;
         }
 
-        public List<MetadataIndexDoc> GetMetadataForNamespace(string @namespace)
+        public Models.SearchResult GetMetadataForNamespace(string @namespace, Models.SearchParameters searchParameters)
         {
-            List<MetadataIndexDoc> metadata = null;
             var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
             @namespace = @namespace.Replace(@"\", @"\\");
             @namespace = @namespace.Replace(@"/", @"\/");
@@ -247,12 +247,12 @@ namespace Kartverket.Metadatakatalog.Service
                     "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "resourceReferenceCodeName" }
                 });
 
-                metadata = queryResults.ToList();
+                return _searchService.CreateSearchResults(queryResults, searchParameters);
 
             }
             catch (Exception) { }
 
-            return metadata;
+            return null;
         }
 
         public DatasetNameValidationResult ValidDatasetsName(string @namespace, string datasetName, string uuid)

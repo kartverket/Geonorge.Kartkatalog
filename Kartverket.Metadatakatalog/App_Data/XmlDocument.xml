@@ -565,7 +565,7 @@
             Catalogue search for articles
             </summary>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.DatasetsNamespace(System.String)">
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.DatasetsNamespace(System.String,System.Int32,System.Int32)">
             <summary>
             Catalogue search for articles
             </summary>
