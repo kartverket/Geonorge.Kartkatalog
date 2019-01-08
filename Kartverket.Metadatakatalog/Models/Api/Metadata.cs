@@ -190,6 +190,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             ServiceDistributionUrlForDataset = item.ServiceDistributionUrlForDataset;
             ServiceWfsDistributionUrlForDataset = item.ServiceWfsDistributionUrlForDataset != null ? item.ServiceWfsDistributionUrlForDataset : WfsServiceUrl();
             Date = item.Date;
+            DatasetName = item.DatasetName;
 
             if (Type == "dataset")
             {
