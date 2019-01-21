@@ -41,7 +41,8 @@ namespace Kartverket.Metadatakatalog.Models
         public string ParentIdentifier { get; set; }
         public DateTime? Date { get; set; }
         public DistributionDetails DistributionDetails { get; set; }
-        
+        public string DatasetName { get; set; }
+
 
         public SearchResultItem()
         {
@@ -54,6 +55,7 @@ namespace Kartverket.Metadatakatalog.Models
             if (doc is MetadataIndexDoc)
             {
                 MetadataIndexDoc metadataIndexDoc = (MetadataIndexDoc)doc;
+                DatasetName = metadataIndexDoc.ResourceReferenceCodeName;
                 SetSearchIndexDoc(metadataIndexDoc);
             }
             else if (doc is MetadataIndexAllDoc)

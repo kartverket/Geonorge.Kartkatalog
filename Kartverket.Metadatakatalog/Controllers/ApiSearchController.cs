@@ -17,6 +17,7 @@ using Kartverket.Metadatakatalog.Models.ViewModels;
 using System.Web.Http.Description;
 using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Models.Article;
+using System.Web.Configuration;
 
 
 // Metadata search api examples
@@ -229,6 +230,52 @@ namespace Kartverket.Metadatakatalog.Controllers
                 return null;
             }
         }
+
+        /// <summary>
+        /// Catalogue search for articles
+        /// </summary>
+        [System.Web.Http.Route("api/datasets-namespace")]
+        [System.Web.Http.HttpGet]
+        public SearchResult DatasetsNamespace(string @namespace, int limit = 10, int offset = 0)
+        {
+            try
+            {
+                Models.SearchParameters searchParameters = new Models.SearchParameters();
+                searchParameters.Limit = limit;
+                searchParameters.Offset = offset;
+
+                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+                Models.SearchResult searchResult = _metadataService.GetMetadataForNamespace(@namespace, searchParameters);
+
+                return new SearchResult(searchResult, urlHelper) ;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Valid metadata dataset name
+        /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [System.Web.Http.Route("api/valid-dataset-name")]
+        [System.Web.Http.HttpGet]
+        public DatasetNameValidationResult ValidDatasetsName(string @namespace, string datasetName, string uuid)
+        {
+            try
+            {
+                return _metadataService.ValidDatasetsName(@namespace, datasetName, uuid);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return new DatasetNameValidationResult { IsValid = false, Result = ex.Message };
+            }
+        }
+
 
         [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/metadata/{uuid}")]
