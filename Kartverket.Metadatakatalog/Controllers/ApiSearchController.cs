@@ -18,6 +18,7 @@ using System.Web.Http.Description;
 using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Models.Article;
 using System.Web.Configuration;
+using Resources;
 
 
 // Metadata search api examples
@@ -78,7 +79,8 @@ namespace Kartverket.Metadatakatalog.Controllers
             
                 Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
 
-                searchParameters.AddDefaultFacetsIfMissing();
+                //searchParameters.AddDefaultFacetsIfMissing();
+                searchParameters.AddComplexFacetsIfMissing();
                 Models.SearchResult searchResult   = _searchServiceAll.Search(searchParameters);
 
                 var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
@@ -406,7 +408,9 @@ namespace Kartverket.Metadatakatalog.Controllers
             return facets
                 .Select(item => new FacetParameter
                 {
-                    Name = item.name, Value = item.value
+                    Name = item.name, Value = item.value,
+                    NameTranslated = UI.ResourceManager.GetString("Facet_" + item.name)
+
                 }).Where(v => v.Name != null)
                 .ToList();
         }

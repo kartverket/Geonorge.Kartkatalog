@@ -5,6 +5,7 @@ using System;
 using SolrNet.Commands.Parameters;
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
+using Resources;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -74,7 +75,11 @@ namespace Kartverket.Metadatakatalog.Models
                 {
                     if (Facets.All(f => f.Name != defaultFacet))
                     {
-                        Facets.Add(new FacetParameter { Name = defaultFacet });
+                        Facets.Add(new FacetParameter
+                        {
+                            Name = defaultFacet,
+                            NameTranslated = UI.ResourceManager.GetString("Facet_" + defaultFacet)
+                        });
                     }
                 }
             }
