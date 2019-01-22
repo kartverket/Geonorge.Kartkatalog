@@ -703,6 +703,11 @@
             The name of the facet field
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Facet.Name">
+            <summary>
+            The name of the facet field
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Facet.FacetResults">
             <summary>
             The facet result

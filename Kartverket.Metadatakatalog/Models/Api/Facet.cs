@@ -11,6 +11,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public string FacetField { get; set; }
         /// <summary>
+        /// The name of the facet field
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
         /// The facet result
         /// </summary>
         public List<FacetValue> FacetResults { get; set; }
@@ -23,6 +27,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         private Facet(Models.Facet item)
         {
             FacetField = item.FacetField;
+            Name = item.FacetField;
             FacetResults = FacetField == "area" ? FacetValue.OrganizationCreateFromList(item.FacetResults) : FacetValue.CreateFromList(item.FacetResults);
             NameTranslated = UI.ResourceManager.GetString("Facet_" + item.FacetField);
         }
