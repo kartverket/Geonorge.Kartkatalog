@@ -768,6 +768,11 @@
             The type of metadata
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.TypeTranslated">
+            <summary>
+            The type of metadata translated
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.Theme">
             <summary>
             The theme

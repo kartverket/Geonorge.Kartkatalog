@@ -6,6 +6,8 @@ using System.Runtime.Caching;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Xml;
+using Kartverket.Metadatakatalog.Helpers;
+using Kartverket.Metadatakatalog.Models.Translations;
 
 namespace Kartverket.Metadatakatalog.Models.Api
 {
@@ -27,6 +29,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// The type of metadata
         /// </summary>
         public string Type { get; set; }
+        /// <summary>
+        /// The type of metadata translated
+        /// </summary>
+        public string TypeTranslated { get; set; }
         /// <summary>
         /// The theme
         /// </summary>
@@ -152,6 +158,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             Title = item.Title;
             Abstract = item.Abstract;
             Type = item.Type;
+            TypeTranslated = TranslateType();
             Theme = item.Theme;
             Organization = item.Organization;
             OrganizationLogo = item.OrganizationLogoUrl;
@@ -249,6 +256,32 @@ namespace Kartverket.Metadatakatalog.Models.Api
             }
 
             MapUrl = GetMapUrl();
+        }
+
+        public string TranslateType()
+        {
+            string t = Type;
+
+            if (CultureHelper.GetCurrentCulture() == Culture.NorwegianCode)
+            {
+                if (Type == "dataset") t = "Datasett";
+                else if (Type == "software") t = "Applikasjon";
+                else if (Type == "service") t = "Tjeneste";
+                else if (Type == "servicelayer") t = "Tjenestelag";
+                else if (Type == "series") t = "Datasettserie";
+                else if (Type == "dimensionGroup") t = "Datapakke";
+            }
+            else
+            {
+                if (Type == "dataset") t = "Dataset";
+                else if (Type == "software") t = "Application";
+                else if (Type == "service") t = "Service";
+                else if (Type == "servicelayer") t = "Service layer";
+                else if (Type == "series") t = "Dataset series";
+                else if (Type == "dimensionGroup") t = "Data package";
+            }
+
+            return t;
         }
 
         private string MakeDownloadUrlRelative()
