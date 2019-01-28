@@ -34,38 +34,16 @@ namespace Kartverket.Metadatakatalog.Areas.HelpPage
         public static void Register(HttpConfiguration config)
         {
             //// Uncomment the following to use the documentation from XML documentation file.
-            config.SetDocumentationProvider(new XmlDocumentationProvider(HttpContext.Current.Server.MapPath("~/App_Data/XmlDocument.xml")));
+            //config.SetDocumentationProvider(new XmlDocumentationProvider(HttpContext.Current.Server.MapPath("~/App_Data/XmlDocument.xml")));
 
             //// Uncomment the following to use "sample string" as the sample for all actions that have string as the body parameter or return type.
             //// Also, the string arrays will be used for IEnumerable<string>. The sample objects will be serialized into different media type 
             //// formats by the available formatters.
-            Kartverket.Metadatakatalog.Models.Api.SearchResult s2 = new Kartverket.Metadatakatalog.Models.Api.SearchResult(new Kartverket.Metadatakatalog.Models.SearchResult() { Limit = 10, NumFound=1, Offset =0 });
-            s2.Results = new List<Metadatakatalog.Models.Api.Metadata>();
-            Metadatakatalog.Models.Api.Metadata m = new Metadatakatalog.Models.Api.Metadata() { Abstract = "Adresser med geografisk punkt og kretsinformasjon. Kopiert ukentlig fra Matikkelen.", Organization = "Kartverket", Title = "Adresse", Theme = "Annen", IsOpenData = false, DistributionProtocol = "WWW:DOWNLOAD-1.0-http--download", DistributionUrl = "https://download.geonorge.no/skdl2/nl2prot/nl2", Type = "dataset", OrganizationUrl = "https://kartkatalog.geonorge.no/metadata/kartverket", OrganizationLogo = "https://register.geonorge.no/data/organizations/971040238_kv_logo100.png", ShowDetailsUrl = "https://kartkatalog.geonorge.no/metadata/kartverket/adresse/0674c9d0-a72e-43b9-a9d4-327f374b2a32", ThumbnailUrl = "http://www.geonorge.no:80/geonetwork/srv/eng/resources.get?uuid=0674c9d0-a72e-43b9-a9d4-327f374b2a32&amp;fname=Matrikkelen_s.png", Uuid = "0674c9d0-a72e-43b9-a9d4-327f374b2a32" };
-            s2.Results.Add(m);
-
-            s2.Facets = new List<Metadatakatalog.Models.Api.Facet>();
-            Metadatakatalog.Models.Api.Facet f = new Metadatakatalog.Models.Api.Facet();
-            f.FacetField = "theme";
-            f.FacetResults = new List<Metadatakatalog.Models.Api.Facet.FacetValue>();
-            f.FacetResults.Add(new Metadatakatalog.Models.Api.Facet.FacetValue() { Name = "Annen", Count = 1 });
-            s2.Facets.Add(f);
-            Metadatakatalog.Models.Api.Facet f2 = new Metadatakatalog.Models.Api.Facet();
-            f2.FacetField = "type";
-            f2.FacetResults = new List<Metadatakatalog.Models.Api.Facet.FacetValue>();
-            f2.FacetResults.Add(new Metadatakatalog.Models.Api.Facet.FacetValue() { Name = "dataset", Count = 1 });
-            s2.Facets.Add(f2);
-            Metadatakatalog.Models.Api.Facet f3 = new Metadatakatalog.Models.Api.Facet();
-            f3.FacetField = "organization";
-            f3.FacetResults = new List<Metadatakatalog.Models.Api.Facet.FacetValue>();
-            f3.FacetResults.Add(new Metadatakatalog.Models.Api.Facet.FacetValue() { Name = "Kartverket", Count = 1 });
-            s2.Facets.Add(f3);
-
-            config.SetSampleObjects(new Dictionary<Type, object>
-            {
-                {typeof(string), "sample string"},
-                {typeof(Kartverket.Metadatakatalog.Models.Api.SearchResult), s2}
-            });
+            //config.SetSampleObjects(new Dictionary<Type, object>
+            //{
+            //    {typeof(string), "sample string"},
+            //    {typeof(IEnumerable<string>), new string[]{"sample 1", "sample 2"}}
+            //});
 
             // Extend the following to provide factories for types not handled automatically (those lacking parameterless
             // constructors) or for which you prefer to use non-default property values. Line below provides a fallback
@@ -84,17 +62,14 @@ namespace Kartverket.Metadatakatalog.Areas.HelpPage
             //// Uncomment the following to use "[0]=foo&[1]=bar" directly as the sample for all actions that support form URL encoded format
             //// and have IEnumerable<string> as the body parameter or return type.
             //config.SetSampleForType("[0]=foo&[1]=bar", new MediaTypeHeaderValue("application/x-www-form-urlencoded"), typeof(IEnumerable<string>));
-            //config.SetSampleForType("[0]=foo&[1]=bar", new MediaTypeHeaderValue("application/json"), typeof(IEnumerable<string>));
+
             //// Uncomment the following to use "1234" directly as the request sample for media type "text/plain" on the controller named "Values"
             //// and action named "Put".
-            //config.SetSampleRequest("/api/search/?text=adresse", new MediaTypeHeaderValue("application/x-www-form-urlencoded"), "APISearch", "Get");
-            config.SetSampleRequest("/api/search/?text=adresse&facets[0]name=organization&facets[0]value=Kartverket", new MediaTypeHeaderValue("application/x-www-form-urlencoded"), "APISearch", "Get");
-            //config.SetSampleRequest("/api/search/?text=adresse&facets[0]name=organization&facets[0]value=Kartverket&Offset=10&Limit=15", new MediaTypeHeaderValue("application/x-www-form-urlencoded"), "APISearch", "Get");
+            //config.SetSampleRequest("1234", new MediaTypeHeaderValue("text/plain"), "Values", "Put");
+
             //// Uncomment the following to use the image on "../images/aspNetHome.png" directly as the response sample for media type "image/png"
             //// on the controller named "Values" and action named "Get" with parameter "id".
-
-            //var urlHelper = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
-           
+            //config.SetSampleResponse(new ImageSample("../images/aspNetHome.png"), new MediaTypeHeaderValue("image/png"), "Values", "Get", "id");
 
             //// Uncomment the following to correct the sample request when the action expects an HttpRequestMessage with ObjectContent<string>.
             //// The sample will be generated as if the controller named "Values" and action named "Get" were having string as the body parameter.

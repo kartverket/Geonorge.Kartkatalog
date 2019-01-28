@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Kartverket.Metadatakatalog.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Xml;
+using Kartverket.Metadatakatalog.Helpers;
+using Kartverket.Metadatakatalog.Models.Translations;
 
 namespace Kartverket.Metadatakatalog.Models.Api
 {
@@ -26,6 +29,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// The type of metadata
         /// </summary>
         public string Type { get; set; }
+        /// <summary>
+        /// The type of metadata translated
+        /// </summary>
+        public string TypeTranslated { get; set; }
         /// <summary>
         /// The theme
         /// </summary>
@@ -65,12 +72,12 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// <summary>
         /// True if one of the nationalinitiativs(Samarbeid og lover) is "Åpne data"
         /// </summary>
-        public bool IsOpenData { get; set; }
+        public bool? IsOpenData { get; set; }
         /// <summary>
         /// <summary>
         /// True if one of the nationalinitiativs(Samarbeid og lover) is "Det offentlige kartgrunnlaget"
         /// </summary>
-        public bool IsDokData { get; set; }
+        public bool? IsDokData { get; set; }
         /// <summary>
         /// Url for legend/drawing rules
         /// </summary>
@@ -130,7 +137,17 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public string GetCapabilitiesUrl { get; set; }
 
+        /// <summary>
+        /// The full dataset name
+        /// </summary>
+        public string DatasetName { get; set; }
+
         public DateTime? Date { get; set; }
+        private string MapUrl { get; set; }
+        public bool? ShowMapLink { get; set; }
+        private bool ShowServiceMapLink { get; set; }
+        private string DownloadUrl { get; set; }
+        private string ServiceUrl { get; set; }
 
 
         public Metadata() { 
@@ -141,6 +158,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             Title = item.Title;
             Abstract = item.Abstract;
             Type = item.Type;
+            TypeTranslated = TranslateType();
             Theme = item.Theme;
             Organization = item.Organization;
             OrganizationLogo = item.OrganizationLogoUrl;
@@ -179,12 +197,149 @@ namespace Kartverket.Metadatakatalog.Models.Api
             ServiceDistributionUrlForDataset = item.ServiceDistributionUrlForDataset;
             ServiceWfsDistributionUrlForDataset = item.ServiceWfsDistributionUrlForDataset != null ? item.ServiceWfsDistributionUrlForDataset : WfsServiceUrl();
             Date = item.Date;
+            DatasetName = item.DatasetName;
+
+            if (Type == "dataset")
+            {
+                if (!string.IsNullOrWhiteSpace(item.ServiceDistributionProtocolForDataset))
+                {
+                    string commonPart = SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(item.ServiceDistributionProtocolForDataset, true);
+
+                    if (item.ServiceDistributionProtocolForDataset.Contains(SimpleMetadataUtil.OgcWms))
+                    {
+                        if (!string.IsNullOrWhiteSpace(item.ServiceDistributionUrlForDataset))
+                        {
+                            ServiceUrl = $"{commonPart}{RemoveQueryString(item.ServiceDistributionUrlForDataset)}";
+
+                            if (!string.IsNullOrWhiteSpace(item.ServiceDistributionNameForDataset))
+                            {
+                                ServiceUrl += $"&addLayers={item.ServiceDistributionNameForDataset}";
+                            }
+                        }
+                    }
+                    else if (item.ServiceDistributionProtocolForDataset.Contains(SimpleMetadataUtil.OgcWfs))
+                    {
+                        if (!string.IsNullOrWhiteSpace(item.ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(item.ServiceDistributionUrlForDataset))
+                        {
+                            ServiceUrl = $"{commonPart}{RemoveQueryString(item.ServiceDistributionUrlForDataset)}&addLayers={item.ServiceDistributionNameForDataset}";
+                        }
+                        else if (!string.IsNullOrWhiteSpace(item.DistributionUrl))
+                        {
+                            ServiceUrl = $"{commonPart}{RemoveQueryString(item.DistributionUrl)}";
+                        }
+                    }
+                }
+            }
+
+            if (Type == "service" || Type == "servicelayer")
+            {
+                if (!string.IsNullOrWhiteSpace(item.DistributionProtocol) && !string.IsNullOrWhiteSpace(item.DistributionUrl))
+                {
+                    string commonPart = $"{SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(item.DistributionProtocol, true)}{RemoveQueryString(item.DistributionUrl)}";
+
+                    if (item.DistributionProtocol.Contains(SimpleMetadataUtil.OgcWms) || item.DistributionProtocol.Contains(SimpleMetadataUtil.OgcWfs))
+                    {
+                        DownloadUrl = commonPart;
+
+                        if (!string.IsNullOrWhiteSpace(item.DistributionName))
+                        {
+                            DownloadUrl += $"&addLayers={item.DistributionName}";
+                        }
+                    }
+                }
+            }
+            else
+            {
+                DownloadUrl = item.DistributionUrl;
+                if (!DownloadLink())
+                    DownloadUrl = MakeDownloadUrlRelative();
+            }
+
+            MapUrl = GetMapUrl();
         }
 
+        public string TranslateType()
+        {
+            string t = Type;
+
+            if (CultureHelper.GetCurrentCulture() == Culture.NorwegianCode)
+            {
+                if (Type == "dataset") t = "Datasett";
+                else if (Type == "software") t = "Applikasjon";
+                else if (Type == "service") t = "Tjeneste";
+                else if (Type == "servicelayer") t = "Tjenestelag";
+                else if (Type == "series") t = "Datasettserie";
+                else if (Type == "dimensionGroup") t = "Datapakke";
+            }
+            else
+            {
+                if (Type == "dataset") t = "Dataset";
+                else if (Type == "software") t = "Application";
+                else if (Type == "service") t = "Service";
+                else if (Type == "servicelayer") t = "Service layer";
+                else if (Type == "series") t = "Dataset series";
+                else if (Type == "dimensionGroup") t = "Data package";
+            }
+
+            return t;
+        }
+
+        private string MakeDownloadUrlRelative()
+        {
+            if (!string.IsNullOrWhiteSpace(DownloadUrl))
+            {
+                if (Uri.IsWellFormedUriString(DownloadUrl, UriKind.Absolute))
+                {
+                    Uri downloadUrl = new Uri(DownloadUrl);
+                    return "//" + downloadUrl.Host + downloadUrl.PathAndQuery;
+                }
+            }
+            return null;
+        }
+        public bool DownloadLink()
+        {
+            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("WWW:DOWNLOAD") || DistributionProtocol.Contains("GEONORGE:FILEDOWNLOAD")) && (Type == "dataset" || Type == "series") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
+            else return false;
+        }
         private string GetGetCapabilitiesUrl(SearchResultItem item)
         {
             DistributionDetails distributionDetails = new DistributionDetails(null, item.DistributionProtocol, null, item.DistributionUrl);
             return distributionDetails.DistributionDetailsGetCapabilitiesUrl();
+        }
+        private string GetMapUrl()
+        {
+            if (ShowMaplink())
+            {
+                ShowMapLink = true;
+                return SimpleMetadataUtil.NorgeskartUrl + DownloadUrl;
+            }
+            if (ShowServiceMaplink())
+            {
+                ShowServiceMapLink = true;
+                return SimpleMetadataUtil.NorgeskartUrl + ServiceUrl;
+            }
+            return "";
+        }
+        public bool ShowMaplink()
+        {
+            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") || DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
+            else return false;
+        }
+
+        string RemoveQueryString(string URL)
+        {
+            int startQueryString = URL.IndexOf("?");
+
+            if (startQueryString != -1)
+                URL = URL.Substring(0, startQueryString);
+
+            return URL;
+        }
+
+        public bool ShowServiceMaplink()
+        {
+            if (!string.IsNullOrWhiteSpace(ServiceUrl)) return true;
+            else return false;
         }
 
         public static List<Metadata> CreateFromList(IEnumerable<SearchResultItem> items, UrlHelper urlHelper)

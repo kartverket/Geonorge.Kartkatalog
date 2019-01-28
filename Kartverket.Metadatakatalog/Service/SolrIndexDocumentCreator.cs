@@ -173,6 +173,8 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 indexDoc.Uuid = simpleMetadata.Uuid;
                 indexDoc.Title = culture == Culture.EnglishCode && !string.IsNullOrEmpty(simpleMetadata.EnglishTitle) ? simpleMetadata.EnglishTitle : simpleMetadata.Title;
+                indexDoc.ResourceReferenceCodespace = simpleMetadata?.ResourceReference?.Codespace;
+                indexDoc.ResourceReferenceCodeName = simpleMetadata?.ResourceReference?.Code;
                 indexDoc.Abstract = culture == Culture.EnglishCode && !string.IsNullOrEmpty(simpleMetadata.EnglishAbstract) ? simpleMetadata.EnglishAbstract : simpleMetadata.Abstract;
                 indexDoc.Purpose = culture == Culture.EnglishCode && !string.IsNullOrEmpty(simpleMetadata.EnglishPurpose) ? simpleMetadata.EnglishPurpose : simpleMetadata.Purpose;
                 indexDoc.Type = simpleMetadata.HierarchyLevel;

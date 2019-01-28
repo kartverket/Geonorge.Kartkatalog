@@ -162,6 +162,11 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("parentidentifier")]
         public string ParentIdentifier { get; set; }
 
+        [SolrField("resourceReferenceCodespace")]
+        public string ResourceReferenceCodespace { get; set; }
+        [SolrField("resourceReferenceCodeName")]
+        public string ResourceReferenceCodeName { get; set; }
+
         public string DistributionType { get; internal set; }
 
         public string ClassName { get; set; }
