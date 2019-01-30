@@ -638,6 +638,11 @@
             The type
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.TypeTranslated">
+            <summary>
+            The translated name of type
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Date">
             <summary>
             The type
@@ -656,6 +661,11 @@
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.ShowDetailsUrl">
             <summary>
             Link to article
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.Article.Author">
+            <summary>
+            Author of the article
             </summary>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters.text">
