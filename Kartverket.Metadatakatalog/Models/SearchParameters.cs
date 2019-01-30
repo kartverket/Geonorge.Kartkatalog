@@ -62,6 +62,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public void AddDefaultFacetsIfMissing(List<string> additionalFacets)
         {
+            List<FacetParameter> FacetList = new List<FacetParameter>(); 
             var defaultFacets = new List<string> { "theme", "type", "organization" };
 
             if (additionalFacets.Any())
@@ -69,13 +70,25 @@ namespace Kartverket.Metadatakatalog.Models
                 defaultFacets.AddRange(additionalFacets);
             }
 
-            foreach (var defaultFacet in defaultFacets)
+            foreach (var defaultFacet in  defaultFacets)
             {
                 if (Facets != null)
                 {
-                    if (Facets.All(f => f.Name != defaultFacet))
+                    var selectedFacets = Facets.Where(f => f.Name == defaultFacet);
+                    if (selectedFacets.Any()) 
                     {
-                        Facets.Add(new FacetParameter
+                        foreach (var selectedFacet in selectedFacets)
+                        {
+                            FacetList.Add(new FacetParameter
+                            {
+                                Name = selectedFacet.Name,
+                                NameTranslated = selectedFacet.NameTranslated,
+                                Value = selectedFacet.Value
+                            });
+                        }
+                    }
+                    else { 
+                        FacetList.Add(new FacetParameter
                         {
                             Name = defaultFacet,
                             NameTranslated = UI.ResourceManager.GetString("Facet_" + defaultFacet)
@@ -83,6 +96,8 @@ namespace Kartverket.Metadatakatalog.Models
                     }
                 }
             }
+            Facets = FacetList;
+
         }
 
 

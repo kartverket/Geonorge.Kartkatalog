@@ -78,8 +78,6 @@ namespace Kartverket.Metadatakatalog.Controllers
                     parameters = new SearchParameters();
             
                 Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
-
-                //searchParameters.AddDefaultFacetsIfMissing();
                 searchParameters.AddComplexFacetsIfMissing();
                 Models.SearchResult searchResult   = _searchServiceAll.Search(searchParameters);
 
