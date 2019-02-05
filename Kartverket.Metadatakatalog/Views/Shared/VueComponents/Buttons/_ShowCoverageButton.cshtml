@@ -1,9 +1,8 @@
 ﻿@using Resources
 <script type="text/x-template" id="showCoverageButtonTemplate">
     <div>
-        <div>{{resultItem.CoverageUrl}}</div>
         <div v-on:click="showModal = !showModal && resultItem.CoverageUrl" v-html="htmlElement"></div>
-        <div v-show="showModal" class="custom-modal">
+        <div v-if="showModal" class="custom-modal">
             <div class="custom-modal-container">
                 <iframe v-bind:src="resultItem.CoverageUrl" style="height: 100%;"></iframe>
                 <div class="modal-footer" style="padding: 4px;">
