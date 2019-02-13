@@ -95,6 +95,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public List<string> DatasetServices { get; set; }
         /// <summary>
+        /// Services for dataset with ShowMapLink true
+        /// </summary>
+        public List<DatasetService> DatasetServicesWithShowMapLink { get; set; }
+        /// <summary>
         ///  Datasets for service
         /// </summary>
         public List<string> ServiceDatasets { get; set; }
@@ -188,6 +192,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             ProductSheetUrl = item.ProductSheetUrl;
             ProductSpecificationUrl = item.ProductSpecificationUrl;
             DatasetServices = item.DatasetServices;
+            DatasetServicesWithShowMapLink = AddDatasetServicesWithShowMapLink(DatasetServices);
             ServiceDatasets = item.ServiceDatasets;
             Bundles = item.Bundles;
             ServiceLayers = item.ServiceLayers;
@@ -258,6 +263,42 @@ namespace Kartverket.Metadatakatalog.Models.Api
             MapUrl = GetMapUrl();
         }
 
+        private List<DatasetService> AddDatasetServicesWithShowMapLink(List<string> datasetServicesString)
+        {
+            var datasetServices = new List<DatasetService>();
+            if (datasetServicesString != null)
+            {
+                foreach (var serviceString in datasetServicesString)
+                {
+                    var serviceArray = serviceString.Split('|');
+                    try
+                    {
+                        if (ShowMaplink(serviceArray[6]) && IsServiceOrServiceLayer(serviceArray[3]) && serviceArray[6] != null)
+                        {
+                            datasetServices.Add(new DatasetService
+                            {
+                                Uuid = serviceArray[0],
+                                DistributionProtocol = serviceArray[6],
+                                GetCapabilitiesUrl = serviceArray[7],
+                                Title = serviceArray[1]
+                            });
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        
+                    }
+                }
+            }
+
+            return datasetServices;
+        }
+
+        private bool IsServiceOrServiceLayer(string type)
+        {
+            return type == "service" || type == "servicelayer";
+        }
+
         public string TranslateType()
         {
             string t = Type;
@@ -322,8 +363,17 @@ namespace Kartverket.Metadatakatalog.Models.Api
         }
         public bool ShowMaplink()
         {
-            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") || DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl)) return true;
+            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") || DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl) || DatasetServicesWithShowMapLink.Any()) return true;
             else return false;
+        }
+
+        public bool ShowMaplink(string protocol)
+        {
+            if (!string.IsNullOrWhiteSpace(protocol) && (protocol.Contains("OGC:WMS") || protocol.Contains("OGC:WFS") || protocol.Contains("OGC:WCS")))
+            {
+                return true;
+            };
+            return false;
         }
 
         string RemoveQueryString(string URL)
@@ -404,5 +454,13 @@ namespace Kartverket.Metadatakatalog.Models.Api
             MemoryCache memoryCache = MemoryCache.Default;
             memoryCache.Add("AtomFeedDoc", AtomFeedDoc, new DateTimeOffset(DateTime.Now.AddDays(1)));
         }
+    }
+
+    public class DatasetService
+    {
+        public string Uuid { get; set; }
+        public string Title { get; set; }
+        public string DistributionProtocol { get; set; }
+        public string GetCapabilitiesUrl { get; set; }
     }
 }
