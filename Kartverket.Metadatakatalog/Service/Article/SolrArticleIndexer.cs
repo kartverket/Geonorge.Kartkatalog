@@ -1,5 +1,6 @@
 ﻿using Kartverket.Metadatakatalog.Models.Article;
 using Kartverket.Metadatakatalog.Models.SearchIndex;
+using Kartverket.Metadatakatalog.Models.Translations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,8 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
         public void RunIndexing()
         {
-            RunSearch();
+            RunSearch(Culture.NorwegianCode);
+            RunSearch(Culture.EnglishCode);
         }
 
         public void RunIndexingOn(string uuid)
@@ -34,10 +36,21 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
             try
             {
-
+                SetNorwegianIndexCores();
                 RemoveIndexDocument(uuid);
 
-                var article = _articleFether.FetchArticleDocumentAsync(uuid).Result;
+                var article = _articleFether.FetchArticleDocumentAsync(uuid, Culture.NorwegianCode).Result;
+
+                if (article != null)
+                {
+                    ArticleIndexDoc articleIndexDoc = _indexDocumentCreator.CreateIndexDoc(article);
+                    RunIndex(articleIndexDoc);
+                }
+
+                SetEnglishIndexCores();
+                RemoveIndexDocument(uuid);
+
+                article = _articleFether.FetchArticleDocumentAsync(uuid, Culture.EnglishCode).Result;
 
                 if (article != null)
                 {
@@ -63,7 +76,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
             _indexer.Index(articleIndexDoc);
         }
 
-        private void RunSearch(string articleId = "")
+        private void RunSearch(string culture, string articleId = "")
         {
             Log.Info("Running indexing articles");
             List<ArticleDocument> documents = null;
@@ -71,10 +84,10 @@ namespace Kartverket.Metadatakatalog.Service.Article
             {
                 if (!string.IsNullOrEmpty(articleId)) { 
                     documents = new List<ArticleDocument>();
-                    documents.Add(_articleFether.FetchArticleDocumentAsync(articleId).Result);
+                    documents.Add(_articleFether.FetchArticleDocumentAsync(articleId, culture).Result);
                 }
                 else
-                    documents = _articleFether.FetchArticleDocumentsAsync().Result.ToList();
+                    documents = _articleFether.FetchArticleDocumentsAsync(culture).Result.ToList();
 
                 List<ArticleIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(documents);
                 foreach (var doc in indexDocs)
@@ -92,13 +105,28 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
         public void RunReIndexing()
         {
+            SetNorwegianIndexCores();
             DeleteIndexes();
-            RunSearch();
+            RunSearch(Culture.NorwegianCode);
+
+            SetEnglishIndexCores();
+            DeleteIndexes();
+            RunSearch(Culture.EnglishCode);
         }
 
         private void DeleteIndexes()
         {
             _indexer.DeleteIndex();
+        }
+
+        private void SetNorwegianIndexCores()
+        {
+            _indexer.SetSolrIndexer(SolrCores.Articles);
+        }
+
+        private void SetEnglishIndexCores()
+        {
+            _indexer.SetSolrIndexer(SolrCores.ArticlesEnglish);
         }
     }
 }

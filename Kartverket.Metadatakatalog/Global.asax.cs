@@ -64,6 +64,7 @@ namespace Kartverket.Metadatakatalog
             solrFacility.AddCore(SolrCores.Applications, typeof(ApplicationIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications");
             solrFacility.AddCore(SolrCores.ApplicationsEnglish, typeof(ApplicationIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/applications_en");
             solrFacility.AddCore(SolrCores.Articles, typeof(ArticleIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/articles");
+            solrFacility.AddCore(SolrCores.ArticlesEnglish, typeof(ArticleIndexDoc), WebConfigurationManager.AppSettings["SolrServerUrl"] + "/solr/articles_en");
             indexContainer.AddFacility(solrFacility);
 
         }
