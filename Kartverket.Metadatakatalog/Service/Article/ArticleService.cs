@@ -17,7 +17,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
         public ArticleService()
         {
-            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ArticleIndexDoc>>(SolrCores.Articles);
+            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ArticleIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Articles));
         }
 
         public Kartverket.Metadatakatalog.Models.Article.SearchResult Search(Kartverket.Metadatakatalog.Models.Article.SearchParameters parameters)

@@ -12,5 +12,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
         void Index(ArticleIndexDoc doc);
         void DeleteIndex();
         void RemoveIndexDocument(string uuid);
+
+        void SetSolrIndexer(string coreId);
     }
 }

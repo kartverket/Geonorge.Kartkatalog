@@ -9,7 +9,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
 {
     public interface IArticleFetcher
     {
-        Task<List<ArticleDocument>> FetchArticleDocumentsAsync();
-        Task<ArticleDocument> FetchArticleDocumentAsync(string articleId);
+        Task<List<ArticleDocument>> FetchArticleDocumentsAsync(string culture);
+        Task<ArticleDocument> FetchArticleDocumentAsync(string articleId, string culture);
     }
 }

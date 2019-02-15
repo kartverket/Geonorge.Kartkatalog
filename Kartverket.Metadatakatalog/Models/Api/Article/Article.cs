@@ -17,6 +17,10 @@ namespace Kartverket.Metadatakatalog.Models.Api.Article
         /// </summary>
         public string Type { get; set; }
         /// <summary>
+        /// The translated name of type
+        /// </summary>
+        public string TypeTranslated { get; set; }
+        /// <summary>
         /// The type
         /// </summary>
         public DateTime? Date { get; set; }
@@ -32,16 +36,34 @@ namespace Kartverket.Metadatakatalog.Models.Api.Article
         /// Link to article
         /// </summary>
         public string ShowDetailsUrl { get; set; }
+        /// <summary>
+        /// Author of the article
+        /// </summary>
+        public string Author { get; set; }
 
         public Article(Models.Article.SearchResultItem item)
         {
             Uuid = item.Uuid;
             Type = item.Type;
+            TypeTranslated = GetTypeTranslated();
             Date = item.StartPublish;
             Title = item.Title;
             Intro = !string.IsNullOrEmpty(item.Intro) ? item.Intro : "";
             ShowDetailsUrl = item.DetailsUrl;
+            Author = item.Author;
+        }
 
+        public string GetTypeTranslated()
+        {
+            switch (Type)
+            {
+                case "StandardPage":
+                    return "Artikkel";
+                case "NewsPage":
+                    return "Nyhet";
+            }
+
+            return Type;
         }
 
         public static List<Article> CreateFromList(IEnumerable<Models.Article.SearchResultItem> items)

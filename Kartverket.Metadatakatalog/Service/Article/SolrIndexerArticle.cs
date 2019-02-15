@@ -1,4 +1,5 @@
-﻿using Kartverket.Metadatakatalog.Models.SearchIndex;
+﻿using Kartverket.Metadatakatalog.Models;
+using Kartverket.Metadatakatalog.Models.SearchIndex;
 using SolrNet;
 using System;
 using System.Collections.Generic;
@@ -54,5 +55,11 @@ namespace Kartverket.Metadatakatalog.Service.Article
                 Log.Error("Error removing UUID: " + uuid + "", exception);
             }
         }
+
+        public void SetSolrIndexer(string coreId)
+        {
+            _solr = MvcApplication.indexContainer.Resolve<ISolrOperations<ArticleIndexDoc>>(coreId);
+        }
+
     }
 }

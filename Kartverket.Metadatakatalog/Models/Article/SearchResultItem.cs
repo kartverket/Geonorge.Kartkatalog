@@ -16,6 +16,7 @@ namespace Kartverket.Metadatakatalog.Models.Article
         public string Intro { get; set; }
         public string Body { get; set; }
         public string DetailsUrl { get; set; }
+        public string Author { get; set; }
 
         public SearchResultItem(ArticleIndexDoc doc)
         {
@@ -26,6 +27,7 @@ namespace Kartverket.Metadatakatalog.Models.Article
             Intro = doc.MainIntro;
             Body = doc.MainBody;
             DetailsUrl =  doc.LinkUrl;
+            Author = doc.Author;
         }
     }
 }
