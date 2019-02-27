@@ -53,7 +53,6 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             parameters.AddDefaultFacetsIfMissing();
             parameters.CreateFacetOfArea();
-            parameters.AddComplexFacetsIfMissing();
 
             var searchResult = _searchService.Search(parameters);
             var model = new SearchByAreaViewModel(parameters, searchResult);
