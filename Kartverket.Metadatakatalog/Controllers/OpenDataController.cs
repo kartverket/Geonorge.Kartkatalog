@@ -34,7 +34,6 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             parameters.AddDefaultFacetsIfMissing();
             parameters.CreateFacetOfArea();
-            parameters.AddComplexFacetsIfMissing();
             FixAreaParameters(parameters);
 
             var searchResult = _searchService.Search(parameters);

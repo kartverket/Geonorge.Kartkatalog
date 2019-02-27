@@ -49,28 +49,17 @@ namespace Kartverket.Metadatakatalog.Models
         public string orderby { get; set; }
         public List<FacetParameter> Facets { get; set; }
 
+        public void AddComplexFacetsIfMissing()
+        {
+            AddDefaultFacetsIfMissing();
+        }
 
         public void AddDefaultFacetsIfMissing()
         {
-            AddDefaultFacetsIfMissing(new List<string>());
-        }
-
-        public void AddComplexFacetsIfMissing()
-        {
-            AddDefaultFacetsIfMissing(new List<string> { "nationalinitiative", "placegroups", "DistributionProtocols", "area", "dataaccess" });
-        }
-
-        public void AddDefaultFacetsIfMissing(List<string> additionalFacets)
-        {
             List<FacetParameter> FacetList = new List<FacetParameter>(); 
-            var defaultFacets = new List<string> { "type", "theme", "organization" };
+            var facets = new List<string> { "type", "theme", "organization", "nationalinitiative", "placegroups", "DistributionProtocols", "area", "dataaccess" };
 
-            if (additionalFacets.Any())
-            {
-                defaultFacets.AddRange(additionalFacets);
-            }
-
-            foreach (var defaultFacet in  defaultFacets)
+            foreach (var defaultFacet in facets)
             {
                 if (Facets != null)
                 {
