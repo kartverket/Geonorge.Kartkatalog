@@ -267,7 +267,9 @@ namespace Kartverket.Metadatakatalog.Service
             @namespace = @namespace.Replace(@"/", @"\/");
             @namespace = @namespace.Replace(@":", @"\:");
 
-            ISolrQuery query = new SolrQuery("resourceReferenceCodespace:"+ @namespace + " AND resourceReferenceCodeName:\""+ datasetName + "\" AND -uuid:"+ uuid);
+            //ISolrQuery query = new SolrQuery("resourceReferenceCodespace:"+ @namespace + " AND resourceReferenceCodeName:\""+ datasetName + "\" AND -uuid:"+ uuid);
+            //datasetName unique across namespace
+            ISolrQuery query = new SolrQuery("resourceReferenceCodeName:\"" + datasetName + "\" AND -uuid:" + uuid);
             try
             {
                 SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
