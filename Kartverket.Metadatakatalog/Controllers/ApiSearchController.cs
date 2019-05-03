@@ -301,7 +301,6 @@ namespace Kartverket.Metadatakatalog.Controllers
         public Models.MetadataViewModel GetData(string uuid)
         {
             Models.MetadataViewModel model = _metadataService.GetMetadataViewModelByUuid(uuid);
-            model.CoverageUrl = model.GetCoverageParams();
             return model;
         }
 
