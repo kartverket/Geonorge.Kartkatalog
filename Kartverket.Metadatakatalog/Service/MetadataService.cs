@@ -413,9 +413,8 @@ namespace Kartverket.Metadatakatalog.Service
             //Nettside
             if (simpleMetadata.HierarchyLevel == "software")
             {
-                distribution.DistributionUrl = simpleMetadataDistribution.URL;
                 distribution.DownloadUrl = simpleMetadataDistribution.URL;
-                distribution.CanShowMapUrl = true;
+                distribution.CanShowMapUrl = false;
             }
 
             //Åpne data, begrenset, skjermet
