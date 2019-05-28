@@ -405,7 +405,7 @@ namespace Kartverket.Metadatakatalog.Service
             }
 
             //Kopier url
-            if (simpleMetadataDistribution.URL != null)
+            if (simpleMetadata.HierarchyLevel != "software" && simpleMetadataDistribution.URL != null)
             {
                 distribution.GetCapabilitiesUrl = simpleMetadataDistribution.URL;
             }
@@ -414,6 +414,7 @@ namespace Kartverket.Metadatakatalog.Service
             if (simpleMetadata.HierarchyLevel == "software")
             {
                 distribution.DistributionUrl = simpleMetadataDistribution.URL;
+                distribution.DownloadUrl = simpleMetadataDistribution.URL;
                 distribution.CanShowMapUrl = true;
             }
 
