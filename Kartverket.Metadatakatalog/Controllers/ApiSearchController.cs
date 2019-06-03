@@ -19,6 +19,12 @@ using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Models.Article;
 using System.Web.Configuration;
 using Resources;
+using System.Net.Http;
+using Kartverket.Metadatakatalog.Models.Translations;
+using Kartverket.Metadatakatalog.Helpers;
+using System.Net.Http.Headers;
+using System.Globalization;
+using System.Threading;
 
 
 // Metadata search api examples
@@ -293,6 +299,23 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [System.Web.Http.Route("api/resources")]
+        [System.Web.Http.HttpGet]
+        public System.Resources.ResourceSet Resources()
+        {
+            try
+            {
+                SetLanguage(Request);
+                return UI.ResourceManager.GetResourceSet(System.Globalization.CultureInfo.CurrentCulture, true, true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return null;
+            }
+        }
+
         /// <summary>
         /// Get metadata for uuid
         /// </summary>
@@ -410,6 +433,34 @@ namespace Kartverket.Metadatakatalog.Controllers
 
                 }).Where(v => v.Name != null)
                 .ToList();
+        }
+
+        private void SetLanguage(HttpRequestMessage request)
+        {
+            string language = Culture.NorwegianCode;
+
+            IEnumerable<string> headerValues;
+            if (request.Headers.TryGetValues("Accept-Language", out headerValues))
+            {
+                language = headerValues.FirstOrDefault();
+                if (CultureHelper.IsNorwegian(language))
+                    language = Culture.NorwegianCode;
+                else
+                    language = Culture.EnglishCode;
+            }
+            else
+            {
+                CookieHeaderValue cookie = request.Headers.GetCookies("_culture").FirstOrDefault();
+                if (cookie != null && !string.IsNullOrEmpty(cookie["_culture"].Value))
+                {
+                    language = cookie["_culture"].Value;
+                }
+            }
+
+            var culture = new CultureInfo(language);
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+
         }
 
     }
