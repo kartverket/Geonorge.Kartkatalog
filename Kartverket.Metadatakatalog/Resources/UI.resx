@@ -448,10 +448,7 @@
     <value>Filnedlastning - nedlastning</value>
   </data>
   <data name="FileDownloadIntro" xml:space="preserve">
-    <value>&lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;
-            &lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;
-            &lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;
-            &lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene til nedlasting.&lt;/p&gt;</value>
+    <value>&lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;&lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;&lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;&lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene til nedlasting.&lt;/p&gt;</value>
   </data>
   <data name="FileDownloadOrder" xml:space="preserve">
     <value>Filnedlastning - bestilling</value>
@@ -526,9 +523,7 @@
     <value>Allerede lagt til nedlasting</value>
   </data>
   <data name="AreaHelpText" xml:space="preserve">
-    <value>&lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;
-                    &lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;
-                    &lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;</value>
+    <value>&lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;&lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;&lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;</value>
   </data>
   <data name="ChooseFromMap" xml:space="preserve">
     <value>Velg fra kart</value>
@@ -555,9 +550,7 @@
     <value>E-post</value>
   </data>
   <data name="FormatHelpText" xml:space="preserve">
-    <value>&lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;
-                    &lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;
-&lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;</value>
+    <value>&lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;&lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;&lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;</value>
   </data>
   <data name="IsNotAvailable" xml:space="preserve">
     <value>er ikke tilgjengelig</value>
@@ -584,8 +577,7 @@
     <value>Du har ingen elementer til nedlasting</value>
   </data>
   <data name="ProjectionHelpText" xml:space="preserve">
-    <value>&lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;
-                    &lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;</value>
+    <value>&lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;&lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;</value>
   </data>
   <data name="RemovalOfDataset" xml:space="preserve">
     <value>Fjerning av datasett</value>
@@ -693,8 +685,7 @@
     <value>Det har desverre skjedd en feil med din forespørsel. Prøv igjen om litt.</value>
   </data>
   <data name="ErrorReport" xml:space="preserve">
-    <value>&lt;p&gt;Feilen er logget og vil sjekkes av systemansvarlig.&lt;/p&gt;
-&lt;p&gt;Du kan også rapportere feilen til &lt;a mailto:"post@norgedigitalt.no"&gt;post@norgedigitalt.no&lt;/a&gt;.&lt;/p&gt;</value>
+    <value>&lt;p&gt;Feilen er logget og vil sjekkes av systemansvarlig.&lt;/p&gt;&lt;p&gt;Du kan også rapportere feilen til &lt;a mailto:"post@norgedigitalt.no"&gt;post@norgedigitalt.no&lt;/a&gt;.&lt;/p&gt;</value>
   </data>
   <data name="AllMapData" xml:space="preserve">
     <value>Alle kartdata</value>

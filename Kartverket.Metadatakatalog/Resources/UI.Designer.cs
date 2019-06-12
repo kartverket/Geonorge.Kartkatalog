@@ -169,9 +169,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;
-        ///                    &lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;
-        ///                    &lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;&lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;&lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;.
         /// </summary>
         public static string AreaHelpText {
             get {
@@ -738,8 +736,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Feilen er logget og vil sjekkes av systemansvarlig.&lt;/p&gt;
-        ///&lt;p&gt;Du kan også rapportere feilen til &lt;a mailto:&quot;post@norgedigitalt.no&quot;&gt;post@norgedigitalt.no&lt;/a&gt;.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Feilen er logget og vil sjekkes av systemansvarlig.&lt;/p&gt;&lt;p&gt;Du kan også rapportere feilen til &lt;a mailto:&quot;post@norgedigitalt.no&quot;&gt;post@norgedigitalt.no&lt;/a&gt;.&lt;/p&gt;.
         /// </summary>
         public static string ErrorReport {
             get {
@@ -928,10 +925,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;
-        ///            &lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;
-        ///            &lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;
-        ///            &lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene til nedlasting.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;&lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;&lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;&lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene til nedlasting.&lt;/p&gt;.
         /// </summary>
         public static string FileDownloadIntro {
             get {
@@ -958,9 +952,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;
-        ///                    &lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;
-        ///&lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;&lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;&lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;.
         /// </summary>
         public static string FormatHelpText {
             get {
@@ -1392,8 +1384,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;
-        ///                    &lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;&lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;.
         /// </summary>
         public static string ProjectionHelpText {
             get {
