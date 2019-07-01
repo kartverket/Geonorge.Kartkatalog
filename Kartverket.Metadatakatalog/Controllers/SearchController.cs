@@ -1,9 +1,14 @@
-﻿using System.Web.Mvc;
+﻿using System.Web;
+using System.Web.Configuration;
+using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Service.Search;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.OpenIdConnect;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -58,6 +63,31 @@ namespace Kartverket.Metadatakatalog.Controllers
             var model = new SearchByAreaViewModel(parameters, searchResult);
 
             return View(model);
+        }
+
+        public void SignIn()
+        {
+            var redirectUrl = Url.Action(nameof(SearchController.Index), "Search");
+            HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = redirectUrl },
+                OpenIdConnectAuthenticationDefaults.AuthenticationType);
+        }
+
+        public void SignOut()
+        {
+            var redirectUri = WebConfigurationManager.AppSettings["GeoID:PostLogoutRedirectUri"];
+            HttpContext.GetOwinContext().Authentication.SignOut(
+                new AuthenticationProperties { RedirectUri = redirectUri },
+                OpenIdConnectAuthenticationDefaults.AuthenticationType,
+                CookieAuthenticationDefaults.AuthenticationType);
+        }
+
+        /// <summary>
+        /// This is the action responding to /signout-callback-oidc route after logout at the identity provider
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SignOutCallback()
+        {
+            return RedirectToAction(nameof(SearchController.Index), "Search");
         }
 
         protected override void OnException(ExceptionContext filterContext)

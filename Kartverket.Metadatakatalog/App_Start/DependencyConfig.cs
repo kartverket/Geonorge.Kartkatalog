@@ -17,17 +17,19 @@ using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service.Article;
+using Geonorge.AuthLib.NetFull;
 
 namespace Kartverket.Metadatakatalog
 {
     public static class DependencyConfig
     {
-        public static void Configure(ContainerBuilder builder)
+        public static IContainer Configure(ContainerBuilder builder)
         {
             builder.RegisterControllers(typeof(MvcApplication).Assembly).PropertiesAutowired();
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly()).PropertiesAutowired();
 
             builder.RegisterModule(new AutofacWebTypesModule());
+            builder.RegisterModule<GeonorgeAuthenticationModule>();
             ConfigureAppDependencies(builder);
             var container = builder.Build();
 
@@ -36,6 +38,8 @@ namespace Kartverket.Metadatakatalog
 
             // dependency resolver for Web API
             GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+
+            return container;
         }
 
         // the order of component registration is significant. must wire up dependencies in other packages before types in this project.
