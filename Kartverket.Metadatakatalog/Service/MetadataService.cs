@@ -156,7 +156,7 @@ namespace Kartverket.Metadatakatalog.Service
                                     GetCapabilitiesUrl = metadata.Distributions.RelatedViewServices[0].GetCapabilitiesUrl
                                 }
                                 );
-                            metadata.CanShowMapUrl = true;
+                            distribution.Value.CanShowMapUrl = true;
                         }
 
                         metadata.Distributions.SelfDistribution.Add(distribution.Value);
