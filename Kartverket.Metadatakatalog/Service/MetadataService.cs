@@ -421,6 +421,17 @@ namespace Kartverket.Metadatakatalog.Service
             if (SimpleMetadataUtil.IsOpendata(simpleMetadata)) distribution.AccessIsOpendata = true;
             if (SimpleMetadataUtil.IsRestricted(simpleMetadata)) distribution.AccessIsRestricted = true;
             if (SimpleMetadataUtil.IsProtected(simpleMetadata)) distribution.AccessIsProtected = true;
+
+            if (simpleMetadata.HierarchyLevel == "service") { 
+                distribution.DatasetServicesWithShowMapLink = new List<DatasetService>();
+                distribution.DatasetServicesWithShowMapLink.Add(
+                    new DatasetService {
+                        Uuid = distribution.Uuid, Title = distribution.Title,
+                        DistributionProtocol = distribution.Protocol, GetCapabilitiesUrl = distribution.GetCapabilitiesUrl }
+                    );
+            }
+
+
             return distribution;
         }
 

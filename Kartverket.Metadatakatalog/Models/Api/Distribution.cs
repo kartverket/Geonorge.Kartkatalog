@@ -28,6 +28,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public List<DistributionFormat> DistributionFormats { get; set; }
         public string DistributionName { get; set; }
         public string DistributionUrl { get; set; }
+        public List<DatasetService> DatasetServicesWithShowMapLink { get; set; }
 
 
         public Distribution()
