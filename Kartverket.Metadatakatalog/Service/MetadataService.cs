@@ -422,7 +422,7 @@ namespace Kartverket.Metadatakatalog.Service
             if (SimpleMetadataUtil.IsRestricted(simpleMetadata)) distribution.AccessIsRestricted = true;
             if (SimpleMetadataUtil.IsProtected(simpleMetadata)) distribution.AccessIsProtected = true;
 
-            if (distribution.CanShowMapUrl && simpleMetadata.HierarchyLevel == "service") { 
+            if (distribution.CanShowMapUrl) { 
                 distribution.DatasetServicesWithShowMapLink = new List<DatasetService>();
                 distribution.DatasetServicesWithShowMapLink.Add(
                     new DatasetService {
