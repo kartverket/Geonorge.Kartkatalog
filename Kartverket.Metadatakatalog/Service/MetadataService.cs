@@ -135,6 +135,24 @@ namespace Kartverket.Metadatakatalog.Service
 
             }
 
+            if (!string.IsNullOrEmpty(metadata.DistributionUrl) && (metadata.IsService() || metadata.IsServiceLayer()))
+            {
+                for (int d=0; d < metadata.Distributions.RelatedDataset.Count; d++)
+                {
+                    metadata.Distributions.RelatedDataset[d].DatasetServicesWithShowMapLink = new List<DatasetService>();
+                    metadata.Distributions.RelatedDataset[d].DatasetServicesWithShowMapLink.Add(
+                        new DatasetService
+                        {
+                            Uuid = metadata.Uuid,
+                            Title = metadata.Title,
+                            DistributionProtocol = metadata?.DistributionDetails?.ProtocolName,
+                            GetCapabilitiesUrl = metadata?.DistributionDetails?.URL
+                        });
+
+                    metadata.Distributions.RelatedDataset[d].CanShowMapUrl = true;
+                }
+            }
+
             // Self ...
             var simpleMetadata = GetSimpleMetadataByUuid(metadata.Uuid) ?? throw new ArgumentNullException("GetSimpleMetadataByUuid(metadata.Uuid)");
             if (simpleMetadata.DistributionsFormats.Any())
