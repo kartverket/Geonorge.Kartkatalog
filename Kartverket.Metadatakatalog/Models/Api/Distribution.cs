@@ -22,6 +22,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public bool AccessIsOpendata { get; set; }
         public bool AccessIsRestricted { get; set; }
         public bool AccessIsProtected { get; set; }
+        public string DataAccess { get; set; }
         public string ServiceDistributionAccessConstraint { get; set; }
         public string GetCapabilitiesUrl { get; set; }
         public string Protocol { get; set; }

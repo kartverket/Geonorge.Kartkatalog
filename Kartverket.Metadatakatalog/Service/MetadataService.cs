@@ -165,16 +165,19 @@ namespace Kartverket.Metadatakatalog.Service
                         if (metadata.HierarchyLevel == "dataset" && metadata.Distributions.RelatedViewServices != null)
                         {
                             distribution.Value.DatasetServicesWithShowMapLink = new List<DatasetService>();
-                            distribution.Value.DatasetServicesWithShowMapLink.Add(
-                                new DatasetService
-                                {
-                                    Uuid = metadata.Distributions.RelatedViewServices[0].Uuid,
-                                    Title = metadata.Distributions.RelatedViewServices[0].Title,
-                                    DistributionProtocol = metadata.Distributions.RelatedViewServices[0].Protocol,
-                                    GetCapabilitiesUrl = metadata.Distributions.RelatedViewServices[0].GetCapabilitiesUrl
-                                }
-                                );
-                            distribution.Value.CanShowMapUrl = true;
+                            if (metadata?.Distributions?.RelatedViewServices != null && metadata?.Distributions?.RelatedViewServices.Count > 0)
+                            {
+                                distribution.Value.DatasetServicesWithShowMapLink.Add(
+                                    new DatasetService
+                                    {
+                                        Uuid = metadata?.Distributions?.RelatedViewServices?[0]?.Uuid,
+                                        Title = metadata?.Distributions?.RelatedViewServices?[0]?.Title,
+                                        DistributionProtocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol,
+                                        GetCapabilitiesUrl = metadata?.Distributions?.RelatedViewServices?[0]?.GetCapabilitiesUrl
+                                    }
+                                    );
+                                distribution.Value.CanShowMapUrl = true;
+                            }
                         }
 
                         metadata.Distributions.SelfDistribution.Add(distribution.Value);
@@ -454,6 +457,8 @@ namespace Kartverket.Metadatakatalog.Service
             if (SimpleMetadataUtil.IsOpendata(simpleMetadata)) distribution.AccessIsOpendata = true;
             if (SimpleMetadataUtil.IsRestricted(simpleMetadata)) distribution.AccessIsRestricted = true;
             if (SimpleMetadataUtil.IsProtected(simpleMetadata)) distribution.AccessIsProtected = true;
+
+            distribution.DataAccess = SimpleMetadataUtil.GetDataAccess(simpleMetadata, Culture);
 
             return distribution;
         }
@@ -791,6 +796,7 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.OrderingInstructionsLinkText = Register.GetServiceDeclaration(metadata.OrderingInstructions);
             metadata.SetDistributionUrl();
             metadata.OrganizationLogoUrl = GetOrganizationLogoUrl(metadata.ContactOwner);
+            metadata.DataAccess = metadata?.Constraints?.AccessConstraints;
 
             return metadata;
         }
