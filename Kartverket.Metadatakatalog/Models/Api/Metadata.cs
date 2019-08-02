@@ -73,6 +73,9 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// True if one of the nationalinitiativs(Samarbeid og lover) is "Åpne data"
         /// </summary>
         public bool? IsOpenData { get; set; }
+        public bool? AccessIsOpendata { get; set; }
+        public bool AccessIsRestricted { get; set; }
+        public bool AccessIsProtected { get; set; }
         /// <summary>
         /// <summary>
         /// True if one of the nationalinitiativs(Samarbeid og lover) is "Det offentlige kartgrunnlaget"
@@ -182,6 +185,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
             if (item.NationalInitiative != null && item.NationalInitiative.Contains("Åpne data") || item.DataAccess == "Åpne data")
                 IsOpenData = true;
             else IsOpenData = false;
+
+            AccessIsOpendata = IsOpenData;
+            AccessIsRestricted = SimpleMetadataUtil.IsRestricted(item.OtherConstraintsAccess);
+            AccessIsProtected = SimpleMetadataUtil.IsProtected(item.AccessConstraint); 
 
             if (item.NationalInitiative != null && item.NationalInitiative.Contains("Det offentlige kartgrunnlaget"))
                 IsDokData = true;
