@@ -129,6 +129,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// Url for service mapped to dataset (wms)
         /// </summary>
         public string ServiceDistributionUrlForDataset { get; set; }
+        public string ServiceUuid { get; set; }
+
         /// <summary>
         /// Url for service mapped to dataset (wfs)
         /// </summary>
@@ -207,6 +209,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             OtherConstraintsAccess = item.OtherConstraintsAccess;
             DataAccess = item.DataAccess;
             ServiceDistributionUrlForDataset = item.ServiceDistributionUrlForDataset;
+            ServiceUuid = item.ServiceDistributionUuidForDataset;
             ServiceWfsDistributionUrlForDataset = item.ServiceWfsDistributionUrlForDataset != null ? item.ServiceWfsDistributionUrlForDataset : WfsServiceUrl();
             Date = item.Date;
             DatasetName = item.DatasetName;
