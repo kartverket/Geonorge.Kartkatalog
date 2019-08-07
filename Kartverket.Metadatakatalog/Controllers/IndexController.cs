@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
+using System.Security.Claims;
 using System.Web.Mvc;
+using Geonorge.AuthLib.Common;
 using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog.Controllers
@@ -60,8 +62,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [Authorize]
         public ActionResult ReIndex()
         {
-            string role = GetSecurityClaim("role");
-            if (role == "nd.metadata_admin")
+            if (ClaimsPrincipal.Current.IsInRole(GeonorgeRoles.MetadataAdmin))
             {
                 Log.Info("Run reindexing of entire metadata catalogue.");
                 DateTime start = DateTime.Now;
@@ -83,27 +84,6 @@ namespace Kartverket.Metadatakatalog.Controllers
         protected override void OnException(ExceptionContext filterContext)
         {
             Log.Error("Error", filterContext.Exception);
-        }
-
-        private string GetSecurityClaim(string type)
-        {
-            string result = null;
-            foreach (var claim in System.Security.Claims.ClaimsPrincipal.Current.Claims)
-            {
-                if (claim.Type == type && !string.IsNullOrWhiteSpace(claim.Value))
-                {
-                    result = claim.Value;
-                    break;
-                }
-            }
-
-            // bad hack, must fix BAAT
-            if (!string.IsNullOrWhiteSpace(result) && type.Equals("organization") && result.Equals("Statens kartverk"))
-            {
-                result = "Kartverket";
-            }
-
-            return result;
         }
     }
 }

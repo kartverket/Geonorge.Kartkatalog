@@ -16,11 +16,11 @@ namespace Kartverket.Metadatakatalog.Service.Article
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly Geonorge.Utilities.Organization.IHttpClientFactory _httpClientFactory;
 
         string endPointUri = WebConfigurationManager.AppSettings["GeonorgeUrl"];
 
-        public ArticleFetcher(IHttpClientFactory httpClientFactory)
+        public ArticleFetcher(Geonorge.Utilities.Organization.IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }

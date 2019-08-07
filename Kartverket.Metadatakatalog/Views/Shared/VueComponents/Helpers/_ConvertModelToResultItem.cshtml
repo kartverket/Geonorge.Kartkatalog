@@ -40,7 +40,7 @@
             ServiceUrl: item.ServiceLink,
             ServiceUuid: item.ServiceUuid,
             ServiceDistributionAccessConstraint: item.ServiceDistributionAccessConstraint,
-            DistributionUrl: item.DistributionUrl,
+            DistributionUrl: (item.DistributionUrl === undefined ? item.DownloadUrl : item.DistributionUrl),
             GetCapabilitiesUrl: item.GetCapabilitiesUrl,
 
             ShowDownloadService: item.CanShowDownloadService,

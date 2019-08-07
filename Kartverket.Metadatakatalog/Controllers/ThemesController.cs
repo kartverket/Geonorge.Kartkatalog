@@ -10,6 +10,7 @@ using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
 using System.IO;
 using System.Security.Claims;
+using Geonorge.AuthLib.Common;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -37,7 +38,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             var theme = _themeService.GetTheme(id);
             if (theme == null) return HttpNotFound();
 
-            ViewBag.IsAdmin = IsAdmin();
+            ViewBag.IsAdmin = ClaimsPrincipal.Current.IsInRole(GeonorgeRoles.MetadataAdmin);
 
             return View(theme);
         }
@@ -60,7 +61,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Theme theme, HttpPostedFileBase uploadFile)
         {
-            if (!IsAdmin())
+            if (!ClaimsPrincipal.Current.IsInRole(GeonorgeRoles.MetadataAdmin))
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
 
             if (uploadFile != null)
@@ -128,7 +129,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         public ActionResult Edit(Theme theme, string[] operatesOn, HttpPostedFileBase uploadFile)
         {
 
-            if (!IsAdmin())
+            if (!ClaimsPrincipal.Current.IsInRole(GeonorgeRoles.MetadataAdmin))
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
 
             if (uploadFile != null)
@@ -174,45 +175,12 @@ namespace Kartverket.Metadatakatalog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            if(!IsAdmin())
+            if(!ClaimsPrincipal.Current.IsInRole(GeonorgeRoles.MetadataAdmin))
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
 
             _themeService.RemoveTheme(id);
 
             return RedirectToAction("Index");
-        }
-
-        public bool IsAdmin()
-        {
-            List<string> roles = GetSecurityClaim("role");
-            foreach (string role in roles)
-            {
-                if (role == "nd.metadata_admin")
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public List<string> GetSecurityClaim(string type)
-        {
-            List<string> result = new List<string>();
-            foreach (var claim in ClaimsPrincipal.Current.Claims)
-            {
-                if (claim.Type == type && !string.IsNullOrWhiteSpace(claim.Value))
-                {
-                    result.Add(claim.Value);
-                }
-            }
-
-            // bad hack, must fix BAAT
-            if (result.Count == 0 && type.Equals("organization") && result.Equals("Statens kartverk"))
-            {
-                result.Add("Kartverket");
-            }
-
-            return result;
         }
 
     }
