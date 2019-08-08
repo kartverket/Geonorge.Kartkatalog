@@ -750,4 +750,22 @@
   <data name="KeywordsAdministrativeUnits" xml:space="preserve">
     <value>Administrative enheter</value>
   </data>
+  <data name="AddToMap" xml:space="preserve">
+    <value>Legg til i kart</value>
+  </data>
+  <data name="DisplayProductSpecification" xml:space="preserve">
+    <value>Vis produktspesifikasjon</value>
+  </data>
+  <data name="RemoveFromMap" xml:space="preserve">
+    <value>Fjern fra kart</value>
+  </data>
+  <data name="SearchMapDataAndArticles" xml:space="preserve">
+    <value>Søk etter kartdata og artikler</value>
+  </data>
+  <data name="SearchResultCountText" xml:space="preserve">
+    <value>Søk på {0} ga {1} treff</value>
+  </data>
+  <data name="SearchResultsCountText" xml:space="preserve">
+    <value>Søk på {0} ga {1} treff</value>
+  </data>
 </root>

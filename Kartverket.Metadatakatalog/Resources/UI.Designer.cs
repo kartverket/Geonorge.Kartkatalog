@@ -106,6 +106,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Legg til i kart.
+        /// </summary>
+        public static string AddToMap {
+            get {
+                return ResourceManager.GetString("AddToMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Alle kartdata.
         /// </summary>
         public static string AllMapData {
@@ -579,6 +588,15 @@ namespace Resources {
         public static string DisplayProductSheet {
             get {
                 return ResourceManager.GetString("DisplayProductSheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis produktspesifikasjon.
+        /// </summary>
+        public static string DisplayProductSpecification {
+            get {
+                return ResourceManager.GetString("DisplayProductSpecification", resourceCulture);
             }
         }
         
@@ -1474,6 +1492,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fjern fra kart.
+        /// </summary>
+        public static string RemoveFromMap {
+            get {
+                return ResourceManager.GetString("RemoveFromMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Målestokkstall.
         /// </summary>
         public static string ResolutionScale {
@@ -1560,6 +1587,33 @@ namespace Resources {
         public static string SearchMapData {
             get {
                 return ResourceManager.GetString("SearchMapData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Søk etter kartdata og artikler.
+        /// </summary>
+        public static string SearchMapDataAndArticles {
+            get {
+                return ResourceManager.GetString("SearchMapDataAndArticles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Søk på {0} ga {1} treff.
+        /// </summary>
+        public static string SearchResultCountText {
+            get {
+                return ResourceManager.GetString("SearchResultCountText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Søk på {0} ga {1} treff.
+        /// </summary>
+        public static string SearchResultsCountText {
+            get {
+                return ResourceManager.GetString("SearchResultsCountText", resourceCulture);
             }
         }
         
