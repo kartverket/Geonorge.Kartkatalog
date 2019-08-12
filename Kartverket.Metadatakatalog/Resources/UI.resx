@@ -768,4 +768,13 @@
   <data name="SearchResultsCountText" xml:space="preserve">
     <value>Søk på {0} ga {1} treff</value>
   </data>
+  <data name="ClearSearch" xml:space="preserve">
+    <value>Nullstill søk</value>
+  </data>
+  <data name="SaveResultsAsCSV" xml:space="preserve">
+    <value>Lagre listen som CSV</value>
+  </data>
+  <data name="ShowMoreResults" xml:space="preserve">
+    <value>Vis flere</value>
+  </data>
 </root>

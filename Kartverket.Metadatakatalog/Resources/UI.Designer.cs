@@ -259,6 +259,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nullstill søk.
+        /// </summary>
+        public static string ClearSearch {
+            get {
+                return ResourceManager.GetString("ClearSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lukk.
         /// </summary>
         public static string Close {
@@ -1546,6 +1555,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lagre listen som CSV.
+        /// </summary>
+        public static string SaveResultsAsCSV {
+            get {
+                return ResourceManager.GetString("SaveResultsAsCSV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Søk.
         /// </summary>
         public static string Search {
@@ -1785,6 +1803,15 @@ namespace Resources {
         public static string ServiceSlowAndSpecialAccess {
             get {
                 return ResourceManager.GetString("ServiceSlowAndSpecialAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis flere.
+        /// </summary>
+        public static string ShowMoreResults {
+            get {
+                return ResourceManager.GetString("ShowMoreResults", resourceCulture);
             }
         }
         

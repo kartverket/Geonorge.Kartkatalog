@@ -1303,6 +1303,11 @@
               Looks up a localized string similar to Velg fra kart.
             </summary>
         </member>
+        <member name="P:Resources.UI.ClearSearch">
+            <summary>
+              Looks up a localized string similar to Nullstill søk.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Close">
             <summary>
               Looks up a localized string similar to Lukk.
@@ -2018,6 +2023,11 @@
               Looks up a localized string similar to Lagre som.
             </summary>
         </member>
+        <member name="P:Resources.UI.SaveResultsAsCSV">
+            <summary>
+              Looks up a localized string similar to Lagre listen som CSV.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Search">
             <summary>
               Looks up a localized string similar to Søk.
@@ -2151,6 +2161,11 @@
         <member name="P:Resources.UI.ServiceSlowAndSpecialAccess">
             <summary>
               Looks up a localized string similar to Tjenesten kan være treg å vise og krever spesiell tilgang for å kunne vises - kontakt dataeier.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.ShowMoreResults">
+            <summary>
+              Looks up a localized string similar to Vis flere.
             </summary>
         </member>
         <member name="P:Resources.UI.South">

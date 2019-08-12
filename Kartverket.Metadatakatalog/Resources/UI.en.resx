@@ -768,4 +768,13 @@
   <data name="SearchResultsCountText" xml:space="preserve">
     <value>Search for {0} returned {1} items</value>
   </data>
+  <data name="ClearSearch" xml:space="preserve">
+    <value>Clear search</value>
+  </data>
+  <data name="SaveResultsAsCSV" xml:space="preserve">
+    <value>Save results as CSV</value>
+  </data>
+  <data name="ShowMoreResults" xml:space="preserve">
+    <value>Show more</value>
+  </data>
 </root>
