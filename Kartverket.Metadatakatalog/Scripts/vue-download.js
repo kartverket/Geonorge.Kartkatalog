@@ -1790,13 +1790,29 @@ var mainVueModel = new Vue({
         getOrderRequestAdditionalInfo: function (distributionUrl, metadataUuid) {
             return this.orderRequestsAdditionalInfo[distributionUrl] != undefined && this.orderRequestsAdditionalInfo[distributionUrl][metadataUuid] != undefined ? this.orderRequestsAdditionalInfo[distributionUrl][metadataUuid] : {};
         },
+        getCookie: function(cname) {
+            var name = cname + '=';
+            var ca = document.cookie.split(';');
+            for(var i = 0; i<ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) === 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return '';
+        },
         sendRequests: function () {
             this.updateUsageForOrderRequests();
             this.updateEmailForOrderRequests();
             var responseData = [];
             var responseFailed = false;
             var orderRequests = this.orderRequests;
+            var bearerToken = this.getCookie('oidcAccessToken');
             for (distributionUrl in orderRequests) {
+
                 $.ajax({
                     url: distributionUrl,
                     type: "POST",
@@ -1805,6 +1821,11 @@ var mainVueModel = new Vue({
                     contentType: "application/json",
                     xhrFields: { withCredentials: IsGeonorge(distributionUrl) },
                     async: false,
+                    beforeSend: function (xhr) {
+                        if (bearerToken && bearerToken.length) {
+                            xhr.setRequestHeader('Authorization', 'Bearer ' + bearerToken);
+                        }
+                    },
                     error: function (jqXHR, textStatus, errorThrown) {
                         showAlert(errorThrown, "danger");
                         responseFailed = true;
@@ -1844,6 +1865,7 @@ var mainVueModel = new Vue({
                     email: emailAddress,
                     downloadAsBundle: true
                 };
+                var bearerToken = this.getCookie('oidcAccessToken');
                 $.ajax({
                     url: responseItem.orderBundleUrl,
                     type: 'PUT',
@@ -1851,6 +1873,11 @@ var mainVueModel = new Vue({
                     contentType: "application/json",
                     xhrFields: { withCredentials: IsGeonorge(responseItem.distributionUrl) },
                     data: JSON.stringify(data),
+                    beforeSend: function (xhr) {
+                        if (bearerToken && bearerToken.length) {
+                            xhr.setRequestHeader('Authorization', 'Bearer ' + bearerToken);
+                        }
+                    },
                     success: function (data) {
                         hideLoadingAnimation();
                         $('#order-bundle-message-' + responseItem.additionalInfo.distributedBy).addClass("alert alert-success");
