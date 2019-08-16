@@ -1890,7 +1890,36 @@ var mainVueModel = new Vue({
                 });
             }
         },
-
+        handleDownloadFileClick: function (event) {
+            event.preventDefault();
+            var url = event.target.href;
+            var bearerToken = this.getCookie('oidcAccessToken');
+            $.ajax({
+                url: url,
+                type: "GET",
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                beforeSend: function (xhr) {
+                    if (bearerToken && bearerToken.length) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + bearerToken);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    showAlert(errorThrown, "danger");
+                },
+                success: function (data) {
+                    var objectUrl = window.URL.createObjectURL(new Blob([data]), { type: "application/zip" });
+                    var hiddenLinkElement = document.createElement('a');
+                    hiddenLinkElement.style.display = 'none';
+                    hiddenLinkElement.href = objectUrl;
+                    hiddenLinkElement.download = url.substring(url.lastIndexOf('/') + 1);
+                    document.body.appendChild(hiddenLinkElement);
+                    hiddenLinkElement.click();
+                    window.URL.revokeObjectURL(objectUrl);
+                }
+            });
+        },
         removeFromLocalStorage: function (uuid) {
             var uuidLength = uuid.length;
             var orderItems = JSON.parse(localStorage["orderItems"]);
