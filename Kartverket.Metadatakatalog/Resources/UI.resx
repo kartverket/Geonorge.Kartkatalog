@@ -777,4 +777,10 @@
   <data name="ShowMoreResults" xml:space="preserve">
     <value>Vis flere</value>
   </data>
+  <data name="RemoveFromBasket" xml:space="preserve">
+    <value>Fjern nedlasting</value>
+  </data>
+  <data name="KeywordsNationalTheme" xml:space="preserve">
+    <value>Nasjonale tema</value>
+  </data>
 </root>

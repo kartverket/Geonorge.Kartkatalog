@@ -1078,6 +1078,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nasjonale tema.
+        /// </summary>
+        public static string KeywordsNationalTheme {
+            get {
+                return ResourceManager.GetString("KeywordsNationalTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Geografisk område.
         /// </summary>
         public static string KeywordsPlace {
@@ -1497,6 +1506,15 @@ namespace Resources {
         public static string RemoveAllDatasetsConfirm {
             get {
                 return ResourceManager.GetString("RemoveAllDatasetsConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fjern nedlasting.
+        /// </summary>
+        public static string RemoveFromBasket {
+            get {
+                return ResourceManager.GetString("RemoveFromBasket", resourceCulture);
             }
         }
         

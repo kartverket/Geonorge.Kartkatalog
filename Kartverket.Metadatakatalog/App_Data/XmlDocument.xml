@@ -1758,6 +1758,11 @@
               Looks up a localized string similar to Administrative enheter.
             </summary>
         </member>
+        <member name="P:Resources.UI.KeywordsNationalTheme">
+            <summary>
+              Looks up a localized string similar to Nasjonale tema.
+            </summary>
+        </member>
         <member name="P:Resources.UI.KeywordsPlace">
             <summary>
               Looks up a localized string similar to Geografisk område.
@@ -1991,6 +1996,11 @@
         <member name="P:Resources.UI.RemoveAllDatasetsConfirm">
             <summary>
               Looks up a localized string similar to Er du sikker på at du vil fjerne alle datasett til nedlastning?.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.RemoveFromBasket">
+            <summary>
+              Looks up a localized string similar to Fjern nedlasting.
             </summary>
         </member>
         <member name="P:Resources.UI.RemoveFromMap">
