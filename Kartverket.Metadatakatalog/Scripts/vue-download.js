@@ -1896,6 +1896,8 @@ var mainVueModel = new Vue({
             $.ajax({
                 url: fileUrl,
                 type: "GET",
+                dataType: "binary",
+                processData: false,
                 xhrFields: {
                     responseType: 'blob'
                 },
