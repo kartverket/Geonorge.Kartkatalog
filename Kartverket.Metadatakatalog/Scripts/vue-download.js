@@ -1890,12 +1890,11 @@ var mainVueModel = new Vue({
                 });
             }
         },
-        handleDownloadFileClick: function (event) {
+        handleDownloadFileClick: function (fileUrl) {
             event.preventDefault();
-            var url = event.target.href;
             var bearerToken = this.getCookie('oidcAccessToken');
             $.ajax({
-                url: url,
+                url: fileUrl,
                 type: "GET",
                 xhrFields: {
                     responseType: 'blob'
@@ -1913,7 +1912,7 @@ var mainVueModel = new Vue({
                     var hiddenLinkElement = document.createElement('a');
                     hiddenLinkElement.style.display = 'none';
                     hiddenLinkElement.href = objectUrl;
-                    hiddenLinkElement.download = url.substring(url.lastIndexOf('/') + 1);
+                    hiddenLinkElement.download = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
                     document.body.appendChild(hiddenLinkElement);
                     hiddenLinkElement.click();
                     window.URL.revokeObjectURL(objectUrl);
