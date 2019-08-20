@@ -307,7 +307,7 @@
     <value>nedlastingen</value>
   </data>
   <data name="ToBasket" xml:space="preserve">
-    <value>til nedlastning</value>
+    <value>Åpne nedlastinger</value>
   </data>
   <data name="AvailableAs" xml:space="preserve">
     <value>Tilgjengelig som</value>
@@ -763,10 +763,10 @@
     <value>Søk etter kartdata og artikler</value>
   </data>
   <data name="SearchResultCountText" xml:space="preserve">
-    <value>Søk på {0} ga {1} treff</value>
+    <value>Søk på {0} ga {1} treff i {2}</value>
   </data>
   <data name="SearchResultsCountText" xml:space="preserve">
-    <value>Søk på {0} ga {1} treff</value>
+    <value>Søk på {0} ga {1} treff i {2}</value>
   </data>
   <data name="ClearSearch" xml:space="preserve">
     <value>Nullstill søk</value>
@@ -780,7 +780,46 @@
   <data name="RemoveFromBasket" xml:space="preserve">
     <value>Fjern nedlasting</value>
   </data>
+  <data name="DisplayMap" xml:space="preserve">
+    <value>Vis kart</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>Engelsk</value>
+  </data>
   <data name="KeywordsNationalTheme" xml:space="preserve">
     <value>Nasjonale tema</value>
+  </data>
+  <data name="MapCatalog" xml:space="preserve">
+    <value>Kartkatalogen</value>
+  </data>
+  <data name="Norwegian" xml:space="preserve">
+    <value>Norsk</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Logg inn</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Logg ut</value>
+  </data>
+  <data name="AboutGeonorge" xml:space="preserve">
+    <value>Om Geonorge</value>
+  </data>
+  <data name="AboutTheSite" xml:space="preserve">
+    <value>Om nettstedet</value>
+  </data>
+  <data name="ASolutionBy" xml:space="preserve">
+    <value>En løsning fra</value>
+  </data>
+  <data name="OrgNo" xml:space="preserve">
+    <value>Org. nr.</value>
+  </data>
+  <data name="PrivacyAndUseOfCookies" xml:space="preserve">
+    <value>Personvern og bruk av cookies</value>
+  </data>
+  <data name="Telephone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Versjon</value>
   </data>
 </root>

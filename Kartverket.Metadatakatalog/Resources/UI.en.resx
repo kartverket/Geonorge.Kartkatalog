@@ -304,7 +304,7 @@
     <value>The service may be slow to display and requires special access to display - contact data owner</value>
   </data>
   <data name="TheBasket" xml:space="preserve">
-    <value>the download</value>
+    <value>Go to downloads</value>
   </data>
   <data name="ToBasket" xml:space="preserve">
     <value>for download</value>
@@ -763,10 +763,10 @@
     <value>Search for map data and articles</value>
   </data>
   <data name="SearchResultCountText" xml:space="preserve">
-    <value>Search for {0} returned {1} item</value>
+    <value>Search for {0} returned {1} item in {2}</value>
   </data>
   <data name="SearchResultsCountText" xml:space="preserve">
-    <value>Search for {0} returned {1} items</value>
+    <value>Search for {0} returned {1} items {2}</value>
   </data>
   <data name="ClearSearch" xml:space="preserve">
     <value>Clear search</value>
@@ -780,7 +780,46 @@
   <data name="RemoveFromBasket" xml:space="preserve">
     <value>Remove from download</value>
   </data>
+  <data name="DisplayMap" xml:space="preserve">
+    <value>Show map</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
   <data name="KeywordsNationalTheme" xml:space="preserve">
     <value>National theme</value>
+  </data>
+  <data name="MapCatalog" xml:space="preserve">
+    <value>Map catalog</value>
+  </data>
+  <data name="Norwegian" xml:space="preserve">
+    <value>Norwegian</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="AboutGeonorge" xml:space="preserve">
+    <value>About Geonorge</value>
+  </data>
+  <data name="AboutTheSite" xml:space="preserve">
+    <value>About the site</value>
+  </data>
+  <data name="ASolutionBy" xml:space="preserve">
+    <value>A solution by</value>
+  </data>
+  <data name="OrgNo" xml:space="preserve">
+    <value>Org. no.</value>
+  </data>
+  <data name="PrivacyAndUseOfCookies" xml:space="preserve">
+    <value>Privacy and use of cookies</value>
+  </data>
+  <data name="Telephone" xml:space="preserve">
+    <value>Telephone</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
   </data>
 </root>
