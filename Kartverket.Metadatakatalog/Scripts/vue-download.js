@@ -1890,7 +1890,7 @@ var mainVueModel = new Vue({
                 });
             }
         },
-        handleDownloadFileClick: function (fileUrl) {
+        handleDownloadFileClick: function (fileUrl, fileName) {
             event.preventDefault();
             var bearerToken = this.getCookie('oidcAccessToken');
             $.ajax({
@@ -1914,7 +1914,7 @@ var mainVueModel = new Vue({
                     var hiddenLinkElement = document.createElement('a');
                     hiddenLinkElement.style.display = 'none';
                     hiddenLinkElement.href = objectUrl;
-                    hiddenLinkElement.download = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+                    hiddenLinkElement.download = fileName ? fileName : fileUrl.substring(fileUrl.lastIndexOf('/') + 1) + '.zip';
                     document.body.appendChild(hiddenLinkElement);
                     hiddenLinkElement.click();
                     window.URL.revokeObjectURL(objectUrl);
