@@ -766,7 +766,7 @@
     <value>Search for {0} returned {1} item in {2}</value>
   </data>
   <data name="SearchResultsCountText" xml:space="preserve">
-    <value>Search for {0} returned {1} items {2}</value>
+    <value>Search for {0} returned {1} items in {2}</value>
   </data>
   <data name="ClearSearch" xml:space="preserve">
     <value>Clear search</value>
