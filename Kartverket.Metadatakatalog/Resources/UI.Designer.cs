@@ -592,6 +592,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vis alt fra {0}.
+        /// </summary>
+        public static string DisplayEverythingByVariable {
+            get {
+                return ResourceManager.GetString("DisplayEverythingByVariable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vis kart.
         /// </summary>
         public static string DisplayMap {
@@ -2118,6 +2127,15 @@ namespace Resources {
         public static string ValidityPeriod {
             get {
                 return ResourceManager.GetString("ValidityPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} fra.
+        /// </summary>
+        public static string VariableBy {
+            get {
+                return ResourceManager.GetString("VariableBy", resourceCulture);
             }
         }
         

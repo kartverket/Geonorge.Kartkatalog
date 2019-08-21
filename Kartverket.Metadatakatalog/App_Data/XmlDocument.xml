@@ -1488,6 +1488,11 @@
               Looks up a localized string similar to Vis mangler.
             </summary>
         </member>
+        <member name="P:Resources.UI.DisplayEverythingByVariable">
+            <summary>
+              Looks up a localized string similar to Vis alt fra {0}.
+            </summary>
+        </member>
         <member name="P:Resources.UI.DisplayMap">
             <summary>
               Looks up a localized string similar to Vis kart.
@@ -2336,6 +2341,11 @@
         <member name="P:Resources.UI.ValidityPeriod">
             <summary>
               Looks up a localized string similar to Gyldighetsperiode.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.VariableBy">
+            <summary>
+              Looks up a localized string similar to {0} fra.
             </summary>
         </member>
         <member name="P:Resources.UI.Version">

@@ -822,4 +822,10 @@
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>
+  <data name="DisplayEverythingByVariable" xml:space="preserve">
+    <value>Display everything by {0}</value>
+  </data>
+  <data name="VariableBy" xml:space="preserve">
+    <value>{0} by</value>
+  </data>
 </root>
