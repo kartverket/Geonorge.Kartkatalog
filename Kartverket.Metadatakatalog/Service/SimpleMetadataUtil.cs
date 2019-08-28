@@ -1,4 +1,5 @@
 ﻿using GeoNorgeAPI;
+using Kartverket.Metadatakatalog.Helpers;
 using System;
 using System.Text;
 using System.Web.Configuration;
@@ -186,6 +187,26 @@ namespace Kartverket.Metadatakatalog.Service
                 url = url.Substring(0, startQueryString);
 
             return url;
+        }
+
+        internal static string GetDataAccess(SimpleMetadata simpleMetadata, string culture)
+        {
+            if (IsRestricted(simpleMetadata))
+                if (CultureHelper.IsNorwegian(culture))
+                    return "Tilgangsbegrensede data";
+                else
+                    return "Protected data";
+            else if (IsProtected(simpleMetadata))
+                if (CultureHelper.IsNorwegian(culture))
+                    return "Skjermede data";
+                else
+                    return "Restricted data";
+            else
+            if (CultureHelper.IsNorwegian(culture))
+                return "Åpne data";
+            else
+                return "Open data";
+
         }
     }
 }

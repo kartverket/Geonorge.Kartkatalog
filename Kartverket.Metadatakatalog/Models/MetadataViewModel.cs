@@ -124,6 +124,7 @@ namespace Kartverket.Metadatakatalog.Models
         public bool AccessIsOpendata { get; set; }
         public bool AccessIsRestricted { get; set; }
         public bool AccessIsProtected { get; set; }
+        public string DataAccess { get; set; }
         public bool CanShowMapUrl { get; set; }
         public bool CanShowServiceMapUrl { get; set; }
         public bool CanShowDownloadService { get; set; }

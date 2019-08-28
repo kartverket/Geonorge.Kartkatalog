@@ -73,6 +73,9 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// True if one of the nationalinitiativs(Samarbeid og lover) is "Åpne data"
         /// </summary>
         public bool? IsOpenData { get; set; }
+        public bool? AccessIsOpendata { get; set; }
+        public bool AccessIsRestricted { get; set; }
+        public bool AccessIsProtected { get; set; }
         /// <summary>
         /// <summary>
         /// True if one of the nationalinitiativs(Samarbeid og lover) is "Det offentlige kartgrunnlaget"
@@ -126,6 +129,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// Url for service mapped to dataset (wms)
         /// </summary>
         public string ServiceDistributionUrlForDataset { get; set; }
+        public string ServiceUuid { get; set; }
+
         /// <summary>
         /// Url for service mapped to dataset (wfs)
         /// </summary>
@@ -183,6 +188,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
                 IsOpenData = true;
             else IsOpenData = false;
 
+            AccessIsOpendata = IsOpenData;
+            AccessIsRestricted = SimpleMetadataUtil.IsRestricted(item.OtherConstraintsAccess);
+            AccessIsProtected = SimpleMetadataUtil.IsProtected(item.AccessConstraint); 
+
             if (item.NationalInitiative != null && item.NationalInitiative.Contains("Det offentlige kartgrunnlaget"))
                 IsDokData = true;
             else IsDokData = false;
@@ -200,6 +209,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             OtherConstraintsAccess = item.OtherConstraintsAccess;
             DataAccess = item.DataAccess;
             ServiceDistributionUrlForDataset = item.ServiceDistributionUrlForDataset;
+            ServiceUuid = item.ServiceDistributionUuidForDataset;
             ServiceWfsDistributionUrlForDataset = item.ServiceWfsDistributionUrlForDataset != null ? item.ServiceWfsDistributionUrlForDataset : WfsServiceUrl();
             Date = item.Date;
             DatasetName = item.DatasetName;

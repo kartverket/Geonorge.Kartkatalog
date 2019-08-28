@@ -304,7 +304,7 @@
     <value>The service may be slow to display and requires special access to display - contact data owner</value>
   </data>
   <data name="TheBasket" xml:space="preserve">
-    <value>the download</value>
+    <value>Go to downloads</value>
   </data>
   <data name="ToBasket" xml:space="preserve">
     <value>for download</value>
@@ -448,10 +448,7 @@
     <value>File download - download</value>
   </data>
   <data name="FileDownloadIntro" xml:space="preserve">
-    <value>&lt;p&gt; Downloading files requires that you choose the area, format, and coordinate system for each data set. &lt;/ p&gt;
-             &lt;p&gt;Should multiple files be downloaded, common options can be made at the top. Individual choices can be made for each dataset. &lt;/p&gt;
-             &lt;p&gt; Symbols indicate whether data from your selection is available. &lt;/p&gt;
-             &lt;p&gt; If an area is not displayed in a public choice, it must be individually selected for the data sets to download. &lt;/p&gt;</value>
+    <value>&lt;p&gt;Downloading files requires that you choose the area, format, and coordinate system for each data set. &lt;/ p&gt;&lt;p&gt;Should multiple files be downloaded, common options can be made at the top. Individual choices can be made for each dataset. &lt;/p&gt;&lt;p&gt; Symbols indicate whether data from your selection is available. &lt;/p&gt;&lt;p&gt; If an area is not displayed in a public choice, it must be individually selected for the data sets to download. &lt;/p&gt;</value>
   </data>
   <data name="FileDownloadOrder" xml:space="preserve">
     <value>File download - order</value>
@@ -526,9 +523,7 @@
     <value>Already put for download</value>
   </data>
   <data name="AreaHelpText" xml:space="preserve">
-    <value>&lt;p&gt;Here you can select finished files from fixed areas from drop-down list. &lt;/p&gt;
-                     &lt;p&gt;For some datasets you can also use the Map tool to select data from grid or define freely chosen polygon for download. &lt;/p&gt;
-                     &lt;p&gt;For freely chosen polygon, the file will be generated and you will be notified by email when the file is complete for download. &lt;/p&gt;</value>
+    <value>&lt;p&gt;Here you can select finished files from fixed areas from drop-down list. &lt;/p&gt;&lt;p&gt;For some datasets you can also use the Map tool to select data from grid or define freely chosen polygon for download. &lt;/p&gt;&lt;p&gt;For freely chosen polygon, the file will be generated and you will be notified by email when the file is complete for download. &lt;/p&gt;</value>
   </data>
   <data name="ChooseFromMap" xml:space="preserve">
     <value>Choose from map</value>
@@ -555,9 +550,7 @@
     <value>Email</value>
   </data>
   <data name="FormatHelpText" xml:space="preserve">
-    <value>&lt;p&gt;Location-based information is available in different formats depending on the type of data set. Special tools are needed to read most formats. &lt;/p&gt;
-     &lt;p&gt;SOSI - Norwegian exchange format for site-based information. &lt;/p&gt;
-&lt;p&gt;GML - International XML Format for Location-based Information. &lt;/p&gt;</value>
+    <value>&lt;p&gt;Location-based information is available in different formats depending on the type of data set. Special tools are needed to read most formats. &lt;/p&gt;&lt;p&gt;SOSI - Norwegian exchange format for site-based information. &lt;/p&gt;&lt;p&gt;GML - International XML Format for Location-based Information. &lt;/p&gt;</value>
   </data>
   <data name="IsNotAvailable" xml:space="preserve">
     <value>is not available</value>
@@ -584,8 +577,7 @@
     <value>You have no items for download</value>
   </data>
   <data name="ProjectionHelpText" xml:space="preserve">
-    <value>&lt;p&gt;Enter the desired data set coordinate system to be downloaded. &lt;/p&gt;
-                     &lt;p&gt;If you want data for the entire country, it is common to use EUREF89, UTM zone 33. &lt;/p&gt;</value>
+    <value>&lt;p&gt;Enter the desired data set coordinate system to be downloaded. &lt;/p&gt;&lt;p&gt;If you want data for the entire country, it is common to use EUREF89, UTM zone 33. &lt;/p&gt;</value>
   </data>
   <data name="RemovalOfDataset" xml:space="preserve">
     <value>Removal of dataset</value>
@@ -693,8 +685,7 @@
     <value>Unfortunately, an error has occurred with your request. Please try again.</value>
   </data>
   <data name="ErrorReport" xml:space="preserve">
-    <value>&lt;p&gt;The error is logged and will be checked by the system administrator.&lt;/p&gt;
-&lt;p&gt;You can also report the error to &lt;a mailto:"post@norgedigitalt.no"&gt;post@norgedigitalt.no &lt;/a&gt;. &lt;/p&gt;</value>
+    <value>&lt;p&gt;The error is logged and will be checked by the system administrator.&lt;/p&gt;&lt;p&gt;You can also report the error to &lt;a mailto:"post@norgedigitalt.no"&gt;post@norgedigitalt.no &lt;/a&gt;. &lt;/p&gt;</value>
   </data>
   <data name="AllMapData" xml:space="preserve">
     <value>All map data</value>
@@ -758,5 +749,83 @@
   </data>
   <data name="KeywordsAdministrativeUnits" xml:space="preserve">
     <value>Administrative units</value>
+  </data>
+  <data name="AddToMap" xml:space="preserve">
+    <value>Add to map</value>
+  </data>
+  <data name="DisplayProductSpecification" xml:space="preserve">
+    <value>Show product specification</value>
+  </data>
+  <data name="RemoveFromMap" xml:space="preserve">
+    <value>Remove from map</value>
+  </data>
+  <data name="SearchMapDataAndArticles" xml:space="preserve">
+    <value>Search for map data and articles</value>
+  </data>
+  <data name="SearchResultCountText" xml:space="preserve">
+    <value>Search for {0} returned {1} item in {2}</value>
+  </data>
+  <data name="SearchResultsCountText" xml:space="preserve">
+    <value>Search for {0} returned {1} items in {2}</value>
+  </data>
+  <data name="ClearSearch" xml:space="preserve">
+    <value>Clear search</value>
+  </data>
+  <data name="SaveResultsAsCSV" xml:space="preserve">
+    <value>Save results as CSV</value>
+  </data>
+  <data name="ShowMoreResults" xml:space="preserve">
+    <value>Show more</value>
+  </data>
+  <data name="RemoveFromBasket" xml:space="preserve">
+    <value>Remove from download</value>
+  </data>
+  <data name="DisplayMap" xml:space="preserve">
+    <value>Show map</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="KeywordsNationalTheme" xml:space="preserve">
+    <value>National theme</value>
+  </data>
+  <data name="MapCatalog" xml:space="preserve">
+    <value>Map catalog</value>
+  </data>
+  <data name="Norwegian" xml:space="preserve">
+    <value>Norwegian</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="AboutGeonorge" xml:space="preserve">
+    <value>About Geonorge</value>
+  </data>
+  <data name="AboutTheSite" xml:space="preserve">
+    <value>About the site</value>
+  </data>
+  <data name="ASolutionBy" xml:space="preserve">
+    <value>A solution by</value>
+  </data>
+  <data name="OrgNo" xml:space="preserve">
+    <value>Org. no.</value>
+  </data>
+  <data name="PrivacyAndUseOfCookies" xml:space="preserve">
+    <value>Privacy and use of cookies</value>
+  </data>
+  <data name="Telephone" xml:space="preserve">
+    <value>Telephone</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="DisplayEverythingByVariable" xml:space="preserve">
+    <value>Display everything by {0}</value>
+  </data>
+  <data name="VariableBy" xml:space="preserve">
+    <value>{0} by</value>
   </data>
 </root>

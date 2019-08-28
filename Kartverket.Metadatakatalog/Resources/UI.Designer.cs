@@ -61,11 +61,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Om Geonorge.
+        /// </summary>
+        public static string AboutGeonorge {
+            get {
+                return ResourceManager.GetString("AboutGeonorge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Her gis oversikt over datasett i Geonorge med opplysninger om tilgjengelige formater, tilknyttede tjenester og API-er..
         /// </summary>
         public static string AboutMapCatalog {
             get {
                 return ResourceManager.GetString("AboutMapCatalog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Om nettstedet.
+        /// </summary>
+        public static string AboutTheSite {
+            get {
+                return ResourceManager.GetString("AboutTheSite", resourceCulture);
             }
         }
         
@@ -102,6 +120,15 @@ namespace Resources {
         public static string AddToBasket {
             get {
                 return ResourceManager.GetString("AddToBasket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Legg til i kart.
+        /// </summary>
+        public static string AddToMap {
+            get {
+                return ResourceManager.GetString("AddToMap", resourceCulture);
             }
         }
         
@@ -169,9 +196,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;
-        ///                    &lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;
-        ///                    &lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;&lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;&lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;.
         /// </summary>
         public static string AreaHelpText {
             get {
@@ -203,6 +228,15 @@ namespace Resources {
         public static string Articles {
             get {
                 return ResourceManager.GetString("Articles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to En løsning fra.
+        /// </summary>
+        public static string ASolutionBy {
+            get {
+                return ResourceManager.GetString("ASolutionBy", resourceCulture);
             }
         }
         
@@ -248,6 +282,15 @@ namespace Resources {
         public static string ChooseFromMap {
             get {
                 return ResourceManager.GetString("ChooseFromMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nullstill søk.
+        /// </summary>
+        public static string ClearSearch {
+            get {
+                return ResourceManager.GetString("ClearSearch", resourceCulture);
             }
         }
         
@@ -549,6 +592,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vis alt fra {0}.
+        /// </summary>
+        public static string DisplayEverythingByVariable {
+            get {
+                return ResourceManager.GetString("DisplayEverythingByVariable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis kart.
+        /// </summary>
+        public static string DisplayMap {
+            get {
+                return ResourceManager.GetString("DisplayMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vis meldinger.
         /// </summary>
         public static string DisplayMessages {
@@ -581,6 +642,15 @@ namespace Resources {
         public static string DisplayProductSheet {
             get {
                 return ResourceManager.GetString("DisplayProductSheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vis produktspesifikasjon.
+        /// </summary>
+        public static string DisplayProductSpecification {
+            get {
+                return ResourceManager.GetString("DisplayProductSpecification", resourceCulture);
             }
         }
         
@@ -711,6 +781,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Engelsk.
+        /// </summary>
+        public static string English {
+            get {
+                return ResourceManager.GetString("English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vennligst skriv inn søkeord.
         /// </summary>
         public static string EnterSearchCriteria {
@@ -738,8 +817,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Feilen er logget og vil sjekkes av systemansvarlig.&lt;/p&gt;
-        ///&lt;p&gt;Du kan også rapportere feilen til &lt;a mailto:&quot;post@norgedigitalt.no&quot;&gt;post@norgedigitalt.no&lt;/a&gt;.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Feilen er logget og vil sjekkes av systemansvarlig.&lt;/p&gt;&lt;p&gt;Du kan også rapportere feilen til &lt;a mailto:&quot;post@norgedigitalt.no&quot;&gt;post@norgedigitalt.no&lt;/a&gt;.&lt;/p&gt;.
         /// </summary>
         public static string ErrorReport {
             get {
@@ -928,10 +1006,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;
-        ///            &lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;
-        ///            &lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;
-        ///            &lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene til nedlasting.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;&lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;&lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;&lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene til nedlasting.&lt;/p&gt;.
         /// </summary>
         public static string FileDownloadIntro {
             get {
@@ -958,9 +1033,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;
-        ///                    &lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;
-        ///&lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;&lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;&lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;.
         /// </summary>
         public static string FormatHelpText {
             get {
@@ -1059,6 +1132,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nasjonale tema.
+        /// </summary>
+        public static string KeywordsNationalTheme {
+            get {
+                return ResourceManager.GetString("KeywordsNationalTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Geografisk område.
         /// </summary>
         public static string KeywordsPlace {
@@ -1091,6 +1173,15 @@ namespace Resources {
         public static string Map {
             get {
                 return ResourceManager.GetString("Map", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kartkatalogen.
+        /// </summary>
+        public static string MapCatalog {
+            get {
+                return ResourceManager.GetString("MapCatalog", resourceCulture);
             }
         }
         
@@ -1239,6 +1330,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Norsk.
+        /// </summary>
+        public static string Norwegian {
+            get {
+                return ResourceManager.GetString("Norwegian", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ikke godkjent.
         /// </summary>
         public static string NotApproved {
@@ -1311,6 +1411,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Org. nr..
+        /// </summary>
+        public static string OrgNo {
+            get {
+                return ResourceManager.GetString("OrgNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Annet.
         /// </summary>
         public static string Other {
@@ -1356,6 +1465,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Personvern og bruk av cookies.
+        /// </summary>
+        public static string PrivacyAndUseOfCookies {
+            get {
+                return ResourceManager.GetString("PrivacyAndUseOfCookies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vi trenger eposten din for å kunne sende deg link når pakken er klar.
         /// </summary>
         public static string PrivacyEmailRequiredBundling {
@@ -1392,8 +1510,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;
-        ///                    &lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;&lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;.
         /// </summary>
         public static string ProjectionHelpText {
             get {
@@ -1483,6 +1600,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fjern nedlasting.
+        /// </summary>
+        public static string RemoveFromBasket {
+            get {
+                return ResourceManager.GetString("RemoveFromBasket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fjern fra kart.
+        /// </summary>
+        public static string RemoveFromMap {
+            get {
+                return ResourceManager.GetString("RemoveFromMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Målestokkstall.
         /// </summary>
         public static string ResolutionScale {
@@ -1528,6 +1663,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lagre listen som CSV.
+        /// </summary>
+        public static string SaveResultsAsCSV {
+            get {
+                return ResourceManager.GetString("SaveResultsAsCSV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Søk.
         /// </summary>
         public static string Search {
@@ -1569,6 +1713,33 @@ namespace Resources {
         public static string SearchMapData {
             get {
                 return ResourceManager.GetString("SearchMapData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Søk etter kartdata og artikler.
+        /// </summary>
+        public static string SearchMapDataAndArticles {
+            get {
+                return ResourceManager.GetString("SearchMapDataAndArticles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Søk på {0} ga {1} treff i {2}.
+        /// </summary>
+        public static string SearchResultCountText {
+            get {
+                return ResourceManager.GetString("SearchResultCountText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Søk på {0} ga {1} treff i {2}.
+        /// </summary>
+        public static string SearchResultsCountText {
+            get {
+                return ResourceManager.GetString("SearchResultsCountText", resourceCulture);
             }
         }
         
@@ -1744,6 +1915,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vis flere.
+        /// </summary>
+        public static string ShowMoreResults {
+            get {
+                return ResourceManager.GetString("ShowMoreResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logg inn.
+        /// </summary>
+        public static string SignIn {
+            get {
+                return ResourceManager.GetString("SignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logg ut.
+        /// </summary>
+        public static string SignOut {
+            get {
+                return ResourceManager.GetString("SignOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sør.
         /// </summary>
         public static string South {
@@ -1767,6 +1965,15 @@ namespace Resources {
         public static string SpecificUsage {
             get {
                 return ResourceManager.GetString("SpecificUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telefon.
+        /// </summary>
+        public static string Telephone {
+            get {
+                return ResourceManager.GetString("Telephone", resourceCulture);
             }
         }
         
@@ -1852,7 +2059,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to til nedlastning.
+        ///   Looks up a localized string similar to Åpne nedlastinger.
         /// </summary>
         public static string ToBasket {
             get {
@@ -1920,6 +2127,24 @@ namespace Resources {
         public static string ValidityPeriod {
             get {
                 return ResourceManager.GetString("ValidityPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} fra.
+        /// </summary>
+        public static string VariableBy {
+            get {
+                return ResourceManager.GetString("VariableBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Versjon.
+        /// </summary>
+        public static string Version {
+            get {
+                return ResourceManager.GetString("Version", resourceCulture);
             }
         }
         

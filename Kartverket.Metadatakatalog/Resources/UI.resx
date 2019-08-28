@@ -307,7 +307,7 @@
     <value>nedlastingen</value>
   </data>
   <data name="ToBasket" xml:space="preserve">
-    <value>til nedlastning</value>
+    <value>Åpne nedlastinger</value>
   </data>
   <data name="AvailableAs" xml:space="preserve">
     <value>Tilgjengelig som</value>
@@ -448,10 +448,7 @@
     <value>Filnedlastning - nedlastning</value>
   </data>
   <data name="FileDownloadIntro" xml:space="preserve">
-    <value>&lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;
-            &lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;
-            &lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;
-            &lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene til nedlasting.&lt;/p&gt;</value>
+    <value>&lt;p&gt;Nedlastning av filer krever at du velger område, format, og koordinatsystem for hvert datasett.&lt;/p&gt;&lt;p&gt;Skal det lastes ned flere filer, kan det gjøres fellesvalg øverst. Individuelle valg kan gjøres for hvert datasett.&lt;/p&gt;&lt;p&gt;Symboler angir om data ut fra ditt valg er tilgjengelig.&lt;/p&gt;&lt;p&gt;Dersom område ikke vises i fellesvalg, må det velges individuelt for datasettene til nedlasting.&lt;/p&gt;</value>
   </data>
   <data name="FileDownloadOrder" xml:space="preserve">
     <value>Filnedlastning - bestilling</value>
@@ -526,9 +523,7 @@
     <value>Allerede lagt til nedlasting</value>
   </data>
   <data name="AreaHelpText" xml:space="preserve">
-    <value>&lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;
-                    &lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;
-                    &lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;</value>
+    <value>&lt;p&gt;Her kan du velge ferdige filer fra faste områder fra nedtrekklista.&lt;/p&gt;&lt;p&gt;For noen datasett kan du også bruke kartverktøyet for å velge data fra rutenett eller definere fritt valgt polygon for nedlastning.&lt;/p&gt;&lt;p&gt;For fritt valgt polygon vil filen bli generert og du vil få melding på e-post når fila er ferdig for nedlastning.&lt;/p&gt;</value>
   </data>
   <data name="ChooseFromMap" xml:space="preserve">
     <value>Velg fra kart</value>
@@ -555,9 +550,7 @@
     <value>E-post</value>
   </data>
   <data name="FormatHelpText" xml:space="preserve">
-    <value>&lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;
-                    &lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;
-&lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;</value>
+    <value>&lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;&lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;&lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;</value>
   </data>
   <data name="IsNotAvailable" xml:space="preserve">
     <value>er ikke tilgjengelig</value>
@@ -584,8 +577,7 @@
     <value>Du har ingen elementer til nedlasting</value>
   </data>
   <data name="ProjectionHelpText" xml:space="preserve">
-    <value>&lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;
-                    &lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;</value>
+    <value>&lt;p&gt;Her angir du ønsket koordinatsystem for datasett som skal lastes ned.&lt;/p&gt;&lt;p&gt;Hvis du ønsker data for hele landet, er det vanlig å bruke EUREF89, UTM sone 33.&lt;/p&gt;</value>
   </data>
   <data name="RemovalOfDataset" xml:space="preserve">
     <value>Fjerning av datasett</value>
@@ -693,8 +685,7 @@
     <value>Det har desverre skjedd en feil med din forespørsel. Prøv igjen om litt.</value>
   </data>
   <data name="ErrorReport" xml:space="preserve">
-    <value>&lt;p&gt;Feilen er logget og vil sjekkes av systemansvarlig.&lt;/p&gt;
-&lt;p&gt;Du kan også rapportere feilen til &lt;a mailto:"post@norgedigitalt.no"&gt;post@norgedigitalt.no&lt;/a&gt;.&lt;/p&gt;</value>
+    <value>&lt;p&gt;Feilen er logget og vil sjekkes av systemansvarlig.&lt;/p&gt;&lt;p&gt;Du kan også rapportere feilen til &lt;a mailto:"post@norgedigitalt.no"&gt;post@norgedigitalt.no&lt;/a&gt;.&lt;/p&gt;</value>
   </data>
   <data name="AllMapData" xml:space="preserve">
     <value>Alle kartdata</value>
@@ -758,5 +749,83 @@
   </data>
   <data name="KeywordsAdministrativeUnits" xml:space="preserve">
     <value>Administrative enheter</value>
+  </data>
+  <data name="AddToMap" xml:space="preserve">
+    <value>Legg til i kart</value>
+  </data>
+  <data name="DisplayProductSpecification" xml:space="preserve">
+    <value>Vis produktspesifikasjon</value>
+  </data>
+  <data name="RemoveFromMap" xml:space="preserve">
+    <value>Fjern fra kart</value>
+  </data>
+  <data name="SearchMapDataAndArticles" xml:space="preserve">
+    <value>Søk etter kartdata og artikler</value>
+  </data>
+  <data name="SearchResultCountText" xml:space="preserve">
+    <value>Søk på {0} ga {1} treff i {2}</value>
+  </data>
+  <data name="SearchResultsCountText" xml:space="preserve">
+    <value>Søk på {0} ga {1} treff i {2}</value>
+  </data>
+  <data name="ClearSearch" xml:space="preserve">
+    <value>Nullstill søk</value>
+  </data>
+  <data name="SaveResultsAsCSV" xml:space="preserve">
+    <value>Lagre listen som CSV</value>
+  </data>
+  <data name="ShowMoreResults" xml:space="preserve">
+    <value>Vis flere</value>
+  </data>
+  <data name="RemoveFromBasket" xml:space="preserve">
+    <value>Fjern nedlasting</value>
+  </data>
+  <data name="DisplayMap" xml:space="preserve">
+    <value>Vis kart</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>Engelsk</value>
+  </data>
+  <data name="KeywordsNationalTheme" xml:space="preserve">
+    <value>Nasjonale tema</value>
+  </data>
+  <data name="MapCatalog" xml:space="preserve">
+    <value>Kartkatalogen</value>
+  </data>
+  <data name="Norwegian" xml:space="preserve">
+    <value>Norsk</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Logg inn</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Logg ut</value>
+  </data>
+  <data name="AboutGeonorge" xml:space="preserve">
+    <value>Om Geonorge</value>
+  </data>
+  <data name="AboutTheSite" xml:space="preserve">
+    <value>Om nettstedet</value>
+  </data>
+  <data name="ASolutionBy" xml:space="preserve">
+    <value>En løsning fra</value>
+  </data>
+  <data name="OrgNo" xml:space="preserve">
+    <value>Org. nr.</value>
+  </data>
+  <data name="PrivacyAndUseOfCookies" xml:space="preserve">
+    <value>Personvern og bruk av cookies</value>
+  </data>
+  <data name="Telephone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Versjon</value>
+  </data>
+  <data name="DisplayEverythingByVariable" xml:space="preserve">
+    <value>Vis alt fra {0}</value>
+  </data>
+  <data name="VariableBy" xml:space="preserve">
+    <value>{0} fra</value>
   </data>
 </root>

@@ -88,19 +88,6 @@ namespace Kartverket.Metadatakatalog.Service
         public Distributions GetDistributions(MetadataViewModel metadata)
         {
             string type = null;
-
-            // Self ...
-            var simpleMetadata = GetSimpleMetadataByUuid(metadata.Uuid) ?? throw new ArgumentNullException("GetSimpleMetadataByUuid(metadata.Uuid)");
-            if (simpleMetadata.DistributionsFormats.Any())
-            {
-                var distributionRows = CreateDistributionRows(metadata.Uuid, simpleMetadata);
-                if (distributionRows != null)
-                    foreach (var distribution in distributionRows)
-                    {
-                        distribution.Value.RemoveDetailsUrl = true;
-                        metadata.Distributions.SelfDistribution.Add(distribution.Value);
-                    }
-            }
                        
             if (metadata.IsDataset())
             {
@@ -146,6 +133,55 @@ namespace Kartverket.Metadatakatalog.Service
                 // Datasett
                 metadata.Distributions.RelatedDataset = ConvertRelatedData(applicationIndexDoc.ApplicationDatasets);
 
+            }
+
+            if (!string.IsNullOrEmpty(metadata.DistributionUrl) && (metadata.IsService() || metadata.IsServiceLayer()))
+            {
+                for (int d=0; d < metadata.Distributions.RelatedDataset.Count; d++)
+                {
+                    metadata.Distributions.RelatedDataset[d].DatasetServicesWithShowMapLink = new List<DatasetService>();
+                    metadata.Distributions.RelatedDataset[d].DatasetServicesWithShowMapLink.Add(
+                        new DatasetService
+                        {
+                            Uuid = metadata.Uuid,
+                            Title = metadata.Title,
+                            DistributionProtocol = metadata?.DistributionDetails?.ProtocolName,
+                            GetCapabilitiesUrl = metadata?.DistributionDetails?.URL
+                        });
+
+                    metadata.Distributions.RelatedDataset[d].CanShowMapUrl = true;
+                }
+            }
+
+            // Self ...
+            var simpleMetadata = GetSimpleMetadataByUuid(metadata.Uuid) ?? throw new ArgumentNullException("GetSimpleMetadataByUuid(metadata.Uuid)");
+            if (simpleMetadata.DistributionsFormats.Any())
+            {
+                var distributionRows = CreateDistributionRows(metadata.Uuid, simpleMetadata);
+                if (distributionRows != null)
+                    foreach (var distribution in distributionRows)
+                    {
+                        distribution.Value.RemoveDetailsUrl = true;
+                        if (metadata.HierarchyLevel == "dataset" && metadata.Distributions.RelatedViewServices != null)
+                        {
+                            distribution.Value.DatasetServicesWithShowMapLink = new List<DatasetService>();
+                            if (metadata?.Distributions?.RelatedViewServices != null && metadata?.Distributions?.RelatedViewServices.Count > 0)
+                            {
+                                distribution.Value.DatasetServicesWithShowMapLink.Add(
+                                    new DatasetService
+                                    {
+                                        Uuid = metadata?.Distributions?.RelatedViewServices?[0]?.Uuid,
+                                        Title = metadata?.Distributions?.RelatedViewServices?[0]?.Title,
+                                        DistributionProtocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol,
+                                        GetCapabilitiesUrl = metadata?.Distributions?.RelatedViewServices?[0]?.GetCapabilitiesUrl
+                                    }
+                                    );
+                                distribution.Value.CanShowMapUrl = true;
+                            }
+                        }
+
+                        metadata.Distributions.SelfDistribution.Add(distribution.Value);
+                    }
             }
 
             metadata.Distributions.ShowSelfDistributions = metadata.Distributions.ShowSelf();
@@ -267,7 +303,9 @@ namespace Kartverket.Metadatakatalog.Service
             @namespace = @namespace.Replace(@"/", @"\/");
             @namespace = @namespace.Replace(@":", @"\:");
 
-            ISolrQuery query = new SolrQuery("resourceReferenceCodespace:"+ @namespace + " AND resourceReferenceCodeName:\""+ datasetName + "\" AND -uuid:"+ uuid);
+            //ISolrQuery query = new SolrQuery("resourceReferenceCodespace:"+ @namespace + " AND resourceReferenceCodeName:\""+ datasetName + "\" AND -uuid:"+ uuid);
+            //datasetName unique across namespace
+            ISolrQuery query = new SolrQuery("resourceReferenceCodeName:\"" + datasetName + "\" AND -uuid:" + uuid);
             try
             {
                 SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
@@ -403,7 +441,7 @@ namespace Kartverket.Metadatakatalog.Service
             }
 
             //Kopier url
-            if (simpleMetadataDistribution.URL != null)
+            if (simpleMetadata.HierarchyLevel != "software" && simpleMetadataDistribution.URL != null)
             {
                 distribution.GetCapabilitiesUrl = simpleMetadataDistribution.URL;
             }
@@ -411,14 +449,17 @@ namespace Kartverket.Metadatakatalog.Service
             //Nettside
             if (simpleMetadata.HierarchyLevel == "software")
             {
-                distribution.DistributionUrl = simpleMetadataDistribution.URL;
-                distribution.CanShowMapUrl = true;
+                distribution.DownloadUrl = simpleMetadataDistribution.URL;
+                distribution.CanShowMapUrl = false;
             }
 
             //Åpne data, begrenset, skjermet
             if (SimpleMetadataUtil.IsOpendata(simpleMetadata)) distribution.AccessIsOpendata = true;
             if (SimpleMetadataUtil.IsRestricted(simpleMetadata)) distribution.AccessIsRestricted = true;
             if (SimpleMetadataUtil.IsProtected(simpleMetadata)) distribution.AccessIsProtected = true;
+
+            distribution.DataAccess = SimpleMetadataUtil.GetDataAccess(simpleMetadata, Culture);
+
             return distribution;
         }
 
@@ -755,6 +796,7 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.OrderingInstructionsLinkText = Register.GetServiceDeclaration(metadata.OrderingInstructions);
             metadata.SetDistributionUrl();
             metadata.OrganizationLogoUrl = GetOrganizationLogoUrl(metadata.ContactOwner);
+            metadata.DataAccess = metadata?.Constraints?.AccessConstraints;
 
             return metadata;
         }

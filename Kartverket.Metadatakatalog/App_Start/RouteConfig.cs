@@ -11,6 +11,8 @@ namespace Kartverket.Metadatakatalog
 
             routes.LowercaseUrls = true;
 
+            routes.MapRoute("OIDC-callback-signout", "signout-callback-oidc", new { controller = "Search", action = "SignOutCallback" });
+
             routes.MapRoute("DisplayMetadataUuidAndSlug", "metadata/{organization}/{title}/{uuid}",
                 new { controller = "Metadata", action = "Index" },
                 new { uuid = @"[a-zA-Z0-9-_]+$" }
