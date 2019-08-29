@@ -1738,6 +1738,11 @@
               Looks up a localized string similar to &lt;p&gt;Stedfestet informasjon gjøres tilgjengelig på ulike formater avhengig av type datasett. Det kreves spesialverktøy for å lese de fleste formatene.&lt;/p&gt;&lt;p&gt;SOSI – norsk utvekslingsformat for stedfestet informasjon.&lt;/p&gt;&lt;p&gt;GML – internasjonalt XML-format for stedfestet informasjon.&lt;/p&gt;.
             </summary>
         </member>
+        <member name="P:Resources.UI.Formats">
+            <summary>
+              Looks up a localized string similar to Formater.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Help">
             <summary>
               Looks up a localized string similar to Hjelp.

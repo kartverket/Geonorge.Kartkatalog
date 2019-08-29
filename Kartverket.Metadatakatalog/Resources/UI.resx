@@ -828,4 +828,7 @@
   <data name="VariableBy" xml:space="preserve">
     <value>{0} fra</value>
   </data>
+  <data name="Formats" xml:space="preserve">
+    <value>Formater</value>
+  </data>
 </root>

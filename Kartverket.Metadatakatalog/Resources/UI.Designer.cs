@@ -1042,6 +1042,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Formater.
+        /// </summary>
+        public static string Formats {
+            get {
+                return ResourceManager.GetString("Formats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hjelp.
         /// </summary>
         public static string Help {
