@@ -149,7 +149,9 @@ namespace Kartverket.Metadatakatalog.Service
                             GetCapabilitiesUrl = metadata?.DistributionDetails?.URL
                         });
 
-                    metadata.Distributions.RelatedDataset[d].CanShowMapUrl = true;
+                    var protocol = metadata?.DistributionDetails?.ProtocolName;
+                    if (!string.IsNullOrEmpty(protocol) && protocol == "OGC:WMS")
+                        metadata.Distributions.RelatedDataset[d].CanShowMapUrl = true;
                 }
             }
 
@@ -176,7 +178,9 @@ namespace Kartverket.Metadatakatalog.Service
                                         GetCapabilitiesUrl = metadata?.Distributions?.RelatedViewServices?[0]?.GetCapabilitiesUrl
                                     }
                                     );
-                                distribution.Value.CanShowMapUrl = true;
+                                var protocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol;
+                                if (!string.IsNullOrEmpty(protocol) && protocol == "OGC:WMS")
+                                    distribution.Value.CanShowMapUrl = true;
                             }
                         }
 

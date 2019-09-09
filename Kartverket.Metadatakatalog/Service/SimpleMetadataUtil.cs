@@ -20,6 +20,7 @@ namespace Kartverket.Metadatakatalog.Service
         public const string Wcs = "wcs";
 
         public static readonly string NorgeskartUrl = WebConfigurationManager.AppSettings["NorgeskartUrl"];
+        public static readonly bool MapOnlyWms = Convert.ToBoolean(WebConfigurationManager.AppSettings["MapOnlyWms"]);
 
         public static string ConvertHierarchyLevelToType(string hierarchyLevel)
         {
@@ -76,7 +77,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         internal static bool ShowMapLink(SimpleDistribution simpleMetadataDistribution, string hierarchyLevel)
         {
-            return !string.IsNullOrWhiteSpace(simpleMetadataDistribution?.URL) && !string.IsNullOrWhiteSpace(simpleMetadataDistribution.Protocol) && (simpleMetadataDistribution.Protocol.Contains("OGC:WMS") || simpleMetadataDistribution.Protocol.Contains("OGC:WFS")) && (hierarchyLevel == "service" || hierarchyLevel == "servicelayer");
+            return !string.IsNullOrWhiteSpace(simpleMetadataDistribution?.URL) && !string.IsNullOrWhiteSpace(simpleMetadataDistribution.Protocol) && (simpleMetadataDistribution.Protocol.Contains("OGC:WMS") || (!MapOnlyWms && simpleMetadataDistribution.Protocol.Contains("OGC:WFS"))) && (hierarchyLevel == "service" || hierarchyLevel == "servicelayer");
         }
 
         public static string GetCapabilitiesUrl(string url, string protocol)
