@@ -1910,12 +1910,21 @@ var mainVueModel = new Vue({
                     showAlert(errorThrown, "danger");
                 },
                 success: function (data) {
-                    var objectUrl = window.URL.createObjectURL(new Blob([data]), { type: "application/zip" });
-                    var hiddenLinkElement = document.createElement('a');
-                    hiddenLinkElement.href = objectUrl;
-                    hiddenLinkElement.download = fileName ? fileName : fileUrl.substring(fileUrl.lastIndexOf('/') + 1) + '.zip';
-                    hiddenLinkElement.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-                    window.URL.revokeObjectURL(objectUrl);
+
+                    var downloadFileName = fileName ? fileName : fileUrl.substring(fileUrl.lastIndexOf('/') + 1) + '.zip';
+
+                    if (navigator.userAgent.indexOf('Edge') >= 0) {
+                        window.navigator.msSaveOrOpenBlob(new Blob([data]), downloadFileName);
+                    }
+                    else
+                    {
+                        var objectUrl = window.URL.createObjectURL(new Blob([data]), { type: "application/zip" });
+                        var hiddenLinkElement = document.createElement('a');
+                        hiddenLinkElement.href = objectUrl;
+                        hiddenLinkElement.download = downloadFileName;
+                        hiddenLinkElement.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+                        window.URL.revokeObjectURL(objectUrl);
+                    }
                 }
             });
         },
