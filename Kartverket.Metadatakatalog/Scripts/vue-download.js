@@ -1916,7 +1916,7 @@ var mainVueModel = new Vue({
                     hiddenLinkElement.href = objectUrl;
                     hiddenLinkElement.download = fileName ? fileName : fileUrl.substring(fileUrl.lastIndexOf('/') + 1) + '.zip';
                     document.body.appendChild(hiddenLinkElement);
-                    hiddenLinkElement.click();
+                    hiddenLinkElement.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
                     window.URL.revokeObjectURL(objectUrl);
                 }
             });
