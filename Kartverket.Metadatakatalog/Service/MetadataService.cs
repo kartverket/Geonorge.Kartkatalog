@@ -856,7 +856,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         private string GetDistributionUrl(SimpleDistributionDetails distributionDetails)
         {
-            return distributionDetails?.URL;
+            return SimpleMetadataUtil.GetCapabilitiesUrl(distributionDetails?.URL, distributionDetails?.Protocol);
         }
 
         private string GetTranslation(string norwegian, string english)
