@@ -19,6 +19,8 @@ namespace Kartverket.Metadatakatalog.Models
 {
     public class MetadataViewModel
     {
+        public static readonly bool MapOnlyWms = System.Convert.ToBoolean(WebConfigurationManager.AppSettings["MapOnlyWms"]);
+
         public void SetDistributionUrl()
         {
             if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL)){
@@ -213,7 +215,7 @@ namespace Kartverket.Metadatakatalog.Models
                                 }
                             }
                         }
-                        else if (ServiceDistributionProtocolForDataset.Contains(SimpleMetadataUtil.OgcWfs))
+                        else if (!MapOnlyWms && ServiceDistributionProtocolForDataset.Contains(SimpleMetadataUtil.OgcWfs))
                         {
                             string commonPart = SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(SimpleMetadataUtil.OgcWfs, true);
 
@@ -270,7 +272,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowMapLink()
         {
-            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("OGC:WMS") || DistributionDetails.Protocol.Contains("OGC:WFS")) && (IsService() || IsServiceLayer())) return true;
+            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("OGC:WMS") || (!MapOnlyWms && DistributionDetails.Protocol.Contains("OGC:WFS"))) && (IsService() || IsServiceLayer())) return true;
             else return false;
         }
 
