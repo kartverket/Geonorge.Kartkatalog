@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using GeoNorgeAPI;
 using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
@@ -361,6 +361,23 @@ namespace Kartverket.Metadatakatalog.Service
                     metadata.ServiceUuid = searchResult.Items[0].ServiceDistributionUuidForDataset;
                 }
                 metadata.ServiceDistributionAccessConstraint = searchResult.Items[0].ServiceDistributionAccessConstraint;
+            }
+
+            var metadataIndexDocResult = GetMetadata(metadata.Uuid) ?? throw new ArgumentNullException("GetMetadata(metadata.Uuid)");
+
+            // Visningstjenester - OGC:WMS, OGC:WMTS, WMS-C
+            metadata.Distributions.RelatedViewServices = GetRelatedViewService(metadataIndexDocResult.DatasetServices);
+
+            foreach (var simpleDistributionFormat in metadata.Distributions.RelatedViewServices) { 
+                metadata.DatasetServicesWithShowMapLink.Add(
+                new DatasetService
+                {
+                    Uuid = metadata?.Distributions?.RelatedViewServices?[0]?.Uuid,
+                    Title = metadata?.Distributions?.RelatedViewServices?[0]?.Title,
+                    DistributionProtocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol,
+                    GetCapabilitiesUrl = metadata?.Distributions?.RelatedViewServices?[0]?.GetCapabilitiesUrl
+                }
+                );
             }
 
             metadata.AccessIsRestricted = metadata.IsRestricted();
