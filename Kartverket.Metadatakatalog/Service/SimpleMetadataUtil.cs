@@ -101,6 +101,10 @@ namespace Kartverket.Metadatakatalog.Service
                 return tmp + "request=GetCapabilities&service=CSW";
             if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WMTS")))
                 return tmp + "request=GetCapabilities&service=wmts";
+
+            if (tmp.EndsWith("?"))
+                tmp = tmp.Remove(tmp.Length - 1);
+
             return tmp;
         }
 
