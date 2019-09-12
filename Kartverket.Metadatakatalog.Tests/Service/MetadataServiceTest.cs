@@ -40,6 +40,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             var geonorgeUrlResolverMock = new Mock<IGeonorgeUrlResolver>();
             var organizationServiceMock = new Mock<IOrganizationService>();
             var searchServiceMock = new Mock<ISearchService>();
+            searchServiceMock.Setup(x => x.GetMetadata(Uuid)).Returns(new Metadatakatalog.Models.MetadataIndexDoc());
             var themeResolverMock = new Mock<ThemeResolver>();
             var searchServiceDirectoryServiceMock = new Mock<IServiceDirectoryService>();
             var metadataService = new MetadataService(geoNorgeMock.Object, new GeoNetworkUtil("http://example.com/"),

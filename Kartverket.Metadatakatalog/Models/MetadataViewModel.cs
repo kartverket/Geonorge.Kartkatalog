@@ -138,6 +138,7 @@ namespace Kartverket.Metadatakatalog.Models
         public Distributions Distributions { get; set; }
 
         public string ServiceType { get; set; }
+        public List<DatasetService> DatasetServicesWithShowMapLink { get; set; }
 
 
         public MetadataViewModel()
@@ -145,6 +146,7 @@ namespace Kartverket.Metadatakatalog.Models
             Related = new List<MetadataViewModel>();
             Thumbnails = new List<Thumbnail>();
             Distributions = new Distributions();
+            DatasetServicesWithShowMapLink = new List<DatasetService>();
         }
 
         public SeoUrl CreateSeoUrl()
