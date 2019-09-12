@@ -10,5 +10,6 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
         SearchResultForOrganization SearchByOrganization(SearchByOrganizationParameters parameters);
         SearchResult CreateSearchResults(SolrQueryResults<MetadataIndexDoc> queryResults, SearchParameters parameters);
+        MetadataIndexDoc GetMetadata(string uuid);
     }
 }
