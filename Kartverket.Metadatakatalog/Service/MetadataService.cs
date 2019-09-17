@@ -448,6 +448,7 @@ namespace Kartverket.Metadatakatalog.Service
             if (simpleMetadata.HierarchyLevel != "software" && simpleMetadataDistribution.URL != null)
             {
                 distribution.GetCapabilitiesUrl = simpleMetadataDistribution.URL;
+                distribution.DistributionUrl = simpleMetadataDistribution.URL;
             }
 
             //Nettside
