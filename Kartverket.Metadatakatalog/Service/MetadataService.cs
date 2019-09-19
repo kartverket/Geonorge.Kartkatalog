@@ -373,7 +373,7 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.CanShowDownloadUrl = metadata.ShowDownloadLink();
             metadata.CanShowWebsiteUrl = metadata.ShowWebsiteLink();
 
-            metadata.MapLink = metadata.MapUrl();
+            metadata.MapLink = metadata.DistributionUrl; //metadata.MapUrl();
             metadata.ServiceLink = metadata.ServiceUrl();
 
             metadata.CoverageUrl = metadata.GetCoverageLink();
@@ -798,6 +798,7 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
             metadata.DistributionProtocol = metadata.DistributionDetails?.Protocol;
+            metadata.Protocol = metadata.DistributionDetails?.ProtocolName;
             metadata.OrderingInstructionsLinkText = Register.GetServiceDeclaration(metadata.OrderingInstructions);
             metadata.SetDistributionUrl();
             metadata.OrganizationLogoUrl = GetOrganizationLogoUrl(metadata.ContactOwner);
