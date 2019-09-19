@@ -797,7 +797,7 @@ namespace Kartverket.Metadatakatalog.Service
                     }
                 }
             }
-
+            metadata.DistributionProtocol = metadata.DistributionDetails?.Protocol;
             metadata.OrderingInstructionsLinkText = Register.GetServiceDeclaration(metadata.OrderingInstructions);
             metadata.SetDistributionUrl();
             metadata.OrganizationLogoUrl = GetOrganizationLogoUrl(metadata.ContactOwner);
