@@ -49,6 +49,8 @@ namespace Kartverket.Metadatakatalog.Models
         [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? DateUpdated { get; set; }
         public DistributionDetails DistributionDetails { get; set; }
+        public string DistributionProtocol { get; set; }
+        public string Protocol { get; set; }
         public DistributionFormat DistributionFormat { get; set; }
         public List<SimpleDistributionFormat> DistributionFormats { get; set; }
         public List<SimpleDistribution> DistributionsFormats { get; set; }
