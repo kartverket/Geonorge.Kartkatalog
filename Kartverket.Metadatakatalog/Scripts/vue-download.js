@@ -1909,6 +1909,8 @@ var mainVueModel = new Vue({
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     showAlert(errorThrown, "danger");
+                    //Try to open file in new window/tab
+                    window.open(fileUrl, '_blank');
                 },
                 success: function (data) {
 
