@@ -1890,49 +1890,16 @@ var mainVueModel = new Vue({
                 });
             }
         },
-        handleDownloadFileClick: function (fileUrl, fileName) {
-            event.preventDefault();
+        AddAccessToken: function (fileUrl) {
             var bearerToken = this.getCookie('oidcAccessToken');
-            $.ajax({
-                url: fileUrl,
-                type: "GET",
-                dataType: "binary",
-                processData: false,
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                beforeSend: function (xhr) {
-                    if (bearerToken && bearerToken.length) {
-                        xhr.setRequestHeader('Authorization', 'Bearer ' + bearerToken);
-                    }
-                    showLoadingAnimation("Laster ned fil, vennligst vent..");
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    showAlert(errorThrown, "danger");
-                    //Try to open file in new window/tab
-                    window.open(fileUrl, '_blank');
-                },
-                success: function (data) {
 
-                    var downloadFileName = fileName ? fileName : fileUrl.substring(fileUrl.lastIndexOf('/') + 1) + '.zip';
-
-                    if (navigator.userAgent.indexOf('Edge') >= 0) {
-                        window.navigator.msSaveOrOpenBlob(new Blob([data]), downloadFileName);
-                    }
-                    else
-                    {
-                        var objectUrl = window.URL.createObjectURL(new Blob([data]), { type: "application/zip" });
-                        var hiddenLinkElement = document.createElement('a');
-                        hiddenLinkElement.href = objectUrl;
-                        hiddenLinkElement.download = downloadFileName;
-                        hiddenLinkElement.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-                        window.URL.revokeObjectURL(objectUrl);
-                    }
-                },
-                complete: function () {
-                    hideLoadingAnimation();
-                }
-            });
+            if (bearerToken) {
+                if (bearerToken.indexOf('?') > -1)
+                    fileUrl = fileUrl + '&access_token=' + bearerToken;
+                else
+                    fileUrl = fileUrl + '?access_token=' + bearerToken;
+            }
+            return fileUrl;
         },
         removeFromLocalStorage: function (uuid) {
             var uuidLength = uuid.length;

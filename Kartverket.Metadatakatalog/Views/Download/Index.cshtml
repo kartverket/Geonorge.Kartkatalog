@@ -427,7 +427,7 @@
                                             <div class="col-sm-5 col-md-6">
                                                 <span class="download-list-item-name">
                                                     <span class="inline-block">
-                                                        <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name" v-on:click="handleDownloadFileClick(file.downloadUrl, file.name)">
+                                                        <a v-bind:href="AddAccessToken(file.downloadUrl)" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
                                                             {{ file.areaName }}
                                                         </a>
                                                     </span>
@@ -440,7 +440,7 @@
                                                 <span class="label label-info auto-width">{{file.format}}</span>
                                             </div>
                                             <div class="col-sm-1 col-md-1 icon-col">
-                                                <a v-bind:href="file.downloadUrl" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name" class="btn" v-on:click="handleDownloadFileClick(file.downloadUrl, file.name)">
+                                                <a v-bind:href="AddAccessToken(file.downloadUrl)" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name" class="btn">
                                                     <span class="custom-icon custom-icon-lastned"></span>
                                                 </a>
                                             </div>
