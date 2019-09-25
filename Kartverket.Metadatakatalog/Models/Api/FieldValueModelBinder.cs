@@ -94,9 +94,13 @@ namespace SM.General.Api
                 //Refresh KV Work list from refreshed base kvps list after processing each property
                 kvpsWork = new List<KeyValuePair<string, string>>(kvps);
 
-                if (!prop.PropertyType.IsClass || prop.PropertyType.FullName == "System.String")
+                //Check and process property encompassing complex object recursively 
+                if (prop.PropertyType.IsClass && prop.PropertyType.FullName != "System.String")
                 {
-                    //For single or teminal properties.
+                    RecurseNestedObj(obj, prop);
+                }
+                else
+                {
                     foreach (var item in kvpsWork)
                     {
                         //Ignore any bracket in a name key 
@@ -117,32 +121,6 @@ namespace SM.General.Api
                         }
                     }
                 }
-                else if (prop.PropertyType.IsClass)
-                {
-                    //Check if List<string> or string[] type and assign string value directly to list or array item.    
-                    if (prop.ToString().Contains("[System.String]") || prop.ToString().Contains("System.String[]"))
-                    {
-                        var strList = new List<string>();
-                        foreach (var item in kvpsWork)
-                        {
-                            //Remove any brackets and enclosure from Key.
-                            var itemKey = Regex.Replace(item.Key, RexBrackets, "");
-                            if (itemKey == prop.Name)
-                            {
-                                strList.Add(item.Value);
-                                kvps.Remove(item);
-                            }
-                        }
-                        //Add list to parent property.                        
-                        if (prop.PropertyType.IsGenericType) prop.SetValue(obj, strList);
-                        else if (prop.PropertyType.IsArray) prop.SetValue(obj, strList.ToArray());
-                    }
-                    else
-                    {
-                        //Check and process property encompassing complex object recursively
-                        RecurseNestedObj(obj, prop);
-                    }
-                }
             }
             //Add property of this object to parent object 
             if (parentObj != null)
@@ -151,59 +129,7 @@ namespace SM.General.Api
             }
         }
 
-        private void RecurseNestedObj(object obj, PropertyInfo prop, string pParentName = "", string pParentObjIndex = "")
-        {
-            //Check recursion limit
-            if (recursionCount > maxRecursionLimit)
-            {
-                throw new Exception(string.Format("Exceed maximum recursion limit {0}", maxRecursionLimit));
-            }
-            recursionCount++;
-
-            //Valicate collection types
-            if (prop.PropertyType.IsGenericType || prop.PropertyType.BaseType.IsGenericType)
-            {
-                if ((prop.PropertyType.IsGenericType && prop.PropertyType.Name != "List`1")
-                    || (prop.PropertyType.BaseType.IsGenericType && prop.PropertyType.BaseType.Name != "List`1"))
-                {
-                    throw new Exception("Only support nested Generic List collection");
-                }
-                if (prop.PropertyType.GenericTypeArguments.Count() > 1 || prop.PropertyType.BaseType.GenericTypeArguments.Count() > 1)
-                {
-                    throw new Exception("Only support nested Generic List collection with one argument");
-                }
-            }
-
-            //Dynamically create instances for nested collection items
-            object childObj = null;
-            if (prop.PropertyType.IsGenericType || prop.PropertyType.BaseType.IsGenericType || prop.PropertyType.IsArray)
-            {
-                if (prop.PropertyType.IsGenericType)
-                {
-                    childObj = Activator.CreateInstance(prop.PropertyType.GenericTypeArguments[0]);
-
-                }
-                else if (!prop.PropertyType.IsGenericType && prop.PropertyType.BaseType.IsGenericType)
-                {
-                    childObj = Activator.CreateInstance(prop.PropertyType.BaseType.GenericTypeArguments[0]);
-                }
-                else if (prop.PropertyType.IsArray)
-                {
-                    childObj = Activator.CreateInstance(prop.PropertyType.GetElementType());
-                }
-                //Call to process collection
-                SetPropertyValuesForList(childObj, parentObj: obj, parentProp: prop,
-                            pParentName: pParentName, pParentObjIndex: pParentObjIndex);
-            }
-            else
-            {
-                //Dynamically create instances for nested object and call to process it
-                childObj = Activator.CreateInstance(prop.PropertyType);
-                SetPropertyValues(childObj, parentObj: obj, parentProp: prop);
-            }
-        }
-
-        private void SetPropertyValuesForList(object obj, object parentObj = null, PropertyInfo parentProp = null,
+        public void SetPropertyValuesForList(object obj, object parentObj = null, PropertyInfo parentProp = null,
                                              string pParentName = "", string pParentObjIndex = "")
         {
             //Get props for type of object item in collection
@@ -282,13 +208,16 @@ namespace SM.General.Api
             foreach (var group in kvwsGroups)
             {
                 //Initiate object with type of collection item
-                object tempObj = null;
-
-                tempObj = Activator.CreateInstance(obj.GetType());
-                //Iterate through properties of object model.
+                var tempObj = Activator.CreateInstance(obj.GetType());
                 foreach (var prop in props)
                 {
-                    if (!prop.PropertyType.IsClass || prop.PropertyType.FullName == "System.String")
+                    //Check and process nested objects in collection recursively
+                    //Pass ObjIndex for child KV Work items only for this parent object
+                    if (prop.PropertyType.IsClass && prop.PropertyType.FullName != "System.String")
+                    {
+                        RecurseNestedObj(tempObj, prop, pParentName: group[0].ParentName, pParentObjIndex: group[0].ObjIndex);
+                    }
+                    else
                     {
                         //Assign terminal property to object    
                         foreach (var item in group)
@@ -300,47 +229,7 @@ namespace SM.General.Api
                             }
                         }
                     }
-                    else if (prop.PropertyType.IsClass)
-                    {
-                        //Check if List<string> or string[] type and assign string value directly to list or array item.    
-                        if (prop.ToString().Contains("[System.String]") || prop.ToString().Contains("System.String[]"))
-                        {
-                            //Match passed current processing object.
-                            var tempProps = tempObj.GetType().GetProperties();
-
-                            //Iterate through current processing object properties.
-                            foreach (var tempProp in tempProps)
-                            {
-                                if (tempProp.Name == prop.Name)
-                                {
-                                    var strList = new List<string>();
-
-                                    //Iterate through passed data items.
-                                    foreach (var item in group)
-                                    {
-                                        //Remove any brackets and enclosure from Key.
-                                        var itemKey = Regex.Replace(item.Key, RexBrackets, "");
-                                        if (itemKey == tempProp.Name)
-                                        {
-                                            strList.Add(item.Value);
-                                            kvps.Remove(item.SourceKvp);
-                                        }
-                                    }
-                                    //Add list to parent property.
-                                    if (prop.PropertyType.IsGenericType) tempProp.SetValue(tempObj, strList);
-                                    else if (prop.PropertyType.IsArray) tempProp.SetValue(tempObj, strList.ToArray());
-                                }
-                            }
-                        }
-                        //Check and process nested objects in collection recursively
-                        //Pass ObjIndex for child KV Work items only for this parent object                        
-                        else
-                        {
-                            RecurseNestedObj(tempObj, prop, pParentName: group[0].ParentName, pParentObjIndex: group[0].ObjIndex);
-                        }
-                    }
                 }
-
                 //Add populated object to List or Array                    
                 if (listObj != null)
                 {
@@ -360,6 +249,57 @@ namespace SM.General.Api
             else if (arrayObj != null)
             {
                 parentProp.SetValue(parentObj, arrayObj, null);
+            }
+        }
+
+        private void RecurseNestedObj(object obj, PropertyInfo prop, string pParentName = "", string pParentObjIndex = "")
+        {
+            //Check recursion limit
+            //if (recursionCount > maxRecursionLimit)
+            //{
+            //    throw new Exception(string.Format("Exceed maximum recursion limit {0}", maxRecursionLimit));
+            //}
+            recursionCount++;
+
+            //Valicate collection types
+            if (prop.PropertyType.IsGenericType || prop.PropertyType.BaseType.IsGenericType)
+            {
+                if ((prop.PropertyType.IsGenericType && prop.PropertyType.Name != "List`1")
+                    || (prop.PropertyType.BaseType.IsGenericType && prop.PropertyType.BaseType.Name != "List`1"))
+                {
+                    throw new Exception("Only support nested Generic List collection");
+                }
+                if (prop.PropertyType.GenericTypeArguments.Count() > 1 || prop.PropertyType.BaseType.GenericTypeArguments.Count() > 1)
+                {
+                    throw new Exception("Only support nested Generic List collection with one argument");
+                }
+            }
+
+            object childObj = null;
+            if (prop.PropertyType.IsGenericType || prop.PropertyType.BaseType.IsGenericType || prop.PropertyType.IsArray)
+            {
+                //Dynamically create instances for nested collection items
+                if (prop.PropertyType.IsGenericType)
+                {
+                    childObj = Activator.CreateInstance(prop.PropertyType.GenericTypeArguments[0]);
+                }
+                else if (!prop.PropertyType.IsGenericType && prop.PropertyType.BaseType.IsGenericType)
+                {
+                    childObj = Activator.CreateInstance(prop.PropertyType.BaseType.GenericTypeArguments[0]);
+                }
+                else if (prop.PropertyType.IsArray)
+                {
+                    childObj = Activator.CreateInstance(prop.PropertyType.GetElementType());
+                }
+                //Call to process collection
+                SetPropertyValuesForList(childObj, parentObj: obj, parentProp: prop,
+                            pParentName: pParentName, pParentObjIndex: pParentObjIndex);
+            }
+            else
+            {
+                //Dynamically create instances for nested object and call to process it
+                childObj = Activator.CreateInstance(prop.PropertyType);
+                SetPropertyValues(childObj, parentObj: obj, parentProp: prop);
             }
         }
 

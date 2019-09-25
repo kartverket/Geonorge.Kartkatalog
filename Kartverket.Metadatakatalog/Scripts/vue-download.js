@@ -1905,9 +1905,12 @@ var mainVueModel = new Vue({
                     if (bearerToken && bearerToken.length) {
                         xhr.setRequestHeader('Authorization', 'Bearer ' + bearerToken);
                     }
+                    showLoadingAnimation("Laster ned fil, vennligst vent..");
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     showAlert(errorThrown, "danger");
+                    //Try to open file in new window/tab
+                    window.open(fileUrl, '_blank');
                 },
                 success: function (data) {
 
@@ -1925,6 +1928,9 @@ var mainVueModel = new Vue({
                         hiddenLinkElement.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
                         window.URL.revokeObjectURL(objectUrl);
                     }
+                },
+                complete: function () {
+                    hideLoadingAnimation();
                 }
             });
         },
