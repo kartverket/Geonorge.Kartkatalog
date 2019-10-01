@@ -51,7 +51,7 @@ namespace Kartverket.Metadatakatalog
                 "~/Scripts/shopping-cart.js"));
 
             if (WebConfigurationManager.AppSettings["EnvironmentName"] == "dev")
-                BundleTable.EnableOptimizations = true;
+                BundleTable.EnableOptimizations = false;
             else
                 BundleTable.EnableOptimizations = true;
         }
