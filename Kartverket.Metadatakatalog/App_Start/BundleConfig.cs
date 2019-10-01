@@ -27,9 +27,9 @@ namespace Kartverket.Metadatakatalog
                 ));
 
             bundles.Add(new ScriptBundle("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts").Include(
-               "~/Content/bower_components/kartverket-felleskomponenter/assets/js/vendor.js",
+               "~/Content/bower_components/kartverket-felleskomponenter/assets/js/vendor.min.js",
                "~/Content/bower_components/vue/dist/vue.js",
-               "~/Content/bower_components/kartverket-felleskomponenter/assets/js/main.js",
+               "~/Content/bower_components/kartverket-felleskomponenter/assets/js/main.min.js",
                "~/Content/bower_components/clipboard/dist/clipboard.min.js",
                "~/Content/bower_components/axios/dist/axios.min.js",
                "~/Scripts/site.js",
@@ -55,10 +55,10 @@ namespace Kartverket.Metadatakatalog
             bundles.Add(new ScriptBundle("~/bundles/shopping-cart").Include(
                 "~/Scripts/shopping-cart.js"));
 
-            //if (WebConfigurationManager.AppSettings["EnvironmentName"] == "dev")
+            if (WebConfigurationManager.AppSettings["EnvironmentName"] == "dev")
                 BundleTable.EnableOptimizations = false;
-            //else
-            //    BundleTable.EnableOptimizations = true;
+            else
+                BundleTable.EnableOptimizations = true;
         }
     }
 }
