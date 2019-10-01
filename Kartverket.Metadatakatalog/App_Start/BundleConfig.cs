@@ -21,7 +21,7 @@ namespace Kartverket.Metadatakatalog
                 "~/Content/Blocks/SurveyBlock/SurveyBlockStyle.css"
                 ));
 
-            bundles.Add(new StyleBundle("~/shared-partials-styles").Include(
+            bundles.Add(new StyleBundle("~/Content/shared-partials-styles").Include(
                 "~/dist/vendor.css",
                 "~/dist/main.css"
                 ));
@@ -51,7 +51,7 @@ namespace Kartverket.Metadatakatalog
                 "~/Scripts/shopping-cart.js"));
 
             if (WebConfigurationManager.AppSettings["EnvironmentName"] == "dev")
-                BundleTable.EnableOptimizations = false;
+                BundleTable.EnableOptimizations = true;
             else
                 BundleTable.EnableOptimizations = true;
         }
