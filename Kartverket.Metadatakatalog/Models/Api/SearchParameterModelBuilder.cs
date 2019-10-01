@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -37,6 +37,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
                 List<FacetInput> facets = new List<FacetInput>();
                 var query = HttpContext.Current.Request.QueryString;
                 int i = 0;
+                //Check if array input starts at 1
+                if (string.IsNullOrEmpty(query["facets[0]name"]) && !string.IsNullOrEmpty(query["facets[1]name"]))
+                    i = 1;
+
                 while (!string.IsNullOrEmpty(query["facets[" + i + "]name"]))
                 {
                     var facet = new FacetInput();
