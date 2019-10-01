@@ -37,11 +37,6 @@ namespace Kartverket.Metadatakatalog
                 "~/Content/Blocks/SurveyBlock/SurveyBlockScript.js"
            ));
 
-            bundles.Add(new ScriptBundle("~/shared-partials-scripts").Include(
-               "~/dist/vendor.js",
-               "~/dist/main.js"
-               ));
-
 
             bundles.Add(new ScriptBundle("~/Content/download").Include(
                "~/Scripts/vue-download.js"

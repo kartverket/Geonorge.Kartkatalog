@@ -84,7 +84,10 @@
     {
         @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_Footer_eng.min.cshtml");
     }
-    @Scripts.Render("~/shared-partials-scripts")
+
+    <script src="~/dist/vendor.js"></script>
+    <script src="~/dist/main.js"></script>
+
     <script>
         searchOption.supportsLogin = false;
         searchOption.epiBaseUrl = '@Html.GeonorgeUrl()';
