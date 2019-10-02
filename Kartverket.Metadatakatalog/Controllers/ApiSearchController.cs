@@ -76,10 +76,10 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Catalogue search
         /// </summary>
 
-        public SearchResult Get([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
+        public SearchResult Get([System.Web.Http.ModelBinding.ModelBinder(typeof(SearchParameterModelBuilder))] SearchParameters parameters)
         {
-            try
-            {            
+           try
+           {                
                 if (parameters == null)
                     parameters = new SearchParameters();
             

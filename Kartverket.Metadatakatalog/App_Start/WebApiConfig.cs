@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using Kartverket.Metadatakatalog.Formatter;
 using WebApi.BasicAuth;
+using Kartverket.Metadatakatalog.Models.Api;
+using System.Web.Http.ModelBinding;
+using System.Web.Http.ModelBinding.Binders;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -10,6 +13,9 @@ namespace Kartverket.Metadatakatalog
     {
         public static void Register(HttpConfiguration config)
         {
+            var provider = new SimpleModelBinderProvider(typeof(SearchParameters), new SearchParameterModelBuilder());
+            config.Services.Insert(typeof(ModelBinderProvider), 0, provider);
+
             config.Formatters.Add(new CsvFormatter());
 
             config.MapHttpAttributeRoutes();

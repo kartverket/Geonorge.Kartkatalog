@@ -1,5 +1,6 @@
 ﻿using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Helpers;
+using Kartverket.Metadatakatalog.Models.Translations;
 using System;
 using System.Text;
 using System.Web.Configuration;
@@ -215,6 +216,32 @@ namespace Kartverket.Metadatakatalog.Service
             else
                 return "Open data";
 
+        }
+
+        internal static string GetTypeTranslated(string Type)
+        {
+            string t = Type;
+
+            if (CultureHelper.GetCurrentCulture() == Culture.NorwegianCode)
+            {
+                if (Type == "dataset") t = "Datasett";
+                else if (Type == "software") t = "Applikasjon";
+                else if (Type == "service") t = "Tjeneste";
+                else if (Type == "servicelayer") t = "Tjenestelag";
+                else if (Type == "series") t = "Datasettserie";
+                else if (Type == "dimensionGroup") t = "Datapakke";
+            }
+            else
+            {
+                if (Type == "dataset") t = "Dataset";
+                else if (Type == "software") t = "Application";
+                else if (Type == "service") t = "Service";
+                else if (Type == "servicelayer") t = "Service layer";
+                else if (Type == "series") t = "Dataset series";
+                else if (Type == "dimensionGroup") t = "Data package";
+            }
+
+            return t;
         }
     }
 }
