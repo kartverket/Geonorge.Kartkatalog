@@ -21,26 +21,21 @@ namespace Kartverket.Metadatakatalog
                 "~/Content/Blocks/SurveyBlock/SurveyBlockStyle.css"
                 ));
 
-            bundles.Add(new StyleBundle("~/shared-partials-styles").Include(
+            bundles.Add(new StyleBundle("~/Content/shared-partials-styles").Include(
                 "~/dist/vendor.css",
                 "~/dist/main.css"
                 ));
 
             bundles.Add(new ScriptBundle("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts").Include(
-               "~/Content/bower_components/kartverket-felleskomponenter/assets/js/vendor.js",
+               "~/Content/bower_components/kartverket-felleskomponenter/assets/js/vendor.min.js",
                "~/Content/bower_components/vue/dist/vue.js",
-               "~/Content/bower_components/kartverket-felleskomponenter/assets/js/main.js",
+               "~/Content/bower_components/kartverket-felleskomponenter/assets/js/main.min.js",
                "~/Content/bower_components/clipboard/dist/clipboard.min.js",
                "~/Content/bower_components/axios/dist/axios.min.js",
                "~/Scripts/site.js",
                "~/Scripts/visninger.js",
                 "~/Content/Blocks/SurveyBlock/SurveyBlockScript.js"
            ));
-
-            bundles.Add(new ScriptBundle("~/shared-partials-scripts").Include(
-               "~/dist/vendor.js",
-               "~/dist/main.js"
-               ));
 
 
             bundles.Add(new ScriptBundle("~/Content/download").Include(
@@ -55,10 +50,10 @@ namespace Kartverket.Metadatakatalog
             bundles.Add(new ScriptBundle("~/bundles/shopping-cart").Include(
                 "~/Scripts/shopping-cart.js"));
 
-            //if (WebConfigurationManager.AppSettings["EnvironmentName"] == "dev")
+            if (WebConfigurationManager.AppSettings["EnvironmentName"] == "dev")
                 BundleTable.EnableOptimizations = false;
-            //else
-            //    BundleTable.EnableOptimizations = true;
+            else
+                BundleTable.EnableOptimizations = true;
         }
     }
 }
