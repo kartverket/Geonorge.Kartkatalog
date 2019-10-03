@@ -1683,7 +1683,7 @@ var mainVueModel = new Vue({
 
         autoSelectProjectionAndFormatsForSingleOrderLine: function (orderLineUuid) {
             this.masterOrderLine.allSelectedAreas[orderLineUuid].forEach(function (selectedArea) {
-                if (selectedArea.allAvailableProjections[orderLineUuid].length == 1) {
+                if (selectedArea && selectedArea.allAvailableProjections && selectedArea.allAvailableProjections[orderLineUuid] && selectedArea.allAvailableProjections[orderLineUuid].length && selectedArea.allAvailableProjections[orderLineUuid].length == 1) {
                     var projectionCode = selectedArea.allAvailableProjections[orderLineUuid][0].code;
                     this.masterOrderLine.allAvailableProjections[orderLineUuid].forEach(function (availableProjection, index) {
                         if (availableProjection.code == projectionCode) {
@@ -1691,7 +1691,7 @@ var mainVueModel = new Vue({
                         }
                     }.bind(this));
                 }
-                if (selectedArea.allAvailableFormats[orderLineUuid].length == 1) {
+                if (selectedArea && selectedArea.allAvailableFormats && selectedArea.allAvailableFormats[orderLineUuid] && selectedArea.allAvailableFormats[orderLineUuid].length && selectedArea.allAvailableFormats[orderLineUuid].length == 1) {
                     var formatName = selectedArea.allAvailableFormats[orderLineUuid][0].name;
                     this.masterOrderLine.allAvailableFormats[orderLineUuid].forEach(function (availableFormat, index) {
                         if (availableFormat.name == formatName) {
