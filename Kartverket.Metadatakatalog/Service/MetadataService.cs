@@ -738,7 +738,7 @@ namespace Kartverket.Metadatakatalog.Service
                 DateMetadataUpdated = simpleMetadata.DateMetadataUpdated,
                 DatePublished = simpleMetadata.DatePublished,
                 DateUpdated = simpleMetadata.DateUpdated,
-                DistributionDetails = Convert(simpleMetadata.DistributionDetails),
+                DistributionDetails = Convert(simpleMetadata.DistributionDetails, simpleMetadata?.DistributionsFormats),
                 DistributionUrl = GetDistributionUrl(simpleMetadata.DistributionDetails),
                 DistributionFormat = Convert(simpleMetadata.DistributionFormat),
                 DistributionsFormats = simpleMetadata.DistributionsFormats,
@@ -961,7 +961,7 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
-        private DistributionDetails Convert(SimpleDistributionDetails simpleDistributionDetails)
+        private DistributionDetails Convert(SimpleDistributionDetails simpleDistributionDetails, List<SimpleDistribution> distributions = null)
         {
             DistributionDetails output = null;
             if (simpleDistributionDetails != null)
@@ -974,6 +974,32 @@ namespace Kartverket.Metadatakatalog.Service
                     URL = simpleDistributionDetails.URL
                 };
             }
+
+            if (distributions != null && distributions.Count > 0)
+            {
+                foreach (var distribution in distributions)
+                {
+                    if (distribution.Protocol == "GEONORGE:DOWNLOAD")
+                    {
+                        output.Protocol = distribution.Protocol;
+                        output.URL = distribution.URL;
+                        break;
+                    }
+                    else if (distribution.Protocol == "WWW:DOWNLOAD-1.0-http--download")
+                    {
+                        output.Protocol = distribution.Protocol;
+                        output.URL = distribution.URL;
+                        break;
+                    }
+                    else if (distribution.Protocol == "GEONORGE:FILEDOWNLOAD")
+                    {
+                        output.Protocol = distribution.Protocol;
+                        output.URL = distribution.URL;
+                        break;
+                    }
+                }
+            }
+
             return output;
         }
 
