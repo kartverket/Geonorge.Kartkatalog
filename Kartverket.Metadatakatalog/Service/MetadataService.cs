@@ -739,8 +739,6 @@ namespace Kartverket.Metadatakatalog.Service
                 DatePublished = simpleMetadata.DatePublished,
                 DateUpdated = simpleMetadata.DateUpdated,
                 DistributionDetails = Convert(simpleMetadata.DistributionDetails, simpleMetadata?.DistributionsFormats),
-                DistributionUrl = GetDistributionUrl(simpleMetadata.DistributionDetails),
-                DistributionFormat = Convert(simpleMetadata.DistributionFormat),
                 DistributionsFormats = simpleMetadata.DistributionsFormats,
                 HierarchyLevel = simpleMetadata.HierarchyLevel,
                 KeywordsPlace = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)),
@@ -798,6 +796,10 @@ namespace Kartverket.Metadatakatalog.Service
                     }
                 }
             }
+
+            metadata.DistributionUrl = GetDistributionUrl(metadata.DistributionDetails);
+            metadata.DistributionFormat = Convert(metadata.DistributionFormat);
+
             metadata.DistributionProtocol = metadata.DistributionDetails?.Protocol;
             metadata.Protocol = metadata.DistributionDetails?.ProtocolName;
             metadata.OrderingInstructionsLinkText = Register.GetServiceDeclaration(metadata.OrderingInstructions);
@@ -806,6 +808,25 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.DataAccess = metadata?.Constraints?.AccessConstraints;
 
             return metadata;
+        }
+
+        private DistributionFormat Convert(DistributionFormat simpleDistributionFormat)
+        {
+            DistributionFormat output = null;
+            if (simpleDistributionFormat != null)
+            {
+                output = new DistributionFormat
+                {
+                    Name = simpleDistributionFormat.Name,
+                    Version = simpleDistributionFormat.Version
+                };
+            }
+            return output;
+        }
+
+        private string GetDistributionUrl(DistributionDetails distributionDetails)
+        {
+            return SimpleMetadataUtil.GetCapabilitiesUrl(distributionDetails?.URL, distributionDetails?.Protocol);
         }
 
         private string GetResourceReferenceCode(SimpleResourceReference resourceReference)
@@ -981,19 +1002,19 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     if (distribution.Protocol == "GEONORGE:DOWNLOAD")
                     {
-                        output.Protocol = distribution.Protocol;
+                        output.Protocol = Register.GetDistributionType(distribution.Protocol);
                         output.URL = distribution.URL;
                         break;
                     }
                     else if (distribution.Protocol == "WWW:DOWNLOAD-1.0-http--download")
                     {
-                        output.Protocol = distribution.Protocol;
+                        output.Protocol = Register.GetDistributionType(distribution.Protocol);
                         output.URL = distribution.URL;
                         break;
                     }
                     else if (distribution.Protocol == "GEONORGE:FILEDOWNLOAD")
                     {
-                        output.Protocol = distribution.Protocol;
+                        output.Protocol = Register.GetDistributionType(distribution.Protocol);
                         output.URL = distribution.URL;
                         break;
                     }
