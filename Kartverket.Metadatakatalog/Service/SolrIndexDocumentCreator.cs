@@ -299,6 +299,31 @@ namespace Kartverket.Metadatakatalog.Service
                     indexDoc.DistributionUrl = distributionDetails.URL;
                     indexDoc.DistributionName = distributionDetails.Name;
                     if (!string.IsNullOrEmpty(indexDoc.DistributionName) && indexDoc.Type == "service") indexDoc.Type = "servicelayer";
+
+                    if(indexDoc.Type == "dataset")
+                    {
+                        foreach(var distribution in simpleMetadata.DistributionsFormats)
+                        {
+                            if (distribution.Protocol == "GEONORGE:DOWNLOAD")
+                            {
+                                indexDoc.DistributionProtocol = distribution.Protocol;
+                                indexDoc.DistributionUrl = distribution.URL;
+                                break;
+                            }
+                            else if (distribution.Protocol == "WWW:DOWNLOAD-1.0-http--download")
+                            {
+                                indexDoc.DistributionProtocol = distribution.Protocol;
+                                indexDoc.DistributionUrl = distribution.URL;
+                                break;
+                            }
+                            else if (distribution.Protocol == "GEONORGE:FILEDOWNLOAD")
+                            {
+                                indexDoc.DistributionProtocol = distribution.Protocol;
+                                indexDoc.DistributionUrl = distribution.URL;
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;
