@@ -1002,19 +1002,22 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     if (distribution.Protocol == "GEONORGE:DOWNLOAD")
                     {
-                        output.Protocol = Register.GetDistributionType(distribution.Protocol);
+                        output.Protocol = distribution.Protocol;
+                        output.ProtocolName = Register.GetDistributionType(distribution.Protocol);
                         output.URL = distribution.URL;
                         break;
                     }
                     else if (distribution.Protocol == "WWW:DOWNLOAD-1.0-http--download")
                     {
-                        output.Protocol = Register.GetDistributionType(distribution.Protocol);
+                        output.Protocol = distribution.Protocol;
+                        output.ProtocolName = Register.GetDistributionType(distribution.Protocol);
                         output.URL = distribution.URL;
                         break;
                     }
                     else if (distribution.Protocol == "GEONORGE:FILEDOWNLOAD")
                     {
-                        output.Protocol = Register.GetDistributionType(distribution.Protocol);
+                        output.Protocol = distribution.Protocol;
+                        output.ProtocolName = Register.GetDistributionType(distribution.Protocol);
                         output.URL = distribution.URL;
                         break;
                     }
