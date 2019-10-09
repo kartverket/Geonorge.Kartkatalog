@@ -952,6 +952,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ingen online tilgang.
+        /// </summary>
+        public static string Facet_type_GEONORGE_OFFLINE {
+            get {
+                return ResourceManager.GetString("Facet_type_GEONORGE_OFFLINE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Datasettserie.
         /// </summary>
         public static string Facet_type_series {

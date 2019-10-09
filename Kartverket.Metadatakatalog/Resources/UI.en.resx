@@ -831,4 +831,7 @@
   <data name="Formats" xml:space="preserve">
     <value>Formats</value>
   </data>
+  <data name="Facet_type_GEONORGE_OFFLINE" xml:space="preserve">
+    <value>No online access</value>
+  </data>
 </root>

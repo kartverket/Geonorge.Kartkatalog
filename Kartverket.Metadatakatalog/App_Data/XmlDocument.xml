@@ -1688,6 +1688,11 @@
               Looks up a localized string similar to Datapakke.
             </summary>
         </member>
+        <member name="P:Resources.UI.Facet_type_GEONORGE_OFFLINE">
+            <summary>
+              Looks up a localized string similar to Ingen online tilgang.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Facet_type_series">
             <summary>
               Looks up a localized string similar to Datasettserie.
