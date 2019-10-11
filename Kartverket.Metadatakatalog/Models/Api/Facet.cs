@@ -108,11 +108,17 @@ namespace Kartverket.Metadatakatalog.Models.Api
 
             public string LinkName()
             {
-                var translatedName = UI.ResourceManager.GetString("Facet_type_" + Name);
-                string link = !string.IsNullOrWhiteSpace(translatedName) ? translatedName : Name;
-                if (link == "GEONORGE:OFFLINE")
-                    link = "";
-                if (link.Length > 50) link = link.Substring(0, 50) + "...";
+                string link = Name;
+
+                if (Name == "GEONORGE:OFFLINE")
+                {
+                    link = UI.ResourceManager.GetString("Facet_type_GEONORGE_OFFLINE");
+                }
+                else { 
+                    var translatedName = UI.ResourceManager.GetString("Facet_type_" + Name);
+                    link = !string.IsNullOrWhiteSpace(translatedName) ? translatedName : Name;
+                    if (link.Length > 50) link = link.Substring(0, 50) + "...";
+                }
                 return link;
             }
 
