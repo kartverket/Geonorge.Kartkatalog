@@ -1,4 +1,4 @@
-﻿/// <reference path="jquery-2.2.0.js" />
+﻿/// <reference path="jquery-3.4.1.js" />
 /// <autosync enabled="true" />
 /// <reference path="../content/bower_components/axios/dist/axios.js" />
 /// <reference path="../content/bower_components/clipboard/dist/clipboard.js" />

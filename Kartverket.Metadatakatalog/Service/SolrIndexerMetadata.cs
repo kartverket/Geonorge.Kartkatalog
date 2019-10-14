@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Kartverket.Metadatakatalog.Models;
-using Microsoft.Practices.ServiceLocation;
 using SolrNet;
 using System;
 
