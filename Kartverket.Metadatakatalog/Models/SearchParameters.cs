@@ -121,6 +121,10 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 order = new[] { new SortOrder("date_updated", Order.DESC) };
             }
+            else if (string.IsNullOrWhiteSpace(Text) && !HasNoFacetvalue())
+            {
+                order = new[] { new SortOrder("title", Order.ASC) };
+            }
             else if (string.IsNullOrWhiteSpace(Text) && HasNoFacetvalue())
             {
                 order = new[] { new SortOrder("popularMetadata", Order.DESC) };

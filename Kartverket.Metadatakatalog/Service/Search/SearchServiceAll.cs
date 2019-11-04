@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
-using Microsoft.Practices.ServiceLocation;
 using SolrNet;
 using SolrNet.Commands.Parameters;
 using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
