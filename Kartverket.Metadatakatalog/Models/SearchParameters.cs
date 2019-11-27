@@ -57,7 +57,7 @@ namespace Kartverket.Metadatakatalog.Models
         public void AddDefaultFacetsIfMissing()
         {
             List<FacetParameter> FacetList = new List<FacetParameter>(); 
-            var facets = new List<string> { "type", "theme", "organization", "nationalinitiative", "placegroups", "DistributionProtocols", "area", "dataaccess" };
+            var facets = new List<string> { "type", "theme", "organization", "nationalinitiative", "placegroups", "DistributionProtocols", "area", "dataaccess", "spatialscope" };
 
             foreach (var defaultFacet in facets)
             {

@@ -411,7 +411,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                 //TODO tolke liste fra nøkkelord
                 indexDoc.Area = _placeResolver.ResolveArea(simpleMetadata);
-
+                indexDoc.SpatialScope = _placeResolver.ResolveSpatialScope(Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_SPATIAL_SCOPE)).ToList(), culture);
                 if (simpleMetadata.Constraints != null)
                 {
                     indexDoc.license = simpleMetadata.Constraints.UseLimitations;
@@ -1173,6 +1173,7 @@ namespace Kartverket.Metadatakatalog.Service
             else 
                 indexDoc.Area = simpleMetadata.Area;
             indexDoc.license = simpleMetadata.license;
+            indexDoc.SpatialScope = simpleMetadata.SpatialScope;
             indexDoc.Type = simpleMetadata.Type;
             indexDoc.typenumber = simpleMetadata.typenumber;
             indexDoc.DatasetServices = simpleMetadata.DatasetServices;
