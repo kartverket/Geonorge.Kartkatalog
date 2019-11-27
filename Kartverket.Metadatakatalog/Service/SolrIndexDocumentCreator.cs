@@ -1168,7 +1168,10 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.OtherConstraintsAccess = simpleMetadata.OtherConstraintsAccess;
             indexDoc.ServiceDistributionAccessConstraint = simpleMetadata.ServiceDistributionAccessConstraint;
             indexDoc.DataAccess = simpleMetadata.DataAccess;
-            indexDoc.Area = simpleMetadata.Area;
+            if(simpleMetadata.Placegroups != null && simpleMetadata.Area != null)
+               indexDoc.Area = simpleMetadata.Area.Concat(simpleMetadata.Placegroups).ToList();
+            else 
+                indexDoc.Area = simpleMetadata.Area;
             indexDoc.license = simpleMetadata.license;
             indexDoc.Type = simpleMetadata.Type;
             indexDoc.typenumber = simpleMetadata.typenumber;

@@ -95,6 +95,12 @@ namespace Kartverket.Metadatakatalog.Models.Api
                 var placeResolver = new Service.PlaceResolver();
                 var areaDictionary = placeResolver.GetAreas();
                 var areas = facetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.Name).ToList();
+                var places = facetResults.Where(p => !p.Name.Contains("/")).Select(p => p).Distinct().OrderBy(po => po.Name).ToList();
+
+                foreach (var place in places)
+                {
+                    facets.Add(new FacetValue(place));
+                }
 
                 foreach (var area in areas)
                 {
