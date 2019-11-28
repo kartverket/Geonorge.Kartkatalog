@@ -1668,6 +1668,11 @@
               Looks up a localized string similar to Geografisk område.
             </summary>
         </member>
+        <member name="P:Resources.UI.Facet_spatialscope">
+            <summary>
+              Looks up a localized string similar to Dekningsområde.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Facet_theme">
             <summary>
               Looks up a localized string similar to Tema.

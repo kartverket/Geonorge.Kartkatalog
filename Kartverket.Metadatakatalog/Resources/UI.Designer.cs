@@ -916,6 +916,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dekningsområde.
+        /// </summary>
+        public static string Facet_spatialscope {
+            get {
+                return ResourceManager.GetString("Facet_spatialscope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tema.
         /// </summary>
         public static string Facet_theme {

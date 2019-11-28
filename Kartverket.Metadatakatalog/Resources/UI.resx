@@ -834,4 +834,7 @@
   <data name="Facet_type_GEONORGE_OFFLINE" xml:space="preserve">
     <value>Ingen online tilgang</value>
   </data>
+  <data name="Facet_spatialscope" xml:space="preserve">
+    <value>Dekningsområde</value>
+  </data>
 </root>
