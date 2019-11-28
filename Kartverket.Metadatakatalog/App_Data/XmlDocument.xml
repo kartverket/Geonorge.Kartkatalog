@@ -1620,7 +1620,7 @@
         </member>
         <member name="P:Resources.UI.Facet_area">
             <summary>
-              Looks up a localized string similar to Område.
+              Looks up a localized string similar to Geografisk område.
             </summary>
         </member>
         <member name="P:Resources.UI.Facet_dataaccess">

@@ -826,7 +826,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Område.
+        ///   Looks up a localized string similar to Geografisk område.
         /// </summary>
         public static string Facet_area {
             get {
