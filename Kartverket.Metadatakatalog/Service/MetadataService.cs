@@ -416,7 +416,7 @@ namespace Kartverket.Metadatakatalog.Service
             distribution.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(simpleMetadata.HierarchyLevel);
             distribution.TypeTranslated = SimpleMetadataUtil.GetTypeTranslated(simpleMetadata.HierarchyLevel);
             distribution.DistributionFormats.Add(GetDistributionFormat(simpleMetadataDistribution));
-            distribution.Organization = GetOrganizationFromContactMetadata(simpleMetadata.ContactMetadata);
+            distribution.Organization = GetOrganizationFromContactMetadata(simpleMetadata.ContactOwner);
 
             distribution.ShowDetailsUrl = "/metadata/org/title/" + uuid;
             if (simpleMetadata.Constraints != null)
