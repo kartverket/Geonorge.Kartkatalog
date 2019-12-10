@@ -1976,10 +1976,10 @@ var mainVueModel = new Vue({
             return hasCoordinates;
         },
         emailAddressIsValid: function (email) {
-            $('#feedback-alert.message').text = "";
+            $('#feedback-alert .message').text = "";
             var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             var validEmail = regex.test(email);
-            if (!validEmail) {
+            if (!validEmail && email) {
                 showAlert("Epost-adresse er ugyldig<br/>", "danger");
             }
 
