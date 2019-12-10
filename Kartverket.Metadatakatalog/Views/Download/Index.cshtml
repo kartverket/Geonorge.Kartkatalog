@@ -360,7 +360,7 @@
                     <div v-show="emailRequired" class="row margin-bottom-10">
                         <div id="emailField" class="col-sm-6 margin-bottom-10">
                             <p class="article-p">@UI.Email: <span class="required-indicator"></span><small>(@UI.PrivacyEmailRequiredCropping)</small></p>
-                            <input type="text" v-model="email" name="email" v-on:blur="checkEmailAddress()" class="form-control" />
+                            <input type="text" v-model="email" name="email" v-on:blur="checkEmailAddress(this)" class="form-control" />
                         </div>
                     </div>
                     <div class="row">

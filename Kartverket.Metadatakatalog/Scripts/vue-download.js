@@ -1979,11 +1979,11 @@ var mainVueModel = new Vue({
             var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             return regex.test(email);
         },
-        checkEmailAddress: function () {
+        checkEmailAddress: function (email) {
             $('#feedback-alert .message').html('');
             hideAlert();
-            var validEmail = this.emailAddressIsValid(this.email);
-            console.log("Email:" + this.email);
+            var validEmail = this.emailAddressIsValid(email);
+            console.log("Email:" + email);
             if (!validEmail && email) {
                 showAlert("Epost-adresse er ugyldig<br/>", "danger");
             }
