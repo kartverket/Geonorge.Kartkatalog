@@ -1983,6 +1983,7 @@ var mainVueModel = new Vue({
             $('#feedback-alert .message').html('');
             hideAlert();
             var validEmail = emailAddressIsValid(email);
+            connsole.log("Email:" + email);
             if (!validEmail && email) {
                 showAlert("Epost-adresse er ugyldig<br/>", "danger");
             }
