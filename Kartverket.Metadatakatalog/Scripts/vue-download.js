@@ -1976,7 +1976,8 @@ var mainVueModel = new Vue({
             return hasCoordinates;
         },
         emailAddressIsValid: function (email) {
-            $('#feedback-alert .message').text = "";
+            $('#feedback-alert .message').html('');
+            hideAlert();
             var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             var validEmail = regex.test(email);
             if (!validEmail && email) {
