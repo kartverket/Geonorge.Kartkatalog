@@ -1984,7 +1984,6 @@ var mainVueModel = new Vue({
             hideAlert();
             var emailAddress = this.email;
             var validEmail = this.emailAddressIsValid(emailAddress);
-            console.log("Email:" + emailAddress);
             if (!validEmail && emailAddress) {
                 showAlert("Epost-adresse er ugyldig<br/>", "danger");
             }
