@@ -1976,14 +1976,16 @@ var mainVueModel = new Vue({
             return hasCoordinates;
         },
         emailAddressIsValid: function (email) {
+            var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            return regex.test(email);
+        },
+        emailAddressIsValidMessage: function (email) {
             $('#feedback-alert .message').html('');
             hideAlert();
-            var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-            var validEmail = regex.test(email);
+            var validEmail = emailAddressIsValid(email);
             if (!validEmail && email) {
                 showAlert("Epost-adresse er ugyldig<br/>", "danger");
             }
-
             return validEmail;
         },
         isEmpty: function (item) {
