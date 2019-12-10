@@ -1976,14 +1976,11 @@ var mainVueModel = new Vue({
             return hasCoordinates;
         },
         emailAddressIsValid: function (email) {
+            hideAlert();
             var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             var validEmail = regex.test(email);
             if (!validEmail) {
                 showAlert("Epost-adresse er ugyldig<br/>", "danger");
-            }
-            else
-            {
-                hideAlert();
             }
 
             return validEmail;
