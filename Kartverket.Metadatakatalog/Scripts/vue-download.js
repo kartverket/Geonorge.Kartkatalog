@@ -1977,7 +1977,16 @@ var mainVueModel = new Vue({
         },
         emailAddressIsValid: function (email) {
             var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-            return regex.test(email);
+            var validEmail = regex.test(email);
+            if (!validEmail) {
+                showAlert("Epost-adresse er ugyldig<br/>", "danger");
+            }
+            else
+            {
+                hideAlert();
+            }
+
+            return validEmail;
         },
         isEmpty: function (item) {
             return (item == null || item == undefined || item.length == 0);
