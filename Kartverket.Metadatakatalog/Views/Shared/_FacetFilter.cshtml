@@ -22,9 +22,6 @@
     var areaFacets = Facets.First(f => f.FacetField == "area");
     var areas = areaFacets.FacetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.AreaLinkName(Model.areaDictionary)).ToList();
 
-    var placeGroupFacets = Facets.First(f => f.FacetField == "placegroups");
-    var placeGroups = placeGroupFacets.FacetResults;
-
     var organizationFacets = Facets.First(f => f.FacetField == "organization");
     var organizations = organizationFacets.FacetResults;
 
@@ -154,17 +151,6 @@
         <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="indicator"></span>
         <span v-on:click="isActive = !isActive" v-bind:class="{'active': isActive}" class="facet-filter-title">{{ FacetName }}</span>
         <div v-bind:class="{'active': isActive}" class="facet-filter-sub-item-list">
-
-            @*Henter ut alle placegroups (Norge, Havområder, Jan Mayen, Svalbard)*@
-            <div v-bind:class="{'selected': placeGroup.isSelected, 'is-empty': placeGroup.Count == 0}" v-for="placeGroup in PlaceGroups">
-                <span v-bind:class="{'no-indicator': !placeGroup.hasChildren}" class="indicator"></span>
-                <div class="facet-checkbox facet-link">
-                    <span v-on:click="$parent.toggleFilter('placegroups', placeGroup)"
-                          data-loading-message="Filtrerer søkeresultat" class="facet-checkbox-icon show-loading-animation">
-                    </span>
-                    {{ placeGroup.Name }} <span class="text-muted">({{ placeGroup.Count }})</span>
-                </div>
-            </div>
 
             @*Henter ut alle Fylker*@
             <div v-for="area in FacetResults">
@@ -464,7 +450,6 @@
         data: function(){
             var data = {
                 FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(areas))),
-                PlaceGroups: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(placeGroups))),
                 FacetField: "@areaFacets.FacetField",
                 FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + areaFacets.FacetField)))',
                 isActive: false
@@ -509,29 +494,13 @@
                     areaIndex++;
                 }
 
-                @:data.hasChildren = data.FacetResults.length > 0 || data.PlaceGroups.length > 0;
-
-                int placeGroupIndex = 0;
-                foreach (var placeGroup in placeGroups)
-                {
-                    // Get facet name for placegroups
-                    var placeGroupName = placeGroup.AreaLinkName(Model.areaDictionary).Trim();
-                    @:data.PlaceGroups[@placeGroupIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(placeGroupName))";
-
-                    @:data.PlaceGroups[@placeGroupIndex].isSelected = this.$parent.isSelected("placegroups", data.PlaceGroups[@placeGroupIndex]);
-
-                    @:data.PlaceGroups[@placeGroupIndex].hasChildren = false;
-
-                    placeGroupIndex++;
-                }
-
             }
 
             return data;
         },
         computed: {
             hasSelected: function() {
-                return this.$parent.hasSelected(this.FacetResults) || this.$parent.hasSelected(this.PlaceGroups);
+                return this.$parent.hasSelected(this.FacetResults);
             }
         },
         created: function() {

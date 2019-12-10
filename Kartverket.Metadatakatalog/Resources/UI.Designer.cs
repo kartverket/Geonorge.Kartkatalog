@@ -826,7 +826,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Område.
+        ///   Looks up a localized string similar to Geografisk område.
         /// </summary>
         public static string Facet_area {
             get {
@@ -912,6 +912,15 @@ namespace Resources {
         public static string Facet_placegroups {
             get {
                 return ResourceManager.GetString("Facet_placegroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dekningsområde.
+        /// </summary>
+        public static string Facet_spatialscope {
+            get {
+                return ResourceManager.GetString("Facet_spatialscope", resourceCulture);
             }
         }
         

@@ -9,6 +9,7 @@ using System;
 using System.Net.Http.Headers;
 using System.Web.Configuration;
 using Kartverket.Metadatakatalog.Models.Translations;
+using Kartverket.Metadatakatalog.Models;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -287,6 +288,41 @@ namespace Kartverket.Metadatakatalog.Service
             return placegroup;
         }
 
+        internal List<string> ResolveSpatialScope(List<Models.Keyword> keywords, string culture)
+        {
+            List<string> spatialscopes = new List<string>();
+
+            foreach(var keyword in keywords)
+            {
+                if (culture == Culture.NorwegianCode)
+                {
+                    spatialscopes.Add(GetNorwegianSpatialScope(keyword.KeywordValue));
+                }   
+                else
+                    spatialscopes.Add(keyword.KeywordValue);
+            }
+
+            return spatialscopes;
+        }
+
+        private readonly Dictionary<string, string> _norwegianSpatialScope = new Dictionary<string, string>
+        {
+            {"European", "Europeisk"},
+            {"Global", "Global"},
+            {"Local", "Lokal"},
+            {"National", "Nasjonal"},
+            {"Regional", "Regional"}
+           
+
+        };
+
+        private string GetNorwegianSpatialScope(string keywordValue)
+        {
+            if (_norwegianSpatialScope.ContainsKey(keywordValue))
+                return _norwegianSpatialScope[keywordValue];
+            else
+                return keywordValue;
+        }
     }
 
 
