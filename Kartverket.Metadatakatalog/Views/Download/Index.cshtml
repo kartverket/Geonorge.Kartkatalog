@@ -38,7 +38,7 @@
                     {{ area.name }}
                     <span v-show="!master && !area.hasSelectedProjections" data-toggle="tooltip" data-placement="bottom" title="Støttet projeksjon er ikke valgt" class="projection-warning-icon"></span>
                     <span v-show="!master && !area.hasSelectedFormats" data-toggle="tooltip" data-placement="bottom" title="Støttet format er ikke valgt" class="format-warning-icon"></span>
-                    <span v-on:click="removeSelectedArea(area)" class="custom-select-list-remove-button"></span>
+                    <span v-on:click="removeSelectedArea(area)" class="fa fa-times"></span>
                 </span>
                 <input type="text" class="custom-select-list-input" />
             </div>
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                     <div class="custom-select-list-dropdown-additional-options">
-                        <a v-show="supportsPolygonSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !supportsPolygonSelection}"><span class="glyphicon glyphicon-globe"></span> @UI.ChooseFromMap</a>
+                        <a v-show="supportsPolygonSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !supportsPolygonSelection}"><span class="fa fa-globe"></span> @UI.ChooseFromMap</a>
                         <a v-show="supportsGridSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'grid')" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !supportsGridSelection}"><span class="fa fa-map"></span> @UI.SelectGrid</a>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
         <div class="custom-select-list-input-container">
             <span v-for="projection in selected" class="custom-select-list-selected">
                 {{ projection.name }}
-                <span v-on:click="removeSelectedProjection(projection)" class="custom-select-list-remove-button"></span>
+                <span v-on:click="removeSelectedProjection(projection)" class="fa fa-times"></span>
             </span>
             <input type="text" class="custom-select-list-input" />
         </div>
@@ -117,7 +117,7 @@
         <div class="custom-select-list-input-container">
             <span v-for="format in selected" class="custom-select-list-selected">
                 {{ format.name }}
-                <span v-on:click="removeSelectedFormat(format)" class="custom-select-list-remove-button"></span>
+                <span v-on:click="removeSelectedFormat(format)" class="fa fa-times"></span>
             </span>
             <input type="text" class="custom-select-list-input" />
         </div>
@@ -340,7 +340,7 @@
                                 <div class="custom-select-list-input-container">
                                     <span v-for="(purpose, index) in usagePurposes" class="custom-select-list-selected">
                                         {{ getPurposeName(purpose) }}
-                                        <span v-on:click="removeSelectedPurpose(index)" class="custom-select-list-remove-button"></span>
+                                        <span v-on:click="removeSelectedPurpose(index)" class="fa fa-times"></span>
                                     </span>
                                     <input type="text" class="custom-select-list-input" />
                                 </div>
@@ -367,9 +367,9 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="pull-right">
-                                    <a class="btn" id="remove-all-items"><span class="glyphicon glyphicon-remove"></span> @UI.RemoveAll</a>
-                                    <a href="/" class="btn"><span class="glyphicon glyphicon-shopping-cart"></span> @UI.OrderMore</a>
-                                    <button v-on:click="sendRequests()" v-bind:disabled="!formIsValid()" class="btn"><span class="glyphicon glyphicon-save"></span> @UI.Download</button>
+                                    <a class="btn" id="remove-all-items"><span class="fa fa-trash"></span> @UI.RemoveAll</a>
+                                    <a href="/" class="btn"><span class="fa fa-shopping-cart"></span> @UI.OrderMore</a>
+                                    <button v-on:click="sendRequests()" v-bind:disabled="!formIsValid()" class="btn"><span class="fa fa-save"></span> @UI.Download</button>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
