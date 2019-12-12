@@ -752,6 +752,7 @@ namespace Kartverket.Metadatakatalog.Service
                 LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl,
                 MaintenanceFrequency = Register.GetMaintenanceFrequency(simpleMetadata.MaintenanceFrequency),
                 DatasetLanguage = simpleMetadata.Language,
+                SpatialScope = GetSpatialScope(simpleMetadata.Keywords),
                 MetadataLanguage = simpleMetadata.MetadataLanguage,
                 MetadataStandard = simpleMetadata.MetadataStandard,
                 MetadataStandardVersion = simpleMetadata.MetadataStandardVersion,
@@ -809,6 +810,18 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.DataAccess = metadata?.Constraints?.AccessConstraints;
 
             return metadata;
+        }
+
+        private string GetSpatialScope(List<SimpleKeyword> keywords)
+        {
+            var spatialScope = Convert(SimpleKeyword.Filter(keywords, null, SimpleKeyword.THESAURUS_SPATIAL_SCOPE)).FirstOrDefault();
+            if (spatialScope != null)
+            {
+                return spatialScope.KeywordValue;
+            }
+            else
+                return "";
+
         }
 
         private DistributionFormat Convert(DistributionFormat simpleDistributionFormat)

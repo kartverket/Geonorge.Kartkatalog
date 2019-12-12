@@ -75,6 +75,8 @@ namespace Kartverket.Metadatakatalog.Models
         public List<Keyword> KeywordsConcept { get; set; }
         public List<Keyword> KeywordsAdministrativeUnits { get; set; }
 
+        public string SpatialScope { get; set; }
+
         public string LegendDescriptionUrl { get; set; }
         //
         // Summary:
