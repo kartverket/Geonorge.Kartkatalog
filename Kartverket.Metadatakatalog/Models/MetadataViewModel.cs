@@ -80,6 +80,7 @@ namespace Kartverket.Metadatakatalog.Models
         // Summary:
         //     Values from codelist: http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode
         public string MaintenanceFrequency { get; set; }
+        public string DatasetLanguage { get; set; }
         public string MetadataLanguage { get; set; }
         public string MetadataStandard { get; set; }
         public string MetadataStandardVersion { get; set; }

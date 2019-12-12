@@ -751,6 +751,7 @@ namespace Kartverket.Metadatakatalog.Service
                 KeywordsAdministrativeUnits = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_ADMIN_UNITS)),
                 LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl,
                 MaintenanceFrequency = Register.GetMaintenanceFrequency(simpleMetadata.MaintenanceFrequency),
+                DatasetLanguage = simpleMetadata.Language,
                 MetadataLanguage = simpleMetadata.MetadataLanguage,
                 MetadataStandard = simpleMetadata.MetadataStandard,
                 MetadataStandardVersion = simpleMetadata.MetadataStandardVersion,
