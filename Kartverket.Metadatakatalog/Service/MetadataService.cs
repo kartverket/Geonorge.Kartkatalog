@@ -764,7 +764,7 @@ namespace Kartverket.Metadatakatalog.Service
                 CoverageUrl = simpleMetadata.CoverageUrl,
                 CoverageGridUrl = simpleMetadata.CoverageGridUrl,
                 Purpose = GetTranslation(simpleMetadata.Purpose, simpleMetadata.EnglishPurpose),
-                QualitySpecifications = Convert(simpleMetadata.QualitySpecifications),
+                QualitySpecifications = Convert(simpleMetadata.QualitySpecifications, simpleMetadata.ProductSpecificationOther),
                 ReferenceSystem = Convert(simpleMetadata.ReferenceSystem),
                 ResolutionScale = simpleMetadata.ResolutionScale,
                 SpatialRepresentation = Register.GetSpatialRepresentation(simpleMetadata.SpatialRepresentation),
@@ -960,7 +960,7 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
-        private List<QualitySpecification> Convert(List<SimpleQualitySpecification> simpleQualitySpecifications)
+        private List<QualitySpecification> Convert(List<SimpleQualitySpecification> simpleQualitySpecifications, SimpleOnlineResource spesificationOther)
         {
             List<QualitySpecification> output = new List<QualitySpecification>();
             if (simpleQualitySpecifications != null)
@@ -974,7 +974,8 @@ namespace Kartverket.Metadatakatalog.Service
                         //Date = simpleQualitySpecification.Date,
                         DateType = spec.DateType,
                         Explanation = GetTranslation(spec.Explanation, spec.EnglishExplanation),
-                        Result = spec.Result ?? null
+                        Result = spec.Result ?? null,
+                        SpecificationLink = spec?.Responsible == "other" ? spesificationOther?.URL : null
                     }
                     );
                 }

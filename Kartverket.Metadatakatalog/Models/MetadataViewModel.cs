@@ -814,6 +814,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string Explanation { get; set; }
         public bool? Result { get; set; }
         public string Title { get; set; }
+        public string SpecificationLink { get; set; }
     }
 
     public class ReferenceSystem
