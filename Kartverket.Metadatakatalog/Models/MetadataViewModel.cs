@@ -69,6 +69,7 @@ namespace Kartverket.Metadatakatalog.Models
         public List<Keyword> KeywordsPlace { get; set; }
         public List<Keyword> KeywordsTheme { get; set; }
         public List<Keyword> KeywordsInspire { get; set; }
+        public List<Keyword> KeywordsInspirePriorityDataset { get; set; }
         public List<Keyword> KeywordsNationalInitiative { get; set; }
         public List<Keyword> KeywordsNationalTheme { get; set; }
         public List<Keyword> KeywordsOther { get; set; }
