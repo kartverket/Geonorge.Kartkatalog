@@ -1827,7 +1827,11 @@ var mainVueModel = new Vue({
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        showAlert(errorThrown, "danger");
+                        if (jqXHR.status === 500) {
+                            showAlert(jqXHR.responseText, "danger");
+                        } else {
+                            showAlert(errorThrown, "danger");
+                        }
                         responseFailed = true;
                     },
                     success: function (data) {
