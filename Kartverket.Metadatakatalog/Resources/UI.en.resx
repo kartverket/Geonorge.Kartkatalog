@@ -837,4 +837,7 @@
   <data name="Facet_spatialscope" xml:space="preserve">
     <value>Spatial scope</value>
   </data>
+  <data name="LanguageInDataset" xml:space="preserve">
+    <value>Language in dataset</value>
+  </data>
 </root>

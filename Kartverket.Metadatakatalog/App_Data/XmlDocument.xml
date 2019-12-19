@@ -1813,6 +1813,11 @@
               Looks up a localized string similar to Geografisk område.
             </summary>
         </member>
+        <member name="P:Resources.UI.LanguageInDataset">
+            <summary>
+              Looks up a localized string similar to Språk i datasett.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Licence">
             <summary>
               Looks up a localized string similar to Lisens.

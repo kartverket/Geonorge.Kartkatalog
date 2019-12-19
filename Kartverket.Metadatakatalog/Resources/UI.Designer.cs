@@ -1177,6 +1177,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Språk i datasett.
+        /// </summary>
+        public static string LanguageInDataset {
+            get {
+                return ResourceManager.GetString("LanguageInDataset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lisens.
         /// </summary>
         public static string Licence {
