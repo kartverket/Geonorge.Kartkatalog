@@ -840,6 +840,9 @@
   <data name="LanguageInDataset" xml:space="preserve">
     <value>Language in dataset</value>
   </data>
+  <data name="DatasetName" xml:space="preserve">
+    <value>Dataset name</value>
+  </data>
   <data name="NamespaceToDataset" xml:space="preserve">
     <value>Namespace to dataset</value>
   </data>

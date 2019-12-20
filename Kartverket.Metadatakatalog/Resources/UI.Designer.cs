@@ -457,6 +457,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Datasett-ID.
+        /// </summary>
+        public static string DatasetName {
+            get {
+                return ResourceManager.GetString("DatasetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Datasett tjenesten opererer på.
         /// </summary>
         public static string DatasetsServiceOperatesOn {

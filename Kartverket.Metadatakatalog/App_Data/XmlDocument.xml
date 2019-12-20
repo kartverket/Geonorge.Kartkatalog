@@ -1413,6 +1413,11 @@
               Looks up a localized string similar to Datasett er korrekt utfylt.
             </summary>
         </member>
+        <member name="P:Resources.UI.DatasetName">
+            <summary>
+              Looks up a localized string similar to Datasett-ID.
+            </summary>
+        </member>
         <member name="P:Resources.UI.DatasetsServiceOperatesOn">
             <summary>
               Looks up a localized string similar to Datasett tjenesten opererer på.
