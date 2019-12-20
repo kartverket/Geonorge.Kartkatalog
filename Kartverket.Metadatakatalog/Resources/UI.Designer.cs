@@ -1303,6 +1303,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Navnerom til datasett.
+        /// </summary>
+        public static string NamespaceToDataset {
+            get {
+                return ResourceManager.GetString("NamespaceToDataset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Landsdekkende.
         /// </summary>
         public static string Nationwide {

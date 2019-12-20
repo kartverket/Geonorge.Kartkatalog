@@ -1883,6 +1883,11 @@
               Looks up a localized string similar to Navn.
             </summary>
         </member>
+        <member name="P:Resources.UI.NamespaceToDataset">
+            <summary>
+              Looks up a localized string similar to Navnerom til datasett.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Nationwide">
             <summary>
               Looks up a localized string similar to Landsdekkende.

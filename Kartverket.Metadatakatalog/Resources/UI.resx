@@ -840,4 +840,7 @@
   <data name="LanguageInDataset" xml:space="preserve">
     <value>Språk i datasett</value>
   </data>
+  <data name="NamespaceToDataset" xml:space="preserve">
+    <value>Navnerom til datasett</value>
+  </data>
 </root>
