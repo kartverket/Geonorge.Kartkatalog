@@ -1623,6 +1623,11 @@
               Looks up a localized string similar to &lt;p&gt;Feilen er logget og vil sjekkes av systemansvarlig.&lt;/p&gt;&lt;p&gt;Du kan også rapportere feilen til &lt;a mailto:&quot;post@norgedigitalt.no&quot;&gt;post@norgedigitalt.no&lt;/a&gt;.&lt;/p&gt;.
             </summary>
         </member>
+        <member name="P:Resources.UI.EuPriorityDataset">
+            <summary>
+              Looks up a localized string similar to EU - prioriterte datasett.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Facet_area">
             <summary>
               Looks up a localized string similar to Geografisk område.
@@ -1856,6 +1861,16 @@
         <member name="P:Resources.UI.MapServicesText">
             <summary>
               Looks up a localized string similar to Mange fagetater, fylkesetater og kommuner tilbyr nettkart til bruk for publikum. Her kan du utforske for eksempel flyfoto, høydedata, arealplaner eller ulike temakart..
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Metadata_KeywordsInspire_Label">
+            <summary>
+              Looks up a localized string similar to Inspire-kategorier.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Metadata_KeywordsOther_Label">
+            <summary>
+              Looks up a localized string similar to Ukategoriserte nøkkelord.
             </summary>
         </member>
         <member name="P:Resources.UI.MetadataInMunicipality">

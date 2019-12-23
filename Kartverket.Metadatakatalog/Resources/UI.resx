@@ -846,4 +846,13 @@
   <data name="NamespaceToDataset" xml:space="preserve">
     <value>Navnerom til datasett</value>
   </data>
+  <data name="EuPriorityDataset" xml:space="preserve">
+    <value>EU - prioriterte datasett</value>
+  </data>
+  <data name="Metadata_KeywordsInspire_Label" xml:space="preserve">
+    <value>Inspire-kategorier</value>
+  </data>
+  <data name="Metadata_KeywordsOther_Label" xml:space="preserve">
+    <value>Ukategoriserte nøkkelord</value>
+  </data>
 </root>

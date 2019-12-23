@@ -835,6 +835,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EU - prioriterte datasett.
+        /// </summary>
+        public static string EuPriorityDataset {
+            get {
+                return ResourceManager.GetString("EuPriorityDataset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Geografisk område.
         /// </summary>
         public static string Facet_area {
@@ -1254,6 +1263,24 @@ namespace Resources {
         public static string MapServicesText {
             get {
                 return ResourceManager.GetString("MapServicesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inspire-kategorier.
+        /// </summary>
+        public static string Metadata_KeywordsInspire_Label {
+            get {
+                return ResourceManager.GetString("Metadata_KeywordsInspire_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ukategoriserte nøkkelord.
+        /// </summary>
+        public static string Metadata_KeywordsOther_Label {
+            get {
+                return ResourceManager.GetString("Metadata_KeywordsOther_Label", resourceCulture);
             }
         }
         
