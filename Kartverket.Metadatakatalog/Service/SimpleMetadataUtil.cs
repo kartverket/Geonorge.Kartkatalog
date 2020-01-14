@@ -83,33 +83,35 @@ namespace Kartverket.Metadatakatalog.Service
 
         public static string GetCapabilitiesUrl(string url, string protocol)
         {
-            if (string.IsNullOrWhiteSpace(url)) return "";
-            var tmp = url;
-            var startQueryString = tmp.IndexOf("?", StringComparison.Ordinal);
+            return url;
 
-            if (startQueryString != -1)
-                tmp = tmp.Substring(0, startQueryString + 1);
-            else
-                tmp = tmp + "?";
+            //if (string.IsNullOrWhiteSpace(url)) return "";
+            //var tmp = url;
+            //var startQueryString = tmp.IndexOf("?request=", StringComparison.Ordinal);
 
-            if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WMS")))
-                return tmp + "request=GetCapabilities&service=WMS";
-            if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WFS")))
-                return tmp + "request=GetCapabilities&service=WFS";
-            if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WCS")))
-                return tmp + "request=GetCapabilities&service=WCS";
-            if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:CSW")))
-                return tmp + "request=GetCapabilities&service=CSW";
-            if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WMTS")))
-                return tmp + "request=GetCapabilities&service=wmts";
+            //if (startQueryString != -1)
+            //    tmp = tmp.Substring(0, startQueryString + 1);
+            //else
+            //    tmp = tmp + "?";
 
-            if (startQueryString != -1)
-                return url;
+            //if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WMS")))
+            //    return tmp + "request=GetCapabilities&service=WMS";
+            //if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WFS")))
+            //    return tmp + "request=GetCapabilities&service=WFS";
+            //if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WCS")))
+            //    return tmp + "request=GetCapabilities&service=WCS";
+            //if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:CSW")))
+            //    return tmp + "request=GetCapabilities&service=CSW";
+            //if (!string.IsNullOrWhiteSpace(protocol) && protocol.Contains(("OGC:WMTS")))
+            //    return tmp + "request=GetCapabilities&service=wmts";
 
-            if (tmp.EndsWith("?"))
-                tmp = tmp.Remove(tmp.Length - 1);
+            //if (startQueryString != -1)
+            //    return url;
 
-            return tmp;
+            //if (tmp.EndsWith("?"))
+            //    tmp = tmp.Remove(tmp.Length - 1);
+
+            //return tmp;
         }
 
         internal static string MapUrl(SimpleDistribution simpleMetadataDistribution, string hierarchyLevel)
