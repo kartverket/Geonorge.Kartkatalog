@@ -457,6 +457,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Datasett-ID.
+        /// </summary>
+        public static string DatasetName {
+            get {
+                return ResourceManager.GetString("DatasetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Datasett tjenesten opererer på.
         /// </summary>
         public static string DatasetsServiceOperatesOn {
@@ -826,6 +835,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EU - prioriterte datasett.
+        /// </summary>
+        public static string EuPriorityDataset {
+            get {
+                return ResourceManager.GetString("EuPriorityDataset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Geografisk område.
         /// </summary>
         public static string Facet_area {
@@ -1177,6 +1195,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Språk i datasett.
+        /// </summary>
+        public static string LanguageInDataset {
+            get {
+                return ResourceManager.GetString("LanguageInDataset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lisens.
         /// </summary>
         public static string Licence {
@@ -1240,6 +1267,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inspire-kategorier.
+        /// </summary>
+        public static string Metadata_KeywordsInspire_Label {
+            get {
+                return ResourceManager.GetString("Metadata_KeywordsInspire_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ukategoriserte nøkkelord.
+        /// </summary>
+        public static string Metadata_KeywordsOther_Label {
+            get {
+                return ResourceManager.GetString("Metadata_KeywordsOther_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hva finnes i kommune/fylke?.
         /// </summary>
         public static string MetadataInMunicipality {
@@ -1290,6 +1335,15 @@ namespace Resources {
         public static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Navnerom til datasett.
+        /// </summary>
+        public static string NamespaceToDataset {
+            get {
+                return ResourceManager.GetString("NamespaceToDataset", resourceCulture);
             }
         }
         

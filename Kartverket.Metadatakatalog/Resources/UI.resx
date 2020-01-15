@@ -837,4 +837,22 @@
   <data name="Facet_spatialscope" xml:space="preserve">
     <value>Dekningsområde</value>
   </data>
+  <data name="LanguageInDataset" xml:space="preserve">
+    <value>Språk i datasett</value>
+  </data>
+  <data name="DatasetName" xml:space="preserve">
+    <value>Datasett-ID</value>
+  </data>
+  <data name="NamespaceToDataset" xml:space="preserve">
+    <value>Navnerom til datasett</value>
+  </data>
+  <data name="EuPriorityDataset" xml:space="preserve">
+    <value>EU - prioriterte datasett</value>
+  </data>
+  <data name="Metadata_KeywordsInspire_Label" xml:space="preserve">
+    <value>Inspire-kategorier</value>
+  </data>
+  <data name="Metadata_KeywordsOther_Label" xml:space="preserve">
+    <value>Ukategoriserte nøkkelord</value>
+  </data>
 </root>

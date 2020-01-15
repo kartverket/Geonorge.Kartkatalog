@@ -528,7 +528,7 @@ var OrderLine = {
                 center_latitude: "7226208",
                 center_longitude: "378604",
                 grid_folder: "/sites/all/modules/custom/kms_widget/grid/",
-                coordinateSystem: "32633",
+                coordinateSystem: "25833",
                 selection_type: "3525",
                 service_name: "fylker-utm32",
                 zoom_level: "4",
@@ -734,7 +734,7 @@ var MasterOrderLine = {
                 center_latitude: "7226208",
                 center_longitude: "378604",
                 grid_folder: "/sites/all/modules/custom/kms_widget/grid/",
-                coordinateSystem: "32633",
+                coordinateSystem: "25833",
                 selection_type: "3525",
                 service_name: "fylker-utm32",
                 zoom_level: "4",
@@ -1827,7 +1827,11 @@ var mainVueModel = new Vue({
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        showAlert(errorThrown, "danger");
+                        if (jqXHR.status === 500) {
+                            showAlert(jqXHR.responseText, "danger");
+                        } else {
+                            showAlert(errorThrown, "danger");
+                        }
                         responseFailed = true;
                     },
                     success: function (data) {

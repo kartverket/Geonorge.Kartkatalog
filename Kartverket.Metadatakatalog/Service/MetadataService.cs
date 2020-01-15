@@ -744,6 +744,7 @@ namespace Kartverket.Metadatakatalog.Service
                 KeywordsPlace = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)),
                 KeywordsTheme = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_THEME, null)),
                 KeywordsInspire = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_GEMET_INSPIRE_V1)),
+                KeywordsInspirePriorityDataset = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_INSPIRE_PRIORITY_DATASET)),
                 KeywordsNationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)),
                 KeywordsNationalTheme = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME)),
                 KeywordsOther = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, null)),
@@ -751,6 +752,8 @@ namespace Kartverket.Metadatakatalog.Service
                 KeywordsAdministrativeUnits = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_ADMIN_UNITS)),
                 LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl,
                 MaintenanceFrequency = Register.GetMaintenanceFrequency(simpleMetadata.MaintenanceFrequency),
+                DatasetLanguage = simpleMetadata.Language,
+                SpatialScope = GetSpatialScope(simpleMetadata.Keywords),
                 MetadataLanguage = simpleMetadata.MetadataLanguage,
                 MetadataStandard = simpleMetadata.MetadataStandard,
                 MetadataStandardVersion = simpleMetadata.MetadataStandardVersion,
@@ -762,7 +765,7 @@ namespace Kartverket.Metadatakatalog.Service
                 CoverageUrl = simpleMetadata.CoverageUrl,
                 CoverageGridUrl = simpleMetadata.CoverageGridUrl,
                 Purpose = GetTranslation(simpleMetadata.Purpose, simpleMetadata.EnglishPurpose),
-                QualitySpecifications = Convert(simpleMetadata.QualitySpecifications),
+                QualitySpecifications = Convert(simpleMetadata.QualitySpecifications, simpleMetadata.ProductSpecificationOther),
                 ReferenceSystem = Convert(simpleMetadata.ReferenceSystem),
                 ResolutionScale = simpleMetadata.ResolutionScale,
                 SpatialRepresentation = Register.GetSpatialRepresentation(simpleMetadata.SpatialRepresentation),
@@ -808,6 +811,18 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.DataAccess = metadata?.Constraints?.AccessConstraints;
 
             return metadata;
+        }
+
+        private string GetSpatialScope(List<SimpleKeyword> keywords)
+        {
+            var spatialScope = Convert(SimpleKeyword.Filter(keywords, null, SimpleKeyword.THESAURUS_SPATIAL_SCOPE)).FirstOrDefault();
+            if (spatialScope != null)
+            {
+                return spatialScope.KeywordValue;
+            }
+            else
+                return "";
+
         }
 
         private DistributionFormat Convert(DistributionFormat simpleDistributionFormat)
@@ -946,7 +961,7 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
-        private List<QualitySpecification> Convert(List<SimpleQualitySpecification> simpleQualitySpecifications)
+        private List<QualitySpecification> Convert(List<SimpleQualitySpecification> simpleQualitySpecifications, SimpleOnlineResource spesificationOther)
         {
             List<QualitySpecification> output = new List<QualitySpecification>();
             if (simpleQualitySpecifications != null)
@@ -960,7 +975,8 @@ namespace Kartverket.Metadatakatalog.Service
                         //Date = simpleQualitySpecification.Date,
                         DateType = spec.DateType,
                         Explanation = GetTranslation(spec.Explanation, spec.EnglishExplanation),
-                        Result = spec.Result ?? null
+                        Result = spec.Result ?? null,
+                        SpecificationLink = spec?.Responsible == "other" ? spesificationOther?.URL : null
                     }
                     );
                 }

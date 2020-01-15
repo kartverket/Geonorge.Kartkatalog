@@ -69,17 +69,21 @@ namespace Kartverket.Metadatakatalog.Models
         public List<Keyword> KeywordsPlace { get; set; }
         public List<Keyword> KeywordsTheme { get; set; }
         public List<Keyword> KeywordsInspire { get; set; }
+        public List<Keyword> KeywordsInspirePriorityDataset { get; set; }
         public List<Keyword> KeywordsNationalInitiative { get; set; }
         public List<Keyword> KeywordsNationalTheme { get; set; }
         public List<Keyword> KeywordsOther { get; set; }
         public List<Keyword> KeywordsConcept { get; set; }
         public List<Keyword> KeywordsAdministrativeUnits { get; set; }
 
+        public string SpatialScope { get; set; }
+
         public string LegendDescriptionUrl { get; set; }
         //
         // Summary:
         //     Values from codelist: http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode
         public string MaintenanceFrequency { get; set; }
+        public string DatasetLanguage { get; set; }
         public string MetadataLanguage { get; set; }
         public string MetadataStandard { get; set; }
         public string MetadataStandardVersion { get; set; }
@@ -811,6 +815,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string Explanation { get; set; }
         public bool? Result { get; set; }
         public string Title { get; set; }
+        public string SpecificationLink { get; set; }
     }
 
     public class ReferenceSystem
