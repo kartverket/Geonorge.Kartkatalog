@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Keen.Core;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
 {
