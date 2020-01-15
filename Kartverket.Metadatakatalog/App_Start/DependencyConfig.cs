@@ -77,14 +77,7 @@ namespace Kartverket.Metadatakatalog
 
             // ErrorService
             builder.RegisterType<ErrorService>()
-                .As<IErrorService>()
-                .WithParameters(new List<Parameter>
-                {
-                    new NamedParameter("projectID", WebConfigurationManager.AppSettings["KeenIO_ProjectId"]),
-                    new NamedParameter("writeKey", WebConfigurationManager.AppSettings["KeenIO_WriteKey"]),
-                    new NamedParameter("collection", WebConfigurationManager.AppSettings["KeenIO_CollectionProcessingLog"]),
-                    new NamedParameter("enabled", WebConfigurationManager.AppSettings["KeenIO_Enabled"])
-                });
+                .As<IErrorService>();
 
             // in app
             builder.RegisterType<MetadataService>().As<IMetadataService>();
