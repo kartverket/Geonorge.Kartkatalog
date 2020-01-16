@@ -1,4 +1,4 @@
-﻿$(document).on("click", "#remove-all-items", function () {
+$(document).on("click", "#remove-all-items", function () {
     $('#remove-all-items-modal').modal('show')
 });
 
@@ -434,6 +434,20 @@ var OrderLine = {
             if (mapType == "grid") { this.loadGridMap(orderItem) }
             else if (mapType == "polygon") { this.loadPolygonMap(orderItem) }
             $('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
+        },
+
+        selectAllGrids: function (orderItem) {
+
+            var orderLineUuid = orderItem.metadata.uuid;
+
+            orderItem.availableAreas.celle.forEach(function (selectedArea) {
+                selectedArea.isSelected = true;
+                orderItem.selectedAreas.push(selectedArea);
+            }.bind(this));
+
+            this.$root.updateSelectedAreasForSingleOrderLine(orderLineUuid, true);
+            this.$root.updateAvailableProjectionsAndFormatsForSingleOrderLine(orderLineUuid);
+            this.$root.validateAreas();   
         },
 
         isJson: function (str) {

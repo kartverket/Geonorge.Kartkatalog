@@ -855,4 +855,7 @@
   <data name="Metadata_KeywordsOther_Label" xml:space="preserve">
     <value>Uncategorised keywords</value>
   </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>Select all</value>
+  </data>
 </root>

@@ -1843,6 +1843,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Velg alle.
+        /// </summary>
+        public static string SelectAll {
+            get {
+                return ResourceManager.GetString("SelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Velg formål.
         /// </summary>
         public static string SelectDownloadPurpose {

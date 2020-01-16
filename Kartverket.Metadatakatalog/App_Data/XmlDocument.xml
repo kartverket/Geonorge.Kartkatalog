@@ -2183,6 +2183,11 @@
               Looks up a localized string similar to Lovhenvisning.
             </summary>
         </member>
+        <member name="P:Resources.UI.SelectAll">
+            <summary>
+              Looks up a localized string similar to Velg alle.
+            </summary>
+        </member>
         <member name="P:Resources.UI.SelectDownloadPurpose">
             <summary>
               Looks up a localized string similar to Velg formål.
