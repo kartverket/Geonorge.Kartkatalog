@@ -38,6 +38,9 @@ namespace Kartverket.Metadatakatalog.Service
         Dictionary<string, string> DownloadPurposes = new Dictionary<string, string>();
         Dictionary<string, string> DownloadPurposesEnglish = new Dictionary<string, string>();
 
+        Dictionary<string, string> ListOfInspire = new Dictionary<string, string>();
+        
+
         public RegisterFetcher()
         {
             TopicCategories = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB100");
@@ -64,6 +67,8 @@ namespace Kartverket.Metadatakatalog.Service
             DownloadUseGroupsEnglish = GetCodeListByName("brukergrupper", Culture.EnglishCode);
             DownloadPurposes = GetCodeListByName("formal");
             DownloadPurposesEnglish = GetCodeListByName("formal", Culture.EnglishCode);
+
+            ListOfInspire = GetCodeList("E7E48BC6-47C6-4E37-BE12-08FB9B2FEDE6");
 
         }
 
@@ -195,6 +200,18 @@ namespace Kartverket.Metadatakatalog.Service
             KeyValuePair<string, string> dic = culture == Culture.NorwegianCode
                 ? ListOfStatusValues.Where(p => p.Key == value).FirstOrDefault()
                 : ListOfStatusValuesEnglish.Where(p => p.Key == value).FirstOrDefault();
+            if (!dic.Equals(default(KeyValuePair<String, String>)))
+                value = dic.Value;
+
+            return value;
+        }
+
+        public string GetInspire(string value)
+        {
+            var culture = CultureHelper.GetCurrentCulture();
+            KeyValuePair<string, string> dic = 
+                 ListOfInspire.Where(p => p.Key == value).FirstOrDefault();
+                
             if (!dic.Equals(default(KeyValuePair<String, String>)))
                 value = dic.Value;
 

@@ -802,6 +802,8 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
 
+            metadata.KeywordsInspire = GetTranslationForInspire(metadata.KeywordsInspire);
+
             metadata.DistributionUrl = GetDistributionUrl(metadata.DistributionDetails);
             metadata.DistributionFormat = Convert(metadata.DistributionFormat);
 
@@ -813,6 +815,21 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.DataAccess = metadata?.Constraints?.AccessConstraints;
 
             return metadata;
+        }
+
+        private List<Keyword> GetTranslationForInspire(List<Keyword> keywordsInspire)
+        {
+            if (keywordsInspire == null)
+                return null;
+
+            for(int k=0;k< keywordsInspire.Count;k++)
+            {
+                var inspire = Register.GetInspire(keywordsInspire[k].KeywordValue);
+                if (inspire != null)
+                    keywordsInspire[k].KeywordValue = inspire; 
+            }
+
+            return keywordsInspire;
         }
 
         private string GetSpatialScope(List<SimpleKeyword> keywords)
