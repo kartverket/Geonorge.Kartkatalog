@@ -64,6 +64,8 @@ namespace Kartverket.Metadatakatalog.Models
         //     Note: Only supporting one hierarchyLevel element. Array is overwritten with
         //     an array of one element when value is updated.
         public string HierarchyLevel { get; set; }
+        public string Type { get; set; }
+        public string TypeTranslated { get; set; }
         public List<Keyword> Keywords { get; set; }
 
         public List<Keyword> KeywordsPlace { get; set; }
