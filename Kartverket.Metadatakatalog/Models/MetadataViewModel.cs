@@ -90,6 +90,10 @@ namespace Kartverket.Metadatakatalog.Models
         public List<string> OperatesOn { get; set; }
         public List<MetadataViewModel> Related { get; set; }
         public string ProcessHistory { get; set; }
+        public string Availability { get; set; }
+        public string Capacity { get; set; }
+        public string Performance { get; set; }
+
         public string ProductPageUrl { get; set; }
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
@@ -816,6 +820,7 @@ namespace Kartverket.Metadatakatalog.Models
         public bool? Result { get; set; }
         public string Title { get; set; }
         public string SpecificationLink { get; set; }
+        public string QuantitativeResult { get; set; }
     }
 
     public class ReferenceSystem

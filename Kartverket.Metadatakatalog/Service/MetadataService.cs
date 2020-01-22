@@ -976,7 +976,9 @@ namespace Kartverket.Metadatakatalog.Service
                         DateType = spec.DateType,
                         Explanation = GetTranslation(spec.Explanation, spec.EnglishExplanation),
                         Result = spec.Result ?? null,
-                        SpecificationLink = spec?.Responsible == "other" ? spesificationOther?.URL : null
+                        SpecificationLink = spec?.Responsible == "other" ? spesificationOther?.URL : null,
+                        QuantitativeResult = spec.QuantitativeResult
+                        
                     }
                     );
                 }
