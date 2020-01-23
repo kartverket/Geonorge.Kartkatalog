@@ -834,9 +834,9 @@ namespace Kartverket.Metadatakatalog.Service
                 if (qualitySpecification.Title == "capacity")
                 {
                     if (CultureHelper.IsNorwegian())
-                        quantitativeResult.Capacity = "Kapasitet: " + qualitySpecification.QuantitativeResult + " samtidige forespørsler innenfor responstid";
+                        quantitativeResult.Capacity = "Kapasitet: " + qualitySpecification.QuantitativeResult + " samtidige forespørsler";
                     else
-                        quantitativeResult.Capacity = "Capacity: " + qualitySpecification.QuantitativeResult + " simultaneous requests within response time";
+                        quantitativeResult.Capacity = "Capacity: " + qualitySpecification.QuantitativeResult + " simultaneous requests";
                 }
                 if (qualitySpecification.Title == "performance")
                 {
