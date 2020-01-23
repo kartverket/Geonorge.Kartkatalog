@@ -813,8 +813,45 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.SetDistributionUrl();
             metadata.OrganizationLogoUrl = GetOrganizationLogoUrl(metadata.ContactOwner);
             metadata.DataAccess = metadata?.Constraints?.AccessConstraints;
+            metadata.QuantitativeResult = GetQuantitativeResult(metadata.QualitySpecifications);
 
             return metadata;
+        }
+
+        private QuantitativeResult GetQuantitativeResult(List<QualitySpecification> qualitySpecifications)
+        {
+            QuantitativeResult quantitativeResult = new QuantitativeResult();
+
+            foreach (var qualitySpecification in qualitySpecifications)
+            {
+                if (qualitySpecification.Title == "availability")
+                {
+                    if (CultureHelper.IsNorwegian())
+                        quantitativeResult.Availability = "Tilgjengelighet: " + qualitySpecification.QuantitativeResult + "%";
+                    else
+                        quantitativeResult.Availability = "Availability: " + qualitySpecification.QuantitativeResult + "%";
+                }
+                if (qualitySpecification.Title == "capacity")
+                {
+                    if (CultureHelper.IsNorwegian())
+                        quantitativeResult.Capacity = "Kapasitet: " + qualitySpecification.QuantitativeResult + " samtidige forespørsler innenfor responstid";
+                    else
+                        quantitativeResult.Capacity = "Capacity: " + qualitySpecification.QuantitativeResult + " simultaneous requests within response time";
+                }
+                if (qualitySpecification.Title == "performance")
+                {
+                    if (CultureHelper.IsNorwegian())
+                        quantitativeResult.Performance = "Responstid: " + qualitySpecification.QuantitativeResult + " sekunder";
+                    else
+                        quantitativeResult.Performance = "Performance: " + qualitySpecification.QuantitativeResult + " seconds";
+                }
+            }
+
+            if (string.IsNullOrEmpty(quantitativeResult.Availability) && string.IsNullOrEmpty(quantitativeResult.Capacity)
+                && string.IsNullOrEmpty(quantitativeResult.Performance))
+                return null;
+
+            return quantitativeResult;
         }
 
         private List<Keyword> GetTranslationForInspire(List<Keyword> keywordsInspire)

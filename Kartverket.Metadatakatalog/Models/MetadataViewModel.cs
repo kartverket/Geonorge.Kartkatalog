@@ -151,6 +151,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public string ServiceType { get; set; }
         public List<DatasetService> DatasetServicesWithShowMapLink { get; set; }
+        public QuantitativeResult QuantitativeResult { get; set; }
 
 
         public MetadataViewModel()
@@ -603,6 +604,13 @@ namespace Kartverket.Metadatakatalog.Models
             return HierarchyLevel;
         }
 
+    }
+
+    public class QuantitativeResult
+    {
+       public string Availability { get; set; }
+       public string Capacity { get; set; }
+       public string Performance { get; set; }
     }
 
     public class Distributions
