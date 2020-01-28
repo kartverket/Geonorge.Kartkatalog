@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 
 namespace Kartverket.Metadatakatalog.Service
@@ -11,7 +13,7 @@ namespace Kartverket.Metadatakatalog.Service
     public class RegisterFetcher
     {
         MemoryCacher memCacher = new MemoryCacher();
-        private static readonly WebClient _webClient = new WebClient();
+        private static readonly HttpClient _httpClient = new HttpClient();
 
         Dictionary<string, string> TopicCategories = new Dictionary<string, string>();
         Dictionary<string, string> TopicCategoriesEnglish = new Dictionary<string, string>();
@@ -105,10 +107,14 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (Organizations.Count < 1)
             {
-                _webClient.Encoding = System.Text.Encoding.UTF8;
-                _webClient.Headers.Remove("Accept-Language");
-                _webClient.Headers.Add("Accept-Language", Culture.NorwegianCode);
-                var data = _webClient.DownloadString(System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner");
+                var url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner";
+                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Add("Accept-Language", Culture.NorwegianCode);
+
+                var responseResult = _httpClient.GetAsync(url).Result;
+                HttpContent content = responseResult.Content;
+                var data = content.ReadAsStringAsync().Result;
+
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
 
                 var orgs = response["containeditems"];
@@ -287,10 +293,14 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
-                _webClient.Headers.Remove("Accept-Language");
-                _webClient.Headers.Add("Accept-Language", culture);
-                _webClient.Encoding = System.Text.Encoding.UTF8;
-                var data = _webClient.DownloadString(url);
+
+                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+
+                var responseResult = _httpClient.GetAsync(url).Result;
+                HttpContent content = responseResult.Content;
+                var data = content.ReadAsStringAsync().Result;
+
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
                 var codeList = response["containeditems"];
 
@@ -330,10 +340,14 @@ namespace Kartverket.Metadatakatalog.Service
             {
 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/metadata-kodelister/" + name;
-                _webClient.Headers.Remove("Accept-Language");
-                _webClient.Headers.Add("Accept-Language", culture);
-                _webClient.Encoding = System.Text.Encoding.UTF8;
-                var data = _webClient.DownloadString(url);
+
+                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+
+                var responseResult = _httpClient.GetAsync(url).Result;
+                HttpContent content = responseResult.Content;
+                var data = content.ReadAsStringAsync().Result;
+
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
                 var codeList = response["containeditems"];
 
@@ -373,11 +387,15 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (RegisterItems.Count < 1)
             {
+                var url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/subregister/" + registername;
 
-                _webClient.Headers.Remove("Accept-Language");
-                _webClient.Headers.Add("Accept-Language", culture);
-                _webClient.Encoding = System.Text.Encoding.UTF8;
-                var data = _webClient.DownloadString(System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/subregister/" + registername);
+                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+
+                var responseResult = _httpClient.GetAsync(url).Result;
+                HttpContent content = responseResult.Content;
+                var data = content.ReadAsStringAsync().Result;
+
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
 
                 var items = response["containeditems"];
@@ -417,8 +435,12 @@ namespace Kartverket.Metadatakatalog.Service
             {
 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
-                _webClient.Encoding = System.Text.Encoding.UTF8;
-                var data = _webClient.DownloadString(url);
+                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+
+                var responseResult = _httpClient.GetAsync(url).Result;
+                HttpContent content = responseResult.Content;
+                var data = content.ReadAsStringAsync().Result;
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
 
                 var codeList = response["containeditems"];
