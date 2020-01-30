@@ -435,6 +435,7 @@ namespace Kartverket.Metadatakatalog.Service
             distribution.Title = GetTranslation(simpleMetadata.Title, simpleMetadata.EnglishTitle);
             distribution.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(simpleMetadata.HierarchyLevel);
             distribution.TypeTranslated = SimpleMetadataUtil.GetTypeTranslated(simpleMetadata.HierarchyLevel);
+            distribution.TypeName = simpleMetadata.HierarchyLevelName;
             distribution.DistributionFormats.Add(GetDistributionFormat(simpleMetadataDistribution));
             distribution.Organization = GetOrganizationFromContactMetadata(simpleMetadata.ContactOwner);
 
@@ -445,6 +446,25 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (!string.IsNullOrEmpty(simpleMetadata.ParentIdentifier) && (distribution.Protocol == "WMS-tjeneste" || distribution.Protocol == "WMS service"))
                 distribution.Protocol = UI.Facet_type_servicelayer;
+
+            if(simpleMetadata.HierarchyLevel == "series")
+            {
+                var metadataIndexDocResult = _searchService.GetMetadata(uuid);
+                if(metadataIndexDocResult != null && metadataIndexDocResult.SerieDatasets != null)
+                {
+                    distribution.SerieDatasets = Models.Api.Metadata.AddSerieDatasets(metadataIndexDocResult.SerieDatasets);
+                }
+            }
+
+            if (simpleMetadata.IsDataset() && !string.IsNullOrEmpty(simpleMetadata.ParentIdentifier))
+            {
+                var metadataIndexDocResult = _searchService.GetMetadata(uuid);
+                if (metadataIndexDocResult != null && metadataIndexDocResult.Serie != null)
+                {
+                    if(!string.IsNullOrEmpty(metadataIndexDocResult.Serie))
+                        distribution.Serie = Models.Api.Metadata.AddSerie(metadataIndexDocResult.Serie);
+                }
+            }
 
             //Vis kart
             if (SimpleMetadataUtil.ShowMapLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
