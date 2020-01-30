@@ -36,6 +36,8 @@ namespace Kartverket.Metadatakatalog.Models
         public List<string> ServiceDatasets { get; set; }
         public List<string> Bundles { get; set; }
         public List<string> ServiceLayers { get; set; }
+        public List<string> SerieDatasets { get; set; }
+        public string Serie { get; set; }
         public string AccessConstraint { get; set; }
         public string OtherConstraintsAccess { get; set; }
         public string DataAccess { get; set; }
@@ -108,6 +110,8 @@ namespace Kartverket.Metadatakatalog.Models
             ProductSpecificationUrl = doc.ProductSpecificationUrl;
             DatasetServices = doc.DatasetServices;
             ServiceDatasets = doc.ServiceDatasets;
+            Serie = doc.Serie;
+            SerieDatasets = doc.SerieDatasets;
             Bundles = doc.Bundles;
             ServiceLayers = doc.ServiceLayers;
             AccessConstraint = doc.AccessConstraint;

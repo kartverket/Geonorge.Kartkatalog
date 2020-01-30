@@ -119,6 +119,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public List<string> ServiceLayers { get; set; }
         /// <summary>
+        /// Datasets in series
+        /// </summary>
+        public List<Dataset> SerieDatasets { get; set; }
+        /// <summary>
         /// AccessConstraint
         /// </summary>
         public string AccessConstraint { get; set; }
@@ -269,6 +273,12 @@ namespace Kartverket.Metadatakatalog.Models.Api
                     }
                 }
             }
+             
+            if(Type == "series" && item.SerieDatasets != null && item.SerieDatasets.Count > 0)
+            {
+                SerieDatasets = AddSerieDatasets(item.SerieDatasets);
+            }
+
             else
             {
                 DownloadUrl = item.DistributionUrl;
@@ -277,6 +287,34 @@ namespace Kartverket.Metadatakatalog.Models.Api
             }
 
             MapUrl = GetMapUrl();
+        }
+
+        private List<Dataset> AddSerieDatasets(List<string> serieDatasets)
+        {
+            var datasets = new List<Dataset>();
+            if (serieDatasets != null)
+            {
+                foreach (var datasetString in serieDatasets)
+                {
+                    var datasetArray = datasetString.Split('|');
+                    try
+                    {
+                        datasets.Add(new Dataset
+                        {
+                            Uuid = datasetArray[0],
+                            DistributionProtocol = datasetArray[6],
+                            GetCapabilitiesUrl = datasetArray[7],
+                            Title = datasetArray[1]
+                        });
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+            }
+
+            return datasets;
         }
 
         private List<DatasetService> AddDatasetServicesWithShowMapLink(List<string> datasetServicesString)
@@ -473,6 +511,14 @@ namespace Kartverket.Metadatakatalog.Models.Api
     }
 
     public class DatasetService
+    {
+        public string Uuid { get; set; }
+        public string Title { get; set; }
+        public string DistributionProtocol { get; set; }
+        public string GetCapabilitiesUrl { get; set; }
+    }
+
+    public class Dataset
     {
         public string Uuid { get; set; }
         public string Title { get; set; }

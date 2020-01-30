@@ -885,6 +885,11 @@
             ServiceLayers
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.SerieDatasets">
+            <summary>
+            Datasets in series
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.AccessConstraint">
             <summary>
             AccessConstraint
