@@ -789,6 +789,11 @@
             The type of metadata translated
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.TypeName">
+            <summary>
+            The grouping name of dataset series
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.Theme">
             <summary>
             The theme

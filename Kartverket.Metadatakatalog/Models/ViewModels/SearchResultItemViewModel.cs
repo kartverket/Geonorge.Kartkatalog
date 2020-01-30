@@ -16,6 +16,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string Title { get; set; }
         public string @Abstract { get; set; }
         public string Type { get; set; }
+        public string TypeName { get; set; }
         public string Theme { get; set; }
         public string Organization { get; set; }
         public string OrganizationShortName { get; set; }

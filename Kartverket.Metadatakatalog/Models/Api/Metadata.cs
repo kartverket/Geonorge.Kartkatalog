@@ -35,6 +35,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public string TypeTranslated { get; set; }
         /// <summary>
+        /// The grouping name of dataset series
+        /// </summary>
+        public string TypeName { get; set; }
+        /// <summary>
         /// The theme
         /// </summary>
         public string Theme { get; set; }
@@ -168,6 +172,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             Title = item.Title;
             Abstract = item.Abstract;
             Type = item.Type;
+            TypeName = item.TypeName;
             TypeTranslated = TranslateType();
             Theme = item.Theme;
             Organization = item.Organization;

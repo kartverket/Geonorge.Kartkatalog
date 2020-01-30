@@ -629,6 +629,9 @@ namespace Kartverket.Metadatakatalog.Service
                                 thumbnailsUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMd.Uuid, thumbnailsRel[thumbnailsRel.Count - 1].URL);
                             }
 
+                            if(simpleMd.HierarchyLevel == "dataset")
+                            { 
+
                             dataEntries.Add(new MetaDataEntry
                             {
                                 Uuid = simpleMd.Uuid,
@@ -645,6 +648,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 AccessConstraints = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.AccessConstraints) ? simpleMd.Constraints.AccessConstraints : ""),
                                 OtherConstraintsAccess = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.OtherConstraintsAccess) ? simpleMd.Constraints.OtherConstraintsAccess : "")
                             });
+                            }
                         }
 
                         List<string> datasetsNewList = new List<string>();
