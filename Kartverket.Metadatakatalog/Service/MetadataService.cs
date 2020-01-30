@@ -363,6 +363,16 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
 
+            if (metadata.Type == "series" && metadataIndexDocResult != null)
+            {
+                metadata.SerieDatasets = GetRelatedDatasets(metadataIndexDocResult.SerieDatasets);
+            }
+
+            if (metadata.Type == "dataset" && metadataIndexDocResult != null && metadataIndexDocResult.Serie != null)
+            {
+                metadata.Serie = GetSerieForDataset(metadataIndexDocResult.Serie);
+            }
+
             metadata.AccessIsRestricted = metadata.IsRestricted();
             metadata.AccessIsOpendata = metadata.IsOpendata();
             metadata.AccessIsProtected = metadata.IsOffline();
@@ -381,6 +391,16 @@ namespace Kartverket.Metadatakatalog.Service
                 metadata.ServiceType = simpleMetadata.ServiceType;
 
             return metadata;
+        }
+
+        private Serie GetSerieForDataset(string serie)
+        {
+            return Models.Api.Metadata.AddSerie(serie);
+        }
+
+        private List<Dataset> GetRelatedDatasets(List<string> serieDatasets)
+        {
+            return Models.Api.Metadata.AddSerieDatasets(serieDatasets);
         }
 
         /// <summary>
@@ -743,6 +763,7 @@ namespace Kartverket.Metadatakatalog.Service
                 HierarchyLevel = simpleMetadata.HierarchyLevel,
                 Type = simpleMetadata.HierarchyLevel,
                 TypeTranslated = SimpleMetadataUtil.GetTypeTranslated(simpleMetadata.HierarchyLevel),
+                TypeName = simpleMetadata.HierarchyLevelName,
                 KeywordsPlace = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)),
                 KeywordsTheme = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_THEME, null)),
                 KeywordsInspire = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_GEMET_INSPIRE_V1)),

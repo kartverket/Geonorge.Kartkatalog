@@ -66,6 +66,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string HierarchyLevel { get; set; }
         public string Type { get; set; }
         public string TypeTranslated { get; set; }
+        public string TypeName { get; set; }
         public List<Keyword> Keywords { get; set; }
 
         public List<Keyword> KeywordsPlace { get; set; }
@@ -151,6 +152,8 @@ namespace Kartverket.Metadatakatalog.Models
 
         public string ServiceType { get; set; }
         public List<DatasetService> DatasetServicesWithShowMapLink { get; set; }
+        public List<Dataset> SerieDatasets { get; set; }
+        public Serie Serie { get; set; }
         public QuantitativeResult QuantitativeResult { get; set; }
 
 

@@ -299,7 +299,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             MapUrl = GetMapUrl();
         }
 
-        private Serie AddSerie(string serieString)
+        public static Serie AddSerie(string serieString)
         {
             var serie = new Serie();
            
@@ -320,7 +320,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             return serie;
         }
 
-        private List<Dataset> AddSerieDatasets(List<string> serieDatasets)
+        public static List<Dataset> AddSerieDatasets(List<string> serieDatasets)
         {
             var datasets = new List<Dataset>();
             if (serieDatasets != null)
