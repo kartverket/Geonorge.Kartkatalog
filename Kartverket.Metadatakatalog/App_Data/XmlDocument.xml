@@ -890,6 +890,11 @@
             Datasets in series
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.Serie">
+            <summary>
+            Serie for datasett
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.AccessConstraint">
             <summary>
             AccessConstraint

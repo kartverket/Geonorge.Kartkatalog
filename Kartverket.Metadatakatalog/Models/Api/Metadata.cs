@@ -123,6 +123,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public List<Dataset> SerieDatasets { get; set; }
         /// <summary>
+        /// Serie for datasett
+        /// </summary>
+        public Serie Serie { get; set; }
+        /// <summary>
         /// AccessConstraint
         /// </summary>
         public string AccessConstraint { get; set; }
@@ -254,6 +258,12 @@ namespace Kartverket.Metadatakatalog.Models.Api
                         }
                     }
                 }
+
+                if(item.Serie != null)
+                {
+                    Serie = AddSerie(item.Serie);
+                }
+
             }
 
             if (Type == "service" || Type == "servicelayer")
@@ -287,6 +297,27 @@ namespace Kartverket.Metadatakatalog.Models.Api
             }
 
             MapUrl = GetMapUrl();
+        }
+
+        private Serie AddSerie(string serieString)
+        {
+            var serie = new Serie();
+           
+            var datasetArray = serieString.Split('|');
+            try
+            {
+                serie.Uuid = datasetArray[0];
+                serie.DistributionProtocol = datasetArray[6];
+                serie.GetCapabilitiesUrl = datasetArray[7];
+                serie.Title = datasetArray[1];
+                serie.TypeName = datasetArray[11];
+
+            }
+            catch (Exception e)
+            {
+
+            }
+            return serie;
         }
 
         private List<Dataset> AddSerieDatasets(List<string> serieDatasets)
@@ -524,5 +555,14 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public string Title { get; set; }
         public string DistributionProtocol { get; set; }
         public string GetCapabilitiesUrl { get; set; }
+    }
+
+    public class Serie
+    {
+        public string Uuid { get; set; }
+        public string Title { get; set; }
+        public string DistributionProtocol { get; set; }
+        public string GetCapabilitiesUrl { get; set; }
+        public string TypeName { get; set; }
     }
 }
