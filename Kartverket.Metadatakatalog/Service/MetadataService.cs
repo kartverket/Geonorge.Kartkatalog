@@ -101,6 +101,15 @@ namespace Kartverket.Metadatakatalog.Service
 
                 // Kartløsninger - hierarchyLevel="software" (evt protokoll=WWW:LINK-1.0-http--link)
                 metadata.Distributions.RelatedApplications = GetApplicationsRelatedDistributions(metadata.Uuid);
+
+                //Serie
+                if (metadataIndexDocResult != null && metadataIndexDocResult.Serie != null)
+                {
+                    List<string> serie = new List<string>();
+                    serie.Add(metadataIndexDocResult.Serie);
+                    metadata.Distributions.RelatedDatasetSerie = ConvertRelatedData(serie);
+                }
+
             }
 
             else if (metadata.IsService() || metadata.IsServiceLayer())
@@ -198,6 +207,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             metadata.Distributions.ShowSelfDistributions = metadata.Distributions.ShowSelf();
             metadata.Distributions.ShowRelatedDataset = metadata.Distributions.ShowDatasets();
+            metadata.Distributions.ShowRelatedDatasetSerie = metadata.Distributions.ShowDatasetSerie();
             metadata.Distributions.ShowRelatedSerieDatasets = metadata.Distributions.ShowSerieDatasets();
             metadata.Distributions.ShowRelatedServices = metadata.Distributions.ShowServices();
             metadata.Distributions.ShowRelatedApplications = metadata.Distributions.ShowApplications();
