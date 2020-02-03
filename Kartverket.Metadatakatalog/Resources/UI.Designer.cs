@@ -754,6 +754,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last ned datasettserie.
+        /// </summary>
+        public static string DownloadSeries {
+            get {
+                return ResourceManager.GetString("DownloadSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nedlastingstjenester.
         /// </summary>
         public static string DownloadServices {

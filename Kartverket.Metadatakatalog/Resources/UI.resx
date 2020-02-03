@@ -858,4 +858,7 @@
   <data name="SelectAll" xml:space="preserve">
     <value>Velg alle</value>
   </data>
+  <data name="DownloadSeries" xml:space="preserve">
+    <value>Last ned datasettserie</value>
+  </data>
 </root>

@@ -1593,6 +1593,11 @@
               Looks up a localized string similar to Felles valg for nedlastning, vil gjelde for alle datasett.
             </summary>
         </member>
+        <member name="P:Resources.UI.DownloadSeries">
+            <summary>
+              Looks up a localized string similar to Last ned datasettserie.
+            </summary>
+        </member>
         <member name="P:Resources.UI.DownloadServices">
             <summary>
               Looks up a localized string similar to Nedlastingstjenester.
