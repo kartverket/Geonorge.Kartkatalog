@@ -997,8 +997,8 @@ var mainVueModel = new Vue({
                 if (val !== undefined && val !== null && val !== "") {
                     var metadata = (localStorage[val + ".metadata"] !== undefined) ? JSON.parse(localStorage[val + ".metadata"]) : "";
                     var apiUrl = (metadata.distributionUrl !== undefined) ? metadata.distributionUrl : defaultUrl;
-                    var capabilities = getJsonData(apiUrl + val);
-                    if (capabilities == "error" && metadata !== "") {
+                    var capabilities = metadata.capabilities ? metadata.capabilities : getJsonData(apiUrl + val);
+                    if (capabilities === "error" && metadata !== "") {
                         this.removeOrderLine(metadata.uuid, false);
                     }
                     else if (capabilities !== "") {
@@ -1033,7 +1033,7 @@ var mainVueModel = new Vue({
                                         orderLines[key].metadata.canDownloadUrl = link.href;
                                     }
                                     if (link.rel == "http://rel.geonorge.no/download/area") {
-                                        var availableAreas = getJsonData(link.href);
+                                        var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(link.href);
                                         this.masterOrderLine.allAvailableAreas[uuid] = {};
 
                                         availableAreas.forEach(function (availableArea) {
@@ -1082,12 +1082,12 @@ var mainVueModel = new Vue({
 
                                     }
                                     if (link.rel == "http://rel.geonorge.no/download/projection") {
-                                        var defaultProjections = getJsonData(link.href)
+                                        var defaultProjections = metadata.projections && metadata.projections.length ? metadata.projections : getJsonData(link.href)
                                         orderLines[key].defaultProjections = defaultProjections;
                                         this.masterOrderLine.allDefaultProjections[uuid] = defaultProjections;
                                     }
                                     if (link.rel == "http://rel.geonorge.no/download/format") {
-                                        var defaultFormats = getJsonData(link.href);
+                                        var defaultFormats = metadata.formats && metadata.formats.length ? metadata.formats : getJsonData(link.href);
                                         orderLines[key].defaultFormats = defaultFormats;
                                         this.masterOrderLine.allDefaultFormats[uuid] = defaultFormats;
                                     }
