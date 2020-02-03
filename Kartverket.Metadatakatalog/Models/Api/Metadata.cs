@@ -311,7 +311,11 @@ namespace Kartverket.Metadatakatalog.Models.Api
                 serie.GetCapabilitiesUrl = datasetArray[7];
                 serie.Title = datasetArray[1];
                 serie.TypeName = datasetArray[11];
-
+                serie.Theme = datasetArray[8];
+                serie.Organization = datasetArray[4];
+                serie.DistributionUrl = datasetArray[7];
+                serie.AccessIsOpendata = Convert.ToBoolean(datasetArray[12]);
+                serie.AccessIsRestricted = Convert.ToBoolean(datasetArray[13]);
             }
             catch (Exception e)
             {
@@ -335,8 +339,15 @@ namespace Kartverket.Metadatakatalog.Models.Api
                             Uuid = datasetArray[0],
                             DistributionProtocol = datasetArray[6],
                             GetCapabilitiesUrl = datasetArray[7],
-                            Title = datasetArray[1]
-                        });
+                            Title = datasetArray[1],
+                            Type = "dataset",
+                            Theme = datasetArray[8],
+                            Organization = datasetArray[4],
+                            DistributionUrl = datasetArray[7],
+                            AccessIsOpendata = Convert.ToBoolean(datasetArray[14]),
+                            AccessIsRestricted = Convert.ToBoolean(datasetArray[15])
+
+                    });
                     }
                     catch (Exception e)
                     {
@@ -553,8 +564,14 @@ namespace Kartverket.Metadatakatalog.Models.Api
     {
         public string Uuid { get; set; }
         public string Title { get; set; }
+        public string Type { get; set; }
         public string DistributionProtocol { get; set; }
         public string GetCapabilitiesUrl { get; set; }
+        public string Theme { get; set; }
+        public string Organization { get; set; }
+        public string DistributionUrl { get; set; }
+        public bool? AccessIsOpendata { get; set; }
+        public bool? AccessIsRestricted { get; set; }
     }
 
     public class Serie
@@ -564,5 +581,12 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public string DistributionProtocol { get; set; }
         public string GetCapabilitiesUrl { get; set; }
         public string TypeName { get; set; }
+        public string Theme { get; set; }
+        public string Organization { get; set; }
+        public string DistributionUrl { get; set; }
+        public bool? AccessIsRestricted { get; set; }
+        public bool? AccessIsOpendata { get; set; }
+
+
     }
 }

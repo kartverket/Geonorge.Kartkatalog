@@ -560,10 +560,12 @@ namespace Kartverket.Metadatakatalog.Service
                             KeywordNationalTheme = keywordNationalTheme,
                             OrganizationLogoUrl = OrganizationLogoUrl,
                             ThumbnailUrl = thumbnailsUrl,
-                            HierarchyLevelName = simpleMd.HierarchyLevelName
+                            HierarchyLevelName = simpleMd.HierarchyLevelName,
+                            AccessIsOpendata = SimpleMetadataUtil.IsOpendata(simpleMd) ? true : false,
+                            AccessIsRestricted = SimpleMetadataUtil.IsRestricted(simpleMetadata) ? true : false
                         };
 
-                        indexDoc.Serie = serie.Uuid + "|" + serie.Title + "|" + serie.ParentIdentifier + "|" + serie.HierarchyLevel + "|" + serie.ContactOwnerOrganization + "|" + serie.DistributionDetailsName + "|" + serie.DistributionDetailsProtocol + "|" + serie.DistributionDetailsUrl + "|" + serie.KeywordNationalTheme + "|" + serie.OrganizationLogoUrl + "|" + serie.ThumbnailUrl + "|" + serie.HierarchyLevelName;
+                        indexDoc.Serie = serie.Uuid + "|" + serie.Title + "|" + serie.ParentIdentifier + "|" + serie.HierarchyLevel + "|" + serie.ContactOwnerOrganization + "|" + serie.DistributionDetailsName + "|" + serie.DistributionDetailsProtocol + "|" + serie.DistributionDetailsUrl + "|" + serie.KeywordNationalTheme + "|" + serie.OrganizationLogoUrl + "|" + serie.ThumbnailUrl + "|" + serie.HierarchyLevelName + "|" + serie.AccessIsOpendata + "|" + serie.AccessIsRestricted;
 
                     }
                     catch(Exception ex)
@@ -646,7 +648,10 @@ namespace Kartverket.Metadatakatalog.Service
                                 OrganizationLogoUrl = OrganizationLogoUrl,
                                 ThumbnailUrl = thumbnailsUrl,
                                 AccessConstraints = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.AccessConstraints) ? simpleMd.Constraints.AccessConstraints : ""),
-                                OtherConstraintsAccess = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.OtherConstraintsAccess) ? simpleMd.Constraints.OtherConstraintsAccess : "")
+                                OtherConstraintsAccess = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.OtherConstraintsAccess) ? simpleMd.Constraints.OtherConstraintsAccess : ""),
+                                AccessIsOpendata = SimpleMetadataUtil.IsOpendata(simpleMd) ? true : false,
+                                AccessIsRestricted = SimpleMetadataUtil.IsRestricted(simpleMd) ? true : false
+
                             });
                             }
                         }
@@ -654,7 +659,7 @@ namespace Kartverket.Metadatakatalog.Service
                         List<string> datasetsNewList = new List<string>();
                         foreach (var metadata in dataEntries)
                         {
-                            datasetsNewList.Add(metadata.Uuid + "|" + metadata.Title + "|" + metadata.ParentIdentifier + "|" + metadata.HierarchyLevel + "|" + metadata.ContactOwnerOrganization + "|" + metadata.DistributionDetailsName + "|" + metadata.DistributionDetailsProtocol + "|" + metadata.DistributionDetailsUrl + "|" + metadata.KeywordNationalTheme + "|" + metadata.OrganizationLogoUrl + "|" + metadata.ThumbnailUrl + "|" + metadata.AccessConstraints + "|" + metadata.OtherConstraintsAccess +"|" + metadata.HierarchyLevelName);
+                            datasetsNewList.Add(metadata.Uuid + "|" + metadata.Title + "|" + metadata.ParentIdentifier + "|" + metadata.HierarchyLevel + "|" + metadata.ContactOwnerOrganization + "|" + metadata.DistributionDetailsName + "|" + metadata.DistributionDetailsProtocol + "|" + metadata.DistributionDetailsUrl + "|" + metadata.KeywordNationalTheme + "|" + metadata.OrganizationLogoUrl + "|" + metadata.ThumbnailUrl + "|" + metadata.AccessConstraints + "|" + metadata.OtherConstraintsAccess +"|" + metadata.HierarchyLevelName + "|" + metadata.AccessIsOpendata + "|" + metadata.AccessIsRestricted);
                         }
 
                         indexDoc.SerieDatasets = datasetsNewList.ToList();
@@ -1365,5 +1370,7 @@ namespace Kartverket.Metadatakatalog.Service
         public string ServiceDistributionAccessConstraint { get; set; }
         public string ServiceWfsDistributionAccessConstraint { get; set; }
         public string HierarchyLevelName { get; set; }
-    }
+        public bool? AccessIsOpendata { get; set; }
+        public bool? AccessIsRestricted { get; set; }
+}
 }
