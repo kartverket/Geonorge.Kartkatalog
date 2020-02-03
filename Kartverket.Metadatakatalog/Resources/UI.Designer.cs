@@ -754,7 +754,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last ned datasettserie.
+        ///   Looks up a localized string similar to Last ned serie.
         /// </summary>
         public static string DownloadSeries {
             get {

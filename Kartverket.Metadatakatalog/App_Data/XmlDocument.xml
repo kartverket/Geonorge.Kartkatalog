@@ -1595,7 +1595,7 @@
         </member>
         <member name="P:Resources.UI.DownloadSeries">
             <summary>
-              Looks up a localized string similar to Last ned datasettserie.
+              Looks up a localized string similar to Last ned serie.
             </summary>
         </member>
         <member name="P:Resources.UI.DownloadServices">

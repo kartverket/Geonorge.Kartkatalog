@@ -859,6 +859,6 @@
     <value>Select all</value>
   </data>
   <data name="DownloadSeries" xml:space="preserve">
-    <value>Download dataset series</value>
+    <value>Download series</value>
   </data>
 </root>

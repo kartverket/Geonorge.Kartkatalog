@@ -859,6 +859,6 @@
     <value>Velg alle</value>
   </data>
   <data name="DownloadSeries" xml:space="preserve">
-    <value>Last ned datasettserie</value>
+    <value>Last ned serie</value>
   </data>
 </root>
