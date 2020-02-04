@@ -861,4 +861,10 @@
   <data name="DownloadSeries" xml:space="preserve">
     <value>Download series</value>
   </data>
+  <data name="Facet_type_datasetserie" xml:space="preserve">
+    <value>The dataset is included in the dataset series</value>
+  </data>
+  <data name="Facet_type_seriedatasets" xml:space="preserve">
+    <value>Datasets included in the dataset series</value>
+  </data>
 </root>

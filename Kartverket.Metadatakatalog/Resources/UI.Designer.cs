@@ -979,6 +979,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Datasettet inngår i datasettserien.
+        /// </summary>
+        public static string Facet_type_datasetserie {
+            get {
+                return ResourceManager.GetString("Facet_type_datasetserie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Datapakke.
         /// </summary>
         public static string Facet_type_dimensionGroup {
@@ -993,6 +1002,15 @@ namespace Resources {
         public static string Facet_type_GEONORGE_OFFLINE {
             get {
                 return ResourceManager.GetString("Facet_type_GEONORGE_OFFLINE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Datasett som inngår i datasettserien.
+        /// </summary>
+        public static string Facet_type_seriedatasets {
+            get {
+                return ResourceManager.GetString("Facet_type_seriedatasets", resourceCulture);
             }
         }
         

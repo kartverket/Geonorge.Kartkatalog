@@ -861,4 +861,10 @@
   <data name="DownloadSeries" xml:space="preserve">
     <value>Last ned serie</value>
   </data>
+  <data name="Facet_type_datasetserie" xml:space="preserve">
+    <value>Datasettet inngår i datasettserien</value>
+  </data>
+  <data name="Facet_type_seriedatasets" xml:space="preserve">
+    <value>Datasett som inngår i datasettserien</value>
+  </data>
 </root>
