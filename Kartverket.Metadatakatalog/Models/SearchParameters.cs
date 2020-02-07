@@ -182,6 +182,7 @@ namespace Kartverket.Metadatakatalog.Models
                         new SolrQuery("titleText:"+ text + "*^40"),
                         new SolrQuery("allText:" + text + "^1.2"),
                         new SolrQuery("allText:" + text + "*^1.1"),
+                        new SolrQuery("!serie:*series_historic"),
                         new SolrQuery("!boost b=typenumber")
                     });
                 }
@@ -196,6 +197,7 @@ namespace Kartverket.Metadatakatalog.Models
                         new SolrQuery("allText:" + text + "*^1.1"),
                         new SolrQuery("allText:\"" + text + "\"~1"),   //Fuzzy
                         new SolrQuery("allText2:" + text + ""), //Stemmer
+                        new SolrQuery("!serie:*series_historic"),
                         new SolrQuery("!boost b=typenumber"),
                         //new SolrQuery("allText3:" + text)        //Fonetisk
                     });
