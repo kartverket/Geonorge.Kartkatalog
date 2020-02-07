@@ -153,6 +153,15 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("applicationdataset")]
         public List<string> ApplicationDatasets { get; set; }
 
+        [SolrField("seriedatasets")]
+        public List<string> SerieDatasets { get; set; }
+
+        [SolrField("serie")]
+        public string Serie { get; set; }
+
+        [SolrField("typename")]
+        public string Typename { get; set; }
+
         [SolrField("accessconstraint")]
         public string AccessConstraint { get; set; }
 

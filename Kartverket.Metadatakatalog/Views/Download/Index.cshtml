@@ -63,6 +63,7 @@
                     <div class="custom-select-list-dropdown-additional-options">
                         <a v-show="supportsPolygonSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !supportsPolygonSelection}"><span class="fa fa-globe"></span> @UI.ChooseFromMap</a>
                         <a v-show="supportsGridSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'grid')" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !supportsGridSelection}"><span class="fa fa-map"></span> @UI.SelectGrid</a>
+                        <a v-show="supportsGridSelection" class="btn" v-on:click="$parent.selectAllGrids($parent)" title="Velg alle" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !supportsGridSelection}"><span class=""></span> @UI.SelectAll</a>
                     </div>
                 </div>
             </div>

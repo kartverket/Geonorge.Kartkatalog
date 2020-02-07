@@ -101,6 +101,15 @@ namespace Kartverket.Metadatakatalog.Service
 
                 // Kartløsninger - hierarchyLevel="software" (evt protokoll=WWW:LINK-1.0-http--link)
                 metadata.Distributions.RelatedApplications = GetApplicationsRelatedDistributions(metadata.Uuid);
+
+                //Serie
+                if (metadataIndexDocResult != null && metadataIndexDocResult.Serie != null)
+                {
+                    List<string> serie = new List<string>();
+                    serie.Add(metadataIndexDocResult.Serie);
+                    metadata.Distributions.RelatedDatasetSerie = ConvertRelatedData(serie);
+                }
+
             }
 
             else if (metadata.IsService() || metadata.IsServiceLayer())
@@ -188,8 +197,18 @@ namespace Kartverket.Metadatakatalog.Service
                     }
             }
 
+            //Serie
+            if (metadata.HierarchyLevel == "series")
+            {
+                var metadataIndexDocResult = _searchService.GetMetadata(metadata.Uuid);
+                if(metadataIndexDocResult != null)
+                    metadata.Distributions.RelatedSerieDatasets = ConvertRelatedData(metadataIndexDocResult.SerieDatasets);
+            }
+
             metadata.Distributions.ShowSelfDistributions = metadata.Distributions.ShowSelf();
             metadata.Distributions.ShowRelatedDataset = metadata.Distributions.ShowDatasets();
+            metadata.Distributions.ShowRelatedDatasetSerie = metadata.Distributions.ShowDatasetSerie();
+            metadata.Distributions.ShowRelatedSerieDatasets = metadata.Distributions.ShowSerieDatasets();
             metadata.Distributions.ShowRelatedServices = metadata.Distributions.ShowServices();
             metadata.Distributions.ShowRelatedApplications = metadata.Distributions.ShowApplications();
             metadata.Distributions.ShowRelatedServiceLayer = metadata.Distributions.ShowServicLayers();
@@ -363,6 +382,16 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
 
+            if (metadata.Type == "series" && metadataIndexDocResult != null)
+            {
+                metadata.SerieDatasets = GetRelatedDatasets(metadataIndexDocResult.SerieDatasets);
+            }
+
+            if (metadata.Type == "dataset" && metadataIndexDocResult != null && metadataIndexDocResult.Serie != null)
+            {
+                metadata.Serie = GetSerieForDataset(metadataIndexDocResult.Serie);
+            }
+
             metadata.AccessIsRestricted = metadata.IsRestricted();
             metadata.AccessIsOpendata = metadata.IsOpendata();
             metadata.AccessIsProtected = metadata.IsOffline();
@@ -381,6 +410,16 @@ namespace Kartverket.Metadatakatalog.Service
                 metadata.ServiceType = simpleMetadata.ServiceType;
 
             return metadata;
+        }
+
+        private Serie GetSerieForDataset(string serie)
+        {
+            return Models.Api.Metadata.AddSerie(serie);
+        }
+
+        private List<Dataset> GetRelatedDatasets(List<string> serieDatasets)
+        {
+            return Models.Api.Metadata.AddSerieDatasets(serieDatasets);
         }
 
         /// <summary>
@@ -415,6 +454,7 @@ namespace Kartverket.Metadatakatalog.Service
             distribution.Title = GetTranslation(simpleMetadata.Title, simpleMetadata.EnglishTitle);
             distribution.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType(simpleMetadata.HierarchyLevel);
             distribution.TypeTranslated = SimpleMetadataUtil.GetTypeTranslated(simpleMetadata.HierarchyLevel);
+            distribution.TypeName = simpleMetadata.HierarchyLevelName;
             distribution.DistributionFormats.Add(GetDistributionFormat(simpleMetadataDistribution));
             distribution.Organization = GetOrganizationFromContactMetadata(simpleMetadata.ContactOwner);
 
@@ -425,6 +465,25 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (!string.IsNullOrEmpty(simpleMetadata.ParentIdentifier) && (distribution.Protocol == "WMS-tjeneste" || distribution.Protocol == "WMS service"))
                 distribution.Protocol = UI.Facet_type_servicelayer;
+
+            if(simpleMetadata.HierarchyLevel == "series")
+            {
+                var metadataIndexDocResult = _searchService.GetMetadata(uuid);
+                if(metadataIndexDocResult != null && metadataIndexDocResult.SerieDatasets != null)
+                {
+                    distribution.SerieDatasets = Models.Api.Metadata.AddSerieDatasets(metadataIndexDocResult.SerieDatasets);
+                }
+            }
+
+            if (simpleMetadata.IsDataset() && !string.IsNullOrEmpty(simpleMetadata.ParentIdentifier))
+            {
+                var metadataIndexDocResult = _searchService.GetMetadata(uuid);
+                if (metadataIndexDocResult != null && metadataIndexDocResult.Serie != null)
+                {
+                    if(!string.IsNullOrEmpty(metadataIndexDocResult.Serie))
+                        distribution.Serie = Models.Api.Metadata.AddSerie(metadataIndexDocResult.Serie);
+                }
+            }
 
             //Vis kart
             if (SimpleMetadataUtil.ShowMapLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
@@ -741,6 +800,9 @@ namespace Kartverket.Metadatakatalog.Service
                 DistributionDetails = Convert(simpleMetadata.DistributionDetails, simpleMetadata?.DistributionsFormats),
                 DistributionsFormats = simpleMetadata.DistributionsFormats,
                 HierarchyLevel = simpleMetadata.HierarchyLevel,
+                Type = simpleMetadata.HierarchyLevel,
+                TypeTranslated = SimpleMetadataUtil.GetTypeTranslated(simpleMetadata.HierarchyLevel),
+                TypeName = simpleMetadata.HierarchyLevelName,
                 KeywordsPlace = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)),
                 KeywordsTheme = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_THEME, null)),
                 KeywordsInspire = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_GEMET_INSPIRE_V1)),
@@ -800,6 +862,8 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
 
+            metadata.KeywordsInspire = GetTranslationForInspire(metadata.KeywordsInspire);
+
             metadata.DistributionUrl = GetDistributionUrl(metadata.DistributionDetails);
             metadata.DistributionFormat = Convert(metadata.DistributionFormat);
 
@@ -809,8 +873,60 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.SetDistributionUrl();
             metadata.OrganizationLogoUrl = GetOrganizationLogoUrl(metadata.ContactOwner);
             metadata.DataAccess = metadata?.Constraints?.AccessConstraints;
+            metadata.QuantitativeResult = GetQuantitativeResult(metadata.QualitySpecifications);
 
             return metadata;
+        }
+
+        private QuantitativeResult GetQuantitativeResult(List<QualitySpecification> qualitySpecifications)
+        {
+            QuantitativeResult quantitativeResult = new QuantitativeResult();
+
+            foreach (var qualitySpecification in qualitySpecifications)
+            {
+                if (qualitySpecification.Title == "availability")
+                {
+                    if (CultureHelper.IsNorwegian())
+                        quantitativeResult.Availability = "Tilgjengelighet: " + qualitySpecification.QuantitativeResult + "%";
+                    else
+                        quantitativeResult.Availability = "Availability: " + qualitySpecification.QuantitativeResult + "%";
+                }
+                if (qualitySpecification.Title == "capacity")
+                {
+                    if (CultureHelper.IsNorwegian())
+                        quantitativeResult.Capacity = "Kapasitet: " + qualitySpecification.QuantitativeResult + " samtidige forespørsler";
+                    else
+                        quantitativeResult.Capacity = "Capacity: " + qualitySpecification.QuantitativeResult + " simultaneous requests";
+                }
+                if (qualitySpecification.Title == "performance")
+                {
+                    if (CultureHelper.IsNorwegian())
+                        quantitativeResult.Performance = "Responstid: " + qualitySpecification.QuantitativeResult + " sekunder";
+                    else
+                        quantitativeResult.Performance = "Performance: " + qualitySpecification.QuantitativeResult + " seconds";
+                }
+            }
+
+            if (string.IsNullOrEmpty(quantitativeResult.Availability) && string.IsNullOrEmpty(quantitativeResult.Capacity)
+                && string.IsNullOrEmpty(quantitativeResult.Performance))
+                return null;
+
+            return quantitativeResult;
+        }
+
+        private List<Keyword> GetTranslationForInspire(List<Keyword> keywordsInspire)
+        {
+            if (keywordsInspire == null)
+                return null;
+
+            for(int k=0;k< keywordsInspire.Count;k++)
+            {
+                var inspire = Register.GetInspire(keywordsInspire[k].KeywordValue);
+                if (inspire != null)
+                    keywordsInspire[k].KeywordValue = inspire; 
+            }
+
+            return keywordsInspire;
         }
 
         private string GetSpatialScope(List<SimpleKeyword> keywords)
@@ -976,7 +1092,9 @@ namespace Kartverket.Metadatakatalog.Service
                         DateType = spec.DateType,
                         Explanation = GetTranslation(spec.Explanation, spec.EnglishExplanation),
                         Result = spec.Result ?? null,
-                        SpecificationLink = spec?.Responsible == "other" ? spesificationOther?.URL : null
+                        SpecificationLink = spec?.Responsible == "other" ? spesificationOther?.URL : null,
+                        QuantitativeResult = spec.QuantitativeResult
+                        
                     }
                     );
                 }

@@ -64,6 +64,9 @@ namespace Kartverket.Metadatakatalog.Models
         //     Note: Only supporting one hierarchyLevel element. Array is overwritten with
         //     an array of one element when value is updated.
         public string HierarchyLevel { get; set; }
+        public string Type { get; set; }
+        public string TypeTranslated { get; set; }
+        public string TypeName { get; set; }
         public List<Keyword> Keywords { get; set; }
 
         public List<Keyword> KeywordsPlace { get; set; }
@@ -90,6 +93,10 @@ namespace Kartverket.Metadatakatalog.Models
         public List<string> OperatesOn { get; set; }
         public List<MetadataViewModel> Related { get; set; }
         public string ProcessHistory { get; set; }
+        public string Availability { get; set; }
+        public string Capacity { get; set; }
+        public string Performance { get; set; }
+
         public string ProductPageUrl { get; set; }
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
@@ -145,6 +152,9 @@ namespace Kartverket.Metadatakatalog.Models
 
         public string ServiceType { get; set; }
         public List<DatasetService> DatasetServicesWithShowMapLink { get; set; }
+        public List<Dataset> SerieDatasets { get; set; }
+        public Serie Serie { get; set; }
+        public QuantitativeResult QuantitativeResult { get; set; }
 
 
         public MetadataViewModel()
@@ -599,10 +609,19 @@ namespace Kartverket.Metadatakatalog.Models
 
     }
 
+    public class QuantitativeResult
+    {
+       public string Availability { get; set; }
+       public string Capacity { get; set; }
+       public string Performance { get; set; }
+    }
+
     public class Distributions
     {
         public List<Distribution> SelfDistribution { get; set; }
         public List<Distribution> RelatedDataset { get; set; }
+        public List<Distribution> RelatedSerieDatasets { get; set; }
+        public List<Distribution> RelatedDatasetSerie { get; set; }
         public List<Distribution> RelatedApplications { get; set; }
         public List<Distribution> RelatedServices { get; set; }
         public List<Distribution> RelatedServiceLayer { get; set; }
@@ -610,6 +629,8 @@ namespace Kartverket.Metadatakatalog.Models
         public List<Distribution> RelatedDownloadServices { get; set; }
 
         public bool ShowRelatedDataset { get; set; }
+        public bool ShowRelatedSerieDatasets { get; set; }
+        public bool ShowRelatedDatasetSerie { get; set; }
         public bool ShowRelatedApplications { get; set; }
         public bool ShowRelatedServices { get; set; }
         public bool ShowRelatedServiceLayer { get; set; }
@@ -636,6 +657,8 @@ namespace Kartverket.Metadatakatalog.Models
             RelatedServiceLayer = new List<Distribution>();
             RelatedViewServices = new List<Distribution>();
             RelatedDownloadServices = new List<Distribution>();
+            RelatedSerieDatasets = new List<Distribution>();
+            RelatedDatasetSerie = new List<Distribution>();
 
             ShowRelatedDataset = false;
             ShowRelatedApplications = false;
@@ -669,6 +692,15 @@ namespace Kartverket.Metadatakatalog.Models
         public bool ShowDatasets()
         {
             return RelatedDataset.Any();
+        }
+
+        public bool ShowSerieDatasets()
+        {
+            return RelatedSerieDatasets.Any();
+        }
+        public bool ShowDatasetSerie()
+        {
+            return RelatedDatasetSerie.Any();
         }
 
         public bool ShowServicLayers()
@@ -816,6 +848,7 @@ namespace Kartverket.Metadatakatalog.Models
         public bool? Result { get; set; }
         public string Title { get; set; }
         public string SpecificationLink { get; set; }
+        public string QuantitativeResult { get; set; }
     }
 
     public class ReferenceSystem

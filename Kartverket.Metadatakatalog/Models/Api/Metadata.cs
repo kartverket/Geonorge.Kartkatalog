@@ -35,6 +35,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public string TypeTranslated { get; set; }
         /// <summary>
+        /// The grouping name of dataset series
+        /// </summary>
+        public string TypeName { get; set; }
+        /// <summary>
         /// The theme
         /// </summary>
         public string Theme { get; set; }
@@ -115,6 +119,14 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public List<string> ServiceLayers { get; set; }
         /// <summary>
+        /// Datasets in series
+        /// </summary>
+        public List<Dataset> SerieDatasets { get; set; }
+        /// <summary>
+        /// Serie for datasett
+        /// </summary>
+        public Serie Serie { get; set; }
+        /// <summary>
         /// AccessConstraint
         /// </summary>
         public string AccessConstraint { get; set; }
@@ -168,6 +180,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             Title = item.Title;
             Abstract = item.Abstract;
             Type = item.Type;
+            TypeName = item.TypeName;
             TypeTranslated = TranslateType();
             Theme = item.Theme;
             Organization = item.Organization;
@@ -245,6 +258,12 @@ namespace Kartverket.Metadatakatalog.Models.Api
                         }
                     }
                 }
+
+                if(item.Serie != null)
+                {
+                    Serie = AddSerie(item.Serie);
+                }
+
             }
 
             if (Type == "service" || Type == "servicelayer")
@@ -264,6 +283,12 @@ namespace Kartverket.Metadatakatalog.Models.Api
                     }
                 }
             }
+             
+            if(Type == "series" && item.SerieDatasets != null && item.SerieDatasets.Count > 0)
+            {
+                SerieDatasets = AddSerieDatasets(item.SerieDatasets);
+            }
+
             else
             {
                 DownloadUrl = item.DistributionUrl;
@@ -272,6 +297,66 @@ namespace Kartverket.Metadatakatalog.Models.Api
             }
 
             MapUrl = GetMapUrl();
+        }
+
+        public static Serie AddSerie(string serieString)
+        {
+            var serie = new Serie();
+           
+            var datasetArray = serieString.Split('|');
+            try
+            {
+                serie.Uuid = datasetArray[0];
+                serie.DistributionProtocol = datasetArray[6];
+                serie.GetCapabilitiesUrl = datasetArray[7];
+                serie.Title = datasetArray[1];
+                serie.TypeName = datasetArray[11];
+                serie.Theme = datasetArray[8];
+                serie.Organization = datasetArray[4];
+                serie.DistributionUrl = datasetArray[7];
+                serie.AccessIsOpendata = Convert.ToBoolean(datasetArray[12]);
+                serie.AccessIsRestricted = Convert.ToBoolean(datasetArray[13]);
+            }
+            catch (Exception e)
+            {
+
+            }
+            return serie;
+        }
+
+        public static List<Dataset> AddSerieDatasets(List<string> serieDatasets)
+        {
+            var datasets = new List<Dataset>();
+            if (serieDatasets != null)
+            {
+                foreach (var datasetString in serieDatasets)
+                {
+                    var datasetArray = datasetString.Split('|');
+                    try
+                    {
+                        datasets.Add(new Dataset
+                        {
+                            Uuid = datasetArray[0],
+                            DistributionProtocol = datasetArray[6],
+                            GetCapabilitiesUrl = datasetArray[7],
+                            Title = datasetArray[1],
+                            Type = "dataset",
+                            Theme = datasetArray[8],
+                            Organization = datasetArray[4],
+                            DistributionUrl = datasetArray[7],
+                            AccessIsOpendata = Convert.ToBoolean(datasetArray[14]),
+                            AccessIsRestricted = Convert.ToBoolean(datasetArray[15])
+
+                    });
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+            }
+
+            return datasets;
         }
 
         private List<DatasetService> AddDatasetServicesWithShowMapLink(List<string> datasetServicesString)
@@ -473,5 +558,35 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public string Title { get; set; }
         public string DistributionProtocol { get; set; }
         public string GetCapabilitiesUrl { get; set; }
+    }
+
+    public class Dataset
+    {
+        public string Uuid { get; set; }
+        public string Title { get; set; }
+        public string Type { get; set; }
+        public string DistributionProtocol { get; set; }
+        public string GetCapabilitiesUrl { get; set; }
+        public string Theme { get; set; }
+        public string Organization { get; set; }
+        public string DistributionUrl { get; set; }
+        public bool? AccessIsOpendata { get; set; }
+        public bool? AccessIsRestricted { get; set; }
+    }
+
+    public class Serie
+    {
+        public string Uuid { get; set; }
+        public string Title { get; set; }
+        public string DistributionProtocol { get; set; }
+        public string GetCapabilitiesUrl { get; set; }
+        public string TypeName { get; set; }
+        public string Theme { get; set; }
+        public string Organization { get; set; }
+        public string DistributionUrl { get; set; }
+        public bool? AccessIsRestricted { get; set; }
+        public bool? AccessIsOpendata { get; set; }
+
+
     }
 }

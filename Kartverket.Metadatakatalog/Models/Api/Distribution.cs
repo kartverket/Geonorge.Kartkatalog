@@ -10,6 +10,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public string Title { get; set; }
         public string Type { get; set; }
         public string TypeTranslated { get; set; }
+        public string TypeName { get; set; }
         public string Organization { get; set; }
         public string ShowDetailsUrl { get; set; }
         public bool RemoveDetailsUrl { get; set; }
@@ -31,6 +32,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public string DistributionName { get; set; }
         public string DistributionUrl { get; set; }
         public List<DatasetService> DatasetServicesWithShowMapLink { get; set; }
+        public List<Dataset> SerieDatasets { get; set; }
+        public Serie Serie { get; set; }
 
         public Distribution()
         {
