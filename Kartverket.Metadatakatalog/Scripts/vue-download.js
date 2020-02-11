@@ -135,6 +135,8 @@ var Areas = {
                     this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type].forEach(function (availableArea, index) {
                         if (availableArea.code == area.code) {
                             this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type][index].isSelected = false;
+                            this.$root.masterOrderLine.allAvailableAreas[orderLineUuid][area.type][index].isSelectedInMap = false;
+                            this.$root.removeGridFromMap(orderLineUuid, this.$parent.capabilities, area);
                             this.$root.removePreSelectedAreaFromLocalStorage(orderLineUuid, area);
                         }
                     }.bind(this));
@@ -2125,6 +2127,21 @@ var mainVueModel = new Vue({
                 localStorage.setItem('preSelectedAreas', JSON.stringify(preSelectedAreas));
             }
         },
+
+        removeGridFromMap: function (uuid, capabilities, area) {
+
+            var iframeElement = document.getElementById(uuid + "-iframe");
+
+            iframeMessage = {
+                "cmd": "selectFeature",
+                "layer": capabilities.mapSelectionLayer,
+                "feature": { "n": area.code }
+            };
+
+            if (iframeElement !== null && iframeElement.contentWindow !== null)
+                iframeElement.contentWindow.postMessage(JSON.stringify(iframeMessage), '*');
+        },
+
         autoselectWithOrderLineValuesFromLocalStorage: function () {
             var selectedOrderLineValues = this.getSelectedOrderLineValuesFromLocalStorage();
             var preSelectedOrderLineValues = this.getPreSelectedOrderLineValuesFromLocalStorage();
