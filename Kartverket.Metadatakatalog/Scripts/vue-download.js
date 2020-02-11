@@ -459,6 +459,26 @@ var OrderLine = {
             return true;
         },
 
+        setSelectedGrids: function (orderItem)
+        {
+            var iframeElement = document.getElementById(orderItem.metadata.uuid + "-iframe");
+
+            for (areaType in this.$root.masterOrderLine.allSelectedAreas[this.$root.activeMapUuid]) {
+
+                var selectedArea = this.$root.masterOrderLine.allSelectedAreas[this.$root.activeMapUuid][areaType];
+
+                iframeMessage = {
+                    "cmd": "selectFeature",
+                    "layer": orderItem.capabilities.mapSelectionLayer,
+                    "feature": { "n": selectedArea.code }
+                };
+
+                if (selectedArea.isSelectedInMap === undefined || !selectedArea.isSelectedInMap)
+                    iframeElement.contentWindow.postMessage(JSON.stringify(iframeMessage), '*');
+
+            }   
+        },
+
         loadGridMap: function () {
             var orderItem = this;
             orderItem.mapIsLoaded = true;
@@ -470,6 +490,7 @@ var OrderLine = {
                 "zoom_level": "3"
             }
 
+            setTimeout(this.setSelectedGrids, 1000, orderItem);
             window.addEventListener('message', function (e) {
                 if (e !== undefined && e.data !== undefined && typeof (e.data) == "string") {
                     var iframeElement = document.getElementById(orderItem.metadata.uuid + "-iframe");
@@ -503,6 +524,7 @@ var OrderLine = {
                                     this.$root.masterOrderLine.allAvailableAreas[this.$root.activeMapUuid][areaType].forEach(function (availableArea) {
                                         if (availableArea.code == areaname) {
                                             availableArea.isSelected = true;
+                                            availableArea.isSelectedInMap = true;
                                         }
                                     })
                                 }
@@ -512,6 +534,7 @@ var OrderLine = {
                                     this.$root.masterOrderLine.allAvailableAreas[this.$root.activeMapUuid][areaType].forEach(function (availableArea) {
                                         if (availableArea.code == areaname) {
                                             availableArea.isSelected = false;
+                                            availableArea.isSelectedInMap = false;
                                         }
                                     })
                                 }
