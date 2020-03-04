@@ -1,4 +1,4 @@
-﻿using Kartverket.Metadatakatalog.Models.Article;
+using Kartverket.Metadatakatalog.Models.Article;
 using Kartverket.Metadatakatalog.Models.SearchIndex;
 using System;
 using System.Collections.Generic;
@@ -52,7 +52,8 @@ namespace Kartverket.Metadatakatalog.Service.Article
                 indexDoc.Heading = document.Heading;
                 if(document.MainIntro != null)
                     indexDoc.MainIntro = document.MainIntro.ToString();
-                indexDoc.MainBody = document.MainBody.Substring(0, document.MainBody.Length > 30000 ? 30000 : document.MainBody.Length);
+                if(document.MainBody != null)
+                    indexDoc.MainBody = document.MainBody.Substring(0, document.MainBody.Length > 30000 ? 30000 : document.MainBody.Length);
                 indexDoc.StartPublish = document.StartPublish;
                 if(document.LinkUrl.StartsWith("/"))
                     indexDoc.LinkUrl = WebConfigurationManager.AppSettings["GeonorgeUrl"] + document.LinkUrl.TrimStart('/');
