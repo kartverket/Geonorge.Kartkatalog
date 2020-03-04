@@ -46,7 +46,7 @@ namespace Kartverket.Metadatakatalog.Models.Article
         public SortOrder[] OrderBy()
         {
             var order = new[] { new SortOrder("score", Order.DESC) };
-            if (orderby == "StartPublish")
+            if (string.IsNullOrEmpty(Text) || orderby == "StartPublish")
             {
                 order = new[] { new SortOrder("StartPublish", Order.DESC) };
             }
