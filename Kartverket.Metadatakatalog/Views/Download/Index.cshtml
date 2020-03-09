@@ -40,7 +40,7 @@
                     <span v-show="!master && !area.hasSelectedFormats" data-toggle="tooltip" data-placement="bottom" title="Støttet format er ikke valgt" class="format-warning-icon"></span>
                     <span v-on:click="removeSelectedArea(area)" class="fa fa-times"></span>
                 </span>
-                <input type="text" class="custom-select-list-input" />
+                <input type="text" autocomplete="no" class="custom-select-list-input" />
             </div>
             <div class="custom-select-list-dropdown-container">
                 <div class="custom-select-list-dropdown">
@@ -97,7 +97,7 @@
                 {{ projection.name }}
                 <span v-on:click="removeSelectedProjection(projection)" class="fa fa-times"></span>
             </span>
-            <input type="text" class="custom-select-list-input" />
+            <input type="text" autocomplete="no" class="custom-select-list-input" />
         </div>
         <div class="custom-select-list-dropdown-container">
             <div class="custom-select-list-dropdown">
@@ -120,7 +120,7 @@
                 {{ format.name }}
                 <span v-on:click="removeSelectedFormat(format)" class="fa fa-times"></span>
             </span>
-            <input type="text" class="custom-select-list-input" />
+            <input type="text" autocomplete="off" class="custom-select-list-input" />
         </div>
         <div class="custom-select-list-dropdown-container">
             <div class="custom-select-list-dropdown">
@@ -343,7 +343,7 @@
                                         {{ getPurposeName(purpose) }}
                                         <span v-on:click="removeSelectedPurpose(index)" class="fa fa-times"></span>
                                     </span>
-                                    <input type="text" class="custom-select-list-input" />
+                                    <input type="text" autocomplete="no" class="custom-select-list-input" />
                                 </div>
                                 <div class="custom-select-list-dropdown-container">
                                     <div class="custom-select-list-dropdown">
