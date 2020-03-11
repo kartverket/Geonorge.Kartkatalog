@@ -301,7 +301,7 @@ namespace Kartverket.Metadatakatalog.Service
                     indexDoc.DistributionName = distributionDetails.Name;
                     if (!string.IsNullOrEmpty(indexDoc.DistributionName) && indexDoc.Type == "service") indexDoc.Type = "servicelayer";
 
-                    if(indexDoc.Type == "dataset")
+                    if(indexDoc.Type == "dataset" || indexDoc.Type == "series")
                     {
                         foreach(var distribution in simpleMetadata.DistributionsFormats)
                         {
@@ -426,7 +426,7 @@ namespace Kartverket.Metadatakatalog.Service
                 if (indexDoc.Type == "software")
                     indexDoc.typenumber = 80;
 
-                if (indexDoc.Type == "dataset")
+                if (indexDoc.Type == "dataset" || indexDoc.Type == "series")
                 {
                     AddRelatedDatasets(geoNorge, indexDoc);
                 }
