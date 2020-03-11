@@ -350,7 +350,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (searchResult != null && searchResult.NumFound > 0)
             {
-                if (metadata.IsDataset())
+                if (metadata.IsDataset() || metadata.IsDatasetSeries())
                 {
                     metadata.ServiceDistributionProtocolForDataset = searchResult.Items[0].ServiceDistributionProtocolForDataset;
                     metadata.ServiceDistributionUrlForDataset = searchResult.Items[0].ServiceDistributionUrlForDataset;

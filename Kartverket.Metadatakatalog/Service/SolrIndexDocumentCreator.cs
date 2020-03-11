@@ -1298,7 +1298,7 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.DistributionProtocols = distributionProtocols;
             }
 
-            if (indexDoc.Type == "dataset")
+            if (indexDoc.Type == "dataset" || indexDoc.Type == "series")
             {
                 indexDoc.ServiceDistributionProtocolForDataset = simpleMetadata.ServiceDistributionProtocolForDataset;
                 indexDoc.ServiceDistributionUrlForDataset = simpleMetadata.ServiceDistributionUrlForDataset;

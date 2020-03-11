@@ -228,7 +228,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             Date = item.Date;
             DatasetName = item.DatasetName;
 
-            if (Type == "dataset")
+            if (Type == "dataset" || Type == "series")
             {
                 if (!string.IsNullOrWhiteSpace(item.ServiceDistributionProtocolForDataset))
                 {
