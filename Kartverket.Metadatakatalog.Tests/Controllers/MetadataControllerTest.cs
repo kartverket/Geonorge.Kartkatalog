@@ -14,6 +14,7 @@ namespace Kartverket.Metadatakatalog.Tests.Controllers
         private const string Uuid = "123456-123456";
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldReturn404WhenMetadataNotFound()
         {
             var serviceMock = new Mock<IMetadataService>();
@@ -24,6 +25,7 @@ namespace Kartverket.Metadatakatalog.Tests.Controllers
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldReturnMetadataForUuid()
         {
             var serviceMock = new Mock<IMetadataService>();
@@ -51,6 +53,7 @@ namespace Kartverket.Metadatakatalog.Tests.Controllers
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldReturnRedirectUserToSeoUrl()
         {
             var serviceMock = new Mock<IMetadataService>();

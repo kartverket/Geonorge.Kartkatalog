@@ -12,6 +12,7 @@ namespace Kartverket.Metadatakatalog.Tests.Controllers
     public class ThemesControllerTest
     {
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldReturnAListOfThemes()
         {
             var themeList = new List<Theme> {new Theme()};

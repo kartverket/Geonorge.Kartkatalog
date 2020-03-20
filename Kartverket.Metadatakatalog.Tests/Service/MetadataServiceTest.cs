@@ -15,6 +15,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         private const string Uuid = "123456";
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ReturnNullWhenMetadataIsNotFound()
         {
             var geoNorgeMock = new Mock<IGeoNorge>();
@@ -32,6 +33,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldReturnMetadataFromGeoNorge()
         {
             var dummyMetadata = SimpleMetadata.CreateDataset().GetMetadata();

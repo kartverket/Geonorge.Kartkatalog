@@ -7,6 +7,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
     public class SeoUrlTest
     {
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldLowerCase()
         {
             var seoUrl = new SeoUrl("SkogOgLandskap", "Ar50");
@@ -15,6 +16,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldRemoveApostroph()
         {
             var seoUrl = new SeoUrl("skog'", "a'r");
@@ -23,6 +25,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldReplaceNorwegianCharacters()
         {
             var seoUrl = new SeoUrl("SkØgÅLÆndskap", "årøæ5");
@@ -31,6 +34,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldReplaceSpecialCharacters()
         {
             var seoUrl = new SeoUrl("skog$og@landska%p", "a~r 5");
@@ -39,6 +43,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldRemoveDuplicateHyphens()
         {
             var seoUrl = new SeoUrl("skog og -landskap", "ar - 5");
@@ -47,6 +52,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldRemoveLeadingAndTrailingHyphens()
         {
             var seoUrl = new SeoUrl("-skog og landskap-", "-ar5-");
@@ -55,6 +61,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldReturnTrueWhenBothOrganizationAndTitleMatches()
         {
             var seoUrl = new SeoUrl("Skog og landskap", "WMS AR-5");
@@ -62,6 +69,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldReturnFalseWhenOrganizationDoesNotMatch()
         {
             var seoUrl = new SeoUrl("Skog og landskap", "AR-5");
@@ -69,6 +77,7 @@ namespace Kartverket.Metadatakatalog.Tests.Models
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldReturnFalseWhenTitleDoesNotMatch()
         {
             var seoUrl = new SeoUrl("Skog og landskap", "AR-5");
