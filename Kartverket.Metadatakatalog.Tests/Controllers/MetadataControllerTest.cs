@@ -41,6 +41,16 @@ namespace Kartverket.Metadatakatalog.Tests.Controllers
         }
 
         [Fact]
+        [Trait("Category", "Integration")]
+        public void ShouldReturnLiveMetadataForDTM50()
+        {
+            GeoNorgeAPI.GeoNorge geoNorge = new GeoNorgeAPI.GeoNorge();
+            string uuid = "e25d0104-0858-4d06-bba8-d154514c11d2"; //DTM 50
+            var metadata = geoNorge.GetRecordByUuid(uuid);
+            metadata.fileIdentifier.CharacterString.Should().Be(uuid);
+        }
+
+        [Fact]
         public void ShouldReturnRedirectUserToSeoUrl()
         {
             var serviceMock = new Mock<IMetadataService>();
