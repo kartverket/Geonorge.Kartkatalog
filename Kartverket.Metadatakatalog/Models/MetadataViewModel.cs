@@ -198,7 +198,7 @@ namespace Kartverket.Metadatakatalog.Models
         {
             StringBuilder url = new StringBuilder();
 
-            if (IsDataset())
+            if (IsDataset() || IsDatasetSeries())
             {
                 if(string.IsNullOrWhiteSpace(ServiceDistributionProtocolForDataset) && string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
                 {
