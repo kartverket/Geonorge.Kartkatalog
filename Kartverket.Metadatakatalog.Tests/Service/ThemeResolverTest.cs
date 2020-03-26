@@ -343,78 +343,91 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         //}
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordKulturminnerToKulturminner()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveToAnnenWhenNoKeywordOrTopicCategoryWithMappingExists()
         {
             ResolveTheme(SimpleMetadata.CreateDataset()).Should().Be(ThemeResolver.DokAnnen);
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordBasisGeodataRegardslessOfCase()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Basis geodata")).Should().Be(ThemeResolver.DokBasisGeodata);
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordSamferdsel()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Samferdsel")).Should().Be(ThemeResolver.DokSamferdsel);
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordSamfunnssikkerhet()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Samfunnssikkerhet")).Should().Be(ThemeResolver.DokSamfunnssikkerhet);
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordForurensning()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Forurensning")).Should().Be(ThemeResolver.DokForurensning);
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordFriluftsliv()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Friluftsliv")).Should().Be(ThemeResolver.DokFriluftsliv);
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordLandskap()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Landskap")).Should().Be(ThemeResolver.DokLandskap);
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordNatur()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Natur")).Should().Be(ThemeResolver.DokNatur);
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordKulturminner()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Kulturminner")).Should().Be(ThemeResolver.DokKulturminner);
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordLandbruk()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Landbruk")).Should().Be(ThemeResolver.DokLandbruk);
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordEnergi()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Energi")).Should().Be(ThemeResolver.DokEnergi);
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordGeologi()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Geologi")).Should().Be(ThemeResolver.DokGeologi);
@@ -429,6 +442,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         //}
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldResolveKeywordPlan()
         {
             ResolveTheme(CreateMetadataWithDokKeyword("Plan")).Should().Be(ThemeResolver.DokPlan);

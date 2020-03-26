@@ -27,6 +27,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         //}
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldSearchAndIndexTwoMetadataEntriesFromGeonorge()
         {
             var geoNorgeMock = new Mock<IGeoNorge>();
@@ -64,6 +65,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldCrawlAndIndexAllMetadataFromGeonorge()
         {
             var geoNorgeMock = new Mock<IGeoNorge>();
@@ -112,6 +114,7 @@ namespace Kartverket.Metadatakatalog.Tests.Service
         }
 
         [Fact]
+        [Trait("Category", "Unit")]
         public void ShouldIndexSingleMetadata()
         {
             const string uuid = "12345-123545-1231245-1231232";
