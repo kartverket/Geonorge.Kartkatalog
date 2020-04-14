@@ -162,6 +162,7 @@ namespace Kartverket.Metadatakatalog.Models
             var text = Text;
             if (!string.IsNullOrEmpty(text))
             {
+                text = text.Trim();
                 text = text.Replace(":", " ");
                 text = text.Replace("!", " ");
                 text = text.Replace("{", " ");
