@@ -181,9 +181,12 @@ namespace Kartverket.Metadatakatalog.Models
                     string textOr = "";
                     for(int w= 0 ;w<words.Count(); w++)
                     {
-                        textOr = textOr + "titleText:" + words[w] + "^50";
-                        if (w != words.Count() - 1)
-                            textOr = textOr + " OR ";
+                        if (!string.IsNullOrEmpty(words[w]))
+                        { 
+                            textOr = textOr + "titleText:" + words[w] + "^50";
+                            if (w != words.Count() - 1)
+                                textOr = textOr + " OR ";
+                        }
                     }
 
                     queryString = textOr;
