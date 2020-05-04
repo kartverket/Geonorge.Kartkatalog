@@ -132,7 +132,7 @@ namespace Kartverket.Metadatakatalog.Formatter
                     Escape(meta.Theme) + ";" +
                     Escape(meta.Organization) + ";" +
                     Escape(meta.DataAccess) + ";" +
-                    Escape(meta.IsDokData.HasValue ? "Det offentlige kartgrunnlaget" : "") + ";" +
+                    Escape(meta.IsDokData.HasValue && meta.IsDokData.Value == true ? "Det offentlige kartgrunnlaget" : "") + ";" +
                     Escape(meta.Uuid) + ";" +
                     Escape(meta.ServiceDistributionUrlForDataset) + ";" +
                     Escape(meta.ServiceWfsDistributionUrlForDataset) + ";" +
