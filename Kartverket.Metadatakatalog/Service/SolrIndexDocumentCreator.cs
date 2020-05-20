@@ -931,10 +931,10 @@ namespace Kartverket.Metadatakatalog.Service
                                         uuidFound = uuid;
                                         break;
                                     }
-                                    else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS" && !string.IsNullOrEmpty(uriName))
-                                    {
-                                        uuidFound = uuid;
-                                    }
+                                    //else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS" && !string.IsNullOrEmpty(uriName))
+                                    //{
+                                    //    uuidFound = uuid;
+                                    //}
 
                                 }
 
@@ -1121,10 +1121,10 @@ namespace Kartverket.Metadatakatalog.Service
                         uuidFound = uuid;
                         break;
                     }
-                    else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS" && !string.IsNullOrEmpty(uriName))
-                    {
-                        uuidFound = uuid;
-                    }
+                    //else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS" && !string.IsNullOrEmpty(uriName))
+                    //{
+                    //    uuidFound = uuid;
+                    //}
 
                 }
 
