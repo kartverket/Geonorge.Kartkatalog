@@ -447,6 +447,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         }
         private string GetMapUrl()
         {
+            ShowMapLink = false; 
             if (ShowMaplink())
             {
                 ShowMapLink = true;
@@ -461,13 +462,13 @@ namespace Kartverket.Metadatakatalog.Models.Api
         }
         public bool ShowMaplink()
         {
-            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") || DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl) || DatasetServicesWithShowMapLink.Any()) return true;
+            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") /*|| DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")*/) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl) || DatasetServicesWithShowMapLink.Any()) return true;
             else return false;
         }
 
         public bool ShowMaplink(string protocol)
         {
-            if (!string.IsNullOrWhiteSpace(protocol) && (protocol.Contains("OGC:WMS") || protocol.Contains("OGC:WFS") || protocol.Contains("OGC:WCS")))
+            if (!string.IsNullOrWhiteSpace(protocol) && (protocol.Contains("OGC:WMS") /*|| protocol.Contains("OGC:WFS") || protocol.Contains("OGC:WCS")*/))
             {
                 return true;
             };
