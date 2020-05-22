@@ -369,7 +369,9 @@ namespace Kartverket.Metadatakatalog.Models.Api
                     var serviceArray = serviceString.Split('|');
                     try
                     {
-                        if (ShowMaplink(serviceArray[6]) && IsServiceOrServiceLayer(serviceArray[3]) && serviceArray[6] != null)
+                        if (ShowMaplink(serviceArray[6]) && IsServiceOrServiceLayer(serviceArray[3]) 
+                            && serviceArray[6] != null && serviceArray[6] == "OGC:WMS"
+                            && serviceArray[5] != null && serviceArray[5] =="")
                         {
                             datasetServices.Add(new DatasetService
                             {
