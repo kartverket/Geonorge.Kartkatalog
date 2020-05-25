@@ -369,15 +369,18 @@ namespace Kartverket.Metadatakatalog.Service
                 if(metadata.Distributions.RelatedViewServices != null)
                 { 
                     foreach (var simpleDistributionFormat in metadata.Distributions.RelatedViewServices) { 
+                        if((simpleDistributionFormat?.Protocol == "OGC:WMS" || simpleDistributionFormat?.Protocol == "WMS-tjeneste")
+                            && string.IsNullOrEmpty(simpleDistributionFormat?.DistributionName)) { 
                         metadata.DatasetServicesWithShowMapLink.Add(
                         new DatasetService
                         {
-                            Uuid = metadata?.Distributions?.RelatedViewServices?[0]?.Uuid,
-                            Title = metadata?.Distributions?.RelatedViewServices?[0]?.Title,
-                            DistributionProtocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol,
-                            GetCapabilitiesUrl = metadata?.Distributions?.RelatedViewServices?[0]?.GetCapabilitiesUrl
+                            Uuid = simpleDistributionFormat?.Uuid,
+                            Title = simpleDistributionFormat?.Title,
+                            DistributionProtocol = simpleDistributionFormat?.Protocol,
+                            GetCapabilitiesUrl = simpleDistributionFormat?.GetCapabilitiesUrl
                         }
                         );
+                        }
                     }
                 }
             }
@@ -484,7 +487,7 @@ namespace Kartverket.Metadatakatalog.Service
                         distribution.Serie = Models.Api.Metadata.AddSerie(metadataIndexDocResult.Serie);
                 }
             }
-
+            distribution.DistributionName = simpleMetadata.DistributionDetails?.Name;
             //Vis kart
             if (SimpleMetadataUtil.ShowMapLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
             {

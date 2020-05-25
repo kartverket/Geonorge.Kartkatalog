@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Threading;
 using Kartverket.Metadatakatalog.Models.Translations;
 using System.Diagnostics;
+using System.Web.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -24,6 +25,7 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly PlaceResolver _placeResolver;
         private readonly GeoNetworkUtil _geoNetworkUtil;
         private static readonly HttpClient _httpClient = new HttpClient();
+        public static readonly bool MapOnlyWms = System.Convert.ToBoolean(WebConfigurationManager.AppSettings["MapOnlyWms"]);
 
         public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil)
         {
@@ -919,6 +921,7 @@ namespace Kartverket.Metadatakatalog.Service
                                             var uriAttributes = (SimpleUriLiteral)record.Items[i];
                                             if (uriAttributes != null)
                                             {
+                                                uriProtocol = ""; uriName = "";
                                                 if (!string.IsNullOrEmpty(uriAttributes.protocol))
                                                     uriProtocol = uriAttributes.protocol;
                                                 if (!string.IsNullOrEmpty(uriAttributes.name))
@@ -931,7 +934,7 @@ namespace Kartverket.Metadatakatalog.Service
                                         uuidFound = uuid;
                                         break;
                                     }
-                                    else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS" && !string.IsNullOrEmpty(uriName))
+                                    else if (!MapOnlyWms && !string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS" && !string.IsNullOrEmpty(uriName))
                                     {
                                         uuidFound = uuid;
                                     }
@@ -1109,6 +1112,7 @@ namespace Kartverket.Metadatakatalog.Service
                             var uriAttributes = (SimpleUriLiteral)record.Items[i];
                             if (uriAttributes != null)
                             {
+                                uriProtocol = ""; uriName = "";
                                 if (!string.IsNullOrEmpty(uriAttributes.protocol))
                                     uriProtocol = uriAttributes.protocol;
                                 if (!string.IsNullOrEmpty(uriAttributes.name))
@@ -1121,7 +1125,7 @@ namespace Kartverket.Metadatakatalog.Service
                         uuidFound = uuid;
                         break;
                     }
-                    else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS" && !string.IsNullOrEmpty(uriName))
+                    else if (!MapOnlyWms && !string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS" && !string.IsNullOrEmpty(uriName))
                     {
                         uuidFound = uuid;
                     }
