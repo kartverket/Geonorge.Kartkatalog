@@ -441,7 +441,7 @@ namespace Kartverket.Metadatakatalog.Models
                     }
 
                     if (!string.IsNullOrEmpty(CoverageCellUrl))
-                        CoverageLink = CoverageLink + "&geosjon=" + System.Net.WebUtility.UrlEncode(CoverageCellUrl);
+                        CoverageLink = CoverageLink + "&geojson=" + System.Net.WebUtility.UrlEncode(CoverageCellUrl);
 
 
                     return CoverageLink;
