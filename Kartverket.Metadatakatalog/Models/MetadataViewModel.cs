@@ -102,6 +102,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string ProductSpecificationUrl { get; set; }
         public string CoverageUrl { get; set; }
         public string CoverageGridUrl { get; set; }
+        public string CoverageCellUrl { get; set; }
         public string DownloadUrl { get; set; }
         public string Purpose { get; set; }
         public List<QualitySpecification> QualitySpecifications { get; set; }
@@ -438,6 +439,10 @@ namespace Kartverket.Metadatakatalog.Models
                     {
                         CoverageLink = $"{commonPart}&lat=355422&long=6668909&geojson={RemoveQueryString(pathStr)}&addLayer={layerStr}";
                     }
+
+                    if (!string.IsNullOrEmpty(CoverageCellUrl))
+                        CoverageLink = CoverageLink + "&geosjon=" + System.Net.WebUtility.UrlEncode(CoverageCellUrl);
+
 
                     return CoverageLink;
                 }

@@ -399,6 +399,7 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.AccessIsOpendata = metadata.IsOpendata();
             metadata.AccessIsProtected = metadata.IsOffline();
 
+            metadata.CoverageCellUrl = simpleMetadata.CoverageCellUrl;
             metadata.CanShowMapUrl = metadata.ShowMapLink();
             metadata.CanShowServiceMapUrl = metadata.ShowServiceMapLink();
             metadata.CanShowDownloadService = metadata.ShowDownloadService();
