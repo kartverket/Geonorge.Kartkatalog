@@ -347,7 +347,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsRestricted()
         {
-            if (Constraints != null &&  !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && Constraints.OtherConstraintsAccess.ToLower() == "norway digital restricted")
+            if (Constraints != null &&  !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && (Constraints.OtherConstraintsAccess.ToLower() == "norway digital restricted" || Constraints.OtherConstraintsAccess == "http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"))
             return true;
             else
                 return false;
