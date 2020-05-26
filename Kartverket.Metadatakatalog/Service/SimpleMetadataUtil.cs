@@ -62,13 +62,13 @@ namespace Kartverket.Metadatakatalog.Service
         }
         public static bool IsRestricted(SimpleMetadata simpleMetadata)
         {
-            return simpleMetadata.Constraints != null && IsRestricted(simpleMetadata.Constraints.OtherConstraintsAccess);
+            return simpleMetadata.Constraints != null && IsRestricted(!string.IsNullOrEmpty(simpleMetadata.Constraints.AccessConstraintsLink) ? simpleMetadata.Constraints.AccessConstraintsLink : simpleMetadata.Constraints.OtherConstraintsAccess);
         }
-        public static bool IsRestricted(string otherConstraintsAccess)
+        public static bool IsRestricted(string accessConstraint)
         {
-            if (string.IsNullOrEmpty(otherConstraintsAccess)) return false;
-            return otherConstraintsAccess.ToLower() == "norway digital restricted" ||
-                   otherConstraintsAccess.ToLower() == "Beskyttet" || otherConstraintsAccess.ToLower() == "restricted";
+            if (string.IsNullOrEmpty(accessConstraint)) return false;
+            return accessConstraint.ToLower() == "norway digital restricted" ||
+                   accessConstraint.ToLower() == "Beskyttet" || accessConstraint.ToLower() == "restricted" || accessConstraint == "http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d";
         }
         public static bool IsProtected(SimpleMetadata simpleMetadata)
         {
