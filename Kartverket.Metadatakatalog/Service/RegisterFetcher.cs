@@ -248,18 +248,18 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 if (value == "restricted")
                     value = "Skjermede data";
-                if (OtherConstraintsAccess == "no restrictions")
+                if (value == "no restrictions" || OtherConstraintsAccess == "no restrictions")
                     value = "Åpne data";
-                else if (OtherConstraintsAccess == "norway digital restricted")
+                else if (value == "norway digital restricted" || OtherConstraintsAccess == "norway digital restricted")
                     value = "Norge digitalt-begrenset";
             }
             else
             {
                 if (value == "restricted")
                     value = "Restricted data";
-                if (OtherConstraintsAccess == "no restrictions")
+                if (value == "no restrictions" || OtherConstraintsAccess == "no restrictions")
                     value = "Open data";
-                else if (OtherConstraintsAccess == "norway digital restricted")
+                else if (value == "norway digital restricted" || OtherConstraintsAccess == "norway digital restricted")
                     value = "Norway digitalt restricted";
             }
 
