@@ -1195,7 +1195,7 @@ namespace Kartverket.Metadatakatalog.Service
                     OtherConstraintsLinkText = simpleConstraints.OtherConstraintsLinkText,
                     SecurityConstraints = Register.GetClassification(simpleConstraints.SecurityConstraints),
                     SecurityConstraintsNote = simpleConstraints.SecurityConstraintsNote,
-                    UseConstraints = Register.GetRestriction(simpleConstraints.UseConstraints),
+                    UseConstraints = Register.GetRestriction(!string.IsNullOrEmpty(simpleConstraints.UseConstraintsLicenseLink) ? "license" : simpleConstraints.UseConstraints),
                     UseLimitations = GetTranslation(simpleConstraints.UseLimitations, simpleConstraints.EnglishUseLimitations),
                     OtherConstraintsAccess = simpleConstraints.OtherConstraintsAccess
                 };
