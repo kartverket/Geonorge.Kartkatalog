@@ -144,6 +144,10 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 if (AccessConstraint == "restricted")
                     dataaccess = "Restricted data";
+                else if (AccessConstraint == "norway digital restricted")
+                    dataaccess = "Norway digital restricted";
+                else if (AccessConstraint == "no restrictions")
+                    dataaccess = "Open data";
                 else if (AccessConstraint == "otherRestrictions")
                     if (OtherConstraintsAccess == "norway digital restricted")
                         dataaccess = "Norway digital restricted";
@@ -154,6 +158,10 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 if (AccessConstraint == "restricted")
                     dataaccess = "Skjermede data";
+                else if (AccessConstraint == "norway digital restricted")
+                    dataaccess = "Norge digitalt-begrenset";
+                else if (AccessConstraint == "no restrictions")
+                    dataaccess = "Åpne data";
                 else if (AccessConstraint == "otherRestrictions")
                     if (OtherConstraintsAccess == "norway digital restricted")
                         dataaccess = "Norge digitalt-begrenset";
