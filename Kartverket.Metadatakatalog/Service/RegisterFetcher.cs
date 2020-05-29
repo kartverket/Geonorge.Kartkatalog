@@ -348,9 +348,7 @@ namespace Kartverket.Metadatakatalog.Service
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
                 _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
 
-                var responseResult = _httpClient.GetAsync(url).Result;
-                HttpContent content = responseResult.Content;
-                var data = content.ReadAsStringAsync().Result;
+                var data = _httpClient.GetAsync(url).Result.Content.ReadAsStringAsync().Result;
 
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
                 var codeList = response["containeditems"];
