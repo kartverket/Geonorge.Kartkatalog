@@ -68,7 +68,7 @@ namespace Kartverket.Metadatakatalog.Service
         {
             if (string.IsNullOrEmpty(accessConstraint)) return false;
             return accessConstraint.ToLower() == "norway digital restricted" ||
-                   accessConstraint.ToLower() == "Beskyttet" || accessConstraint.ToLower() == "restricted" || accessConstraint == "http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d";
+                   accessConstraint.ToLower() == "Beskyttet" || accessConstraint.ToLower() == "restricted" || accessConstraint == "https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d";
         }
         public static bool IsProtected(SimpleMetadata simpleMetadata)
         {
