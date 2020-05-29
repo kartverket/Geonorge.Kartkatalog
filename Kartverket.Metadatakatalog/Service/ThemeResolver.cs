@@ -9,6 +9,8 @@ namespace Kartverket.Metadatakatalog.Service
 {
     public class ThemeResolver
     {
+        public RegisterFetcher Register = new RegisterFetcher();
+
         public const string DokBasisGeodata = "Basis geodata";
         public const string DokSamferdsel = "Samferdsel";
         public const string DokNatur = "Natur";
@@ -143,30 +145,30 @@ namespace Kartverket.Metadatakatalog.Service
             if (culture == Culture.EnglishCode)
             {
                 if (AccessConstraint == "restricted")
-                    dataaccess = "Restricted data";
+                    dataaccess = Register.ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1b"]; 
                 else if (AccessConstraint == "norway digital restricted")
-                    dataaccess = "Norway digital restricted";
+                    dataaccess = Register.ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"]; 
                 else if (AccessConstraint == "no restrictions")
-                    dataaccess = "Open data";
+                    dataaccess = Register.ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
                 else if (AccessConstraint == "otherRestrictions")
                     if (OtherConstraintsAccess == "norway digital restricted")
-                        dataaccess = "Norway digital restricted";
+                        dataaccess = Register.ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"]; 
                     else if (OtherConstraintsAccess == "no restrictions")
-                        dataaccess = "Open data";
+                        dataaccess = Register.ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
             }
             else
             {
                 if (AccessConstraint == "restricted")
-                    dataaccess = "Skjermede data";
+                    dataaccess = Register.ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1b"];
                 else if (AccessConstraint == "norway digital restricted")
-                    dataaccess = "Norge digitalt-begrenset";
+                    dataaccess = Register.ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"];
                 else if (AccessConstraint == "no restrictions")
-                    dataaccess = "Åpne data";
+                    dataaccess = Register.ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
                 else if (AccessConstraint == "otherRestrictions")
                     if (OtherConstraintsAccess == "norway digital restricted")
-                        dataaccess = "Norge digitalt-begrenset";
+                        dataaccess = Register.ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"];
                     else if (OtherConstraintsAccess == "no restrictions")
-                        dataaccess = "Åpne data";
+                        dataaccess = Register.ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
             }
             return dataaccess;
         }
