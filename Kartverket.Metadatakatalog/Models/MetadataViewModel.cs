@@ -102,6 +102,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string ProductSpecificationUrl { get; set; }
         public string CoverageUrl { get; set; }
         public string CoverageGridUrl { get; set; }
+        public string CoverageCellUrl { get; set; }
         public string DownloadUrl { get; set; }
         public string Purpose { get; set; }
         public List<QualitySpecification> QualitySpecifications { get; set; }
@@ -346,7 +347,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsRestricted()
         {
-            if (Constraints != null &&  !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && Constraints.OtherConstraintsAccess.ToLower() == "norway digital restricted")
+            if (Constraints != null &&  !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && (Constraints.OtherConstraintsAccess.ToLower() == "norway digital restricted" || Constraints.OtherConstraintsAccess == "https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"))
             return true;
             else
                 return false;
@@ -438,6 +439,10 @@ namespace Kartverket.Metadatakatalog.Models
                     {
                         CoverageLink = $"{commonPart}&lat=355422&long=6668909&geojson={RemoveQueryString(pathStr)}&addLayer={layerStr}";
                     }
+
+                    if (!string.IsNullOrEmpty(CoverageCellUrl))
+                        CoverageLink = CoverageLink + "&geojson=" + System.Net.WebUtility.UrlEncode(CoverageCellUrl);
+
 
                     return CoverageLink;
                 }

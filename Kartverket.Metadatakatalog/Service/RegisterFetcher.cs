@@ -27,6 +27,8 @@ namespace Kartverket.Metadatakatalog.Service
         Dictionary<string, string> ListOfClassificationValuesEnglish = new Dictionary<string, string>();
         Dictionary<string, string> ListOfRestrictionValues = new Dictionary<string, string>();
         Dictionary<string, string> ListOfRestrictionValuesEnglish = new Dictionary<string, string>();
+        public Dictionary<string, string> ListOfRestrictionInspireValues = new Dictionary<string, string>();
+        public Dictionary<string, string> ListOfRestrictionInspireValuesEnglish = new Dictionary<string, string>();
         Dictionary<string, string> ListOfCoordinatesystemNameValues = new Dictionary<string, string>();
         Dictionary<string, string> ListOfCoordinatesystemNameValuesEnglish = new Dictionary<string, string>();
         Dictionary<string, string> ListOfDistributionTypes = new Dictionary<string, string>();
@@ -57,6 +59,8 @@ namespace Kartverket.Metadatakatalog.Service
             ListOfClassificationValuesEnglish = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB145", Culture.EnglishCode);
             ListOfRestrictionValues = GetCodeList("D23E9F2F-66AB-427D-8AE4-5B6FD3556B57");
             ListOfRestrictionValuesEnglish = GetCodeList("D23E9F2F-66AB-427D-8AE4-5B6FD3556B57", Culture.EnglishCode);
+            ListOfRestrictionInspireValues = GetCodeListByName("inspire-tilgangsrestriksjoner");
+            ListOfRestrictionInspireValuesEnglish = GetCodeListByName("inspire-tilgangsrestriksjoner", Culture.EnglishCode);
             ListOfCoordinatesystemNameValues = GetEPSGCodeList("37B9DC41-D868-4CBC-84F9-39557041FB2C");
             ListOfCoordinatesystemNameValuesEnglish = GetEPSGCodeList("37B9DC41-D868-4CBC-84F9-39557041FB2C", Culture.EnglishCode);
             ListOfDistributionTypes = GetCodeList("94B5A165-7176-4F43-B6EC-1063F7ADE9EA");
@@ -109,7 +113,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 var url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner";
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
-                _httpClient.DefaultRequestHeaders.Add("Accept-Language", Culture.NorwegianCode);
+                _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", Culture.NorwegianCode);
 
                 var responseResult = _httpClient.GetAsync(url).Result;
                 HttpContent content = responseResult.Content;
@@ -247,20 +251,20 @@ namespace Kartverket.Metadatakatalog.Service
             if (culture == Culture.NorwegianCode)
             {
                 if (value == "restricted")
-                    value = "Skjermede data";
-                if (OtherConstraintsAccess == "no restrictions")
-                    value = "Åpne data";
-                else if (OtherConstraintsAccess == "norway digital restricted")
-                    value = "Norge digitalt-begrenset";
+                    value = ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1b"]; // "Skjermede data"
+                if (value == "no restrictions" || OtherConstraintsAccess == "no restrictions")
+                    value = ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];  //"Åpne data"
+                else if (value == "norway digital restricted" || OtherConstraintsAccess == "norway digital restricted")
+                    value = ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"]; //"Norge digitalt-begrenset"
             }
             else
             {
                 if (value == "restricted")
-                    value = "Restricted data";
-                if (OtherConstraintsAccess == "no restrictions")
-                    value = "Open data";
-                else if (OtherConstraintsAccess == "norway digital restricted")
-                    value = "Norway digitalt restricted";
+                    value = ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1b"]; // "Restricted data";
+                if (value == "no restrictions" || OtherConstraintsAccess == "no restrictions")
+                    value = ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"]; // "Open data"
+                else if (value == "norway digital restricted" || OtherConstraintsAccess == "norway digital restricted")
+                    value = ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"];  //"Norway digitalt restricted"
             }
 
             return value;
@@ -295,7 +299,7 @@ namespace Kartverket.Metadatakatalog.Service
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
 
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
-                _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+                _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
                 var responseResult = _httpClient.GetAsync(url).Result;
                 HttpContent content = responseResult.Content;
@@ -342,11 +346,9 @@ namespace Kartverket.Metadatakatalog.Service
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/metadata-kodelister/" + name;
 
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
-                _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+                _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
-                var responseResult = _httpClient.GetAsync(url).Result;
-                HttpContent content = responseResult.Content;
-                var data = content.ReadAsStringAsync().Result;
+                var data = _httpClient.GetAsync(url).Result.Content.ReadAsStringAsync().Result;
 
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
                 var codeList = response["containeditems"];
@@ -390,7 +392,7 @@ namespace Kartverket.Metadatakatalog.Service
                 var url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/subregister/" + registername;
 
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
-                _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+                _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
                 var responseResult = _httpClient.GetAsync(url).Result;
                 HttpContent content = responseResult.Content;
@@ -436,7 +438,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
-                _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+                _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
                 var responseResult = _httpClient.GetAsync(url).Result;
                 HttpContent content = responseResult.Content;
