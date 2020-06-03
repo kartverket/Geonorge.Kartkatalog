@@ -20,6 +20,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public bool CanShowDownloadService { get; set; }
         public string MapUrl { get; set; }
         public string ServiceUrl { get; set; }
+        public string ServiceUuid { get; set; }
         public string DownloadUrl { get; set; }
         public bool AccessIsOpendata { get; set; }
         public bool AccessIsRestricted { get; set; }

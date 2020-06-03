@@ -159,7 +159,7 @@ namespace Kartverket.Metadatakatalog.Service
                         });
 
                     var protocol = metadata?.DistributionDetails?.ProtocolName;
-                    if (!string.IsNullOrEmpty(protocol) && protocol == "OGC:WMS")
+                    if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
                         metadata.Distributions.RelatedDataset[d].CanShowMapUrl = true;
                 }
             }
@@ -188,7 +188,7 @@ namespace Kartverket.Metadatakatalog.Service
                                     }
                                     );
                                 var protocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol;
-                                if (!string.IsNullOrEmpty(protocol) && protocol == "OGC:WMS")
+                                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
                                     distribution.Value.CanShowMapUrl = true;
                             }
                         }
@@ -494,6 +494,8 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 distribution.MapUrl = SimpleMetadataUtil.MapUrl(simpleMetadataDistribution, simpleMetadata.HierarchyLevel);
                 distribution.CanShowMapUrl = true;
+                if (distribution.CanShowMapUrl)
+                    distribution.ServiceUuid = uuid;
             }
             //Last ned
             if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
