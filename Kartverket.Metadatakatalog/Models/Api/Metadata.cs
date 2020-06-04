@@ -282,6 +282,9 @@ namespace Kartverket.Metadatakatalog.Models.Api
                         }
                     }
                 }
+
+                if (string.IsNullOrEmpty(ServiceUuid) && string.IsNullOrWhiteSpace(item.DistributionName))
+                    ServiceUuid = Uuid;
             }
              
             if(Type == "series" && item.SerieDatasets != null && item.SerieDatasets.Count > 0)
