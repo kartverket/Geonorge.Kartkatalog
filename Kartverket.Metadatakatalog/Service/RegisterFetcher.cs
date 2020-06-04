@@ -122,17 +122,19 @@ namespace Kartverket.Metadatakatalog.Service
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
 
                 var orgs = response["containeditems"];
-
-                foreach (var org in orgs)
-                {
-                    var name = org["label"].ToString();
-                    var shortName = name;
-                    if (org["ShortName"] != null)
-                        shortName = org["ShortName"].ToString();
-
-                    if (!Organizations.ContainsKey(name))
+                lock (Organizations)
+                { 
+                    foreach (var org in orgs)
                     {
-                        Organizations.Add(name, shortName);
+                        var name = org["label"].ToString();
+                        var shortName = name;
+                        if (org["ShortName"] != null)
+                            shortName = org["ShortName"].ToString();
+
+                        if (!Organizations.ContainsKey(name))
+                        {
+                            Organizations.Add(name, shortName);
+                        }
                     }
                 }
 
@@ -307,16 +309,18 @@ namespace Kartverket.Metadatakatalog.Service
 
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
                 var codeList = response["containeditems"];
-
-                foreach (var code in codeList)
-                {
-                    var codevalue = code["codevalue"].ToString();
-                    if (string.IsNullOrWhiteSpace(codevalue))
-                        codevalue = code["label"].ToString();
-
-                    if (!CodeValues.ContainsKey(codevalue))
+                lock (CodeValues)
+                { 
+                    foreach (var code in codeList)
                     {
-                        CodeValues.Add(codevalue, code["label"].ToString());
+                        var codevalue = code["codevalue"].ToString();
+                        if (string.IsNullOrWhiteSpace(codevalue))
+                            codevalue = code["label"].ToString();
+
+                        if (!CodeValues.ContainsKey(codevalue))
+                        {
+                            CodeValues.Add(codevalue, code["label"].ToString());
+                        }
                     }
                 }
 
@@ -352,16 +356,18 @@ namespace Kartverket.Metadatakatalog.Service
 
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
                 var codeList = response["containeditems"];
-
-                foreach (var code in codeList)
+                lock (CodeValues)
                 {
-                    var codevalue = code["codevalue"].ToString();
-                    if (string.IsNullOrWhiteSpace(codevalue))
-                        codevalue = code["label"].ToString();
-
-                    if (!CodeValues.ContainsKey(codevalue))
+                    foreach (var code in codeList)
                     {
-                        CodeValues.Add(codevalue, code["label"].ToString());
+                        var codevalue = code["codevalue"].ToString();
+                        if (string.IsNullOrWhiteSpace(codevalue))
+                            codevalue = code["label"].ToString();
+
+                        if (!CodeValues.ContainsKey(codevalue))
+                        {
+                            CodeValues.Add(codevalue, code["label"].ToString());
+                        }
                     }
                 }
 
@@ -401,16 +407,18 @@ namespace Kartverket.Metadatakatalog.Service
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
 
                 var items = response["containeditems"];
-
-                foreach (var item in items)
+                lock (RegisterItems)
                 {
-                    var id = item["id"].ToString();
-                    var owner = item["owner"].ToString();
-                    string organization = item["owner"].ToString();
-
-                    if (!RegisterItems.ContainsKey(id))
+                    foreach (var item in items)
                     {
-                        RegisterItems.Add(id, item["label"].ToString());
+                        var id = item["id"].ToString();
+                        var owner = item["owner"].ToString();
+                        string organization = item["owner"].ToString();
+
+                        if (!RegisterItems.ContainsKey(id))
+                        {
+                            RegisterItems.Add(id, item["label"].ToString());
+                        }
                     }
                 }
 
@@ -446,16 +454,18 @@ namespace Kartverket.Metadatakatalog.Service
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
 
                 var codeList = response["containeditems"];
-
-                foreach (var code in codeList)
-                {
-                    var codevalue = code["documentreference"].ToString();
-                    if (string.IsNullOrWhiteSpace(codevalue))
-                        codevalue = code["label"].ToString();
-
-                    if (!CodeValues.ContainsKey(codevalue))
+                lock (CodeValues)
+                { 
+                    foreach (var code in codeList)
                     {
-                        CodeValues.Add(codevalue, code["label"].ToString());
+                        var codevalue = code["documentreference"].ToString();
+                        if (string.IsNullOrWhiteSpace(codevalue))
+                            codevalue = code["label"].ToString();
+
+                        if (!CodeValues.ContainsKey(codevalue))
+                        {
+                            CodeValues.Add(codevalue, code["label"].ToString());
+                        }
                     }
                 }
 
