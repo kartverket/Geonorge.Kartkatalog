@@ -1,6 +1,7 @@
 ﻿using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -15,34 +16,34 @@ namespace Kartverket.Metadatakatalog.Service
         MemoryCacher memCacher = new MemoryCacher();
         private static readonly HttpClient _httpClient = new HttpClient();
 
-        Dictionary<string, string> TopicCategories = new Dictionary<string, string>();
-        Dictionary<string, string> TopicCategoriesEnglish = new Dictionary<string, string>();
-        Dictionary<string, string> SpatialRepresentations = new Dictionary<string, string>();
-        Dictionary<string, string> SpatialRepresentationsEnglish = new Dictionary<string, string>();
-        Dictionary<string, string> MaintenanceFrequencyValues = new Dictionary<string, string>();
-        Dictionary<string, string> MaintenanceFrequencyValuesEnglish = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfStatusValues = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfStatusValuesEnglish = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfClassificationValues = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfClassificationValuesEnglish = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfRestrictionValues = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfRestrictionValuesEnglish = new Dictionary<string, string>();
-        public Dictionary<string, string> ListOfRestrictionInspireValues = new Dictionary<string, string>();
-        public Dictionary<string, string> ListOfRestrictionInspireValuesEnglish = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfCoordinatesystemNameValues = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfCoordinatesystemNameValuesEnglish = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfDistributionTypes = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfDistributionTypesEnglish = new Dictionary<string, string>();
-        public Dictionary<string, string> OrganizationShortNames = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfOrderingInstructions = new Dictionary<string, string>();
-        Dictionary<string, string> ListOfOrderingInstructionsEnglish = new Dictionary<string, string>();
+        IDictionary<string, string> TopicCategories = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> TopicCategoriesEnglish = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> SpatialRepresentations = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> SpatialRepresentationsEnglish = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> MaintenanceFrequencyValues = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> MaintenanceFrequencyValuesEnglish = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> ListOfStatusValues = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> ListOfStatusValuesEnglish = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> ListOfClassificationValues = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> ListOfClassificationValuesEnglish = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> ListOfRestrictionValues = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> ListOfRestrictionValuesEnglish = new ConcurrentDictionary<string, string>();
+        public IDictionary<string, string> ListOfRestrictionInspireValues = new ConcurrentDictionary<string, string>();
+        public IDictionary<string, string> ListOfRestrictionInspireValuesEnglish = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> ListOfCoordinatesystemNameValues = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> ListOfCoordinatesystemNameValuesEnglish = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> ListOfDistributionTypes = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> ListOfDistributionTypesEnglish = new ConcurrentDictionary<string, string>();
+        public IDictionary<string, string> OrganizationShortNames = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> ListOfOrderingInstructions = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> ListOfOrderingInstructionsEnglish = new ConcurrentDictionary<string, string>();
 
-        Dictionary<string, string> DownloadUseGroups = new Dictionary<string, string>();
-        Dictionary<string, string> DownloadUseGroupsEnglish = new Dictionary<string, string>();
-        Dictionary<string, string> DownloadPurposes = new Dictionary<string, string>();
-        Dictionary<string, string> DownloadPurposesEnglish = new Dictionary<string, string>();
+        IDictionary<string, string> DownloadUseGroups = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> DownloadUseGroupsEnglish = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> DownloadPurposes = new ConcurrentDictionary<string, string>();
+        IDictionary<string, string> DownloadPurposesEnglish = new ConcurrentDictionary<string, string>();
 
-        Dictionary<string, string> ListOfInspire = new Dictionary<string, string>();
+        IDictionary<string, string> ListOfInspire = new ConcurrentDictionary<string, string>();
         
 
         public RegisterFetcher()
@@ -78,7 +79,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         }
 
-        public Dictionary<string, string> GetDownloadUseGroups()
+        public IDictionary<string, string> GetDownloadUseGroups()
         {
             var culture = CultureHelper.GetCurrentCulture();
             if (culture == Culture.NorwegianCode)
@@ -87,7 +88,7 @@ namespace Kartverket.Metadatakatalog.Service
                 return DownloadUseGroupsEnglish;
         }
 
-        public Dictionary<string, string> GetDownloadPurposes()
+        public IDictionary<string, string> GetDownloadPurposes()
         {
             var culture = CultureHelper.GetCurrentCulture();
             if (culture == Culture.NorwegianCode)
@@ -96,20 +97,20 @@ namespace Kartverket.Metadatakatalog.Service
                 return DownloadPurposesEnglish;
         }
 
-        public Dictionary<string, string> GetListOfOrganizations()
+        public IDictionary<string, string> GetListOfOrganizations()
         {
             MemoryCacher memCacher = new MemoryCacher();
 
             var cache = memCacher.GetValue("organizations");
 
-            Dictionary<string, string> Organizations = new Dictionary<string, string>();
+            IDictionary<string, string> Organizations = new ConcurrentDictionary<string, string>();
 
             if (cache != null)
             {
-                Organizations = cache as Dictionary<string, string>;
+                Organizations = cache as IDictionary<string, string>;
             }
 
-            if (Organizations.Count < 1)
+            if (Organizations == null && Organizations.Count < 1)
             {
                 var url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner";
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
@@ -284,16 +285,16 @@ namespace Kartverket.Metadatakatalog.Service
             return value;
         }
 
-        public Dictionary<string, string> GetCodeList(string systemid, string culture = Culture.NorwegianCode)
+        public IDictionary<string, string> GetCodeList(string systemid, string culture = Culture.NorwegianCode)
         {
             var cacheId = systemid + "_" + culture;
             var cache = memCacher.GetValue(cacheId);
 
-            Dictionary<string, string> CodeValues = new Dictionary<string, string>();
+            IDictionary<string, string> CodeValues = new ConcurrentDictionary<string, string>();
 
             if (cache != null)
             {
-                CodeValues = cache as Dictionary<string, string>;
+                CodeValues = cache as IDictionary<string, string>;
             }
             else
             {
@@ -333,16 +334,16 @@ namespace Kartverket.Metadatakatalog.Service
             return CodeValues;
         }
 
-        public Dictionary<string, string> GetCodeListByName(string name, string culture = Culture.NorwegianCode)
+        public IDictionary<string, string> GetCodeListByName(string name, string culture = Culture.NorwegianCode)
         {
             var cacheId = name + "_" + culture;
             var cache = memCacher.GetValue(cacheId);
 
-            Dictionary<string, string> CodeValues = new Dictionary<string, string>();
+            IDictionary<string, string> CodeValues = new ConcurrentDictionary<string, string>();
 
             if (cache != null)
             {
-                CodeValues = cache as Dictionary<string, string>;
+                CodeValues = cache as IDictionary<string, string>;
             }
             else
             {
@@ -380,20 +381,20 @@ namespace Kartverket.Metadatakatalog.Service
             return CodeValues;
         }
 
-        public Dictionary<string, string> GetSubRegister(string registername, string culture = Culture.NorwegianCode)
+        public IDictionary<string, string> GetSubRegister(string registername, string culture = Culture.NorwegianCode)
         {
             MemoryCacher memCacher = new MemoryCacher();
 
             var cache = memCacher.GetValue("subregisteritem-" + registername);
 
-            Dictionary<string, string> RegisterItems = new Dictionary<string, string>();
+            IDictionary<string, string> RegisterItems = new ConcurrentDictionary<string, string>();
 
             if (cache != null)
             {
-                RegisterItems = cache as Dictionary<string, string>;
+                RegisterItems = cache as IDictionary<string, string>;
             }
 
-            if (RegisterItems.Count < 1)
+            if (RegisterItems ==  null && RegisterItems.Count < 1)
             {
                 var url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/subregister/" + registername;
 
@@ -429,17 +430,17 @@ namespace Kartverket.Metadatakatalog.Service
             return RegisterItems;
         }
 
-        public Dictionary<string, string> GetEPSGCodeList(string systemid, string culture = Culture.NorwegianCode)
+        public IDictionary<string, string> GetEPSGCodeList(string systemid, string culture = Culture.NorwegianCode)
         {
             var cacheId = systemid + "_" + culture;
 
             var cache = memCacher.GetValue(cacheId);
 
-            Dictionary<string, string> CodeValues = new Dictionary<string, string>();
+            IDictionary<string, string> CodeValues = new ConcurrentDictionary<string, string>();
 
             if (cache != null)
             {
-                CodeValues = cache as Dictionary<string, string>;
+                CodeValues = cache as IDictionary<string, string>;
             }
             else
             {
