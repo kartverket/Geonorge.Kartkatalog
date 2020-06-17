@@ -339,7 +339,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsOpendata()
         {
-            if (Constraints != null && !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && Constraints.OtherConstraintsAccess.ToLower() == "no restrictions")
+            if (Constraints != null && !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && (Constraints.OtherConstraintsAccess.ToLower() == "no restrictions") || Constraints.OtherConstraintsAccess=="https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations")
                 return true;
             else
                 return false;

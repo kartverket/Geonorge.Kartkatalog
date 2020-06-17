@@ -58,7 +58,7 @@ namespace Kartverket.Metadatakatalog.Service
         }
         public static bool IsOpendata(string otherConstraintsAccess)
         {
-            return !string.IsNullOrEmpty(otherConstraintsAccess) && otherConstraintsAccess.ToLower() == "no restrictions";
+            return !string.IsNullOrEmpty(otherConstraintsAccess) && (otherConstraintsAccess.ToLower() == "no restrictions" || otherConstraintsAccess == "https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations");
         }
         public static bool IsRestricted(SimpleMetadata simpleMetadata)
         {
