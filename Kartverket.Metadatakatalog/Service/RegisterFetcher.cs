@@ -301,10 +301,10 @@ namespace Kartverket.Metadatakatalog.Service
                 object lockObj = new object();
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
 
-                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
-                _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
+                var message = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+                message.Headers.Add("Accept-Language", culture);
 
-                var responseResult = _httpClient.GetAsync(url).Result;
+                var responseResult = _httpClient.SendAsync(message).Result;
                 HttpContent content = responseResult.Content;
                 var data = content.ReadAsStringAsync().Result;
 
