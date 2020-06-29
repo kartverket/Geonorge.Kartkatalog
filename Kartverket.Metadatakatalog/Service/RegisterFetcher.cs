@@ -298,7 +298,7 @@ namespace Kartverket.Metadatakatalog.Service
             }
             else
             {
-                
+                object lockObj = new object();
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
 
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
@@ -310,17 +310,21 @@ namespace Kartverket.Metadatakatalog.Service
 
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
                 var codeList = response["containeditems"];
-                lock (CodeValues)
-                { 
-                    foreach (var code in codeList)
-                    {
-                        var codevalue = code["codevalue"].ToString();
-                        if (string.IsNullOrWhiteSpace(codevalue))
-                            codevalue = code["label"].ToString();
 
-                        if (!CodeValues.ContainsKey(codevalue))
+                foreach (var code in codeList)
+                {
+                    var codevalue = code["codevalue"].ToString();
+                    if (string.IsNullOrWhiteSpace(codevalue))
+                        codevalue = code["label"].ToString();
+
+                    if (!CodeValues.ContainsKey(codevalue))
+                    {
+                        lock (lockObj)
                         {
-                            CodeValues.Add(codevalue, code["label"].ToString());
+                            if (!CodeValues.ContainsKey(codevalue))
+                            {
+                                CodeValues.Add(codevalue, code["label"].ToString());
+                            }
                         }
                     }
                 }
