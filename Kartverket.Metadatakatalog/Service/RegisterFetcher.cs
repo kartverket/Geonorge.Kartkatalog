@@ -113,7 +113,7 @@ namespace Kartverket.Metadatakatalog.Service
             if (Organizations == null && Organizations.Count < 1)
             {
                 var url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner";
-                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", Culture.NorwegianCode);
 
                 var responseResult = _httpClient.GetAsync(url).Result;
@@ -354,7 +354,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/metadata-kodelister/" + name;
 
-                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
                 var data = _httpClient.GetAsync(url).Result.Content.ReadAsStringAsync().Result;
@@ -402,7 +402,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 var url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/subregister/" + registername;
 
-                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
                 var responseResult = _httpClient.GetAsync(url).Result;
@@ -450,7 +450,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
-                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
                 var responseResult = _httpClient.GetAsync(url).Result;
