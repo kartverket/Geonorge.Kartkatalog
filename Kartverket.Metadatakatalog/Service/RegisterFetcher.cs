@@ -113,7 +113,7 @@ namespace Kartverket.Metadatakatalog.Service
             if (Organizations == null && Organizations.Count < 1)
             {
                 var url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner";
-                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", Culture.NorwegianCode);
 
                 var responseResult = _httpClient.GetAsync(url).Result;
@@ -298,29 +298,33 @@ namespace Kartverket.Metadatakatalog.Service
             }
             else
             {
-                
+                object lockObj = new object();
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
 
-                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
-                _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
+                var message = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+                message.Headers.Add("Accept-Language", culture);
 
-                var responseResult = _httpClient.GetAsync(url).Result;
+                var responseResult = _httpClient.SendAsync(message).Result;
                 HttpContent content = responseResult.Content;
                 var data = content.ReadAsStringAsync().Result;
 
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
                 var codeList = response["containeditems"];
-                lock (CodeValues)
-                { 
-                    foreach (var code in codeList)
-                    {
-                        var codevalue = code["codevalue"].ToString();
-                        if (string.IsNullOrWhiteSpace(codevalue))
-                            codevalue = code["label"].ToString();
 
-                        if (!CodeValues.ContainsKey(codevalue))
+                foreach (var code in codeList)
+                {
+                    var codevalue = code["codevalue"].ToString();
+                    if (string.IsNullOrWhiteSpace(codevalue))
+                        codevalue = code["label"].ToString();
+
+                    if (!CodeValues.ContainsKey(codevalue))
+                    {
+                        lock (lockObj)
                         {
-                            CodeValues.Add(codevalue, code["label"].ToString());
+                            if (!CodeValues.ContainsKey(codevalue))
+                            {
+                                CodeValues.Add(codevalue, code["label"].ToString());
+                            }
                         }
                     }
                 }
@@ -350,7 +354,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/metadata-kodelister/" + name;
 
-                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
                 var data = _httpClient.GetAsync(url).Result.Content.ReadAsStringAsync().Result;
@@ -398,7 +402,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 var url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/subregister/" + registername;
 
-                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
                 var responseResult = _httpClient.GetAsync(url).Result;
@@ -446,7 +450,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
 
                 string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
-                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+                _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
                 var responseResult = _httpClient.GetAsync(url).Result;

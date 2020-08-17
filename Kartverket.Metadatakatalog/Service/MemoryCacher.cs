@@ -8,6 +8,8 @@ namespace Kartverket.Metadatakatalog.Service
 {
     public class MemoryCacher
     {
+        static readonly object addLock = new object();
+
         public object GetValue(string key)
         {
             MemoryCache memoryCache = MemoryCache.Default;
@@ -16,8 +18,15 @@ namespace Kartverket.Metadatakatalog.Service
 
         public bool Add(string key, object value, DateTimeOffset absExpiration)
         {
-            MemoryCache memoryCache = MemoryCache.Default;
-            return memoryCache.Add(key, value, absExpiration);
+            lock (addLock)
+            {
+                CacheItemPolicy policy =
+                new CacheItemPolicy { AbsoluteExpiration = absExpiration, Priority = CacheItemPriority.NotRemovable };
+                MemoryCache memoryCache = MemoryCache.Default;
+                memoryCache.Set(key, value, policy);
+            }
+
+            return true;
         }
 
         public void Delete(string key)
