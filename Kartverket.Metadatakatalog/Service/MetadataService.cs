@@ -1073,10 +1073,14 @@ namespace Kartverket.Metadatakatalog.Service
             ReferenceSystem output = null;
             if (simpleReferenceSystem != null)
             {
+                var coordsys = simpleReferenceSystem.CoordinateSystem;
+                if (!string.IsNullOrEmpty(simpleReferenceSystem.CoordinateSystemLink))
+                    coordsys = simpleReferenceSystem.CoordinateSystemLink;
+
                 output = new ReferenceSystem
                 {
-                    CoordinateSystem = Register.GetCoordinatesystemName(simpleReferenceSystem.CoordinateSystem),
-                    CoordinateSystemUrl = simpleReferenceSystem.CoordinateSystem,
+                    CoordinateSystem = Register.GetCoordinatesystemName(coordsys),
+                    CoordinateSystemUrl = simpleReferenceSystem.CoordinateSystemLink,
                     Namespace = simpleReferenceSystem.Namespace
                 };
             }
