@@ -856,6 +856,13 @@ namespace Kartverket.Metadatakatalog.Service
                 OrderingInstructions = (simpleMetadata.AccessProperties != null && !string.IsNullOrEmpty(simpleMetadata.AccessProperties.OrderingInstructions)) ? simpleMetadata.AccessProperties.OrderingInstructions : ""
             };
 
+            if (string.IsNullOrEmpty(metadata.ProductSpecificationUrl))
+            {
+                if (simpleMetadata.ProductSpecificationOther != null
+                    && !string.IsNullOrEmpty(simpleMetadata.ProductSpecificationOther.URL))
+                    metadata.ProductSpecificationUrl = simpleMetadata.ProductSpecificationOther.URL;
+            }
+
             if (string.IsNullOrEmpty(metadata.CoverageUrl))
             {
                 if (metadata.Thumbnails != null)
