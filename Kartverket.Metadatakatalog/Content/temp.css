@@ -100,7 +100,9 @@
 
     .articles-list-item .intro {
     }
-
+#responseList .intro-text a {
+    font-size: 12pt;
+}
 
 
 @font-face {
