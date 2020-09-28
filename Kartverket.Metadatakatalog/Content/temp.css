@@ -101,8 +101,7 @@
 .inline-link-regular {
     display: block;
 }    
-.inline-link-regular a {
-    display: block;
+.inline-link-regular > a {
     font-size: 12pt;
 }
 
