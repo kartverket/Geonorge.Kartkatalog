@@ -98,9 +98,12 @@
         margin: 0;
     }
 
-    .articles-list-item .intro {
-    }
-
+.inline-link-regular {
+    display: block;
+}    
+.inline-link-regular > a {
+    font-size: 12pt;
+}
 
 
 @font-face {

@@ -6797,4 +6797,10 @@ button.close {
     display: none !important;
   }
 }
+.inline-link-regular {
+  display: block;
+}    
+.inline-link-regular > a {
+  font-size: 12pt;
+}
 /*# sourceMappingURL=bootstrap.css.map */
