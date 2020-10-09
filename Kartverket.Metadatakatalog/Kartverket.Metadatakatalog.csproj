@@ -1174,8 +1174,6 @@
     <Content Include="KartverketSharedMenu\Styles\geonorge-top\searchTop.css" />
     <Content Include="robots.txt" />
     <Content Include="PostDeploy.ps1" />
-    <Content Include=".bowerrc" />
-    <Content Include="bower.json" />
     <Content Include="authentication.default.config" />
     <Content Include="Content\bower_components\vue\.babelrc" />
     <Content Include="Content\bower_components\vue\.bower.json" />
@@ -1388,7 +1386,6 @@
     <Content Include="Views\Shared\_PaginationForOrganization.cshtml" />
     <Content Include="Views\Shared\_Resources.cshtml" />
     <Content Include="Views\Shared\VueComponents\_FilterTab.cshtml" />
-    <Content Include="SolrNet.chm" />
     <Content Include="settings.config">
       <SubType>Designer</SubType>
     </Content>
