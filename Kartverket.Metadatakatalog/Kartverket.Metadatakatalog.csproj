@@ -714,12 +714,6 @@
     <Content Include="Content\bower_components\vue\benchmarks\ssr\renderToString.js" />
     <Content Include="Content\bower_components\vue\benchmarks\svg\index.html" />
     <Content Include="Content\bower_components\vue\benchmarks\uptime\index.html" />
-    <Content Include="Content\bower_components\vue\build\alias.js" />
-    <Content Include="Content\bower_components\vue\build\build.js" />
-    <Content Include="Content\bower_components\vue\build\config.js" />
-    <Content Include="Content\bower_components\vue\build\gen-release-note.js" />
-    <Content Include="Content\bower_components\vue\build\get-weex-version.js" />
-    <Content Include="Content\bower_components\vue\build\install-hooks.js" />
     <Content Include="Content\bower_components\vue\dist\vue.common.js" />
     <Content Include="Content\bower_components\vue\dist\vue.esm.js" />
     <Content Include="Content\bower_components\vue\dist\vue.js" />
@@ -758,13 +752,6 @@
     <Content Include="Content\bower_components\vue\flow\options.js" />
     <Content Include="Content\bower_components\vue\flow\ssr.js" />
     <Content Include="Content\bower_components\vue\flow\vnode.js" />
-    <Content Include="Content\bower_components\vue\packages\vue-template-compiler\browser.js" />
-    <Content Include="Content\bower_components\vue\packages\vue-template-compiler\build.js" />
-    <Content Include="Content\bower_components\vue\packages\vue-template-compiler\index.js" />
-    <Content Include="Content\bower_components\vue\packages\weex-template-compiler\build.js" />
-    <Content Include="Content\bower_components\vue\packages\weex-template-compiler\index.js" />
-    <Content Include="Content\bower_components\vue\packages\weex-vue-framework\factory.js" />
-    <Content Include="Content\bower_components\vue\packages\weex-vue-framework\index.js" />
     <Content Include="Content\bower_components\vue\src\compiler\codegen\events.js" />
     <Content Include="Content\bower_components\vue\src\compiler\codegen\index.js" />
     <Content Include="Content\bower_components\vue\src\compiler\create-compiler.js" />
@@ -1189,21 +1176,11 @@
     <Content Include="Content\bower_components\vue\.github\PULL_REQUEST_TEMPLATE.md" />
     <Content Include="Content\bower_components\vue\BACKERS.md" />
     <Content Include="Content\bower_components\vue\benchmarks\ssr\README.md" />
-    <Content Include="Content\bower_components\vue\build\git-hooks\commit-msg" />
-    <Content Include="Content\bower_components\vue\build\git-hooks\pre-commit" />
-    <Content Include="Content\bower_components\vue\build\release-weex.sh" />
-    <Content Include="Content\bower_components\vue\build\release.sh" />
     <Content Include="Content\bower_components\vue\dist\README.md" />
     <Content Include="Content\bower_components\vue\examples\todomvc\readme.md" />
     <Content Include="Content\bower_components\vue\LICENSE" />
     <Content Include="Content\bower_components\vue\package-lock.json" />
     <Content Include="Content\bower_components\vue\package.json" />
-    <Content Include="Content\bower_components\vue\packages\vue-template-compiler\package.json" />
-    <Content Include="Content\bower_components\vue\packages\vue-template-compiler\README.md" />
-    <Content Include="Content\bower_components\vue\packages\weex-template-compiler\package.json" />
-    <Content Include="Content\bower_components\vue\packages\weex-template-compiler\README.md" />
-    <Content Include="Content\bower_components\vue\packages\weex-vue-framework\package.json" />
-    <Content Include="Content\bower_components\vue\packages\weex-vue-framework\README.md" />
     <Content Include="Content\bower_components\vue\README.md" />
     <Content Include="Content\bower_components\vue\test\e2e\.eslintrc" />
     <Content Include="Content\bower_components\vue\test\helpers\.eslintrc" />
@@ -1391,6 +1368,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\bower_components\vue\build\git-hooks\" />
+    <Folder Include="Content\bower_components\vue\packages\vue-template-compiler\" />
+    <Folder Include="Content\bower_components\vue\packages\weex-template-compiler\" />
+    <Folder Include="Content\bower_components\vue\packages\weex-vue-framework\" />
     <Folder Include="KartverketSharedMenu\Bundles\" />
     <Folder Include="Util\" />
   </ItemGroup>
