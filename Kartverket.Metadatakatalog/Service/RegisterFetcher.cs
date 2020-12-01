@@ -254,20 +254,20 @@ namespace Kartverket.Metadatakatalog.Service
             if (culture == Culture.NorwegianCode)
             {
                 if (value == "restricted")
-                    value = ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1b"]; // "Skjermede data"
+                    value = ListOfRestrictionInspireValues["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1b"]; // "Skjermede data"
                 if (value == "no restrictions" || OtherConstraintsAccess == "no restrictions")
-                    value = ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];  //"Åpne data"
+                    value = ListOfRestrictionInspireValues["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];  //"Åpne data"
                 else if (value == "norway digital restricted" || OtherConstraintsAccess == "norway digital restricted")
-                    value = ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"]; //"Norge digitalt-begrenset"
+                    value = ListOfRestrictionInspireValues["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"]; //"Norge digitalt-begrenset"
             }
             else
             {
                 if (value == "restricted")
-                    value = ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1b"]; // "Restricted data";
+                    value = ListOfRestrictionInspireValuesEnglish["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1b"]; // "Restricted data";
                 if (value == "no restrictions" || OtherConstraintsAccess == "no restrictions")
-                    value = ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"]; // "Open data"
+                    value = ListOfRestrictionInspireValuesEnglish["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"]; // "Open data"
                 else if (value == "norway digital restricted" || OtherConstraintsAccess == "norway digital restricted")
-                    value = ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"];  //"Norway digitalt restricted"
+                    value = ListOfRestrictionInspireValuesEnglish["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"];  //"Norway digitalt restricted"
             }
 
             return value;
@@ -366,6 +366,8 @@ namespace Kartverket.Metadatakatalog.Service
                     foreach (var code in codeList)
                     {
                         var codevalue = code["codevalue"].ToString();
+                        if (name == "inspire-tilgangsrestriksjoner" && !string.IsNullOrWhiteSpace(codevalue))
+                            codevalue = codevalue.Replace("https","http");
                         if (string.IsNullOrWhiteSpace(codevalue))
                             codevalue = code["label"].ToString();
 

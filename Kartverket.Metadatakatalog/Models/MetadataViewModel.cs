@@ -339,7 +339,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsOpendata()
         {
-            if (Constraints != null && !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && (Constraints.OtherConstraintsAccess.ToLower() == "no restrictions" || Constraints.OtherConstraintsAccess=="https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"))
+            if (Constraints != null && !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && (Constraints.OtherConstraintsAccess.ToLower() == "no restrictions" || Constraints.OtherConstraintsAccess.Contains("noLimitations")))
                 return true;
             else
                 return false;
@@ -347,7 +347,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsRestricted()
         {
-            if (Constraints != null &&  !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && (Constraints.OtherConstraintsAccess.ToLower() == "norway digital restricted" || Constraints.OtherConstraintsAccess == "https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"))
+            if (Constraints != null &&  !string.IsNullOrEmpty(Constraints.OtherConstraintsAccess) && (Constraints.OtherConstraintsAccess.ToLower() == "norway digital restricted" || Constraints.OtherConstraintsAccess.Contains("INSPIRE_Directive_Article13_1d")))
             return true;
             else
                 return false;

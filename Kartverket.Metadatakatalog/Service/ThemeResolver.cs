@@ -145,30 +145,30 @@ namespace Kartverket.Metadatakatalog.Service
             if (culture == Culture.EnglishCode)
             {
                 if (AccessConstraint == "restricted")
-                    dataaccess = Register.ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1b"]; 
+                    dataaccess = Register.ListOfRestrictionInspireValuesEnglish["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1b"]; 
                 else if (AccessConstraint == "norway digital restricted")
-                    dataaccess = Register.ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"]; 
+                    dataaccess = Register.ListOfRestrictionInspireValuesEnglish["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"]; 
                 else if (AccessConstraint == "no restrictions")
-                    dataaccess = Register.ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
+                    dataaccess = Register.ListOfRestrictionInspireValuesEnglish["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
                 else if (AccessConstraint == "otherRestrictions")
                     if (OtherConstraintsAccess == "norway digital restricted")
-                        dataaccess = Register.ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"]; 
+                        dataaccess = Register.ListOfRestrictionInspireValuesEnglish["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"]; 
                     else if (OtherConstraintsAccess == "no restrictions")
-                        dataaccess = Register.ListOfRestrictionInspireValuesEnglish["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
+                        dataaccess = Register.ListOfRestrictionInspireValuesEnglish["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
             }
             else
             {
                 if (AccessConstraint == "restricted")
-                    dataaccess = Register.ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1b"];
+                    dataaccess = Register.ListOfRestrictionInspireValues["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1b"];
                 else if (AccessConstraint == "norway digital restricted")
-                    dataaccess = Register.ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"];
+                    dataaccess = Register.ListOfRestrictionInspireValues["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"];
                 else if (AccessConstraint == "no restrictions")
-                    dataaccess = Register.ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
+                    dataaccess = Register.ListOfRestrictionInspireValues["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
                 else if (AccessConstraint == "otherRestrictions")
                     if (OtherConstraintsAccess == "norway digital restricted")
-                        dataaccess = Register.ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"];
+                        dataaccess = Register.ListOfRestrictionInspireValues["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"];
                     else if (OtherConstraintsAccess == "no restrictions")
-                        dataaccess = Register.ListOfRestrictionInspireValues["https://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
+                        dataaccess = Register.ListOfRestrictionInspireValues["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
             }
             return dataaccess;
         }
