@@ -198,8 +198,9 @@ namespace Kartverket.Metadatakatalog.Models.Api
                 OrganizationUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/" + s;
             }
 
-            if (item.NationalInitiative != null && item.NationalInitiative.Contains(UI.OpenData) || item.DataAccess == UI.OpenData
-                || item.DataAccess.Contains("ingen begrensninger") || item.DataAccess.Contains("no limitations"))
+            if (item.NationalInitiative != null && item.NationalInitiative.Contains(UI.OpenData)
+                || (!string.IsNullOrEmpty(item.DataAccess) && (item.DataAccess == UI.OpenData
+                || item.DataAccess.Contains("ingen begrensninger") || item.DataAccess.Contains("no limitations"))))
                 IsOpenData = true;
             else IsOpenData = false;
 
