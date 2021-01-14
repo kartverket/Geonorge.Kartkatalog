@@ -1058,7 +1058,7 @@ var mainVueModel = new Vue({
                                         orderLines[key].metadata.canDownloadUrl = link.href;
                                     }
                                     if (link.rel === "http://rel.geonorge.no/download/area") {
-                                        var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(link.href);
+                                        var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(addAccessTokenForRestrictedRole(link.href, capabilities));
                                         this.masterOrderLine.allAvailableAreas[uuid] = {};
 
                                         availableAreas.forEach(function (availableArea) {
@@ -1149,6 +1149,24 @@ var mainVueModel = new Vue({
         'masterOrderLine': MasterOrderLine
     },
     methods: {
+        addAccessTokenForRestrictedRole: function (url, capabilities) {
+
+            var bearerToken = this.getCookie('oidcAccessToken');
+
+            if (capabilities !== "" && capabilities.accessConstraintRequiredRole !== undefined) {
+
+                if (capabilities.accessConstraintRequiredRole.indexOf('nd.egenkommune') > -1
+                    || capabilities.accessConstraintRequiredRole.indexOf('nd.landbrukspart') > -1) {
+                    if (bearerToken) {
+                        if (bearerToken.indexOf('?') > -1)
+                            url = url + '&access_token=' + bearerToken;
+                        else
+                            url = url + '?access_token=' + bearerToken;
+                    }
+                }
+            }
+            return url;
+        },
         getPurposeName: function (purpose) {
 
             for (var item in this.usagePurposesAvailable)
