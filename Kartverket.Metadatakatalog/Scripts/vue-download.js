@@ -1058,7 +1058,7 @@ var mainVueModel = new Vue({
                                         orderLines[key].metadata.canDownloadUrl = link.href;
                                     }
                                     if (link.rel === "http://rel.geonorge.no/download/area") {
-                                        var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(addAccessTokenForRestrictedRole(link.href, capabilities));
+                                        var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(this.addAccessTokenForRestrictedRole(link.href, capabilities));
                                         this.masterOrderLine.allAvailableAreas[uuid] = {};
 
                                         availableAreas.forEach(function (availableArea) {
