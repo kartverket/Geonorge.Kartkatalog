@@ -1368,6 +1368,9 @@ var mainVueModel = new Vue({
                         if (selectedArea.type == "polygon") {
                             emailRequired = true;
                         }
+                        else if (selectedArea.type == "matrikkel_eiendom") {
+                            emailRequired = true;
+                        }
                     }.bind(this));
 
                 } else {
