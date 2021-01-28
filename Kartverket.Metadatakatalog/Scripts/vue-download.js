@@ -69,6 +69,19 @@ var Areas = {
         else {
             data.supportsPolygonSelection = this.$parent.masterSupportsPolygonSelection();
         }
+
+        if (!this.master) {
+            for (orderLineUuid in this.$root.masterOrderLine.allAvailableAreas) {
+                if (this.$root.masterOrderLine.allAvailableAreas[orderLineUuid]["matrikkel_eiendom"] !== undefined) {
+                    this.$root.masterOrderLine.allAvailableAreas[orderLineUuid]["matrikkel_eiendom"].forEach(function (availableArea, index) {
+                        if (availableArea.type == "matrikkel_eiendom") {
+                            data.supportsPolygonSelection = false;
+                        }
+                    }.bind(this));
+                }
+            }
+        }
+
         return data;
     },
     methods: {
