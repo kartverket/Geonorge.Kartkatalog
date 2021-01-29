@@ -72,9 +72,9 @@ var Areas = {
 
         if (!this.master) {
             for (orderLineUuid in this.$root.masterOrderLine.allAvailableAreas) {
-                if (this.$root.masterOrderLine.allAvailableAreas[orderLineUuid]["matrikkel_eiendom"] !== undefined) {
-                    this.$root.masterOrderLine.allAvailableAreas[orderLineUuid]["matrikkel_eiendom"].forEach(function (availableArea, index) {
-                        if (availableArea.type == "matrikkel_eiendom") {
+                if (this.$root.masterOrderLine.allAvailableAreas[orderLineUuid]["kommuner"] !== undefined) {
+                    this.$root.masterOrderLine.allAvailableAreas[orderLineUuid]["kommuner"].forEach(function (availableArea, index) {
+                        if (availableArea.type == "kommuner") {
                             data.supportsPolygonSelection = false;
                         }
                     }.bind(this));
@@ -1381,7 +1381,7 @@ var mainVueModel = new Vue({
                         if (selectedArea.type == "polygon") {
                             emailRequired = true;
                         }
-                        else if (selectedArea.type == "matrikkel_eiendom") {
+                        else if (selectedArea.type == "kommuner") {
                             emailRequired = true;
                         }
                     }.bind(this));
