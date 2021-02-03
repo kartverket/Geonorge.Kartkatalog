@@ -500,6 +500,9 @@ namespace Kartverket.Metadatakatalog.Models
         {
             double zoomLevel = 7;
 
+            if (BoundingBox == null)
+                return 7;
+
             if (string.IsNullOrEmpty(BoundingBox.WestBoundLongitude) || string.IsNullOrEmpty(BoundingBox.SouthBoundLatitude) ||
                 string.IsNullOrEmpty(BoundingBox.EastBoundLongitude) || string.IsNullOrEmpty(BoundingBox.NorthBoundLatitude))
                 return Convert.ToInt16(zoomLevel);
