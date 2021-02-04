@@ -23,6 +23,7 @@ namespace Kartverket.Metadatakatalog.Service
                 CacheItemPolicy policy =
                 new CacheItemPolicy { AbsoluteExpiration = absExpiration, Priority = CacheItemPriority.NotRemovable };
                 MemoryCache memoryCache = MemoryCache.Default;
+                memoryCache.Remove(key);
                 memoryCache.Set(key, value, policy);
             }
 
