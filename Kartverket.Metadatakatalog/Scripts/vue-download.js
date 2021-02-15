@@ -69,6 +69,19 @@ var Areas = {
         else {
             data.supportsPolygonSelection = this.$parent.masterSupportsPolygonSelection();
         }
+
+        if (!this.master) {
+            for (orderLineUuid in this.$root.masterOrderLine.allAvailableAreas) {
+                if (this.$root.masterOrderLine.allAvailableAreas[orderLineUuid]["kommuner"] !== undefined) {
+                    this.$root.masterOrderLine.allAvailableAreas[orderLineUuid]["kommuner"].forEach(function (availableArea, index) {
+                        if (availableArea.type == "kommuner") {
+                            data.supportsPolygonSelection = false;
+                        }
+                    }.bind(this));
+                }
+            }
+        }
+
         return data;
     },
     methods: {
@@ -1058,7 +1071,7 @@ var mainVueModel = new Vue({
                                         orderLines[key].metadata.canDownloadUrl = link.href;
                                     }
                                     if (link.rel === "http://rel.geonorge.no/download/area") {
-                                        var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(link.href);
+                                        var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(this.addAccessTokenForRestrictedRole(link.href, capabilities));
                                         this.masterOrderLine.allAvailableAreas[uuid] = {};
 
                                         availableAreas.forEach(function (availableArea) {
@@ -1149,6 +1162,24 @@ var mainVueModel = new Vue({
         'masterOrderLine': MasterOrderLine
     },
     methods: {
+        addAccessTokenForRestrictedRole: function (url, capabilities) {
+
+            var bearerToken = this.getCookie('oidcAccessToken');
+
+            if (capabilities !== "" && capabilities.accessConstraintRequiredRole !== undefined) {
+
+                if (capabilities.accessConstraintRequiredRole.indexOf('nd.egenkommune') > -1
+                    || capabilities.accessConstraintRequiredRole.indexOf('nd.landbrukspart') > -1) {
+                    if (bearerToken) {
+                        if (bearerToken.indexOf('?') > -1)
+                            url = url + '&access_token=' + bearerToken;
+                        else
+                            url = url + '?access_token=' + bearerToken;
+                    }
+                }
+            }
+            return url;
+        },
         getPurposeName: function (purpose) {
 
             for (var item in this.usagePurposesAvailable)
@@ -1348,6 +1379,9 @@ var mainVueModel = new Vue({
                             }
                         }.bind(this));
                         if (selectedArea.type == "polygon") {
+                            emailRequired = true;
+                        }
+                        else if (selectedArea.type == "kommuner") {
                             emailRequired = true;
                         }
                     }.bind(this));

@@ -39,10 +39,15 @@
     </script>
 </head>
 <body class="geonorge-container prototype  geonorge ng-scope">
+    <main-navigation environment="@Html.EnvironmentName()" 
+                     norwegianurl="@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url }))"
+                     englishurl="@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Request.Url }))"
+                     language="@CultureHelper.GetCurrentCulture()">
 
+    </main-navigation>
     <div id="loading-animation" class="loading-animation" style="display: none;"></div>
 
-    @Html.Raw(File.ReadAllText(Server.MapPath("~/dist/partials/Header.html")))
+    @*@Html.Raw(File.ReadAllText(Server.MapPath("~/dist/partials/Header.html")))*@
     @Styles.Render("~/Content/shared-partials-styles")
     @Styles.Render("~/Content/bower_components/kartverket-felleskomponenter/assets/css/styles")
 
@@ -106,7 +111,7 @@
         setMainSearchPlaceholder('@Html.Raw(UI.SearchMapData)');
     </script>
     @RenderSection("scripts", required: false)
-
+    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@0.1.33/MainNavigation.js")"></script>
 </body>
 
 </html>
