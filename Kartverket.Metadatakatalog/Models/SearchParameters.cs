@@ -193,7 +193,13 @@ namespace Kartverket.Metadatakatalog.Models
                     queryString = textOr;
                 }
 
-                if (text.Trim().Length == 0) query = SolrQuery.All;
+                if (text.Trim().Length == 0)
+                {
+                    query = new SolrMultipleCriteriaQuery(new[]
+                    {
+                        new SolrQuery("!serie:*series_historic*")
+                    });
+                }
                 else if (text.Trim().Length < 5)
                 {
                     query = new SolrMultipleCriteriaQuery(new[]
@@ -224,7 +230,11 @@ namespace Kartverket.Metadatakatalog.Models
                     });
                 }
             }
-            else query = SolrQuery.All;
+            else
+                query = new SolrMultipleCriteriaQuery(new[]
+                {
+                        new SolrQuery("!serie:*series_historic*")
+                });
 
             Log.Debug("Query: " + query.ToString());
             return query;
