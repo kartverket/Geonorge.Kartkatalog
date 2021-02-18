@@ -7,6 +7,22 @@ function fixUrl(urlen) {
     return urlJson;
 }
 
+function GetCookie(cname)
+{
+    var name = cname + '=';
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) === ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) === 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return '';
+}
+
 function getOrderItemName(uuid) {
     var metadata = JSON.parse(localStorage.getItem(uuid + ".metadata"));
     return metadata !== null && metadata.name !== undefined ? metadata.name : "";
@@ -71,14 +87,22 @@ var Areas = {
         }
 
         if (!this.master) {
-            for (orderLineUuid in this.$root.masterOrderLine.allAvailableAreas) {
-                if (this.$root.masterOrderLine.allAvailableAreas[orderLineUuid]["kommuner"] !== undefined) {
-                    this.$root.masterOrderLine.allAvailableAreas[orderLineUuid]["kommuner"].forEach(function (availableArea, index) {
-                        if (availableArea.type == "kommuner") {
-                            data.supportsPolygonSelection = false;
-                        }
-                    }.bind(this));
-                }
+
+            var accessConstraintRequiredRoleIsAgriculturalParty = false;
+
+            if (this.$parent.capabilities !== "" && this.$parent.capabilities.accessConstraintRequiredRole !== undefined)
+            {
+                var role = this.$parent.capabilities.accessConstraintRequiredRole;
+                accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+            }
+
+            var isAgriculturalParty = false;
+            var baatInfo = GetCookie('baatInfo');
+            if (baatInfo) {
+                baatInfo = String(baatInfo);
+                isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                if (isAgriculturalParty && accessConstraintRequiredRoleIsAgriculturalParty)
+                    data.supportsPolygonSelection = false;
             }
         }
 
@@ -1164,7 +1188,7 @@ var mainVueModel = new Vue({
     methods: {
         addAccessTokenForRestrictedRole: function (url, capabilities) {
 
-            var bearerToken = this.getCookie('oidcAccessToken');
+            var bearerToken = GetCookie('oidcAccessToken');
 
             if (capabilities !== "" && capabilities.accessConstraintRequiredRole !== undefined) {
 
@@ -1378,10 +1402,19 @@ var mainVueModel = new Vue({
                                 emailRequired = orderLine.capabilities.deliveryNotificationByEmail !== undefined ? orderLine.capabilities.deliveryNotificationByEmail : false;
                             }
                         }.bind(this));
+
+                        var isAgriculturalParty = false;
+                        var baatInfo = GetCookie('baatInfo');
+                        if (baatInfo)
+                        {
+                            baatInfo = String(baatInfo);
+                            isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                        }
+
                         if (selectedArea.type == "polygon") {
                             emailRequired = true;
                         }
-                        else if (selectedArea.type == "kommuner") {
+                        else if (isAgriculturalParty) {
                             emailRequired = true;
                         }
                     }.bind(this));
