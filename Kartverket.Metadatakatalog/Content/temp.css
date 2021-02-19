@@ -1,4 +1,4 @@
-﻿.fixed-menu-margin {
+.fixed-menu-margin {
     margin-top: 140px;
 }
 @media (min-width: 360px) {
@@ -12,6 +12,9 @@
     }
 }
 
+.container-breadcrumbs {
+    display: block!important;
+}
 .table-border-bottom {
     border-bottom: 1px solid #ccc;
 }
