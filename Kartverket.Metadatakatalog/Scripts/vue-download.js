@@ -951,7 +951,7 @@ var MasterOrderLine = {
 
                                                             // Set coordinates for orderline in order request
                                                             this.$root.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
-                                                                if (orderRequest.metadataUuid == orderItem.metadata.uuid) {
+                                                                if (polygonSelectionAvailableForUser && (orderRequest.metadataUuid == orderItem.metadata.uuid)) {
                                                                     orderRequest.coordinates = this.$root.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid];
                                                                 }
                                                             }.bind(this))
