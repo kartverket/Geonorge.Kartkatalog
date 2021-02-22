@@ -901,18 +901,41 @@ var MasterOrderLine = {
                                                             polygonArea.allAvailableFormats = {};
                                                             polygonArea.allAvailableFormats[orderItem.metadata.uuid] = orderItem.defaultFormats;
 
+                                                            var polygonSelectionAvailableForUser = true;
+                                                            var accessConstraintRequiredRoleIsAgriculturalParty = false;
+                                                            var datasetOnlyOwnMunicipalityRole = false;
 
-                                                            // orderLine
-                                                            var isAllreadyAddedInfo = this.isAllreadyAdded(this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid], polygonArea, "code");
-                                                            if (!isAllreadyAddedInfo.added) {
-                                                                this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(polygonArea);
-                                                            } else {
-                                                                this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid][isAllreadyAddedInfo.position] = polygonArea;
+                                                            if (orderItem.capabilities.accessConstraintRequiredRole !== undefined) {
+                                                                var role = orderItem.capabilities.accessConstraintRequiredRole;
+                                                                accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                                                                datasetOnlyOwnMunicipalityRole = role.indexOf('nd.egenkommune') > -1;
                                                             }
 
-                                                            this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
-                                                            this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
+                                                            var isAgriculturalParty = false;
+                                                            var userHasOnlyOwnMunicipalityRole = false;
+                                                            var baatInfo = GetCookie('baatInfo');
+                                                            if (baatInfo) {
+                                                                baatInfo = String(baatInfo);
+                                                                isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                                                                userHasOnlyOwnMunicipalityRole = baatInfo.indexOf('nd.egenkommune') > -1;
+                                                                if (isAgriculturalParty && accessConstraintRequiredRoleIsAgriculturalParty)
+                                                                    polygonSelectionAvailableForUser = false;
+                                                                else if (userHasOnlyOwnMunicipalityRole && datasetOnlyOwnMunicipalityRole)
+                                                                    polygonSelectionAvailableForUser = false;
+                                                            }
 
+                                                            // orderLine
+                                                            if (polygonSelectionAvailableForUser) {
+                                                                var isAllreadyAddedInfo = this.isAllreadyAdded(this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid], polygonArea, "code");
+                                                                if (!isAllreadyAddedInfo.added) {
+                                                                    this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(polygonArea);
+                                                                } else {
+                                                                    this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid][isAllreadyAddedInfo.position] = polygonArea;
+                                                                }
+
+                                                                this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
+                                                                this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
+                                                            }
 
                                                             // MasterOrderLine:
                                                             var isAllreadyAddedInfo = this.isAllreadyAdded(this.selectedAreas, polygonArea, "code");
