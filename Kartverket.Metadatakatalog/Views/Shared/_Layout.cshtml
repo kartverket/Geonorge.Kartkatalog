@@ -38,7 +38,7 @@
             };
     </script>
 </head>
-<body class="geonorge-container prototype  geonorge ng-scope">
+<body class="geonorge-container prototype  geonorge ng-scope fixed-menu-margin">
     <main-navigation environment="@Html.EnvironmentName()" 
                      norwegianurl="@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url }))"
                      englishurl="@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Request.Url }))"
@@ -111,7 +111,7 @@
         setMainSearchPlaceholder('@Html.Raw(UI.SearchMapData)');
     </script>
     @RenderSection("scripts", required: false)
-    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@0.1.33/MainNavigation.js")"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@0.1.41/MainNavigation.js")"></script>
 </body>
 
 </html>
