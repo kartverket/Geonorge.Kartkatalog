@@ -1403,6 +1403,13 @@ var mainVueModel = new Vue({
                             }
                         }.bind(this));
 
+                        var accessConstraintRequiredRoleIsAgriculturalParty = false;
+
+                        if (this.$parent.capabilities !== "" && this.$parent.capabilities.accessConstraintRequiredRole !== undefined) {
+                            var role = this.$parent.capabilities.accessConstraintRequiredRole;
+                            accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                        }
+
                         var isAgriculturalParty = false;
                         var baatInfo = GetCookie('baatInfo');
                         if (baatInfo)
@@ -1414,7 +1421,7 @@ var mainVueModel = new Vue({
                         if (selectedArea.type == "polygon") {
                             emailRequired = true;
                         }
-                        else if (isAgriculturalParty) {
+                        else if (accessConstraintRequiredRoleIsAgriculturalParty && isAgriculturalParty) {
                             emailRequired = true;
                         }
                     }.bind(this));
