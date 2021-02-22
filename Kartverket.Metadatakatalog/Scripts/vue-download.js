@@ -1901,7 +1901,30 @@ var mainVueModel = new Vue({
                             "usagePurpose": this.usagePurposes
                         }
 
-                        if (this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
+                        var polygonSelectionAvailableForUser = true;
+                        var accessConstraintRequiredRoleIsAgriculturalParty = false;
+                        var datasetOnlyOwnMunicipalityRole = false;
+
+                        if (orderLine.capabilities.accessConstraintRequiredRole !== undefined) {
+                            var role = orderLine.capabilities.accessConstraintRequiredRole;
+                            accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                            datasetOnlyOwnMunicipalityRole = role.indexOf('nd.egenkommune') > -1;
+                        }
+
+                        var isAgriculturalParty = false;
+                        var userHasOnlyOwnMunicipalityRole = false;
+                        var baatInfo = GetCookie('baatInfo');
+                        if (baatInfo) {
+                            baatInfo = String(baatInfo);
+                            isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                            userHasOnlyOwnMunicipalityRole = baatInfo.indexOf('nd.egenkommune') > -1;
+                            if (isAgriculturalParty && accessConstraintRequiredRoleIsAgriculturalParty)
+                                polygonSelectionAvailableForUser = false;
+                            else if (userHasOnlyOwnMunicipalityRole && datasetOnlyOwnMunicipalityRole)
+                                polygonSelectionAvailableForUser = false;
+                        }
+
+                        if (polygonSelectionAvailableForUser && this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
                             orderRequest.coordinates = this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid];
                         }
 
