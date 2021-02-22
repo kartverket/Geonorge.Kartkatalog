@@ -89,19 +89,25 @@ var Areas = {
         if (!this.master) {
 
             var accessConstraintRequiredRoleIsAgriculturalParty = false;
+            var datasetOnlyOwnMunicipalityRole = false;
 
             if (this.$parent.capabilities !== "" && this.$parent.capabilities.accessConstraintRequiredRole !== undefined)
             {
                 var role = this.$parent.capabilities.accessConstraintRequiredRole;
                 accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                datasetOnlyOwnMunicipalityRole = role.indexOf('nd.egenkommune') > -1;
             }
 
             var isAgriculturalParty = false;
+            var userHasOnlyOwnMunicipalityRole = false;
             var baatInfo = GetCookie('baatInfo');
             if (baatInfo) {
                 baatInfo = String(baatInfo);
                 isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                userHasOnlyOwnMunicipalityRole = baatInfo.indexOf('nd.egenkommune') > -1;
                 if (isAgriculturalParty && accessConstraintRequiredRoleIsAgriculturalParty)
+                    data.supportsPolygonSelection = false;
+                else if (userHasOnlyOwnMunicipalityRole && datasetOnlyOwnMunicipalityRole)
                     data.supportsPolygonSelection = false;
             }
         }
