@@ -1397,31 +1397,28 @@ var mainVueModel = new Vue({
                         selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLineUuid);
                         selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLineUuid);
 
+                        var userHasRoleAgriculturalParty = false;
+                        var accessConstraintRequiredRoleIsAgriculturalParty = false;
+                        var baatInfo = GetCookie('baatInfo');
+                        if (baatInfo) {
+                            baatInfo = String(baatInfo);
+                            userHasRoleAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                        }
+
                         this.orderLines.forEach(function (orderLine) {
                             if (orderLine.metadata.uuid == orderLineUuid && !emailRequired) {
                                 emailRequired = orderLine.capabilities.deliveryNotificationByEmail !== undefined ? orderLine.capabilities.deliveryNotificationByEmail : false;
+                                if (orderLine.capabilities.accessConstraintRequiredRole !== undefined) {
+                                    var role = orderLine.capabilities.accessConstraintRequiredRole;
+                                    accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                                }
                             }
                         }.bind(this));
-
-                        var accessConstraintRequiredRoleIsAgriculturalParty = false;
-
-                        if (this.$parent.capabilities !== "" && this.$parent.capabilities.accessConstraintRequiredRole !== undefined) {
-                            var role = this.$parent.capabilities.accessConstraintRequiredRole;
-                            accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
-                        }
-
-                        var isAgriculturalParty = false;
-                        var baatInfo = GetCookie('baatInfo');
-                        if (baatInfo)
-                        {
-                            baatInfo = String(baatInfo);
-                            isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
-                        }
 
                         if (selectedArea.type == "polygon") {
                             emailRequired = true;
                         }
-                        else if (accessConstraintRequiredRoleIsAgriculturalParty && isAgriculturalParty) {
+                        else if (accessConstraintRequiredRoleIsAgriculturalParty && userHasRoleAgriculturalParty) {
                             emailRequired = true;
                         }
                     }.bind(this));
