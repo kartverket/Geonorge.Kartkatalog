@@ -935,19 +935,18 @@ var MasterOrderLine = {
 
                                                                 this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
                                                                 this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
+
+                                                                // MasterOrderLine:
+                                                                var isAllreadyAddedInfo = this.isAllreadyAdded(this.selectedAreas, polygonArea, "code");
+                                                                if (!isAllreadyAddedInfo.added) {
+                                                                    this.selectedAreas.push(polygonArea);
+                                                                } else {
+                                                                    this.selectedAreas[isAllreadyAddedInfo.position] = polygonArea;
+                                                                }
+
+                                                                this.availableAreas[polygonArea.type] = [];
+                                                                this.availableAreas[polygonArea.type].push(polygonArea);
                                                             }
-
-                                                            // MasterOrderLine:
-                                                            var isAllreadyAddedInfo = this.isAllreadyAdded(this.selectedAreas, polygonArea, "code");
-                                                            if (!isAllreadyAddedInfo.added) {
-                                                                this.selectedAreas.push(polygonArea);
-                                                            } else {
-                                                                this.selectedAreas[isAllreadyAddedInfo.position] = polygonArea;
-                                                            }
-
-                                                            this.availableAreas[polygonArea.type] = [];
-                                                            this.availableAreas[polygonArea.type].push(polygonArea);
-
 
                                                             // Set coordinates for orderline in order request
                                                             this.$root.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
