@@ -1149,6 +1149,9 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (distributions != null && distributions.Count > 0)
             {
+                if (output == null)
+                    output = new DistributionDetails();
+
                 foreach (var distribution in distributions)
                 {
                     if (distribution.Protocol == "GEONORGE:DOWNLOAD")
