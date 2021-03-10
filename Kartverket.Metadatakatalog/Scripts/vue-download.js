@@ -1124,6 +1124,10 @@ var mainVueModel = new Vue({
                                     }
                                     if (link.rel === "http://rel.geonorge.no/download/area") {
                                         var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(this.addAccessTokenForRestrictedRole(link.href, capabilities));
+
+                                        if (availableAreas.length === 0)
+                                            showAlert("Ingen områder er tilgjengelige for " + metadata.name, 'danger');
+
                                         this.masterOrderLine.allAvailableAreas[uuid] = {};
 
                                         availableAreas.forEach(function (availableArea) {
