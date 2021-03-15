@@ -975,12 +975,12 @@ namespace Kartverket.Metadatakatalog.Service
                 foreach(var distribution in simpleDistributions) {
                     output.Add(new DistributionViewModel
                     {
-                        Name = distribution.Name,
                         Organization = distribution.Organization,
                         Protocol = distribution.Protocol,
-                        URL = distribution.URL,
                         ProtocolName = Register.GetDistributionType(distribution.Protocol),
-                        FormatName = distribution.Name,
+                        URL = distribution.URL,
+                        Name = distribution.Name,
+                        FormatName = distribution.FormatName,
                         FormatVersion = distribution.FormatVersion,
                         UnitsOfDistribution = distribution.UnitsOfDistribution,
                         EnglishUnitsOfDistribution = distribution.EnglishUnitsOfDistribution
