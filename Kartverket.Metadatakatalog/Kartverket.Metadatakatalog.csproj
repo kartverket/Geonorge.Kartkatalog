@@ -406,6 +406,7 @@
     <Compile Include="Models\Translations\ThemeTranslation.cs" />
     <Compile Include="Models\Translations\Translation.cs" />
     <Compile Include="Models\Translations\TranslationCollection.cs" />
+    <Compile Include="Models\ViewModels\DistributionViewModel.cs" />
     <Compile Include="Models\ViewModels\SearchByAreaViewModel.cs" />
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Resources\UI.en.Designer.cs">

@@ -804,7 +804,7 @@ namespace Kartverket.Metadatakatalog.Service
                 DatePublished = simpleMetadata.DatePublished,
                 DateUpdated = simpleMetadata.DateUpdated,
                 DistributionDetails = Convert(simpleMetadata.DistributionDetails, simpleMetadata?.DistributionsFormats),
-                DistributionsFormats = simpleMetadata.DistributionsFormats,
+                DistributionsFormats = Convert(simpleMetadata.DistributionsFormats),
                 HierarchyLevel = simpleMetadata.HierarchyLevel,
                 Type = simpleMetadata.HierarchyLevel,
                 TypeTranslated = SimpleMetadataUtil.GetTypeTranslated(simpleMetadata.HierarchyLevel),
@@ -964,6 +964,29 @@ namespace Kartverket.Metadatakatalog.Service
                     Name = simpleDistributionFormat.Name,
                     Version = simpleDistributionFormat.Version
                 };
+            }
+            return output;
+        }
+        private List<DistributionViewModel> Convert(List<SimpleDistribution> simpleDistributions)
+        {
+            List<DistributionViewModel> output = new List<DistributionViewModel>();
+            if (simpleDistributions != null)
+            {
+                foreach(var distribution in simpleDistributions) {
+                    output.Add(new DistributionViewModel
+                    {
+                        Name = distribution.Name,
+                        Organization = distribution.Organization,
+                        Protocol = distribution.Protocol,
+                        URL = distribution.URL,
+                        ProtocolName = Register.GetDistributionType(distribution.Protocol),
+                        FormatName = distribution.Name,
+                        FormatVersion = distribution.FormatVersion,
+                        UnitsOfDistribution = distribution.UnitsOfDistribution,
+                        EnglishUnitsOfDistribution = distribution.EnglishUnitsOfDistribution
+                        
+                    });
+                }
             }
             return output;
         }
