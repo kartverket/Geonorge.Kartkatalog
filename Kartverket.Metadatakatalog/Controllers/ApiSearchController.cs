@@ -408,7 +408,8 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Facets = CreateFacetParameters(parameters.facets),
                 Offset = parameters.offset,
                 Limit = parameters.limit,
-                orderby = parameters.orderby
+                orderby = parameters.orderby,
+                listhidden = parameters.listhidden
             };
         }
 

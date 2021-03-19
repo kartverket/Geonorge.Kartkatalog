@@ -950,6 +950,11 @@
             This param indicates the maximum number of constraint counts that should be returned. Default is 10.
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.listhidden">
+            <summary>
+            List hidden metadata like series_historic
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.orderby">
             <summary>
             Limits the list to facets. Ex. <![CDATA[ &facets[0]name=organization&facets[0]value=Kartverket]]>. Facets result is grouped by  "theme" , "type", "organization".

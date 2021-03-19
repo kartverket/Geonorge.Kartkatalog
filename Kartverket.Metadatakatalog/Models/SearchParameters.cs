@@ -47,6 +47,7 @@ namespace Kartverket.Metadatakatalog.Models
         public int Limit { get; set; }
         public int Offset { get; set; }
         public string orderby { get; set; }
+        public bool listhidden { get; set; }
         public List<FacetParameter> Facets { get; set; }
 
         public void AddComplexFacetsIfMissing()
@@ -197,7 +198,7 @@ namespace Kartverket.Metadatakatalog.Models
                 {
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
-                        new SolrQuery("!serie:*series_historic*")
+                        listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*")
                     });
                 }
                 else if (text.Trim().Length < 5)
@@ -208,7 +209,7 @@ namespace Kartverket.Metadatakatalog.Models
                         new SolrQuery("titleText:"+ text + "*^40"),
                         new SolrQuery("allText:" + text + "^1.2"),
                         new SolrQuery("allText:" + text + "*^1.1"),
-                        new SolrQuery("!serie:*series_historic*"),
+                        listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         new SolrQuery("!boost b=typenumber")
                     });
                 }
@@ -224,7 +225,7 @@ namespace Kartverket.Metadatakatalog.Models
                         new SolrQuery("allText:" + text + "*^1.1"),
                         new SolrQuery("allText:\"" + text + "\"~1"),   //Fuzzy
                         new SolrQuery("allText2:" + text + ""), //Stemmer
-                        new SolrQuery("!serie:*series_historic*"),
+                        listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         new SolrQuery("!boost b=typenumber"),
                         //new SolrQuery("allText3:" + text)        //Fonetisk
                     });
@@ -233,7 +234,7 @@ namespace Kartverket.Metadatakatalog.Models
             else
                 query = new SolrMultipleCriteriaQuery(new[]
                 {
-                        new SolrQuery("!serie:*series_historic*")
+                     listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*")
                 });
 
             Log.Debug("Query: " + query.ToString());

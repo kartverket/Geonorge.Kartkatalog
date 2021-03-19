@@ -17,6 +17,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public int limit { get; set; }
         /// <summary>
+        /// List hidden metadata like series_historic
+        /// </summary>
+        public bool listhidden { get; set; }
+        /// <summary>
         /// Limits the list to facets. Ex. <![CDATA[ &facets[0]name=organization&facets[0]value=Kartverket]]>. Facets result is grouped by  "theme" , "type", "organization".
         /// </summary>
         /// <summary>
