@@ -33,6 +33,13 @@ namespace Kartverket.Metadatakatalog.Models.Api
                 {
                     searchParameters.offset = offset;
                 }
+
+                bool listhidden = false;
+                if (bool.TryParse(GetValue(bindingContext, "listhidden"), out listhidden))
+                {
+                    searchParameters.listhidden = listhidden;
+                }
+
                 searchParameters.orderby = GetValue(bindingContext, "orderby");
                 List<FacetInput> facets = new List<FacetInput>();
                 var query = HttpContext.Current.Request.QueryString;
