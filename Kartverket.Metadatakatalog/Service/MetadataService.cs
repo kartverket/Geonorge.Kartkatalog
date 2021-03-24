@@ -634,6 +634,7 @@ namespace Kartverket.Metadatakatalog.Service
                                             {
                                                 distribution.Value.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType("service");
                                                 distribution.Value.TypeTranslated = SimpleMetadataUtil.GetTypeTranslated("service");
+                                                distribution.Value.CanShowMapUrl = true;
                                             }
 
                                             viewServices.Add(distribution.Value);
