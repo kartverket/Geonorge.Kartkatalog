@@ -192,8 +192,8 @@ namespace Kartverket.Metadatakatalog.Service
                                     distribution.Value.CanShowMapUrl = true;
                             }
                         }
-
-                        metadata.Distributions.SelfDistribution.Add(distribution.Value);
+                        if(!(simpleMetadata.IsDataset() && distribution.Key.Protocol == "OGC:WMS"))
+                            metadata.Distributions.SelfDistribution.Add(distribution.Value);
                     }
             }
 
@@ -627,7 +627,9 @@ namespace Kartverket.Metadatakatalog.Service
                                 if (distributionRows != null)
                                     foreach (var distribution in distributionRows)
                                     {
-                                        viewServices.Add(distribution.Value);
+                                        if (distribution.Key.Protocol == "OGC:WMS" || distribution.Key.Protocol == "OGC:WMTS"
+                                            || distribution.Key.Protocol == "WMS-C")
+                                            viewServices.Add(distribution.Value);
                                     }
                             }
                         }

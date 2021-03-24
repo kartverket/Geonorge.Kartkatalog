@@ -430,7 +430,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                 if (indexDoc.Type == "dataset" || indexDoc.Type == "series")
                 {
-                    AddRelatedDatasets(geoNorge, indexDoc);
+                    AddRelatedDatasetServices(geoNorge, indexDoc, simpleMetadata);
                 }
                 else if (indexDoc.Type == "dimensionGroup")
                 {
@@ -1050,7 +1050,7 @@ namespace Kartverket.Metadatakatalog.Service
             }
         }
 
-        private void AddRelatedDatasets(IGeoNorge geoNorge, MetadataIndexDoc indexDoc)
+        private void AddRelatedDatasetServices(IGeoNorge geoNorge, MetadataIndexDoc indexDoc, SimpleMetadata metadata)
         {
             string searchString = indexDoc.Uuid;
             //Sjekk om denne er koblet til noen tjenester
@@ -1208,6 +1208,59 @@ namespace Kartverket.Metadatakatalog.Service
 
                 indexDoc.DatasetServices = datasetServicesNewList.ToList();
 
+            }
+
+            //Check if dataset has OGC:WMS distribution
+
+            var wmsDistribution = metadata.DistributionsFormats.Where(d => d.Protocol == "OGC:WMS").FirstOrDefault();
+            if(wmsDistribution != null)
+            {
+
+                SimpleKeyword nationalTheme = SimpleKeyword.Filter(metadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME).FirstOrDefault();
+                string keywordNationalTheme = "";
+                if (nationalTheme != null)
+                    keywordNationalTheme = nationalTheme.Keyword;
+
+                string OrganizationLogoUrl = "";
+                if (metadata.ContactOwner != null && metadata.ContactOwner.Organization != null)
+                {
+                    Task<Organization> organizationTaskRel =
+                    _organizationService.GetOrganizationByName(metadata.ContactOwner.Organization);
+                    Organization organizationRel = organizationTaskRel.Result;
+                    if (organizationRel != null)
+                    {
+                        OrganizationLogoUrl = organizationRel.LogoUrl;
+                    }
+                }
+
+                string thumbnailsUrl = "";
+                List<SimpleThumbnail> thumbnailsRel = metadata.Thumbnails;
+                if (thumbnailsRel != null && thumbnailsRel.Count > 0)
+                {
+                    thumbnailsUrl = _geoNetworkUtil.GetThumbnailUrl(metadata.Uuid, thumbnailsRel[thumbnailsRel.Count - 1].URL);
+                }
+
+                var service = new MetaDataEntry
+                {
+                    Uuid = metadata.Uuid,
+                    Title = metadata.Title,
+                    ParentIdentifier = metadata.Uuid,
+                    HierarchyLevel = "service",
+                    ContactOwnerOrganization = (metadata.ContactOwner != null && metadata.ContactOwner.Organization != null) ? metadata.ContactOwner.Organization : "",
+                    DistributionDetailsName = wmsDistribution.Name != null ? wmsDistribution.Name : "",
+                    DistributionDetailsProtocol = wmsDistribution.Protocol,
+                    DistributionDetailsUrl = wmsDistribution.URL,
+                    KeywordNationalTheme = keywordNationalTheme,
+                    OrganizationLogoUrl = OrganizationLogoUrl,
+                    ThumbnailUrl = thumbnailsUrl,
+                    AccessConstraints = (metadata.Constraints != null && !string.IsNullOrEmpty(metadata.Constraints.AccessConstraints) ? metadata.Constraints.AccessConstraints : ""),
+                    OtherConstraintsAccess = (metadata.Constraints != null && !string.IsNullOrEmpty(metadata.Constraints.OtherConstraintsAccess) ? metadata.Constraints.OtherConstraintsAccess : "")
+                };
+
+                if (indexDoc.DatasetServices == null)
+                    indexDoc.DatasetServices = new List<string>();
+
+                indexDoc.DatasetServices.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl + "|" + service.KeywordNationalTheme + "|" + service.OrganizationLogoUrl + "|" + service.ThumbnailUrl + "|" + service.AccessConstraints + "|" + service.OtherConstraintsAccess);
             }
         }
 
