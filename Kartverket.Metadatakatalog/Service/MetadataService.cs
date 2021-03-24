@@ -470,14 +470,6 @@ namespace Kartverket.Metadatakatalog.Service
             if (!string.IsNullOrEmpty(simpleMetadata.ParentIdentifier) && (distribution.Protocol == "WMS-tjeneste" || distribution.Protocol == "WMS service"))
                 distribution.Protocol = UI.Facet_type_servicelayer;
 
-            if(simpleMetadata.IsDataset() &&
-                simpleMetadata.DistributionsFormats!= null && simpleMetadata.DistributionsFormats.Where(d => d.Protocol == "OGC:WMS").Any())
-            {
-                distribution.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType("service");
-                distribution.TypeTranslated = SimpleMetadataUtil.GetTypeTranslated("service");
-            }
-
-
             if(simpleMetadata.HierarchyLevel == "series")
             {
                 var metadataIndexDocResult = _searchService.GetMetadata(uuid);
@@ -636,8 +628,16 @@ namespace Kartverket.Metadatakatalog.Service
                                     foreach (var distribution in distributionRows)
                                     {
                                         if (distribution.Key.Protocol == "OGC:WMS" || distribution.Key.Protocol == "OGC:WMTS"
-                                            || distribution.Key.Protocol == "WMS-C")
+                                            || distribution.Key.Protocol == "WMS-C") {
+
+                                            if (simpleMetadata.IsDataset())
+                                            {
+                                                distribution.Value.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType("service");
+                                                distribution.Value.TypeTranslated = SimpleMetadataUtil.GetTypeTranslated("service");
+                                            }
+
                                             viewServices.Add(distribution.Value);
+                                        }
                                     }
                             }
                         }
