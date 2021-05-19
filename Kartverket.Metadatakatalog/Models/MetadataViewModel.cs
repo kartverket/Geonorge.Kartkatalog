@@ -1,4 +1,4 @@
-﻿using GeoNorgeAPI;
+using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Service;
@@ -14,6 +14,7 @@ using Kartverket.Metadatakatalog.Models.Api;
 using Resources;
 using Kartverket.Metadatakatalog.Service;
 using System.Text;
+using Kartverket.Metadatakatalog.Models.ViewModels;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -53,7 +54,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string Protocol { get; set; }
         public DistributionFormat DistributionFormat { get; set; }
         public List<SimpleDistributionFormat> DistributionFormats { get; set; }
-        public List<SimpleDistribution> DistributionsFormats { get; set; }
+        public List<DistributionViewModel> DistributionsFormats { get; set; }
         public string UnitsOfDistribution { get; set; }
         public List<ReferenceSystem> ReferenceSystems { get; set; }
         public string EnglishAbstract { get; set; }
@@ -614,7 +615,6 @@ namespace Kartverket.Metadatakatalog.Models
 
             return HierarchyLevel;
         }
-
     }
 
     public class QuantitativeResult

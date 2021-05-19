@@ -7,6 +7,22 @@ function fixUrl(urlen) {
     return urlJson;
 }
 
+function GetCookie(cname)
+{
+    var name = cname + '=';
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) === ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) === 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return '';
+}
+
 function getOrderItemName(uuid) {
     var metadata = JSON.parse(localStorage.getItem(uuid + ".metadata"));
     return metadata !== null && metadata.name !== undefined ? metadata.name : "";
@@ -71,14 +87,28 @@ var Areas = {
         }
 
         if (!this.master) {
-            for (orderLineUuid in this.$root.masterOrderLine.allAvailableAreas) {
-                if (this.$root.masterOrderLine.allAvailableAreas[orderLineUuid]["kommuner"] !== undefined) {
-                    this.$root.masterOrderLine.allAvailableAreas[orderLineUuid]["kommuner"].forEach(function (availableArea, index) {
-                        if (availableArea.type == "kommuner") {
-                            data.supportsPolygonSelection = false;
-                        }
-                    }.bind(this));
-                }
+
+            var accessConstraintRequiredRoleIsAgriculturalParty = false;
+            var datasetOnlyOwnMunicipalityRole = false;
+
+            if (this.$parent.capabilities !== "" && this.$parent.capabilities.accessConstraintRequiredRole !== undefined)
+            {
+                var role = this.$parent.capabilities.accessConstraintRequiredRole;
+                accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                datasetOnlyOwnMunicipalityRole = role.indexOf('nd.egenkommune') > -1;
+            }
+
+            var isAgriculturalParty = false;
+            var userHasOnlyOwnMunicipalityRole = false;
+            var baatInfo = GetCookie('baatInfo');
+            if (baatInfo) {
+                baatInfo = String(baatInfo);
+                isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                userHasOnlyOwnMunicipalityRole = baatInfo.indexOf('nd.egenkommune') > -1;
+                if (isAgriculturalParty && accessConstraintRequiredRoleIsAgriculturalParty)
+                    data.supportsPolygonSelection = false;
+                else if (userHasOnlyOwnMunicipalityRole && datasetOnlyOwnMunicipalityRole)
+                    data.supportsPolygonSelection = false;
             }
         }
 
@@ -871,34 +901,56 @@ var MasterOrderLine = {
                                                             polygonArea.allAvailableFormats = {};
                                                             polygonArea.allAvailableFormats[orderItem.metadata.uuid] = orderItem.defaultFormats;
 
+                                                            var polygonSelectionAvailableForUser = true;
+                                                            var accessConstraintRequiredRoleIsAgriculturalParty = false;
+                                                            var datasetOnlyOwnMunicipalityRole = false;
+
+                                                            if (orderItem.capabilities.accessConstraintRequiredRole !== undefined) {
+                                                                var role = orderItem.capabilities.accessConstraintRequiredRole;
+                                                                accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                                                                datasetOnlyOwnMunicipalityRole = role.indexOf('nd.egenkommune') > -1;
+                                                            }
+
+                                                            var isAgriculturalParty = false;
+                                                            var userHasOnlyOwnMunicipalityRole = false;
+                                                            var baatInfo = GetCookie('baatInfo');
+                                                            if (baatInfo) {
+                                                                baatInfo = String(baatInfo);
+                                                                isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                                                                userHasOnlyOwnMunicipalityRole = baatInfo.indexOf('nd.egenkommune') > -1;
+                                                                if (isAgriculturalParty && accessConstraintRequiredRoleIsAgriculturalParty)
+                                                                    polygonSelectionAvailableForUser = false;
+                                                                else if (userHasOnlyOwnMunicipalityRole && datasetOnlyOwnMunicipalityRole)
+                                                                    polygonSelectionAvailableForUser = false;
+                                                            }
 
                                                             // orderLine
-                                                            var isAllreadyAddedInfo = this.isAllreadyAdded(this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid], polygonArea, "code");
-                                                            if (!isAllreadyAddedInfo.added) {
-                                                                this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(polygonArea);
-                                                            } else {
-                                                                this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid][isAllreadyAddedInfo.position] = polygonArea;
+                                                            if (polygonSelectionAvailableForUser) {
+                                                                var isAllreadyAddedInfo = this.isAllreadyAdded(this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid], polygonArea, "code");
+                                                                if (!isAllreadyAddedInfo.added) {
+                                                                    this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(polygonArea);
+                                                                } else {
+                                                                    this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid][isAllreadyAddedInfo.position] = polygonArea;
+                                                                }
+
+                                                                this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
+                                                                this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
+
+                                                                // MasterOrderLine:
+                                                                var isAllreadyAddedInfo = this.isAllreadyAdded(this.selectedAreas, polygonArea, "code");
+                                                                if (!isAllreadyAddedInfo.added) {
+                                                                    this.selectedAreas.push(polygonArea);
+                                                                } else {
+                                                                    this.selectedAreas[isAllreadyAddedInfo.position] = polygonArea;
+                                                                }
+
+                                                                this.availableAreas[polygonArea.type] = [];
+                                                                this.availableAreas[polygonArea.type].push(polygonArea);
                                                             }
-
-                                                            this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
-                                                            this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
-
-
-                                                            // MasterOrderLine:
-                                                            var isAllreadyAddedInfo = this.isAllreadyAdded(this.selectedAreas, polygonArea, "code");
-                                                            if (!isAllreadyAddedInfo.added) {
-                                                                this.selectedAreas.push(polygonArea);
-                                                            } else {
-                                                                this.selectedAreas[isAllreadyAddedInfo.position] = polygonArea;
-                                                            }
-
-                                                            this.availableAreas[polygonArea.type] = [];
-                                                            this.availableAreas[polygonArea.type].push(polygonArea);
-
 
                                                             // Set coordinates for orderline in order request
                                                             this.$root.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
-                                                                if (orderRequest.metadataUuid == orderItem.metadata.uuid) {
+                                                                if (polygonSelectionAvailableForUser && (orderRequest.metadataUuid == orderItem.metadata.uuid)) {
                                                                     orderRequest.coordinates = this.$root.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid];
                                                                 }
                                                             }.bind(this))
@@ -1072,6 +1124,10 @@ var mainVueModel = new Vue({
                                     }
                                     if (link.rel === "http://rel.geonorge.no/download/area") {
                                         var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(this.addAccessTokenForRestrictedRole(link.href, capabilities));
+
+                                        if (availableAreas.length === 0)
+                                            showAlert("Ingen områder er tilgjengelige for " + metadata.name, 'danger');
+
                                         this.masterOrderLine.allAvailableAreas[uuid] = {};
 
                                         availableAreas.forEach(function (availableArea) {
@@ -1164,7 +1220,7 @@ var mainVueModel = new Vue({
     methods: {
         addAccessTokenForRestrictedRole: function (url, capabilities) {
 
-            var bearerToken = this.getCookie('oidcAccessToken');
+            var bearerToken = GetCookie('oidcAccessToken');
 
             if (capabilities !== "" && capabilities.accessConstraintRequiredRole !== undefined) {
 
@@ -1373,15 +1429,28 @@ var mainVueModel = new Vue({
                         selectedArea.hasSelectedProjections = this.hasSelectedProjections(selectedArea, orderLineUuid);
                         selectedArea.hasSelectedFormats = this.hasSelectedFormats(selectedArea, orderLineUuid);
 
+                        var userHasRoleAgriculturalParty = false;
+                        var accessConstraintRequiredRoleIsAgriculturalParty = false;
+                        var baatInfo = GetCookie('baatInfo');
+                        if (baatInfo) {
+                            baatInfo = String(baatInfo);
+                            userHasRoleAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                        }
+
                         this.orderLines.forEach(function (orderLine) {
                             if (orderLine.metadata.uuid == orderLineUuid && !emailRequired) {
                                 emailRequired = orderLine.capabilities.deliveryNotificationByEmail !== undefined ? orderLine.capabilities.deliveryNotificationByEmail : false;
+                                if (orderLine.capabilities.accessConstraintRequiredRole !== undefined) {
+                                    var role = orderLine.capabilities.accessConstraintRequiredRole;
+                                    accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                                }
                             }
                         }.bind(this));
+
                         if (selectedArea.type == "polygon") {
                             emailRequired = true;
                         }
-                        else if (selectedArea.type == "kommuner") {
+                        else if (accessConstraintRequiredRoleIsAgriculturalParty && userHasRoleAgriculturalParty) {
                             emailRequired = true;
                         }
                     }.bind(this));
@@ -1836,7 +1905,30 @@ var mainVueModel = new Vue({
                             "usagePurpose": this.usagePurposes
                         }
 
-                        if (this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
+                        var polygonSelectionAvailableForUser = true;
+                        var accessConstraintRequiredRoleIsAgriculturalParty = false;
+                        var datasetOnlyOwnMunicipalityRole = false;
+
+                        if (orderLine.capabilities.accessConstraintRequiredRole !== undefined) {
+                            var role = orderLine.capabilities.accessConstraintRequiredRole;
+                            accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                            datasetOnlyOwnMunicipalityRole = role.indexOf('nd.egenkommune') > -1;
+                        }
+
+                        var isAgriculturalParty = false;
+                        var userHasOnlyOwnMunicipalityRole = false;
+                        var baatInfo = GetCookie('baatInfo');
+                        if (baatInfo) {
+                            baatInfo = String(baatInfo);
+                            isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                            userHasOnlyOwnMunicipalityRole = baatInfo.indexOf('nd.egenkommune') > -1;
+                            if (isAgriculturalParty && accessConstraintRequiredRoleIsAgriculturalParty)
+                                polygonSelectionAvailableForUser = false;
+                            else if (userHasOnlyOwnMunicipalityRole && datasetOnlyOwnMunicipalityRole)
+                                polygonSelectionAvailableForUser = false;
+                        }
+
+                        if (polygonSelectionAvailableForUser && this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
                             orderRequest.coordinates = this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid];
                         }
 

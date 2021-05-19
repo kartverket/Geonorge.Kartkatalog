@@ -192,8 +192,8 @@ namespace Kartverket.Metadatakatalog.Service
                                     distribution.Value.CanShowMapUrl = true;
                             }
                         }
-
-                        metadata.Distributions.SelfDistribution.Add(distribution.Value);
+                        if(!(simpleMetadata.IsDataset() && distribution.Key.Protocol == "OGC:WMS"))
+                            metadata.Distributions.SelfDistribution.Add(distribution.Value);
                     }
             }
 
@@ -627,7 +627,18 @@ namespace Kartverket.Metadatakatalog.Service
                                 if (distributionRows != null)
                                     foreach (var distribution in distributionRows)
                                     {
-                                        viewServices.Add(distribution.Value);
+                                        if (distribution.Key.Protocol == "OGC:WMS" || distribution.Key.Protocol == "OGC:WMTS"
+                                            || distribution.Key.Protocol == "WMS-C") {
+
+                                            if (simpleMetadata.IsDataset())
+                                            {
+                                                distribution.Value.Type = SimpleMetadataUtil.ConvertHierarchyLevelToType("service");
+                                                distribution.Value.TypeTranslated = SimpleMetadataUtil.GetTypeTranslated("service");
+                                                distribution.Value.CanShowMapUrl = true;
+                                            }
+
+                                            viewServices.Add(distribution.Value);
+                                        }
                                     }
                             }
                         }
@@ -804,7 +815,7 @@ namespace Kartverket.Metadatakatalog.Service
                 DatePublished = simpleMetadata.DatePublished,
                 DateUpdated = simpleMetadata.DateUpdated,
                 DistributionDetails = Convert(simpleMetadata.DistributionDetails, simpleMetadata?.DistributionsFormats),
-                DistributionsFormats = simpleMetadata.DistributionsFormats,
+                DistributionsFormats = Convert(simpleMetadata.DistributionsFormats),
                 HierarchyLevel = simpleMetadata.HierarchyLevel,
                 Type = simpleMetadata.HierarchyLevel,
                 TypeTranslated = SimpleMetadataUtil.GetTypeTranslated(simpleMetadata.HierarchyLevel),
@@ -964,6 +975,29 @@ namespace Kartverket.Metadatakatalog.Service
                     Name = simpleDistributionFormat.Name,
                     Version = simpleDistributionFormat.Version
                 };
+            }
+            return output;
+        }
+        private List<DistributionViewModel> Convert(List<SimpleDistribution> simpleDistributions)
+        {
+            List<DistributionViewModel> output = new List<DistributionViewModel>();
+            if (simpleDistributions != null)
+            {
+                foreach(var distribution in simpleDistributions) {
+                    output.Add(new DistributionViewModel
+                    {
+                        Organization = distribution.Organization,
+                        Protocol = distribution.Protocol,
+                        ProtocolName = Register.GetDistributionType(distribution.Protocol),
+                        URL = distribution.URL,
+                        Name = distribution.Name,
+                        FormatName = distribution.FormatName,
+                        FormatVersion = distribution.FormatVersion,
+                        UnitsOfDistribution = distribution.UnitsOfDistribution,
+                        EnglishUnitsOfDistribution = distribution.EnglishUnitsOfDistribution
+                        
+                    });
+                }
             }
             return output;
         }
