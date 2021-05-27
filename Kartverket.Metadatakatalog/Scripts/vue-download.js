@@ -1713,6 +1713,10 @@ var mainVueModel = new Vue({
 
 
         updateSelectedAreasForSingleOrderLine: function (orderLineUuid, autoSelectProjectionsAndFormats) {
+
+            var baatInfo = GetCookie('baatInfo');
+
+
             var selectedAreas = [];
             for (areaType in this.masterOrderLine.allAvailableAreas[orderLineUuid]) {
                 if (this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].length) {
@@ -1720,7 +1724,13 @@ var mainVueModel = new Vue({
                         if (selectedArea.isSelected) {
                             var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, selectedArea, "code");
                             if (!isAllreadyAddedInfo.added) {
-                                selectedAreas.push(selectedArea);
+                                if (baatInfo) {
+                                    baatInfo = String(baatInfo);
+                                    if (baatInfo.indexOf('nd.landbrukspart') > -1)
+                                        selectedAreas = [];
+                                }
+
+                             selectedAreas.push(selectedArea);
                             }
                         }
                     }.bind(this))
