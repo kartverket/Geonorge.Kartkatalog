@@ -1715,7 +1715,20 @@ var mainVueModel = new Vue({
         updateSelectedAreasForSingleOrderLine: function (orderLineUuid, autoSelectProjectionsAndFormats) {
 
             var baatInfo = GetCookie('baatInfo');
+            var accessConstraintRequiredRole = '';
 
+            for (line = 0; line < this.orderLines.length; line++)
+            {
+                var orderLine = this.orderLines[line];
+
+                if (orderLine.metadata !== undefined && orderLine.metadata.uuid !== undefined && orderLine.metadata.uuid == orderLineUuid) {
+
+                    if (orderLine.capabilities.accessConstraintRequiredRole !== undefined) {
+                        accessConstraintRequiredRole = orderLine.capabilities.accessConstraintRequiredRole;
+                        break;
+                    }
+                }
+            }
 
             var selectedAreas = [];
             for (areaType in this.masterOrderLine.allAvailableAreas[orderLineUuid]) {
@@ -1724,9 +1737,9 @@ var mainVueModel = new Vue({
                         if (selectedArea.isSelected) {
                             var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, selectedArea, "code");
                             if (!isAllreadyAddedInfo.added) {
-                                if (baatInfo) {
+                                if (baatInfo && accessConstraintRequiredRole !== undefined) {
                                     baatInfo = String(baatInfo);
-                                    if (baatInfo.indexOf('nd.landbrukspart') > -1)
+                                    if (baatInfo.indexOf('nd.landbrukspart') > -1 && accessConstraintRequiredRole.indexOf('nd.landbrukspart') > -1)
                                         selectedAreas = [];
                                 }
 
