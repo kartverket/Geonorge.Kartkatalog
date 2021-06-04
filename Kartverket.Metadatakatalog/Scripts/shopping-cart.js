@@ -29,6 +29,7 @@ updateShoppingCart = function() {
     let orderItemsObj = {};
     const cookieName = "orderItems";
     let cookieValue = getCookie(cookieName) || 0;
+    const downloadIconCounterElement = mainNavigationElement?.downloadItemsElement?.downloadIconCounter;
 
     if (localStorage.getItem("orderItems") != null) {
         orderItems = localStorage.getItem("orderItems");
@@ -38,6 +39,10 @@ updateShoppingCart = function() {
         cookieValue = orderItemsObj.length; 
     }
     setCookie(cookieName, cookieValue, 7);
+
+    if (downloadIconCounterElement) {
+        downloadIconCounterElement.innerText = cookieValue ? cookieValue : "";
+    }
 }
 
 
@@ -45,6 +50,7 @@ updateShoppingCart = function() {
 updateShoppingCartCookie = function() {
     const cookieName = "orderItems";
     let cookieValue = 0;
+    const downloadIconCounterElement = mainNavigationElement?.downloadItemsElement?.downloadIconCounter;
 
     if (localStorage.getItem("orderItems") != null && localStorage.getItem("orderItems") != "[]") {
         const orderItems = localStorage.getItem("orderItems");
@@ -52,5 +58,9 @@ updateShoppingCartCookie = function() {
         cookieValue = orderItemsObj.length;
     }
     setCookie(cookieName, cookieValue, 7);
+
+    if (downloadIconCounterElement) {
+        downloadIconCounterElement.innerText = cookieValue ? cookieValue : "";
+    }
 }
 
