@@ -29,7 +29,7 @@ updateShoppingCart = function() {
     let orderItemsObj = {};
     const cookieName = "orderItems";
     let cookieValue = getCookie(cookieName) || 0;
-    const downloadIconCounterElement = mainNavigationElement?.downloadItemsElement?.downloadIconCounter;
+    const downloadIconCounterElement = mainNavigationElement && mainNavigationElement.downloadItemsElement && mainNavigationElement.downloadItemsElement.downloadIconCounter || null;
 
     if (localStorage.getItem("orderItems") != null) {
         orderItems = localStorage.getItem("orderItems");
@@ -50,7 +50,7 @@ updateShoppingCart = function() {
 updateShoppingCartCookie = function() {
     const cookieName = "orderItems";
     let cookieValue = 0;
-    const downloadIconCounterElement = mainNavigationElement?.downloadItemsElement?.downloadIconCounter;
+    const downloadIconCounterElement = mainNavigationElement && mainNavigationElement.downloadItemsElement && mainNavigationElement.downloadItemsElement.downloadIconCounter || null;
 
     if (localStorage.getItem("orderItems") != null && localStorage.getItem("orderItems") != "[]") {
         const orderItems = localStorage.getItem("orderItems");
