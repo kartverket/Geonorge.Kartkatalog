@@ -22,7 +22,9 @@ const setCookie = function(cname, cvalue, exdays) {
     document.cookie = `${cname}=${cvalue};${expires};path=/;${domain}`;
 }
 
-const updateShoppingCart = function() {
+
+// Override for felleskomponenter
+updateShoppingCart = function() {
     let orderItems = "";
     let orderItemsObj = {};
     const cookieName = "orderItems";
@@ -39,8 +41,8 @@ const updateShoppingCart = function() {
 }
 
 
-
-const updateShoppingCartCookie = function() {
+// Override for felleskomponenter
+updateShoppingCartCookie = function() {
     const cookieName = "orderItems";
     let cookieValue = 0;
 
