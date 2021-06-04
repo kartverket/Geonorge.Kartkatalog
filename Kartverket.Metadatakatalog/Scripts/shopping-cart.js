@@ -43,6 +43,9 @@ updateShoppingCart = function() {
 
     if (downloadIconCounterElement) {
         downloadIconCounterElement.innerText = cookieValue ? cookieValue : "";
+        if (cookieValue === 0) {
+            downloadIconCounterElement.classList.add("hidden");
+        }
     }
 }
 
@@ -63,6 +66,9 @@ updateShoppingCartCookie = function() {
 
     if (downloadIconCounterElement) {
         downloadIconCounterElement.innerText = cookieValue ? cookieValue : "";
+        if (cookieValue === 0) {
+            downloadIconCounterElement.classList.add("hidden");
+        }
     }
 }
 
