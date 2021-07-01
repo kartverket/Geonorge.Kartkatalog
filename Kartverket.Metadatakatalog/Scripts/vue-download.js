@@ -1713,37 +1713,22 @@ var mainVueModel = new Vue({
 
 
         updateSelectedAreasForSingleOrderLine: function (orderLineUuid, autoSelectProjectionsAndFormats) {
-
-            var baatInfo = GetCookie('baatInfo');
-            var accessConstraintRequiredRole = '';
-
-            for (line = 0; line < this.orderLines.length; line++)
-            {
-                var orderLine = this.orderLines[line];
-
-                if (orderLine.metadata !== undefined && orderLine.metadata.uuid !== undefined && orderLine.metadata.uuid == orderLineUuid) {
-
-                    if (orderLine.capabilities.accessConstraintRequiredRole !== undefined) {
-                        accessConstraintRequiredRole = orderLine.capabilities.accessConstraintRequiredRole;
-                        break;
-                    }
-                }
-            }
-
             var selectedAreas = [];
+            var maxEiendoms = 100;
             for (areaType in this.masterOrderLine.allAvailableAreas[orderLineUuid]) {
                 if (this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].length) {
                     this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (selectedArea) {
                         if (selectedArea.isSelected) {
                             var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, selectedArea, "code");
                             if (!isAllreadyAddedInfo.added) {
-                                if (baatInfo && accessConstraintRequiredRole !== undefined) {
-                                    baatInfo = String(baatInfo);
-                                    if (baatInfo.indexOf('nd.landbrukspart') > -1 && accessConstraintRequiredRole.indexOf('nd.landbrukspart') > -1)
-                                        selectedAreas = [];
+                                if (selectedArea.type == "Eiendommer" && selectedAreas.length > maxEiendoms - 1)
+                                {
+                                    selectedArea.selected = false;
+                                    hideAlert();
+                                    showAlert("Du kan kun velge maksimum " + maxEiendoms + " eiendommer<br/>", "danger");
                                 }
-
-                             selectedAreas.push(selectedArea);
+                                else
+                                    selectedAreas.push(selectedArea);
                             }
                         }
                     }.bind(this))
