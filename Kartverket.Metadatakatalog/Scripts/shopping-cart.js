@@ -1,93 +1,74 @@
-﻿function removeSingleItemFromArray(array, undesirableItem) {
-    var index = array.indexOf(undesirableItem);
-    if (index >= 0) {
-        array.splice(index, 1);
+﻿const getCookie = function(cname) {
+    const name = `${cname}=`;
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
     }
-    return array;
+    return "";
 }
 
-function removeFromArray(array, undesirableItems) {
-    var multiple = Array.isArray(undesirableItems);
-    if (multiple) {
-        undesirableItems.forEach(function (undesirableItem) {
-            array = removeSingleItemFromArray(array, undesirableItem);
-        });
-    } else {
-        array = removeSingleItemFromArray(array, undesirableItems);
-    }
+const setCookie = function(cname, cvalue, exdays) {
+    let expireDate = new Date();
+    expireDate.setTime(expireDate.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    const expires = `expires=${expireDate.toUTCString()}`;
+    const domain = window.location.hostname === 'localhost' ? '' : 'domain=.geonorge.no';
+    document.cookie = `${cname}=${cvalue};${expires};path=/;${domain}`;
 }
 
-function orderItemHasMetadata(orderItemUuid) {
-    var orderItemHasMetadata = localStorage.getItem(orderItemUuid + ".metadata") != null ? true : false;
-    return orderItemHasMetadata;
-}
 
-function removeBrokenOrderItems() {
-    var orderItems = JSON.parse(localStorage.getItem("orderItems"));
-    if (orderItems != null) {
-        removeFromArray(orderItems, [null, undefined, "null", {}, ""]);
-        orderItems.forEach(function (orderItem) {
-            if (!orderItemHasMetadata(orderItem)) {
-                removeSingleItemFromArray(orderItems, orderItem);
-            }
-        });
-        localStorage.setItem('orderItems', JSON.stringify(orderItems));
-    }
-}
-
-function updateShoppingCart() {
-    var shoppingCartElement = $('#orderitem-count');
-    var orderItems = "";
-    var orderItemsObj = {};
-    var cookieName = "orderitems";
-    var cookieValue = 0;
-    var cookieDomain = ".geonorge.no";
+// Override for felleskomponenter
+updateShoppingCart = function() {
+    let orderItems = "";
+    let orderItemsObj = {};
+    const cookieName = "orderItems";
+    let cookieValue = getCookie(cookieName) || 0;
+    const mainNavigationElement = document.getElementsByTagName("main-navigation").length ? document.getElementsByTagName("main-navigation")[0] : null;
+    const downloadIconCounterElement = mainNavigationElement && mainNavigationElement.downloadItemsElement && mainNavigationElement.downloadItemsElement.downloadIconCounter || null;
 
     if (localStorage.getItem("orderItems") != null) {
         orderItems = localStorage.getItem("orderItems");
     }
-
     if (orderItems != "") {
         orderItemsObj = JSON.parse(orderItems);
-        cookieValue = orderItemsObj.length;
-        if (cookieValue > 0) {
-            shoppingCartElement.css("display", "block");
-            shoppingCartElement.html(cookieValue);
-            addShoppingCartTooltip(cookieValue);
-        } else {
-            shoppingCartElement.css("display", "none");
-            addShoppingCartTooltip(0);
+        cookieValue = orderItemsObj.length; 
+    }
+    setCookie(cookieName, cookieValue, 7);
+
+    if (downloadIconCounterElement) {
+        downloadIconCounterElement.innerText = cookieValue ? cookieValue : "";
+        if (cookieValue === 0) {
+            downloadIconCounterElement.classList.add("hidden");
         }
-
-    } else if ($.cookie(cookieName) !== undefined && $.cookie(cookieName) != 0 && $.cookie(cookieName) != null) {
-        cookieValue = $.cookie(cookieName);
-        shoppingCartElement.css("display", "block");
-        shoppingCartElement.html(cookieValue);
-    } else {
-        shoppingCartElement.css("display", "none");
     }
-    $.cookie(cookieName, cookieValue, { expires: 7, path: '/', domain: cookieDomain });
 }
 
-function updateShoppingCartCookie() {
-    var shoppingCartElement = $('#orderitem-count');
-    var cookieName = "orderitems";
-    var cookieDomain = ".geonorge.no";
-    var cookieValue = 0;
+
+// Override for felleskomponenter
+updateShoppingCartCookie = function() {
+    const cookieName = "orderItems";
+    let cookieValue = 0;
+    const mainNavigationElement = document.getElementsByTagName("main-navigation").length ? document.getElementsByTagName("main-navigation")[0] : null;
+    const downloadIconCounterElement = mainNavigationElement && mainNavigationElement.downloadItemsElement && mainNavigationElement.downloadItemsElement.downloadIconCounter || null;
+
     if (localStorage.getItem("orderItems") != null && localStorage.getItem("orderItems") != "[]") {
-        var orderItems = localStorage.getItem("orderItems");
-        var orderItemsObj = JSON.parse(orderItems);
+        const orderItems = localStorage.getItem("orderItems");
+        const orderItemsObj = JSON.parse(orderItems);
         cookieValue = orderItemsObj.length;
-        shoppingCartElement.html(cookieValue);
-    } else {
-        cookieValue = 0;
-        shoppingCartElement.css("display", "none");
     }
-    $.cookie(cookieName, cookieValue, { expires: 7, path: '/', domain: cookieDomain });
+    setCookie(cookieName, cookieValue, 7);
+
+    if (downloadIconCounterElement) {
+        downloadIconCounterElement.innerText = cookieValue ? cookieValue : "";
+        if (cookieValue === 0) {
+            downloadIconCounterElement.classList.add("hidden");
+        }
+    }
 }
 
-
-document.addEventListener("DOMContentLoaded", function (event) {
-    removeBrokenOrderItems();
-    updateShoppingCart();
-});

@@ -39,7 +39,7 @@
     </script>
 </head>
 <body class="geonorge-container prototype  geonorge ng-scope fixed-menu-margin">
-    <main-navigation environment="@Html.EnvironmentName()" 
+    <main-navigation environment="@Html.EnvironmentName()"
                      norwegianurl="@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url }))"
                      englishurl="@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Request.Url }))"
                      language="@CultureHelper.GetCurrentCulture()">
@@ -81,14 +81,7 @@
     </script>
 
 
-    @if (CultureHelper.IsNorwegian())
-    {
-        @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_Footer.min.cshtml");
-    }
-    else
-    {
-        @RenderPage("~/Content/bower_components/kartverket-felleskomponenter/assets/partials/_Footer_eng.min.cshtml");
-    }
+    <geonorge-footer language="@CultureHelper.GetCurrentCulture()" version="@Html.ApplicationVersionNumber()" environment="@Html.EnvironmentName()" />
 
     <script src="~/dist/vendor.js"></script>
     <script src="~/dist/main.js"></script>
@@ -96,7 +89,7 @@
     <script>
         searchOption.supportsLogin = false;
         searchOption.epiBaseUrl = '@Html.GeonorgeUrl()';
-        var orderItems = Cookies.get('orderitems');
+        var orderItems = Cookies.get('orderItems');
         if (orderItems && orderItems > 0) {
             $('.downloads__count').show();
             $('.downloads__count').text(orderItems);
@@ -111,7 +104,8 @@
         setMainSearchPlaceholder('@Html.Raw(UI.SearchMapData)');
     </script>
     @RenderSection("scripts", required: false)
-    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@0.1.41/MainNavigation.js")"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@0.1.53/MainNavigation.js")"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@0.1.53/GeonorgeFooter.js")"></script>
 </body>
 
 </html>
