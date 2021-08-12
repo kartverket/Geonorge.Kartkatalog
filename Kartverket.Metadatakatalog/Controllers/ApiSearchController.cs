@@ -25,6 +25,8 @@ using Kartverket.Metadatakatalog.Helpers;
 using System.Net.Http.Headers;
 using System.Globalization;
 using System.Threading;
+using System.Xml;
+using System.Text.RegularExpressions;
 
 
 // Metadata search api examples
@@ -364,6 +366,130 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             var metadata = _metadataService.GetMetadataViewModelByUuid(uuid);
             return _metadataService.GetDistributions(metadata);
+        }
+
+        /// <summary>
+        ///     Catalogue in dcat format
+        /// </summary>
+        [System.Web.Http.Route("api/sitemap")]
+        [System.Web.Http.HttpGet]
+        public HttpResponseMessage SiteMap()
+        {
+            var doc = new System.Xml.XmlDocument();
+            doc.Load(HttpContext.Current.Request.MapPath("~\\App_Data\\sitemap.xml"));
+            return new HttpResponseMessage
+            {
+                Content = new StringContent(doc.OuterXml, System.Text.Encoding.UTF8, "application/xml")
+            };
+        }
+
+        /// <summary>
+        /// Create sitemap
+        /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [System.Web.Http.Route("api/create-sitemap")]
+        [System.Web.Http.HttpGet]
+        public HttpResponseMessage CreateSiteMap()
+        {
+            try
+            {
+                SearchParameters parameters = new SearchParameters();
+                parameters.limit = 50000;
+
+                Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
+
+                searchParameters.AddDefaultFacetsIfMissing();
+                Models.SearchResult searchResult = _searchService.Search(searchParameters);
+
+                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+                var results = new SearchResult(searchResult, urlHelper).Results;
+
+                var xml = CreateSiteMap(results);
+
+                return new HttpResponseMessage
+                {
+                    Content = new StringContent(xml.OuterXml, System.Text.Encoding.UTF8, "application/xml")
+                };
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return null;
+            }
+
+}
+
+        private System.Xml.XmlDocument CreateSiteMap(List<Models.Api.Metadata> results)
+        {
+            XmlDocument doc = new XmlDocument();
+            XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", null, null);
+            doc.AppendChild(dec);
+
+            XmlElement root = doc.CreateElement("urlset");
+            root.SetAttribute("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
+            doc.AppendChild(root);
+
+            foreach(var item in results)
+            {
+                XmlElement url = doc.CreateElement("url");
+
+                XmlElement loc = doc.CreateElement("loc");
+                loc.InnerText = item.ShowDetailsUrl.Replace("/uuid/", "/" + ConvertTextToUrlSlug(item.Title) + "/");
+                url.AppendChild(loc);
+
+                XmlElement lastmod = doc.CreateElement("lastmod");
+                lastmod.InnerText = item.Date.HasValue 
+                    ? item.Date.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+
+                url.AppendChild(lastmod);
+
+                root.AppendChild(url);
+
+
+            }
+
+            doc.Save(System.Web.HttpContext.Current.Request.MapPath("~\\App_Data\\sitemap.xml"));
+
+            return doc;
+        }
+
+        static string ConvertTextToUrlSlug(string text)
+        {
+            if (!string.IsNullOrEmpty(text))
+            {
+                // To lower case
+                text = text.ToLower();
+
+                // Character replace
+                // replace & with and
+                text = Regex.Replace(text, @"\&+", "and");
+
+                text = text.Replace("æ", "ae");
+                text = text.Replace("ä", "ae");
+                text = text.Replace("ø", "oe");
+                text = text.Replace("ö", "oe");
+                text = text.Replace("å", "aa");
+
+                // remove characters
+                text = text.Replace("'", "");
+
+                // remove invalid characters
+                text = Regex.Replace(text, @"[^a-z0-9æøå.]", "-");
+
+                // remove duplicates
+                text = Regex.Replace(text, @"-+", "-");
+
+                // trim leading & trailing characters
+                text = text.Trim('-');
+
+                return text;
+            }
+            else
+            {
+                return "";
+            }
         }
 
         private Models.SearchResult CreateRelated(MetadataViewModel result)

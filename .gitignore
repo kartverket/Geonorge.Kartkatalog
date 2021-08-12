@@ -167,3 +167,5 @@ $RECYCLE.BIN/
 
 # npm packages  
 node_modules/
+
+Kartverket.Metadatakatalog/App_Data/sitemap.xml
