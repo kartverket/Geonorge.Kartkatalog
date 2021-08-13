@@ -376,7 +376,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         public HttpResponseMessage SiteMap()
         {
             var doc = new System.Xml.XmlDocument();
-            doc.Load(HttpContext.Current.Request.MapPath("~\\App_Data\\sitemap.xml"));
+            doc.Load(HttpContext.Current.Request.MapPath("~\\sitemap\\sitemap.xml"));
             return new HttpResponseMessage
             {
                 Content = new StringContent(doc.OuterXml, System.Text.Encoding.UTF8, "application/xml")
@@ -450,7 +450,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             }
 
-            doc.Save(System.Web.HttpContext.Current.Request.MapPath("~\\App_Data\\sitemap.xml"));
+            doc.Save(System.Web.HttpContext.Current.Request.MapPath("~\\sitemap\\sitemap.xml"));
 
             return doc;
         }
