@@ -590,6 +590,16 @@
             Get distributions for uuid
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.SiteMap">
+            <summary>
+                Catalogue in dcat format
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.CreateSiteMap">
+            <summary>
+            Create sitemap
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.SearchController.Index(Kartverket.Metadatakatalog.Models.SearchParameters)">
             <summary>
             Main search page. Contains all datasets
