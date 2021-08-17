@@ -45,6 +45,7 @@ namespace Kartverket.Metadatakatalog.Models
         public DateTime? Date { get; set; }
         public DistributionDetails DistributionDetails { get; set; }
         public string DatasetName { get; set; }
+        public string SpatialScope { get; set; }
 
 
         public SearchResultItem()
@@ -121,6 +122,7 @@ namespace Kartverket.Metadatakatalog.Models
             ParentIdentifier = doc.ParentIdentifier;
             DistributionType = doc.DistributionType;
             Date = doc.DateUpdated;
+            SpatialScope = doc.SpatialScope?[0];
         }
     }
 }

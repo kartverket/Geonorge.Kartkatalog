@@ -170,6 +170,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         private bool ShowServiceMapLink { get; set; }
         private string DownloadUrl { get; set; }
         private string ServiceUrl { get; set; }
+        public string SpatialScope { get; set; }
 
 
         public Metadata() { 
@@ -302,6 +303,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
             }
 
             MapUrl = GetMapUrl();
+
+            SpatialScope = item.SpatialScope;
         }
 
         public static Serie AddSerie(string serieString)
