@@ -439,11 +439,11 @@ namespace Kartverket.Metadatakatalog.Controllers
                 loc.InnerText = item.ShowDetailsUrl.Replace("/uuid/", "/" + ConvertTextToUrlSlug(item.Title) + "/");
                 url.AppendChild(loc);
 
-                XmlElement lastmod = doc.CreateElement("lastmod");
-                lastmod.InnerText = item.Date.HasValue 
-                    ? item.Date.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+                //XmlElement lastmod = doc.CreateElement("lastmod");
+                //lastmod.InnerText = item.Date.HasValue 
+                //    ? item.Date.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
 
-                url.AppendChild(lastmod);
+                //url.AppendChild(lastmod);
 
                 root.AppendChild(url);
 
