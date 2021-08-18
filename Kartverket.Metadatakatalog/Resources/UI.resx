@@ -867,4 +867,7 @@
   <data name="Facet_type_seriedatasets" xml:space="preserve">
     <value>Datasett som inngår i datasettserien</value>
   </data>
+  <data name="DistributionUrl" xml:space="preserve">
+    <value>Distribusjons-url</value>
+  </data>
 </root>

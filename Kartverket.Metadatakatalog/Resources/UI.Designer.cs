@@ -718,6 +718,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Distribusjons-url.
+        /// </summary>
+        public static string DistributionUrl {
+            get {
+                return ResourceManager.GetString("DistributionUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to er ikke lik fellesvalget.
         /// </summary>
         public static string DoesNotMatchCommonChoice {
