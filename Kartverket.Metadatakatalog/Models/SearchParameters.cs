@@ -175,7 +175,7 @@ namespace Kartverket.Metadatakatalog.Models
                 text = text.Replace("^", " ");
                 text = text.Replace("-", "\\-");
 
-                var queryString = "titleText:" + text + "^50";
+                var queryString = "titleText:" + text + "^40";
 
                 if(text.Contains(" "))
                 {
@@ -185,7 +185,7 @@ namespace Kartverket.Metadatakatalog.Models
                     {
                         if (!string.IsNullOrEmpty(words[w]))
                         { 
-                            textOr = textOr + "titleText:" + words[w] + "^50";
+                            textOr = textOr + "titleText:" + words[w] + "^40";
                             if (w != words.Count() - 1)
                                 textOr = textOr + " OR ";
                         }
@@ -218,8 +218,8 @@ namespace Kartverket.Metadatakatalog.Models
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
                         //new SolrQuery("titleText:"+ text + "^50"),
+                        new SolrQuery("titleText:"+ text + "*^50"),
                         new SolrQuery(queryString),
-                        new SolrQuery("titleText:"+ text + "*^40"),
                         new SolrQuery("titleText:"+ text + "~2^1.1"),
                         new SolrQuery("allText:" + text + "^1.2"),
                         new SolrQuery("allText:" + text + "*^1.1"),
