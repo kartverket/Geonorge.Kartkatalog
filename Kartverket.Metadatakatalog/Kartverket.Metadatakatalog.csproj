@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -537,6 +537,9 @@
     <Content Include="Content\bower_components\clipboard\package.js" />
     <Content Include="Content\bower_components\clipboard\package.json" />
     <Content Include="Content\bower_components\clipboard\readme.md" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\.bower.json" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\all.css" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\all.min.css" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\chosen-sprite%402x.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\chosen-sprite.png" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -552,8 +555,26 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\vendor.min.css" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\vendorfonts.css" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\css\vendorfonts.min.css" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\702ZOKiLJc3WVjuplzInF5uFdDttMLvmWuJdhhgs.ttf" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\FontAwesome.otf" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\I4k9un7TZVWzRVT-T8y3USBnSvpkopQaUR-2r7iU.ttf" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\JXh38I15wypJXxuGMBp0EAVxt0G0biEntp43Qt6E.ttf" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\KeOuBrn4kERxqtaUH3aCWcynf_cDxXwCLxiixG1c.ttf" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\lAoFXXQEzZoMSUteGWKCWcynf_cDxXwCLxiixG1c.ttf" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\MzqLaYbbbCL9X6EvaIy3USBnSvpkopQaUR-2r7iU.ttf" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\oNo9fC8O2RDydKj12by3USBnSvpkopQaUR-2r7iU.ttf" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\statusicon.eot" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\statusicon.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\statusicon.ttf" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\statusicon.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\tzj9b56b8RgXW8FAriS3USBnSvpkopQaUR-2r7iU.ttf" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\Y3_3JNqUVRAQQRNVteQ.ttf" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\_ySUJH_bn48VBG8sNSonF5uFdDttMLvmWuJdhhgs.ttf" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\arrow-select-blue.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\arrow-select-orange.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\chevron-down.svg" />
@@ -683,6 +704,7 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\soek.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\sosi.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\spatialdataservice.svg" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\status-not-set.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\tick_fe5000_16px.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\tjenestestatus.svg" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\images\svg\totop_3867c8_75px-01.svg" />
@@ -693,12 +715,22 @@
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\js\main.min.js" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\js\vendor.js" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\js\vendor.min.js" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Analytics.cshtml" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Analytics.html" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Analytics.min.cshtml" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Analytics.min.html" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer.cshtml" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer.html" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer.min.cshtml" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer.min.html" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer_eng.cshtml" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer_eng.html" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer_eng.min.cshtml" />
     <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer_eng.min.html" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\bower.json" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\package-lock.json" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\README.md" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\yarn.lock" />
     <Content Include="Content\bower_components\vue\.gitignore" />
     <Content Include="Content\bower_components\vue\benchmarks\big-table\demo.css" />
     <Content Include="Content\bower_components\vue\benchmarks\big-table\index.html" />
@@ -1200,35 +1232,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\.bower.json" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\702ZOKiLJc3WVjuplzInF5uFdDttMLvmWuJdhhgs.ttf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.eot" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.woff" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\fontawesome-webfont.woff2" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\FontAwesome.otf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\I4k9un7TZVWzRVT-T8y3USBnSvpkopQaUR-2r7iU.ttf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\JXh38I15wypJXxuGMBp0EAVxt0G0biEntp43Qt6E.ttf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\KeOuBrn4kERxqtaUH3aCWcynf_cDxXwCLxiixG1c.ttf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\lAoFXXQEzZoMSUteGWKCWcynf_cDxXwCLxiixG1c.ttf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\MzqLaYbbbCL9X6EvaIy3USBnSvpkopQaUR-2r7iU.ttf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\oNo9fC8O2RDydKj12by3USBnSvpkopQaUR-2r7iU.ttf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\statusicon.eot" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\statusicon.ttf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\statusicon.woff" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\tzj9b56b8RgXW8FAriS3USBnSvpkopQaUR-2r7iU.ttf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\Y3_3JNqUVRAQQRNVteQ.ttf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\_ySUJH_bn48VBG8sNSonF5uFdDttMLvmWuJdhhgs.ttf" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Analytics.cshtml" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Analytics.min.cshtml" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer.cshtml" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer.min.cshtml" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer_eng.cshtml" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\partials\_Footer_eng.min.cshtml" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\bower.json" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\package-lock.json" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\README.md" />
-    <Content Include="Content\bower_components\kartverket-felleskomponenter\yarn.lock" />
     <Content Include="authentication.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1263,6 +1266,62 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-300.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-300.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-300italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-300italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-400.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-400.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-400italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-400italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-600.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-600.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-600italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-600italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-700.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-700.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-700italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-700italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-800.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-800.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-800italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\open-sans-latin-800italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-100.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-100.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-100italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-100italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-200.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-200.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-200italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-200italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-300.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-300.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-300italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-300italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-400.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-400.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-400italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-400italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-500.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-500.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-500italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-500italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-600.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-600.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-600italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-600italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-700.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-700.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-700italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-700italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-800.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-800.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-800italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-800italic.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-900.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-900.woff2" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-900italic.woff" />
+    <Content Include="Content\bower_components\kartverket-felleskomponenter\assets\fonts\raleway-latin-900italic.woff2" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -1367,6 +1426,7 @@
     <Content Include="settings.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="yarn.lock" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\bower_components\vue\build\git-hooks\" />
