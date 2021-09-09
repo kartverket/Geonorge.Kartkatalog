@@ -21,10 +21,6 @@ namespace Kartverket.Metadatakatalog
                 "~/Content/Blocks/SurveyBlock/SurveyBlockStyle.css"
                 ));
 
-            bundles.Add(new StyleBundle("~/Content/shared-partials-styles").Include(
-                "~/dist/vendor.css",
-                "~/dist/main.css"
-                ));
 
             bundles.Add(new ScriptBundle("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts").Include(
                "~/Content/bower_components/kartverket-felleskomponenter/assets/js/vendor.min.js",
