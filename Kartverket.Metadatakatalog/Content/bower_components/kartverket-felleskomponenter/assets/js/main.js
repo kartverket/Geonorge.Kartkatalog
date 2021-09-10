@@ -93,14 +93,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
     };
     $(".chosen-select").chosen(options);
     $("[data-toggle='tooltip']").tooltip({
-        trigger: 'hover'
+        trigger: 'hover',
+        position: { my: "center top", at: "center bottom+10" }
     });
-    $("li.has-error[data-toggle='tooltip']").tooltip("option", "position", { my: "center", at: "center bottom+30" });
+    $("li.has-error[data-toggle='tooltip']").tooltip("option", "position", { my: "center top", at: "center bottom+30" });
     $("li[data-toggle='tooltip']").mouseleave(function() {
         $(".ui-helper-hidden-accessible").remove();
     });
 
-    $(".ui-tooltip-element[data-toggle='tooltip']").tooltip("option", "position", { my: "center", at: "center bottom+25" });
+    $(".ui-tooltip-element[data-toggle='tooltip']").tooltip("option", "position", { my: "center top", at: "center bottom+25" });
     $(".ui-tooltip-element[data-toggle='tooltip']").mouseleave(function() {
         $(".ui-helper-hidden-accessible").remove();
     });
