@@ -159,7 +159,7 @@
                 <span class="custom-icon custom-icon-checked" data-toggle="tooltip" data-placement="bottom" title="@UI.DatasetIsCorrect">
                 </span>
             </span>
-            <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom" title="@Html.Raw(UI.NavigateToDataset)" class="btn icon-btn"><span class="fa fa-home"></span></a>
+            <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom center" track title="@Html.Raw(UI.NavigateToDataset)" class="btn icon-btn"><span class="fa fa-home"></span></a>
             <span v-on:click="$root.removeOrderLine(metadata.uuid, false)" data-toggle="tooltip" data-placement="bottom" title="@UI.DeleteDataset" class="btn icon-btn"><span class="fa fa-trash"></span></span>
         </div>
         <div class="clearfix"></div>
