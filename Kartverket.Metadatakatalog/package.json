@@ -7,10 +7,10 @@
     "gulp": "^4.0.2"
   },
   "dependencies": {
-    "geonorge-shared-partials": "https://github.com/kartverket/Geonorge.SharedPartials.git",
-    "geonorge-base": "https://github.com/kartverket/felleskomponenter.git",
-    "vue": "^2.6.10",
+    "axios": "^0.21.1",
     "clipboard": "^2.0.4",
-    "axios": "^0.21.1"
+    "geonorge-base": "^10.0.8",
+    "geonorge-shared-partials": "^1.0.0",
+    "vue": "^2.6.10"
   }
 }

@@ -1466,7 +1466,7 @@ var mainVueModel = new Vue({
             this.addSelectedOrderLineValuesToLocalStorage();
             this.addSelectedMasterOrderLineValuesToLocalStorage();
             setTimeout(function () {
-                $("[data-toggle='tooltip']").tooltip();
+                $("[data-toggle='tooltip']").tooltip({ position: { my: "center top", at: "center bottom+10" } });
             }, 300);
         },
 
@@ -2021,7 +2021,7 @@ var mainVueModel = new Vue({
                         }
                     }
                 }).done(function () {
-                    $("[data-toggle='tooltip']").tooltip();
+                    $("[data-toggle='tooltip']").tooltip({ position: { my: "center top", at: "center bottom+10" } });
                 })
             }
 

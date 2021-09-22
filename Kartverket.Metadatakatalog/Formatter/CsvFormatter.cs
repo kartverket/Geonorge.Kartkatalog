@@ -123,7 +123,7 @@ namespace Kartverket.Metadatakatalog.Formatter
 
         private void WriteSearchLines(SearchResult data, StreamWriter writer)
         {
-            writer.WriteLine(UI.Title + ";Type;" + UI.Facet_theme + ";" + UI.Facet_organization + ";" + UI.OpenData + ";DOK-data;Uuid;Wms-url;Wfs-url;Atom-feed");
+            writer.WriteLine(UI.Title + ";Type;" + UI.Facet_theme + ";" + UI.Facet_organization + ";" + UI.OpenData + ";DOK-data;Uuid;Wms-url;Wfs-url;Atom-feed;"+ UI.Facet_spatialscope+";"+ UI.Facet_DistributionProtocols + ";" + UI.DistributionUrl);
             foreach (var meta in data.Results)
             {
                 writer.WriteLine(
@@ -136,7 +136,11 @@ namespace Kartverket.Metadatakatalog.Formatter
                     Escape(meta.Uuid) + ";" +
                     Escape(meta.ServiceDistributionUrlForDataset) + ";" +
                     Escape(meta.ServiceWfsDistributionUrlForDataset) + ";" +
-                    Escape(meta.AtomFeed())
+                    Escape(meta.AtomFeed()) + ";" +
+                    Escape(meta.SpatialScope) + ";" +
+                    Escape(meta.DistributionProtocol) + ";" +
+                    Escape(meta.DistributionUrl)
+
                 );
             }
         }

@@ -1588,6 +1588,11 @@
               Looks up a localized string similar to Distribusjonstype.
             </summary>
         </member>
+        <member name="P:Resources.UI.DistributionUrl">
+            <summary>
+              Looks up a localized string similar to Distribusjons-url.
+            </summary>
+        </member>
         <member name="P:Resources.UI.DoesNotMatchCommonChoice">
             <summary>
               Looks up a localized string similar to er ikke lik fellesvalget.
