@@ -561,6 +561,40 @@ namespace Kartverket.Metadatakatalog.Models.Api
             MemoryCache memoryCache = MemoryCache.Default;
             memoryCache.Add("AtomFeedDoc", AtomFeedDoc, new DateTimeOffset(DateTime.Now.AddDays(1)));
         }
+
+        public string GetAtomFeed(List<string> services)
+        {
+            string atomFeed = "";
+
+            if(services != null) { 
+
+                foreach(var service in services)
+                { 
+                    var data = service.Split('|');
+
+                    if(data.Length >= 8) {
+
+                        var protocol = data[6];
+                        if(protocol == "W3C:AtomFeed")
+                        {
+                            var url = data[7];
+                            if(!string.IsNullOrEmpty(url))
+                            {
+                                if (url.ToLower().Contains("gml"))
+                                    return url;
+                                else if (url.ToLower().Contains("sosi"))
+                                    return url;
+                                else
+                                    atomFeed = url;
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            return atomFeed;
+        }
     }
 
     public class DatasetService
