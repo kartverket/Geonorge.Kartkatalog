@@ -33,6 +33,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string ProductSheetUrl { get; set; }
         public string ProductSpecificationUrl { get; set; }
         public List<string> DatasetServices { get; set; }
+        public List<string> Distributions { get; private set; }
         public List<string> ServiceDatasets { get; set; }
         public List<string> Bundles { get; set; }
         public List<string> ServiceLayers { get; set; }
@@ -110,6 +111,7 @@ namespace Kartverket.Metadatakatalog.Models
             ProductSheetUrl = doc.ProductSheetUrl;
             ProductSpecificationUrl = doc.ProductSpecificationUrl;
             DatasetServices = doc.DatasetServices;
+            Distributions = doc.Distributions;
             ServiceDatasets = doc.ServiceDatasets;
             Serie = doc.Serie;
             SerieDatasets = doc.SerieDatasets;

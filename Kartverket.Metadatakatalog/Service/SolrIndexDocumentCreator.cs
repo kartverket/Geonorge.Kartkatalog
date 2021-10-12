@@ -305,7 +305,13 @@ namespace Kartverket.Metadatakatalog.Service
 
                     if(indexDoc.Type == "dataset" || indexDoc.Type == "series")
                     {
-                        foreach(var distribution in simpleMetadata.DistributionsFormats)
+                        List<string> distributionsNewList = new List<string>();
+
+                        foreach (var distribution in simpleMetadata.DistributionsFormats)
+                        {
+                            distributionsNewList.Add(distribution.Organization + "|" + distribution.Protocol + "|" + distribution.URL + "|" + distribution.FormatName + "|" + distribution.FormatVersion  + "|" + distribution.Name + "|" + distribution.UnitsOfDistribution + "|" + distribution.EnglishUnitsOfDistribution);
+                        }
+                        foreach (var distribution in simpleMetadata.DistributionsFormats)
                         {
                             if (distribution.Protocol == "GEONORGE:DOWNLOAD")
                             {
@@ -326,6 +332,8 @@ namespace Kartverket.Metadatakatalog.Service
                                 break;
                             }
                         }
+
+                        indexDoc.Distributions = distributionsNewList.ToList();
                     }
                 }
 
@@ -1363,6 +1371,7 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.ServiceDistributionUuidForDataset = simpleMetadata.ServiceDistributionUuidForDataset;
                 indexDoc.ServiceDistributionAccessConstraint = simpleMetadata.ServiceDistributionAccessConstraint;
                 indexDoc.Serie = simpleMetadata.Serie;
+                indexDoc.Distributions = simpleMetadata.Distributions;
             }
 
             if (indexDoc.Type == "series")

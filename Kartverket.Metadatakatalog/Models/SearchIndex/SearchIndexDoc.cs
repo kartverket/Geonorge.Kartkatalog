@@ -141,6 +141,9 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("datasetservice")]
         public List<string> DatasetServices { get; set; }
 
+        [SolrField("distributions")]
+        public List<string> Distributions { get; set; }
+
         [SolrField("servicedataset")]
         public List<string> ServiceDatasets { get; set; }
 
