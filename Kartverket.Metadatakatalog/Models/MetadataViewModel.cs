@@ -325,7 +325,12 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsDatasetSeries()
         {
-            return HierarchyLevel == "series";
+            return HierarchyLevel == "series" || HierarchyLevel == "Datasettserie";
+        }
+
+        public bool IsDatasetOrSeries()
+        {
+            return IsDataset() || IsDatasetSeries();
         }
 
         public bool IsApplication()

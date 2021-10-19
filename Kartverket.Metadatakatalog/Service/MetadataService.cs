@@ -64,7 +64,7 @@ namespace Kartverket.Metadatakatalog.Service
 
 
             //Hente inn indeks og relaterte services
-            if (simpleMetadata.IsDataset() || simpleMetadata.IsDimensionGroup())
+            if (simpleMetadata.IsDataset() || simpleMetadata.IsDimensionGroup() || simpleMetadata.HierarchyLevel == "series")
             {
                 relatedDistributions.AddRange(GetMetadataRelatedDistributions(uuid));
                 if (simpleMetadata.IsDataset())
@@ -89,7 +89,7 @@ namespace Kartverket.Metadatakatalog.Service
         {
             string type = null;
                        
-            if (metadata.IsDataset())
+            if (metadata.IsDatasetOrSeries())
             {
                 var metadataIndexDocResult = _searchService.GetMetadata(metadata.Uuid) ?? throw new ArgumentNullException("GetMetadata(metadata.Uuid)");
 
