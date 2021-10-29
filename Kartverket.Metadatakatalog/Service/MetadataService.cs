@@ -1044,7 +1044,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         private static DateTime? GetDateMetadataValidTo(SimpleMetadata simpleMetadata)
         {
-            return IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidTo)
+            return (string.IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidTo) || simpleMetadata.ValidTimePeriod.ValidTo == "unknown")
                                     ? (DateTime?)null
                                     : DateTime.Parse(simpleMetadata.ValidTimePeriod.ValidTo);
         }
