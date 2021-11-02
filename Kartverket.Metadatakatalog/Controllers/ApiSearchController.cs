@@ -362,10 +362,10 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         [System.Web.Http.Route("api/distribution-lists/{uuid}")]
         [System.Web.Http.HttpGet]
-        public Distributions GetDistributionLists(string uuid)
+        public Distributions GetDistributionLists(string uuid, [System.Web.Http.ModelBinding.ModelBinder(typeof(SearchParameterModelBuilder))] SearchParameters parameters)
         {
             var metadata = _metadataService.GetMetadataViewModelByUuid(uuid);
-            return _metadataService.GetDistributions(metadata);
+            return _metadataService.GetDistributions(metadata, parameters);
         }
 
         /// <summary>

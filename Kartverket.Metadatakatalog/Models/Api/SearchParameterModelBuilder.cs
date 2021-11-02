@@ -40,6 +40,18 @@ namespace Kartverket.Metadatakatalog.Models.Api
                     searchParameters.listhidden = listhidden;
                 }
 
+                DateTime datefrom = DateTime.Now.AddDays(-7);
+                if (DateTime.TryParse(GetValue(bindingContext, "datefrom"), out datefrom))
+                {
+                    searchParameters.datefrom = datefrom;
+                }
+
+                DateTime dateto = DateTime.Now;
+                if (DateTime.TryParse(GetValue(bindingContext, "dateto"), out dateto))
+                {
+                    searchParameters.dateto = dateto;
+                }
+
                 searchParameters.orderby = GetValue(bindingContext, "orderby");
                 List<FacetInput> facets = new List<FacetInput>();
                 var query = HttpContext.Current.Request.QueryString;

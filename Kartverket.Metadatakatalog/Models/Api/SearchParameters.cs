@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Kartverket.Metadatakatalog.Models.Api
 {
@@ -27,6 +28,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// Field to order by, ex: orderby=title, default order is score desc.
         /// </summary>
         public string orderby { get; set; }
+        public DateTime? datefrom { get; set; }
+        public DateTime? dateto { get; set; }
         public List<FacetInput> facets { get; set; }
 
         public SearchParameters()

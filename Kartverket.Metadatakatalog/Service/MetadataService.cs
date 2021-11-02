@@ -19,6 +19,7 @@ using Kartverket.Metadatakatalog.Helpers;
 using Resources;
 using System.Text.RegularExpressions;
 using System.Web.Configuration;
+using SolrNet.Commands.Parameters;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -85,7 +86,7 @@ namespace Kartverket.Metadatakatalog.Service
             return simpleMetadata == null ? null : CreateMetadataViewModel(simpleMetadata);
         }
 
-        public Distributions GetDistributions(MetadataViewModel metadata)
+        public Distributions GetDistributions(MetadataViewModel metadata, Models.Api.SearchParameters parameters)
         {
             string type = null;
                        
@@ -200,9 +201,17 @@ namespace Kartverket.Metadatakatalog.Service
             //Serie
             if (metadata.HierarchyLevel == "series")
             {
-                var metadataIndexDocResult = _searchService.GetMetadata(metadata.Uuid);
-                if(metadataIndexDocResult != null)
-                    metadata.Distributions.RelatedSerieDatasets = ConvertRelatedData(metadataIndexDocResult.SerieDatasets);
+                
+                if (metadata.TypeName == "series_time")
+                {
+                    metadata.Distributions.RelatedSerieDatasets = GetTimeRelatedDistributions(metadata.Uuid, parameters);
+                }
+                else
+                {
+                    var metadataIndexDocResult = _searchService.GetMetadata(metadata.Uuid);
+                    if (metadataIndexDocResult != null)
+                        metadata.Distributions.RelatedSerieDatasets = ConvertRelatedData(metadataIndexDocResult.SerieDatasets);
+                }
             }
 
             metadata.Distributions.ShowSelfDistributions = metadata.Distributions.ShowSelf();
@@ -217,6 +226,53 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.Distributions = metadata.Distributions.GetTitle(metadata, type);
 
             return metadata.Distributions;
+        }
+
+        private List<Distribution> GetTimeRelatedDistributions(object uuid, Models.Api.SearchParameters parameters)
+        {
+            List<Distribution> distributions = new List<Distribution>();
+
+            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+            if (parameters.offset == 0)
+                parameters.offset = 1;
+
+            var datequery = "";
+
+            if(parameters.datefrom.HasValue && parameters.dateto.HasValue)
+            {
+                string dateFrom = parameters.datefrom.Value.ToString("yyyy-MM-dd");
+                string dateTo = parameters.dateto.Value.ToString("yyyy-MM-dd");
+                datequery = $" AND date_published:[{dateFrom}T00:00:00Z TO {dateTo}T23:59:59Z]";
+            }
+
+            ISolrQuery query = new SolrQuery("serie:" + uuid + "*" + datequery);
+            try
+            {
+                SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                {
+                    Rows = parameters.limit,
+                    OrderBy = new[] { new SortOrder("date_published", Order.DESC) },
+                    Start = parameters.offset - 1, //solr is zero-based - we use one-based indexing in api
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "resourceReferenceCodeName" }
+                });
+
+                foreach (var result in queryResults)
+                {
+                    var distribution = new Distribution
+                    {
+                        Uuid = result.Uuid, Title = result.Title + "(" + result.DatePublished + ")",
+                        Organization = result.Organization
+                    };
+
+                    distributions.Add(distribution);
+                }
+
+            }
+            catch (Exception ex) { }
+
+            return distributions;
         }
 
         public SearchResultItemViewModel Metadata(string uuid)
@@ -385,7 +441,7 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
 
-            if (metadata.Type == "series" && metadataIndexDocResult != null)
+            if (metadata.Type == "series" && metadataIndexDocResult != null && metadata.TypeName != "series_time")
             {
                 metadata.SerieDatasets = GetRelatedDatasets(metadataIndexDocResult.SerieDatasets);
             }
@@ -473,7 +529,7 @@ namespace Kartverket.Metadatakatalog.Service
             if(simpleMetadata.HierarchyLevel == "series")
             {
                 var metadataIndexDocResult = _searchService.GetMetadata(uuid);
-                if(metadataIndexDocResult != null && metadataIndexDocResult.SerieDatasets != null)
+                if(metadataIndexDocResult != null && metadataIndexDocResult.SerieDatasets != null && distribution.TypeName != "series_time")
                 {
                     distribution.SerieDatasets = Models.Api.Metadata.AddSerieDatasets(metadataIndexDocResult.SerieDatasets);
                 }
