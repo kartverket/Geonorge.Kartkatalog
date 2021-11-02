@@ -263,7 +263,9 @@ namespace Kartverket.Metadatakatalog.Service
                     var distribution = new Distribution
                     {
                         Uuid = result.Uuid, Title = result.Title + "(" + result.DatePublished + ")",
-                        Organization = result.Organization
+                        Organization = result.Organization,
+                        DistributionUrl = result.DistributionUrl,
+                        Protocol = result.DistributionProtocol
                     };
 
                     distributions.Add(distribution);
