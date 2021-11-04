@@ -271,8 +271,7 @@ namespace Kartverket.Metadatakatalog.Service
                         distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
                         distribution.Protocol = result.DistributionProtocol != null ? Register.GetDistributionType(result.DistributionProtocol) : "";
                         distribution.CanShowDownloadUrl = !string.IsNullOrEmpty(result.DistributionUrl);
-                        distribution.DownloadUrl = result.DistributionUrl;
-                        distribution.GetCapabilitiesUrl = result.DistributionUrl;
+                        distribution.DistributionUrl = result.DistributionUrl;
 
                         //Åpne data, begrenset, skjermet
                         if (SimpleMetadataUtil.IsOpendata(result.OtherConstraintsAccess)) distribution.AccessIsOpendata = true;
