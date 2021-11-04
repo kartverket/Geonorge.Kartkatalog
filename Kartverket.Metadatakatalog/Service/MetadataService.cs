@@ -270,7 +270,7 @@ namespace Kartverket.Metadatakatalog.Service
                         distribution.Organization = result.Organization;
                         distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
                         distribution.Protocol = result.DistributionProtocol != null ? Register.GetDistributionType(result.DistributionProtocol) : "";
-
+                        distribution.CanShowDownloadUrl = !string.IsNullOrEmpty(result.DistributionUrl);
                         distribution.DownloadUrl = result.DistributionUrl;
 
                         //Åpne data, begrenset, skjermet
