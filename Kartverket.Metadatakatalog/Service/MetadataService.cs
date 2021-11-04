@@ -242,7 +242,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 string dateFrom = parameters.datefrom.Value.ToString("yyyy-MM-dd");
                 string dateTo = parameters.dateto.Value.ToString("yyyy-MM-dd");
-                datequery = $" AND date_published:[{dateFrom}T00:00:00Z TO {dateTo}T23:59:59Z]";
+                datequery = $" AND date_updated:[{dateFrom}T00:00:00Z TO {dateTo}T23:59:59Z]";
             }
 
             ISolrQuery query = new SolrQuery("serie:" + uuid + "*" + datequery);
@@ -251,7 +251,7 @@ namespace Kartverket.Metadatakatalog.Service
                 SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
                 {
                     Rows = parameters.limit,
-                    OrderBy = new[] { new SortOrder("date_published", Order.DESC) },
+                    OrderBy = new[] { new SortOrder("date_updated", Order.DESC) },
                     Start = parameters.offset - 1, //solr is zero-based - we use one-based indexing in api
                     Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
                     "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
@@ -266,7 +266,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                         distribution.Uuid = result.Uuid;
                         distribution.Type = result.Type;
-                        distribution.Title = result.DatePublished.Value.AddHours(2).ToString("dd.MM.yyyy") + ": " + result.Title;
+                        distribution.Title = result.DateUpdated.Value.AddHours(2).ToString("dd.MM.yyyy") + ": " + result.Title;
                         distribution.Organization = result.Organization;
                         distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
                         distribution.Protocol = result.DistributionProtocol != null ? Register.GetDistributionType(result.DistributionProtocol) : "";
