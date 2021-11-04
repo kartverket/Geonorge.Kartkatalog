@@ -260,15 +260,30 @@ namespace Kartverket.Metadatakatalog.Service
 
                 foreach (var result in queryResults)
                 {
-                    var distribution = new Distribution
+                    try
                     {
-                        Uuid = result.Uuid, Title = result.Title + "(" + result.DatePublished + ")",
-                        Organization = result.Organization,
-                        DistributionUrl = result.DistributionUrl,
-                        Protocol = result.DistributionProtocol
-                    };
+                        Distribution distribution = new Distribution();
 
-                    distributions.Add(distribution);
+                        distribution.Uuid = result.Uuid;
+                        distribution.Type = result.Type;
+                        distribution.Title = result.Title + " (" + result.DatePublished + ")";
+                        distribution.Organization = result.Organization;
+                        distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
+                        distribution.Protocol = result.DistributionProtocol != null ? Register.GetDistributionType(result.DistributionProtocol) : "";
+
+                        distribution.DownloadUrl = result.DistributionUrl;
+
+                        //Åpne data, begrenset, skjermet
+                        if (SimpleMetadataUtil.IsOpendata(result.OtherConstraintsAccess)) distribution.AccessIsOpendata = true;
+                        if (SimpleMetadataUtil.IsRestricted(result.OtherConstraintsAccess)) distribution.AccessIsRestricted = true;
+                        if (SimpleMetadataUtil.IsProtected(result.AccessConstraint)) distribution.AccessIsProtected = true;
+
+                        distributions.Add(distribution);
+                    }
+                    catch (Exception)
+                    {
+                    }
+
                 }
 
             }
