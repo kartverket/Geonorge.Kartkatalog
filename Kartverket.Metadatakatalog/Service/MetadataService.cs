@@ -266,7 +266,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                         distribution.Uuid = result.Uuid;
                         distribution.Type = result.Type;
-                        distribution.Title = result.Title + " (" + result.DatePublished + ")";
+                        distribution.Title = result.DatePublished + ": " + result.Title;
                         distribution.Organization = result.Organization;
                         distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
                         distribution.Protocol = result.DistributionProtocol != null ? Register.GetDistributionType(result.DistributionProtocol) : "";
