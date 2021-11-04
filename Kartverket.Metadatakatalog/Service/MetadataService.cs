@@ -634,7 +634,9 @@ namespace Kartverket.Metadatakatalog.Service
                     distributionFormat.Name = distribution.Name;
                     distributionFormat.Version = distribution.Version;
 
-                    distributions.Add(distributionFormat);
+                    var formatExists = distributions.Where(d => d.Name == distributionFormat.Name && d.Version == distributionFormat.Version).FirstOrDefault();
+                    if(formatExists == null)
+                        distributions.Add(distributionFormat);
                 }
             }
             return distributions;
