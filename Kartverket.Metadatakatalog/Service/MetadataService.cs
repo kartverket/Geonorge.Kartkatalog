@@ -278,6 +278,8 @@ namespace Kartverket.Metadatakatalog.Service
                         if (SimpleMetadataUtil.IsRestricted(result.OtherConstraintsAccess)) distribution.AccessIsRestricted = true;
                         if (SimpleMetadataUtil.IsProtected(result.AccessConstraint)) distribution.AccessIsProtected = true;
 
+                        distribution.Serie = new Serie { TypeName = "series_time" };
+
                         distributions.Add(distribution);
                     }
                     catch (Exception)
