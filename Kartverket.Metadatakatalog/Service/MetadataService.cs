@@ -20,6 +20,7 @@ using Resources;
 using System.Text.RegularExpressions;
 using System.Web.Configuration;
 using SolrNet.Commands.Parameters;
+using System.Globalization;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -243,6 +244,8 @@ namespace Kartverket.Metadatakatalog.Service
                 string dateFrom = parameters.datefrom.Value.ToString("yyyy-MM-dd");
                 string dateTo = parameters.dateto.Value.ToString("yyyy-MM-dd");
                 datequery = $" AND date_updated:[{dateFrom}T00:00:00Z TO {dateTo}T23:59:59Z]";
+
+                parameters.limit = 50;
             }
 
             ISolrQuery query = new SolrQuery("serie:" + uuid + "*" + datequery);
@@ -266,7 +269,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                         distribution.Uuid = result.Uuid;
                         distribution.Type = result.Type;
-                        distribution.Title = result.DateUpdated.Value.AddHours(2).ToString("dd.MM.yyyy") + ": " + result.Title;
+                        distribution.Title = result.DateUpdated.Value.AddHours(2).ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) + ": " + result.Title;
                         distribution.Organization = result.Organization;
                         distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
                         distribution.Protocol = result.DistributionProtocol != null ? Register.GetDistributionType(result.DistributionProtocol) : "";
