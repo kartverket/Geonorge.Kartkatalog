@@ -172,7 +172,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 var distributionRows = CreateDistributionRows(metadata.Uuid, simpleMetadata);
                 if (distributionRows != null)
-                    foreach (var distribution in distributionRows)
+                    foreach (var distribution in distributionRows.Where(d => d.Key.Protocol != "W3C:AtomFeed"))
                     {
                         distribution.Value.RemoveDetailsUrl = true;
                         if (metadata.HierarchyLevel == "dataset" && metadata.Distributions.RelatedViewServices != null)
@@ -196,6 +196,48 @@ namespace Kartverket.Metadatakatalog.Service
                         }
                         if(!(simpleMetadata.IsDataset() && distribution.Key.Protocol == "OGC:WMS"))
                             metadata.Distributions.SelfDistribution.Add(distribution.Value);
+                    }
+
+                    var distributionKeyProtocol = false;
+                    KeyValuePair<DistributionRow, Distribution> distributionWithAllFormats = new KeyValuePair<DistributionRow, Distribution>();
+                    List<DistributionFormat> distributionFormats = new List<DistributionFormat>();
+
+                    foreach (var distribution in distributionRows.Where(d => d.Key.Protocol == "W3C:AtomFeed"))
+                    {
+                        distribution.Value.RemoveDetailsUrl = true;
+                        if (metadata.HierarchyLevel == "dataset" && metadata.Distributions.RelatedViewServices != null)
+                        {
+                            distribution.Value.DatasetServicesWithShowMapLink = new List<DatasetService>();
+                            if (metadata?.Distributions?.RelatedViewServices != null && metadata?.Distributions?.RelatedViewServices.Count > 0)
+                            {
+                                distribution.Value.DatasetServicesWithShowMapLink.Add(
+                                    new DatasetService
+                                    {
+                                        Uuid = metadata?.Distributions?.RelatedViewServices?[0]?.Uuid,
+                                        Title = metadata?.Distributions?.RelatedViewServices?[0]?.Title,
+                                        DistributionProtocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol,
+                                        GetCapabilitiesUrl = metadata?.Distributions?.RelatedViewServices?[0]?.GetCapabilitiesUrl
+                                    }
+                                    );
+                                var protocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol;
+                                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                                    distribution.Value.CanShowMapUrl = true;
+                        }
+                        foreach (var distro in distribution.Value.DistributionFormats)
+                        {
+                            distributionFormats.Add(distro);
+                        }
+
+                        if (distribution.Key.Protocol == "OGC:WMS")
+                            distributionKeyProtocol = true;
+                    }
+
+                    distributionWithAllFormats = distribution;
+                }
+
+                    if (!(simpleMetadata.IsDataset() && distributionKeyProtocol)) {
+                        distributionWithAllFormats.Value.DistributionFormats = distributionFormats;
+                        metadata.Distributions.SelfDistribution.Add(distributionWithAllFormats.Value);
                     }
             }
 
