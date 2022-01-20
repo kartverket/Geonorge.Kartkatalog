@@ -1010,7 +1010,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             metadata.KeywordsInspire = GetTranslationForInspire(metadata.KeywordsInspire);
 
-            metadata.DistributionUrl = GetDistributionUrl(metadata.DistributionDetails);
+            metadata.DistributionUrl = GetDistributionUrl(metadata);
             metadata.DistributionFormat = Convert(metadata.DistributionFormat);
 
             metadata.DistributionProtocol = metadata.DistributionDetails?.Protocol;
@@ -1124,9 +1124,18 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
-        private string GetDistributionUrl(DistributionDetails distributionDetails)
+        private string GetDistributionUrl(MetadataViewModel metadata)
         {
-            return SimpleMetadataUtil.GetCapabilitiesUrl(distributionDetails?.URL, distributionDetails?.Protocol);
+            if (metadata.DistributionDetails != null && !string.IsNullOrWhiteSpace(metadata.DistributionDetails.Protocol) && metadata.DistributionDetails.Protocol.Contains("GEONORGE:DOWNLOAD"))
+                return metadata.DistributionDetails.URL;
+
+            foreach (var distributionDetail in metadata.DistributionsFormats)
+            {
+                if (distributionDetail != null && !string.IsNullOrWhiteSpace(distributionDetail.Protocol) && distributionDetail.Protocol.Contains("GEONORGE:DOWNLOAD"))
+                    return distributionDetail.URL;
+            }
+
+            return metadata?.DistributionDetails?.URL;
         }
 
         private string GetResourceReferenceCode(SimpleResourceReference resourceReference)

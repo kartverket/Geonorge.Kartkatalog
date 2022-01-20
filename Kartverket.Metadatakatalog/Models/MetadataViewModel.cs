@@ -285,6 +285,12 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains("GEONORGE:DOWNLOAD"))
                     return true;
+
+                foreach(var distributionDetail in DistributionsFormats) 
+                {
+                    if (distributionDetail != null && !string.IsNullOrWhiteSpace(distributionDetail.Protocol) && distributionDetail.Protocol.Contains("GEONORGE:DOWNLOAD"))
+                        return true;
+                }
             }
 
             return false;
