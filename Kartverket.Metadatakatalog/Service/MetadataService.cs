@@ -89,7 +89,7 @@ namespace Kartverket.Metadatakatalog.Service
         {
             string type = null;
                        
-            if (metadata.IsDataset())
+            if (metadata.IsDataset() || metadata.IsDatasetSeries())
             {
                 var metadataIndexDocResult = _searchService.GetMetadata(metadata.Uuid) ?? throw new ArgumentNullException("GetMetadata(metadata.Uuid)");
 
