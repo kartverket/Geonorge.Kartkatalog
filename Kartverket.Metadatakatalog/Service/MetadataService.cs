@@ -233,7 +233,7 @@ namespace Kartverket.Metadatakatalog.Service
                     distributionWithAllFormats = distribution;
                 }
 
-                    if (!(simpleMetadata.IsDataset() && distributionKeyProtocol)) {
+                    if (!(simpleMetadata.IsDataset() && distributionKeyProtocol) && distributionWithAllFormats.Value != null) {
                         distributionWithAllFormats.Value.DistributionFormats = distributionFormats;
                         metadata.Distributions.SelfDistribution.Add(distributionWithAllFormats.Value);
                     }
