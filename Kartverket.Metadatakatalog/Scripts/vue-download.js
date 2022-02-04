@@ -481,6 +481,41 @@ var OrderLine = {
             $('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
         },
 
+        validateClipperFile: function (orderItem) {
+            // Checking whether FormData is available in browser  
+            if (window.FormData !== undefined) {
+
+                var fileUpload = $("#clipperFile").get(0);
+                var files = fileUpload.files;
+
+                // Create FormData object  
+                var fileData = new FormData();
+                console.log(files.length)
+
+                // Looping over all files and add it to FormData object  
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                    alert('jepp');
+                }
+
+                $.ajax({
+                    url: 'https://localhost:44350/api/validate-clipperfile/' + orderItem.metadataUuid,
+                    type: "POST",
+                    contentType: false, // Not to set any content header  
+                    processData: false, // Not to process data  
+                    data: fileData,
+                    success: function (result) {
+                        alert(result);
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        },
+
         selectAllGrids: function (orderItem) {
 
             var orderLineUuid = orderItem.metadata.uuid;
