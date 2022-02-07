@@ -490,16 +490,31 @@ var OrderLine = {
 
 
                 $.ajax({
-                    url: 'https://localhost:44350/api/validate-clipperfile/' + orderItem.metadata.uuid,
+                    url: downloadUrl + 'api/validate-clipperfile/' + orderItem.metadata.uuid,
                     type: "POST",
                     contentType: false, // Not to set any content header  
                     processData: false, // Not to process data  
                     data: myData,
                     success: function (result) {
-                        alert("Validering vellykket");
+                        console.log(result);
+                        if (result.valid) {
+                            showAlert("Validering vellykket", "green");
+                            //Todo set selected clipperFile "Klippefil valgt"
+                            // Set clipperFile for orderline in order request
+                            //todo check error
+                            this.$root.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
+                                if (orderRequest.metadataUuid == orderItem.metadata.uuid) {
+                                    orderRequest.clipperFile = result.url;
+                                }
+                            }.bind(this))
+                        }
+                        else
+                        {
+                            showAlert("Validering feilet: " + result.message, "danger")
+                        }
                     },
                     error: function (err) {
-                        alert(err.statusText);
+                        showAlert("Validering feilet: " + err.statusText, "danger")
                     }
                 });
             } else {

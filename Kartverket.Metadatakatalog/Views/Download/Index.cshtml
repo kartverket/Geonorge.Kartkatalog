@@ -505,6 +505,7 @@
     var downloadPurposes = @Html.Raw(JsonConvert.SerializeObject(ViewBag.DownloadPurposes));
     var downloadSoftwareClient = 'Kartkatalogen';
     var downloadSoftwareClientVersion = '@Html.ApplicationVersionNumber()';
+    var downloadUrl = '@Html.DownloadUrl()';
 </script>
 @section scripts{
     @Scripts.Render("~/Content/download");
