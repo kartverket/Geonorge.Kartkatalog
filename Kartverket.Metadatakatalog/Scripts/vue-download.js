@@ -485,27 +485,18 @@ var OrderLine = {
             // Checking whether FormData is available in browser  
             if (window.FormData !== undefined) {
 
-                var fileUpload = $("#clipperFile").get(0);
-                var files = fileUpload.files;
+                var form = document.getElementById("clipper-" + orderItem.metadata.uuid),
+                    myData = new FormData(form);
 
-                // Create FormData object  
-                var fileData = new FormData();
-                console.log(files.length)
-
-                // Looping over all files and add it to FormData object  
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                    alert('jepp');
-                }
 
                 $.ajax({
-                    url: 'https://localhost:44350/api/validate-clipperfile/' + orderItem.metadataUuid,
+                    url: 'https://localhost:44350/api/validate-clipperfile/' + orderItem.metadata.uuid,
                     type: "POST",
                     contentType: false, // Not to set any content header  
                     processData: false, // Not to process data  
-                    data: fileData,
+                    data: myData,
                     success: function (result) {
-                        alert(result);
+                        alert("Validering vellykket");
                     },
                     error: function (err) {
                         alert(err.statusText);
