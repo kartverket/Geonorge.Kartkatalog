@@ -376,7 +376,7 @@ var Formats = {
 
 
 var OrderLine = {
-    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'selectedCoordinates', 'defaultProjections', 'defaultFormats', 'orderLineErrors', 'orderLineInfoMessages', 'notAvailableSelectedAreas', 'notAvailableSelectedProjections', 'notAvailableSelectedFormats'],
+    props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'selectedCoordinates', 'selectedClipperFiles', 'defaultProjections', 'defaultFormats', 'orderLineErrors', 'orderLineInfoMessages', 'notAvailableSelectedAreas', 'notAvailableSelectedProjections', 'notAvailableSelectedFormats'],
     template: '#order-line-template',
     data: function () {
         var data = {
@@ -497,22 +497,61 @@ var OrderLine = {
                     data: myData,
                     success: function (result) {
                         console.log(result);
+                        clearAlertMessage();
+                        hideAlert();
+
                         if (result.valid) {
                             showAlert("Validering vellykket", "green");
-                            //Todo set selected clipperFile "Klippefil valgt"
-                            // Set clipperFile for orderline in order request
-                            //todo check error
+
+                            //Todo problem area masterorderline
+
+                            orderItem.clipperFile = result.url;
+                            this.$root.masterOrderLine.allSelectedClipperFiles[orderItem.metadata.uuid] = orderItem.clipperFile;
+
+                            var clipperFileArea = {
+                                "name": "Valgt fra klippefil",
+                                "type": "polygonfile",
+                                "code": "Kart",
+                                "isSelected": true,
+                                "formats": orderItem.defaultFormats,
+                                "projections": orderItem.defaultProjections,
+                                "clipperFiles": orderItem.clipperFile
+                            }
+
+                            clipperFileArea.allAvailableProjections = {};
+                            clipperFileArea.allAvailableProjections[orderItem.metadata.uuid] = orderItem.defaultProjections;
+
+                            clipperFileArea.allAvailableFormats = {};
+                            clipperFileArea.allAvailableFormats[orderItem.metadata.uuid] = orderItem.defaultFormats;
+
+                            var isAllreadyAddedInfo = this.isAllreadyAdded(this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid], clipperFileArea, "code");
+                            if (!isAllreadyAddedInfo.added) {
+                                this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(clipperFileArea);
+                            } else {
+                                this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid][isAllreadyAddedInfo.position] = clipperFileArea;
+
+                            }
+
+                            this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][clipperFileArea.type] = [];
+                            this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][clipperFileArea.type].push(clipperFileArea);
+
+                            // Set clipperfile for orderline in order request
                             this.$root.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
                                 if (orderRequest.metadataUuid == orderItem.metadata.uuid) {
-                                    orderRequest.clipperFile = result.url;
+                                    orderRequest.clipperFile = this.$root.masterOrderLine.allSelectedClipperFiles[orderItem.metadata.uuid];
                                 }
                             }.bind(this))
+
+                            this.$root.updateSelectedAreasForSingleOrderLine(orderItem.metadata.uuid, true);
+                            this.$root.updateAvailableProjectionsAndFormatsForSingleOrderLine(orderItem.metadata.uuid);
+                            this.$root.validateAreas();
+
                         }
                         else
                         {
                             showAlert("Validering feilet: " + result.message, "danger")
                         }
-                    },
+                    }.bind(this),
                     error: function (err) {
                         showAlert("Validering feilet: " + err.statusText, "danger")
                     }
@@ -1023,7 +1062,7 @@ var MasterOrderLine = {
 }
 
 Vue.config.debug = true;
-
+Vue.config.devtools = true;
 var mainVueModel = new Vue({
     el: '#vueContainer',
     data: {
@@ -1053,6 +1092,7 @@ var mainVueModel = new Vue({
             allSelectedProjections: {},
             allSelectedFormats: {},
             allSelectedCoordinates: {},
+            allSelectedClipperFiles: {},
             masterSelectedAreas: [],
             masterSelectedProjections: [],
             masterSelectedFormats: [],
@@ -1151,6 +1191,7 @@ var mainVueModel = new Vue({
 
                             this.masterOrderLine.allSelectedFormats[uuid] = [];
                             this.masterOrderLine.allSelectedCoordinates[uuid] = "";
+                            this.masterOrderLine.allSelectedClipperFiles[uuid] = "";
 
                             this.masterOrderLine.allDefaultProjections[uuid] = [];
                             this.masterOrderLine.allDefaultFormats[uuid] = [];
@@ -1489,6 +1530,9 @@ var mainVueModel = new Vue({
                         }.bind(this));
 
                         if (selectedArea.type == "polygon") {
+                            emailRequired = true;
+                        }
+                        if (selectedArea.type == "polygonfile") {
                             emailRequired = true;
                         }
                         else if (accessConstraintRequiredRoleIsAgriculturalParty && userHasRoleAgriculturalParty) {
@@ -1854,6 +1898,13 @@ var mainVueModel = new Vue({
                                         this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'].push(masterSelectedArea);
                                     }
                                 }
+                                else if (masterSelectedArea.type == "polygonfile") {
+                                    this.masterOrderLine.allSelectedCoordinates[orderLineUuid] = masterSelectedArea.clipperFile;
+                                    if (this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygonfile'] == undefined) {
+                                        this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygonfile'] = [];
+                                        this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygonfile'].push(masterSelectedArea);
+                                    }
+                                }
                                 if (masterSelectedArea.code == availableArea.code) {
                                     this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
                                 }
@@ -1979,6 +2030,10 @@ var mainVueModel = new Vue({
 
                         if (polygonSelectionAvailableForUser && this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== "") {
                             orderRequest.coordinates = this.masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid];
+                        }
+
+                        if (polygonSelectionAvailableForUser && this.masterOrderLine.allSelectedClipperFiles[orderLine.metadata.uuid] !== "") {
+                            orderRequest.clipperFile = this.masterOrderLine.allSelectedClipperFiles[orderLine.metadata.uuid];
                         }
 
                         orderRequests[orderLine.metadata.orderDistributionUrl].orderLines.push(orderRequest);
@@ -2271,13 +2326,15 @@ var mainVueModel = new Vue({
             localStorage.setItem('allSelectedProjections', JSON.stringify(this.masterOrderLine.allSelectedProjections));
             localStorage.setItem('allSelectedFormats', JSON.stringify(this.masterOrderLine.allSelectedFormats));
             localStorage.setItem('allSelectedCoordinates', JSON.stringify(this.masterOrderLine.allSelectedCoordinates));
+            localStorage.setItem('allSelectedClipperFiles', JSON.stringify(this.masterOrderLine.allSelectedClipperFiles));
         },
         getSelectedOrderLineValuesFromLocalStorage: function () {
             var selectedOrderLineValues = {
                 allSelectedAreas: localStorage.getItem('allSelectedAreas') !== null ? JSON.parse(localStorage.getItem('allSelectedAreas')) : null,
                 allSelectedProjections: localStorage.getItem('allSelectedProjections') !== null ? JSON.parse(localStorage.getItem('allSelectedProjections')) : null,
                 allSelectedFormats: localStorage.getItem('allSelectedFormats') !== null ? JSON.parse(localStorage.getItem('allSelectedFormats')) : null,
-                allSelectedCoordinates: localStorage.getItem('allSelectedCoordinates') !== null ? JSON.parse(localStorage.getItem('allSelectedCoordinates')) : null
+                allSelectedCoordinates: localStorage.getItem('allSelectedCoordinates') !== null ? JSON.parse(localStorage.getItem('allSelectedCoordinates')) : null,
+                allSelectedClipperFiles: localStorage.getItem('allSelectedClipperFiles') !== null ? JSON.parse(localStorage.getItem('allSelectedClipperFiles')) : null
             }
             return selectedOrderLineValues;
         },
@@ -2286,6 +2343,7 @@ var mainVueModel = new Vue({
             localStorage.removeItem('allSelectedProjections');
             localStorage.removeItem('allSelectedFormats');
             localStorage.removeItem('allSelectedCoordinates');
+            localStorage.removeItem('allSelectedClipperFiles');
         },
         getPreSelectedOrderLineValuesFromLocalStorage: function () {
             var preSelectedOrderLineValues = {
@@ -2335,7 +2393,13 @@ var mainVueModel = new Vue({
                                     this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'] = [];
                                     this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygon'].push(selectedArea);
                                     this.masterOrderLine.allSelectedCoordinates[orderLineUuid] = selectedArea.coordinates;
-                                } else {
+                                }
+                                else if (selectedArea.type == 'polygonfile') {
+                                    this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygonfile'] = [];
+                                    this.masterOrderLine.allAvailableAreas[orderLineUuid]['polygonfile'].push(selectedArea);
+                                    this.masterOrderLine.allSelectedClipperFiles[orderLineUuid] = selectedArea.clipperFile;
+                                }
+                                else {
                                     this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (availableArea, index) {
                                         if (availableArea.code == selectedArea.code) {
                                             this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType][index].isSelected = true;
