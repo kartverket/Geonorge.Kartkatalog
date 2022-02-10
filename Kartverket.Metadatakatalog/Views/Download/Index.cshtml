@@ -319,6 +319,7 @@
                              v-bind:selected-projections="masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] : []"
                              v-bind:selected-formats="masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] : []"
                              v-bind:selected-coordinates="masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] : ''"
+                             v-bind:selected-clipperfiles="masterOrderLine.allSelectedClipperFiles[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedClipperFiles[orderLine.metadata.uuid] : ''"
                              v-bind:default-projections="masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] : []"
                              v-bind:default-formats="masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] : []"
                              v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}"

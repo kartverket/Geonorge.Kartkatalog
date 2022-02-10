@@ -877,9 +877,136 @@ var MasterOrderLine = {
             //$('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
         },
 
-        validateClipperFile: function (orderItem) {
-            //Todo handle master clipping
-            console.log(orderItem);
+        validateClipperFile: function (parentData) {
+            // Checking whether FormData is available in browser  
+            if (window.FormData !== undefined) {
+
+                var form = document.getElementById("clipper-master"),
+                    myData = new FormData(form);
+
+                console.log(parentData.$root.masterOrderLine);
+                hideLoadingAnimation();
+                showLoadingAnimation("Sjekker klippefil");
+                mainVueModel.$children.forEach(function (orderItem) {
+                    if (orderItem.master !== undefined && orderItem.master == false) {
+                        if (orderItem.capabilities !== undefined && orderItem.capabilities.supportsPolygonSelection !== undefined && orderItem.capabilities.supportsPolygonSelection == true) {
+
+                             $.ajax({
+                    url: downloadUrl + 'api/validate-clipperfile/' + orderItem.metadata.uuid,
+                    type: "POST",
+                    contentType: false, // Not to set any content header  
+                    processData: false, // Not to process data  
+                                 data: myData,
+                                 beforeSend: function () {
+                                     showLoadingAnimation("Sjekker klippefil");
+                                 },
+                    success: function (result) {
+                        console.log(result);
+                        clearAlertMessage();
+                        hideAlert();
+
+                        if (result.valid) {
+                            showAlert("Validering vellykket", "green");
+
+                            orderItem.clipperFile = result.url;
+                           
+
+                            this.$root.masterOrderLine.allSelectedClipperFiles[orderItem.metadata.uuid] = orderItem.clipperFile;
+                            var polygonArea = {
+                                "name": "Valgt fra klippefil",
+                                "type": "polygonfile",
+                                "code": "Kart",
+                                "isSelected": true,
+                                "formats": orderItem.defaultFormats,
+                                "projections": orderItem.defaultProjections,
+                                "clipperFiles": orderItem.clipperFile
+                            }
+
+                            polygonArea.allAvailableProjections = {};
+                            polygonArea.allAvailableProjections[orderItem.metadata.uuid] = orderItem.defaultProjections;
+
+                            polygonArea.allAvailableFormats = {};
+                            polygonArea.allAvailableFormats[orderItem.metadata.uuid] = orderItem.defaultFormats;
+
+                            var polygonSelectionAvailableForUser = true;
+                            var accessConstraintRequiredRoleIsAgriculturalParty = false;
+                            var datasetOnlyOwnMunicipalityRole = false;
+
+                            if (orderItem.capabilities.accessConstraintRequiredRole !== undefined) {
+                                var role = orderItem.capabilities.accessConstraintRequiredRole;
+                                accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                                datasetOnlyOwnMunicipalityRole = role.indexOf('nd.egenkommune') > -1;
+                            }
+
+                            var isAgriculturalParty = false;
+                            var userHasOnlyOwnMunicipalityRole = false;
+                            var baatInfo = GetCookie('baatInfo');
+                            if (baatInfo) {
+                                baatInfo = String(baatInfo);
+                                isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                                userHasOnlyOwnMunicipalityRole = baatInfo.indexOf('nd.egenkommune') > -1;
+                                if (isAgriculturalParty && accessConstraintRequiredRoleIsAgriculturalParty)
+                                    polygonSelectionAvailableForUser = false;
+                                else if (userHasOnlyOwnMunicipalityRole && datasetOnlyOwnMunicipalityRole)
+                                    polygonSelectionAvailableForUser = false;
+                            }
+
+                            // orderLine
+                            if (polygonSelectionAvailableForUser) {
+                                var isAllreadyAddedInfo = this.isAllreadyAdded(this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid], polygonArea, "code");
+                                if (!isAllreadyAddedInfo.added) {
+                                    this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid].push(polygonArea);
+                                } else {
+                                    this.$root.masterOrderLine.allSelectedAreas[orderItem.metadata.uuid][isAllreadyAddedInfo.position] = polygonArea;
+                                }
+
+                                this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type] = [];
+                                this.$root.masterOrderLine.allAvailableAreas[orderItem.metadata.uuid][polygonArea.type].push(polygonArea);
+
+                                // MasterOrderLine:
+                                var isAllreadyAddedInfo = this.isAllreadyAdded(this.selectedAreas, polygonArea, "code");
+                                if (!isAllreadyAddedInfo.added) {
+                                    this.selectedAreas.push(polygonArea);
+                                } else {
+                                    this.selectedAreas[isAllreadyAddedInfo.position] = polygonArea;
+                                }
+
+                                this.availableAreas[polygonArea.type] = [];
+                                this.availableAreas[polygonArea.type].push(polygonArea);
+                            }
+
+                            // Set coordinates for orderline in order request
+                            this.$root.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
+
+                                if (polygonSelectionAvailableForUser && (orderRequest.metadataUuid == orderItem.metadata.uuid)) {
+                                    console.log(orderItem.metadata.uuid);
+                                    orderRequest.clipperFile = this.$root.masterOrderLine.allSelectedClipperFiles[orderItem.metadata.uuid];
+                                }
+                            }.bind(this))
+
+                                     }
+                                     else {
+                                         showAlert("Validering feilet: " + result.message, "danger")
+                                     }
+                                 }.bind(this),
+                                 error: function (err) {
+                                     showAlert("Validering feilet: " + err.statusText, "danger")
+                                 }
+                             });
+                                    }
+                    }
+
+                }.bind(this));
+
+                this.$root.updateSelectedAreasForAllOrderLines(true);
+                this.$root.updateAvailableProjectionsAndFormatsForAllOrderLines();
+                this.$root.validateAreas();
+                hideLoadingAnimation();
+
+            } else {
+                alert("FormData is not supported.");
+            }
+
         },
 
         loadPolygonMap: function (firstOrderItemWithPolygonSupport) {
