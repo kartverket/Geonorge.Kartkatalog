@@ -503,8 +503,6 @@ var OrderLine = {
                         if (result.valid) {
                             showAlert("Validering vellykket", "green");
 
-                            //Todo problem area masterorderline
-
                             orderItem.clipperFile = result.url;
                             this.$root.masterOrderLine.allSelectedClipperFiles[orderItem.metadata.uuid] = orderItem.clipperFile;
 
@@ -878,6 +876,12 @@ var MasterOrderLine = {
             this.loadPolygonMap(firstOrderItemWithPolygonSupport);
             //$('#norgeskartmodal #setcoordinates').attr('uuid', orderItem.metadata.uuid);
         },
+
+        validateClipperFile: function (orderItem) {
+            //Todo handle master clipping
+            console.log(orderItem);
+        },
+
         loadPolygonMap: function (firstOrderItemWithPolygonSupport) {
             var coverageParams = "";
             $.ajax({
