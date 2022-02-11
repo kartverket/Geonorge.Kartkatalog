@@ -888,28 +888,25 @@ var MasterOrderLine = {
                 hideLoadingAnimation();
                 showLoadingAnimation("Sjekker klippefil");
                 mainVueModel.$children.forEach(function (orderItem) {
+                    showLoadingAnimation("Sjekker klippefil");
                     if (orderItem.master !== undefined && orderItem.master == false) {
                         if (orderItem.capabilities !== undefined && orderItem.capabilities.supportsPolygonSelection !== undefined && orderItem.capabilities.supportsPolygonSelection == true) {
 
                              $.ajax({
-                    url: downloadUrl + 'api/validate-clipperfile/' + orderItem.metadata.uuid,
-                    type: "POST",
-                    contentType: false, // Not to set any content header  
-                    processData: false, // Not to process data  
+                                url: downloadUrl + 'api/validate-clipperfile/' + orderItem.metadata.uuid,
+                                type: "POST",
+                                contentType: false, // Not to set any content header  
+                                processData: false, // Not to process data  
                                  data: myData,
                                  beforeSend: function () {
                                      showLoadingAnimation("Sjekker klippefil");
                                  },
-                    success: function (result) {
-                        console.log(result);
-                        clearAlertMessage();
-                        hideAlert();
+                             success: function (result) {
+                             console.log(result);
+                              hideLoadingAnimation();
+                            if (result.valid) {
 
-                        if (result.valid) {
-                            showAlert("Validering vellykket", "green");
-
-                            orderItem.clipperFile = result.url;
-                           
+                            orderItem.clipperFile = result.url;                           
 
                             this.$root.masterOrderLine.allSelectedClipperFiles[orderItem.metadata.uuid] = orderItem.clipperFile;
                             var polygonArea = {
@@ -979,29 +976,30 @@ var MasterOrderLine = {
                             this.$root.orderRequests[orderItem.metadata.orderDistributionUrl].orderLines.forEach(function (orderRequest) {
 
                                 if (polygonSelectionAvailableForUser && (orderRequest.metadataUuid == orderItem.metadata.uuid)) {
-                                    console.log(orderItem.metadata.uuid);
                                     orderRequest.clipperFile = this.$root.masterOrderLine.allSelectedClipperFiles[orderItem.metadata.uuid];
                                 }
                             }.bind(this))
 
-                                     }
-                                     else {
-                                         showAlert("Validering feilet: " + result.message, "danger")
-                                     }
-                                 }.bind(this),
+                            showAlert("Validering av klippefil vellykket for " + orderItem.metadata.name, "success");
+                        }
+                            else
+                            {
+                            hideLoadingAnimation();
+                            showAlert("Validering klippefil feilet for " + orderItem.metadata.name + ": " + result.message, "danger")
+                            }
+                             }.bind(this),
                                  error: function (err) {
-                                     showAlert("Validering feilet: " + err.statusText, "danger")
+                                     hideLoadingAnimation();
+                                     showAlert("Validering av klippefil feilet for " + orderItem.metadata.name + ": " + err.statusText, "danger")
                                  }
                              });
-                                    }
+                        }
                     }
-
                 }.bind(this));
 
                 this.$root.updateSelectedAreasForAllOrderLines(true);
                 this.$root.updateAvailableProjectionsAndFormatsForAllOrderLines();
                 this.$root.validateAreas();
-                hideLoadingAnimation();
 
             } else {
                 alert("FormData is not supported.");
