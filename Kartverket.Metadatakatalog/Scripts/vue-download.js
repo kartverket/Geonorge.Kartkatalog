@@ -501,7 +501,7 @@ var OrderLine = {
                         hideAlert();
 
                         if (result.valid) {
-                            showAlert("Validering vellykket", "green");
+                            showAlert("Validering vellykket for " + orderItem.metadata.name, "success");
 
                             orderItem.clipperFile = result.url;
                             this.$root.masterOrderLine.allSelectedClipperFiles[orderItem.metadata.uuid] = orderItem.clipperFile;
@@ -543,15 +543,14 @@ var OrderLine = {
                             this.$root.updateSelectedAreasForSingleOrderLine(orderItem.metadata.uuid, true);
                             this.$root.updateAvailableProjectionsAndFormatsForSingleOrderLine(orderItem.metadata.uuid);
                             this.$root.validateAreas();
-
                         }
                         else
                         {
-                            showAlert("Validering feilet: " + result.message, "danger")
+                            showAlert("Validering feilet for " + orderItem.metadata.name + ": " + result.message, "danger")
                         }
                     }.bind(this),
                     error: function (err) {
-                        showAlert("Validering feilet: " + err.statusText, "danger")
+                        showAlert("Validering feilet for " + orderItem.metadata.name + ": " + err.statusText, "danger")
                     }
                 });
             } else {
@@ -884,7 +883,6 @@ var MasterOrderLine = {
                 var form = document.getElementById("clipper-master"),
                     myData = new FormData(form);
 
-                console.log(parentData.$root.masterOrderLine);
                 hideLoadingAnimation();
                 showLoadingAnimation("Sjekker klippefil");
                 mainVueModel.$children.forEach(function (orderItem) {
@@ -980,7 +978,11 @@ var MasterOrderLine = {
                                 }
                             }.bind(this))
 
-                            showAlert("Validering av klippefil vellykket for " + orderItem.metadata.name, "success");
+                                showAlert("Validering av klippefil vellykket for " + orderItem.metadata.name, "success");
+
+                                this.$root.updateSelectedAreasForAllOrderLines(true);
+                                this.$root.updateAvailableProjectionsAndFormatsForAllOrderLines();
+                                this.$root.validateAreas();
                         }
                             else
                             {
@@ -996,10 +998,6 @@ var MasterOrderLine = {
                         }
                     }
                 }.bind(this));
-
-                this.$root.updateSelectedAreasForAllOrderLines(true);
-                this.$root.updateAvailableProjectionsAndFormatsForAllOrderLines();
-                this.$root.validateAreas();
 
             } else {
                 alert("FormData is not supported.");
