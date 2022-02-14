@@ -245,26 +245,29 @@ namespace Kartverket.Metadatakatalog.Service
                 
             }
 
-            _httpClient.DefaultRequestHeaders.Accept.Clear();
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var result = _httpClient.GetAsync("https://ws.geonorge.no/dekningsApi/dekning?uuid=" + metadata.Uuid).Result;
-            if (result.IsSuccessStatusCode)
-            {
-                var register = result.Content.ReadAsAsync<Coverage>().Result;
-
-                for(int c = 0; c < register.kommuner.Count(); c ++)
+            if(metadata.HierarchyLevel != "software") 
+            { 
+                _httpClient.DefaultRequestHeaders.Accept.Clear();
+                _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var result = _httpClient.GetAsync("https://ws.geonorge.no/dekningsApi/dekning?uuid=" + metadata.Uuid).Result;
+                if (result.IsSuccessStatusCode)
                 {
-                    string kommune = register.kommuner[c].ToString("D4");
-                    string fylke = kommune.Substring(0,2);
-                    kommune = "0/" + kommune.Substring(0, 2) + "/" + kommune;
-                    fylke = "0/" + fylke;
-                    var municipality = _areas.FirstOrDefault(x => x.Key == kommune).Key;
-                    if (municipality != null && !placegroup.Contains(kommune)) placegroup.Add(municipality);
+                    var register = result.Content.ReadAsAsync<Coverage>().Result;
 
-                    var areaFylke = _areas.FirstOrDefault(x => x.Key == fylke).Key;
-                    if (areaFylke != null && !placegroup.Contains(fylke)) placegroup.Add(areaFylke);
+                    for(int c = 0; c < register.kommuner.Count(); c ++)
+                    {
+                        string kommune = register.kommuner[c].ToString("D4");
+                        string fylke = kommune.Substring(0,2);
+                        kommune = "0/" + kommune.Substring(0, 2) + "/" + kommune;
+                        fylke = "0/" + fylke;
+                        var municipality = _areas.FirstOrDefault(x => x.Key == kommune).Key;
+                        if (municipality != null && !placegroup.Contains(kommune)) placegroup.Add(municipality);
+
+                        var areaFylke = _areas.FirstOrDefault(x => x.Key == fylke).Key;
+                        if (areaFylke != null && !placegroup.Contains(fylke)) placegroup.Add(areaFylke);
+                    }
+
                 }
-
             }
 
             List<string> placegroup2 = new List<string>();
