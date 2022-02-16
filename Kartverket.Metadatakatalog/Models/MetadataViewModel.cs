@@ -285,6 +285,12 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains("GEONORGE:DOWNLOAD"))
                     return true;
+
+                foreach(var distributionDetail in DistributionsFormats) 
+                {
+                    if (distributionDetail != null && !string.IsNullOrWhiteSpace(distributionDetail.Protocol) && distributionDetail.Protocol.Contains("GEONORGE:DOWNLOAD"))
+                        return true;
+                }
             }
 
             return false;
@@ -325,7 +331,12 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool IsDatasetSeries()
         {
-            return HierarchyLevel == "series";
+            return HierarchyLevel == "series" || HierarchyLevel == "Datasettserie";
+        }
+
+        public bool IsDatasetOrSeries()
+        {
+            return IsDataset() || IsDatasetSeries();
         }
 
         public bool IsApplication()

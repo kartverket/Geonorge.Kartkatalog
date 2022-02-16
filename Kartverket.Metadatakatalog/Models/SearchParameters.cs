@@ -218,6 +218,7 @@ namespace Kartverket.Metadatakatalog.Models
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
                         //new SolrQuery("titleText:"+ text + "^50"),
+                        new SolrQuery("uuid:"+ text + "^60"),
                         new SolrQuery(queryString),
                         new SolrQuery("titleText:"+ text + "*^40"),
                         new SolrQuery("titleText:"+ text + "~2^1.1"),

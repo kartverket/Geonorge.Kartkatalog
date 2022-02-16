@@ -136,7 +136,7 @@ namespace Kartverket.Metadatakatalog.Formatter
                     Escape(meta.Uuid) + ";" +
                     Escape(meta.ServiceDistributionUrlForDataset) + ";" +
                     Escape(meta.ServiceWfsDistributionUrlForDataset) + ";" +
-                    Escape(meta.AtomFeed()) + ";" +
+                    Escape(meta.GetAtomFeed(meta.Distributions)) + ";" +
                     Escape(meta.SpatialScope) + ";" +
                     Escape(meta.DistributionProtocol) + ";" +
                     Escape(meta.DistributionUrl)

@@ -103,6 +103,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public List<string> DatasetServices { get; set; }
         /// <summary>
+        /// Distributions for dataset
+        /// </summary>
+        public List<string> Distributions { get; set; }
+        /// <summary>
         /// Services for dataset with ShowMapLink true
         /// </summary>
         public List<DatasetService> DatasetServicesWithShowMapLink { get; set; }
@@ -220,6 +224,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             DatasetServices = item.DatasetServices;
             DatasetServicesWithShowMapLink = AddDatasetServicesWithShowMapLink(DatasetServices);
             ServiceDatasets = item.ServiceDatasets;
+            Distributions = item.Distributions;
             Bundles = item.Bundles;
             ServiceLayers = item.ServiceLayers;
             AccessConstraint = item.AccessConstraint;
@@ -560,6 +565,40 @@ namespace Kartverket.Metadatakatalog.Models.Api
 
             MemoryCache memoryCache = MemoryCache.Default;
             memoryCache.Add("AtomFeedDoc", AtomFeedDoc, new DateTimeOffset(DateTime.Now.AddDays(1)));
+        }
+
+        public string GetAtomFeed(List<string> services)
+        {
+            string atomFeed = "";
+
+            if(services != null) { 
+
+                foreach(var service in services)
+                { 
+                    var data = service.Split('|');
+
+                    if(data.Length >= 3) {
+
+                        var protocol = data[1];
+                        if(protocol == "W3C:AtomFeed")
+                        {
+                            var url = data[2];
+                            if(!string.IsNullOrEmpty(url))
+                            {
+                                if (service.ToLower().Contains("gml"))
+                                    return url;
+                                else if (service.ToLower().Contains("sosi"))
+                                    return url;
+                                else
+                                    atomFeed = url;
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            return atomFeed;
         }
     }
 

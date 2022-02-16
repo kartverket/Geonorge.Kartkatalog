@@ -875,6 +875,11 @@
             Services for dataset
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.Distributions">
+            <summary>
+            Distributions for dataset
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.DatasetServicesWithShowMapLink">
             <summary>
             Services for dataset with ShowMapLink true

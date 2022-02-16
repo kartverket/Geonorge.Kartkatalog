@@ -19,6 +19,8 @@ using Kartverket.Metadatakatalog.Helpers;
 using Resources;
 using System.Text.RegularExpressions;
 using System.Web.Configuration;
+using SolrNet.Commands.Parameters;
+using System.Globalization;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -64,7 +66,7 @@ namespace Kartverket.Metadatakatalog.Service
 
 
             //Hente inn indeks og relaterte services
-            if (simpleMetadata.IsDataset() || simpleMetadata.IsDimensionGroup())
+            if (simpleMetadata.IsDataset() || simpleMetadata.IsDimensionGroup() || simpleMetadata.HierarchyLevel == "series")
             {
                 relatedDistributions.AddRange(GetMetadataRelatedDistributions(uuid));
                 if (simpleMetadata.IsDataset())
@@ -85,7 +87,7 @@ namespace Kartverket.Metadatakatalog.Service
             return simpleMetadata == null ? null : CreateMetadataViewModel(simpleMetadata);
         }
 
-        public Distributions GetDistributions(MetadataViewModel metadata)
+        public Distributions GetDistributions(MetadataViewModel metadata, Models.Api.SearchParameters parameters)
         {
             string type = null;
                        
@@ -242,9 +244,17 @@ namespace Kartverket.Metadatakatalog.Service
             //Serie
             if (metadata.HierarchyLevel == "series")
             {
-                var metadataIndexDocResult = _searchService.GetMetadata(metadata.Uuid);
-                if(metadataIndexDocResult != null)
-                    metadata.Distributions.RelatedSerieDatasets = ConvertRelatedData(metadataIndexDocResult.SerieDatasets);
+                
+                if (metadata.TypeName == "series_time")
+                {
+                    metadata.Distributions.RelatedSerieDatasets = GetTimeRelatedDistributions(metadata.Uuid, parameters);
+                }
+                else
+                {
+                    var metadataIndexDocResult = _searchService.GetMetadata(metadata.Uuid);
+                    if (metadataIndexDocResult != null)
+                        metadata.Distributions.RelatedSerieDatasets = ConvertRelatedData(metadataIndexDocResult.SerieDatasets);
+                }
             }
 
             metadata.Distributions.ShowSelfDistributions = metadata.Distributions.ShowSelf();
@@ -259,6 +269,74 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.Distributions = metadata.Distributions.GetTitle(metadata, type);
 
             return metadata.Distributions;
+        }
+
+        private List<Distribution> GetTimeRelatedDistributions(object uuid, Models.Api.SearchParameters parameters)
+        {
+            List<Distribution> distributions = new List<Distribution>();
+
+            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+            if (parameters.offset == 0)
+                parameters.offset = 1;
+
+            var datequery = "";
+
+            if(parameters.datefrom.HasValue && parameters.dateto.HasValue)
+            {
+                string dateFrom = parameters.datefrom.Value.ToString("yyyy-MM-dd");
+                string dateTo = parameters.dateto.Value.ToString("yyyy-MM-dd");
+                datequery = $" AND date_updated:[{dateFrom}T00:00:00Z TO {dateTo}T23:59:59Z]";
+
+                parameters.limit = 50;
+            }
+
+            ISolrQuery query = new SolrQuery("serie:" + uuid + "*" + datequery);
+            try
+            {
+                SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                {
+                    Rows = parameters.limit,
+                    OrderBy = new[] { new SortOrder("date_updated", Order.DESC) },
+                    Start = parameters.offset - 1, //solr is zero-based - we use one-based indexing in api
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "resourceReferenceCodeName" }
+                });
+
+                foreach (var result in queryResults)
+                {
+                    try
+                    {
+                        Distribution distribution = new Distribution();
+
+                        distribution.Uuid = result.Uuid;
+                        distribution.Type = result.Type;
+                        distribution.Title = result.DateUpdated.Value.AddHours(2).ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) + ": " + result.Title;
+                        distribution.Organization = result.Organization;
+                        distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
+                        distribution.Protocol = result.DistributionProtocol != null ? Register.GetDistributionType(result.DistributionProtocol) : "";
+                        distribution.CanShowDownloadUrl = !string.IsNullOrEmpty(result.DistributionUrl);
+                        distribution.DistributionUrl = result.DistributionUrl;
+
+                        //Åpne data, begrenset, skjermet
+                        if (SimpleMetadataUtil.IsOpendata(result.OtherConstraintsAccess)) distribution.AccessIsOpendata = true;
+                        if (SimpleMetadataUtil.IsRestricted(result.OtherConstraintsAccess)) distribution.AccessIsRestricted = true;
+                        if (SimpleMetadataUtil.IsProtected(result.AccessConstraint)) distribution.AccessIsProtected = true;
+
+                        distribution.Serie = new Serie { TypeName = "series_time" };
+
+                        distributions.Add(distribution);
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                }
+
+            }
+            catch (Exception ex) { }
+
+            return distributions;
         }
 
         public SearchResultItemViewModel Metadata(string uuid)
@@ -427,7 +505,7 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
 
-            if (metadata.Type == "series" && metadataIndexDocResult != null)
+            if (metadata.Type == "series" && metadataIndexDocResult != null && metadata.TypeName != "series_time")
             {
                 metadata.SerieDatasets = GetRelatedDatasets(metadataIndexDocResult.SerieDatasets);
             }
@@ -515,7 +593,7 @@ namespace Kartverket.Metadatakatalog.Service
             if(simpleMetadata.HierarchyLevel == "series")
             {
                 var metadataIndexDocResult = _searchService.GetMetadata(uuid);
-                if(metadataIndexDocResult != null && metadataIndexDocResult.SerieDatasets != null)
+                if(metadataIndexDocResult != null && metadataIndexDocResult.SerieDatasets != null && distribution.TypeName != "series_time")
                 {
                     distribution.SerieDatasets = Models.Api.Metadata.AddSerieDatasets(metadataIndexDocResult.SerieDatasets);
                 }
@@ -603,7 +681,9 @@ namespace Kartverket.Metadatakatalog.Service
                     distributionFormat.Name = distribution.Name;
                     distributionFormat.Version = distribution.Version;
 
-                    distributions.Add(distributionFormat);
+                    var formatExists = distributions.Where(d => d.Name == distributionFormat.Name && d.Version == distributionFormat.Version).FirstOrDefault();
+                    if(formatExists == null)
+                        distributions.Add(distributionFormat);
                 }
             }
             return distributions;
@@ -930,7 +1010,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             metadata.KeywordsInspire = GetTranslationForInspire(metadata.KeywordsInspire);
 
-            metadata.DistributionUrl = GetDistributionUrl(metadata.DistributionDetails);
+            metadata.DistributionUrl = GetDistributionUrl(metadata);
             metadata.DistributionFormat = Convert(metadata.DistributionFormat);
 
             metadata.DistributionProtocol = metadata.DistributionDetails?.Protocol;
@@ -1044,9 +1124,18 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
-        private string GetDistributionUrl(DistributionDetails distributionDetails)
+        private string GetDistributionUrl(MetadataViewModel metadata)
         {
-            return SimpleMetadataUtil.GetCapabilitiesUrl(distributionDetails?.URL, distributionDetails?.Protocol);
+            if (metadata.DistributionDetails != null && !string.IsNullOrWhiteSpace(metadata.DistributionDetails.Protocol) && metadata.DistributionDetails.Protocol.Contains("GEONORGE:DOWNLOAD"))
+                return metadata.DistributionDetails.URL;
+
+            foreach (var distributionDetail in metadata.DistributionsFormats)
+            {
+                if (distributionDetail != null && !string.IsNullOrWhiteSpace(distributionDetail.Protocol) && distributionDetail.Protocol.Contains("GEONORGE:DOWNLOAD"))
+                    return distributionDetail.URL;
+            }
+
+            return metadata?.DistributionDetails?.URL;
         }
 
         private string GetResourceReferenceCode(SimpleResourceReference resourceReference)
@@ -1086,7 +1175,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         private static DateTime? GetDateMetadataValidTo(SimpleMetadata simpleMetadata)
         {
-            return IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidTo)
+            return (string.IsNullOrEmpty(simpleMetadata.ValidTimePeriod.ValidTo) || simpleMetadata.ValidTimePeriod.ValidTo == "unknown")
                                     ? (DateTime?)null
                                     : DateTime.Parse(simpleMetadata.ValidTimePeriod.ValidTo);
         }
