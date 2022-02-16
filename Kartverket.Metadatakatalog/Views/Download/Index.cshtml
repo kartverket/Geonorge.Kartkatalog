@@ -63,6 +63,12 @@
                     <div class="custom-select-list-dropdown-additional-options">
                         <a v-show="supportsPolygonSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'polygon')" title="Velg polygon fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !supportsPolygonSelection}"><span class="fa fa-globe"></span> @UI.ChooseFromMap</a>
                         <a v-show="supportsGridSelection" class="btn" v-on:click="$parent.selectFromMap($parent, 'grid')" title="Velg kartblad fra kart" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !supportsGridSelection}"><span class="fa fa-map"></span> @UI.SelectGrid</a>
+                        <form v-if="!master" :id="'clipper-' + $parent.metadata.uuid" style="display:inline">
+                            <a style="height: auto" v-show="supportsPolygonSelection" class="btn" title="Velg klippefil" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !supportsPolygonSelection}"><span class="fa fa-file"></span> <label for="clipperFile">Klippefil:</label>&nbsp;<input style="display:inline" v-on:change="$parent.validateClipperFile($parent)" type="file" id="clipperFile" name="clipperFileName"></a>
+                        </form>
+                        <form v-if="master" :id="'clipper-master'" style="display:inline">
+                            <a style="height: auto" v-show="supportsPolygonSelection" class="btn" title="Velg klippefil" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !supportsPolygonSelection}"><span class="fa fa-file"></span> <label for="clipperFile">Klippefil:</label>&nbsp;<input style="display:inline" v-on:change="$parent.validateClipperFile($parent)" type="file" id="clipperFile" name="clipperFileName" v-bind:master="true"></a>
+                        </form>
                         <a v-show="supportsGridSelection" class="btn" v-on:click="$parent.selectAllGrids($parent)" title="Velg alle" data-toggle="tooltip" data-placement="bottom" v-bind:class="{disabled: !supportsGridSelection}"><span class=""></span> @UI.SelectAll</a>
                     </div>
                 </div>
@@ -313,6 +319,7 @@
                              v-bind:selected-projections="masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedProjections[orderLine.metadata.uuid] : []"
                              v-bind:selected-formats="masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedFormats[orderLine.metadata.uuid] : []"
                              v-bind:selected-coordinates="masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedCoordinates[orderLine.metadata.uuid] : ''"
+                             v-bind:selected-clipperfiles="masterOrderLine.allSelectedClipperFiles[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allSelectedClipperFiles[orderLine.metadata.uuid] : ''"
                              v-bind:default-projections="masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultProjections[orderLine.metadata.uuid] : []"
                              v-bind:default-formats="masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allDefaultFormats[orderLine.metadata.uuid] : []"
                              v-bind:order-line-errors="masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allOrderLineErrors[orderLine.metadata.uuid] : {}"
@@ -380,7 +387,7 @@
                         </div>
                     </div>
 
-                    <div class="modal fade" id="remove-all-items-modal">
+                    <div class="modal" id="remove-all-items-modal">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -502,6 +509,7 @@
     var downloadPurposes = @Html.Raw(JsonConvert.SerializeObject(ViewBag.DownloadPurposes));
     var downloadSoftwareClient = 'Kartkatalogen';
     var downloadSoftwareClientVersion = '@Html.ApplicationVersionNumber()';
+    var downloadUrl = '@Html.DownloadUrl()';
 </script>
 @section scripts{
     @Scripts.Render("~/Content/download");
