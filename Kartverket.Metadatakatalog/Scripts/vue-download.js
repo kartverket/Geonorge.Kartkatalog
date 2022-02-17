@@ -495,10 +495,14 @@ var OrderLine = {
                     contentType: false, // Not to set any content header  
                     processData: false, // Not to process data  
                     data: myData,
+                    beforeSend: function () {
+                        showLoadingAnimation("Sjekker klippefil");
+                    },
                     success: function (result) {
                         console.log(result);
                         clearAlertMessage();
                         hideAlert();
+                        hideLoadingAnimation();
 
                         if (result.valid) {
                             showAlert("Validering vellykket for " + orderItem.metadata.name, "success");
@@ -546,10 +550,12 @@ var OrderLine = {
                         }
                         else
                         {
+                            hideLoadingAnimation();
                             showAlert("Validering feilet for " + orderItem.metadata.name + ": " + result.message, "danger")
                         }
                     }.bind(this),
                     error: function (err) {
+                        hideLoadingAnimation();
                         showAlert("Validering feilet for " + orderItem.metadata.name + ": " + err.statusText, "danger")
                     }
                 });
