@@ -901,7 +901,7 @@ var MasterOrderLine = {
                                 type: "POST",
                                 contentType: false, // Not to set any content header  
                                  processData: false, // Not to process data  
-                                 async: true,
+                                 async: false,
                                  global: false,
                                  data: myData,
                                  beforeSend: function () {
