@@ -2,6 +2,15 @@ $(document).on("click", "#remove-all-items", function () {
     $('#remove-all-items-modal').modal('show')
 });
 
+$(document).on({
+    ajaxStart: function () {
+        //showLoadingAnimation("Laster...");
+    },
+    ajaxStop: function () {
+        hideLoadingAnimation();
+    }
+});
+
 function fixUrl(urlen) {
     urlJson = urlen.replace("%3F", "?");
     return urlJson;
@@ -889,7 +898,6 @@ var MasterOrderLine = {
                 var form = document.getElementById("clipper-master"),
                     myData = new FormData(form);
 
-                showLoadingAnimation("Sjekker klippefil");
                 mainVueModel.$children.forEach(function (orderItem) {
                     showLoadingAnimation("Sjekker klippefil");
                     if (orderItem.master !== undefined && orderItem.master == false) {
@@ -901,7 +909,7 @@ var MasterOrderLine = {
                                 contentType: false, // Not to set any content header  
                                  processData: false, // Not to process data  
                                  async: true,
-                                 global: false,
+                                 global: true,
                                  data: myData,
                                  beforeSend: function () {
                                      showLoadingAnimation("Sjekker klippefil");
@@ -992,17 +1000,17 @@ var MasterOrderLine = {
                                 this.$root.updateSelectedAreasForAllOrderLines(true);
                                 this.$root.updateAvailableProjectionsAndFormatsForAllOrderLines();
                                 this.$root.validateAreas();
-                                hideLoadingAnimation();
+                                //hideLoadingAnimation();
                         }
                             else
                             {
                                 showAlert("Validering klippefil feilet for " + orderItem.metadata.name + ": " + result.message, "danger")
-                                hideLoadingAnimation();
+                                //hideLoadingAnimation();
                                  }
                              }.bind(this),
                                  error: function (err) {
                                      showAlert("Validering av klippefil feilet for " + orderItem.metadata.name + ": " + err.statusText, "danger")
-                                     hideLoadingAnimation();
+                                     //hideLoadingAnimation();
                                  }
                              });
                         }
