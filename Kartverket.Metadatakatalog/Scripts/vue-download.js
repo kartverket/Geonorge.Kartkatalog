@@ -889,7 +889,6 @@ var MasterOrderLine = {
                 var form = document.getElementById("clipper-master"),
                     myData = new FormData(form);
 
-                hideLoadingAnimation();
                 showLoadingAnimation("Sjekker klippefil");
                 mainVueModel.$children.forEach(function (orderItem) {
                     showLoadingAnimation("Sjekker klippefil");
@@ -901,7 +900,7 @@ var MasterOrderLine = {
                                 type: "POST",
                                 contentType: false, // Not to set any content header  
                                  processData: false, // Not to process data  
-                                 async: false,
+                                 async: true,
                                  global: false,
                                  data: myData,
                                  beforeSend: function () {
@@ -993,15 +992,16 @@ var MasterOrderLine = {
                                 this.$root.updateSelectedAreasForAllOrderLines(true);
                                 this.$root.updateAvailableProjectionsAndFormatsForAllOrderLines();
                                 this.$root.validateAreas();
+                                hideLoadingAnimation();
                         }
                             else
                             {
                             showAlert("Validering klippefil feilet for " + orderItem.metadata.name + ": " + result.message, "danger")
                                  }
-                                 hideLoadingAnimation();
                              }.bind(this),
                                  error: function (err) {
                                      showAlert("Validering av klippefil feilet for " + orderItem.metadata.name + ": " + err.statusText, "danger")
+                                     hideLoadingAnimation();
                                  }
                              });
                         }
