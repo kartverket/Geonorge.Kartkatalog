@@ -900,14 +900,17 @@ var MasterOrderLine = {
                                 url: downloadUrl + 'api/validate-clipperfile/' + orderItem.metadata.uuid,
                                 type: "POST",
                                 contentType: false, // Not to set any content header  
-                                processData: false, // Not to process data  
+                                 processData: false, // Not to process data  
+                                 async: true,
                                  data: myData,
                                  beforeSend: function () {
                                      showLoadingAnimation("Sjekker klippefil");
                                  },
+                                 complete: function () {
+                                     hideLoadingAnimation();
+                                 },
                              success: function (result) {
                              console.log(result);
-                              hideLoadingAnimation();
                             if (result.valid) {
 
                             orderItem.clipperFile = result.url;                           
@@ -992,12 +995,10 @@ var MasterOrderLine = {
                         }
                             else
                             {
-                            hideLoadingAnimation();
                             showAlert("Validering klippefil feilet for " + orderItem.metadata.name + ": " + result.message, "danger")
-                            }
+                                 }
                              }.bind(this),
                                  error: function (err) {
-                                     hideLoadingAnimation();
                                      showAlert("Validering av klippefil feilet for " + orderItem.metadata.name + ": " + err.statusText, "danger")
                                  }
                              });
@@ -1008,7 +1009,6 @@ var MasterOrderLine = {
             } else {
                 alert("FormData is not supported.");
             }
-
         },
 
         loadPolygonMap: function (firstOrderItemWithPolygonSupport) {
