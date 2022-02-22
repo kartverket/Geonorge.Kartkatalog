@@ -907,7 +907,7 @@ var MasterOrderLine = {
                                      showLoadingAnimation("Sjekker klippefil");
                                  },
                                  complete: function () {
-                                     hideLoadingAnimation();
+                                     
                                  },
                              success: function (result) {
                              console.log(result);
@@ -997,6 +997,7 @@ var MasterOrderLine = {
                             {
                             showAlert("Validering klippefil feilet for " + orderItem.metadata.name + ": " + result.message, "danger")
                                  }
+                                 hideLoadingAnimation();
                              }.bind(this),
                                  error: function (err) {
                                      showAlert("Validering av klippefil feilet for " + orderItem.metadata.name + ": " + err.statusText, "danger")
