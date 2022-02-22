@@ -902,6 +902,7 @@ var MasterOrderLine = {
                                 contentType: false, // Not to set any content header  
                                  processData: false, // Not to process data  
                                  async: true,
+                                 global: false,
                                  data: myData,
                                  beforeSend: function () {
                                      showLoadingAnimation("Sjekker klippefil");
