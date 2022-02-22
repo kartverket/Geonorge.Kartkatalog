@@ -28,6 +28,7 @@ namespace Kartverket.Metadatakatalog
                "~/Content/bower_components/kartverket-felleskomponenter/assets/js/main.min.js",
                "~/Content/bower_components/clipboard/dist/clipboard.min.js",
                "~/Content/bower_components/axios/dist/axios.min.js",
+               "~/Scripts/bootstrap.js",
                "~/Scripts/site.js",
                "~/Scripts/visninger.js",
                 "~/Content/Blocks/SurveyBlock/SurveyBlockScript.js"

@@ -2,6 +2,15 @@ $(document).on("click", "#remove-all-items", function () {
     $('#remove-all-items-modal').modal('show')
 });
 
+$(document).on({
+    ajaxStart: function () {
+        //showLoadingAnimation("Laster...");
+    },
+    ajaxStop: function () {
+        hideLoadingAnimation();
+    }
+});
+
 function fixUrl(urlen) {
     urlJson = urlen.replace("%3F", "?");
     return urlJson;
@@ -889,8 +898,6 @@ var MasterOrderLine = {
                 var form = document.getElementById("clipper-master"),
                     myData = new FormData(form);
 
-                hideLoadingAnimation();
-                showLoadingAnimation("Sjekker klippefil");
                 mainVueModel.$children.forEach(function (orderItem) {
                     showLoadingAnimation("Sjekker klippefil");
                     if (orderItem.master !== undefined && orderItem.master == false) {
@@ -900,14 +907,18 @@ var MasterOrderLine = {
                                 url: downloadUrl + 'api/validate-clipperfile/' + orderItem.metadata.uuid,
                                 type: "POST",
                                 contentType: false, // Not to set any content header  
-                                processData: false, // Not to process data  
+                                 processData: false, // Not to process data  
+                                 async: true,
+                                 global: true,
                                  data: myData,
                                  beforeSend: function () {
                                      showLoadingAnimation("Sjekker klippefil");
                                  },
+                                 complete: function () {
+                                     
+                                 },
                              success: function (result) {
                              console.log(result);
-                              hideLoadingAnimation();
                             if (result.valid) {
 
                             orderItem.clipperFile = result.url;                           
@@ -989,16 +1000,17 @@ var MasterOrderLine = {
                                 this.$root.updateSelectedAreasForAllOrderLines(true);
                                 this.$root.updateAvailableProjectionsAndFormatsForAllOrderLines();
                                 this.$root.validateAreas();
+                                //hideLoadingAnimation();
                         }
                             else
                             {
-                            hideLoadingAnimation();
-                            showAlert("Validering klippefil feilet for " + orderItem.metadata.name + ": " + result.message, "danger")
-                            }
+                                showAlert("Validering klippefil feilet for " + orderItem.metadata.name + ": " + result.message, "danger")
+                                //hideLoadingAnimation();
+                                 }
                              }.bind(this),
                                  error: function (err) {
-                                     hideLoadingAnimation();
                                      showAlert("Validering av klippefil feilet for " + orderItem.metadata.name + ": " + err.statusText, "danger")
+                                     //hideLoadingAnimation();
                                  }
                              });
                         }
@@ -1008,7 +1020,6 @@ var MasterOrderLine = {
             } else {
                 alert("FormData is not supported.");
             }
-
         },
 
         loadPolygonMap: function (firstOrderItemWithPolygonSupport) {
@@ -2382,7 +2393,7 @@ var mainVueModel = new Vue({
             return hasCoordinates;
         },
         emailAddressIsValid: function (email) {
-            var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
+            var regex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
             return regex.test(email);
         },
         checkEmailAddress: function () {
