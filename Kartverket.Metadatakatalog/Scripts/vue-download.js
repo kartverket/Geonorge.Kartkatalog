@@ -996,7 +996,8 @@ var MasterOrderLine = {
                         }
                             else
                             {
-                            showAlert("Validering klippefil feilet for " + orderItem.metadata.name + ": " + result.message, "danger")
+                                showAlert("Validering klippefil feilet for " + orderItem.metadata.name + ": " + result.message, "danger")
+                                hideLoadingAnimation();
                                  }
                              }.bind(this),
                                  error: function (err) {
