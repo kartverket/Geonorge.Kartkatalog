@@ -234,7 +234,8 @@ namespace Kartverket.Metadatakatalog.Service
 
             foreach (var keyword in metadata.Keywords)
             {
-                var myValueList = _areas.Where(x => x.Value.ToLower() == keyword.Keyword.ToLower()).ToList();
+                string keyWord = FixKeyWord(keyword.Keyword.ToLower());
+                var myValueList = _areas.Where(x => x.Value.ToLower() == keyWord).ToList();
                 if(myValueList != null)
                 {
                     foreach (var myValue in myValueList)
@@ -289,6 +290,20 @@ namespace Kartverket.Metadatakatalog.Service
 
 
             return placegroup;
+        }
+
+        private string FixKeyWord(string keyword)
+        {
+            keyword = keyword.Replace(" fylke", "");
+
+            if (keyword.Contains("kommune"))
+            {
+                int position = keyword.IndexOf("kommune");
+                if (position > 0)
+                    keyword = keyword.Substring(0, position).Trim();
+            }
+
+            return keyword;
         }
 
         internal List<string> ResolveSpatialScope(List<Models.Keyword> keywords, string culture)
