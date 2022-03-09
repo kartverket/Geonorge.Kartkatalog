@@ -103,7 +103,7 @@ namespace Kartverket.Metadatakatalog.Service
                     foreach (var item in register.containeditems)
                     {
                         var codevalue = item.label;
-                        var label = item.description;
+                        var label = RemoveSamiTranslation(item.description);
                         var status = item.status;
                         if (status == "Gyldig")                        
                             _areas.Add("0/" + codevalue, label);
@@ -116,7 +116,7 @@ namespace Kartverket.Metadatakatalog.Service
                     foreach (var item in register.containeditems)
                     {
                         var codevalue = item.label;
-                        var label = item.description;
+                        var label = RemoveSamiTranslation(item.description);
                         var status = item.status;
                         if (status == "Gyldig")
                             _areas.Add("0/" + codevalue.Substring(0, 2) + "/" + codevalue, label);
@@ -126,6 +126,17 @@ namespace Kartverket.Metadatakatalog.Service
                 memCacher.Add("areas", _areas, new DateTimeOffset(DateTime.Now.AddHours(12)));
             }
 
+        }
+
+        private string RemoveSamiTranslation(string description)
+        {
+            if(description.Contains(" – ")) 
+            {
+                var names = description.Split('–');
+                description = names[0].Trim();
+            }
+
+            return description;
         }
 
         // note use of lowercase keywords - comparison is also done with lower casing of input
