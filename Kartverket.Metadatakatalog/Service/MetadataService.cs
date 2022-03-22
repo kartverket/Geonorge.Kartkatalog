@@ -533,6 +533,9 @@ namespace Kartverket.Metadatakatalog.Service
             if(simpleMetadata.IsService())
                 metadata.ServiceType = simpleMetadata.ServiceType;
 
+            if (simpleMetadata.IsService())
+                metadata.Operations = simpleMetadata.ContainOperations;
+
             return metadata;
         }
 
