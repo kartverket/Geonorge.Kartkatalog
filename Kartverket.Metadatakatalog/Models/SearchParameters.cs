@@ -224,7 +224,7 @@ namespace Kartverket.Metadatakatalog.Models
                         new SolrQuery("titleText:"+ text + "~2^1.1"),
                         new SolrQuery("allText:" + text + "^1.2"),
                         new SolrQuery("allText:" + text + "*^1.1"),
-                        new SolrQuery("allText:\"" + text + "\"~1"),   //Fuzzy
+                        new SolrQuery("allText:\"" + text + "\"~^1"),   //Fuzzy
                         new SolrQuery("allText2:" + text + ""), //Stemmer
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         new SolrQuery("!boost b=typenumber"),
