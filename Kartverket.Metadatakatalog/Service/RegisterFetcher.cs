@@ -32,8 +32,8 @@ namespace Kartverket.Metadatakatalog.Service
         public IDictionary<string, string> ListOfRestrictionInspireValuesEnglish = new ConcurrentDictionary<string, string>();
         IDictionary<string, string> ListOfCoordinatesystemNameValues = new ConcurrentDictionary<string, string>();
         IDictionary<string, string> ListOfCoordinatesystemNameValuesEnglish = new ConcurrentDictionary<string, string>();
-        IDictionary<string, string> ListOfDistributionTypes = new ConcurrentDictionary<string, string>();
-        IDictionary<string, string> ListOfDistributionTypesEnglish = new ConcurrentDictionary<string, string>();
+        public IDictionary<string, string> ListOfDistributionTypes = new ConcurrentDictionary<string, string>();
+        public IDictionary<string, string> ListOfDistributionTypesEnglish = new ConcurrentDictionary<string, string>();
         public IDictionary<string, string> OrganizationShortNames = new ConcurrentDictionary<string, string>();
         IDictionary<string, string> ListOfOrderingInstructions = new ConcurrentDictionary<string, string>();
         IDictionary<string, string> ListOfOrderingInstructionsEnglish = new ConcurrentDictionary<string, string>();

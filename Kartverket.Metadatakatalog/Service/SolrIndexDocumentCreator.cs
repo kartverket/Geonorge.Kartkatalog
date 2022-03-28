@@ -20,6 +20,8 @@ namespace Kartverket.Metadatakatalog.Service
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        public RegisterFetcher Register = new RegisterFetcher();
+
         private readonly IOrganizationService _organizationService;
         private readonly ThemeResolver _themeResolver;
         private readonly PlaceResolver _placeResolver;
@@ -1274,6 +1276,10 @@ namespace Kartverket.Metadatakatalog.Service
 
         private string ConvertProtocolToSimpleName(string protocol, string culture) {
             if (culture == Culture.EnglishCode) {
+
+                if (Register.ListOfDistributionTypesEnglish.ContainsKey(protocol))
+                    return Register.ListOfDistributionTypesEnglish.Where(k => k.Key == protocol).FirstOrDefault().Value;
+
                 if (protocol.ToLower().Contains("wmts")) return "WMTS-service";
                 else if (protocol.ToLower().Contains("wfs")) return "WFS-service";
                 else if (protocol.ToLower().Contains("wms")) return "WMS-service";
@@ -1291,6 +1297,9 @@ namespace Kartverket.Metadatakatalog.Service
             }
             else
             {
+                if (Register.ListOfDistributionTypes.ContainsKey(protocol)) 
+                    return Register.ListOfDistributionTypes.Where(k => k.Key == protocol).FirstOrDefault().Value;
+
                 if (protocol.ToLower().Contains("wmts")) return "WMTS-tjeneste";
                 else if (protocol.ToLower().Contains("wfs")) return "WFS-tjeneste";
                 else if (protocol.ToLower().Contains("wms")) return "WMS-tjeneste";
