@@ -1943,13 +1943,21 @@ var mainVueModel = new Vue({
 
         updateSelectedAreasForSingleOrderLine: function (orderLineUuid, autoSelectProjectionsAndFormats) {
             var selectedAreas = [];
+            var maxEiendoms = 100;
             for (areaType in this.masterOrderLine.allAvailableAreas[orderLineUuid]) {
                 if (this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].length) {
                     this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (selectedArea) {
                         if (selectedArea.isSelected) {
                             var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, selectedArea, "code");
                             if (!isAllreadyAddedInfo.added) {
-                                 selectedAreas.push(selectedArea);
+                                if (selectedArea.type == "Eiendommer" && selectedAreas.length > maxEiendoms - 1)
+                                {
+                                    selectedArea.selected = false;
+                                    hideAlert();
+                                    showAlert("Du kan kun velge maksimum " + maxEiendoms + " eiendommer<br/>", "danger");
+                                }
+                                else
+                                    selectedAreas.push(selectedArea);
                             }
                         }
                     }.bind(this))
