@@ -890,10 +890,12 @@ var MasterOrderLine = {
                         polygonSelectionAvailableForUser = false;
                 }
 
-                if (!polygonSelectionAvailableForUser)
+                if (!polygonSelectionAvailableForUser && !masterSupportsPolygonSelection) {
                     masterSupportsPolygonSelection = false;
-                else if (orderLine.capabilities.supportsPolygonSelection)
-                    return true;
+                }
+                else if (orderLine.capabilities.supportsPolygonSelection) {
+                    masterSupportsPolygonSelection = true;
+                }
             });
             return masterSupportsPolygonSelection;
         },
