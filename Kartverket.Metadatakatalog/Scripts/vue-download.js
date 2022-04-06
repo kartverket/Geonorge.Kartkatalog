@@ -893,7 +893,7 @@ var MasterOrderLine = {
                 if (!polygonSelectionAvailableForUser)
                     masterSupportsPolygonSelection = false;
                 else if (orderLine.capabilities.supportsPolygonSelection)
-                    masterSupportsPolygonSelection = true;
+                    return true;
             });
             return masterSupportsPolygonSelection;
         },
