@@ -871,8 +871,8 @@ var MasterOrderLine = {
                 var accessConstraintRequiredRoleIsAgriculturalParty = orderLine.capabilities.supportsPolygonSelection;
                 var datasetOnlyOwnMunicipalityRole = false;
 
-                if (orderItem.capabilities.accessConstraintRequiredRole !== undefined) {
-                    var role = orderItem.capabilities.accessConstraintRequiredRole;
+                if (orderLine.capabilities.accessConstraintRequiredRole !== undefined) {
+                    var role = orderLine.capabilities.accessConstraintRequiredRole;
                     accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
                     datasetOnlyOwnMunicipalityRole = role.indexOf('nd.egenkommune') > -1;
                 }
