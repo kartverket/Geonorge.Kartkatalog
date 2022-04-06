@@ -890,7 +890,7 @@ var MasterOrderLine = {
                         polygonSelectionAvailableForUser = false;
                 }
 
-                if (!polygonSelectionAvailableForUser && !masterSupportsPolygonSelection) {
+                if (!polygonSelectionAvailableForUser && masterSupportsPolygonSelection) {
                     masterSupportsPolygonSelection = false;
                 }
                 else if (orderLine.capabilities.supportsPolygonSelection) {
