@@ -866,7 +866,33 @@ var MasterOrderLine = {
         masterSupportsPolygonSelection: function () {
             var masterSupportsPolygonSelection = false;
             this.$root.orderLines.forEach(function (orderLine) {
-                if (orderLine.capabilities.supportsPolygonSelection)
+
+                var polygonSelectionAvailableForUser = orderLine.capabilities.supportsPolygonSelection;
+                var accessConstraintRequiredRoleIsAgriculturalParty = orderLine.capabilities.supportsPolygonSelection;
+                var datasetOnlyOwnMunicipalityRole = false;
+
+                if (orderItem.capabilities.accessConstraintRequiredRole !== undefined) {
+                    var role = orderItem.capabilities.accessConstraintRequiredRole;
+                    accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                    datasetOnlyOwnMunicipalityRole = role.indexOf('nd.egenkommune') > -1;
+                }
+
+                var isAgriculturalParty = false;
+                var userHasOnlyOwnMunicipalityRole = false;
+                var baatInfo = GetCookie('baatInfo');
+                if (baatInfo) {
+                    baatInfo = String(baatInfo);
+                    isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                    userHasOnlyOwnMunicipalityRole = baatInfo.indexOf('nd.egenkommune') > -1;
+                    if (isAgriculturalParty && accessConstraintRequiredRoleIsAgriculturalParty)
+                        polygonSelectionAvailableForUser = false;
+                    else if (userHasOnlyOwnMunicipalityRole && datasetOnlyOwnMunicipalityRole)
+                        polygonSelectionAvailableForUser = false;
+                }
+
+                if (!polygonSelectionAvailableForUser)
+                    masterSupportsPolygonSelection = false;
+                else if (orderLine.capabilities.supportsPolygonSelection)
                     masterSupportsPolygonSelection = true;
             });
             return masterSupportsPolygonSelection;
