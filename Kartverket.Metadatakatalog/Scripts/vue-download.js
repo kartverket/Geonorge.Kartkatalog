@@ -868,7 +868,7 @@ var MasterOrderLine = {
             this.$root.orderLines.forEach(function (orderLine) {
 
                 var polygonSelectionAvailableForUser = orderLine.capabilities.supportsPolygonSelection;
-                var accessConstraintRequiredRoleIsAgriculturalParty = orderLine.capabilities.supportsPolygonSelection;
+                var accessConstraintRequiredRoleIsAgriculturalParty = false;
                 var datasetOnlyOwnMunicipalityRole = false;
 
                 if (orderLine.capabilities.accessConstraintRequiredRole !== undefined) {
