@@ -122,6 +122,7 @@ namespace Kartverket.Metadatakatalog.Models
         public List<Thumbnail> Thumbnails { get; set; }
         public string Title { get; set; }
         public string TopicCategory { get; set; }
+        public List<string> TopicCategories { get; set; }
         public string Uuid { get; set; }
 
         public string ResourceReferenceCode { get; set; }
