@@ -68,6 +68,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string Type { get; set; }
         public string TypeTranslated { get; set; }
         public string TypeName { get; set; }
+        public List<string> Credits { get; set; }
         public List<Keyword> Keywords { get; set; }
 
         public List<Keyword> KeywordsPlace { get; set; }
