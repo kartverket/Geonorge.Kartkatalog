@@ -1033,7 +1033,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         private string FixMarkDown(string text)
         {
-            if (text.Contains("###")) 
+            if (!string.IsNullOrEmpty(text) && text.Contains("###")) 
             {
                 text = text.Replace("###", "### ");
                 text = text.Replace("###  ", "### ");
