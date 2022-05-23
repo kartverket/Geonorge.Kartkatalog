@@ -923,9 +923,9 @@ namespace Kartverket.Metadatakatalog.Service
                 Title = GetTranslation(simpleMetadata.Title, simpleMetadata.EnglishTitle),
                 NorwegianTitle = simpleMetadata.Title,
                 Uuid = simpleMetadata.Uuid,
-                Abstract = GetTranslation(simpleMetadata.Abstract, simpleMetadata.EnglishAbstract),
+                Abstract = FixMarkDown(GetTranslation(simpleMetadata.Abstract, simpleMetadata.EnglishAbstract)),
                 Status = Register.GetStatus(simpleMetadata.Status),
-                EnglishAbstract = simpleMetadata.EnglishAbstract,
+                EnglishAbstract = FixMarkDown(simpleMetadata.EnglishAbstract),
                 EnglishTitle = simpleMetadata.EnglishTitle,
                 BoundingBox = Convert(simpleMetadata.BoundingBox),
                 Constraints = Convert(simpleMetadata.Constraints),
@@ -1029,6 +1029,16 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.QuantitativeResult = GetQuantitativeResult(metadata.QualitySpecifications);
 
             return metadata;
+        }
+
+        private string FixMarkDown(string text)
+        {
+            if (text.Contains("###")) 
+            {
+                text = text.Replace("###", "### ");
+                text = text.Replace("###  ", "### ");
+            }
+            return text;
         }
 
         private QuantitativeResult GetQuantitativeResult(List<QualitySpecification> qualitySpecifications)
