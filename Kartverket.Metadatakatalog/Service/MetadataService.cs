@@ -148,10 +148,13 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (!string.IsNullOrEmpty(metadata.DistributionUrl) && (metadata.IsService() || metadata.IsServiceLayer()))
             {
-                for (int d=0; d < metadata.Distributions.RelatedDataset.Count; d++)
+                var distributions = metadata.Distributions.RelatedDataset.Where(d => d.Protocol != "Atom Feed").ToArray();
+                var distributionsAtomFeed = metadata.Distributions.RelatedDataset.Where(d => d.Protocol == "Atom Feed").ToArray();
+
+                for (int d = 0; d < distributions.Length; d++)
                 {
-                    metadata.Distributions.RelatedDataset[d].DatasetServicesWithShowMapLink = new List<DatasetService>();
-                    metadata.Distributions.RelatedDataset[d].DatasetServicesWithShowMapLink.Add(
+                    distributions[d].DatasetServicesWithShowMapLink = new List<DatasetService>();
+                    distributions[d].DatasetServicesWithShowMapLink.Add(
                         new DatasetService
                         {
                             Uuid = metadata.Uuid,
@@ -162,8 +165,38 @@ namespace Kartverket.Metadatakatalog.Service
 
                     var protocol = metadata?.DistributionDetails?.ProtocolName;
                     if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
-                        metadata.Distributions.RelatedDataset[d].CanShowMapUrl = true;
+                        distributions[d].CanShowMapUrl = true;
                 }
+
+                var atomFeedDistributionFormats = new List<DistributionFormat>();
+
+                for (int d = 0; d < distributionsAtomFeed.Length; d++)
+                {
+                    atomFeedDistributionFormats.AddRange(distributionsAtomFeed[d].DistributionFormats);
+
+                    distributionsAtomFeed[0].DistributionFormats = atomFeedDistributionFormats.Select(s => new DistributionFormat { Name = s.Name, Version  = s.Version }).Distinct().ToList();
+                    distributionsAtomFeed[0].DatasetServicesWithShowMapLink = new List<DatasetService>();
+                    distributionsAtomFeed[0].DatasetServicesWithShowMapLink.Add(
+                        new DatasetService
+                        {
+                            Uuid = metadata.Uuid,
+                            Title = metadata.Title,
+                            DistributionProtocol = metadata?.DistributionDetails?.ProtocolName,
+                            GetCapabilitiesUrl = metadata?.DistributionDetails?.URL
+                        });
+
+                    var protocol = metadata?.DistributionDetails?.ProtocolName;
+                    if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                        distributionsAtomFeed[0].CanShowMapUrl = true;
+                }
+
+                var atomFeed = distributionsAtomFeed.FirstOrDefault();
+
+                distributionsAtomFeed = new Distribution[1];
+                distributionsAtomFeed[0] = atomFeed;
+
+                metadata.Distributions.RelatedDataset = distributions.Concat(distributionsAtomFeed).ToList();
+
             }
 
             // Self ...
