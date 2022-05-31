@@ -285,8 +285,10 @@ namespace Kartverket.Metadatakatalog.Service
                 else
                 {
                     var metadataIndexDocResult = _searchService.GetMetadata(metadata.Uuid);
-                    if (metadataIndexDocResult != null)
+                    if (metadataIndexDocResult != null) { 
                         metadata.Distributions.RelatedSerieDatasets = ConvertRelatedData(metadataIndexDocResult.SerieDatasets);
+                        metadata.Distributions.RelatedSerieDatasets = GroupFormats(metadata.Distributions.RelatedSerieDatasets, metadata);
+                    }
                 }
             }
 
@@ -302,6 +304,67 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.Distributions = metadata.Distributions.GetTitle(metadata, type);
 
             return metadata.Distributions;
+        }
+
+        private List<Distribution> GroupFormats(List<Distribution> distributionData, MetadataViewModel metadata)
+        {
+            var distributions = distributionData.Where(d => d.Protocol != "Atom Feed").ToArray();
+            var distributionsAtomFeed = distributionData.Where(d => d.Protocol == "Atom Feed").ToArray();
+
+            for (int d = 0; d < distributions.Length; d++)
+            {
+                distributions[d].DatasetServicesWithShowMapLink = new List<DatasetService>();
+                distributions[d].DatasetServicesWithShowMapLink.Add(
+                    new DatasetService
+                    {
+                        Uuid = metadata.Uuid,
+                        Title = metadata.Title,
+                        DistributionProtocol = metadata?.DistributionDetails?.ProtocolName,
+                        GetCapabilitiesUrl = metadata?.DistributionDetails?.URL
+                    });
+
+                var protocol = metadata?.DistributionDetails?.ProtocolName;
+                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                    distributions[d].CanShowMapUrl = true;
+            }
+
+
+            var atomFeedDatasets = distributionData.Select(d => d.Uuid).Distinct().ToArray();
+
+            for (int d = 0; d < atomFeedDatasets.Length; d++)
+            {
+                var meta = distributionsAtomFeed.Where(m => m.Uuid == atomFeedDatasets[d]);
+                List<DistributionFormat> distributionFormats = new List<DistributionFormat>();
+                
+                foreach(var met in meta) 
+                {
+                    var distros = met.DistributionFormats;
+
+                    foreach(var distro in distros) 
+                    {
+                        distributionFormats.Add(new DistributionFormat { Name = distro.Name, Version = distro.Version });
+                    }
+                }
+
+                distributionFormats = distributionFormats.Distinct().ToList();
+
+                distributionsAtomFeed[d].DistributionFormats = distributionFormats;
+                distributionsAtomFeed[d].DatasetServicesWithShowMapLink = new List<DatasetService>();
+                distributionsAtomFeed[d].DatasetServicesWithShowMapLink.Add(
+                    new DatasetService
+                    {
+                        Uuid = metadata.Uuid,
+                        Title = metadata.Title,
+                        DistributionProtocol = metadata?.DistributionDetails?.ProtocolName,
+                        GetCapabilitiesUrl = metadata?.DistributionDetails?.URL
+                    });
+
+                var protocol = metadata?.DistributionDetails?.ProtocolName;
+                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                    distributionsAtomFeed[d].CanShowMapUrl = true;
+            }
+
+            return distributions.Concat(distributionsAtomFeed).ToList();
         }
 
         private List<Distribution> GetTimeRelatedDistributions(object uuid, Models.Api.SearchParameters parameters)
