@@ -513,6 +513,8 @@ namespace Kartverket.Metadatakatalog.Service
                         }
                         catch (Exception ex)
                         {
+                            string identifier = simpleMetadata.Uuid;
+                            Log.Error("Exception while parsing applicationDatasets: " + identifier, ex);
                         }
                     }
 
@@ -580,7 +582,8 @@ namespace Kartverket.Metadatakatalog.Service
                     }
                     catch(Exception ex)
                     {
-
+                        string identifier = simpleMetadata.Uuid;
+                        Log.Error("Exception serie: " + identifier, ex);
                     }
 
                 }
@@ -829,6 +832,8 @@ namespace Kartverket.Metadatakatalog.Service
                     }
                     catch (Exception ex)
                     {
+                        string identifier = simpleMetadata.Uuid;
+                        Log.Error("Exception serviceDatasets: " + identifier, ex);
                     }
                 }
 
