@@ -329,12 +329,15 @@ namespace Kartverket.Metadatakatalog.Service
             }
 
 
-            var atomFeedDatasets = distributionData.Select(d => d.Uuid).Distinct().ToArray();
+            var atomFeedDatasets = distributionsAtomFeed.Select(d => d.Uuid).Distinct().ToArray();
 
             for (int d = 0; d < atomFeedDatasets.Length; d++)
             {
                 var meta = distributionsAtomFeed.Where(m => m.Uuid == atomFeedDatasets[d]);
-                List<DistributionFormat> distributionFormats = new List<DistributionFormat>();
+
+                distributionsAtomFeed[d] = meta.FirstOrDefault();
+
+                List <DistributionFormat> distributionFormats = new List<DistributionFormat>();
                 
                 foreach(var met in meta) 
                 {
