@@ -330,12 +330,13 @@ namespace Kartverket.Metadatakatalog.Service
 
 
             var atomFeedDatasets = distributionsAtomFeed.Select(d => d.Uuid).Distinct().ToArray();
+            Distribution[] distributionsAtomFeedUnique = new Distribution[atomFeedDatasets.Length];
 
             for (int d = 0; d < atomFeedDatasets.Length; d++)
             {
                 var meta = distributionsAtomFeed.Where(m => m.Uuid == atomFeedDatasets[d]);
 
-                distributionsAtomFeed[d] = meta.FirstOrDefault();
+                distributionsAtomFeedUnique[d] = meta.FirstOrDefault();
 
                 List <DistributionFormat> distributionFormats = new List<DistributionFormat>();
                 
@@ -351,9 +352,9 @@ namespace Kartverket.Metadatakatalog.Service
 
                 distributionFormats = distributionFormats.Distinct().ToList();
 
-                distributionsAtomFeed[d].DistributionFormats = distributionFormats;
-                distributionsAtomFeed[d].DatasetServicesWithShowMapLink = new List<DatasetService>();
-                distributionsAtomFeed[d].DatasetServicesWithShowMapLink.Add(
+                distributionsAtomFeedUnique[d].DistributionFormats = distributionFormats;
+                distributionsAtomFeedUnique[d].DatasetServicesWithShowMapLink = new List<DatasetService>();
+                distributionsAtomFeedUnique[d].DatasetServicesWithShowMapLink.Add(
                     new DatasetService
                     {
                         Uuid = metadata.Uuid,
@@ -364,10 +365,10 @@ namespace Kartverket.Metadatakatalog.Service
 
                 var protocol = metadata?.DistributionDetails?.ProtocolName;
                 if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
-                    distributionsAtomFeed[d].CanShowMapUrl = true;
+                    distributionsAtomFeedUnique[d].CanShowMapUrl = true;
             }
 
-            return distributions.Concat(distributionsAtomFeed).ToList();
+            return distributions.Concat(distributionsAtomFeedUnique).ToList();
         }
 
         private List<Distribution> GetTimeRelatedDistributions(object uuid, Models.Api.SearchParameters parameters)
