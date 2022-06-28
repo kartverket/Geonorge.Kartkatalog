@@ -530,8 +530,10 @@ namespace Kartverket.Metadatakatalog.Service
             if(metadata.Type == "dataset") 
             {
                 var mapLink = metadata.GetMapLinkFromSelf();
-                if (!string.IsNullOrEmpty(mapLink))
+                if (!string.IsNullOrEmpty(mapLink)) { 
                     metadata.MapLink = mapLink;
+                    metadata.CanShowMapUrl = true;
+                }
             }
             metadata.ServiceLink = metadata.ServiceUrl();
 
