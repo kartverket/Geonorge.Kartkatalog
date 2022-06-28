@@ -527,6 +527,12 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.CanShowWebsiteUrl = metadata.ShowWebsiteLink();
 
             metadata.MapLink = metadata.DistributionUrl; //metadata.MapUrl();
+            if(metadata.Type == "dataset") 
+            {
+                var mapLink = metadata.GetMapLinkFromSelf();
+                if (!string.IsNullOrEmpty(mapLink))
+                    metadata.MapLink = mapLink;
+            }
             metadata.ServiceLink = metadata.ServiceUrl();
 
             metadata.CoverageUrl = metadata.GetCoverageLink();

@@ -628,6 +628,19 @@ namespace Kartverket.Metadatakatalog.Models
 
             return HierarchyLevel;
         }
+
+        internal string GetMapLinkFromSelf()
+        {
+            foreach (var distribution in DistributionsFormats)
+            {
+                if (distribution.Protocol == SimpleMetadataUtil.OgcWms)
+                {
+                    return distribution.URL;
+                }
+            }
+
+            return "";
+        }
     }
 
     public class QuantitativeResult
