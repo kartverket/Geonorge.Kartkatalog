@@ -967,7 +967,7 @@
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.listhidden">
             <summary>
-            List hidden metadata like series_historic
+            List hidden metadata like series_historic, series_time
             </summary>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.orderby">

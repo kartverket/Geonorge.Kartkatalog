@@ -198,7 +198,8 @@ namespace Kartverket.Metadatakatalog.Models
                 {
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
-                        listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*")
+                        listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*"),
+                        listhidden ? null : new SolrQuery("!serie:*series_time*"),
                     });
                 }
                 else if (text.Trim().Length < 5)
@@ -210,6 +211,7 @@ namespace Kartverket.Metadatakatalog.Models
                         new SolrQuery("allText:" + text + "^1.2"),
                         new SolrQuery("allText:" + text + "*^1.1"),
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
+                        listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber")
                     });
                 }
@@ -227,6 +229,7 @@ namespace Kartverket.Metadatakatalog.Models
                         new SolrQuery("allText:\"" + text + "\"~1"),   //Fuzzy
                         new SolrQuery("allText2:" + text + ""), //Stemmer
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
+                        listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
                         //new SolrQuery("allText3:" + text)        //Fonetisk
                     });
@@ -235,7 +238,8 @@ namespace Kartverket.Metadatakatalog.Models
             else
                 query = new SolrMultipleCriteriaQuery(new[]
                 {
-                     listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*")
+                     listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*"),
+                     listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_time*")
                 });
 
             Log.Debug("Query: " + query.ToString());
