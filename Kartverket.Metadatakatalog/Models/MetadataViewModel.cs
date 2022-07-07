@@ -56,6 +56,7 @@ namespace Kartverket.Metadatakatalog.Models
         public List<SimpleDistributionFormat> DistributionFormats { get; set; }
         public List<DistributionViewModel> DistributionsFormats { get; set; }
         public string UnitsOfDistribution { get; set; }
+        public List<SimpleOperation> Operations { get; set; }
         public List<ReferenceSystem> ReferenceSystems { get; set; }
         public string EnglishAbstract { get; set; }
         public string EnglishTitle { get; set; }
@@ -167,6 +168,7 @@ namespace Kartverket.Metadatakatalog.Models
             Thumbnails = new List<Thumbnail>();
             Distributions = new Distributions();
             DatasetServicesWithShowMapLink = new List<DatasetService>();
+            Operations = new List<SimpleOperation>();
         }
 
         public SeoUrl CreateSeoUrl()
@@ -627,6 +629,19 @@ namespace Kartverket.Metadatakatalog.Models
             }
 
             return HierarchyLevel;
+        }
+
+        internal string GetMapLinkFromSelf()
+        {
+            foreach (var distribution in DistributionsFormats)
+            {
+                if (distribution.Protocol == SimpleMetadataUtil.OgcWms)
+                {
+                    return distribution.URL;
+                }
+            }
+
+            return "";
         }
     }
 

@@ -103,7 +103,7 @@ namespace Kartverket.Metadatakatalog.Service
                     foreach (var item in register.containeditems)
                     {
                         var codevalue = item.label;
-                        var label = item.description;
+                        var label = RemoveSamiTranslation(item.description);
                         var status = item.status;
                         if (status == "Gyldig")                        
                             _areas.Add("0/" + codevalue, label);
@@ -116,7 +116,7 @@ namespace Kartverket.Metadatakatalog.Service
                     foreach (var item in register.containeditems)
                     {
                         var codevalue = item.label;
-                        var label = item.description;
+                        var label = RemoveSamiTranslation(item.description);
                         var status = item.status;
                         if (status == "Gyldig")
                             _areas.Add("0/" + codevalue.Substring(0, 2) + "/" + codevalue, label);
@@ -126,6 +126,17 @@ namespace Kartverket.Metadatakatalog.Service
                 memCacher.Add("areas", _areas, new DateTimeOffset(DateTime.Now.AddHours(12)));
             }
 
+        }
+
+        private string RemoveSamiTranslation(string description)
+        {
+            if(description.Contains(" – ")) 
+            {
+                var names = description.Split('–');
+                description = names[0].Trim();
+            }
+
+            return description;
         }
 
         // note use of lowercase keywords - comparison is also done with lower casing of input
@@ -234,15 +245,19 @@ namespace Kartverket.Metadatakatalog.Service
 
             foreach (var keyword in metadata.Keywords)
             {
-                var myValueList = _areas.Where(x => x.Value.ToLower() == keyword.Keyword.ToLower()).ToList();
-                if(myValueList != null)
-                {
-                    foreach (var myValue in myValueList)
+                string[] keyWords = FixKeyWord(keyword.Keyword.ToLower());
+                foreach (var keyWord in keyWords) 
+                { 
+                    var myValueList = _areas.Where(x => x.Value.ToLower() == keyWord).ToList();
+                    if(myValueList != null)
                     {
-                        if (myValue.Key != null) placegroup.Add(myValue.Key);
+                        foreach (var myValue in myValueList)
+                        {
+                            if (myValue.Key != null && !placegroup.Contains(myValue.Key) ) placegroup.Add(myValue.Key);
+                        }
                     }
                 }
-                
+
             }
 
             if(metadata.HierarchyLevel != "software") 
@@ -289,6 +304,32 @@ namespace Kartverket.Metadatakatalog.Service
 
 
             return placegroup;
+        }
+
+        private string[] FixKeyWord(string keyword)
+        {
+            List<string> keywords = new List<string>();
+
+            if (keyword.Contains("fylke")) { 
+                keyword = keyword.Replace(" fylke", "");
+                keywords.Add(keyword);
+            }
+            else if (keyword.Contains("kommune"))
+            {
+                var area = keyword.Split(',');
+                if(area != null && area.Length > 1) 
+                {
+                    var municipality = area[0].Replace("kommune","").Trim();
+                    var county = area[1].Trim();
+
+                    keywords.Add(municipality);
+                    keywords.Add(county);
+                }
+            }
+            else
+                keywords.Add(keyword);
+
+            return keywords.ToArray();
         }
 
         internal List<string> ResolveSpatialScope(List<Models.Keyword> keywords, string culture)

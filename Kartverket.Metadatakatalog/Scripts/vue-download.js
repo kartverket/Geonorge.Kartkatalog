@@ -866,8 +866,36 @@ var MasterOrderLine = {
         masterSupportsPolygonSelection: function () {
             var masterSupportsPolygonSelection = false;
             this.$root.orderLines.forEach(function (orderLine) {
-                if (orderLine.capabilities.supportsPolygonSelection)
+
+                var polygonSelectionAvailableForUser = orderLine.capabilities.supportsPolygonSelection;
+                var accessConstraintRequiredRoleIsAgriculturalParty = false;
+                var datasetOnlyOwnMunicipalityRole = false;
+
+                if (orderLine.capabilities.accessConstraintRequiredRole !== undefined) {
+                    var role = orderLine.capabilities.accessConstraintRequiredRole;
+                    accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                    datasetOnlyOwnMunicipalityRole = role.indexOf('nd.egenkommune') > -1;
+                }
+
+                var isAgriculturalParty = false;
+                var userHasOnlyOwnMunicipalityRole = false;
+                var baatInfo = GetCookie('baatInfo');
+                if (baatInfo) {
+                    baatInfo = String(baatInfo);
+                    isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                    userHasOnlyOwnMunicipalityRole = baatInfo.indexOf('nd.egenkommune') > -1;
+                    if (isAgriculturalParty && accessConstraintRequiredRoleIsAgriculturalParty)
+                        polygonSelectionAvailableForUser = false;
+                    else if (userHasOnlyOwnMunicipalityRole && datasetOnlyOwnMunicipalityRole)
+                        polygonSelectionAvailableForUser = false;
+                }
+
+                if (!polygonSelectionAvailableForUser && masterSupportsPolygonSelection) {
+                    masterSupportsPolygonSelection = false;
+                }
+                else if (orderLine.capabilities.supportsPolygonSelection) {
                     masterSupportsPolygonSelection = true;
+                }
             });
             return masterSupportsPolygonSelection;
         },
@@ -1514,7 +1542,7 @@ var mainVueModel = new Vue({
         },
         isSupportedType: function (areaType) {
             var isSupportedType = false;
-            var supportedAreaTypes = ["fylke", "kommune"];
+            var supportedAreaTypes = ["fylke", "kommune", "Kommuner"];
             supportedAreaTypes.forEach(function (supportedAreaType) {
                 if (areaType == supportedAreaType) isSupportedType = true;
             })
@@ -1943,21 +1971,13 @@ var mainVueModel = new Vue({
 
         updateSelectedAreasForSingleOrderLine: function (orderLineUuid, autoSelectProjectionsAndFormats) {
             var selectedAreas = [];
-            var maxEiendoms = 100;
             for (areaType in this.masterOrderLine.allAvailableAreas[orderLineUuid]) {
                 if (this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].length) {
                     this.masterOrderLine.allAvailableAreas[orderLineUuid][areaType].forEach(function (selectedArea) {
                         if (selectedArea.isSelected) {
                             var isAllreadyAddedInfo = this.isAllreadyAdded(selectedAreas, selectedArea, "code");
                             if (!isAllreadyAddedInfo.added) {
-                                if (selectedArea.type == "Eiendommer" && selectedAreas.length > maxEiendoms - 1)
-                                {
-                                    selectedArea.selected = false;
-                                    hideAlert();
-                                    showAlert("Du kan kun velge maksimum " + maxEiendoms + " eiendommer<br/>", "danger");
-                                }
-                                else
-                                    selectedAreas.push(selectedArea);
+                                 selectedAreas.push(selectedArea);
                             }
                         }
                     }.bind(this))
