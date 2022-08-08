@@ -515,7 +515,7 @@ namespace Kartverket.Metadatakatalog.Service
                         }
                         catch (Exception ex)
                         {
-                            string identifier = simpleMetadata.Uuid;
+                            string identifier = rel;
                             Log.Error("Exception while parsing applicationDatasets: " + identifier, ex);
                         }
                     }
