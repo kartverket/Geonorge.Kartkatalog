@@ -112,6 +112,9 @@ namespace Kartverket.Metadatakatalog
                 Thread.CurrentThread.CurrentCulture = culture;
                 Thread.CurrentThread.CurrentUICulture = culture;
             }
+
+            Response.AddHeader("Content-language", Thread.CurrentThread.CurrentUICulture.Name);
+
         }
 
         protected void Application_EndRequest()

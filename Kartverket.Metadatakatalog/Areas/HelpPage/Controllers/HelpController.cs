@@ -53,6 +53,9 @@ namespace Kartverket.Metadatakatalog.Areas.HelpPage.Controllers
                 ModelDescription modelDescription;
                 if (modelDescriptionGenerator.GeneratedModels.TryGetValue(modelName, out modelDescription))
                 {
+                    if (ViewBag.Title == null)
+                        ViewBag.Title = modelDescription.Name;
+
                     return View(modelDescription);
                 }
             }
