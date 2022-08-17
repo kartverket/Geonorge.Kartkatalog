@@ -160,6 +160,7 @@ namespace Kartverket.Metadatakatalog.Models
         public List<Dataset> SerieDatasets { get; set; }
         public Serie Serie { get; set; }
         public QuantitativeResult QuantitativeResult { get; set; }
+        public SimpleContentInformation ContentInformation { get; set; } = new SimpleContentInformation();
 
 
         public MetadataViewModel()
