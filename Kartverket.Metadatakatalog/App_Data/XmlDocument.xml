@@ -1363,6 +1363,11 @@
               Looks up a localized string similar to Lukk.
             </summary>
         </member>
+        <member name="P:Resources.UI.CloudCoverPercentage">
+            <summary>
+              Looks up a localized string similar to Skydekke prosent.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Concepts">
             <summary>
               Looks up a localized string similar to Begreper.
