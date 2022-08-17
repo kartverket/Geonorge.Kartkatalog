@@ -615,7 +615,7 @@ namespace Kartverket.Metadatakatalog.Service
                 metadata.Serie = GetSerieForDataset(metadataIndexDocResult.Serie);
             }
 
-            if (metadata.Type == "dataset" && metadata.ContentInformation != null)
+            if (metadata.Type == "dataset" && simpleMetadata.ContentInformation != null)
                 metadata.ContentInformation.CloudCoverPercentage = simpleMetadata.ContentInformation.CloudCoverPercentage;
 
             metadata.AccessIsRestricted = metadata.IsRestricted();
