@@ -221,13 +221,13 @@ namespace Kartverket.Metadatakatalog.Models
                 {
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
-                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^75  titleText:"+ titleText + "*^50"),
+                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^75  titleText:"+ titleText + "*^61"),
                         new SolrQuery("uuid:"+ text + "^60"),
                         new SolrQuery(queryString),
-                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^75 titleText:"+ text + "~2^1.1"),
-                        new SolrQuery("(type:dataset AND allText:"+ text + ")^75 allText:" + text + "^1.2"),
-                        new SolrQuery("(type:dataset AND allText:"+ text + ")^75 allText:" + text + "*^1.1"),
-                        new SolrQuery("(type:dataset AND allText:"+ text + ")^75 allText:" + text + "~^1"),   //Fuzzy
+                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^70 titleText:"+ text + "~2^1.1"),
+                        new SolrQuery("(type:dataset AND allText:"+ text + ")^30 allText:" + text + "^1.2"),
+                        new SolrQuery("(type:dataset AND allText:"+ text + ")^5 allText:" + text + "*^1.1"),
+                        new SolrQuery("(type:dataset AND allText:"+ text + ") allText:" + text + "~^1"),   //Fuzzy
                         //new SolrQuery("allText2:" + text + ""), //Stemmer
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
