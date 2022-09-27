@@ -209,9 +209,9 @@ namespace Kartverket.Metadatakatalog.Models
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
                         new SolrQuery(queryString),
-                        new SolrQuery("titleText:"+ titleText + "*^50"),
-                        new SolrQuery("allText:" + text + "^1.2"),
-                        new SolrQuery("allText:" + text + "*^1.1"),
+                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^75 titleText:"+ titleText + "*^50"),
+                        new SolrQuery("(type:dataset AND allText:"+ text + ")^75 allText:" + text + "^1.2"),
+                        new SolrQuery("(type:dataset AND allText:"+ text + "*)^75 allText:" + text + "*^1.1"),
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber")
