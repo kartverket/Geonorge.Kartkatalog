@@ -691,6 +691,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 string identifier = simpleMetadata.Uuid;
                 Log.Error("Exception while parsing metadata: " + identifier, e);
+                return null;
             }
             return indexDoc;
         }
