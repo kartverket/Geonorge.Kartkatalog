@@ -22,17 +22,29 @@ namespace Kartverket.Metadatakatalog
                 ));
 
 
-            bundles.Add(new ScriptBundle("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts").Include(
+            // bundles.Add(new ScriptBundle("~/Content/bower_components/kartverket-felleskomponenter/assets/js/scripts").Include(
+            //    "~/Content/bower_components/kartverket-felleskomponenter/assets/js/vendor.min.js",
+            //    "~/Content/bower_components/vue/dist/vue.js",
+            //    "~/Content/bower_components/kartverket-felleskomponenter/assets/js/main.min.js",
+            //    "~/Content/bower_components/clipboard/dist/clipboard.min.js",
+            //    "~/Content/bower_components/axios/dist/axios.min.js",
+            //    "~/Scripts/bootstrap.js",
+            //    "~/Scripts/site.js",
+            //    "~/Scripts/visninger.js",
+            //     "~/Content/Blocks/SurveyBlock/SurveyBlockScript.js"
+            //));
+
+            bundles.Add(new ScriptBundle("~/bundles/js").Include(
+               "~/Scripts/jquery-{version}.js",
                "~/Content/bower_components/kartverket-felleskomponenter/assets/js/vendor.min.js",
-               "~/Content/bower_components/vue/dist/vue.js",
                "~/Content/bower_components/kartverket-felleskomponenter/assets/js/main.min.js",
-               "~/Content/bower_components/clipboard/dist/clipboard.min.js",
-               "~/Content/bower_components/axios/dist/axios.min.js",
-               "~/Scripts/bootstrap.js",
-               "~/Scripts/site.js",
-               "~/Scripts/visninger.js",
-                "~/Content/Blocks/SurveyBlock/SurveyBlockScript.js"
+               "~/Content/bower_components/vue/dist/vue.js"
            ));
+
+            bundles.Add(new ScriptBundle("~/node-modules/scripts").Include(
+               "~/node_modules/@kartverket/geonorge-web-components/MainNavigation.js",
+               "~/node_modules/@kartverket/geonorge-web-components/GeoNorgeFooter.js"
+             ));
 
 
             bundles.Add(new ScriptBundle("~/Content/download").Include(
