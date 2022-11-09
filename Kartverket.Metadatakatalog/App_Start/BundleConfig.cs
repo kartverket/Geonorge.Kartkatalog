@@ -41,11 +41,6 @@ namespace Kartverket.Metadatakatalog
                "~/Content/bower_components/vue/dist/vue.js"
            ));
 
-            bundles.Add(new ScriptBundle("~/node-modules/scripts").Include(
-               "~/node_modules/@kartverket/geonorge-web-components/MainNavigation.js",
-               "~/node_modules/@kartverket/geonorge-web-components/GeoNorgeFooter.js"
-             ));
-
 
             bundles.Add(new ScriptBundle("~/Content/download").Include(
                "~/Scripts/vue-download.js"
