@@ -2322,7 +2322,7 @@ var mainVueModel = new Vue({
                     },
                     error: function (xhr, status, errorThrown) {
                         hideLoadingAnimation();
-                        showAlert("Feil: " + errorThrown, 'danger');
+                        showAlert("Feil: " + errorThrown + ". " + xhr.responseText, 'danger');
                     }
                 });
             }
