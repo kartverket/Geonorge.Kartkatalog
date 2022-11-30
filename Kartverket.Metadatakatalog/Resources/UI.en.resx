@@ -870,4 +870,7 @@
   <data name="DistributionUrl" xml:space="preserve">
     <value>Distribusjons url</value>
   </data>
+  <data name="CloudCoverPercentage" xml:space="preserve">
+    <value>Cloud cover percentage</value>
+  </data>
 </root>

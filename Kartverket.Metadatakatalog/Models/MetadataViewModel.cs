@@ -69,6 +69,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string Type { get; set; }
         public string TypeTranslated { get; set; }
         public string TypeName { get; set; }
+        public List<string> Credits { get; set; }
         public List<Keyword> Keywords { get; set; }
 
         public List<Keyword> KeywordsPlace { get; set; }
@@ -123,6 +124,7 @@ namespace Kartverket.Metadatakatalog.Models
         public List<Thumbnail> Thumbnails { get; set; }
         public string Title { get; set; }
         public string TopicCategory { get; set; }
+        public List<string> TopicCategories { get; set; }
         public string Uuid { get; set; }
 
         public string ResourceReferenceCode { get; set; }
@@ -158,6 +160,7 @@ namespace Kartverket.Metadatakatalog.Models
         public List<Dataset> SerieDatasets { get; set; }
         public Serie Serie { get; set; }
         public QuantitativeResult QuantitativeResult { get; set; }
+        public SimpleContentInformation ContentInformation { get; set; }
 
 
         public MetadataViewModel()

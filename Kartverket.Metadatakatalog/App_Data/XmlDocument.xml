@@ -967,7 +967,7 @@
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.listhidden">
             <summary>
-            List hidden metadata like series_historic
+            List hidden metadata like series_historic, series_time
             </summary>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.orderby">
@@ -1361,6 +1361,11 @@
         <member name="P:Resources.UI.Close">
             <summary>
               Looks up a localized string similar to Lukk.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.CloudCoverPercentage">
+            <summary>
+              Looks up a localized string similar to Skydekke prosent.
             </summary>
         </member>
         <member name="P:Resources.UI.Concepts">

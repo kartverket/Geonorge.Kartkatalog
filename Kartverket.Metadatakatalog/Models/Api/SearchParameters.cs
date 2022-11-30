@@ -18,7 +18,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public int limit { get; set; }
         /// <summary>
-        /// List hidden metadata like series_historic
+        /// List hidden metadata like series_historic, series_time
         /// </summary>
         public bool listhidden { get; set; }
         /// <summary>

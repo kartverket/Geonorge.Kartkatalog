@@ -148,10 +148,13 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (!string.IsNullOrEmpty(metadata.DistributionUrl) && (metadata.IsService() || metadata.IsServiceLayer()))
             {
-                for (int d=0; d < metadata.Distributions.RelatedDataset.Count; d++)
+                var distributions = metadata.Distributions.RelatedDataset.Where(d => d.Protocol != "Atom Feed").ToArray();
+                var distributionsAtomFeed = metadata.Distributions.RelatedDataset.Where(d => d.Protocol == "Atom Feed").ToArray();
+
+                for (int d = 0; d < distributions.Length; d++)
                 {
-                    metadata.Distributions.RelatedDataset[d].DatasetServicesWithShowMapLink = new List<DatasetService>();
-                    metadata.Distributions.RelatedDataset[d].DatasetServicesWithShowMapLink.Add(
+                    distributions[d].DatasetServicesWithShowMapLink = new List<DatasetService>();
+                    distributions[d].DatasetServicesWithShowMapLink.Add(
                         new DatasetService
                         {
                             Uuid = metadata.Uuid,
@@ -162,8 +165,38 @@ namespace Kartverket.Metadatakatalog.Service
 
                     var protocol = metadata?.DistributionDetails?.ProtocolName;
                     if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
-                        metadata.Distributions.RelatedDataset[d].CanShowMapUrl = true;
+                        distributions[d].CanShowMapUrl = true;
                 }
+
+                var atomFeedDistributionFormats = new List<DistributionFormat>();
+
+                for (int d = 0; d < distributionsAtomFeed.Length; d++)
+                {
+                    atomFeedDistributionFormats.AddRange(distributionsAtomFeed[d].DistributionFormats);
+
+                    distributionsAtomFeed[0].DistributionFormats = atomFeedDistributionFormats.Select(s => new DistributionFormat { Name = s.Name, Version  = s.Version }).Distinct().ToList();
+                    distributionsAtomFeed[0].DatasetServicesWithShowMapLink = new List<DatasetService>();
+                    distributionsAtomFeed[0].DatasetServicesWithShowMapLink.Add(
+                        new DatasetService
+                        {
+                            Uuid = metadata.Uuid,
+                            Title = metadata.Title,
+                            DistributionProtocol = metadata?.DistributionDetails?.ProtocolName,
+                            GetCapabilitiesUrl = metadata?.DistributionDetails?.URL
+                        });
+
+                    var protocol = metadata?.DistributionDetails?.ProtocolName;
+                    if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                        distributionsAtomFeed[0].CanShowMapUrl = true;
+                }
+
+                var atomFeed = distributionsAtomFeed.FirstOrDefault();
+
+                distributionsAtomFeed = new Distribution[1];
+                distributionsAtomFeed[0] = atomFeed;
+
+                metadata.Distributions.RelatedDataset = distributions.Concat(distributionsAtomFeed).ToList();
+
             }
 
             // Self ...
@@ -252,8 +285,10 @@ namespace Kartverket.Metadatakatalog.Service
                 else
                 {
                     var metadataIndexDocResult = _searchService.GetMetadata(metadata.Uuid);
-                    if (metadataIndexDocResult != null)
+                    if (metadataIndexDocResult != null) { 
                         metadata.Distributions.RelatedSerieDatasets = ConvertRelatedData(metadataIndexDocResult.SerieDatasets);
+                        metadata.Distributions.RelatedSerieDatasets = GroupFormats(metadata.Distributions.RelatedSerieDatasets, metadata);
+                    }
                 }
             }
 
@@ -269,6 +304,71 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.Distributions = metadata.Distributions.GetTitle(metadata, type);
 
             return metadata.Distributions;
+        }
+
+        private List<Distribution> GroupFormats(List<Distribution> distributionData, MetadataViewModel metadata)
+        {
+            var distributions = distributionData.Where(d => d.Protocol != "Atom Feed").ToArray();
+            var distributionsAtomFeed = distributionData.Where(d => d.Protocol == "Atom Feed").ToArray();
+
+            for (int d = 0; d < distributions.Length; d++)
+            {
+                distributions[d].DatasetServicesWithShowMapLink = new List<DatasetService>();
+                distributions[d].DatasetServicesWithShowMapLink.Add(
+                    new DatasetService
+                    {
+                        Uuid = metadata.Uuid,
+                        Title = metadata.Title,
+                        DistributionProtocol = metadata?.DistributionDetails?.ProtocolName,
+                        GetCapabilitiesUrl = metadata?.DistributionDetails?.URL
+                    });
+
+                var protocol = metadata?.DistributionDetails?.ProtocolName;
+                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                    distributions[d].CanShowMapUrl = true;
+            }
+
+
+            var atomFeedDatasets = distributionsAtomFeed.Select(d => d.Uuid).Distinct().ToArray();
+            Distribution[] distributionsAtomFeedUnique = new Distribution[atomFeedDatasets.Length];
+
+            for (int d = 0; d < atomFeedDatasets.Length; d++)
+            {
+                var meta = distributionsAtomFeed.Where(m => m.Uuid == atomFeedDatasets[d]);
+
+                distributionsAtomFeedUnique[d] = meta.FirstOrDefault();
+
+                List <DistributionFormat> distributionFormats = new List<DistributionFormat>();
+                
+                foreach(var met in meta) 
+                {
+                    var distros = met.DistributionFormats;
+
+                    foreach(var distro in distros) 
+                    {
+                        distributionFormats.Add(new DistributionFormat { Name = distro.Name, Version = distro.Version });
+                    }
+                }
+
+                distributionFormats = distributionFormats.Distinct().ToList();
+
+                distributionsAtomFeedUnique[d].DistributionFormats = distributionFormats;
+                distributionsAtomFeedUnique[d].DatasetServicesWithShowMapLink = new List<DatasetService>();
+                distributionsAtomFeedUnique[d].DatasetServicesWithShowMapLink.Add(
+                    new DatasetService
+                    {
+                        Uuid = metadata.Uuid,
+                        Title = metadata.Title,
+                        DistributionProtocol = metadata?.DistributionDetails?.ProtocolName,
+                        GetCapabilitiesUrl = metadata?.DistributionDetails?.URL
+                    });
+
+                var protocol = metadata?.DistributionDetails?.ProtocolName;
+                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                    distributionsAtomFeedUnique[d].CanShowMapUrl = true;
+            }
+
+            return distributions.Concat(distributionsAtomFeedUnique).ToList();
         }
 
         private List<Distribution> GetTimeRelatedDistributions(object uuid, Models.Api.SearchParameters parameters)
@@ -515,6 +615,10 @@ namespace Kartverket.Metadatakatalog.Service
                 metadata.Serie = GetSerieForDataset(metadataIndexDocResult.Serie);
             }
 
+            if (metadata.Type == "dataset" && simpleMetadata.ContentInformation != null) {
+                metadata.ContentInformation = new SimpleContentInformation();
+                metadata.ContentInformation.CloudCoverPercentage = simpleMetadata.ContentInformation.CloudCoverPercentage;
+            }
             metadata.AccessIsRestricted = metadata.IsRestricted();
             metadata.AccessIsOpendata = metadata.IsOpendata();
             metadata.AccessIsProtected = metadata.IsOffline();
@@ -934,9 +1038,9 @@ namespace Kartverket.Metadatakatalog.Service
                 Title = GetTranslation(simpleMetadata.Title, simpleMetadata.EnglishTitle),
                 NorwegianTitle = simpleMetadata.Title,
                 Uuid = simpleMetadata.Uuid,
-                Abstract = GetTranslation(simpleMetadata.Abstract, simpleMetadata.EnglishAbstract),
+                Abstract = FixMarkDown(GetTranslation(simpleMetadata.Abstract, simpleMetadata.EnglishAbstract)),
                 Status = Register.GetStatus(simpleMetadata.Status),
-                EnglishAbstract = simpleMetadata.EnglishAbstract,
+                EnglishAbstract = FixMarkDown(simpleMetadata.EnglishAbstract),
                 EnglishTitle = simpleMetadata.EnglishTitle,
                 BoundingBox = Convert(simpleMetadata.BoundingBox),
                 Constraints = Convert(simpleMetadata.Constraints),
@@ -953,6 +1057,7 @@ namespace Kartverket.Metadatakatalog.Service
                 Type = simpleMetadata.HierarchyLevel,
                 TypeTranslated = SimpleMetadataUtil.GetTypeTranslated(simpleMetadata.HierarchyLevel),
                 TypeName = simpleMetadata.HierarchyLevelName,
+                Credits = simpleMetadata.Credits,
                 KeywordsPlace = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_PLACE, null)),
                 KeywordsTheme = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_THEME, null)),
                 KeywordsInspire = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_GEMET_INSPIRE_V1)),
@@ -1000,6 +1105,13 @@ namespace Kartverket.Metadatakatalog.Service
                 OrderingInstructions = (simpleMetadata.AccessProperties != null && !string.IsNullOrEmpty(simpleMetadata.AccessProperties.OrderingInstructions)) ? simpleMetadata.AccessProperties.OrderingInstructions : ""
             };
 
+            if(simpleMetadata.TopicCategories != null) 
+            {
+                metadata.TopicCategories = new List<string>();
+                foreach (var topic in simpleMetadata.TopicCategories)
+                    metadata.TopicCategories.Add(Register.GetTopicCategory(topic));
+            }
+
             if (string.IsNullOrEmpty(metadata.ProductSpecificationUrl))
             {
                 if (simpleMetadata.ProductSpecificationOther != null
@@ -1033,6 +1145,16 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.QuantitativeResult = GetQuantitativeResult(metadata.QualitySpecifications);
 
             return metadata;
+        }
+
+        private string FixMarkDown(string text)
+        {
+            if (!string.IsNullOrEmpty(text) && text.Contains("###")) 
+            {
+                text = text.Replace("###", "### ");
+                text = text.Replace("###  ", "### ");
+            }
+            return text;
         }
 
         private QuantitativeResult GetQuantitativeResult(List<QualitySpecification> qualitySpecifications)

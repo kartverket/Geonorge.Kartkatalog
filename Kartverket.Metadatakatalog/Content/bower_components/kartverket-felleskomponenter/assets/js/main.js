@@ -175,7 +175,7 @@ function updateShoppingCart() {
     var shoppingCartElement = $('.downloads__count');
     var orderItems = "";
     var orderItemsObj = {};
-    var cookieName = "orderitems";
+    var cookieName = "orderItems";
     var cookieValue = 0;
     var cookieDomain = ".geonorge.no";
 
@@ -209,7 +209,7 @@ function updateShoppingCart() {
 
 function updateShoppingCartCookie() {
     var shoppingCartElement = $('.downloads__count');
-    var cookieName = "orderitems";
+    var cookieName = "orderItems";
     var cookieDomain = ".geonorge.no";
     var cookieValue = 0;
     if (localStorage.getItem("orderItems") !== null && localStorage.getItem("orderItems") != "[]") {

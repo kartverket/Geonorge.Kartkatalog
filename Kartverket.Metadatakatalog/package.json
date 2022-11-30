@@ -1,16 +1,8 @@
 {
-  "license": "MIT",
   "version": "1.0.0",
   "name": "asp.net",
   "private": true,
-  "devDependencies": {
-    "gulp": "^4.0.2"
-  },
   "dependencies": {
-    "axios": "^0.21.1",
-    "clipboard": "^2.0.4",
-    "geonorge-base": "^10.0.8",
-    "geonorge-shared-partials": "^1.0.0",
-    "vue": "^2.6.10"
+    "@kartverket/geonorge-web-components": "^0.2.7"
   }
 }

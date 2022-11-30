@@ -1,4 +1,4 @@
-﻿using SolrNet;
+using SolrNet;
 using System.Collections.Generic;
 using System.Linq;
 using System;
@@ -175,7 +175,9 @@ namespace Kartverket.Metadatakatalog.Models
                 text = text.Replace("^", " ");
                 text = text.Replace("-", "\\-");
 
-                var queryString = "titleText:" + text + "^50";
+                var queryString = "titleText:" + text + "^60";
+
+                var titleText = text.Replace(" ", "*");
 
                 if(text.Contains(" "))
                 {
@@ -185,7 +187,7 @@ namespace Kartverket.Metadatakatalog.Models
                     {
                         if (!string.IsNullOrEmpty(words[w]))
                         { 
-                            textOr = textOr + "titleText:" + words[w] + "^50";
+                            textOr = textOr + "titleText:" + words[w] + "^1.2";
                             if (w != words.Count() - 1)
                                 textOr = textOr + " OR ";
                         }
@@ -198,7 +200,8 @@ namespace Kartverket.Metadatakatalog.Models
                 {
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
-                        listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*")
+                        listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*"),
+                        listhidden ? null : new SolrQuery("!serie:*series_time*"),
                     });
                 }
                 else if (text.Trim().Length < 5)
@@ -206,10 +209,11 @@ namespace Kartverket.Metadatakatalog.Models
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
                         new SolrQuery(queryString),
-                        new SolrQuery("titleText:"+ text + "*^40"),
-                        new SolrQuery("allText:" + text + "^1.2"),
-                        new SolrQuery("allText:" + text + "*^1.1"),
+                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^75 titleText:"+ titleText + "*^50"),
+                        new SolrQuery("(type:dataset AND allText:"+ text + ")^75 allText:" + text + "^1.2"),
+                        new SolrQuery("(type:dataset AND allText:"+ text + "*)^75 allText:" + text + "*^1.1"),
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
+                        listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber")
                     });
                 }
@@ -217,16 +221,16 @@ namespace Kartverket.Metadatakatalog.Models
                 {
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
-                        //new SolrQuery("titleText:"+ text + "^50"),
+                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^75  titleText:"+ titleText + "*^61"),
                         new SolrQuery("uuid:"+ text + "^60"),
                         new SolrQuery(queryString),
-                        new SolrQuery("titleText:"+ text + "*^40"),
-                        new SolrQuery("titleText:"+ text + "~2^1.1"),
-                        new SolrQuery("allText:" + text + "^1.2"),
-                        new SolrQuery("allText:" + text + "*^1.1"),
-                        new SolrQuery("allText:" + text + "~^1"),   //Fuzzy
-                        new SolrQuery("allText2:" + text + ""), //Stemmer
+                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^70 titleText:"+ text + "~2^1.1"),
+                        new SolrQuery("(type:dataset AND allText:"+ text + ")^30 allText:" + text + "^1.2"),
+                        new SolrQuery("(type:dataset AND allText:"+ text + ")^5 allText:" + text + "*^1.1"),
+                        new SolrQuery("(type:dataset AND allText:"+ text + ") allText:" + text + "~^1"),   //Fuzzy
+                        //new SolrQuery("allText2:" + text + ""), //Stemmer
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
+                        listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
                         //new SolrQuery("allText3:" + text)        //Fonetisk
                     });
@@ -235,7 +239,8 @@ namespace Kartverket.Metadatakatalog.Models
             else
                 query = new SolrMultipleCriteriaQuery(new[]
                 {
-                     listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*")
+                     listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*"),
+                     listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_time*")
                 });
 
             Log.Debug("Query: " + query.ToString());
