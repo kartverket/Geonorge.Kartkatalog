@@ -54,10 +54,10 @@ namespace Kartverket.Metadatakatalog
             bundles.Add(new ScriptBundle("~/bundles/shopping-cart").Include(
                 "~/Scripts/shopping-cart.js"));
 
-            if (WebConfigurationManager.AppSettings["EnvironmentName"] == "dev")
+            //if (WebConfigurationManager.AppSettings["EnvironmentName"] == "dev")
                 BundleTable.EnableOptimizations = false;
-            else
-                BundleTable.EnableOptimizations = true;
+            //else
+            //    BundleTable.EnableOptimizations = true;
         }
     }
 }
