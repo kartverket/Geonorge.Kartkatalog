@@ -198,7 +198,10 @@ namespace Kartverket.Metadatakatalog.Service
                 distributionsAtomFeed = new Distribution[1];
                 distributionsAtomFeed[0] = atomFeed;
 
-                metadata.Distributions.RelatedDataset = distributions.Concat(distributionsAtomFeed).ToList();
+                if (distributionsAtomFeed != null)
+                    metadata.Distributions.RelatedDataset = distributions.Concat(distributionsAtomFeed).ToList();
+                else
+                    metadata.Distributions.RelatedDataset = distributions.ToList();
 
             }
 
