@@ -172,7 +172,10 @@ namespace Kartverket.Metadatakatalog.Service
 
                 for (int d = 0; d < distributionsAtomFeed.Length; d++)
                 {
-                    atomFeedDistributionFormats.AddRange(distributionsAtomFeed[d].DistributionFormats);
+                    distributionsAtomFeed[d].DistributionFormats.ForEach
+                        (
+                            df => { if (!atomFeedDistributionFormats.Where(f => f.Name == df.Name).Any()) atomFeedDistributionFormats.Add(df); }
+                        );
 
                     distributionsAtomFeed[0].DistributionFormats = atomFeedDistributionFormats.Select(s => new DistributionFormat { Name = s.Name, Version  = s.Version }).Distinct().ToList();
                     distributionsAtomFeed[0].DatasetServicesWithShowMapLink = new List<DatasetService>();
