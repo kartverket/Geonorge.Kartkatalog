@@ -149,7 +149,7 @@ namespace Kartverket.Metadatakatalog.Service
             if (!string.IsNullOrEmpty(metadata.DistributionUrl) && (metadata.IsService() || metadata.IsServiceLayer()))
             {
                 var distributions = metadata.Distributions.RelatedDataset.Where(d => d.Protocol != "Atom Feed").ToArray();
-                var distributionsAtomFeed = metadata.Distributions.RelatedDataset.Where(d => d.Protocol == "Atom Feed").ToArray();
+                var distributionsAtomFeed = metadata.Distributions.RelatedDataset.Where(d => d.Protocol == "Atom Feed" && d.Uuid == metadata.Uuid).ToArray();
 
                 for (int d = 0; d < distributions.Length; d++)
                 {
