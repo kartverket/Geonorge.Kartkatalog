@@ -48,17 +48,17 @@ namespace Kartverket.Metadatakatalog.Models.Api
         {
             Organization = distribution.Organization;
             Protocol = distribution.Protocol;
-            Url = distribution.URL;
+            //Url = distribution.URL;
         }
 
         public string Organization { get; }
         public string Protocol { get; }
-        public string Url { get; }
+        //public string Url { get; }
 
         public override bool Equals(object obj)
         {
             return obj is DistributionRow other &&
-                   (other.Organization == Organization && other.Protocol == Protocol && other.Url == Url);
+                   (other.Organization == Organization && other.Protocol == Protocol /*&& other.Url == Url*/);
         }
         public override int GetHashCode()
         {
@@ -70,8 +70,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
             if (Protocol != null)
                 hash = hash + Protocol.GetHashCode();
 
-            if (Url != null)
-                hash = hash + Url.GetHashCode();
+            //if (Url != null)
+            //    hash = hash + Url.GetHashCode();
 
             return hash;
         }
