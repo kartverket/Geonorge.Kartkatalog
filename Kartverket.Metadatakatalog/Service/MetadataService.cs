@@ -149,7 +149,7 @@ namespace Kartverket.Metadatakatalog.Service
             if (!string.IsNullOrEmpty(metadata.DistributionUrl) && (metadata.IsService() || metadata.IsServiceLayer()))
             {
                 var distributions = metadata.Distributions.RelatedDataset.Where(d => d.Protocol != "Atom Feed").ToArray();
-                var distributionsAtomFeed = metadata.Distributions.RelatedDataset.Where(d => d.Protocol == "Atom Feed" && d.Uuid == metadata.Uuid).ToArray();
+                var distributionsAtomFeed = metadata.Distributions.RelatedDataset.Where(d => d.Protocol == "Atom Feed").ToArray();
 
                 for (int d = 0; d < distributions.Length; d++)
                 {
@@ -172,12 +172,13 @@ namespace Kartverket.Metadatakatalog.Service
 
                 for (int d = 0; d < distributionsAtomFeed.Length; d++)
                 {
-                    distributionsAtomFeed[d].DistributionFormats.ForEach
-                        (
-                            df => { if (!atomFeedDistributionFormats.Where(f => f.Name == df.Name).Any()) atomFeedDistributionFormats.Add(df); }
-                        );
 
-                    distributionsAtomFeed[0].DistributionFormats = atomFeedDistributionFormats.Select(s => new DistributionFormat { Name = s.Name, Version  = s.Version }).Distinct().ToList();
+                    //distributionsAtomFeed[d].DistributionFormats.ForEach
+                    //    (
+                    //        df => { if (!atomFeedDistributionFormats.Where(f => f.Name == df.Name).Any()) atomFeedDistributionFormats.Add(df); }
+                    //    );
+
+                    //distributionsAtomFeed[0].DistributionFormats = atomFeedDistributionFormats.Select(s => new DistributionFormat { Name = s.Name, Version  = s.Version }).Distinct().ToList();
                     distributionsAtomFeed[0].DatasetServicesWithShowMapLink = new List<DatasetService>();
                     distributionsAtomFeed[0].DatasetServicesWithShowMapLink.Add(
                         new DatasetService
@@ -193,10 +194,10 @@ namespace Kartverket.Metadatakatalog.Service
                         distributionsAtomFeed[0].CanShowMapUrl = true;
                 }
 
-                var atomFeed = distributionsAtomFeed.FirstOrDefault();
+                //var atomFeed = distributionsAtomFeed.FirstOrDefault();
 
-                distributionsAtomFeed = new Distribution[1];
-                distributionsAtomFeed[0] = atomFeed;
+                //distributionsAtomFeed = new Distribution[1];
+                //distributionsAtomFeed[0] = atomFeed;
 
                 if (distributionsAtomFeed != null && distributionsAtomFeed[0] != null && !string.IsNullOrEmpty(distributionsAtomFeed[0].Title))
                     metadata.Distributions.RelatedDataset = distributions.Concat(distributionsAtomFeed).ToList();
