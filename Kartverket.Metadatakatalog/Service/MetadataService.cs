@@ -172,9 +172,13 @@ namespace Kartverket.Metadatakatalog.Service
 
                 for (int d = 0; d < distributionsAtomFeed.Length; d++)
                 {
-                    atomFeedDistributionFormats.AddRange(distributionsAtomFeed[d].DistributionFormats);
 
-                    distributionsAtomFeed[0].DistributionFormats = atomFeedDistributionFormats.Select(s => new DistributionFormat { Name = s.Name, Version  = s.Version }).Distinct().ToList();
+                    //distributionsAtomFeed[d].DistributionFormats.ForEach
+                    //    (
+                    //        df => { if (!atomFeedDistributionFormats.Where(f => f.Name == df.Name).Any()) atomFeedDistributionFormats.Add(df); }
+                    //    );
+
+                    //distributionsAtomFeed[0].DistributionFormats = atomFeedDistributionFormats.Select(s => new DistributionFormat { Name = s.Name, Version  = s.Version }).Distinct().ToList();
                     distributionsAtomFeed[0].DatasetServicesWithShowMapLink = new List<DatasetService>();
                     distributionsAtomFeed[0].DatasetServicesWithShowMapLink.Add(
                         new DatasetService
@@ -190,12 +194,15 @@ namespace Kartverket.Metadatakatalog.Service
                         distributionsAtomFeed[0].CanShowMapUrl = true;
                 }
 
-                var atomFeed = distributionsAtomFeed.FirstOrDefault();
+                //var atomFeed = distributionsAtomFeed.FirstOrDefault();
 
-                distributionsAtomFeed = new Distribution[1];
-                distributionsAtomFeed[0] = atomFeed;
+                //distributionsAtomFeed = new Distribution[1];
+                //distributionsAtomFeed[0] = atomFeed;
 
-                metadata.Distributions.RelatedDataset = distributions.Concat(distributionsAtomFeed).ToList();
+                if (distributionsAtomFeed != null && distributionsAtomFeed[0] != null && !string.IsNullOrEmpty(distributionsAtomFeed[0].Title))
+                    metadata.Distributions.RelatedDataset = distributions.Concat(distributionsAtomFeed).ToList();
+                else
+                    metadata.Distributions.RelatedDataset = distributions.ToList();
 
             }
 
@@ -227,7 +234,7 @@ namespace Kartverket.Metadatakatalog.Service
                                     distribution.Value.CanShowMapUrl = true;
                             }
                         }
-                        if(!(simpleMetadata.IsDataset() && distribution.Key.Protocol == "OGC:WMS"))
+                        if(!(simpleMetadata.IsDataset() && (distribution.Key.Protocol == "OGC:WMS" || distribution.Key.Protocol == "W3C:AtomFeed")))
                             metadata.Distributions.SelfDistribution.Add(distribution.Value);
                     }
 
@@ -238,7 +245,7 @@ namespace Kartverket.Metadatakatalog.Service
                     foreach (var distribution in distributionRows.Where(d => d.Key.Protocol == "W3C:AtomFeed"))
                     {
                         distribution.Value.RemoveDetailsUrl = true;
-                        if (metadata.HierarchyLevel == "dataset" && metadata.Distributions.RelatedViewServices != null)
+                        if ((metadata.HierarchyLevel == "dataset" || metadata.HierarchyLevel == "service") && metadata.Distributions.RelatedViewServices != null)
                         {
                             distribution.Value.DatasetServicesWithShowMapLink = new List<DatasetService>();
                             if (metadata?.Distributions?.RelatedViewServices != null && metadata?.Distributions?.RelatedViewServices.Count > 0)
@@ -261,7 +268,7 @@ namespace Kartverket.Metadatakatalog.Service
                             distributionFormats.Add(distro);
                         }
 
-                        if (distribution.Key.Protocol == "OGC:WMS")
+                        if (distribution.Key.Protocol == "OGC:WMS" || distribution.Key.Protocol == "W3C:AtomFeed")
                             distributionKeyProtocol = true;
                     }
 
