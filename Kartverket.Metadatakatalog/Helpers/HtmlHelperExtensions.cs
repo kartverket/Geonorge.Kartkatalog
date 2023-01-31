@@ -60,6 +60,11 @@ namespace Kartverket.Metadatakatalog.Helpers
             return WebConfigurationManager.AppSettings["EnvironmentName"];
         }
 
+        public static string Accessibilitystatementurl(this HtmlHelper helper)
+        {
+            return WebConfigurationManager.AppSettings["Accessibilitystatementurl"];
+        }
+
         public static string KartkatalogenUrl(this HtmlHelper helper)
         {
             return WebConfigurationManager.AppSettings["KartkatalogenUrl"];
