@@ -63,6 +63,14 @@ namespace Kartverket.Metadatakatalog.Service
                         RunIndex(metadataIndexDoc, Culture.EnglishCode);
                     }
                 }
+                else 
+                {
+                    SetNorwegianIndexCores();
+                    RemoveIndexDocument(uuid);
+
+                    SetEnglishIndexCores();
+                    RemoveIndexDocument(uuid);
+                }
 
             }
             catch (Exception exception)
