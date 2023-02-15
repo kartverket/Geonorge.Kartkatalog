@@ -187,8 +187,8 @@ namespace Kartverket.Metadatakatalog.Models
                     {
                         if (!string.IsNullOrEmpty(words[w]))
                         { 
-                            textOr = textOr + "(type:dataset AND titleText:" + words[w] + ")^1.2";
-                            textOr = textOr + "titleText:" + words[w] + "^1.1";
+                            textOr = textOr + "(type:dataset AND titleText:" + words[w] + ")^0.2 ";
+                            textOr = textOr + "titleText:" + words[w] + "^0.1 ";
                             if (w != words.Count() - 1)
                                 textOr = textOr + " OR ";
                         }
@@ -220,12 +220,15 @@ namespace Kartverket.Metadatakatalog.Models
                 }
                 else
                 {
+                    titleText = titleText.Replace("*","\\ ");
+                    var titleTextWithMinusAsSpace = titleText.Replace("\\ ", "\\-");
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
                         new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^75  titleText:"+ titleText + "*^34"),
+                        new SolrQuery("(type:dataset AND titleText:"+ titleTextWithMinusAsSpace + "*)^74  titleText:"+ titleTextWithMinusAsSpace + "*^33"),
                         new SolrQuery("uuid:"+ text + "^76"),
                         new SolrQuery(queryString),
-                        new SolrQuery("(type:dataset AND titleText:"+ text + "~2^1.1)^70 titleText:"+ text + "~2^1.1"),
+                        //new SolrQuery("(type:dataset AND titleText:"+ text + "~2^1.1)^70 titleText:"+ text + "~2^1.1"),
                         new SolrQuery("(type:dataset AND allText:" + text + "^0.9)^10 allText:" + text + "^0.8"),
                         //new SolrQuery("(type:dataset AND allText:" + text + "*)^0.4 allText:" + text + "*^0.3"),
                         //new SolrQuery("(type:dataset AND allText:" + text + "~^1)^0.2 allText:" + text + "~^0.1"),   //Fuzzy
