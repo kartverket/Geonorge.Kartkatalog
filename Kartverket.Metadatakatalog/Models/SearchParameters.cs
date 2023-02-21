@@ -179,6 +179,27 @@ namespace Kartverket.Metadatakatalog.Models
 
                 var textAll = text.Replace(" ", "*");
 
+                var queryString = "";
+
+                if (text.Contains(" "))
+                {
+                    var words = text.Split(' ');
+                    string textOr = "";
+                    for (int w = 0; w < words.Count(); w++)
+                    {
+                        if (!string.IsNullOrEmpty(words[w]))
+                        {
+                            textOr = textOr + "(type:dataset AND titleText:*" + words[w] + "*)^0.5";
+                            textOr = textOr + " titleText:*" + words[w] + "*^0.4";
+                            if (w != words.Count() - 1)
+                                textOr = textOr + " OR ";
+                        }
+                    }
+
+                    queryString = textOr;
+                }
+
+
                 if (text.Trim().Length == 0)
                 {
                     query = new SolrMultipleCriteriaQuery(new[]
@@ -194,6 +215,7 @@ namespace Kartverket.Metadatakatalog.Models
                         new SolrQuery("uuid:"+ text + "^76"),
                         new SolrQuery("(type:dataset AND titleText:*"+ titleText + "*)^75  titleText:*"+ titleText + "*^34"),
                         new SolrQuery("(type:dataset AND allText:*" + textAll + "*)^0.9 allText:*" + textAll + "*^0.8"),
+                        !string.IsNullOrEmpty(queryString) ? new SolrQuery(queryString) : null,
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
