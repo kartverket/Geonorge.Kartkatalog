@@ -210,8 +210,6 @@ namespace Kartverket.Metadatakatalog.Models
                 }
                 else
                 {
-                    titleText = titleText.Replace("*","\\ ");
-                    var titleTextWithMinusAsSpace = titleText.Replace("\\ ", "\\-");
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
                         new SolrQuery("uuid:"+ text + "^76"),
