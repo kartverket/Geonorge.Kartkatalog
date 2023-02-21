@@ -175,27 +175,9 @@ namespace Kartverket.Metadatakatalog.Models
                 text = text.Replace("^", " ");
                 text = text.Replace("-", "\\-");
 
-                var queryString = "titleText:" + text + "^60";
-
                 var titleText = text.Replace(" ", "*");
 
-                if(text.Contains(" "))
-                {
-                    var words = text.Split(' ');
-                    string textOr = "";
-                    for(int w= 0 ;w<words.Count(); w++)
-                    {
-                        if (!string.IsNullOrEmpty(words[w]))
-                        { 
-                            textOr = textOr + "(type:dataset AND titleText:" + words[w] + ")^0.2 ";
-                            textOr = textOr + "titleText:" + words[w] + "^0.1 ";
-                            if (w != words.Count() - 1)
-                                textOr = textOr + " OR ";
-                        }
-                    }
-
-                    queryString = textOr;
-                }
+                var textAll = text.Replace(" ", "*");
 
                 if (text.Trim().Length == 0)
                 {
@@ -205,38 +187,16 @@ namespace Kartverket.Metadatakatalog.Models
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                     });
                 }
-                else if (text.Trim().Length < 5)
-                {
-                    query = new SolrMultipleCriteriaQuery(new[]
-                    {
-                        new SolrQuery(queryString),
-                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^75 titleText:"+ titleText + "*^50"),
-                        new SolrQuery("(type:dataset AND allText:"+ text + ")^75 allText:" + text + "^1.2"),
-                        new SolrQuery("(type:dataset AND allText:"+ text + "*)^75 allText:" + text + "*^1.1"),
-                        listhidden ? null : new SolrQuery("!serie:*series_historic*"),
-                        listhidden ? null : new SolrQuery("!serie:*series_time*"),
-                        new SolrQuery("!boost b=typenumber")
-                    });
-                }
                 else
                 {
-                    titleText = titleText.Replace("*","\\ ");
-                    var titleTextWithMinusAsSpace = titleText.Replace("\\ ", "\\-");
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
-                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^75  titleText:"+ titleText + "*^34"),
-                        new SolrQuery("(type:dataset AND titleText:"+ titleTextWithMinusAsSpace + "*)^74  titleText:"+ titleTextWithMinusAsSpace + "*^33"),
                         new SolrQuery("uuid:"+ text + "^76"),
-                        new SolrQuery(queryString),
-                        //new SolrQuery("(type:dataset AND titleText:"+ text + "~2^1.1)^70 titleText:"+ text + "~2^1.1"),
-                        new SolrQuery("(type:dataset AND allText:" + text + "^0.9)^10 allText:" + text + "^0.8"),
-                        //new SolrQuery("(type:dataset AND allText:" + text + "*)^0.4 allText:" + text + "*^0.3"),
-                        //new SolrQuery("(type:dataset AND allText:" + text + "~^1)^0.2 allText:" + text + "~^0.1"),   //Fuzzy
-                        //new SolrQuery("allText2:" + text + ""), //Stemmer
+                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^75  titleText:"+ titleText + "*^34"),
+                        new SolrQuery("(type:dataset AND allText:" + textAll + "*)^0.9 allText:" + textAll + "*^0.8"),
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
-                        //new SolrQuery("allText3:" + text)        //Fonetisk
                     });
                 }
             }
