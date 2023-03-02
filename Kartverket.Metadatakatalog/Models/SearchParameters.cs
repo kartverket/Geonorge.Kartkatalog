@@ -213,6 +213,7 @@ namespace Kartverket.Metadatakatalog.Models
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
                         new SolrQuery("uuid:"+ text + "^76"),
+                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^77  titleText:"+ titleText + "*^76"),
                         new SolrQuery("(type:dataset AND titleText:*"+ titleText + "*)^75  titleText:*"+ titleText + "*^74"),
                         new SolrQuery("(type:dataset AND allText:*" + textAll + "*)^73 allText:*" + textAll + "*^72"),
                         !string.IsNullOrEmpty(queryString) ? new SolrQuery(queryString) : null,
