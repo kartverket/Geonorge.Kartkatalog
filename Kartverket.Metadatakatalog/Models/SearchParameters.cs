@@ -57,7 +57,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public void AddDefaultFacetsIfMissing()
         {
-            List<FacetParameter> FacetList = new List<FacetParameter>(); 
+            List<FacetParameter> FacetList = new List<FacetParameter>();
             var facets = new List<string> { "type", "theme", "organization", "nationalinitiative", "DistributionProtocols", "area", "dataaccess", "spatialscope" };
 
             foreach (var defaultFacet in facets)
@@ -65,7 +65,7 @@ namespace Kartverket.Metadatakatalog.Models
                 if (Facets != null)
                 {
                     var selectedFacets = Facets.Where(f => f.Name == defaultFacet);
-                    if (selectedFacets.Any()) 
+                    if (selectedFacets.Any())
                     {
                         foreach (var selectedFacet in selectedFacets)
                         {
@@ -77,7 +77,8 @@ namespace Kartverket.Metadatakatalog.Models
                             });
                         }
                     }
-                    else { 
+                    else
+                    {
                         FacetList.Add(new FacetParameter
                         {
                             Name = defaultFacet,
@@ -213,14 +214,9 @@ namespace Kartverket.Metadatakatalog.Models
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
                         new SolrQuery("uuid:"+ text + "^76"),
-<<<<<<< refs/remotes/origin/Development
                         new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^77  titleText:"+ titleText + "*^76"),
                         new SolrQuery("(type:dataset AND titleText:*"+ titleText + "*)^75  titleText:*"+ titleText + "*^74"),
                         new SolrQuery("(type:dataset AND allText:*" + textAll + "*)^73 allText:*" + textAll + "*^72"),
-=======
-                        new SolrQuery("(type:dataset AND titleText:*"+ titleText + "*)^75  titleText:*"+ titleText + "*^34"),
-                        new SolrQuery("(type:dataset AND allText:*" + textAll + "*)^0.9 allText:*" + textAll + "*^0.8"),
->>>>>>> Adjust search
                         !string.IsNullOrEmpty(queryString) ? new SolrQuery(queryString) : null,
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
@@ -244,7 +240,7 @@ namespace Kartverket.Metadatakatalog.Models
             FacetParameter dataAccess = Facets.Where(v => v.Name == "dataaccess").FirstOrDefault();
             if (dataAccess != null)
                 Facets.Remove(dataAccess);
-            if(CultureHelper.GetCurrentCulture() == Culture.EnglishCode)
+            if (CultureHelper.GetCurrentCulture() == Culture.EnglishCode)
                 Facets.Add(new FacetParameter { Name = "dataaccess", Value = "Open data" });
             else
                 Facets.Add(new FacetParameter { Name = "dataaccess", Value = "Åpne data" });
