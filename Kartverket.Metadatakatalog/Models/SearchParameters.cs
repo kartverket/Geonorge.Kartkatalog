@@ -57,7 +57,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public void AddDefaultFacetsIfMissing()
         {
-            List<FacetParameter> FacetList = new List<FacetParameter>(); 
+            List<FacetParameter> FacetList = new List<FacetParameter>();
             var facets = new List<string> { "type", "theme", "organization", "nationalinitiative", "DistributionProtocols", "area", "dataaccess", "spatialscope" };
 
             foreach (var defaultFacet in facets)
@@ -65,7 +65,7 @@ namespace Kartverket.Metadatakatalog.Models
                 if (Facets != null)
                 {
                     var selectedFacets = Facets.Where(f => f.Name == defaultFacet);
-                    if (selectedFacets.Any()) 
+                    if (selectedFacets.Any())
                     {
                         foreach (var selectedFacet in selectedFacets)
                         {
@@ -77,7 +77,8 @@ namespace Kartverket.Metadatakatalog.Models
                             });
                         }
                     }
-                    else { 
+                    else
+                    {
                         FacetList.Add(new FacetParameter
                         {
                             Name = defaultFacet,
@@ -175,20 +176,22 @@ namespace Kartverket.Metadatakatalog.Models
                 text = text.Replace("^", " ");
                 text = text.Replace("-", "\\-");
 
-                var queryString = "titleText:" + text + "^60";
-
                 var titleText = text.Replace(" ", "*");
 
-                if(text.Contains(" "))
+                var textAll = text.Replace(" ", "*");
+
+                var queryString = "";
+
+                if (text.Contains(" "))
                 {
                     var words = text.Split(' ');
                     string textOr = "";
-                    for(int w= 0 ;w<words.Count(); w++)
+                    for (int w = 0; w < words.Count(); w++)
                     {
                         if (!string.IsNullOrEmpty(words[w]))
-                        { 
-                            textOr = textOr + "(type:dataset AND titleText:" + words[w] + ")^1.2";
-                            textOr = textOr + "titleText:" + words[w] + "^1.1";
+                        {
+                            textOr = textOr + "(type:dataset AND titleText:*" + words[w] + "*)^0.5";
+                            textOr = textOr + " titleText:*" + words[w] + "*^0.4";
                             if (w != words.Count() - 1)
                                 textOr = textOr + " OR ";
                         }
@@ -196,6 +199,7 @@ namespace Kartverket.Metadatakatalog.Models
 
                     queryString = textOr;
                 }
+
 
                 if (text.Trim().Length == 0)
                 {
@@ -205,35 +209,18 @@ namespace Kartverket.Metadatakatalog.Models
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                     });
                 }
-                else if (text.Trim().Length < 5)
-                {
-                    query = new SolrMultipleCriteriaQuery(new[]
-                    {
-                        new SolrQuery(queryString),
-                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^75 titleText:"+ titleText + "*^50"),
-                        new SolrQuery("(type:dataset AND allText:"+ text + ")^75 allText:" + text + "^1.2"),
-                        new SolrQuery("(type:dataset AND allText:"+ text + "*)^75 allText:" + text + "*^1.1"),
-                        listhidden ? null : new SolrQuery("!serie:*series_historic*"),
-                        listhidden ? null : new SolrQuery("!serie:*series_time*"),
-                        new SolrQuery("!boost b=typenumber")
-                    });
-                }
                 else
                 {
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
-                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^75  titleText:"+ titleText + "*^34"),
                         new SolrQuery("uuid:"+ text + "^76"),
-                        new SolrQuery(queryString),
-                        new SolrQuery("(type:dataset AND titleText:"+ text + "~2^1.1)^70 titleText:"+ text + "~2^1.1"),
-                        new SolrQuery("(type:dataset AND allText:" + text + "^0.9)^10 allText:" + text + "^0.8"),
-                        //new SolrQuery("(type:dataset AND allText:" + text + "*)^0.4 allText:" + text + "*^0.3"),
-                        //new SolrQuery("(type:dataset AND allText:" + text + "~^1)^0.2 allText:" + text + "~^0.1"),   //Fuzzy
-                        //new SolrQuery("allText2:" + text + ""), //Stemmer
+                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^77  titleText:"+ titleText + "*^76"),
+                        new SolrQuery("(type:dataset AND titleText:*"+ titleText + "*)^75  titleText:*"+ titleText + "*^74"),
+                        new SolrQuery("(type:dataset AND allText:*" + textAll + "*)^73 allText:*" + textAll + "*^72"),
+                        !string.IsNullOrEmpty(queryString) ? new SolrQuery(queryString) : null,
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
-                        //new SolrQuery("allText3:" + text)        //Fonetisk
                     });
                 }
             }
@@ -253,7 +240,7 @@ namespace Kartverket.Metadatakatalog.Models
             FacetParameter dataAccess = Facets.Where(v => v.Name == "dataaccess").FirstOrDefault();
             if (dataAccess != null)
                 Facets.Remove(dataAccess);
-            if(CultureHelper.GetCurrentCulture() == Culture.EnglishCode)
+            if (CultureHelper.GetCurrentCulture() == Culture.EnglishCode)
                 Facets.Add(new FacetParameter { Name = "dataaccess", Value = "Open data" });
             else
                 Facets.Add(new FacetParameter { Name = "dataaccess", Value = "Åpne data" });
