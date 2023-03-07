@@ -52,7 +52,7 @@
                             </ul>
                         </div>
                         <div v-for="(areas, areaType) in available" class="custom-select-list-option-group">
-                            <div v-if="areaType !== 'landsdekkende' && (!master || $root.isSupportedType(areaType))" v-show="areas.length">
+                            <div v-if="areaType !== 'undefined' && areaType !== 'landsdekkende' && (!master || $root.isSupportedType(areaType))" v-show="areas.length">
                                 <p class="custom-select-list-option-group-name">{{ areaType }}</p>
                                 <ul class="custom-select-list-options area-option-list">
                                     <li v-on:click="selectArea(area)" v-bind:class="{'is-selected': (!master && area.isSelected) || (master && isMasterSelected(area)) }" v-for="area in areas">{{ area.name }}</li>
