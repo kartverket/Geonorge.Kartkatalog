@@ -85,14 +85,17 @@ var Areas = {
     data: function () {
         var data = {
             supportsPolygonSelection: false,
-            supportsGridSelection: false
+            supportsGridSelection: false,
+            supportsClipperfile: false
         }
         if (!this.master) {
-            data.supportsPolygonSelection = this.$parent.capabilities.supportsPolygonSelection,
-                data.supportsGridSelection = this.$parent.capabilities.supportsGridSelection
+            data.supportsPolygonSelection = this.$parent.capabilities.supportsPolygonSelection;
+            data.supportsGridSelection = this.$parent.capabilities.supportsGridSelection;
+            data.supportsClipperfile = this.$parent.capabilities.distributedBy == "Geonorge";
         }
         else {
             data.supportsPolygonSelection = this.$parent.masterSupportsPolygonSelection();
+            data.supportsClipperfile = this.$parent.masterSupportsClipperfile();
         }
 
         if (!this.master) {
@@ -898,6 +901,42 @@ var MasterOrderLine = {
                 }
             });
             return masterSupportsPolygonSelection;
+        },
+        masterSupportsClipperfile: function () {
+            var masterSupportsClipperfile = false;
+            this.$root.orderLines.forEach(function (orderLine) {
+
+                var clipperfileAvailableForUser = orderLine.capabilities.distributedBy == "Geonorge";
+                var accessConstraintRequiredRoleIsAgriculturalParty = false;
+                var datasetOnlyOwnMunicipalityRole = false;
+
+                if (orderLine.capabilities.accessConstraintRequiredRole !== undefined) {
+                    var role = orderLine.capabilities.accessConstraintRequiredRole;
+                    accessConstraintRequiredRoleIsAgriculturalParty = role.indexOf('nd.landbrukspart') > -1;
+                    datasetOnlyOwnMunicipalityRole = role.indexOf('nd.egenkommune') > -1;
+                }
+
+                var isAgriculturalParty = false;
+                var userHasOnlyOwnMunicipalityRole = false;
+                var baatInfo = GetCookie('baatInfo');
+                if (baatInfo) {
+                    baatInfo = String(baatInfo);
+                    isAgriculturalParty = baatInfo.indexOf('nd.landbrukspart') > -1;
+                    userHasOnlyOwnMunicipalityRole = baatInfo.indexOf('nd.egenkommune') > -1;
+                    if (isAgriculturalParty && accessConstraintRequiredRoleIsAgriculturalParty)
+                        clipperfileAvailableForUser = false;
+                    else if (userHasOnlyOwnMunicipalityRole && datasetOnlyOwnMunicipalityRole)
+                        clipperfileAvailableForUser = false;
+                }
+
+                if (!clipperfileAvailableForUser && masterSupportsClipperfile) {
+                    masterSupportsClipperfile = false;
+                }
+                else if (orderLine.capabilities.distributedBy == "Geonorge") {
+                    masterSupportsClipperfile = true;
+                }
+            });
+            return masterSupportsClipperfile;
         },
         getFirstOrderItemWithPolygonSupport: function () {
             var firstOrderItemWithPolygonSupport = false;
