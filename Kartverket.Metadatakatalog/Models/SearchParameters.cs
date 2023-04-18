@@ -218,6 +218,8 @@ namespace Kartverket.Metadatakatalog.Models
                         new SolrQuery("(type:dataset AND titleText:*"+ titleText + "*)^75  titleText:*"+ titleText + "*^74"),
                         new SolrQuery("(type:dataset AND allText:*" + textAll + "*)^73 allText:*" + textAll + "*^72"),
                         !string.IsNullOrEmpty(queryString) ? new SolrQuery(queryString) : null,
+                        new SolrQuery("allText:" + text + "~^1"),   //Fuzzy
+                        new SolrQuery("allText2:" + text + ""), //Stemmer
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
