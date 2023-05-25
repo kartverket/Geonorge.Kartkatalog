@@ -2163,6 +2163,11 @@
               Looks up a localized string similar to Fjern fra kart.
             </summary>
         </member>
+        <member name="P:Resources.UI.ResolutionDistance">
+            <summary>
+              Looks up a localized string similar to Distanse i meter.
+            </summary>
+        </member>
         <member name="P:Resources.UI.ResolutionScale">
             <summary>
               Looks up a localized string similar to Målestokkstall.

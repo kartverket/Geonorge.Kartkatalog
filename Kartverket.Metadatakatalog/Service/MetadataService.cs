@@ -1112,7 +1112,10 @@ namespace Kartverket.Metadatakatalog.Service
                 OrderingInstructions = (simpleMetadata.AccessProperties != null && !string.IsNullOrEmpty(simpleMetadata.AccessProperties.OrderingInstructions)) ? simpleMetadata.AccessProperties.OrderingInstructions : ""
             };
 
-            if(simpleMetadata.TopicCategories != null) 
+            if(simpleMetadata.ResolutionDistance.HasValue)
+                metadata.ResolutionDistance = simpleMetadata.ResolutionDistance.Value;
+
+            if (simpleMetadata.TopicCategories != null) 
             {
                 metadata.TopicCategories = new List<string>();
                 foreach (var topic in simpleMetadata.TopicCategories)

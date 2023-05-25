@@ -873,4 +873,7 @@
   <data name="CloudCoverPercentage" xml:space="preserve">
     <value>Cloud cover percentage</value>
   </data>
+  <data name="ResolutionDistance" xml:space="preserve">
+    <value>Distance in meters</value>
+  </data>
 </root>
