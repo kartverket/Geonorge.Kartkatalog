@@ -1744,6 +1744,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Distanse i meter.
+        /// </summary>
+        public static string ResolutionDistance {
+            get {
+                return ResourceManager.GetString("ResolutionDistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Målestokkstall.
         /// </summary>
         public static string ResolutionScale {

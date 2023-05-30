@@ -111,6 +111,7 @@ namespace Kartverket.Metadatakatalog.Models
         public List<QualitySpecification> QualitySpecifications { get; set; }
         public ReferenceSystem ReferenceSystem { get; set; }
         public string ResolutionScale { get; set; }
+        public double? ResolutionDistance { get; set; }
         public string SpatialRepresentation { get; set; }
         public string SpecificUsage { get; set; }
         //
