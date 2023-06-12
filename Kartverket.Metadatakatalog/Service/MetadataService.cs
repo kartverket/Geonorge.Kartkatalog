@@ -597,7 +597,7 @@ namespace Kartverket.Metadatakatalog.Service
                 { 
                     foreach (var simpleDistributionFormat in metadata.Distributions.RelatedViewServices) { 
                         if((simpleDistributionFormat?.Protocol == "OGC:WMS" || simpleDistributionFormat?.Protocol == "WMS-tjeneste")
-                            && string.IsNullOrEmpty(simpleDistributionFormat?.DistributionName)) { 
+                            /*&& string.IsNullOrEmpty(simpleDistributionFormat?.DistributionName)*/) { 
                         metadata.DatasetServicesWithShowMapLink.Add(
                         new DatasetService
                         {
