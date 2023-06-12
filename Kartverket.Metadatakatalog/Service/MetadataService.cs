@@ -164,7 +164,7 @@ namespace Kartverket.Metadatakatalog.Service
                         });
 
                     var protocol = metadata?.DistributionDetails?.ProtocolName;
-                    if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                    if (/*!string.IsNullOrEmpty(protocol) &&*/ protocol.Contains("WMS"))
                         distributions[d].CanShowMapUrl = true;
                 }
 
@@ -190,7 +190,7 @@ namespace Kartverket.Metadatakatalog.Service
                         });
 
                     var protocol = metadata?.DistributionDetails?.ProtocolName;
-                    if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                    if (/*!string.IsNullOrEmpty(protocol) &&*/ protocol.Contains("WMS"))
                         distributionsAtomFeed[0].CanShowMapUrl = true;
                 }
 
@@ -230,7 +230,7 @@ namespace Kartverket.Metadatakatalog.Service
                                     }
                                     );
                                 var protocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol;
-                                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                                if (/*!string.IsNullOrEmpty(protocol) &&*/ protocol.Contains("WMS"))
                                     distribution.Value.CanShowMapUrl = true;
                             }
                         }
@@ -331,7 +331,7 @@ namespace Kartverket.Metadatakatalog.Service
                     });
 
                 var protocol = metadata?.DistributionDetails?.ProtocolName;
-                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                if (/*!string.IsNullOrEmpty(protocol) &&*/ protocol.Contains("WMS"))
                     distributions[d].CanShowMapUrl = true;
             }
 
@@ -371,7 +371,7 @@ namespace Kartverket.Metadatakatalog.Service
                     });
 
                 var protocol = metadata?.DistributionDetails?.ProtocolName;
-                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                if (/*!string.IsNullOrEmpty(protocol) && */protocol.Contains("WMS"))
                     distributionsAtomFeedUnique[d].CanShowMapUrl = true;
             }
 
