@@ -475,7 +475,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         }
         public bool ShowMaplink()
         {
-            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") /*|| DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")*/) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl) || DatasetServicesWithShowMapLink.Any()) return true;
+            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") /*|| DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")*/) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl) || DatasetServicesWithShowMapLink.Any() || (ServiceDistributionUrlForDataset != null && ServiceDistributionUrlForDataset.ToLower().EndsWith("service=wms"))) return true;
             else return false;
         }
 

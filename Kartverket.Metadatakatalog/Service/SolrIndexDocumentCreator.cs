@@ -1145,6 +1145,11 @@ namespace Kartverket.Metadatakatalog.Service
                     {
                         uuidFound = uuid;
                     }
+                    else if (!string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WMS" && !string.IsNullOrEmpty(uriName))
+                    {
+                        uuidFound = uuid;
+                        break;
+                    }
 
                 }
 
