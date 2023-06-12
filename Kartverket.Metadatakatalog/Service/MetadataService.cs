@@ -260,7 +260,7 @@ namespace Kartverket.Metadatakatalog.Service
                                     }
                                     );
                                 var protocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol;
-                                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                                if (/*!string.IsNullOrEmpty(protocol) &&*/ protocol.Contains("WMS"))
                                     distribution.Value.CanShowMapUrl = true;
                         }
                         foreach (var distro in distribution.Value.DistributionFormats)
