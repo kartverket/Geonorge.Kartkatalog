@@ -230,7 +230,10 @@ namespace Kartverket.Metadatakatalog.Service
                                     }
                                     );
                                 var protocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol;
-                                if (/*!string.IsNullOrEmpty(protocol) &&*/ protocol.Contains("WMS"))
+                                var distributionUrl = metadata?.Distributions?.RelatedViewServices?[0]?.DistributionUrl;
+                                if (distributionUrl != null)
+                                    distributionUrl = distributionUrl.ToLower();
+;                                if (/*!string.IsNullOrEmpty(protocol) &&*/ protocol.Contains("WMS") || distributionUrl.EndsWith("service=wms"))
                                     distribution.Value.CanShowMapUrl = true;
                             }
                         }
