@@ -710,12 +710,13 @@ namespace Kartverket.Metadatakatalog.Service
             distribution.ShowDetailsUrl = "/metadata/org/title/" + uuid;
             if (simpleMetadata.Constraints != null)
                 distribution.ServiceDistributionAccessConstraint = simpleMetadata.Constraints.AccessConstraints;
-            distribution.Protocol = Register.GetDistributionType(simpleMetadataDistribution.Protocol);
+            distribution.Protocol = simpleMetadataDistribution.Protocol;
+            //distribution.Protocol = Register.GetDistributionType(simpleMetadataDistribution.Protocol);
 
-            if (!string.IsNullOrEmpty(simpleMetadata.ParentIdentifier) && (distribution.Protocol == "WMS-tjeneste" || distribution.Protocol == "WMS service"))
-                distribution.Protocol = UI.Facet_type_servicelayer;
+            //if (!string.IsNullOrEmpty(simpleMetadata.ParentIdentifier) && (distribution.Protocol == "WMS-tjeneste" || distribution.Protocol == "WMS service"))
+            //    distribution.Protocol = UI.Facet_type_servicelayer;
 
-            if(simpleMetadata.HierarchyLevel == "series")
+            if (simpleMetadata.HierarchyLevel == "series")
             {
                 var metadataIndexDocResult = _searchService.GetMetadata(uuid);
                 if(metadataIndexDocResult != null && metadataIndexDocResult.SerieDatasets != null && distribution.TypeName != "series_time")
