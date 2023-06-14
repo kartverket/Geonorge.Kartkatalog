@@ -446,7 +446,7 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     AddDatapakkeRelatedDatasets(simpleMetadata, geoNorge, indexDoc);
                 }
-                else if (indexDoc.Type == "service" && string.IsNullOrEmpty(simpleMetadata.ParentIdentifier))
+                else if (indexDoc.Type == "service" && string.IsNullOrEmpty(simpleMetadata.ParentIdentifier) || indexDoc.Type == "servicelayer")
                 {
                     AddServiceLayers(simpleMetadata, geoNorge, indexDoc);
                 }
@@ -1398,6 +1398,11 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 indexDoc.Typename = simpleMetadata.Typename;
                 indexDoc.SerieDatasets = simpleMetadata.SerieDatasets;
+            }
+
+            if (indexDoc.Type == "service" || indexDoc.Type == "servicelayer")
+            {
+                indexDoc.ServiceDatasets = simpleMetadata.ServiceDatasets;
             }
 
             indexDoc.DistributionUrl = simpleMetadata.DistributionUrl;
