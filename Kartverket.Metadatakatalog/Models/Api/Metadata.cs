@@ -384,7 +384,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
                     {
                         if (ShowMaplink(serviceArray[6]) && IsServiceOrServiceLayer(serviceArray[3]) 
                             && serviceArray[6] != null && serviceArray[6] == "OGC:WMS"
-                            && serviceArray[5] != null && serviceArray[5] =="")
+                            && serviceArray[5] != null /*&& serviceArray[5] ==""*/)
                         {
                             datasetServices.Add(new DatasetService
                             {
@@ -475,7 +475,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         }
         public bool ShowMaplink()
         {
-            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") /*|| DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")*/) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl) || DatasetServicesWithShowMapLink.Any()) return true;
+            if (!string.IsNullOrWhiteSpace(DistributionProtocol) && (DistributionProtocol.Contains("OGC:WMS") /*|| DistributionProtocol.Contains("OGC:WFS") || DistributionProtocol.Contains("OGC:WCS")*/) && (Type == "service" || Type == "servicelayer") && !string.IsNullOrWhiteSpace(DownloadUrl) || DatasetServicesWithShowMapLink.Any() || (ServiceDistributionUrlForDataset != null && ServiceDistributionUrlForDataset.ToLower().EndsWith("service=wms"))) return true;
             else return false;
         }
 

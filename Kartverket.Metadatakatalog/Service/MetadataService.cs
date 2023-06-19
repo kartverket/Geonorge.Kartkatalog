@@ -164,7 +164,7 @@ namespace Kartverket.Metadatakatalog.Service
                         });
 
                     var protocol = metadata?.DistributionDetails?.ProtocolName;
-                    if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                    if (/*!string.IsNullOrEmpty(protocol) &&*/ protocol.Contains("WMS"))
                         distributions[d].CanShowMapUrl = true;
                 }
 
@@ -190,7 +190,7 @@ namespace Kartverket.Metadatakatalog.Service
                         });
 
                     var protocol = metadata?.DistributionDetails?.ProtocolName;
-                    if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                    if (/*!string.IsNullOrEmpty(protocol) &&*/ protocol.Contains("WMS"))
                         distributionsAtomFeed[0].CanShowMapUrl = true;
                 }
 
@@ -230,7 +230,10 @@ namespace Kartverket.Metadatakatalog.Service
                                     }
                                     );
                                 var protocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol;
-                                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                                var distributionUrl = metadata?.Distributions?.RelatedViewServices?[0]?.DistributionUrl;
+                                if (distributionUrl != null)
+                                    distributionUrl = distributionUrl.ToLower();
+;                                if (/*!string.IsNullOrEmpty(protocol) &&*/ protocol.Contains("WMS") || distributionUrl.EndsWith("service=wms"))
                                     distribution.Value.CanShowMapUrl = true;
                             }
                         }
@@ -260,7 +263,7 @@ namespace Kartverket.Metadatakatalog.Service
                                     }
                                     );
                                 var protocol = metadata?.Distributions?.RelatedViewServices?[0]?.Protocol;
-                                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                                if (/*!string.IsNullOrEmpty(protocol) &&*/ protocol.Contains("WMS"))
                                     distribution.Value.CanShowMapUrl = true;
                         }
                         foreach (var distro in distribution.Value.DistributionFormats)
@@ -331,7 +334,7 @@ namespace Kartverket.Metadatakatalog.Service
                     });
 
                 var protocol = metadata?.DistributionDetails?.ProtocolName;
-                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                if (/*!string.IsNullOrEmpty(protocol) &&*/ protocol.Contains("WMS"))
                     distributions[d].CanShowMapUrl = true;
             }
 
@@ -371,7 +374,7 @@ namespace Kartverket.Metadatakatalog.Service
                     });
 
                 var protocol = metadata?.DistributionDetails?.ProtocolName;
-                if (!string.IsNullOrEmpty(protocol) && protocol.Contains("WMS"))
+                if (/*!string.IsNullOrEmpty(protocol) && */protocol.Contains("WMS"))
                     distributionsAtomFeedUnique[d].CanShowMapUrl = true;
             }
 
@@ -597,7 +600,7 @@ namespace Kartverket.Metadatakatalog.Service
                 { 
                     foreach (var simpleDistributionFormat in metadata.Distributions.RelatedViewServices) { 
                         if((simpleDistributionFormat?.Protocol == "OGC:WMS" || simpleDistributionFormat?.Protocol == "WMS-tjeneste")
-                            && string.IsNullOrEmpty(simpleDistributionFormat?.DistributionName)) { 
+                            /*&& string.IsNullOrEmpty(simpleDistributionFormat?.DistributionName)*/) { 
                         metadata.DatasetServicesWithShowMapLink.Add(
                         new DatasetService
                         {
