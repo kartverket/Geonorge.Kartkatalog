@@ -84,11 +84,13 @@ var Areas = {
     template: '#areas-template',
     data: function () {
         var data = {
+            supportsAreaSelection: false,
             supportsPolygonSelection: false,
             supportsGridSelection: false,
             supportsClipperfile: false
         }
         if (!this.master) {
+            data.supportsAreaSelection = this.$parent.capabilities.supportsAreaSelection;
             data.supportsPolygonSelection = this.$parent.capabilities.supportsPolygonSelection;
             data.supportsGridSelection = this.$parent.capabilities.supportsGridSelection;
             data.supportsClipperfile = this.$parent.capabilities.distributedBy == "Geonorge";
@@ -1418,7 +1420,7 @@ var mainVueModel = new Vue({
                                     if (link.rel === "http://rel.geonorge.no/download/area") {
                                         var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(this.addAccessTokenForRestrictedRole(link.href, capabilities));
 
-                                        if (availableAreas.length === 0)
+                                        if (supportsAreaSelection && availableAreas.length === 0)
                                             showAlert("Ingen områder er tilgjengelige for " + metadata.name, 'danger');
 
                                         this.masterOrderLine.allAvailableAreas[uuid] = {};
