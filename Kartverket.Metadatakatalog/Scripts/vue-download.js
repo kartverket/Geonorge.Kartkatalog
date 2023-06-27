@@ -1418,13 +1418,13 @@ var mainVueModel = new Vue({
                                         orderLines[key].metadata.canDownloadUrl = link.href;
                                     }
 
-                                    this.masterOrderLine.allAvailableAreas[uuid] = {};
-
                                     if (link.rel === "http://rel.geonorge.no/download/area" && orderLines[key].capabilities.supportsAreaSelection) {
                                         var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(this.addAccessTokenForRestrictedRole(link.href, capabilities));
 
                                         if (availableAreas.length === 0)
                                             showAlert("Ingen områder er tilgjengelige for " + metadata.name, 'danger');
+
+                                        this.masterOrderLine.allAvailableAreas[uuid] = {};
 
                                         availableAreas.forEach(function (availableArea) {
                                             if (!this.masterOrderLine.allAvailableAreas[uuid][availableArea.type]) {
