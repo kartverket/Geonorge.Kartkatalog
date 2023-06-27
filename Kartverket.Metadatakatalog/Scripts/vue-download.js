@@ -1417,13 +1417,14 @@ var mainVueModel = new Vue({
                                     if (link.rel === "http://rel.geonorge.no/download/can-download") {
                                         orderLines[key].metadata.canDownloadUrl = link.href;
                                     }
-                                    if (link.rel === "http://rel.geonorge.no/download/area") {
+
+                                    this.masterOrderLine.allAvailableAreas[uuid] = {};
+
+                                    if (link.rel === "http://rel.geonorge.no/download/area" && orderLines[key].capabilities.supportsAreaSelection) {
                                         var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(this.addAccessTokenForRestrictedRole(link.href, capabilities));
 
-                                        if (orderLines[key].capabilities.supportsAreaSelection && availableAreas.length === 0)
+                                        if (availableAreas.length === 0)
                                             showAlert("Ingen områder er tilgjengelige for " + metadata.name, 'danger');
-
-                                        this.masterOrderLine.allAvailableAreas[uuid] = {};
 
                                         availableAreas.forEach(function (availableArea) {
                                             if (!this.masterOrderLine.allAvailableAreas[uuid][availableArea.type]) {
