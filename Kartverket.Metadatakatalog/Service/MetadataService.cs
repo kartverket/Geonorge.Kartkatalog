@@ -397,8 +397,8 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (parameters.datefrom.HasValue && parameters.dateto.HasValue)
             {
-                parameters.datefrom.Value.ToString("yyyy-MM-dd");
-                parameters.dateto.Value.ToString("yyyy-MM-dd");
+                dateFrom = parameters.datefrom.Value.ToString("yyyy-MM-dd");
+                dateTo = parameters.dateto.Value.ToString("yyyy-MM-dd");
 
                 parameters.limit = 10;
             }
