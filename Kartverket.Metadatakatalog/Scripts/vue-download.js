@@ -84,11 +84,13 @@ var Areas = {
     template: '#areas-template',
     data: function () {
         var data = {
+            supportsAreaSelection: false,
             supportsPolygonSelection: false,
             supportsGridSelection: false,
             supportsClipperfile: false
         }
         if (!this.master) {
+            data.supportsAreaSelection = this.$parent.capabilities.supportsAreaSelection;
             data.supportsPolygonSelection = this.$parent.capabilities.supportsPolygonSelection;
             data.supportsGridSelection = this.$parent.capabilities.supportsGridSelection;
             data.supportsClipperfile = this.$parent.capabilities.distributedBy == "Geonorge";
@@ -1415,7 +1417,11 @@ var mainVueModel = new Vue({
                                     if (link.rel === "http://rel.geonorge.no/download/can-download") {
                                         orderLines[key].metadata.canDownloadUrl = link.href;
                                     }
-                                    if (link.rel === "http://rel.geonorge.no/download/area") {
+
+                                    if (link.rel === "http://rel.geonorge.no/download/area")
+                                        this.masterOrderLine.allAvailableAreas[uuid] = {};
+
+                                    if (link.rel === "http://rel.geonorge.no/download/area" && orderLines[key].capabilities.supportsAreaSelection) {
                                         var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(this.addAccessTokenForRestrictedRole(link.href, capabilities));
 
                                         if (availableAreas.length === 0)
