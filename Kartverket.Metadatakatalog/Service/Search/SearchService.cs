@@ -108,7 +108,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
         {
             MetadataIndexDoc metadata = null;
             var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
-
+            uuid = uuid.Replace(":",@"\:");
             ISolrQuery query = new SolrQuery("uuid:" + uuid);
             try
             {
