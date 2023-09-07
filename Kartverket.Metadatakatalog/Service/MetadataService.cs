@@ -686,6 +686,11 @@ namespace Kartverket.Metadatakatalog.Service
         private SimpleMetadata GetSimpleMetadataByUuid(string uuid)
         {
             var mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
+            if(mdMetadataType == null) 
+            {
+                _geoNorge = new GeoNorge("","", "https://data.csw.met.no/?");
+                mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
+            }
             return mdMetadataType == null ? null : new SimpleMetadata(mdMetadataType);
         }
 
