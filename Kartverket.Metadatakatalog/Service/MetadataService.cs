@@ -478,6 +478,8 @@ namespace Kartverket.Metadatakatalog.Service
                             distribution.Protocol = result.DistributionDetails?.Protocol != null ? Register.GetDistributionType(result.DistributionDetails?.Protocol) : "";
                             distribution.CanShowDownloadUrl = !string.IsNullOrEmpty(result.DistributionDetails.URL);
                             distribution.DistributionUrl = result.DistributionDetails.URL;
+                            if (distribution.DistributionUrl.EndsWith(".nc"))
+                                distribution.DistributionUrl = distribution.DistributionUrl + ".html";
 
                             ////Åpne data, begrenset, skjermet
                             if (SimpleMetadataUtil.IsOpendata(result.Constraints.OtherConstraints)) distribution.AccessIsOpendata = true;
