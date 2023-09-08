@@ -1285,6 +1285,9 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.DataAccess = metadata?.Constraints?.AccessConstraints;
             metadata.QuantitativeResult = GetQuantitativeResult(metadata.QualitySpecifications);
 
+            if (!string.IsNullOrEmpty(metadata.ParentIdentifier) && metadata.ContactMetadata.Organization == "Meteorologisk institutt")
+                metadata.MetMetadata = true;
+
             return metadata;
         }
 
