@@ -22,6 +22,7 @@ using System.Web.Configuration;
 using SolrNet.Commands.Parameters;
 using System.Globalization;
 using www.opengis.net;
+using Arkitektum.GIS.Lib.SerializeUtil;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -1671,6 +1672,15 @@ namespace Kartverket.Metadatakatalog.Service
                 };
             }
             return output;
+        }
+
+        public string GetExternalXml(string uuid)
+        {
+            _geoNorge = new GeoNorge("", "", "https://data.csw.met.no/?");
+            var metadata = _geoNorge.GetRecordByUuid(uuid);
+            var xml = SerializeUtil.SerializeToString(metadata);
+            return xml;
+
         }
     }
 
