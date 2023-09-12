@@ -391,7 +391,7 @@ namespace Kartverket.Metadatakatalog.Service
             if (parameters.offset == 0)
                 parameters.offset = 1;
 
-            DateTime DateFrom = new DateTime(2000, 1, 1);
+            DateTime DateFrom = DateTime.Now.AddDays(-180);
             DateTime DateTo = DateTime.Now;
 
             string dateFrom = DateFrom.ToString("yyyy-MM-dd");
