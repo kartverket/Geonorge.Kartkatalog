@@ -391,6 +391,9 @@ namespace Kartverket.Metadatakatalog.Service
             if (parameters.offset == 0)
                 parameters.offset = 1;
 
+            if(parameters.limit == 0)
+                parameters.limit = 10;
+
             DateTime DateFrom = DateTime.Now.AddDays(-180);
             DateTime DateTo = DateTime.Now;
 
@@ -401,8 +404,6 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 dateFrom = parameters.datefrom.Value.ToString("yyyy-MM-dd");
                 dateTo = parameters.dateto.Value.ToString("yyyy-MM-dd");
-
-                parameters.limit = 10;
             }
 
             try
