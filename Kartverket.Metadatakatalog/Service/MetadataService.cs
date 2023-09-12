@@ -488,6 +488,26 @@ namespace Kartverket.Metadatakatalog.Service
                             if (SimpleMetadataUtil.IsRestricted(result.Constraints.OtherConstraintsAccess)) distribution.AccessIsRestricted = true;
                             if (SimpleMetadataUtil.IsProtected(result.Constraints.AccessConstraints)) distribution.AccessIsProtected = true;
 
+                            foreach(var distro in result.DistributionsFormats) 
+                            {
+                                if(distro.Protocol == "OGC:WMS") 
+                                {
+                                    distribution.CanShowMapUrl = true;
+                                    distribution.DatasetServicesWithShowMapLink = new List<DatasetService> 
+                                    { 
+                                        new DatasetService 
+                                        {
+                                            Uuid = distribution.Uuid,
+                                            Title = distribution.Title,
+                                            DistributionProtocol = distro.Protocol,
+                                            GetCapabilitiesUrl = distro.URL
+                                        } 
+                                    };
+
+                                }
+                            }
+
+
                             distribution.Serie = new Serie { TypeName = "series_time" };
 
                             distributions.Add(distribution);
