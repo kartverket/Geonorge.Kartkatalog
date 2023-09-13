@@ -27,6 +27,7 @@ using System.Globalization;
 using System.Threading;
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.Text;
 
 
 // Metadata search api examples
@@ -327,6 +328,20 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             Models.MetadataViewModel model = _metadataService.GetMetadataViewModelByUuid(uuid);
             return model;
+        }
+
+        /// <summary>
+        /// Get metadata for uuid for external met
+        /// </summary>
+        [System.Web.Http.Route("api/get-external-metadata-xml/{uuid}")]
+        [System.Web.Http.HttpGet]
+        public HttpResponseMessage GetExternalXml(string uuid)
+        {
+            string XML = _metadataService.GetExternalXml(uuid);
+            return new HttpResponseMessage()
+            {
+                Content = new StringContent(XML, Encoding.UTF8, "application/xml")
+            };
         }
 
         /// <summary>

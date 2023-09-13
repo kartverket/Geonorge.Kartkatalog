@@ -580,6 +580,11 @@
             Get metadata for uuid
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetExternalXml(System.String)">
+            <summary>
+            Get metadata for uuid for external met
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetRelated(System.String)">
             <summary>
             Get related services, datasets and bundles for uuid

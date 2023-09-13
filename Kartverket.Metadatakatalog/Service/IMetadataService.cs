@@ -13,5 +13,6 @@ namespace Kartverket.Metadatakatalog.Service
         Distributions GetDistributions(MetadataViewModel metadata, Models.Api.SearchParameters parameters = null);
         Models.SearchResult GetMetadataForNamespace(string @namespace, SearchParameters searchParameters);
         DatasetNameValidationResult ValidDatasetsName(string @namespace, string datasetName, string uuid);
+        string GetExternalXml(string uuid);
     }
 }

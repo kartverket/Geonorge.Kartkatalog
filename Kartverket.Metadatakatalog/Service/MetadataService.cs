@@ -21,12 +21,15 @@ using System.Text.RegularExpressions;
 using System.Web.Configuration;
 using SolrNet.Commands.Parameters;
 using System.Globalization;
+using www.opengis.net;
+using Arkitektum.GIS.Lib.SerializeUtil;
+using System.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service
 {
     public class MetadataService : IMetadataService
     {
-        private readonly IGeoNorge _geoNorge;
+        private IGeoNorge _geoNorge;
         private readonly GeoNetworkUtil _geoNetworkUtil;
         private readonly IGeonorgeUrlResolver _geonorgeUrlResolver;
         private readonly IOrganizationService _organizationService;
@@ -385,59 +388,133 @@ namespace Kartverket.Metadatakatalog.Service
         {
             List<Distribution> distributions = new List<Distribution>();
 
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
             if (parameters.offset == 0)
                 parameters.offset = 1;
 
-            var datequery = "";
+            if(parameters.limit == 0)
+                parameters.limit = 10;
 
-            if(parameters.datefrom.HasValue && parameters.dateto.HasValue)
+            DateTime DateFrom = DateTime.Now.AddDays(-180);
+            DateTime DateTo = DateTime.Now;
+
+            string dateFrom = DateFrom.ToString("yyyy-MM-dd");
+            string dateTo = DateTo.ToString("yyyy-MM-dd");
+
+            if (parameters.datefrom.HasValue && parameters.dateto.HasValue)
             {
-                string dateFrom = parameters.datefrom.Value.ToString("yyyy-MM-dd");
-                string dateTo = parameters.dateto.Value.ToString("yyyy-MM-dd");
-                datequery = $" AND date_updated:[{dateFrom}T00:00:00Z TO {dateTo}T23:59:59Z]";
-
-                parameters.limit = 50;
+                dateFrom = parameters.datefrom.Value.ToString("yyyy-MM-dd");
+                dateTo = parameters.dateto.Value.ToString("yyyy-MM-dd");
             }
 
-            ISolrQuery query = new SolrQuery("serie:" + uuid + "*" + datequery);
             try
             {
-                SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
-                {
-                    Rows = parameters.limit,
-                    OrderBy = new[] { new SortOrder("date_updated", Order.DESC) },
-                    Start = parameters.offset - 1, //solr is zero-based - we use one-based indexing in api
-                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
-                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
-                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "resourceReferenceCodeName" }
-                });
+                _geoNorge = new GeoNorge("", "", "https://data.csw.met.no/?");
 
-                foreach (var result in queryResults)
-                {
-                    try
+                ExpressionType[] expressionTypesFromDate = new ExpressionType[2];
+                expressionTypesFromDate[0] = new PropertyNameType { Text = new[] { "apiso:TempExtent_begin" } };
+                expressionTypesFromDate[1] = new LiteralType { Text = new[] { dateFrom } };
+
+                ExpressionType[] expressionTypesToDate = new ExpressionType[2];
+                expressionTypesToDate[0] = new PropertyNameType { Text = new[] { "apiso:TempExtent_end" } };
+                expressionTypesToDate[1] = new LiteralType { Text = new[] { dateTo } };
+
+                var filters = new object[]
+                          {
+
+                    new BinaryLogicOpType()
+                        {
+                            Items = new object[]
+                                {
+                                    new PropertyIsLikeType
+                                    {
+                                        escapeChar = "\\",
+                                        singleChar = "_",
+                                        wildCard = "%",
+                                        PropertyName = new PropertyNameType {Text = new[] {"apiso:ParentIdentifier"}},
+                                        Literal = new LiteralType {Text = new[] { uuid.ToString() }}
+                                    },
+                                    new BinaryComparisonOpType
+                                    {
+                                       expression = expressionTypesFromDate
+                                    }
+                                    ,
+                                    new BinaryComparisonOpType
+                                    {
+                                        expression = expressionTypesToDate
+                                    }
+                                },
+
+                                ItemsElementName = new ItemsChoiceType22[]
+                                    {
+                                        ItemsChoiceType22.PropertyIsLike, ItemsChoiceType22.PropertyIsGreaterThanOrEqualTo,ItemsChoiceType22.PropertyIsLessThanOrEqualTo
+                                    }
+                        },
+
+                          };
+
+                var filterNames = new ItemsChoiceType23[]
                     {
-                        Distribution distribution = new Distribution();
+                    ItemsChoiceType23.And
+                    };
 
-                        distribution.Uuid = result.Uuid;
-                        distribution.Type = result.Type;
-                        distribution.Title = result.DateUpdated.Value.AddHours(2).ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) + ": " + result.Title;
-                        distribution.Organization = result.Organization;
-                        distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
-                        distribution.Protocol = result.DistributionProtocol != null ? Register.GetDistributionType(result.DistributionProtocol) : "";
-                        distribution.CanShowDownloadUrl = !string.IsNullOrEmpty(result.DistributionUrl);
-                        distribution.DistributionUrl = result.DistributionUrl;
 
-                        //Åpne data, begrenset, skjermet
-                        if (SimpleMetadataUtil.IsOpendata(result.OtherConstraintsAccess)) distribution.AccessIsOpendata = true;
-                        if (SimpleMetadataUtil.IsRestricted(result.OtherConstraintsAccess)) distribution.AccessIsRestricted = true;
-                        if (SimpleMetadataUtil.IsProtected(result.AccessConstraint)) distribution.AccessIsProtected = true;
+                var res = _geoNorge.SearchWithFilters(filters, filterNames, parameters.offset, parameters.limit, false, true);
 
-                        distribution.Serie = new Serie { TypeName = "series_time" };
+                if (res.numberOfRecordsMatched != "0")
+                {
 
-                        distributions.Add(distribution);
+
+                try
+                    {
+                        for (int s = 0; s < res.Items.Length; s++)
+                        {
+                            MD_Metadata_Type item = (MD_Metadata_Type) res.Items[s];
+                            SimpleMetadata result = new SimpleMetadata(item);
+
+                            Distribution distribution = new Distribution();
+
+                            distribution.Uuid = result.Uuid;
+                            distribution.Type = result.HierarchyLevel;
+                            distribution.Title = result.DatePublished.Value.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) + ": " + result.Title;
+                            distribution.Organization = result.ContactOwner.Organization;
+                            distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
+                            distribution.Protocol = result.DistributionDetails?.Protocol != null ? Register.GetDistributionType(result.DistributionDetails?.Protocol) : "";
+                            distribution.CanShowDownloadUrl = !string.IsNullOrEmpty(result.DistributionDetails.URL);
+                            distribution.DistributionUrl = result.DistributionDetails.URL;
+                            if (distribution.DistributionUrl.EndsWith(".nc"))
+                                distribution.DistributionUrl = distribution.DistributionUrl + ".html";
+
+                            ////Åpne data, begrenset, skjermet
+                            if (SimpleMetadataUtil.IsOpendata(result.Constraints.OtherConstraints)) distribution.AccessIsOpendata = true;
+                            if (SimpleMetadataUtil.IsRestricted(result.Constraints.OtherConstraintsAccess)) distribution.AccessIsRestricted = true;
+                            if (SimpleMetadataUtil.IsProtected(result.Constraints.AccessConstraints)) distribution.AccessIsProtected = true;
+
+                            foreach(var distro in result.DistributionsFormats) 
+                            {
+                                if(distro.Protocol == "OGC:WMS") 
+                                {
+                                    distribution.CanShowMapUrl = true;
+                                    distribution.DatasetServicesWithShowMapLink = new List<DatasetService> 
+                                    { 
+                                        new DatasetService 
+                                        {
+                                            Uuid = distribution.Uuid,
+                                            Title = distribution.Title,
+                                            DistributionProtocol = distro.Protocol,
+                                            GetCapabilitiesUrl = distro.URL
+                                        } 
+                                    };
+
+                                }
+                            }
+
+
+                            distribution.Serie = new Serie { TypeName = "series_time" };
+
+                            distributions.Add(distribution);
+                        }
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                     }
 
@@ -448,6 +525,74 @@ namespace Kartverket.Metadatakatalog.Service
 
             return distributions;
         }
+
+        //private List<Distribution> GetTimeRelatedDistributions(object uuid, Models.Api.SearchParameters parameters)
+        //{
+        //    List<Distribution> distributions = new List<Distribution>();
+
+        //    var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+        //    if (parameters.offset == 0)
+        //        parameters.offset = 1;
+
+        //    var datequery = "";
+
+        //    if(parameters.datefrom.HasValue && parameters.dateto.HasValue)
+        //    {
+        //        string dateFrom = parameters.datefrom.Value.ToString("yyyy-MM-dd");
+        //        string dateTo = parameters.dateto.Value.ToString("yyyy-MM-dd");
+        //        datequery = $" AND date_updated:[{dateFrom}T00:00:00Z TO {dateTo}T23:59:59Z]";
+
+        //        parameters.limit = 50;
+        //    }
+
+        //    ISolrQuery query = new SolrQuery("serie:" + uuid + "*" + datequery);
+        //    try
+        //    {
+        //        SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+        //        {
+        //            Rows = parameters.limit,
+        //            OrderBy = new[] { new SortOrder("date_updated", Order.DESC) },
+        //            Start = parameters.offset - 1, //solr is zero-based - we use one-based indexing in api
+        //            Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+        //            "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+        //            "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "resourceReferenceCodeName" }
+        //        });
+
+        //        foreach (var result in queryResults)
+        //        {
+        //            try
+        //            {
+        //                Distribution distribution = new Distribution();
+
+        //                distribution.Uuid = result.Uuid;
+        //                distribution.Type = result.Type;
+        //                distribution.Title = result.DateUpdated.Value.AddHours(2).ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) + ": " + result.Title;
+        //                distribution.Organization = result.Organization;
+        //                distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
+        //                distribution.Protocol = result.DistributionProtocol != null ? Register.GetDistributionType(result.DistributionProtocol) : "";
+        //                distribution.CanShowDownloadUrl = !string.IsNullOrEmpty(result.DistributionUrl);
+        //                distribution.DistributionUrl = result.DistributionUrl;
+
+        //                //Åpne data, begrenset, skjermet
+        //                if (SimpleMetadataUtil.IsOpendata(result.OtherConstraintsAccess)) distribution.AccessIsOpendata = true;
+        //                if (SimpleMetadataUtil.IsRestricted(result.OtherConstraintsAccess)) distribution.AccessIsRestricted = true;
+        //                if (SimpleMetadataUtil.IsProtected(result.AccessConstraint)) distribution.AccessIsProtected = true;
+
+        //                distribution.Serie = new Serie { TypeName = "series_time" };
+
+        //                distributions.Add(distribution);
+        //            }
+        //            catch (Exception)
+        //            {
+        //            }
+
+        //        }
+
+        //    }
+        //    catch (Exception ex) { }
+
+        //    return distributions;
+        //}
 
         public SearchResultItemViewModel Metadata(string uuid)
         {
@@ -566,6 +711,11 @@ namespace Kartverket.Metadatakatalog.Service
         private SimpleMetadata GetSimpleMetadataByUuid(string uuid)
         {
             var mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
+            if(mdMetadataType == null) 
+            {
+                _geoNorge = new GeoNorge("","", "https://data.csw.met.no/?");
+                mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
+            }
             return mdMetadataType == null ? null : new SimpleMetadata(mdMetadataType);
         }
 
@@ -1157,6 +1307,11 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.DataAccess = metadata?.Constraints?.AccessConstraints;
             metadata.QuantitativeResult = GetQuantitativeResult(metadata.QualitySpecifications);
 
+            if (!string.IsNullOrEmpty(metadata.ParentIdentifier) && metadata.ContactMetadata.Organization == "Meteorologisk institutt") { 
+                metadata.MetMetadata = true;
+                metadata.MetadataXmlUrl = ConfigurationManager.AppSettings["KartkatalogenUrl"] + "api/get-external-metadata-xml/" + metadata.Uuid;
+            }
+
             return metadata;
         }
 
@@ -1544,6 +1699,15 @@ namespace Kartverket.Metadatakatalog.Service
                 };
             }
             return output;
+        }
+
+        public string GetExternalXml(string uuid)
+        {
+            _geoNorge = new GeoNorge("", "", "https://data.csw.met.no/?");
+            var metadata = _geoNorge.GetRecordByUuid(uuid);
+            var xml = SerializeUtil.SerializeToString(metadata);
+            return xml;
+
         }
     }
 

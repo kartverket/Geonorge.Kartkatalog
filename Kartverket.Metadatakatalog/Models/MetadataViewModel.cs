@@ -162,7 +162,7 @@ namespace Kartverket.Metadatakatalog.Models
         public Serie Serie { get; set; }
         public QuantitativeResult QuantitativeResult { get; set; }
         public SimpleContentInformation ContentInformation { get; set; }
-
+        public bool MetMetadata { get; set; } = false;
 
         public MetadataViewModel()
         {
