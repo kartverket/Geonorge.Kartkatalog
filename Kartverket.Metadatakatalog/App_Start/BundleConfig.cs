@@ -37,8 +37,8 @@ namespace Kartverket.Metadatakatalog
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
                "~/Scripts/jquery-{version}.js",
                "~/Content/bower_components/kartverket-felleskomponenter/assets/js/vendor.min.js",
-               "~/Content/bower_components/kartverket-felleskomponenter/assets/js/main.min.js"//,
-               //"~/Content/bower_components/vue/dist/vue.js"
+               "~/Content/bower_components/kartverket-felleskomponenter/assets/js/main.min.js",
+               "~/Content/bower_components/vue/dist/vue.js"
            ));
 
 
