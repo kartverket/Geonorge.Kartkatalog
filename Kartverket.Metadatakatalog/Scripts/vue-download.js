@@ -1274,9 +1274,9 @@ var MasterOrderLine = {
     }
 }
 
-Vue.config.debug = true;
-Vue.config.devtools = true;
-var mainVueModel = new Vue({
+//Vue.config.debug = true;
+//Vue.config.devtools = true;
+var mainVueModel = Vue.createApp({
     el: '#vueContainer',
     data: {
         orderLines: [],
