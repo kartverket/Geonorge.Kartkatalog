@@ -102,7 +102,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                     foreach (var item in register.containeditems)
                     {
-                        var codevalue = item.label;
+                        var codevalue = item.codevalue;
                         var label = RemoveSamiTranslation(item.description);
                         var status = item.status;
                         if (status == "Gyldig")                        
@@ -115,7 +115,7 @@ namespace Kartverket.Metadatakatalog.Service
                     var register = result2.Content.ReadAsAsync<Register>().Result;
                     foreach (var item in register.containeditems)
                     {
-                        var codevalue = item.label;
+                        var codevalue = item.codevalue;
                         var label = RemoveSamiTranslation(item.description);
                         var status = item.status;
                         if (status == "Gyldig")
