@@ -105,7 +105,7 @@ namespace Kartverket.Metadatakatalog.Service
                         var codevalue = item.codevalue;
                         var label = RemoveSamiTranslation(item.description);
                         var status = item.status;
-                        if (status == "Gyldig")                        
+                        //if (status == "Gyldig")                        
                             _areas.Add("0/" + codevalue, label);
                     }
                 }
@@ -118,7 +118,7 @@ namespace Kartverket.Metadatakatalog.Service
                         var codevalue = item.codevalue;
                         var label = RemoveSamiTranslation(item.description);
                         var status = item.status;
-                        if (status == "Gyldig")
+                        //if (status == "Gyldig")
                             _areas.Add("0/" + codevalue.Substring(0, 2) + "/" + codevalue, label);
                     }
                 }
