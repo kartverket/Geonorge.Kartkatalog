@@ -95,30 +95,30 @@ namespace Kartverket.Metadatakatalog.Service
                 //call register fylker og kommuner
                 _httpClient.DefaultRequestHeaders.Accept.Clear();
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var result = _httpClient.GetAsync("api/subregister/sosi-kodelister/kartverket/fylkesnummer-alle").Result;
+                var result = _httpClient.GetAsync("api/sosi-kodelister/inndelinger/inndelingsbase/fylkesnummer").Result;
                 if (result.IsSuccessStatusCode)
                 {
                     var register = result.Content.ReadAsAsync<Register>().Result;
 
                     foreach (var item in register.containeditems)
                     {
-                        var codevalue = item.label;
+                        var codevalue = item.codevalue;
                         var label = RemoveSamiTranslation(item.description);
                         var status = item.status;
-                        if (status == "Gyldig")                        
+                        //if (status == "Gyldig")                        
                             _areas.Add("0/" + codevalue, label);
                     }
                 }
-                var result2 = _httpClient.GetAsync("api/subregister/sosi-kodelister/kartverket/kommunenummer-alle").Result;
+                var result2 = _httpClient.GetAsync("api/sosi-kodelister/inndelinger/inndelingsbase/kommunenummer").Result;
                 if (result2.IsSuccessStatusCode)
                 {
                     var register = result2.Content.ReadAsAsync<Register>().Result;
                     foreach (var item in register.containeditems)
                     {
-                        var codevalue = item.label;
+                        var codevalue = item.codevalue;
                         var label = RemoveSamiTranslation(item.description);
                         var status = item.status;
-                        if (status == "Gyldig")
+                        //if (status == "Gyldig")
                             _areas.Add("0/" + codevalue.Substring(0, 2) + "/" + codevalue, label);
                     }
                 }

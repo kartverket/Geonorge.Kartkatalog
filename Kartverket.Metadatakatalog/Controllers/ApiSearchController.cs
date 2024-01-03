@@ -326,8 +326,15 @@ namespace Kartverket.Metadatakatalog.Controllers
         [System.Web.Http.HttpGet]
         public Models.MetadataViewModel GetData(string uuid)
         {
+            try { 
             Models.MetadataViewModel model = _metadataService.GetMetadataViewModelByUuid(uuid);
             return model;
+            }
+            catch(Exception ex) 
+            {
+                Log.Error(ex);
+            }
+            return null;
         }
 
         /// <summary>
