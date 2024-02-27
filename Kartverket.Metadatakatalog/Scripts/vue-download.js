@@ -1274,48 +1274,50 @@ var MasterOrderLine = {
     }
 }
 
-Vue.config.debug = true;
-Vue.config.devtools = true;
-var mainVueModel = new Vue({
+//Vue.config.debug = true;
+//Vue.config.devtools = true;
+var mainVueModel = Vue.createApp({
     el: '#vueContainer',
-    data: {
-        orderLines: [],
-        email: "",
-        usageGroup: localStorage.getItem('preSelectedUsageGroup') !== null ? JSON.parse(localStorage.getItem('preSelectedUsageGroup')) : "",
-        usageGroupsAvailable: downloadUseGroups,
-        usagePurposes: localStorage.getItem('preSelectedUsagePurposes') !== null ? JSON.parse(localStorage.getItem('preSelectedUsagePurposes')) : [] ,
-        usagePurposesAvailable: downloadPurposes,
-        softwareClient : downloadSoftwareClient,
-        softwareClientVersion : downloadSoftwareClientVersion,
-        orderRequests: {},
-        orderRequestsAdditionalInfo: {},
-        orderResponse: {},
-        emailRequired: false,
-        contentLoaded: false,
-        activeMapUuid: false,
+    data() {
+        return {
+            orderLines: [],
+            email: "",
+            usageGroup: localStorage.getItem('preSelectedUsageGroup') !== null ? JSON.parse(localStorage.getItem('preSelectedUsageGroup')) : "",
+            usageGroupsAvailable: downloadUseGroups,
+            usagePurposes: localStorage.getItem('preSelectedUsagePurposes') !== null ? JSON.parse(localStorage.getItem('preSelectedUsagePurposes')) : [],
+            usagePurposesAvailable: downloadPurposes,
+            softwareClient: downloadSoftwareClient,
+            softwareClientVersion: downloadSoftwareClientVersion,
+            orderRequests: {},
+            orderRequestsAdditionalInfo: {},
+            orderResponse: {},
+            emailRequired: false,
+            contentLoaded: false,
+            activeMapUuid: false,
 
-        masterOrderLine: {
-            allAvailableAreas: {},
-            masterAvailableAreas: {},
-            allAvailableProjections: {},
-            masterAvailableProjections: [],
-            allAvailableFormats: {},
-            masterAvailableFormats: [],
-            allSelectedAreas: {},
-            allSelectedProjections: {},
-            allSelectedFormats: {},
-            allSelectedCoordinates: {},
-            allSelectedClipperFiles: {},
-            masterSelectedAreas: [],
-            masterSelectedProjections: [],
-            masterSelectedFormats: [],
-            allOrderLineErrors: {},
-            allOrderLineInfoMessages: {},
-            allDefaultProjections: {},
-            allDefaultFormats: {},
-            allNotAvailableSelectedAreas: {},
-            allNotAvailableSelectedProjections: {},
-            allNotAvailableSelectedFormats: {}
+            masterOrderLine: {
+                allAvailableAreas: {},
+                masterAvailableAreas: {},
+                allAvailableProjections: {},
+                masterAvailableProjections: [],
+                allAvailableFormats: {},
+                masterAvailableFormats: [],
+                allSelectedAreas: {},
+                allSelectedProjections: {},
+                allSelectedFormats: {},
+                allSelectedCoordinates: {},
+                allSelectedClipperFiles: {},
+                masterSelectedAreas: [],
+                masterSelectedProjections: [],
+                masterSelectedFormats: [],
+                allOrderLineErrors: {},
+                allOrderLineInfoMessages: {},
+                allDefaultProjections: {},
+                allDefaultFormats: {},
+                allNotAvailableSelectedAreas: {},
+                allNotAvailableSelectedProjections: {},
+                allNotAvailableSelectedFormats: {}
+            }
         }
     },
     computed: {
@@ -2715,3 +2717,4 @@ var mainVueModel = new Vue({
         },
     }
 });
+mainVueModel.mount("#vueContainer");
