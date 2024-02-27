@@ -82,7 +82,7 @@ var MapSelect = {
 var Areas = {
     props: ['available', 'selected', 'master'],
     template: '#areas-template',
-    data: function () {
+    data() {
         var data = {
             supportsAreaSelection: false,
             supportsPolygonSelection: false,
@@ -392,7 +392,7 @@ var Formats = {
 var OrderLine = {
     props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'selectedCoordinates', 'selectedClipperFiles', 'defaultProjections', 'defaultFormats', 'orderLineErrors', 'orderLineInfoMessages', 'notAvailableSelectedAreas', 'notAvailableSelectedProjections', 'notAvailableSelectedFormats'],
     template: '#order-line-template',
-    data: function () {
+    data() {
         var data = {
             expanded: false,
             mapData: {},
@@ -826,14 +826,14 @@ var OrderLine = {
         'projections': Projections,
         'formats': Formats
     },
-    mounted: function () {
+    mounted() {
         this.expanded = this.$root.orderLines.length == 1;
     }
 };
 
 var MasterOrderLine = {
     props: ['allAvailableAreas', 'availableAreas', 'availableProjections', 'availableFormats', 'allSelectedAreas', 'allSelectedProjections', 'allSelectedFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'allOrderLineErrors'],
-    data: function () {
+    data() {
         var data = {
 
             showAreaHelpText: false,
@@ -848,7 +848,7 @@ var MasterOrderLine = {
         }
         return data;
     },
-    created: function () {
+    created() {
 
     },
     methods: {
@@ -1503,7 +1503,7 @@ var mainVueModel = Vue.createApp({
         this.updateAvailableProjectionsAndFormatsForAllOrderLines();
         this.updateAvailableProjectionsAndFormatsForMasterOrderLine();
     },
-    mounted: function () {
+    mounted() {
         this.autoselectWithOrderLineValuesFromLocalStorage();
         this.autoselectWithMasterOrderLineValuesFromLocalStorage();
         this.autoSelectAreasForAllOrderLines();
