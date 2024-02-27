@@ -848,7 +848,7 @@ var MasterOrderLine = {
         }
         return data;
     },
-    created() {
+    setup() {
 
     },
     methods: {
@@ -1372,7 +1372,7 @@ var mainVueModel = Vue.createApp({
             return this.orderLines.length > 1 && containsSupportedType;
         }
     },
-    created () {
+    setup() {
         var defaultUrl = "https://nedlasting.geonorge.no/api/capabilities/";
         var orderItemsJson = localStorage["orderItems"] ? JSON.parse(localStorage["orderItems"]) : [];
         var orderLines = [];
