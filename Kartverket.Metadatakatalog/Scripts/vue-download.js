@@ -1499,9 +1499,9 @@ var mainVueModel = Vue.createApp({
             }.bind(this));
         }
         this.orderLines = orderLines.sort((a, b) => (a.metadata.name > b.metadata.name) ? 1 : -1);
-        this.updateAvailableAreasForMasterOrderLine();
-        this.updateAvailableProjectionsAndFormatsForAllOrderLines();
-        this.updateAvailableProjectionsAndFormatsForMasterOrderLine();
+        this.updateAvailableAreasForMasterOrderLine;
+        this.updateAvailableProjectionsAndFormatsForAllOrderLines;
+        this.updateAvailableProjectionsAndFormatsForMasterOrderLine;
     },
     mounted() {
         this.autoselectWithOrderLineValuesFromLocalStorage();
