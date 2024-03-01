@@ -1277,7 +1277,6 @@ var MasterOrderLine = {
 //Vue.config.debug = true;
 //Vue.config.devtools = true;
 var mainVueModel = Vue.createApp({
-    el: '#vueContainer',
     data() {
         return {
             orderLines: [],
@@ -1372,7 +1371,7 @@ var mainVueModel = Vue.createApp({
             return this.orderLines.length > 1 && containsSupportedType;
         }
     },
-    setup() {
+    created() {
         var defaultUrl = "https://nedlasting.geonorge.no/api/capabilities/";
         var orderItemsJson = localStorage["orderItems"] ? JSON.parse(localStorage["orderItems"]) : [];
         var orderLines = [];
@@ -2716,5 +2715,4 @@ var mainVueModel = Vue.createApp({
             }
         },
     }
-});
-mainVueModel.mount("#vueContainer");
+}).mount('#vueContainer');
