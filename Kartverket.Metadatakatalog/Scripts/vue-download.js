@@ -400,7 +400,19 @@ var OrderLine = {
             showMap: false,
             master: false
         }
+        console.log(data);
         return data;
+    },
+    errorCaptured(error, compInst, errorInfo) {
+        console.log("error: ", error);
+        console.log("compInst: ", compInst);
+        console.log("errorInfo: ", errorInfo);
+    },
+    renderTracked(evt) {
+        console.log("renderTracked: ", evt);
+    },
+    renderTriggered(evt) {
+        console.log("renderTriggered: ", evt)
     },
     computed: {
         hasAreas: function () {
@@ -1370,6 +1382,17 @@ var mainVueModel = Vue.createApp({
             var containsSupportedType = this.containsSupportedType(availableAreaTypes) || this.containsLandsdekkende(availableAreaTypes);
             return this.orderLines.length > 1 && containsSupportedType;
         }
+    },
+    errorCaptured(error, compInst, errorInfo) {
+        console.log("error: ", error);
+        console.log("compInst: ", compInst);
+        console.log("errorInfo: ", errorInfo);
+    },
+    renderTracked(evt) {
+        //console.log("renderTracked: ", evt);
+    },
+    renderTriggered(evt) {
+        //console.log("renderTriggered: ", evt)
     },
     created() {
         var defaultUrl = "https://nedlasting.geonorge.no/api/capabilities/";
