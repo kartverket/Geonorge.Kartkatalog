@@ -172,7 +172,7 @@
         <div v-show="expanded">
             <div class="row orderline-fields">
                 <div class="col-md-4 orderline-field">
-                    <p>@UI.Facet_area  <a href="https://www.geonorge.no/aktuelt/om-geonorge/slik-bruker-du-geonorge/omradeinndelinger/" target="_blank" title="Link til områder  - en forklaring"><span class="badge help-text-toggle clickable">?</span></a></p></p>
+                    <p>@UI.Facet_area  <a href="https://www.geonorge.no/aktuelt/om-geonorge/slik-bruker-du-geonorge/omradeinndelinger/" target="_blank" title="Link til områder  - en forklaring"><span class="badge help-text-toggle clickable">?</span></a></p>
                     <div v-if="!hasAreas" class="help-text form-element-help-text bg-danger"><span>@UI.NoAreasAreAvailable</span></div>
                     <component v-else is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.area && orderLineErrors.area.length ? 'hasError' : '']"></component>
                     <div v-if="orderLineErrors && orderLineErrors.area && hasAreas" class="orderline-errors margin-top-10">
@@ -208,7 +208,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 orderline-fields">
-                    <p>Format  <a href="https://www.geonorge.no/aktuelt/om-geonorge/slik-bruker-du-geonorge/formater/" target="_blank" title="Link til formater  - en forklaring"><span class="badge help-text-toggle clickable">?</span></a></p></p>
+                    <p>Format  <a href="https://www.geonorge.no/aktuelt/om-geonorge/slik-bruker-du-geonorge/formater/" target="_blank" title="Link til formater  - en forklaring"><span class="badge help-text-toggle clickable">?</span></a></p>
                     <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>@UI.AreaMustBeSelectedFirst</span></div>
                     <component v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.format && orderLineErrors.format.length ? 'hasError' : '']"></component>
 
