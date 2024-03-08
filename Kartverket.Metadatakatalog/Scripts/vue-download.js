@@ -409,10 +409,10 @@ var OrderLine = {
         console.log("errorInfo: ", errorInfo);
     },
     renderTracked(evt) {
-        console.log("renderTracked: ", evt);
+        //console.log("renderTracked: ", evt);
     },
     renderTriggered(evt) {
-        console.log("renderTriggered: ", evt)
+        //console.log("renderTriggered: ", evt)
     },
     computed: {
         hasAreas: function () {
@@ -1521,9 +1521,9 @@ var mainVueModel = Vue.createApp({
             }.bind(this));
         }
         this.orderLines = orderLines.sort((a, b) => (a.metadata.name > b.metadata.name) ? 1 : -1);
-        this.updateAvailableAreasForMasterOrderLine;
-        this.updateAvailableProjectionsAndFormatsForAllOrderLines;
-        this.updateAvailableProjectionsAndFormatsForMasterOrderLine;
+        this.updateAvailableAreasForMasterOrderLine();
+        this.updateAvailableProjectionsAndFormatsForAllOrderLines();
+        this.updateAvailableProjectionsAndFormatsForMasterOrderLine();
     },
     mounted() {
         this.autoselectWithOrderLineValuesFromLocalStorage();
@@ -1961,8 +1961,10 @@ var mainVueModel = Vue.createApp({
 
         updateAvailableAreasForMasterOrderLine: function () {
             var masterAvailableAreas = {};
+            console.log('hei')
             for (orderLine in this.masterOrderLine.allAvailableAreas) {
                 for (areaType in this.masterOrderLine.allAvailableAreas[orderLine]) {
+                    
                     this.masterOrderLine.allAvailableAreas[orderLine][areaType].forEach(function (area) {
                         if (masterAvailableAreas[areaType] == undefined) {
                             masterAvailableAreas[areaType] = [];
