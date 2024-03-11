@@ -438,59 +438,65 @@
                             <div class="panel-body">
                                 <div v-for="(dataset, datasetName) in responseItem.datasets">
                                     <h2>{{ datasetName }}</h2>
-                                    <div v-if="file.status == 'ReadyForDownload'" v-for="file in dataset.files" class="download-list-subitem">
-                                        <div class="row">
-                                            <div class="col-sm-5 col-md-6">
-                                                <span class="download-list-item-name">
-                                                    <span class="inline-block">
-                                                        <a v-bind:href="AddAccessToken(file.downloadUrl)" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
-                                                            {{ file.areaName }}
-                                                        </a>
+                                    <template v-for="file in dataset.files">
+                                        <div v-if="file.status == 'ReadyForDownload'" class="download-list-subitem">
+                                            <div class="row">
+                                                <div class="col-sm-5 col-md-6">
+                                                    <span class="download-list-item-name">
+                                                        <span class="inline-block">
+                                                            <a v-bind:href="AddAccessToken(file.downloadUrl)" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name">
+                                                                {{ file.areaName }}
+                                                            </a>
+                                                        </span>
                                                     </span>
-                                                </span>
-                                            </div>
-                                            <div class="col-sm-4 col-md-3">
-                                                <span class="label label-success auto-width">{{ file.projectionName }}</span>
-                                            </div>
-                                            <div class="col-sm-2 col-md-2">
-                                                <span class="label label-info auto-width">{{file.format}}</span>
-                                            </div>
-                                            <div class="col-sm-1 col-md-1 icon-col">
-                                                <a v-bind:href="AddAccessToken(file.downloadUrl)" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name" class="btn">
-                                                    <span class="custom-icon custom-icon-lastned"></span>
-                                                </a>
+                                                </div>
+                                                <div class="col-sm-4 col-md-3">
+                                                    <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                                </div>
+                                                <div class="col-sm-2 col-md-2">
+                                                    <span class="label label-info auto-width">{{file.format}}</span>
+                                                </div>
+                                                <div class="col-sm-1 col-md-1 icon-col">
+                                                    <a v-bind:href="AddAccessToken(file.downloadUrl)" data-toggle="tooltip" data-placement="bottom" v-bind:title="file.name" class="btn">
+                                                        <span class="custom-icon custom-icon-lastned"></span>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div v-if="file.status == 'WaitingForProcessing'" v-for="file in dataset.files" class="download-list-subitem">
-                                        <div class="row">
-                                            <div class="col-sm-5 col-md-6">
+                                    </template>
+                                    <template v-for="file in dataset.files">
+                                        <div v-if="file.status == 'WaitingForProcessing'" class="download-list-subitem">
+                                            <div class="row">
+                                                <div class="col-sm-5 col-md-6">
 
-                                                <span class="download-list-item-name">
-                                                    {{ file.metadataName }}, <span class="inline-block">@UI.SelectedFromMap {{ file.areaName }}</span> <small class="inline-block">(Under behandling)</small>
-                                                </span>
-                                            </div>
-                                            <div class="col-sm-4 col-md-3">
-                                                <span class="label label-success auto-width">{{ file.projectionName }}</span>
-                                            </div>
-                                            <div class="col-sm-2 col-md-2">
-                                                <span class="label label-info auto-width">{{file.format}}</span>
-                                            </div>
-                                            <div class="col-sm-1 col-md-1 icon-col">
-                                                <span class="custom-icon custom-icon-info"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div v-if="!file.status && file.name" v-for="file in dataset.files" class="list-group-subitem">
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-12">
-                                                <span class="custom-icon custom-icon-info"></span>
-                                                <span class="download-list-item-name">
-                                                    {{ file.name }}
-                                                </span>
+                                                    <span class="download-list-item-name">
+                                                        {{ file.metadataName }}, <span class="inline-block">@UI.SelectedFromMap {{ file.areaName }}</span> <small class="inline-block">(Under behandling)</small>
+                                                    </span>
+                                                </div>
+                                                <div class="col-sm-4 col-md-3">
+                                                    <span class="label label-success auto-width">{{ file.projectionName }}</span>
+                                                </div>
+                                                <div class="col-sm-2 col-md-2">
+                                                    <span class="label label-info auto-width">{{file.format}}</span>
+                                                </div>
+                                                <div class="col-sm-1 col-md-1 icon-col">
+                                                    <span class="custom-icon custom-icon-info"></span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </template>
+                                    <template v-for="file in dataset.files">
+                                        <div v-if="!file.status && file.name" class="list-group-subitem">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12">
+                                                    <span class="custom-icon custom-icon-info"></span>
+                                                    <span class="download-list-item-name">
+                                                        {{ file.name }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
                                 </div>
                             </div>
                             <div class="panel-footer" v-if="responseItem.additionalInfo.supportsDownloadBundling && responseItem.numberOfFiles > 1">
