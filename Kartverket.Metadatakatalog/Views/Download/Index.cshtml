@@ -7,6 +7,12 @@
 @section breadcrumb {
     <li class="active">@UI.FileDownload</li>
 }
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<style type="text/css">
+    .btn {
+        margin-right: 5px;
+    }
+</style>
 <div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
@@ -74,20 +80,20 @@
             </div>
         </div>
         <div v-if="supportsPolygonSelection && $parent.mapIsLoaded">
-            <div v-if="master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="true">
-            </div>
+            <component v-if="master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="true">
+            </component>
         </div>
         <div v-if="supportsPolygonSelection && $parent.mapIsLoaded">
-            <div v-if="!master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="false">
-            </div>
+            <component v-if="!master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="false">
+            </component>
         </div>
         <div v-if="supportsGridSelection && $parent.mapIsLoaded">
-            <div v-if="!master"
+            <component v-if="!master"
                  v-show="$parent.showMap" is="mapSelect"
                  v-bind:map-data="$parent.mapData"
                  v-bind:map-src="'@Html.SecureNorgeskartUrl()' + 'nedlasting.html#' + $parent.mapData.defaultConfigurations.zoom_level + '/' + $parent.mapData.defaultConfigurations.center_longitude + '/' + $parent.mapData.defaultConfigurations.center_latitude + '/' + $parent.mapData.defaultConfigurations.service_name"
                  v-bind:master="false">
-            </div>
+            </component>
 
         </div>
     </div>
@@ -171,9 +177,9 @@
         <div v-show="expanded">
             <div class="row orderline-fields">
                 <div class="col-md-4 orderline-field">
-                    <p>@UI.Facet_area  <a href="https://www.geonorge.no/aktuelt/om-geonorge/slik-bruker-du-geonorge/omradeinndelinger/" target="_blank" title="Link til områder  - en forklaring"><span class="badge help-text-toggle clickable">?</span></a></p></p>
+                    <p>@UI.Facet_area  <a href="https://www.geonorge.no/aktuelt/om-geonorge/slik-bruker-du-geonorge/omradeinndelinger/" target="_blank" title="Link til områder  - en forklaring"><span class="badge help-text-toggle clickable">?</span></a></p>
                     <div v-if="!hasAreas" class="help-text form-element-help-text bg-danger"><span>@UI.NoAreasAreAvailable</span></div>
-                    <div v-else is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.area && orderLineErrors.area.length ? 'hasError' : '']"></div>
+                    <component v-else is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.area && orderLineErrors.area.length ? 'hasError' : '']"></component>
                     <div v-if="orderLineErrors && orderLineErrors.area && hasAreas" class="orderline-errors margin-top-10">
                         <div v-for="orderlineError in orderLineErrors.area" class="help-text form-element-help-text bg-danger">
                             {{ orderlineError }}
@@ -188,7 +194,7 @@
                 <div class="col-md-4 orderline-field">
                     <p>@UI.Projection <a href="https://www.geonorge.no/aktuelt/om-geonorge/slik-bruker-du-geonorge/kartprojeksjoner-og-koordinatsystemer/" target="_blank" title="Link til projeksjoner  - en forklaring"><span class="badge help-text-toggle clickable">?</span></a></p>
                     <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>@UI.AreaMustBeSelectedFirst</span></div>
-                    <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.projection && orderLineErrors.projection.length ? 'hasError' : '']"></div>
+                    <component v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.projection && orderLineErrors.projection.length ? 'hasError' : '']"></component>
 
                     <div v-if="orderLineErrors && orderLineErrors.projection" class="orderline-errors margin-top-10">
                         <div v-show="orderLineErrors.projection.length" class="help-text form-element-help-text bg-danger">
@@ -207,9 +213,9 @@
                     </div>
                 </div>
                 <div class="col-md-4 orderline-fields">
-                    <p>Format  <a href="https://www.geonorge.no/aktuelt/om-geonorge/slik-bruker-du-geonorge/formater/" target="_blank" title="Link til formater  - en forklaring"><span class="badge help-text-toggle clickable">?</span></a></p></p>
+                    <p>Format  <a href="https://www.geonorge.no/aktuelt/om-geonorge/slik-bruker-du-geonorge/formater/" target="_blank" title="Link til formater  - en forklaring"><span class="badge help-text-toggle clickable">?</span></a></p>
                     <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>@UI.AreaMustBeSelectedFirst</span></div>
-                    <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.format && orderLineErrors.format.length ? 'hasError' : '']"></div>
+                    <component v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="master" v-bind:class="[orderLineErrors && orderLineErrors.format && orderLineErrors.format.length ? 'hasError' : '']"></component>
 
                     <div v-if="orderLineErrors && orderLineErrors.format" class="orderline-errors margin-top-10">
                         <div v-show="orderLineErrors.format.length" class="help-text form-element-help-text bg-danger">
@@ -238,7 +244,7 @@
         <div class="row">
             <div class="col-md-4">
                 <p>@UI.Facet_area <span href="#" v-on:click="showAreaHelpText = !showAreaHelpText" v-bind:class="{active: showAreaHelpText}" class="badge help-text-toggle clickable">?</span></p>
-                <div is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master"></div>
+                <component is="areas" v-bind:available="availableAreas" v-bind:selected="selectedAreas" v-bind:master="master"></component>
                 <div v-show="showAreaHelpText" class="help-text form-element-help-text bg-info margin-top-10">
                     @Html.Raw(UI.AreaHelpText)
                 </div>
@@ -246,7 +252,7 @@
             <div class="col-md-4">
                 <p>@UI.Projection <span href="#" v-on:click="showProjectionHelpText = !showProjectionHelpText" v-bind:class="{active: showProjectionHelpText}" class="badge help-text-toggle clickable">?</span></p>
                 <div v-if="Object.keys(availableProjections).length === 0" class="help-text form-element-help-text bg-info"><span>@UI.AreaMustBeSelectedFirst</span></div>
-                <div v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="master"></div>
+                <component v-else is="projections" v-bind:available="availableProjections" v-bind:selected="selectedProjections" v-bind:master="master"></component>
                 <div v-show="showProjectionHelpText" class="help-text form-element-help-text bg-info margin-top-10">
                     @Html.Raw(UI.ProjectionHelpText)
                 </div>
@@ -254,7 +260,7 @@
             <div class="col-md-4">
                 <p>Format <span href="#" v-on:click="showFormatHelpText = !showFormatHelpText" v-bind:class="{active: showFormatHelpText}" class="badge help-text-toggle clickable">?</span></p>
                 <div v-if="Object.keys(availableFormats).length === 0" class="help-text form-element-help-text bg-info"><span>@UI.AreaMustBeSelectedFirst</span></div>
-                <div v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="master"></div>
+                <component v-else is="formats" v-bind:available="availableFormats" v-bind:selected="selectedFormats" v-bind:master="master"></component>
                 <div v-show="showFormatHelpText" class="help-text form-element-help-text bg-info margin-top-10">
                     @Html.Raw(UI.FormatHelpText)
                 </div>
@@ -291,7 +297,7 @@
             </div>
             <div id="downloadformVue" class="download-form">
                 <div v-show="showMasterOrderLine" class="orderline orderline-master">
-                    <div is="masterOrderLine"
+                    <component is="masterOrderLine"
                          v-bind:all-available-areas="masterOrderLine.allAvailableAreas"
                          v-bind:available-areas="masterOrderLine.masterAvailableAreas"
                          v-bind:available-projections="masterOrderLine.masterAvailableProjections"
@@ -304,11 +310,11 @@
                          v-bind:selected-formats="masterOrderLine.masterSelectedFormats"
                          v-bind:all-order-line-errors="masterOrderLine.allOrderLineErrors">
 
-                    </div>
+                    </component>
                 </div>
                 <div class="orderlines">
                     <div v-for="(orderLine, index) in orderLines" class="orderline">
-                        <div is="orderLine"
+                        <component is="orderLine"
                              v-bind:metadata="orderLine.metadata"
                              v-bind:capabilities="orderLine.capabilities"
                              v-bind:available-areas="masterOrderLine.allAvailableAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allAvailableAreas[orderLine.metadata.uuid] : []"
@@ -326,7 +332,7 @@
                              v-bind:not-available-selected-areas="masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedAreas[orderLine.metadata.uuid] : []"
                              v-bind:not-available-selected-projections="masterOrderLine.allNotAvailableSelectedProjections[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedProjections[orderLine.metadata.uuid] : []"
                              v-bind:not-available-selected-formats="masterOrderLine.allNotAvailableSelectedFormats[orderLine.metadata.uuid] !== undefined ? masterOrderLine.allNotAvailableSelectedFormats[orderLine.metadata.uuid] : []">
-                        </div>
+                        </component>
                     </div>
                 </div>
                 <div class="download-form">

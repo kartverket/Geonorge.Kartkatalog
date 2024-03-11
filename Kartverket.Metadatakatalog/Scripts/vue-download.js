@@ -82,7 +82,7 @@ var MapSelect = {
 var Areas = {
     props: ['available', 'selected', 'master'],
     template: '#areas-template',
-    data: function () {
+    data() {
         var data = {
             supportsAreaSelection: false,
             supportsPolygonSelection: false,
@@ -392,7 +392,7 @@ var Formats = {
 var OrderLine = {
     props: ['metadata', 'capabilities', 'availableAreas', 'availableProjections', 'availableFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'selectedCoordinates', 'selectedClipperFiles', 'defaultProjections', 'defaultFormats', 'orderLineErrors', 'orderLineInfoMessages', 'notAvailableSelectedAreas', 'notAvailableSelectedProjections', 'notAvailableSelectedFormats'],
     template: '#order-line-template',
-    data: function () {
+    data() {
         var data = {
             expanded: false,
             mapData: {},
@@ -826,14 +826,14 @@ var OrderLine = {
         'projections': Projections,
         'formats': Formats
     },
-    mounted: function () {
+    mounted() {
         this.expanded = this.$root.orderLines.length == 1;
     }
 };
 
 var MasterOrderLine = {
     props: ['allAvailableAreas', 'availableAreas', 'availableProjections', 'availableFormats', 'allSelectedAreas', 'allSelectedProjections', 'allSelectedFormats', 'selectedAreas', 'selectedProjections', 'selectedFormats', 'allOrderLineErrors'],
-    data: function () {
+    data() {
         var data = {
 
             showAreaHelpText: false,
@@ -848,7 +848,7 @@ var MasterOrderLine = {
         }
         return data;
     },
-    created: function () {
+    created() {
 
     },
     methods: {
@@ -1274,48 +1274,49 @@ var MasterOrderLine = {
     }
 }
 
-Vue.config.debug = true;
-Vue.config.devtools = true;
-var mainVueModel = new Vue({
-    el: '#vueContainer',
-    data: {
-        orderLines: [],
-        email: "",
-        usageGroup: localStorage.getItem('preSelectedUsageGroup') !== null ? JSON.parse(localStorage.getItem('preSelectedUsageGroup')) : "",
-        usageGroupsAvailable: downloadUseGroups,
-        usagePurposes: localStorage.getItem('preSelectedUsagePurposes') !== null ? JSON.parse(localStorage.getItem('preSelectedUsagePurposes')) : [] ,
-        usagePurposesAvailable: downloadPurposes,
-        softwareClient : downloadSoftwareClient,
-        softwareClientVersion : downloadSoftwareClientVersion,
-        orderRequests: {},
-        orderRequestsAdditionalInfo: {},
-        orderResponse: {},
-        emailRequired: false,
-        contentLoaded: false,
-        activeMapUuid: false,
+//Vue.config.debug = true;
+//Vue.config.devtools = true;
+var mainVueModel = Vue.createApp({
+    data() {
+        return {
+            orderLines: [],
+            email: "",
+            usageGroup: localStorage.getItem('preSelectedUsageGroup') !== null ? JSON.parse(localStorage.getItem('preSelectedUsageGroup')) : "",
+            usageGroupsAvailable: downloadUseGroups,
+            usagePurposes: localStorage.getItem('preSelectedUsagePurposes') !== null ? JSON.parse(localStorage.getItem('preSelectedUsagePurposes')) : [],
+            usagePurposesAvailable: downloadPurposes,
+            softwareClient: downloadSoftwareClient,
+            softwareClientVersion: downloadSoftwareClientVersion,
+            orderRequests: {},
+            orderRequestsAdditionalInfo: {},
+            orderResponse: {},
+            emailRequired: false,
+            contentLoaded: false,
+            activeMapUuid: false,
 
-        masterOrderLine: {
-            allAvailableAreas: {},
-            masterAvailableAreas: {},
-            allAvailableProjections: {},
-            masterAvailableProjections: [],
-            allAvailableFormats: {},
-            masterAvailableFormats: [],
-            allSelectedAreas: {},
-            allSelectedProjections: {},
-            allSelectedFormats: {},
-            allSelectedCoordinates: {},
-            allSelectedClipperFiles: {},
-            masterSelectedAreas: [],
-            masterSelectedProjections: [],
-            masterSelectedFormats: [],
-            allOrderLineErrors: {},
-            allOrderLineInfoMessages: {},
-            allDefaultProjections: {},
-            allDefaultFormats: {},
-            allNotAvailableSelectedAreas: {},
-            allNotAvailableSelectedProjections: {},
-            allNotAvailableSelectedFormats: {}
+            masterOrderLine: {
+                allAvailableAreas: {},
+                masterAvailableAreas: {},
+                allAvailableProjections: {},
+                masterAvailableProjections: [],
+                allAvailableFormats: {},
+                masterAvailableFormats: [],
+                allSelectedAreas: {},
+                allSelectedProjections: {},
+                allSelectedFormats: {},
+                allSelectedCoordinates: {},
+                allSelectedClipperFiles: {},
+                masterSelectedAreas: [],
+                masterSelectedProjections: [],
+                masterSelectedFormats: [],
+                allOrderLineErrors: {},
+                allOrderLineInfoMessages: {},
+                allDefaultProjections: {},
+                allDefaultFormats: {},
+                allNotAvailableSelectedAreas: {},
+                allNotAvailableSelectedProjections: {},
+                allNotAvailableSelectedFormats: {}
+            }
         }
     },
     computed: {
@@ -1370,7 +1371,7 @@ var mainVueModel = new Vue({
             return this.orderLines.length > 1 && containsSupportedType;
         }
     },
-    created: function () {
+    created() {
         var defaultUrl = "https://nedlasting.geonorge.no/api/capabilities/";
         var orderItemsJson = localStorage["orderItems"] ? JSON.parse(localStorage["orderItems"]) : [];
         var orderLines = [];
@@ -1501,7 +1502,7 @@ var mainVueModel = new Vue({
         this.updateAvailableProjectionsAndFormatsForAllOrderLines();
         this.updateAvailableProjectionsAndFormatsForMasterOrderLine();
     },
-    mounted: function () {
+    mounted() {
         this.autoselectWithOrderLineValuesFromLocalStorage();
         this.autoselectWithMasterOrderLineValuesFromLocalStorage();
         this.autoSelectAreasForAllOrderLines();
@@ -1939,6 +1940,7 @@ var mainVueModel = new Vue({
             var masterAvailableAreas = {};
             for (orderLine in this.masterOrderLine.allAvailableAreas) {
                 for (areaType in this.masterOrderLine.allAvailableAreas[orderLine]) {
+                    
                     this.masterOrderLine.allAvailableAreas[orderLine][areaType].forEach(function (area) {
                         if (masterAvailableAreas[areaType] == undefined) {
                             masterAvailableAreas[areaType] = [];
@@ -2714,4 +2716,4 @@ var mainVueModel = new Vue({
             }
         },
     }
-});
+}).mount('#vueContainer');
