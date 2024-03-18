@@ -671,6 +671,34 @@ namespace Kartverket.Metadatakatalog.Service
             return null;
         }
 
+        public Models.SearchResult GetSimpleMetadata()
+        {
+            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+
+            ISolrQuery query = new SolrQuery("metadata_standard:\"ISO19115\\:Norsk versjon\"");
+            try
+            {
+                SearchParameters searchParameters = new SearchParameters();
+                searchParameters.Limit = 1000;
+                searchParameters.Offset = 1;
+
+                SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                {
+                    Rows = searchParameters.Limit,
+                    Start = searchParameters.Offset - 1, //solr is zero-based - we use one-based indexing in api
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "resourceReferenceCodeName" }
+                });
+
+                return _searchService.CreateSearchResults(queryResults, searchParameters);
+
+            }
+            catch (Exception) { }
+
+            return null;
+        }
+
         public DatasetNameValidationResult ValidDatasetsName(string @namespace, string datasetName, string uuid)
         {
             List<MetadataIndexDoc> metadata = null;
