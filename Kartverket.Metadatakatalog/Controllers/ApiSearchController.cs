@@ -267,6 +267,29 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         /// <summary>
+        /// Get simple metadata list
+        /// </summary>
+        [System.Web.Http.Route("api/datasets-simple")]
+        [System.Web.Http.HttpGet]
+        public SearchResult DatasetsSimple()
+        {
+            try
+            {
+                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+                Models.SearchResult searchResult = _metadataService.GetSimpleMetadata();
+
+                return new SearchResult(searchResult, urlHelper);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return null;
+            }
+        }
+
+
+        /// <summary>
         /// Valid metadata dataset name
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]

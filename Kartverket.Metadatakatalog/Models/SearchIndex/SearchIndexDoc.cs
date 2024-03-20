@@ -21,6 +21,9 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("type")]
         public string Type { get; set; }
 
+        [SolrField("metadata_standard")]
+        public string MetadataStandard { get; set; }
+
         [SolrField("theme")]
         public string Theme { get; set; }
 

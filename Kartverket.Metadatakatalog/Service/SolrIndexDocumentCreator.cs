@@ -72,6 +72,7 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.Abstract = simpleMetadata.Abstract;
             indexDoc.Purpose = simpleMetadata.Purpose;
             indexDoc.Type = simpleMetadata.Type;
+            indexDoc.MetadataStandard = simpleMetadata.MetadataStandard;
             indexDoc.ParentIdentifier = simpleMetadata.ParentIdentifier;
             indexDoc.Organizationgroup = simpleMetadata.Organizationgroup;
             indexDoc.Organization = simpleMetadata.Organization;
@@ -128,6 +129,7 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.Abstract = simpleMetadata.Abstract;
             indexDoc.Purpose = simpleMetadata.Purpose;
             indexDoc.Type = simpleMetadata.Type;
+            indexDoc.MetadataStandard = simpleMetadata.MetadataStandard;
             indexDoc.ParentIdentifier = simpleMetadata.ParentIdentifier;
             indexDoc.Organizationgroup = simpleMetadata.Organizationgroup;
             indexDoc.Organization = simpleMetadata.Organization;
@@ -185,6 +187,8 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.Typename = simpleMetadata.HierarchyLevelName;
                 if (!string.IsNullOrEmpty(simpleMetadata.ParentIdentifier))
                     indexDoc.ParentIdentifier = simpleMetadata.ParentIdentifier;
+
+                indexDoc.MetadataStandard = simpleMetadata.MetadataStandard;
 
                 if (simpleMetadata.ContactOwner != null)
                 {
@@ -1357,6 +1361,7 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.Abstract = simpleMetadata.Abstract;
             indexDoc.Purpose = simpleMetadata.Purpose;
             indexDoc.Type = simpleMetadata.Type;
+            indexDoc.MetadataStandard = simpleMetadata.MetadataStandard;
             indexDoc.ParentIdentifier = simpleMetadata.ParentIdentifier;
             indexDoc.Organizationgroup = simpleMetadata.Organizationgroup;
             indexDoc.Organization = simpleMetadata.Organization;
