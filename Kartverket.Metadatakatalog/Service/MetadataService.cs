@@ -671,7 +671,7 @@ namespace Kartverket.Metadatakatalog.Service
             return null;
         }
 
-        public Models.SearchResult GetSimpleMetadata()
+        public Models.SearchResult GetSimpleMetadata(string organization)
         {
             var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
 
@@ -679,11 +679,16 @@ namespace Kartverket.Metadatakatalog.Service
             try
             {
                 SearchParameters searchParameters = new SearchParameters();
+                searchParameters.AddComplexFacetsIfMissing();
                 searchParameters.Limit = 1000;
                 searchParameters.Offset = 1;
+                if(!IsNullOrEmpty(organization))
+                    searchParameters.Facets.Add(new FacetParameter { Name = "organization", Value = organization });
 
                 SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
                 {
+                    Facet = searchParameters.BuildFacetParameters(),
+                    FilterQueries = searchParameters.BuildFilterQueries(),
                     Rows = searchParameters.Limit,
                     Start = searchParameters.Offset - 1, //solr is zero-based - we use one-based indexing in api
                     Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
