@@ -967,9 +967,9 @@ var MasterOrderLine = {
                 var form = document.getElementById("clipper-master"),
                     myData = new FormData(form);
 
-                mainVueModel.$children.forEach(function (orderItem) {
+                mainVueModel.$data.orderLines.forEach(function (orderItem) {
                     showLoadingAnimation("Sjekker klippefil");
-                    if (orderItem.master !== undefined && orderItem.master == false) {
+                    //if (orderItem.master !== undefined && orderItem.master == false) {
                         if (orderItem.capabilities !== undefined && orderItem.capabilities.supportsPolygonSelection !== undefined && orderItem.capabilities.supportsPolygonSelection == true) {
 
                              $.ajax({
@@ -1083,7 +1083,7 @@ var MasterOrderLine = {
                                  }
                              });
                         }
-                    }
+                    //}
                 }.bind(this));
 
             } else {
@@ -1172,8 +1172,8 @@ var MasterOrderLine = {
                                                 clearAlertMessage();
                                                 hideAlert();
 
-                                                mainVueModel.$children.forEach(function (orderItem) {
-                                                    if (orderItem.master !== undefined && orderItem.master == false) {
+                                                mainVueModel.$data.orderLines.forEach(function (orderItem) {
+                                                    //if (orderItem.master !== undefined && orderItem.master == false) {
                                                         if (orderItem.capabilities !== undefined && orderItem.capabilities.supportsPolygonSelection !== undefined && orderItem.capabilities.supportsPolygonSelection == true) {
 
                                                             this.$root.masterOrderLine.allSelectedCoordinates[orderItem.metadata.uuid] = coordinatesString;
@@ -1248,7 +1248,7 @@ var MasterOrderLine = {
                                                                 }
                                                             }.bind(this))
                                                         }
-                                                    }
+                                                    //}
                                                 }.bind(this));
 
                                                 this.$root.updateSelectedAreasForAllOrderLines(true);
