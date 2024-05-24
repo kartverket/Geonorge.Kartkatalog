@@ -475,7 +475,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                             distribution.Uuid = result.Uuid;
                             distribution.Type = result.HierarchyLevel;
-                            distribution.Title = result.DatePublished.Value.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) + ": " + result.Title;
+                            distribution.Title = result.Title;
                             distribution.Organization = result.ContactOwner.Organization;
                             distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
                             distribution.Protocol = result.DistributionDetails?.Protocol != null ? Register.GetDistributionType(result.DistributionDetails?.Protocol) : "";
