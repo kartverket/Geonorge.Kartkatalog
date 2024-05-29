@@ -418,6 +418,16 @@ namespace Kartverket.Metadatakatalog.Service
                 expressionTypesToDate[0] = new PropertyNameType { Text = new[] { "apiso:TempExtent_end" } };
                 expressionTypesToDate[1] = new LiteralType { Text = new[] { dateTo } };
 
+                BinaryComparisonOpType compareOperationToDate = null;
+
+                if (uuid.ToString() != "no.met:9fbe6a04-279c-46b8-a582-bb08f4b11794") // <gml:endPosition indeterminatePosition="unknown"/>
+                {
+                    compareOperationToDate = new BinaryComparisonOpType
+                    {
+                        expression = expressionTypesToDate
+                    };
+                }
+
                 var filters = new object[]
                           {
 
@@ -438,10 +448,7 @@ namespace Kartverket.Metadatakatalog.Service
                                        expression = expressionTypesFromDate
                                     }
                                     ,
-                                    new BinaryComparisonOpType
-                                    {
-                                        expression = expressionTypesToDate
-                                    }
+                                    compareOperationToDate
                                 },
 
                                 ItemsElementName = new ItemsChoiceType22[]
