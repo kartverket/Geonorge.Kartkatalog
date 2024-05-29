@@ -1340,7 +1340,7 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.DataAccess = metadata?.Constraints?.AccessConstraints;
             metadata.QuantitativeResult = GetQuantitativeResult(metadata.QualitySpecifications);
 
-            if (!string.IsNullOrEmpty(metadata.ParentIdentifier) && metadata.ContactMetadata.Organization == "Meteorologisk institutt") { 
+            if (!string.IsNullOrEmpty(metadata.ParentIdentifier) && (metadata?.ContactMetadata?.Organization == "Meteorologisk institutt" || metadata?.ContactOwner?.Organization == "Meteorologisk institutt")) { 
                 metadata.MetMetadata = true;
                 metadata.MetadataXmlUrl = ConfigurationManager.AppSettings["KartkatalogenUrl"] + "api/get-external-metadata-xml/" + metadata.Uuid;
             }
