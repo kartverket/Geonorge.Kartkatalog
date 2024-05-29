@@ -394,7 +394,7 @@ namespace Kartverket.Metadatakatalog.Service
             if(parameters.limit == 0)
                 parameters.limit = 10;
 
-            DateTime DateFrom = DateTime.Now.AddYears(-100);
+            DateTime DateFrom = DateTime.Now.AddYears(-120);
             DateTime DateTo = DateTime.Now;
 
             string dateFrom = DateFrom.ToString("yyyy-MM-dd");
@@ -482,7 +482,10 @@ namespace Kartverket.Metadatakatalog.Service
 
                             distribution.Uuid = result.Uuid;
                             distribution.Type = result.HierarchyLevel;
-                            distribution.Title = result.Title;
+                            if(uuid.ToString() == "no.met:9fbe6a04-279c-46b8-a582-bb08f4b11794")
+                                distribution.Title =  result.Title + " "  + result.DatePublished.Value.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+                            else
+                                distribution.Title = result.Title;
                             distribution.Organization = result.ContactOwner.Organization;
                             distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
                             distribution.Protocol = result.DistributionDetails?.Protocol != null ? Register.GetDistributionType(result.DistributionDetails?.Protocol) : "";
