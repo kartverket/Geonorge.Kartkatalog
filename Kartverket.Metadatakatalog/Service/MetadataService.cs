@@ -408,7 +408,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             try
             {
-                _geoNorge = new GeoNorge("", "", "https://data.csw.met.no/?");
+                _geoNorge = new GeoNorge("", "", WebConfigurationManager.AppSettings["MetUrl"]);
 
                 ExpressionType[] expressionTypesFromDate = new ExpressionType[2];
                 expressionTypesFromDate[0] = new PropertyNameType { Text = new[] { "apiso:TempExtent_begin" } };
@@ -756,7 +756,7 @@ namespace Kartverket.Metadatakatalog.Service
             var mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
             if(mdMetadataType == null) 
             {
-                _geoNorge = new GeoNorge("","", "https://data.csw.met.no/?");
+                _geoNorge = new GeoNorge("","", WebConfigurationManager.AppSettings["MetUrl"]);
                 mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
             }
             return mdMetadataType == null ? null : new SimpleMetadata(mdMetadataType);
@@ -1746,7 +1746,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public string GetExternalXml(string uuid)
         {
-            _geoNorge = new GeoNorge("", "", "https://data.csw.met.no/?");
+            _geoNorge = new GeoNorge("", "", WebConfigurationManager.AppSettings["MetUrl"]);
             var metadata = _geoNorge.GetRecordByUuid(uuid);
             var xml = SerializeUtil.SerializeToString(metadata);
             return xml;
