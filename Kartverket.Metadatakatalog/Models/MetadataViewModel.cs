@@ -438,6 +438,8 @@ namespace Kartverket.Metadatakatalog.Models
                     {
                         if(!string.IsNullOrEmpty(CoverageUrl) && !string.IsNullOrEmpty(CoverageGridUrl))
                             CoverageLink = $"{commonPart}project=geonorge&layers=1002&lat=6768825.17&lon=217236.30&wms=https://wms.geonorge.no/skwms1/wms.geonorge_dekningskart?datasett={layerStr},https://openwms.statkart.no/skwms1/wms.gp_dek_oversikt?datasett={layerStr}&addLayers=geonorgedekningskart,gp_dek_oversikt_wms&type=dek";
+                        else if (!string.IsNullOrEmpty(CoverageUrl) && string.IsNullOrEmpty(CoverageGridUrl))
+                            CoverageLink = $"{commonPart}project=geonorge&layers=1002&lat=6768825.17&lon=217236.30&wms=https://openwms.statkart.no/skwms1/wms.gp_dek_oversikt?datasett={layerStr}&addLayers=geonorgedekningskart,gp_dek_oversikt_wms&type=dek";
                         else if (string.IsNullOrEmpty(CoverageUrl) && !string.IsNullOrEmpty(CoverageGridUrl))
                             CoverageLink = $"{commonPart}&lon=96090.37&lat=6564869.00&wms={pathStr.Replace("wms?", "")}skwms1%2Fwms.geonorge_dekningskart%3Fdatasett%3D{layerStrGrid}&project=geonorge&layers=1002&addLayers=datasett_dekning";
                         else 
