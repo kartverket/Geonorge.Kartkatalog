@@ -47,6 +47,8 @@ namespace Kartverket.Metadatakatalog.Service
 
                 if (metadata != null)
                 {
+                    Log.Info(string.Format("Trying to remove and update document uuid={0} from index", uuid));
+
                     SetNorwegianIndexCores();
                     MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.NorwegianCode);
                     if(metadataIndexDoc != null) 
