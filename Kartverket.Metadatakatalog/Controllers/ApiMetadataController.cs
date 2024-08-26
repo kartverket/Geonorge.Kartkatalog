@@ -52,7 +52,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 {
                     Log.Info("Running single indexing of metadata with uuid=" + uuid);
 
-                    _indexer.RunIndexingOn(uuid);
+                    _indexer.RunIndexingOn(uuid, action);
 
                     statusCode = HttpStatusCode.OK;
                 }

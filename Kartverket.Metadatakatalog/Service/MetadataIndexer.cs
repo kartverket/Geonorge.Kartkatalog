@@ -3,7 +3,7 @@
     public interface MetadataIndexer
     {
         void RunIndexing();
-        void RunIndexingOn(string uuid);
+        void RunIndexingOn(string uuid, string action = null);
         void RunReIndexing();
     }
 }
