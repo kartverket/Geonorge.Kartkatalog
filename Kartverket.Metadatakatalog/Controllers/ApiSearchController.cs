@@ -271,13 +271,13 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [System.Web.Http.Route("api/datasets-simple")]
         [System.Web.Http.HttpGet]
-        public SearchResult DatasetsSimple()
+        public SearchResult DatasetsSimple(string organization = "")
         {
             try
             {
                 var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
 
-                Models.SearchResult searchResult = _metadataService.GetSimpleMetadata();
+                Models.SearchResult searchResult = _metadataService.GetSimpleMetadata(organization);
 
                 return new SearchResult(searchResult, urlHelper);
             }

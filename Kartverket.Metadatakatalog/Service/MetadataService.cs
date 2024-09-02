@@ -394,7 +394,7 @@ namespace Kartverket.Metadatakatalog.Service
             if(parameters.limit == 0)
                 parameters.limit = 10;
 
-            DateTime DateFrom = DateTime.Now.AddDays(-2);
+            DateTime DateFrom = DateTime.Now.AddYears(-120);
             DateTime DateTo = DateTime.Now;
 
             string dateFrom = DateFrom.ToString("yyyy-MM-dd");
@@ -408,7 +408,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             try
             {
-                _geoNorge = new GeoNorge("", "", "https://data.csw.met.no/?");
+                _geoNorge = new GeoNorge("", "", WebConfigurationManager.AppSettings["MetUrl"]);
 
                 ExpressionType[] expressionTypesFromDate = new ExpressionType[2];
                 expressionTypesFromDate[0] = new PropertyNameType { Text = new[] { "apiso:TempExtent_begin" } };
@@ -417,6 +417,16 @@ namespace Kartverket.Metadatakatalog.Service
                 ExpressionType[] expressionTypesToDate = new ExpressionType[2];
                 expressionTypesToDate[0] = new PropertyNameType { Text = new[] { "apiso:TempExtent_end" } };
                 expressionTypesToDate[1] = new LiteralType { Text = new[] { dateTo } };
+
+                BinaryComparisonOpType compareOperationToDate = null;
+
+                if (uuid.ToString() != "no.met:9fbe6a04-279c-46b8-a582-bb08f4b11794") // <gml:endPosition indeterminatePosition="unknown"/>
+                {
+                    compareOperationToDate = new BinaryComparisonOpType
+                    {
+                        expression = expressionTypesToDate
+                    };
+                }
 
                 var filters = new object[]
                           {
@@ -438,10 +448,7 @@ namespace Kartverket.Metadatakatalog.Service
                                        expression = expressionTypesFromDate
                                     }
                                     ,
-                                    new BinaryComparisonOpType
-                                    {
-                                        expression = expressionTypesToDate
-                                    }
+                                    compareOperationToDate
                                 },
 
                                 ItemsElementName = new ItemsChoiceType22[]
@@ -475,7 +482,10 @@ namespace Kartverket.Metadatakatalog.Service
 
                             distribution.Uuid = result.Uuid;
                             distribution.Type = result.HierarchyLevel;
-                            distribution.Title = result.DatePublished.Value.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture) + ": " + result.Title;
+                            if(uuid.ToString() == "no.met:9fbe6a04-279c-46b8-a582-bb08f4b11794")
+                                distribution.Title =  result.Title + " "  + result.DatePublished.Value.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+                            else
+                                distribution.Title = result.Title;
                             distribution.Organization = result.ContactOwner.Organization;
                             distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
                             distribution.Protocol = result.DistributionDetails?.Protocol != null ? Register.GetDistributionType(result.DistributionDetails?.Protocol) : "";
@@ -671,7 +681,7 @@ namespace Kartverket.Metadatakatalog.Service
             return null;
         }
 
-        public Models.SearchResult GetSimpleMetadata()
+        public Models.SearchResult GetSimpleMetadata(string organization)
         {
             var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
 
@@ -679,11 +689,16 @@ namespace Kartverket.Metadatakatalog.Service
             try
             {
                 SearchParameters searchParameters = new SearchParameters();
+                searchParameters.AddComplexFacetsIfMissing();
                 searchParameters.Limit = 1000;
                 searchParameters.Offset = 1;
+                if(!IsNullOrEmpty(organization))
+                    searchParameters.Facets.Add(new FacetParameter { Name = "organization", Value = organization });
 
                 SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
                 {
+                    Facet = searchParameters.BuildFacetParameters(),
+                    FilterQueries = searchParameters.BuildFilterQueries(),
                     Rows = searchParameters.Limit,
                     Start = searchParameters.Offset - 1, //solr is zero-based - we use one-based indexing in api
                     Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
@@ -741,7 +756,7 @@ namespace Kartverket.Metadatakatalog.Service
             var mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
             if(mdMetadataType == null) 
             {
-                _geoNorge = new GeoNorge("","", "https://data.csw.met.no/?");
+                _geoNorge = new GeoNorge("","", WebConfigurationManager.AppSettings["MetUrl"]);
                 mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
             }
             return mdMetadataType == null ? null : new SimpleMetadata(mdMetadataType);
@@ -1335,7 +1350,7 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.DataAccess = metadata?.Constraints?.AccessConstraints;
             metadata.QuantitativeResult = GetQuantitativeResult(metadata.QualitySpecifications);
 
-            if (!string.IsNullOrEmpty(metadata.ParentIdentifier) && metadata.ContactMetadata.Organization == "Meteorologisk institutt") { 
+            if (!string.IsNullOrEmpty(metadata.ParentIdentifier) && (metadata?.ContactMetadata?.Organization == "Meteorologisk institutt" || metadata?.ContactOwner?.Organization == "Meteorologisk institutt")) { 
                 metadata.MetMetadata = true;
                 metadata.MetadataXmlUrl = ConfigurationManager.AppSettings["KartkatalogenUrl"] + "api/get-external-metadata-xml/" + metadata.Uuid;
             }
@@ -1731,7 +1746,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public string GetExternalXml(string uuid)
         {
-            _geoNorge = new GeoNorge("", "", "https://data.csw.met.no/?");
+            _geoNorge = new GeoNorge("", "", WebConfigurationManager.AppSettings["MetUrl"]);
             var metadata = _geoNorge.GetRecordByUuid(uuid);
             var xml = SerializeUtil.SerializeToString(metadata);
             return xml;

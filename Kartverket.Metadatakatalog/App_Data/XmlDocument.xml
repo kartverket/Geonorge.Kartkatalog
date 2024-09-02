@@ -570,7 +570,7 @@
             Catalogue search for articles
             </summary>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.DatasetsSimple">
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.DatasetsSimple(System.String)">
             <summary>
             Get simple metadata list
             </summary>

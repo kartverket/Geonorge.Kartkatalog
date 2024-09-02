@@ -14,6 +14,6 @@ namespace Kartverket.Metadatakatalog.Service
         Models.SearchResult GetMetadataForNamespace(string @namespace, SearchParameters searchParameters);
         DatasetNameValidationResult ValidDatasetsName(string @namespace, string datasetName, string uuid);
         string GetExternalXml(string uuid);
-        SearchResult GetSimpleMetadata();
+        SearchResult GetSimpleMetadata(string organization);
     }
 }
