@@ -404,6 +404,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 dateFrom = parameters.datefrom.Value.ToString("yyyy-MM-dd");
                 dateTo = parameters.dateto.Value.ToString("yyyy-MM-dd");
+                parameters.limit = 50;
             }
 
             try
