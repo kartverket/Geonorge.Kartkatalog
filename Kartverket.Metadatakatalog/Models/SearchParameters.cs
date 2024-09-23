@@ -6,6 +6,10 @@ using SolrNet.Commands.Parameters;
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Resources;
+using Azure.AI.OpenAI;
+using Azure;
+using OpenAI.Embeddings;
+using System.Web.Configuration;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -211,6 +215,12 @@ namespace Kartverket.Metadatakatalog.Models
                 }
                 else
                 {
+                    var embedding = CreateEmbedding(titleText);
+                    //todo improve problem norwegian float decimal sign
+                    string vectorSearchString = "[" + string.Join("|", embedding.Vector.ToArray()) + "]";
+                    vectorSearchString = vectorSearchString.Replace(",", ".");
+                    vectorSearchString = vectorSearchString.Replace("|", ",");
+
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
                         new SolrQuery("uuid:"+ text + "^76"),
@@ -223,6 +233,7 @@ namespace Kartverket.Metadatakatalog.Models
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
+                        new SolrQuery("{!knn f=vector topK=3}" + vectorSearchString + "^80")                             
                     });
                 }
             }
@@ -235,6 +246,21 @@ namespace Kartverket.Metadatakatalog.Models
 
             Log.Debug("Query: " + query.ToString());
             return query;
+        }
+
+        private Embedding CreateEmbedding(string text)
+        {
+            string keyFromEnvironment = WebConfigurationManager.AppSettings["AI:EndpointApiKey"];
+
+            AzureOpenAIClient azureClient = new AzureOpenAIClient(new Uri(WebConfigurationManager.AppSettings["AI:EndpointUrl"]),
+            new AzureKeyCredential(keyFromEnvironment));
+
+            var embeddingClient = azureClient.GetEmbeddingClient(WebConfigurationManager.AppSettings["AI:EmbeddingName"]);
+
+            var embeddingResult = embeddingClient.GenerateEmbeddingAsync(text);
+            var vector = embeddingResult?.Result?.Value;
+
+            return vector;
         }
 
         public void SetFacetOpenData()

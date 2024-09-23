@@ -188,6 +188,9 @@ namespace Kartverket.Metadatakatalog.Models
         public string DistributionType { get; internal set; }
 
         public string ClassName { get; set; }
+
+        [SolrField("vector")]
+        public float[] Vector { get; set; }
     }
 
 }

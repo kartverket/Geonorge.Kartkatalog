@@ -758,7 +758,7 @@ namespace Kartverket.Metadatakatalog.Service
             if(mdMetadataType == null) 
             {
                 _geoNorge = new GeoNorge("","", WebConfigurationManager.AppSettings["MetUrl"]);
-                mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
+                try { mdMetadataType = _geoNorge.GetRecordByUuid(uuid);}catch (Exception ex) { }
             }
             return mdMetadataType == null ? null : new SimpleMetadata(mdMetadataType);
         }

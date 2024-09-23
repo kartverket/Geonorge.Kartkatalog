@@ -13,6 +13,10 @@ using System.Threading;
 using Kartverket.Metadatakatalog.Models.Translations;
 using System.Diagnostics;
 using System.Web.Configuration;
+using Azure.AI.OpenAI;
+using Azure;
+using OpenAI.Embeddings;
+using System.ClientModel;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -1355,7 +1359,6 @@ namespace Kartverket.Metadatakatalog.Service
         public MetadataIndexAllDoc ConvertIndexDocToMetadataAll(MetadataIndexDoc simpleMetadata)
         {
             var indexDoc = new MetadataIndexAllDoc();
-
             indexDoc.Uuid = simpleMetadata.Uuid;
             indexDoc.Title = simpleMetadata.Title;
             indexDoc.Abstract = simpleMetadata.Abstract;
@@ -1433,7 +1436,25 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.typenumber = simpleMetadata.typenumber;
             indexDoc.DatasetServices = simpleMetadata.DatasetServices;
 
+            var embedding = GetEmbedding(simpleMetadata);
+            indexDoc.Vector = embedding.Vector.ToArray();
+
             return indexDoc;
+        }
+
+        private Embedding GetEmbedding(MetadataIndexDoc metadata)
+        {
+            string keyFromEnvironment = WebConfigurationManager.AppSettings["AI:EndpointApiKey"];
+
+            AzureOpenAIClient azureClient = new AzureOpenAIClient(new Uri(WebConfigurationManager.AppSettings["AI:EndpointUrl"]),
+            new AzureKeyCredential(keyFromEnvironment));
+
+            var embeddingClient = azureClient.GetEmbeddingClient(WebConfigurationManager.AppSettings["AI:EmbeddingName"]);
+
+            var embeddingResult = embeddingClient.GenerateEmbeddingAsync(metadata.Title + " " + metadata.Abstract); //todo use more text or allText from solr?
+            var vector = embeddingResult?.Result?.Value;
+
+            return vector;
         }
 
         private static List<string> blackList = new List<string> { "Arctic SDI", "Barentswatch", "Åpne data" };
