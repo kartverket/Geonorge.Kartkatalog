@@ -215,7 +215,7 @@ namespace Kartverket.Metadatakatalog.Models
                 }
                 else
                 {
-                    var embedding = CreateEmbedding(titleText);
+                    var embedding = CreateEmbedding(Text);
                     //todo improve problem norwegian float decimal sign
                     string vectorSearchString = "[" + string.Join("|", embedding.Vector.ToArray()) + "]";
                     vectorSearchString = vectorSearchString.Replace(",", ".");
@@ -233,7 +233,7 @@ namespace Kartverket.Metadatakatalog.Models
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
-                        new SolrQuery("{!knn f=vector topK=3}" + vectorSearchString + "^80")                             
+                        new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80")                             
                     });
                 }
             }
