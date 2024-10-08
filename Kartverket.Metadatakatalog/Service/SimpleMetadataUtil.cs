@@ -1,9 +1,15 @@
 ﻿using GeoNorgeAPI;
+using Google.Apis.Auth.OAuth2;
+using Google.Cloud.AIPlatform.V1;
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Web.Configuration;
+using Value = Google.Protobuf.WellKnownTypes.Value;
+using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -22,6 +28,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public static readonly string NorgeskartUrl = WebConfigurationManager.AppSettings["NorgeskartUrl"];
         public static readonly bool MapOnlyWms = Convert.ToBoolean(WebConfigurationManager.AppSettings["MapOnlyWms"]);
+        public static readonly bool UseVectorSearch = System.Convert.ToBoolean(WebConfigurationManager.AppSettings["AI:UseVectorSearch"]);
 
         public static string ConvertHierarchyLevelToType(string hierarchyLevel)
         {
@@ -248,5 +255,78 @@ namespace Kartverket.Metadatakatalog.Service
 
             return t;
         }
+
+        /// <summary>  
+        /// Get Access Token From JSON Key Async  
+        /// </summary>  
+        /// <param name="jsonKeyFilePath">Path to your JSON Key file</param>  
+        /// <param name="scopes">Scopes required in access token</param>  
+        /// <returns>Access token as string Task</returns>  
+        public static string GetAccessTokenFromJSONKeyAsync(string jsonKeyFilePath, params string[] scopes)
+        {
+            using (var stream = new FileStream(jsonKeyFilePath, FileMode.Open, FileAccess.Read))
+            {
+                var credentials = GoogleCredential
+                    .FromStream(stream) // Loads key file  
+                    .CreateScoped(scopes) // Gathers scopes requested  
+                    .UnderlyingCredential // Gets the credentials  
+                    .GetAccessTokenForRequestAsync(); // Gets the Access Token  
+
+                return credentials.Result;
+            }
+        }
+
+        /// <summary>  
+        /// Get Access Token From JSON Key  
+        /// </summary>  
+        /// <param name="jsonKeyFilePath">Path to your JSON Key file</param>  
+        /// <param name="scopes">Scopes required in access token</param>  
+        /// <returns>Access token as string</returns>  
+        public static string GetAccessTokenFromJSONKey(string jsonKeyFilePath, params string[] scopes)
+        {
+            return GetAccessTokenFromJSONKeyAsync(jsonKeyFilePath, scopes);
+        }
+
+        public static float[] CreateVectorEmbeddings(string text)
+        {
+            var token = GetAccessTokenFromJSONKey(
+            WebConfigurationManager.AppSettings["AI:Key"],
+            "https://www.googleapis.com/auth/cloud-platform");
+
+            string projectId = WebConfigurationManager.AppSettings["AI:ProjectId"];
+            string locationId = WebConfigurationManager.AppSettings["AI:LocationId"]; //https://cloud.google.com/vertex-ai/docs/general/locations#europe
+            string publisher = "google";
+            string model = WebConfigurationManager.AppSettings["AI:Model"];
+
+            var client = new PredictionServiceClientBuilder
+            {
+                Endpoint = $"{locationId}-aiplatform.googleapis.com",
+                Credential = GoogleCredential.FromAccessToken(token)
+            }.Build();
+
+            // Configure the parent resource.
+            var endpoint = EndpointName.FromProjectLocationPublisherModel(projectId, locationId, publisher, model);
+
+            // Initialize request argument(s).
+            var instances = new List<Value>
+            {
+                Value.ForStruct( new Google.Protobuf.WellKnownTypes.Struct()
+                {
+                    Fields =
+                    {
+                        ["content"] = Value.ForString(text),
+                    }
+                })
+            };
+
+            // Make the request.
+            var response = client.Predict(endpoint, instances, null);
+
+            // Parse and return the embedding vector count.
+            var values = response.Predictions.First().StructValue.Fields["embeddings"].StructValue.Fields["values"].ListValue.Values;
+
+            return values.Select(n => (float)n.NumberValue).ToArray();
+        }
+
     }
 }

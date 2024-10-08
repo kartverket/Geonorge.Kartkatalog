@@ -1051,6 +1051,22 @@
             <param name="simpleMetadata">SimpleMetadata</param>
             <returns></returns>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Service.SimpleMetadataUtil.GetAccessTokenFromJSONKeyAsync(System.String,System.String[])">
+            <summary>  
+            Get Access Token From JSON Key Async  
+            </summary>  
+            <param name="jsonKeyFilePath">Path to your JSON Key file</param>  
+            <param name="scopes">Scopes required in access token</param>  
+            <returns>Access token as string Task</returns>  
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Service.SimpleMetadataUtil.GetAccessTokenFromJSONKey(System.String,System.String[])">
+            <summary>  
+            Get Access Token From JSON Key  
+            </summary>  
+            <param name="jsonKeyFilePath">Path to your JSON Key file</param>  
+            <param name="scopes">Scopes required in access token</param>  
+            <returns>Access token as string</returns>  
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Service.PlaceResolver.GetAreas">
             <summary>
             Gets fylke og kommuner fra register i et dictionary

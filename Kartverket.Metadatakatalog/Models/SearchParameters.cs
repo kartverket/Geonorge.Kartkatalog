@@ -6,10 +6,17 @@ using SolrNet.Commands.Parameters;
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Resources;
-using Azure.AI.OpenAI;
-using Azure;
-using OpenAI.Embeddings;
 using System.Web.Configuration;
+using Google.Cloud.AIPlatform.V1;
+using Value = Google.Protobuf.WellKnownTypes.Value;
+using System.Web;
+using Google.Apis.Auth.OAuth2;
+using Grpc.Core;
+using System.IO;
+using Google.Apis.Http;
+using System.Threading.Tasks;
+using GeoNorgeAPI;
+using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -215,9 +222,8 @@ namespace Kartverket.Metadatakatalog.Models
                 }
                 else
                 {
-                    var embedding = CreateEmbedding(Text);
-                    //todo improve problem norwegian float decimal sign
-                    string vectorSearchString = "[" + string.Join("|", embedding.Vector.ToArray()) + "]";
+                    var embedding = SimpleMetadataUtil.CreateVectorEmbeddings(Text);
+                    string vectorSearchString = "[" + string.Join("|", embedding) + "]";
                     vectorSearchString = vectorSearchString.Replace(",", ".");
                     vectorSearchString = vectorSearchString.Replace("|", ",");
 
@@ -233,7 +239,7 @@ namespace Kartverket.Metadatakatalog.Models
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
-                        new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80")                             
+                        SimpleMetadataUtil.UseVectorSearch ? new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80"): null,                            
                     });
                 }
             }
@@ -246,21 +252,6 @@ namespace Kartverket.Metadatakatalog.Models
 
             Log.Debug("Query: " + query.ToString());
             return query;
-        }
-
-        private Embedding CreateEmbedding(string text)
-        {
-            string keyFromEnvironment = WebConfigurationManager.AppSettings["AI:EndpointApiKey"];
-
-            AzureOpenAIClient azureClient = new AzureOpenAIClient(new Uri(WebConfigurationManager.AppSettings["AI:EndpointUrl"]),
-            new AzureKeyCredential(keyFromEnvironment));
-
-            var embeddingClient = azureClient.GetEmbeddingClient(WebConfigurationManager.AppSettings["AI:EmbeddingName"]);
-
-            var embeddingResult = embeddingClient.GenerateEmbeddingAsync(text);
-            var vector = embeddingResult?.Result?.Value;
-
-            return vector;
         }
 
         public void SetFacetOpenData()
