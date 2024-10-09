@@ -171,7 +171,9 @@ namespace Kartverket.Metadatakatalog.Models
         public ISolrQuery BuildQuery()
         {
             log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            ISolrQuery query;
+            ISolrQuery query = null;
+            try
+            {
             var text = Text;
             if (!string.IsNullOrEmpty(text))
             {
@@ -250,7 +252,12 @@ namespace Kartverket.Metadatakatalog.Models
                      listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_time*")
                 });
 
-            Log.Debug("Query: " + query.ToString());
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error in BuildQuery: " + ex.Message);
+            }
+
             return query;
         }
 
