@@ -37,7 +37,7 @@ namespace Kartverket.Metadatakatalog.Service
             RunSearch(1);
         }
 
-        public void RunIndexingOn(string uuid)
+        public void RunIndexingOn(string uuid, string action = null)
         {
            
             try
@@ -45,8 +45,10 @@ namespace Kartverket.Metadatakatalog.Service
 
                 MD_Metadata_Type metadata = _geoNorge.GetRecordByUuid(uuid);
 
-                if (metadata != null)
+                if (metadata != null && action != "delete")
                 {
+                    Log.Info(string.Format("Trying to remove and update document uuid={0} from index", uuid));
+
                     SetNorwegianIndexCores();
                     MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.NorwegianCode);
                     if(metadataIndexDoc != null) 
