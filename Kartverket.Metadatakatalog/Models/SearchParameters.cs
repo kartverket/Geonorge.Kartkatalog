@@ -225,9 +225,13 @@ namespace Kartverket.Metadatakatalog.Models
                 else
                 {
                     var embedding = SimpleMetadataUtil.CreateVectorEmbeddings(Text);
-                    string vectorSearchString = "[" + string.Join("|", embedding) + "]";
-                    vectorSearchString = vectorSearchString.Replace(",", ".");
-                    vectorSearchString = vectorSearchString.Replace("|", ",");
+                    string vectorSearchString = null;
+                    if(embedding != null) 
+                    {
+                        vectorSearchString = "[" + string.Join("|", embedding) + "]";
+                        vectorSearchString = vectorSearchString.Replace(",", ".");
+                        vectorSearchString = vectorSearchString.Replace("|", ",");
+                    }
 
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
@@ -241,7 +245,7 @@ namespace Kartverket.Metadatakatalog.Models
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
-                        SimpleMetadataUtil.UseVectorSearch ? new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80"): null,                            
+                        SimpleMetadataUtil.UseVectorSearch && vectorSearchString != null ? new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80"): null,                            
                     });
                 }
             }

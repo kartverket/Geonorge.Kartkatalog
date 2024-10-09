@@ -1438,8 +1438,9 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.Type = simpleMetadata.Type;
             indexDoc.typenumber = simpleMetadata.typenumber;
             indexDoc.DatasetServices = simpleMetadata.DatasetServices;
-            if(SimpleMetadataUtil.UseVectorSearch)
-                indexDoc.Vector = SimpleMetadataUtil.CreateVectorEmbeddings(simpleMetadata.Title + " " + simpleMetadata.Abstract);
+            var embeddings = SimpleMetadataUtil.CreateVectorEmbeddings(simpleMetadata.Title + " " + simpleMetadata.Abstract);
+            if (SimpleMetadataUtil.UseVectorSearch && embeddings != null)
+                indexDoc.Vector = embeddings;
 
             return indexDoc;
         }

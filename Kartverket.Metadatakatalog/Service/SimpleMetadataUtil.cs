@@ -29,6 +29,7 @@ namespace Kartverket.Metadatakatalog.Service
         public static readonly string NorgeskartUrl = WebConfigurationManager.AppSettings["NorgeskartUrl"];
         public static readonly bool MapOnlyWms = Convert.ToBoolean(WebConfigurationManager.AppSettings["MapOnlyWms"]);
         public static readonly bool UseVectorSearch = System.Convert.ToBoolean(WebConfigurationManager.AppSettings["AI:UseVectorSearch"]);
+        static log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public static string ConvertHierarchyLevelToType(string hierarchyLevel)
         {
@@ -289,6 +290,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public static float[] CreateVectorEmbeddings(string text)
         {
+            try { 
             var token = GetAccessTokenFromJSONKey(
             WebConfigurationManager.AppSettings["AI:Key"],
             "https://www.googleapis.com/auth/cloud-platform");
@@ -326,6 +328,13 @@ namespace Kartverket.Metadatakatalog.Service
             var values = response.Predictions.First().StructValue.Fields["embeddings"].StructValue.Fields["values"].ListValue.Values;
 
             return values.Select(n => (float)n.NumberValue).ToArray();
+
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error creating vector embeddings", e);
+                return null;
+            }
         }
 
     }
