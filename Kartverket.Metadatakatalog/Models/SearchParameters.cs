@@ -224,13 +224,16 @@ namespace Kartverket.Metadatakatalog.Models
                 }
                 else
                 {
-                    var embedding = SimpleMetadataUtil.CreateVectorEmbeddings(Text);
                     string vectorSearchString = null;
-                    if(embedding != null) 
-                    {
-                        vectorSearchString = "[" + string.Join("|", embedding) + "]";
-                        vectorSearchString = vectorSearchString.Replace(",", ".");
-                        vectorSearchString = vectorSearchString.Replace("|", ",");
+                    if(Text.Length > 2) 
+                    { 
+                        var embedding = SimpleMetadataUtil.CreateVectorEmbeddings(Text);
+                        if(embedding != null) 
+                        {
+                            vectorSearchString = "[" + string.Join("|", embedding) + "]";
+                            vectorSearchString = vectorSearchString.Replace(",", ".");
+                            vectorSearchString = vectorSearchString.Replace("|", ",");
+                        }
                     }
 
                     query = new SolrMultipleCriteriaQuery(new[]
