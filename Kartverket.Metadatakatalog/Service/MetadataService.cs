@@ -936,15 +936,6 @@ namespace Kartverket.Metadatakatalog.Service
                 if (distribution.CanShowMapUrl)
                     distribution.ServiceUuid = uuid;
             }
-            //Last ned
-            if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
-            {
-                if(distribution.Protocol == "OPeNDAP")
-                    distribution.DistributionUrl = simpleMetadataDistribution.URL + ".html";
-                else
-                    distribution.DistributionUrl = simpleMetadataDistribution.URL;
-                distribution.CanShowDownloadUrl = true;
-            }
             //Handlekurv
             if (SimpleMetadataUtil.ShowDownloadService(simpleMetadataDistribution))
             {
@@ -957,6 +948,15 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 distribution.GetCapabilitiesUrl = simpleMetadataDistribution.URL;
                 distribution.DistributionUrl = simpleMetadataDistribution.URL;
+            }
+            //Last ned
+            if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
+            {
+                if (distribution.Protocol == "OPeNDAP")
+                    distribution.DistributionUrl = simpleMetadataDistribution.URL + ".html";
+                else
+                    distribution.DistributionUrl = simpleMetadataDistribution.URL;
+                distribution.CanShowDownloadUrl = true;
             }
 
             //Nettside
