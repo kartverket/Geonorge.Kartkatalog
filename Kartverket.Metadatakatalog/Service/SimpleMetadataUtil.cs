@@ -138,7 +138,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         internal static bool ShowDownloadLink(SimpleDistribution simpleMetadataDistribution, string hierarchyLevel)
         {
-            return !string.IsNullOrWhiteSpace(simpleMetadataDistribution?.URL) && !string.IsNullOrWhiteSpace(simpleMetadataDistribution.Protocol) && (simpleMetadataDistribution.Protocol.Contains("WWW:DOWNLOAD") || simpleMetadataDistribution.Protocol.Contains("GEONORGE:FILEDOWNLOAD") || simpleMetadataDistribution.Protocol.Contains("OPENDAP:OPENDAP")) && (hierarchyLevel == "dataset" || hierarchyLevel == "series");
+            return !string.IsNullOrWhiteSpace(simpleMetadataDistribution?.URL) && !string.IsNullOrWhiteSpace(simpleMetadataDistribution.Protocol) && (simpleMetadataDistribution.Protocol.Contains("WWW:DOWNLOAD") || simpleMetadataDistribution.Protocol.Contains("GEONORGE:FILEDOWNLOAD") || simpleMetadataDistribution.Protocol.Contains("OPENDAP:OPENDAP") || simpleMetadataDistribution.Protocol.Contains("OPeNDAP")) && (hierarchyLevel == "dataset" || hierarchyLevel == "series");
         }
 
         // @TODO doNotCheckHierarchyLevel: check if multiple different methods are really necessary to check hierarchy level in this class and MetadataViewModel.
