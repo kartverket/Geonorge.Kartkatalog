@@ -1459,7 +1459,7 @@ namespace Kartverket.Metadatakatalog.Service
                         Organization = distribution.Organization,
                         Protocol = distribution.Protocol,
                         ProtocolName = Register.GetDistributionType(distribution.Protocol),
-                        URL = distribution.URL,
+                        URL = FixUrl(distribution.URL, distribution.Protocol),
                         Name = distribution.Name,
                         FormatName = distribution.FormatName,
                         FormatVersion = distribution.FormatVersion,
@@ -1470,6 +1470,14 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
             return output;
+        }
+
+        private string FixUrl(string url, string protocol)
+        {
+            if(protocol == "OPENDAP:OPENDAP")
+                url = url + ".html";
+
+            return url;
         }
 
         private string GetDistributionUrl(MetadataViewModel metadata)
