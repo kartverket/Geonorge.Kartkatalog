@@ -939,7 +939,10 @@ namespace Kartverket.Metadatakatalog.Service
             //Last ned
             if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
             {
-                distribution.DistributionUrl = simpleMetadataDistribution.URL;
+                if(distribution.Protocol == "OPeNDAP")
+                    distribution.DistributionUrl = simpleMetadataDistribution.URL + ".html";
+                else
+                    distribution.DistributionUrl = simpleMetadataDistribution.URL;
                 distribution.CanShowDownloadUrl = true;
             }
             //Handlekurv
