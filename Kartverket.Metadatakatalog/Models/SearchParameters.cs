@@ -6,6 +6,17 @@ using SolrNet.Commands.Parameters;
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Resources;
+using System.Web.Configuration;
+using Google.Cloud.AIPlatform.V1;
+using Value = Google.Protobuf.WellKnownTypes.Value;
+using System.Web;
+using Google.Apis.Auth.OAuth2;
+using Grpc.Core;
+using System.IO;
+using Google.Apis.Http;
+using System.Threading.Tasks;
+using GeoNorgeAPI;
+using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -160,7 +171,9 @@ namespace Kartverket.Metadatakatalog.Models
         public ISolrQuery BuildQuery()
         {
             log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            ISolrQuery query;
+            ISolrQuery query = null;
+            try
+            {
             var text = Text;
             if (!string.IsNullOrEmpty(text))
             {
@@ -211,6 +224,18 @@ namespace Kartverket.Metadatakatalog.Models
                 }
                 else
                 {
+                    string vectorSearchString = null;
+                    if(Text.Length > 2) 
+                    { 
+                        var embedding = SimpleMetadataUtil.CreateVectorEmbeddings(Text);
+                        if(embedding != null) 
+                        {
+                            vectorSearchString = "[" + string.Join("|", embedding) + "]";
+                            vectorSearchString = vectorSearchString.Replace(",", ".");
+                            vectorSearchString = vectorSearchString.Replace("|", ",");
+                        }
+                    }
+
                     query = new SolrMultipleCriteriaQuery(new[]
                     {
                         new SolrQuery("uuid:"+ text + "^76"),
@@ -223,6 +248,7 @@ namespace Kartverket.Metadatakatalog.Models
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
+                        SimpleMetadataUtil.UseVectorSearch && vectorSearchString != null ? new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80"): null,                            
                     });
                 }
             }
@@ -233,7 +259,12 @@ namespace Kartverket.Metadatakatalog.Models
                      listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_time*")
                 });
 
-            Log.Debug("Query: " + query.ToString());
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error in BuildQuery: " + ex.Message);
+            }
+
             return query;
         }
 

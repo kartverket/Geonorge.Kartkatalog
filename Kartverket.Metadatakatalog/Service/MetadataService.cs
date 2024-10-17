@@ -758,7 +758,7 @@ namespace Kartverket.Metadatakatalog.Service
             if(mdMetadataType == null) 
             {
                 _geoNorge = new GeoNorge("","", WebConfigurationManager.AppSettings["MetUrl"]);
-                mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
+                try { mdMetadataType = _geoNorge.GetRecordByUuid(uuid);}catch (Exception ex) { }
             }
             return mdMetadataType == null ? null : new SimpleMetadata(mdMetadataType);
         }
@@ -936,12 +936,6 @@ namespace Kartverket.Metadatakatalog.Service
                 if (distribution.CanShowMapUrl)
                     distribution.ServiceUuid = uuid;
             }
-            //Last ned
-            if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
-            {
-                distribution.DistributionUrl = simpleMetadataDistribution.URL;
-                distribution.CanShowDownloadUrl = true;
-            }
             //Handlekurv
             if (SimpleMetadataUtil.ShowDownloadService(simpleMetadataDistribution))
             {
@@ -954,6 +948,15 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 distribution.GetCapabilitiesUrl = simpleMetadataDistribution.URL;
                 distribution.DistributionUrl = simpleMetadataDistribution.URL;
+            }
+            //Last ned
+            if (SimpleMetadataUtil.ShowDownloadLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
+            {
+                if (distribution.Protocol == "OPeNDAP")
+                    distribution.DistributionUrl = simpleMetadataDistribution.URL + ".html";
+                else
+                    distribution.DistributionUrl = simpleMetadataDistribution.URL;
+                distribution.CanShowDownloadUrl = true;
             }
 
             //Nettside
@@ -1456,7 +1459,7 @@ namespace Kartverket.Metadatakatalog.Service
                         Organization = distribution.Organization,
                         Protocol = distribution.Protocol,
                         ProtocolName = Register.GetDistributionType(distribution.Protocol),
-                        URL = distribution.URL,
+                        URL = FixUrl(distribution.URL, distribution.Protocol),
                         Name = distribution.Name,
                         FormatName = distribution.FormatName,
                         FormatVersion = distribution.FormatVersion,
@@ -1467,6 +1470,14 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
             return output;
+        }
+
+        private string FixUrl(string url, string protocol)
+        {
+            if(protocol == "OPENDAP:OPENDAP")
+                url = url + ".html";
+
+            return url;
         }
 
         private string GetDistributionUrl(MetadataViewModel metadata)

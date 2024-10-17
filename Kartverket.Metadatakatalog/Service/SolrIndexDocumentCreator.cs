@@ -13,6 +13,13 @@ using System.Threading;
 using Kartverket.Metadatakatalog.Models.Translations;
 using System.Diagnostics;
 using System.Web.Configuration;
+using OpenAI.Embeddings;
+using System.ClientModel;
+using Google.Cloud.AIPlatform.V1;
+using Value = Google.Protobuf.WellKnownTypes.Value;
+using System.Web;
+using Google.Apis.Auth.OAuth2;
+using System.IO;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -1355,7 +1362,6 @@ namespace Kartverket.Metadatakatalog.Service
         public MetadataIndexAllDoc ConvertIndexDocToMetadataAll(MetadataIndexDoc simpleMetadata)
         {
             var indexDoc = new MetadataIndexAllDoc();
-
             indexDoc.Uuid = simpleMetadata.Uuid;
             indexDoc.Title = simpleMetadata.Title;
             indexDoc.Abstract = simpleMetadata.Abstract;
@@ -1432,6 +1438,9 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.Type = simpleMetadata.Type;
             indexDoc.typenumber = simpleMetadata.typenumber;
             indexDoc.DatasetServices = simpleMetadata.DatasetServices;
+            var embeddings = SimpleMetadataUtil.CreateVectorEmbeddings(simpleMetadata.Title + " " + simpleMetadata.Abstract);
+            if (SimpleMetadataUtil.UseVectorSearch && embeddings != null)
+                indexDoc.Vector = embeddings;
 
             return indexDoc;
         }
