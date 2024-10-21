@@ -835,7 +835,9 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.CanShowWebsiteUrl = metadata.ShowWebsiteLink();
 
             metadata.MapLink = metadata.DistributionUrl; //metadata.MapUrl();
-            if(metadata.Type == "dataset") 
+            metadata.DistributionUrl = FixDistributionUrl(metadata);
+
+            if (metadata.Type == "dataset") 
             {
                 var mapLink = metadata.GetMapLinkFromSelf();
                 if (!string.IsNullOrEmpty(mapLink)) { 
@@ -853,6 +855,20 @@ namespace Kartverket.Metadatakatalog.Service
                 metadata.Operations = simpleMetadata.ContainOperations;
 
             return metadata;
+        }
+
+        private string FixDistributionUrl(MetadataViewModel metadata)
+        {
+            if (metadata.DistributionsFormats != null)
+            {
+                foreach (var distro in metadata.DistributionsFormats)
+                {
+                    if (distro.Protocol == "WWW:LINK-1.0-http--link")
+                        return distro.URL;
+                }
+            }
+
+            return metadata.DistributionUrl;
         }
 
         private Serie GetSerieForDataset(string serie)
@@ -1491,9 +1507,6 @@ namespace Kartverket.Metadatakatalog.Service
                 if (distributionDetail != null && !string.IsNullOrWhiteSpace(distributionDetail.Protocol) && distributionDetail.Protocol.Contains("GEONORGE:DOWNLOAD"))
                     distributionDetailsUrl = distributionDetail.URL;
             }
-
-            if(!string.IsNullOrEmpty(distributionDetailsUrl) && distributionDetailsUrl.EndsWith(".nc"))
-                distributionDetailsUrl = distributionDetailsUrl + ".html";
 
             return distributionDetailsUrl;
         }
