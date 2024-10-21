@@ -316,8 +316,14 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowWebsiteLink()
         {
-            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains("WWW:LINK") ) return true;
-            else return false;
+            if(DistributionFormats != null) 
+            { 
+                foreach (var distribution in DistributionsFormats)
+                {
+                    if(!string.IsNullOrWhiteSpace(distribution.URL) && !string.IsNullOrWhiteSpace(distribution.Protocol) && distribution.Protocol.Contains("WWW:LINK") ) return true;
+                }
+            }
+            return false;
         }
 
         public bool IsService()

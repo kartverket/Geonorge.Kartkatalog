@@ -1482,16 +1482,20 @@ namespace Kartverket.Metadatakatalog.Service
 
         private string GetDistributionUrl(MetadataViewModel metadata)
         {
+            var distributionDetailsUrl = metadata?.DistributionDetails?.URL;
             if (metadata.DistributionDetails != null && !string.IsNullOrWhiteSpace(metadata.DistributionDetails.Protocol) && metadata.DistributionDetails.Protocol.Contains("GEONORGE:DOWNLOAD"))
-                return metadata.DistributionDetails.URL;
+                distributionDetailsUrl = metadata.DistributionDetails.URL;
 
             foreach (var distributionDetail in metadata.DistributionsFormats)
             {
                 if (distributionDetail != null && !string.IsNullOrWhiteSpace(distributionDetail.Protocol) && distributionDetail.Protocol.Contains("GEONORGE:DOWNLOAD"))
-                    return distributionDetail.URL;
+                    distributionDetailsUrl = distributionDetail.URL;
             }
 
-            return metadata?.DistributionDetails?.URL;
+            if(!string.IsNullOrEmpty(distributionDetailsUrl) && distributionDetailsUrl.EndsWith(".nc"))
+                distributionDetailsUrl = distributionDetailsUrl + ".html";
+
+            return distributionDetailsUrl;
         }
 
         private string GetResourceReferenceCode(SimpleResourceReference resourceReference)
