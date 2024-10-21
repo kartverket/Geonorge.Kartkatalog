@@ -287,6 +287,21 @@ namespace Kartverket.Metadatakatalog.Service
                     }
             }
 
+            //Fix OPeNDAP
+            if (metadata.Distributions.SelfDistribution != null && metadata?.ContactOwner?.Organization == "Norsk institutt for vannforskning") 
+            {
+               foreach(var distro in metadata.Distributions.SelfDistribution)
+                {
+                   if(distro.Protocol == "OPeNDAP")
+                   {
+                        metadata.Distributions.RelatedDownloadServices.Add(distro);
+                        metadata.Distributions.SelfDistribution.Remove(distro);
+                        break;
+                   }
+               }
+            }
+                
+
             //Serie
             if (metadata.HierarchyLevel == "series")
             {
@@ -859,7 +874,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         private string FixDistributionUrl(MetadataViewModel metadata)
         {
-            if (metadata.DistributionsFormats != null)
+            if (metadata?.ContactOwner?.Organization == "Norsk institutt for vannforskning" && metadata.DistributionsFormats != null)
             {
                 foreach (var distro in metadata.DistributionsFormats)
                 {
