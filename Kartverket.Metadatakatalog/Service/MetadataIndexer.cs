@@ -5,5 +5,6 @@
         void RunIndexing();
         void RunIndexingOn(string uuid, string action = null);
         void RunReIndexing();
+        void RemoveUuid(string uuid);
     }
 }
