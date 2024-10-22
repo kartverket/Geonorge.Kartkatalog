@@ -324,26 +324,49 @@ namespace Kartverket.Metadatakatalog.Service
                         {
                             distributionsNewList.Add(distribution.Organization + "|" + distribution.Protocol + "|" + distribution.URL + "|" + distribution.FormatName + "|" + distribution.FormatVersion  + "|" + distribution.Name + "|" + distribution.UnitsOfDistribution + "|" + distribution.EnglishUnitsOfDistribution);
                         }
+
+                        var geonorgeDownloadProtocol = "";
+                        var geonorgeDownloadUrl = "";
+
+                        var downloadProtocol = "";
+                        var downloadUrl = "";
+
+                        var geonorgeFileProtocol = "";
+                        var geonorgeFileUrl = "";
+
                         foreach (var distribution in simpleMetadata.DistributionsFormats)
                         {
                             if (distribution.Protocol == "GEONORGE:DOWNLOAD")
                             {
-                                indexDoc.DistributionProtocol = distribution.Protocol;
-                                indexDoc.DistributionUrl = distribution.URL;
-                                break;
+                                geonorgeDownloadProtocol = distribution.Protocol;
+                                geonorgeDownloadUrl = distribution.URL;
                             }
                             else if (distribution.Protocol == "WWW:DOWNLOAD-1.0-http--download")
                             {
-                                indexDoc.DistributionProtocol = distribution.Protocol;
-                                indexDoc.DistributionUrl = distribution.URL;
-                                break;
+                                downloadProtocol = distribution.Protocol;
+                                downloadUrl = distribution.URL;
                             }
                             else if (distribution.Protocol == "GEONORGE:FILEDOWNLOAD")
                             {
-                                indexDoc.DistributionProtocol = distribution.Protocol;
-                                indexDoc.DistributionUrl = distribution.URL;
-                                break;
+                                geonorgeFileProtocol = distribution.Protocol;
+                                geonorgeFileUrl = distribution.URL;
                             }
+                        }
+
+                        if (!string.IsNullOrEmpty(geonorgeDownloadProtocol)) 
+                        { 
+                            indexDoc.DistributionProtocol = geonorgeDownloadProtocol;
+                            indexDoc.DistributionUrl = geonorgeDownloadUrl;
+                        }
+                        else if (!string.IsNullOrEmpty(downloadProtocol))
+                        {
+                            indexDoc.DistributionProtocol = downloadProtocol;
+                            indexDoc.DistributionUrl = downloadUrl;
+                        }
+                        else if (!string.IsNullOrEmpty(geonorgeFileProtocol))
+                        {
+                            indexDoc.DistributionProtocol = geonorgeFileProtocol;
+                            indexDoc.DistributionUrl = geonorgeFileUrl;
                         }
 
                         indexDoc.Distributions = distributionsNewList.ToList();
