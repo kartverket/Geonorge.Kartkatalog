@@ -287,6 +287,21 @@ namespace Kartverket.Metadatakatalog.Service
                     }
             }
 
+            //Fix OPeNDAP
+            if (metadata.Distributions.SelfDistribution != null && metadata?.ContactOwner?.Organization == "Norsk institutt for vannforskning") 
+            {
+               foreach(var distro in metadata.Distributions.SelfDistribution)
+                {
+                   if(distro.Protocol == "OPeNDAP")
+                   {
+                        metadata.Distributions.RelatedDownloadServices.Add(distro);
+                        metadata.Distributions.SelfDistribution.Remove(distro);
+                        break;
+                   }
+               }
+            }
+                
+
             //Serie
             if (metadata.HierarchyLevel == "series")
             {
@@ -835,7 +850,9 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.CanShowWebsiteUrl = metadata.ShowWebsiteLink();
 
             metadata.MapLink = metadata.DistributionUrl; //metadata.MapUrl();
-            if(metadata.Type == "dataset") 
+            metadata.DistributionUrl = FixDistributionUrl(metadata);
+
+            if (metadata.Type == "dataset") 
             {
                 var mapLink = metadata.GetMapLinkFromSelf();
                 if (!string.IsNullOrEmpty(mapLink)) { 
@@ -853,6 +870,20 @@ namespace Kartverket.Metadatakatalog.Service
                 metadata.Operations = simpleMetadata.ContainOperations;
 
             return metadata;
+        }
+
+        private string FixDistributionUrl(MetadataViewModel metadata)
+        {
+            if (metadata?.ContactOwner?.Organization == "Norsk institutt for vannforskning" && metadata.DistributionsFormats != null)
+            {
+                foreach (var distro in metadata.DistributionsFormats)
+                {
+                    if (distro.Protocol == "WWW:LINK-1.0-http--link")
+                        return distro.URL;
+                }
+            }
+
+            return metadata.DistributionUrl;
         }
 
         private Serie GetSerieForDataset(string serie)
@@ -1482,16 +1513,17 @@ namespace Kartverket.Metadatakatalog.Service
 
         private string GetDistributionUrl(MetadataViewModel metadata)
         {
+            var distributionDetailsUrl = metadata?.DistributionDetails?.URL;
             if (metadata.DistributionDetails != null && !string.IsNullOrWhiteSpace(metadata.DistributionDetails.Protocol) && metadata.DistributionDetails.Protocol.Contains("GEONORGE:DOWNLOAD"))
-                return metadata.DistributionDetails.URL;
+                distributionDetailsUrl = metadata.DistributionDetails.URL;
 
             foreach (var distributionDetail in metadata.DistributionsFormats)
             {
                 if (distributionDetail != null && !string.IsNullOrWhiteSpace(distributionDetail.Protocol) && distributionDetail.Protocol.Contains("GEONORGE:DOWNLOAD"))
-                    return distributionDetail.URL;
+                    distributionDetailsUrl = distributionDetail.URL;
             }
 
-            return metadata?.DistributionDetails?.URL;
+            return distributionDetailsUrl;
         }
 
         private string GetResourceReferenceCode(SimpleResourceReference resourceReference)
