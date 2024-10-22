@@ -145,5 +145,33 @@ namespace Kartverket.Metadatakatalog.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
+        /// <summary>
+        /// Remove metadata uuid from index
+        /// </summary>
+        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [System.Web.Http.Route("api/remove-metadata/{uuid}")]
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult Remove(string uuid)
+        {
+            HttpStatusCode statusCode;
+
+            try
+            {
+                Log.Info("Remove metadata uuid: " + uuid);
+                DateTime start = DateTime.Now;
+
+                _indexer.RemoveUuid(uuid);
+
+                statusCode = HttpStatusCode.OK;
+
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception while removing metadata.", e);
+                statusCode = HttpStatusCode.BadRequest;
+            }
+            return StatusCode(statusCode);
+        }
+
     }
 }

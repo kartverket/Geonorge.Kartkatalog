@@ -511,6 +511,11 @@
             Run metadata re-indexing
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.Remove(System.String)">
+            <summary>
+            Remove metadata uuid from index
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApplicationController.Index(Kartverket.Metadatakatalog.Models.SearchParameters)">
             <summary>
             Shows "Kartløsninger". Contains metadata of type "Application"

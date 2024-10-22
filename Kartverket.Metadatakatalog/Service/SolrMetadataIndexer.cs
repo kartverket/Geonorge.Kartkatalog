@@ -226,6 +226,15 @@ namespace Kartverket.Metadatakatalog.Service
             RunSearch(1);
         }
 
+        public void RemoveUuid(string uuid)
+        {
+            SetNorwegianIndexCores();
+            RemoveIndexDocument(uuid);
+
+            SetEnglishIndexCores();
+            RemoveIndexDocument(uuid);
+        }
+
         private void DeleteIndexes()
         {
             _indexer.DeleteIndex();
