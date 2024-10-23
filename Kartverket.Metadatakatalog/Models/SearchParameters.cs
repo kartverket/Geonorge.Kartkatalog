@@ -226,13 +226,16 @@ namespace Kartverket.Metadatakatalog.Models
                 {
                     string vectorSearchString = null;
                     if(Text.Length > 2) 
-                    { 
-                        var embedding = SimpleMetadataUtil.CreateVectorEmbeddings(Text);
-                        if(embedding != null) 
-                        {
-                            vectorSearchString = "[" + string.Join("|", embedding) + "]";
-                            vectorSearchString = vectorSearchString.Replace(",", ".");
-                            vectorSearchString = vectorSearchString.Replace("|", ",");
+                    {
+                        if (SimpleMetadataUtil.UseVectorSearch) 
+                        { 
+                            var embedding = SimpleMetadataUtil.CreateVectorEmbeddings(Text);
+                            if(embedding != null) 
+                            {
+                                vectorSearchString = "[" + string.Join("|", embedding) + "]";
+                                vectorSearchString = vectorSearchString.Replace(",", ".");
+                                vectorSearchString = vectorSearchString.Replace("|", ",");
+                            }
                         }
                     }
 
