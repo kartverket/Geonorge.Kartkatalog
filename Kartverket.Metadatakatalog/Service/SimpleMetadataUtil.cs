@@ -290,49 +290,57 @@ namespace Kartverket.Metadatakatalog.Service
 
         public static float[] CreateVectorEmbeddings(string text)
         {
-            try { 
-            var token = GetAccessTokenFromJSONKey(
-            WebConfigurationManager.AppSettings["AI:Key"],
-            "https://www.googleapis.com/auth/cloud-platform");
-
-            string projectId = WebConfigurationManager.AppSettings["AI:ProjectId"];
-            string locationId = WebConfigurationManager.AppSettings["AI:LocationId"]; //https://cloud.google.com/vertex-ai/docs/general/locations#europe
-            string publisher = "google";
-            string model = WebConfigurationManager.AppSettings["AI:Model"];
-
-            var client = new PredictionServiceClientBuilder
+            if (SimpleMetadataUtil.UseVectorSearch)
             {
-                Endpoint = $"{locationId}-aiplatform.googleapis.com",
-                Credential = GoogleCredential.FromAccessToken(token)
-            }.Build();
-
-            // Configure the parent resource.
-            var endpoint = EndpointName.FromProjectLocationPublisherModel(projectId, locationId, publisher, model);
-
-            // Initialize request argument(s).
-            var instances = new List<Value>
-            {
-                Value.ForStruct( new Google.Protobuf.WellKnownTypes.Struct()
+                try
                 {
-                    Fields =
+                    var token = GetAccessTokenFromJSONKey(
+                    WebConfigurationManager.AppSettings["AI:Key"],
+                    "https://www.googleapis.com/auth/cloud-platform");
+
+                    string projectId = WebConfigurationManager.AppSettings["AI:ProjectId"];
+                    string locationId = WebConfigurationManager.AppSettings["AI:LocationId"]; //https://cloud.google.com/vertex-ai/docs/general/locations#europe
+                    string publisher = "google";
+                    string model = WebConfigurationManager.AppSettings["AI:Model"];
+
+                    var client = new PredictionServiceClientBuilder
                     {
-                        ["content"] = Value.ForString(text),
-                    }
-                })
-            };
+                        Endpoint = $"{locationId}-aiplatform.googleapis.com",
+                        Credential = GoogleCredential.FromAccessToken(token)
+                    }.Build();
 
-            // Make the request.
-            var response = client.Predict(endpoint, instances, null);
+                    // Configure the parent resource.
+                    var endpoint = EndpointName.FromProjectLocationPublisherModel(projectId, locationId, publisher, model);
 
-            // Parse and return the embedding vector count.
-            var values = response.Predictions.First().StructValue.Fields["embeddings"].StructValue.Fields["values"].ListValue.Values;
+                    // Initialize request argument(s).
+                    var instances = new List<Value>
+                {
+                    Value.ForStruct( new Google.Protobuf.WellKnownTypes.Struct()
+                    {
+                        Fields =
+                        {
+                            ["content"] = Value.ForString(text),
+                        }
+                    })
+                };
 
-            return values.Select(n => (float)n.NumberValue).ToArray();
+                    // Make the request.
+                    var response = client.Predict(endpoint, instances, null);
 
+                    // Parse and return the embedding vector count.
+                    var values = response.Predictions.First().StructValue.Fields["embeddings"].StructValue.Fields["values"].ListValue.Values;
+
+                    return values.Select(n => (float)n.NumberValue).ToArray();
+
+                }
+                catch (Exception e)
+                {
+                    Log.Error("Error creating vector embeddings", e);
+                    return null;
+                }
             }
-            catch (Exception e)
+            else
             {
-                Log.Error("Error creating vector embeddings", e);
                 return null;
             }
         }
