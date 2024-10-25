@@ -10,6 +10,9 @@ using System.Text;
 using System.Web.Configuration;
 using Value = Google.Protobuf.WellKnownTypes.Value;
 using System.Linq;
+using System.Net.Http;
+using System.Net;
+using Google.Api.Gax.Grpc;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -30,6 +33,7 @@ namespace Kartverket.Metadatakatalog.Service
         public static readonly bool MapOnlyWms = Convert.ToBoolean(WebConfigurationManager.AppSettings["MapOnlyWms"]);
         public static readonly bool UseVectorSearch = System.Convert.ToBoolean(WebConfigurationManager.AppSettings["AI:UseVectorSearch"]);
         static log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly string ProxyServer = WebConfigurationManager.AppSettings["ProxyServer"];
 
         public static string ConvertHierarchyLevelToType(string hierarchyLevel)
         {
@@ -306,7 +310,8 @@ namespace Kartverket.Metadatakatalog.Service
                     var client = new PredictionServiceClientBuilder
                     {
                         Endpoint = $"{locationId}-aiplatform.googleapis.com",
-                        Credential = GoogleCredential.FromAccessToken(token)
+                        Credential = GoogleCredential.FromAccessToken(token),
+                        GrpcAdapter = !string.IsNullOrEmpty(ProxyServer) ? GenerateAdapter() : null
                     }.Build();
 
                     // Configure the parent resource.
@@ -314,15 +319,15 @@ namespace Kartverket.Metadatakatalog.Service
 
                     // Initialize request argument(s).
                     var instances = new List<Value>
-                {
-                    Value.ForStruct( new Google.Protobuf.WellKnownTypes.Struct()
                     {
-                        Fields =
+                        Value.ForStruct( new Google.Protobuf.WellKnownTypes.Struct()
                         {
-                            ["content"] = Value.ForString(text),
-                        }
-                    })
-                };
+                            Fields =
+                            {
+                                ["content"] = Value.ForString(text),
+                            }
+                        })
+                    };
 
                     // Make the request.
                     var response = client.Predict(endpoint, instances, null);
@@ -345,5 +350,28 @@ namespace Kartverket.Metadatakatalog.Service
             }
         }
 
+        private static GrpcNetClientAdapter GenerateAdapter()
+        {
+            // Step 1: Create a WebProxy instance with the proxy settings
+            var proxy = new WebProxy(ProxyServer);
+
+            // Step 2: Configure HttpClientHandler to use the proxy
+            var httpClientHandler = new HttpClientHandler
+            {
+                Proxy = proxy,
+                UseProxy = true,
+                // Optionally, you can set UseDefaultCredentials to true if needed
+                UseDefaultCredentials = true,
+                // Ensure HTTP/2 is used
+                DefaultProxyCredentials = CredentialCache.DefaultCredentials
+            };
+
+            // Step 3: Set up GrpcNetClientAdapter with the HttpClientHandler
+            var adapter = Google.Api.Gax.Grpc.GrpcNetClientAdapter.Default.WithAdditionalOptions(options =>
+            {
+                options.HttpHandler = httpClientHandler;
+            });
+            return adapter;
+        }
     }
 }
