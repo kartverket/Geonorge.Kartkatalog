@@ -64,29 +64,30 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 object infoForDebug = "Search for: " + text;
                 try
                 {
-                    var token = GetAccessTokenFromJSONKey(
-                    WebConfigurationManager.AppSettings["AI:Key"],
-                    "https://www.googleapis.com/auth/cloud-platform");
-
-                    string projectId = WebConfigurationManager.AppSettings["AI:ProjectId"];
-                    string locationId = WebConfigurationManager.AppSettings["AI:LocationId"];
-                    string model = WebConfigurationManager.AppSettings["AI:Model"];
-
-                    var client = _httpClientFactory.GetHttpClient();
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {token}");
-                    var endpoint = $"https://{locationId}-aiplatform.googleapis.com/v1/projects/{projectId}/locations/{locationId}/publishers/google/models/{model}:predict";
-
                     var inputRequest = new
                     {
                         instances = new[]
-                        {
+{
                             new
                             {
                                 content  = text
                             }
                         }
                     };
+
+                    string projectId = WebConfigurationManager.AppSettings["AI:ProjectId"];
+                    string locationId = WebConfigurationManager.AppSettings["AI:LocationId"];
+                    string model = WebConfigurationManager.AppSettings["AI:Model"];
+
+                    var endpoint = $"https://{locationId}-aiplatform.googleapis.com/v1/projects/{projectId}/locations/{locationId}/publishers/google/models/{model}:predict";
+
+                    var token = GetAccessTokenFromJSONKey(
+                    WebConfigurationManager.AppSettings["AI:Key"],
+                    "https://www.googleapis.com/auth/cloud-platform");
+
+                    var client = _httpClientFactory.GetHttpClient();
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {token}");
 
                     var response = client.PostAsJsonAsync(endpoint, inputRequest).Result;
                     var result = response.Content.ReadAsStringAsync().Result;
