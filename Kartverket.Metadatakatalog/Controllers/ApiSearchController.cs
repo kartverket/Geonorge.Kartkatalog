@@ -64,8 +64,9 @@ namespace Kartverket.Metadatakatalog.Controllers
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IMetadataService _metadataService;
+        private readonly IAiService _aiService;
 
-        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll, IArticleService articleService)
+        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll, IArticleService articleService, IAiService aiService)
         {
             _searchService = searchService;
             _metadataService = metadataService;
@@ -73,6 +74,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             _serviceDirectoryService = serviceDirectoryService;
             _searchServiceAll = searchServiceAll;
             _articleService = articleService;
+            _aiService = aiService;
         }
 
         /// <summary>
@@ -249,7 +251,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             try
             {
-                Models.SearchParameters searchParameters = new Models.SearchParameters();
+                Models.SearchParameters searchParameters = new Models.SearchParameters(_aiService);
                 searchParameters.Limit = limit;
                 searchParameters.Offset = offset;
 
@@ -573,15 +575,16 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         private Models.SearchParameters CreateSearchParameters(SearchParameters parameters)
         {
-            return new Models.SearchParameters
-            {
-                Text = parameters.text,
-                Facets = CreateFacetParameters(parameters.facets),
-                Offset = parameters.offset,
-                Limit = parameters.limit,
-                orderby = parameters.orderby,
-                listhidden = parameters.listhidden
-            };
+            var model = new Models.SearchParameters(_aiService);
+            model.Text = parameters.text;
+            model.Facets = CreateFacetParameters(parameters.facets);
+            model.Offset = parameters.offset;
+            model.Limit = parameters.limit;
+            model.orderby = parameters.orderby;
+            model.listhidden = parameters.listhidden;
+
+            return model;
+           
         }
 
         private Models.Article.SearchParameters CreateSearchParameters(Models.Api.Article.SearchParameters parameters)

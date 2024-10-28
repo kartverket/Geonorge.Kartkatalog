@@ -15,11 +15,11 @@ using System.Diagnostics;
 using System.Web.Configuration;
 using OpenAI.Embeddings;
 using System.ClientModel;
-using Google.Cloud.AIPlatform.V1;
 using Value = Google.Protobuf.WellKnownTypes.Value;
 using System.Web;
 using Google.Apis.Auth.OAuth2;
 using System.IO;
+using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -35,13 +35,15 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly GeoNetworkUtil _geoNetworkUtil;
         private static readonly HttpClient _httpClient = new HttpClient();
         public static readonly bool MapOnlyWms = System.Convert.ToBoolean(WebConfigurationManager.AppSettings["MapOnlyWms"]);
+        private readonly IAiService _aiService;
 
-        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil)
+        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil, IAiService aiService)
         {
             _organizationService = organizationService;
             _themeResolver = themeResolver;
             _geoNetworkUtil = geoNetworkUtil;
             _placeResolver = new PlaceResolver();
+            _aiService = aiService;
         }
 
         public List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems, IGeoNorge geoNorge, string culture)
@@ -1461,7 +1463,7 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.Type = simpleMetadata.Type;
             indexDoc.typenumber = simpleMetadata.typenumber;
             indexDoc.DatasetServices = simpleMetadata.DatasetServices;
-            var embeddings = SimpleMetadataUtil.CreateVectorEmbeddings(simpleMetadata.Title + " " + simpleMetadata.Abstract);
+            var embeddings = _aiService.GetPredictions(simpleMetadata.Title + " " + simpleMetadata.Abstract);
             if (SimpleMetadataUtil.UseVectorSearch && embeddings != null)
                 indexDoc.Vector = embeddings;
 

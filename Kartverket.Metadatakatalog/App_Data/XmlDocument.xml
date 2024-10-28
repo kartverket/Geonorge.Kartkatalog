@@ -1048,15 +1048,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Service.MetadataService.CreateDistributionRows(System.String,GeoNorgeAPI.SimpleMetadata)">
-            <summary>
-            Add rows for each distribution url. Update row if it's the same url.
-            </summary>
-            <param name="uuid">Metadata uuid</param>
-            <param name="simpleMetadata">SimpleMetadata</param>
-            <returns></returns>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Service.SimpleMetadataUtil.GetAccessTokenFromJSONKeyAsync(System.String,System.String[])">
+        <member name="M:Kartverket.Metadatakatalog.Service.Search.AiService.GetAccessTokenFromJSONKeyAsync(System.String,System.String[])">
             <summary>  
             Get Access Token From JSON Key Async  
             </summary>  
@@ -1064,13 +1056,21 @@
             <param name="scopes">Scopes required in access token</param>  
             <returns>Access token as string Task</returns>  
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Service.SimpleMetadataUtil.GetAccessTokenFromJSONKey(System.String,System.String[])">
+        <member name="M:Kartverket.Metadatakatalog.Service.Search.AiService.GetAccessTokenFromJSONKey(System.String,System.String[])">
             <summary>  
             Get Access Token From JSON Key  
             </summary>  
             <param name="jsonKeyFilePath">Path to your JSON Key file</param>  
             <param name="scopes">Scopes required in access token</param>  
             <returns>Access token as string</returns>  
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Service.MetadataService.CreateDistributionRows(System.String,GeoNorgeAPI.SimpleMetadata)">
+            <summary>
+            Add rows for each distribution url. Update row if it's the same url.
+            </summary>
+            <param name="uuid">Metadata uuid</param>
+            <param name="simpleMetadata">SimpleMetadata</param>
+            <returns></returns>
         </member>
         <member name="M:Kartverket.Metadatakatalog.Service.PlaceResolver.GetAreas">
             <summary>

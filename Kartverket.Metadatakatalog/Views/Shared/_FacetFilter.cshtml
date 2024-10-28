@@ -10,52 +10,52 @@
     var Facets = Model.Result.Facets;
     List<SearchResultFacetValueViewModel> orderedList = new List<SearchResultFacetValueViewModel>();
 
-    var themeFacets = Facets.First(f => f.FacetField == "theme");
-    var themes = themeFacets.FacetResults;
+    var themeFacets = Facets.FirstOrDefault(f => f.FacetField == "theme");
+    var themes = themeFacets != null ? themeFacets.FacetResults : null;
 
-    var typeFacets = Facets.First(f => f.FacetField == "type");
-    var types = typeFacets.FacetResults;
+    var typeFacets = Facets.FirstOrDefault(f => f.FacetField == "type");
+    var types = typeFacets != null ? typeFacets.FacetResults : null;
 
-    var nationalinitiativeFacets = Facets.First(f => f.FacetField == "nationalinitiative");
-    var nationalinitiatives = nationalinitiativeFacets.FacetResults;
+    var nationalinitiativeFacets = Facets.FirstOrDefault(f => f.FacetField == "nationalinitiative");
+    var nationalinitiatives = nationalinitiativeFacets != null ? nationalinitiativeFacets.FacetResults : null;
 
-    var areaFacets = Facets.First(f => f.FacetField == "area");
-    var areas = areaFacets.FacetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.AreaLinkName(Model.areaDictionary)).ToList();
+    var areaFacets = Facets.FirstOrDefault(f => f.FacetField == "area");
+    var areas = areaFacets != null ? areaFacets.FacetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.AreaLinkName(Model.areaDictionary)).ToList() : null;
 
-    var organizationFacets = Facets.First(f => f.FacetField == "organization");
-    var organizations = organizationFacets.FacetResults;
+    var organizationFacets = Facets.FirstOrDefault(f => f.FacetField == "organization");
+    var organizations = organizationFacets != null ? organizationFacets.FacetResults : null;
 
-    var distributionProtocolFacets = Facets.First(f => f.FacetField == "DistributionProtocols");
-    var distributionProtocols = distributionProtocolFacets.FacetResults.Where(r => r.Name != "GEONORGE:OFFLINE");
+    var distributionProtocolFacets = Facets.FirstOrDefault(f => f.FacetField == "DistributionProtocols");
+    var distributionProtocols = distributionProtocolFacets != null ? distributionProtocolFacets.FacetResults.Where(r => r.Name != "GEONORGE:OFFLINE") : null;
 
-    var dataAccessFacets = Facets.First(f => f.FacetField == "dataaccess");
-    var dataAccesses = dataAccessFacets.FacetResults;
+    var dataAccessFacets = Facets.FirstOrDefault(f => f.FacetField == "dataaccess");
+    var dataAccesses = dataAccessFacets != null ? dataAccessFacets.FacetResults : null;
 
 }
 
 @{var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer(); }
 
 @{ int datasetCount = 0;
-    var datasetType = types.Where(d => d.Name == "dataset").FirstOrDefault();
+    var datasetType = types != null ? types.Where(d => d.Name == "dataset").FirstOrDefault() : null;
     if (datasetType != null)
     {
         datasetCount = datasetType.Count;
     }
     int applicationCount = 0;
-    var softwareType = types.Where(d => d.Name == "software").FirstOrDefault();
+    var softwareType = types != null ? types.Where(d => d.Name == "software").FirstOrDefault(): null;
     if (softwareType != null)
     {
         applicationCount = softwareType.Count;
     }
     int serviceCount = 0;
-    var serviceType = types.Where(d => d.Name == "service").FirstOrDefault();
+    var serviceType = types != null ? types.Where(d => d.Name == "service").FirstOrDefault() : null;
     if (serviceType != null)
     {
         serviceCount = serviceType.Count;
     }
 
     int servicelayerCount = 0;
-    var servicelayerType = types.Where(d => d.Name == "servicelayer").FirstOrDefault();
+    var servicelayerType = types != null ? types.Where(d => d.Name == "servicelayer").FirstOrDefault() : null;
     if (servicelayerType != null)
     {
         servicelayerCount = servicelayerType.Count;
@@ -192,12 +192,16 @@
         data: function(){
             var data = {
                 FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(themes))),
-                FacetField: "@themeFacets.FacetField",
-                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + themeFacets.FacetField)))',
+                FacetField: "@(themeFacets != null ? themeFacets.FacetField : "" )",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(themeFacets != null ? UI.ResourceManager.GetString("Facet_" + themeFacets.FacetField) : ""))',
                 isActive: false
             }
             @{
                  int themeIndex = 0;
+                 if(themes == null)
+                 {
+                     themes = new List<SearchResultFacetValueViewModel>();
+                 }
                  foreach (var theme in themes)
                  {
                      @:data.FacetResults[@themeIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(theme.LinkName()))";
@@ -236,12 +240,16 @@
         data: function(){
             var data = {
                 FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(types))),
-                FacetField: "@typeFacets.FacetField",
-                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + typeFacets.FacetField)))',
+                FacetField: "@(typeFacets != null ? typeFacets.FacetField : "" )",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(themeFacets != null ? UI.ResourceManager.GetString("Facet_" + typeFacets.FacetField) : ""))',
                 isActive: false
             }
             @{
                 int typeIndex = 0;
+                if (types == null)
+                {
+                    types = new List<SearchResultFacetValueViewModel>();
+                }
                 foreach (var type in types)
                 {
                     @:data.FacetResults[@typeIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(type.LinkName()))";
@@ -281,12 +289,16 @@
         data: function(){
             var data = {
                 FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(nationalinitiatives))),
-                FacetField: "@nationalinitiativeFacets.FacetField",
-                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + nationalinitiativeFacets.FacetField)))',
+                FacetField: "@(nationalinitiativeFacets != null ? nationalinitiativeFacets.FacetField : "" )",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(themeFacets != null ? UI.ResourceManager.GetString("Facet_" + nationalinitiativeFacets.FacetField): ""))',
                 isActive: false
             }
             @{
                 int nationalinitiativeIndex = 0;
+                if (nationalinitiatives == null)
+                {
+                    nationalinitiatives = new List<SearchResultFacetValueViewModel>();
+                }
                 foreach (var nationalinitiative in nationalinitiatives)
                 {
                     @:data.FacetResults[@nationalinitiativeIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(nationalinitiative.LinkName()))";
@@ -325,12 +337,16 @@
         data: function(){
             var data = {
                 FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(distributionProtocols))),
-                FacetField: "@distributionProtocolFacets.FacetField",
-                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + distributionProtocolFacets.FacetField)))',
+                FacetField: "@(distributionProtocolFacets != null ? distributionProtocolFacets.FacetField : "" )",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(themeFacets != null ? UI.ResourceManager.GetString("Facet_" + distributionProtocolFacets.FacetField) : ""))',
                 isActive: false
             }
             @{
                 int distributionProtocolIndex = 0;
+                if (distributionProtocols == null)
+                {
+                    distributionProtocols = new List<SearchResultFacetValueViewModel>();
+                }
                 foreach (var distributionProtocol in distributionProtocols)
                 {
                     @:data.FacetResults[@distributionProtocolIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(distributionProtocol.LinkName()))";
@@ -366,12 +382,16 @@
         data: function(){
             var data = {
                 FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(organizations))),
-                FacetField: "@organizationFacets.FacetField",
-                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + organizationFacets.FacetField)))',
+                FacetField: "@(organizationFacets != null ? organizationFacets.FacetField : "" )",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(themeFacets != null ? UI.ResourceManager.GetString("Facet_" + organizationFacets.FacetField) :""))',
                 isActive: false
             }
             @{
                 int organizationIndex = 0;
+                if (organizations == null)
+                {
+                    organizations = new List<SearchResultFacetValueViewModel>();
+                }
                 foreach (var organization in organizations)
                 {
                     @:data.FacetResults[@organizationIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(organization.LinkName()))";
@@ -412,12 +432,16 @@
         data: function(){
             var data = {
                 FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(dataAccesses))),
-                FacetField: "@dataAccessFacets.FacetField",
-                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + dataAccessFacets.FacetField)))',
+                FacetField: "@(dataAccessFacets != null ? dataAccessFacets.FacetField : "" )",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(themeFacets != null ? UI.ResourceManager.GetString("Facet_" + dataAccessFacets.FacetField) : ""))',
                 isActive: false
             }
             @{
                 int dataAccessIndex = 0;
+                if (dataAccesses == null)
+                {
+                    dataAccesses = new List<SearchResultFacetValueViewModel>();
+                }
                 foreach (var dataAccess in dataAccesses)
                 {
                     @:data.FacetResults[@dataAccessIndex].FacetName = "@Html.Raw(HttpUtility.HtmlDecode(dataAccess.LinkName()))";
@@ -450,13 +474,17 @@
         data: function(){
             var data = {
                 FacetResults: @Html.Raw(HttpUtility.HtmlDecode(javaScriptSerializer.Serialize(areas))),
-                FacetField: "@areaFacets.FacetField",
-                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(UI.ResourceManager.GetString("Facet_" + areaFacets.FacetField)))',
+                 FacetField: "@(areaFacets != null ? areaFacets.FacetField : "" )",
+                FacetName: '@Html.Raw(HttpUtility.HtmlDecode(themeFacets != null ? UI.ResourceManager.GetString("Facet_" + areaFacets.FacetField) :""))',
                 isActive: false
             };
 
             @{
                 int areaIndex = 0;
+                if (areas == null)
+                {
+                    areas = new List<SearchResultFacetValueViewModel>();
+                }
                 foreach (var area in areas)
                 {
                     // Get facet name for areas
@@ -524,7 +552,7 @@
             if (this.filterType == 'tabs') {
                 data.filterTabs = {
 
-                    FacetField: "@typeFacets.FacetField",
+                    FacetField: "@(typeFacets != null ? typeFacets.FacetField : "")",
                     FacetName: '',
                     isSelected: false,
                     hasChildren: false,

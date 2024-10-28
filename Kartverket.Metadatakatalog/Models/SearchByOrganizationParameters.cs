@@ -1,10 +1,15 @@
-﻿using SolrNet;
+﻿using Kartverket.Metadatakatalog.Service.Search;
+using SolrNet;
 
 namespace Kartverket.Metadatakatalog.Models
 {
     public class SearchByOrganizationParameters : SearchParameters
     {
         public string OrganizationSeoName { get; set; }
+
+        public SearchByOrganizationParameters(IAiService aiService) : base(aiService: aiService)
+        {
+        }
 
         public void CreateFacetOfOrganizationSeoName()
         {
