@@ -73,7 +73,8 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
                     var client = _httpClientFactory.GetHttpClient(); // todo _httpClientFactory is null
                     client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+                    if(!client.DefaultRequestHeaders.Contains("Authorization"))
+                        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
                     var endpoint = $"https://{locationId}-aiplatform.googleapis.com/v1/projects/{projectId}/locations/{locationId}/publishers/google/models/{model}:predict";
 
                     var inputRequest = new
