@@ -72,10 +72,9 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     string locationId = WebConfigurationManager.AppSettings["AI:LocationId"];
                     string model = WebConfigurationManager.AppSettings["AI:Model"];
 
-                    var client = _httpClientFactory.GetHttpClient(); // todo _httpClientFactory is null
+                    var client = _httpClientFactory.GetHttpClient();
                     client.DefaultRequestHeaders.Clear();
-                    if(!client.DefaultRequestHeaders.Contains("Authorization"))
-                        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {token}");
                     var endpoint = $"https://{locationId}-aiplatform.googleapis.com/v1/projects/{projectId}/locations/{locationId}/publishers/google/models/{model}:predict";
 
                     var inputRequest = new
@@ -89,7 +88,6 @@ namespace Kartverket.Metadatakatalog.Service.Search
                         }
                     };
 
-                    infoForDebug = inputRequest;
                     var response = client.PostAsJsonAsync(endpoint, inputRequest).Result;
                     var result = response.Content.ReadAsStringAsync().Result;
                     infoForDebug = result;
@@ -103,7 +101,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Error creating vector embeddings with info: " + infoForDebug, e);
+                    Log.Error("Error creating vector embeddings returned: " + infoForDebug, e);
                     return null;
                 }
             }
