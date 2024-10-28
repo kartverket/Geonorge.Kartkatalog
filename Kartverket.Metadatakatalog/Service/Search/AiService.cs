@@ -92,6 +92,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     var result = response.Content.ReadAsStringAsync().Result;
 
                     var jsonResponse = JsonConvert.DeserializeObject<dynamic>(result);
+                    Log.Info("AI response: " + jsonResponse);
                     var values = jsonResponse.predictions[0].embeddings.values;
                     float[] floatValues = ((IEnumerable<dynamic>)values).Select(v => (float)v).ToArray();
 
