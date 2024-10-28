@@ -253,29 +253,29 @@ namespace Kartverket.Metadatakatalog.Service
                             indexDoc.OrganizationShortName = organization.ShortName;
 
                         indexDoc.OrganizationLogoUrl = organization.LogoUrl;
-                        var stopWatch = new Stopwatch();
-                        try
-                        {
-                                _httpClient.DefaultRequestHeaders.Accept.Clear();
-                                Log.Debug("Connecting to: " + indexDoc.OrganizationLogoUrl);
+                        //var stopWatch = new Stopwatch();
+                        //try
+                        //{
+                        //        _httpClient.DefaultRequestHeaders.Accept.Clear();
+                        //        Log.Debug("Connecting to: " + indexDoc.OrganizationLogoUrl);
 
-                                stopWatch.Start();
-                                HttpResponseMessage response = _httpClient.GetAsync(new Uri(indexDoc.OrganizationLogoUrl)).Result;
-                                if (response.StatusCode != HttpStatusCode.OK)
-                                {
-                                    Log.Error("Feil ressurslenke til logo i metadata: " + simpleMetadata.Uuid + " til " + indexDoc.OrganizationLogoUrl + " statuskode: " + response.StatusCode + " fjernet fra index");
-                                    indexDoc.OrganizationLogoUrl = "";
-                                }
-                        }
-                        catch (Exception ex)
-                        {
-                            stopWatch.Stop();
-                            Log.Error("Exception while testing logo resurces for metadata: " + simpleMetadata.Uuid, ex);
-                        }
-                        finally
-                        {
-                            Log.Debug("Used " + stopWatch.ElapsedMilliseconds + "ms fetching " + indexDoc.OrganizationLogoUrl);
-                        }
+                        //        stopWatch.Start();
+                        //        HttpResponseMessage response = _httpClient.GetAsync(new Uri(indexDoc.OrganizationLogoUrl)).Result;
+                        //        if (response.StatusCode != HttpStatusCode.OK)
+                        //        {
+                        //            Log.Error("Feil ressurslenke til logo i metadata: " + simpleMetadata.Uuid + " til " + indexDoc.OrganizationLogoUrl + " statuskode: " + response.StatusCode + " fjernet fra index");
+                        //            indexDoc.OrganizationLogoUrl = "";
+                        //        }
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    stopWatch.Stop();
+                        //    Log.Error("Exception while testing logo resurces for metadata: " + simpleMetadata.Uuid, ex);
+                        //}
+                        //finally
+                        //{
+                        //    Log.Debug("Used " + stopWatch.ElapsedMilliseconds + "ms fetching " + indexDoc.OrganizationLogoUrl);
+                        //}
 
 
                     }
@@ -378,30 +378,30 @@ namespace Kartverket.Metadatakatalog.Service
                 List<SimpleThumbnail> thumbnails = simpleMetadata.Thumbnails;
                 if (thumbnails != null && thumbnails.Count > 0)
                 {
-                    var stopWatch = new Stopwatch();
+                    //var stopWatch = new Stopwatch();
                     try
                     {
                         indexDoc.ThumbnailUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMetadata.Uuid, thumbnails[thumbnails.Count-1].URL);
 
-                            _httpClient.DefaultRequestHeaders.Accept.Clear();
-                            Log.Debug("Connecting to: " + indexDoc.ThumbnailUrl);
+                            //_httpClient.DefaultRequestHeaders.Accept.Clear();
+                            //Log.Debug("Connecting to: " + indexDoc.ThumbnailUrl);
 
-                            stopWatch.Start();
-                            HttpResponseMessage response = _httpClient.GetAsync(new Uri(indexDoc.ThumbnailUrl)).Result;
-                            stopWatch.Stop();
-                            if (response.StatusCode != HttpStatusCode.OK)
-                            {
-                                Log.Error("Feil ressurslenke i metadata: " + simpleMetadata.Uuid + " til " + indexDoc.ThumbnailUrl + " statuskode: " + response.StatusCode + " fjernet fra index");
-                                indexDoc.ThumbnailUrl = "";
-                            }
+                            //stopWatch.Start();
+                            //HttpResponseMessage response = _httpClient.GetAsync(new Uri(indexDoc.ThumbnailUrl)).Result;
+                            //stopWatch.Stop();
+                            //if (response.StatusCode != HttpStatusCode.OK)
+                            //{
+                            //    Log.Error("Feil ressurslenke i metadata: " + simpleMetadata.Uuid + " til " + indexDoc.ThumbnailUrl + " statuskode: " + response.StatusCode + " fjernet fra index");
+                            //    indexDoc.ThumbnailUrl = "";
+                            //}
                     }
                     catch (Exception ex) {
-                        stopWatch.Stop();
-                        Log.Error("Exception while testing thumbnail resurces for metadata: " + simpleMetadata.Uuid, ex);
+                        //stopWatch.Stop();
+                        Log.Error("Exception while setting thumbnail resurces for metadata: " + simpleMetadata.Uuid, ex);
                     }
                     finally
                     {
-                        Log.Debug("Used " + stopWatch.ElapsedMilliseconds + "ms fetching " + indexDoc.ThumbnailUrl);
+                        //Log.Debug("Used " + stopWatch.ElapsedMilliseconds + "ms fetching " + indexDoc.ThumbnailUrl);
                     }
 
 
