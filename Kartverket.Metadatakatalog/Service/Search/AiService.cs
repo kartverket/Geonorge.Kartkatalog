@@ -61,6 +61,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
         {
             if (SimpleMetadataUtil.UseVectorSearch)
             {
+                object infoForDebug = "Search for: " + text;
                 try
                 {
                     var token = GetAccessTokenFromJSONKey(
@@ -88,11 +89,12 @@ namespace Kartverket.Metadatakatalog.Service.Search
                         }
                     };
 
+                    infoForDebug = inputRequest;
                     var response = client.PostAsJsonAsync(endpoint, inputRequest).Result;
                     var result = response.Content.ReadAsStringAsync().Result;
+                    infoForDebug = result;
 
                     var jsonResponse = JsonConvert.DeserializeObject<dynamic>(result);
-                    Log.Info("AI response: " + jsonResponse);
                     var values = jsonResponse.predictions[0].embeddings.values;
                     float[] floatValues = ((IEnumerable<dynamic>)values).Select(v => (float)v).ToArray();
 
@@ -101,7 +103,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Error creating vector embeddings", e);
+                    Log.Error("Error creating vector embeddings with info: " + infoForDebug, e);
                     return null;
                 }
             }
