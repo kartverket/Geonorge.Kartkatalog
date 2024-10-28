@@ -100,6 +100,7 @@ namespace Kartverket.Metadatakatalog
             builder.RegisterType<SolrIndexerArticle>().As<IndexerArticle>();
             builder.RegisterType<SolrIndexArticleDocumentCreator>().As<IndexArticleDocumentCreator>();
             builder.RegisterType<ArticleFetcher>().As<IArticleFetcher>();
+            builder.RegisterType<AiService>().As<IAiService>();
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using GeoNorgeAPI;
-using Google.Apis.Auth.OAuth2;
-using Google.Cloud.AIPlatform.V1;
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
 using System;
@@ -13,6 +11,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net;
 using Google.Api.Gax.Grpc;
+using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -33,7 +32,6 @@ namespace Kartverket.Metadatakatalog.Service
         public static readonly bool MapOnlyWms = Convert.ToBoolean(WebConfigurationManager.AppSettings["MapOnlyWms"]);
         public static readonly bool UseVectorSearch = System.Convert.ToBoolean(WebConfigurationManager.AppSettings["AI:UseVectorSearch"]);
         static log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private static readonly string ProxyServer = WebConfigurationManager.AppSettings["ProxyServer"];
 
         public static string ConvertHierarchyLevelToType(string hierarchyLevel)
         {
@@ -259,119 +257,6 @@ namespace Kartverket.Metadatakatalog.Service
             }
 
             return t;
-        }
-
-        /// <summary>  
-        /// Get Access Token From JSON Key Async  
-        /// </summary>  
-        /// <param name="jsonKeyFilePath">Path to your JSON Key file</param>  
-        /// <param name="scopes">Scopes required in access token</param>  
-        /// <returns>Access token as string Task</returns>  
-        public static string GetAccessTokenFromJSONKeyAsync(string jsonKeyFilePath, params string[] scopes)
-        {
-            using (var stream = new FileStream(jsonKeyFilePath, FileMode.Open, FileAccess.Read))
-            {
-                var credentials = GoogleCredential
-                    .FromStream(stream) // Loads key file  
-                    .CreateScoped(scopes) // Gathers scopes requested  
-                    .UnderlyingCredential // Gets the credentials  
-                    .GetAccessTokenForRequestAsync(); // Gets the Access Token  
-
-                return credentials.Result;
-            }
-        }
-
-        /// <summary>  
-        /// Get Access Token From JSON Key  
-        /// </summary>  
-        /// <param name="jsonKeyFilePath">Path to your JSON Key file</param>  
-        /// <param name="scopes">Scopes required in access token</param>  
-        /// <returns>Access token as string</returns>  
-        public static string GetAccessTokenFromJSONKey(string jsonKeyFilePath, params string[] scopes)
-        {
-            return GetAccessTokenFromJSONKeyAsync(jsonKeyFilePath, scopes);
-        }
-
-        public static float[] CreateVectorEmbeddings(string text)
-        {
-            if (SimpleMetadataUtil.UseVectorSearch)
-            {
-                try
-                {
-                    var token = GetAccessTokenFromJSONKey(
-                    WebConfigurationManager.AppSettings["AI:Key"],
-                    "https://www.googleapis.com/auth/cloud-platform");
-
-                    string projectId = WebConfigurationManager.AppSettings["AI:ProjectId"];
-                    string locationId = WebConfigurationManager.AppSettings["AI:LocationId"]; //https://cloud.google.com/vertex-ai/docs/general/locations#europe
-                    string publisher = "google";
-                    string model = WebConfigurationManager.AppSettings["AI:Model"];
-
-                    var client = new PredictionServiceClientBuilder
-                    {
-                        Endpoint = $"{locationId}-aiplatform.googleapis.com",
-                        Credential = GoogleCredential.FromAccessToken(token),
-                        GrpcAdapter = !string.IsNullOrEmpty(ProxyServer) ? GenerateAdapter() : null
-                    }.Build();
-
-                    // Configure the parent resource.
-                    var endpoint = EndpointName.FromProjectLocationPublisherModel(projectId, locationId, publisher, model);
-
-                    // Initialize request argument(s).
-                    var instances = new List<Value>
-                    {
-                        Value.ForStruct( new Google.Protobuf.WellKnownTypes.Struct()
-                        {
-                            Fields =
-                            {
-                                ["content"] = Value.ForString(text),
-                            }
-                        })
-                    };
-
-                    // Make the request.
-                    var response = client.Predict(endpoint, instances, null);
-
-                    // Parse and return the embedding vector count.
-                    var values = response.Predictions.First().StructValue.Fields["embeddings"].StructValue.Fields["values"].ListValue.Values;
-
-                    return values.Select(n => (float)n.NumberValue).ToArray();
-
-                }
-                catch (Exception e)
-                {
-                    Log.Error("Error creating vector embeddings", e);
-                    return null;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        private static GrpcNetClientAdapter GenerateAdapter()
-        {
-            // Step 1: Create a WebProxy instance with the proxy settings
-            var proxy = new WebProxy(ProxyServer);
-
-            // Step 2: Configure HttpClientHandler to use the proxy
-            var httpClientHandler = new HttpClientHandler
-            {
-                Proxy = proxy,
-                UseProxy = true,
-                // Optionally, you can set UseDefaultCredentials to true if needed
-                UseDefaultCredentials = true,
-                // Ensure HTTP/2 is used
-                DefaultProxyCredentials = CredentialCache.DefaultCredentials
-            };
-
-            // Step 3: Set up GrpcNetClientAdapter with the HttpClientHandler
-            var adapter = Google.Api.Gax.Grpc.GrpcNetClientAdapter.Default.WithAdditionalOptions(options =>
-            {
-                options.HttpHandler = httpClientHandler;
-            });
-            return adapter;
         }
     }
 }

@@ -37,8 +37,9 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly IServiceDirectoryService _searchServiceDirectoryService;
         public RegisterFetcher Register = new RegisterFetcher();
         public string Culture = Models.Translations.Culture.NorwegianCode;
+        private readonly IAiService _aiService;
 
-        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService)
+        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService, IAiService aiService)
         {
             _geoNorge = geoNorge;
             _geoNetworkUtil = geoNetworkUtil;
@@ -46,6 +47,7 @@ namespace Kartverket.Metadatakatalog.Service
             _organizationService = organizationService;
             _searchService = searchService;
             _searchServiceDirectoryService = searchServiceDirectoryService;
+            _aiService = aiService;
         }
 
 
@@ -704,7 +706,7 @@ namespace Kartverket.Metadatakatalog.Service
             ISolrQuery query = new SolrQuery("metadata_standard:\"ISO19115\\:Norsk versjon\"");
             try
             {
-                SearchParameters searchParameters = new SearchParameters();
+                SearchParameters searchParameters = new SearchParameters(_aiService);
                 searchParameters.AddComplexFacetsIfMissing();
                 searchParameters.Limit = 1000;
                 searchParameters.Offset = 1;
@@ -784,7 +786,8 @@ namespace Kartverket.Metadatakatalog.Service
 
             var metadata = ConvertSimpleMetadataToMetadata(simpleMetadata);
 
-            var parameters = new SearchParameters { Text = simpleMetadata.Uuid };
+            var parameters = new SearchParameters (_aiService);
+            parameters.Text = simpleMetadata.Uuid;
             var searchResult = _searchService.Search(parameters);
 
             if (searchResult != null && searchResult.NumFound > 0)

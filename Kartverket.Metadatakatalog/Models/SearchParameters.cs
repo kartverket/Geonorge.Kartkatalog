@@ -7,8 +7,6 @@ using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Resources;
 using System.Web.Configuration;
-using Google.Cloud.AIPlatform.V1;
-using Value = Google.Protobuf.WellKnownTypes.Value;
 using System.Web;
 using Google.Apis.Auth.OAuth2;
 using Grpc.Core;
@@ -17,6 +15,7 @@ using Google.Apis.Http;
 using System.Threading.Tasks;
 using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Service;
+using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -46,12 +45,19 @@ namespace Kartverket.Metadatakatalog.Models
 
     public class SearchParameters
     {
-        public SearchParameters()
+        private readonly IAiService _aiService;
+
+        public SearchParameters(IAiService aiService)
         {
             Facets = new List<FacetParameter>();
             Offset = 1;
             Limit = 30;
             orderby = Models.OrderBy.score.ToString();
+            _aiService = aiService;
+        }
+
+        public SearchParameters()
+        {
         }
 
         public string Text { get; set; }
@@ -228,8 +234,8 @@ namespace Kartverket.Metadatakatalog.Models
                     if(Text.Length > 2) 
                     {
                         if (SimpleMetadataUtil.UseVectorSearch) 
-                        { 
-                            var embedding = SimpleMetadataUtil.CreateVectorEmbeddings(Text);
+                        {
+                            var embedding = _aiService.GetPredictions(Text);
                             if(embedding != null) 
                             {
                                 vectorSearchString = "[" + string.Join("|", embedding) + "]";

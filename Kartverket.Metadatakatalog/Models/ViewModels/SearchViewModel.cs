@@ -34,11 +34,11 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             FacetParameters = parameters.Facets;
             Result = new SearchResultViewModel(searchResult);
             ResultArticles = articleResult;
-            Limit = searchResult.Limit;
+            Limit = searchResult.Limit == 0 ? 50 : searchResult.Limit;
             Offset = searchResult.Offset;
             NumFound = searchResult.NumFound;
             NumFoundTotal = searchResult.NumFound + articleResult.NumFound;
-            orderby = parameters.orderby.ToString();
+            orderby = parameters?.orderby != null ? parameters?.orderby?.ToString() : "score";
             page = 1;
             var placeResolver = new Service.PlaceResolver();
             areaDictionary = placeResolver.GetAreas();
