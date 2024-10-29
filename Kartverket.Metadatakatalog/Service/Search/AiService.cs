@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Helpers;
@@ -61,26 +62,13 @@ namespace Kartverket.Metadatakatalog.Service.Search
         {
             if (SimpleMetadataUtil.UseVectorSearch)
             {
+                object infoForDebug = "Search for: " + text;
                 try
                 {
-                    var token = GetAccessTokenFromJSONKey(
-                    WebConfigurationManager.AppSettings["AI:Key"],
-                    "https://www.googleapis.com/auth/cloud-platform");
-
-                    string projectId = WebConfigurationManager.AppSettings["AI:ProjectId"];
-                    string locationId = WebConfigurationManager.AppSettings["AI:LocationId"];
-                    string model = WebConfigurationManager.AppSettings["AI:Model"];
-
-                    var client = _httpClientFactory.GetHttpClient(); // todo _httpClientFactory is null
-                    client.DefaultRequestHeaders.Clear();
-                    if(!client.DefaultRequestHeaders.Contains("Authorization"))
-                        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-                    var endpoint = $"https://{locationId}-aiplatform.googleapis.com/v1/projects/{projectId}/locations/{locationId}/publishers/google/models/{model}:predict";
-
                     var inputRequest = new
                     {
                         instances = new[]
-                        {
+{
                             new
                             {
                                 content  = text
@@ -88,8 +76,24 @@ namespace Kartverket.Metadatakatalog.Service.Search
                         }
                     };
 
-                    var response = client.PostAsJsonAsync(endpoint, inputRequest).Result;
-                    var result = response.Content.ReadAsStringAsync().Result;
+                    string projectId = WebConfigurationManager.AppSettings["AI:ProjectId"];
+                    string locationId = WebConfigurationManager.AppSettings["AI:LocationId"];
+                    string model = WebConfigurationManager.AppSettings["AI:Model"];
+
+                    var endpoint = $"https://{locationId}-aiplatform.googleapis.com/v1/projects/{projectId}/locations/{locationId}/publishers/google/models/{model}:predict";
+
+                    var token = GetAccessTokenFromJSONKey(
+                    WebConfigurationManager.AppSettings["AI:Key"],
+                    "https://www.googleapis.com/auth/cloud-platform");
+
+                    var client = _httpClientFactory.GetHttpClient();
+
+                    var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
+                    request.Content = new StringContent(JsonConvert.SerializeObject(inputRequest), System.Text.Encoding.UTF8, "application/json");
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    var response = client.SendAsync(request);
+                    var result = response.Result.Content.ReadAsStringAsync().Result;
+                    infoForDebug = result;
 
                     var jsonResponse = JsonConvert.DeserializeObject<dynamic>(result);
                     var values = jsonResponse.predictions[0].embeddings.values;
@@ -100,7 +104,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Error creating vector embeddings", e);
+                    Log.Error("Error creating vector embeddings returned: " + infoForDebug, e);
                     return null;
                 }
             }
