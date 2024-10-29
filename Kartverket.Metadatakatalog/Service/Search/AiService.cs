@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Helpers;
@@ -86,11 +87,12 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     "https://www.googleapis.com/auth/cloud-platform");
 
                     var client = _httpClientFactory.GetHttpClient();
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {token}");
 
-                    var response = client.PostAsJsonAsync(endpoint, inputRequest).Result;
-                    var result = response.Content.ReadAsStringAsync().Result;
+                    var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
+                    request.Content = new StringContent(JsonConvert.SerializeObject(inputRequest), System.Text.Encoding.UTF8, "application/json");
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    var response = client.SendAsync(request);
+                    var result = response.Result.Content.ReadAsStringAsync().Result;
                     infoForDebug = result;
 
                     var jsonResponse = JsonConvert.DeserializeObject<dynamic>(result);
