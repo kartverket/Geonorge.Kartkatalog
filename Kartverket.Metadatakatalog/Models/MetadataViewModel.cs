@@ -304,7 +304,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowMapLink()
         {
-            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) /*&& !string.IsNullOrWhiteSpace(DistributionDetails.Protocol)*/ && (DistributionDetails.Protocol.Contains("OGC:WMS") || (!MapOnlyWms && DistributionDetails.Protocol.Contains("OGC:WFS"))) && (IsService() || IsServiceLayer())) return true;
+            if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.URL) && (!string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && (DistributionDetails.Protocol.Contains("OGC:WMS") || (!MapOnlyWms && DistributionDetails.Protocol.Contains("OGC:WFS")))) && (IsService() || IsServiceLayer())) return true;
             else return false;
         }
 
