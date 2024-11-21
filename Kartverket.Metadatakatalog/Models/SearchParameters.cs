@@ -249,8 +249,9 @@ namespace Kartverket.Metadatakatalog.Models
                     {
                         new SolrQuery("uuid:"+ text + "^76"),
                         new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^77  titleText:"+ titleText + "*^76"),
-                        new SolrQuery("(type:dataset AND titleText:*"+ titleText + "*)^75  titleText:*"+ titleText + "*^74"),
-                        new SolrQuery("(type:dataset AND allText:*" + textAll + "*)^73 allText:*" + textAll + "*^72"),
+                        new SolrQuery("(type:dataset AND title_lowercase:*"+ titleText + "*)^75  titleText:"+ titleText + "*^74"),
+                        new SolrQuery("(type:dataset AND titleText:*"+ titleText + "*)^73  titleText:*"+ titleText + "*^72"),
+                        new SolrQuery("(type:dataset AND allText:*" + textAll + "*)^71 allText:*" + textAll + "*^70"),
                         !string.IsNullOrEmpty(queryString) ? new SolrQuery(queryString) : null,
                         new SolrQuery("allText:" + text + "~^1"),   //Fuzzy
                         new SolrQuery("allText2:" + text + ""), //Stemmer
