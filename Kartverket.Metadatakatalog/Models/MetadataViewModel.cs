@@ -660,6 +660,8 @@ namespace Kartverket.Metadatakatalog.Models
        public string Availability { get; set; }
        public string Capacity { get; set; }
        public string Performance { get; set; }
+       public string FAIR { get; set; }
+       public string Coverage { get; set; }
     }
 
     public class Distributions
