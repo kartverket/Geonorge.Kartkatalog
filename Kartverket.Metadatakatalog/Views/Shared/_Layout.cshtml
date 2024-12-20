@@ -40,20 +40,6 @@
     <script>var environmentIsProduction = @(Html.EnvironmentName() == "" ? "true" : "false");</script>
     <script>
         if (environmentIsProduction) {
-            /* Matomo */
-            var _paq = window._paq = window._paq || [];
-            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-            _paq.push(['trackPageView']);
-            _paq.push(['enableLinkTracking']);
-            (function () {
-                var u = "https://analyse.kartverket.no/analyse/";
-                _paq.push(['setTrackerUrl', u + 'matomo.php']);
-                _paq.push(['setSiteId', '16']);
-                var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-                g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
-            })();
-
-
             /* Google Tag Manager */
             (function (w, d, s, l, i) {
                 w[l] = w[l] || []; w[l].push({
@@ -112,12 +98,8 @@
     @RenderSection("scripts", required: false)
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@2.20.4/MainNavigation.js")"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@2.20.4/GeonorgeFooter.js")"></script>
-    @if (Html.EnvironmentName() == "")
-    {
-        <noscript><p><img src="https://analyse.kartverket.no/analyse/matomo.php?idsite=16&rec=1" style="border:0" alt="" /></p></noscript>
-    }
+    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@2.20.6/MainNavigation.js")"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@2.20.6/GeonorgeFooter.js")"></script>
 </body>
 
 </html>
