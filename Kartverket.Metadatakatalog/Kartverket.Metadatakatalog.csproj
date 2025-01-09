@@ -104,8 +104,8 @@
     <Reference Include="Geonorge.AuthLib.NetFull, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Geonorge.AuthLib.NetFull.1.0.60\lib\net472\Geonorge.AuthLib.NetFull.dll</HintPath>
     </Reference>
-    <Reference Include="GeoNorgeAPI, Version=3.6.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GeoNorgeAPI.3.6.8\lib\net48\GeoNorgeAPI.dll</HintPath>
+    <Reference Include="GeoNorgeAPI, Version=3.6.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GeoNorgeAPI.3.6.9\lib\net48\GeoNorgeAPI.dll</HintPath>
     </Reference>
     <Reference Include="Google.Api.CommonProtos, Version=2.16.0.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Api.CommonProtos.2.16.0\lib\net461\Google.Api.CommonProtos.dll</HintPath>
@@ -147,7 +147,7 @@
       <HintPath>..\packages\Grpc.Net.Common.2.66.0\lib\netstandard2.0\Grpc.Net.Common.dll</HintPath>
     </Reference>
     <Reference Include="Kartverket.Geonorge.Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.52\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.61\lib\net45\Kartverket.Geonorge.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
@@ -238,7 +238,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.61\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="OpenAI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b4187f3e65366280, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenAI.2.0.0-beta.11\lib\netstandard2.0\OpenAI.dll</HintPath>
@@ -296,7 +296,7 @@
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.52\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <HintPath>..\packages\Kartverket.Geonorge.Utilities.1.0.61\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
