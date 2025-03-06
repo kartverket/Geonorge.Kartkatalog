@@ -1433,11 +1433,11 @@ namespace Kartverket.Metadatakatalog.Service
                     else
                         quantitativeResult.Performance = "Performance: " + qualitySpecification.QuantitativeResult + " seconds";
                 }
-                if (qualitySpecification.Title.Contains("FAIR"))
+                if (qualitySpecification.Title != null && qualitySpecification.Title.Contains("FAIR"))
                 {
                     quantitativeResult.FAIR = SimpleMetadata.FAIR_NAME_OF_MEASURE + ": " + qualitySpecification.QuantitativeResult + "%";
                 }
-                if (qualitySpecification.Title.Contains("dekning"))
+                if (qualitySpecification.Title != null && qualitySpecification.Title.Contains("dekning"))
                 {
                     quantitativeResult.Coverage = SimpleMetadata.COVERAGE_NAME_OF_MEASURE + ": " + qualitySpecification.QuantitativeResult + "%";
                 }
