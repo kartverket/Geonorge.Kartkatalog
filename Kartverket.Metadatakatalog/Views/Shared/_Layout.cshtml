@@ -100,7 +100,7 @@
 
 <body class="geonorge-container prototype  geonorge ng-scope fixed-menu-margin">
     <main-navigation userinfo='@userInfoJson' organization='@organizationJson' environment="@Html.EnvironmentName()"
-                     signinurl="@Html.Raw(Url.Action("SignIn", "Search", new { ReturnUrl = Request.Url }))"
+                     signinurl="@Html.Raw(Url.Action("SignIn", "Search"))"
                      signouturl="@Html.Raw(Url.Action("SignOut", "Search"))"
                      isLoggedIn="@Request.IsAuthenticated.ToString().ToLower()"
                      norwegianurl="@Html.Raw(Url.Action("SetCulture", "Search", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url }))"
