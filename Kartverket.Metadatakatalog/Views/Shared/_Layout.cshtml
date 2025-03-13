@@ -1,6 +1,8 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
 @using Resources
 @using System.Web.Configuration;
+@using System.Security.Claims
+@using Geonorge.AuthLib.Common
 <!DOCTYPE html>
 <html lang="@CultureHelper.GetCurrentCulture()" class="js flexbox no-flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg no-smil svgclippaths">
 <head>
@@ -51,8 +53,53 @@
             })(window, document, 'script', 'dataLayer', 'GTM-MR2X5P');
         }</script>
 </head>
+@{
+    dynamic userInfo = new System.Dynamic.ExpandoObject();
+    userInfo.name = "";
+    userInfo.email = "";
+
+    dynamic organization = new System.Dynamic.ExpandoObject();
+    organization.organizationName = "";
+    organization.organizationNumber = "";
+
+    <!-- user claims: -->
+    var cp = (ClaimsPrincipal)User;
+    foreach (var claim in cp.Claims)
+    {
+        <!-- @claim.Type = @claim.Value -->
+        if(claim.Type == "Name")
+        {
+            userInfo.name = claim.Value;
+        }
+        if(claim.Type == "Email")
+        {
+            userInfo.email = claim.Value;
+        }
+        if (claim.Type == "OrganizationOrgnr")
+        {
+            organization.organizationNumber = claim.Value;
+        }
+        if (claim.Type == "OrganizationName")
+        {
+            organization.organizationName = claim.Value;
+        }
+    }
+
+    <!-- roles: -->
+    var roles = cp.FindAll(GeonorgeAuthorizationService.ClaimIdentifierRole);
+    foreach (var role in roles)
+    {
+        <!-- @role.Value-->
+    }
+
+    string userInfoJson = Newtonsoft.Json.JsonConvert.SerializeObject(userInfo);
+    string organizationJson = Newtonsoft.Json.JsonConvert.SerializeObject(organization);
+}
+
+}
+
 <body class="geonorge-container prototype  geonorge ng-scope fixed-menu-margin">
-    <main-navigation environment="@Html.EnvironmentName()"
+    <main-navigation userinfo='@userInfoJson' organization='@organizationJson' environment="@Html.EnvironmentName()"
                      signinurl="@Html.Raw(Url.Action("SignIn", "Search", new { ReturnUrl = Request.Url }))"
                      signouturl="@Html.Raw(Url.Action("SignOut", "Search"))"
                      isLoggedIn="@Request.IsAuthenticated.ToString().ToLower()"
