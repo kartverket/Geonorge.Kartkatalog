@@ -70,6 +70,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             HttpCookie redirectCookie = new HttpCookie("_redirectDownload");
             redirectCookie.Value = "true";
+            redirectCookie.Domain = ".geonorge.no";
             Response.Cookies.Add(redirectCookie);
 
             var redirectUrl = Url.Action(nameof(SearchController.Index), "Search");
@@ -81,6 +82,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             HttpCookie redirectCookie = Request.Cookies["_redirectDownload"];
             redirectCookie.Value = "false";
+            redirectCookie.Domain = ".geonorge.no";
             Response.Cookies.Add(redirectCookie);
 
             HttpCookie loggedInCookie = Request.Cookies["_loggedIn"];
