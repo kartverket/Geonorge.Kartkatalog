@@ -14,7 +14,7 @@
         if (cookie != null)
         {
             cookie.Value = "true";   // update cookie value
-            cookie.Expires = DateTime.Now.AddYears(1);
+            cookie.Path = "/";
             //cookie.SameSite = SameSiteMode.Lax;
             if (!Request.IsLocal) {
                 cookie.Domain = ".geonorge.no";
@@ -24,7 +24,7 @@
         {
             cookie = new HttpCookie("_redirectDownload");
             cookie.Value = "true";
-            cookie.Expires = DateTime.Now.AddYears(1);
+            cookie.Path = "/";
             //cookie.SameSite = SameSiteMode.Lax;
 
             if (!Request.IsLocal) {

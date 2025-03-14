@@ -83,7 +83,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             if (cookie != null)
             {
                 cookie.Value = "false";   // update cookie value
-                cookie.Expires = DateTime.Now.AddYears(1);
+                cookie.Path = "/";
                 //cookie.SameSite = SameSiteMode.Lax;
                 if (!Request.IsLocal)
                     cookie.Domain = ".geonorge.no";
@@ -92,7 +92,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             {
                 cookie = new HttpCookie("_redirectDownload");
                 cookie.Value = "false";
-                cookie.Expires = DateTime.Now.AddYears(1);
+                cookie.Path = "/";
                 //cookie.SameSite = SameSiteMode.Lax;
 
                 if (!Request.IsLocal)
@@ -107,7 +107,6 @@ namespace Kartverket.Metadatakatalog.Controllers
             if (cookie != null)
             {
                 cookie.Value = "false";   // update cookie value
-                cookie.Expires = DateTime.Now.AddYears(1);
                 //cookie.SameSite = SameSiteMode.Lax;
                 if (!Request.IsLocal)
                     cookie.Domain = ".geonorge.no";
@@ -116,7 +115,6 @@ namespace Kartverket.Metadatakatalog.Controllers
             {
                 cookie = new HttpCookie("_loggedIn");
                 cookie.Value = "false";
-                cookie.Expires = DateTime.Now.AddYears(1);
                 //cookie.SameSite = SameSiteMode.Lax;
 
                 if (!Request.IsLocal)
