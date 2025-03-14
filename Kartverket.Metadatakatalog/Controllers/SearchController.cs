@@ -70,41 +70,6 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         public void SignIn()
         {
-            // Save redirect to basket in a cookie
-            HttpCookie cookie = Request.Cookies["_redirectDownload"];
-
-            if (cookie != null)
-            {
-                if (cookie.Domain != ".geonorge.no")
-                {
-                    HttpCookie oldCookie = new HttpCookie("_redirectDownload");
-                    oldCookie.Domain = cookie.Domain;
-                    oldCookie.Expires = DateTime.Now.AddDays(-1d);
-                    Response.Cookies.Add(oldCookie);
-                }
-            }
-
-            if (cookie != null)
-            {
-                cookie.Value = "true";   // update cookie value
-                cookie.Expires = DateTime.Now.AddYears(1);
-                //cookie.SameSite = SameSiteMode.Lax;
-                if (!Request.IsLocal)
-                    cookie.Domain = ".geonorge.no";
-            }
-            else
-            {
-                cookie = new HttpCookie("_redirectDownload");
-                cookie.Value = "true";
-                cookie.Expires = DateTime.Now.AddYears(1);
-                //cookie.SameSite = SameSiteMode.Lax;
-
-                if (!Request.IsLocal)
-                    cookie.Domain = ".geonorge.no";
-            }
-            Response.Cookies.Add(cookie);
-
-
             var redirectUrl = Url.Action(nameof(SearchController.Index), "Search");
             HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = redirectUrl },
                 OpenIdConnectAuthenticationDefaults.AuthenticationType);
@@ -117,18 +82,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             if (cookie != null)
             {
-                if (cookie.Domain != ".geonorge.no")
-                {
-                    HttpCookie oldCookie = new HttpCookie("_redirectDownload");
-                    oldCookie.Domain = cookie.Domain;
-                    oldCookie.Expires = DateTime.Now.AddDays(-1d);
-                    Response.Cookies.Add(oldCookie);
-                }
-            }
-
-            if (cookie != null)
-            {
-                cookie.Value = "true";   // update cookie value
+                cookie.Value = "false";   // update cookie value
                 cookie.Expires = DateTime.Now.AddYears(1);
                 //cookie.SameSite = SameSiteMode.Lax;
                 if (!Request.IsLocal)
@@ -137,7 +91,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             else
             {
                 cookie = new HttpCookie("_redirectDownload");
-                cookie.Value = "true";
+                cookie.Value = "false";
                 cookie.Expires = DateTime.Now.AddYears(1);
                 //cookie.SameSite = SameSiteMode.Lax;
 
@@ -149,17 +103,6 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             // Change loggedIn cookie
             cookie = Request.Cookies["_loggedIn"];
-
-            if (cookie != null)
-            {
-                if (cookie.Domain != ".geonorge.no")
-                {
-                    HttpCookie oldCookie = new HttpCookie("_loggedIn");
-                    oldCookie.Domain = cookie.Domain;
-                    oldCookie.Expires = DateTime.Now.AddDays(-1d);
-                    Response.Cookies.Add(oldCookie);
-                }
-            }
 
             if (cookie != null)
             {
