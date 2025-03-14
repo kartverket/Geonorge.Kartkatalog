@@ -85,6 +85,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             HttpCookie loggedInCookie = Request.Cookies["_loggedIn"];
             loggedInCookie.Value = "false";
+            loggedInCookie.Domain = ".geonorge.no";
             Response.Cookies.Add(loggedInCookie);
 
             var redirectUri = WebConfigurationManager.AppSettings["GeoID:PostLogoutRedirectUri"];
