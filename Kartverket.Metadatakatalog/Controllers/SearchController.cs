@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Net;
+using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Models;
@@ -67,6 +68,10 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         public void SignIn()
         {
+            HttpCookie redirectCookie = new HttpCookie("_redirectDownload");
+            redirectCookie.Value = "true";
+            Response.Cookies.Add(redirectCookie);
+
             var redirectUrl = Url.Action(nameof(SearchController.Index), "Search");
             HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = redirectUrl },
                 OpenIdConnectAuthenticationDefaults.AuthenticationType);
@@ -74,6 +79,14 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         public void SignOut()
         {
+            HttpCookie redirectCookie = Request.Cookies["_redirectDownload"];
+            redirectCookie.Value = "false";
+            Response.Cookies.Add(redirectCookie);
+
+            HttpCookie loggedInCookie = Request.Cookies["_loggedIn"];
+            loggedInCookie.Value = "false";
+            Response.Cookies.Add(loggedInCookie);
+
             var redirectUri = WebConfigurationManager.AppSettings["GeoID:PostLogoutRedirectUri"];
             HttpContext.GetOwinContext().Authentication.SignOut(
                 new AuthenticationProperties { RedirectUri = redirectUri },

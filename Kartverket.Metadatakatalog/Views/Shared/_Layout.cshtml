@@ -3,6 +3,15 @@
 @using System.Web.Configuration;
 @using System.Security.Claims
 @using Geonorge.AuthLib.Common
+
+@{
+    var loggedInCookie = Context.Request.Cookies["_loggedIn"];
+    if (loggedInCookie != null && loggedInCookie.Value == "true" && !Request.IsAuthenticated)
+    {
+        Response.Redirect("/search/SignIn");
+    }
+ }
+
 <!DOCTYPE html>
 <html lang="@CultureHelper.GetCurrentCulture()" class="js flexbox no-flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg no-smil svgclippaths">
 <head>
