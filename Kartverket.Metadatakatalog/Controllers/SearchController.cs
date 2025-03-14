@@ -1,8 +1,10 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Models;
+using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Article;
@@ -68,10 +70,40 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         public void SignIn()
         {
-            HttpCookie redirectCookie = new HttpCookie("_redirectDownload");
-            redirectCookie.Value = "true";
-            redirectCookie.Domain = ".geonorge.no";
-            Response.Cookies.Add(redirectCookie);
+            // Save redirect to basket in a cookie
+            HttpCookie cookie = Request.Cookies["_redirectDownload"];
+
+            if (cookie != null)
+            {
+                if (cookie.Domain != ".geonorge.no")
+                {
+                    HttpCookie oldCookie = new HttpCookie("_redirectDownload");
+                    oldCookie.Domain = cookie.Domain;
+                    oldCookie.Expires = DateTime.Now.AddDays(-1d);
+                    Response.Cookies.Add(oldCookie);
+                }
+            }
+
+            if (cookie != null)
+            {
+                cookie.Value = "true";   // update cookie value
+                cookie.Expires = DateTime.Now.AddYears(1);
+                //cookie.SameSite = SameSiteMode.Lax;
+                if (!Request.IsLocal)
+                    cookie.Domain = ".geonorge.no";
+            }
+            else
+            {
+                cookie = new HttpCookie("_redirectDownload");
+                cookie.Value = "true";
+                cookie.Expires = DateTime.Now.AddYears(1);
+                //cookie.SameSite = SameSiteMode.Lax;
+
+                if (!Request.IsLocal)
+                    cookie.Domain = ".geonorge.no";
+            }
+            Response.Cookies.Add(cookie);
+
 
             var redirectUrl = Url.Action(nameof(SearchController.Index), "Search");
             HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = redirectUrl },
@@ -80,15 +112,75 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         public void SignOut()
         {
-            HttpCookie redirectCookie = Request.Cookies["_redirectDownload"];
-            redirectCookie.Value = "false";
-            redirectCookie.Domain = ".geonorge.no";
-            Response.Cookies.Add(redirectCookie);
+            // Save redirect to basket in a cookie
+            HttpCookie cookie = Request.Cookies["_redirectDownload"];
 
-            HttpCookie loggedInCookie = Request.Cookies["_loggedIn"];
-            loggedInCookie.Value = "false";
-            loggedInCookie.Domain = ".geonorge.no";
-            Response.Cookies.Add(loggedInCookie);
+            if (cookie != null)
+            {
+                if (cookie.Domain != ".geonorge.no")
+                {
+                    HttpCookie oldCookie = new HttpCookie("_redirectDownload");
+                    oldCookie.Domain = cookie.Domain;
+                    oldCookie.Expires = DateTime.Now.AddDays(-1d);
+                    Response.Cookies.Add(oldCookie);
+                }
+            }
+
+            if (cookie != null)
+            {
+                cookie.Value = "true";   // update cookie value
+                cookie.Expires = DateTime.Now.AddYears(1);
+                //cookie.SameSite = SameSiteMode.Lax;
+                if (!Request.IsLocal)
+                    cookie.Domain = ".geonorge.no";
+            }
+            else
+            {
+                cookie = new HttpCookie("_redirectDownload");
+                cookie.Value = "true";
+                cookie.Expires = DateTime.Now.AddYears(1);
+                //cookie.SameSite = SameSiteMode.Lax;
+
+                if (!Request.IsLocal)
+                    cookie.Domain = ".geonorge.no";
+            }
+            Response.Cookies.Add(cookie);
+
+
+            // Change loggedIn cookie
+            cookie = Request.Cookies["_loggedIn"];
+
+            if (cookie != null)
+            {
+                if (cookie.Domain != ".geonorge.no")
+                {
+                    HttpCookie oldCookie = new HttpCookie("_loggedIn");
+                    oldCookie.Domain = cookie.Domain;
+                    oldCookie.Expires = DateTime.Now.AddDays(-1d);
+                    Response.Cookies.Add(oldCookie);
+                }
+            }
+
+            if (cookie != null)
+            {
+                cookie.Value = "false";   // update cookie value
+                cookie.Expires = DateTime.Now.AddYears(1);
+                //cookie.SameSite = SameSiteMode.Lax;
+                if (!Request.IsLocal)
+                    cookie.Domain = ".geonorge.no";
+            }
+            else
+            {
+                cookie = new HttpCookie("_loggedIn");
+                cookie.Value = "false";
+                cookie.Expires = DateTime.Now.AddYears(1);
+                //cookie.SameSite = SameSiteMode.Lax;
+
+                if (!Request.IsLocal)
+                    cookie.Domain = ".geonorge.no";
+            }
+            Response.Cookies.Add(cookie);
+
 
             var redirectUri = WebConfigurationManager.AppSettings["GeoID:PostLogoutRedirectUri"];
             HttpContext.GetOwinContext().Authentication.SignOut(
