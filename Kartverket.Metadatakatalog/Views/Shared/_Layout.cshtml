@@ -130,8 +130,6 @@
     string organizationJson = Newtonsoft.Json.JsonConvert.SerializeObject(organization);
 }
 
-}
-
 <body class="geonorge-container prototype  geonorge ng-scope fixed-menu-margin">
     <main-navigation userinfo='@userInfoJson' organization='@organizationJson' environment="@Html.EnvironmentName()"
                      signinurl="@Html.Raw(Url.Action("SignIn", "Search"))"
