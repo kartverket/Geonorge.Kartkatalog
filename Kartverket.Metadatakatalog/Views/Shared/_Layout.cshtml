@@ -19,6 +19,8 @@
             if (!Request.IsLocal) {
                 cookie.Domain = ".geonorge.no";
             }
+
+            Response.Cookies.Set(cookie);
         }
         else
         {
@@ -30,8 +32,9 @@
             if (!Request.IsLocal) {
                 cookie.Domain = ".geonorge.no";
             }
+
+            Response.Cookies.Add(cookie);
         }
-        Response.Cookies.Add(cookie);
 
         Response.Redirect("/search/SignIn");
     }
