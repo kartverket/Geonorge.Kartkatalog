@@ -1059,7 +1059,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                     try
                     {
-                        if (protocol == "OGC:WFS" || protocol == "OGC:WCS" || protocol == "W3C:REST" || protocol == "W3C:WS" || protocol == "W3C:AtomFeed")
+                        if (protocol == "OGC:WFS" || protocol == "OGC:WCS" || protocol == "W3C:REST" || protocol == "W3C:WS" || protocol == "W3C:AtomFeed" || (!string.IsNullOrEmpty(protocol) && protocol.StartsWith("OGC:API")))
                         {
                             var uuid = relData[0] ?? "";
                             var simpleMetadata = GetSimpleMetadataByUuid(uuid) ?? throw new ArgumentNullException("Not found");
