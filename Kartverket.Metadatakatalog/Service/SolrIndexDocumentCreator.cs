@@ -937,9 +937,9 @@ namespace Kartverket.Metadatakatalog.Service
                                         {
                                             escapeChar = "\\",
                                             singleChar = "_",
-                                            wildCard = "%",
+                                            wildCard = "*",
                                             PropertyName = new PropertyNameType {Text = new[] {"srv:operatesOn"}},
-                                            Literal = new LiteralType {Text = new[] {"%" + searchString + "%"}}
+                                            Literal = new LiteralType {Text = new[] {"*" + searchString + "*"}}
                                         }
                             };
 
@@ -1112,9 +1112,9 @@ namespace Kartverket.Metadatakatalog.Service
                             {
                                 escapeChar = "\\",
                                 singleChar = "_",
-                                wildCard = "%",
+                                wildCard = "*",
                                 PropertyName = new PropertyNameType {Text = new[] {"srv:operatesOn"}},
-                                Literal = new LiteralType {Text = new[] {"%" + searchString + "%"}}
+                                Literal = new LiteralType {Text = new[] {"*" + searchString + "*"}}
                             }
             };
 
