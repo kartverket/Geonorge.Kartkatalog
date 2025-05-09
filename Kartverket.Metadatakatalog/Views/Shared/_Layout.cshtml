@@ -6,10 +6,10 @@
 
 @{
     var loggedInCookie = Context.Request.Cookies["_loggedIn"];
+    // Save redirect to basket in a cookie
+    HttpCookie cookie = Request.Cookies["_redirectDownload"];
     if (loggedInCookie != null && loggedInCookie.Value == "true" && !Request.IsAuthenticated && string.IsNullOrEmpty(Request.QueryString["login"]))
     {
-        // Save redirect to basket in a cookie
-        HttpCookie cookie = Request.Cookies["_redirectDownload"];
 
         if (cookie != null)
         {
@@ -38,6 +38,34 @@
 
         Response.Redirect("/search/SignIn?login=true");
     }
+
+    if (cookie != null)
+    {
+        cookie.Value = "false";   // update cookie value
+        cookie.Path = "/";
+        //cookie.SameSite = SameSiteMode.Lax;
+        if (!Request.IsLocal)
+        {
+            cookie.Domain = ".geonorge.no";
+        }
+
+        Response.Cookies.Set(cookie);
+    }
+    else
+    {
+        cookie = new HttpCookie("_redirectDownload");
+        cookie.Value = "false";
+        cookie.Path = "/";
+        //cookie.SameSite = SameSiteMode.Lax;
+
+        if (!Request.IsLocal)
+        {
+            cookie.Domain = ".geonorge.no";
+        }
+
+        Response.Cookies.Add(cookie);
+    }
+
  }
 
 <!DOCTYPE html>
