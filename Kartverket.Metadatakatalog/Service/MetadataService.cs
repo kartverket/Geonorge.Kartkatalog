@@ -1059,7 +1059,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                     try
                     {
-                        if (protocol == "OGC:WFS" || protocol == "OGC:WCS" || protocol == "W3C:REST" || protocol == "W3C:WS" || protocol == "W3C:AtomFeed")
+                        if (protocol == "OGC:WFS" || protocol == "OGC:WCS" || protocol == "W3C:REST" || protocol == "W3C:WS" || protocol == "W3C:AtomFeed" || (!string.IsNullOrEmpty(protocol) && protocol.StartsWith("OGC:API")))
                         {
                             var uuid = relData[0] ?? "";
                             var simpleMetadata = GetSimpleMetadataByUuid(uuid) ?? throw new ArgumentNullException("Not found");
@@ -1433,11 +1433,11 @@ namespace Kartverket.Metadatakatalog.Service
                     else
                         quantitativeResult.Performance = "Performance: " + qualitySpecification.QuantitativeResult + " seconds";
                 }
-                if (qualitySpecification.Title.Contains("FAIR"))
+                if (qualitySpecification.Title != null && qualitySpecification.Title.Contains("FAIR"))
                 {
                     quantitativeResult.FAIR = SimpleMetadata.FAIR_NAME_OF_MEASURE + ": " + qualitySpecification.QuantitativeResult + "%";
                 }
-                if (qualitySpecification.Title.Contains("dekning"))
+                if (qualitySpecification.Title != null && qualitySpecification.Title.Contains("dekning"))
                 {
                     quantitativeResult.Coverage = SimpleMetadata.COVERAGE_NAME_OF_MEASURE + ": " + qualitySpecification.QuantitativeResult + "%";
                 }

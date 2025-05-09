@@ -482,7 +482,7 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     AddDatapakkeRelatedDatasets(simpleMetadata, geoNorge, indexDoc);
                 }
-                else if (indexDoc.Type == "service" && string.IsNullOrEmpty(simpleMetadata.ParentIdentifier) || indexDoc.Type == "servicelayer")
+                else if (indexDoc.Type == "service" && string.IsNullOrEmpty(simpleMetadata.ParentIdentifier) || indexDoc.Type == "servicelayer" || (indexDoc.Type == "service" && simpleMetadata.DistributionsFormats != null && simpleMetadata.DistributionsFormats.Where(f => f.Protocol.StartsWith("OGC:API")).Any()))
                 {
                     AddServiceLayers(simpleMetadata, geoNorge, indexDoc);
                 }
@@ -939,7 +939,7 @@ namespace Kartverket.Metadatakatalog.Service
                                             singleChar = "_",
                                             wildCard = "%",
                                             PropertyName = new PropertyNameType {Text = new[] {"srv:operatesOn"}},
-                                            Literal = new LiteralType {Text = new[] {"%" + searchString + "%"}}
+                                            Literal = new LiteralType {Text = new[] {"\\%" + searchString + "\\%"}}
                                         }
                             };
 
@@ -1114,7 +1114,7 @@ namespace Kartverket.Metadatakatalog.Service
                                 singleChar = "_",
                                 wildCard = "%",
                                 PropertyName = new PropertyNameType {Text = new[] {"srv:operatesOn"}},
-                                Literal = new LiteralType {Text = new[] {"%" + searchString + "%"}}
+                                Literal = new LiteralType {Text = new[] {"\\%" + searchString + "\\%"}}
                             }
             };
 

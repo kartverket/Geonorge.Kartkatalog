@@ -137,7 +137,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
         [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("metadata/flushcache")]
+        [System.Web.Http.Route("api/flushcache")]
         public ActionResult FlushCache()
         {
             MemoryCacher memCacher = new MemoryCacher();
