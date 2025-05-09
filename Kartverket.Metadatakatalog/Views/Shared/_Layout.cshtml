@@ -1,6 +1,45 @@
 ﻿@using Kartverket.Metadatakatalog.Helpers
 @using Resources
 @using System.Web.Configuration;
+@using System.Security.Claims
+@using Geonorge.AuthLib.Common
+
+@{
+    var loggedInCookie = Context.Request.Cookies["_loggedIn"];
+    if (loggedInCookie != null && loggedInCookie.Value == "true" && !Request.IsAuthenticated)
+    {
+        // Save redirect to basket in a cookie
+        HttpCookie cookie = Request.Cookies["_redirectDownload"];
+
+        if (cookie != null)
+        {
+            cookie.Value = "true";   // update cookie value
+            cookie.Path = "/";
+            //cookie.SameSite = SameSiteMode.Lax;
+            if (!Request.IsLocal) {
+                cookie.Domain = ".geonorge.no";
+            }
+
+            Response.Cookies.Set(cookie);
+        }
+        else
+        {
+            cookie = new HttpCookie("_redirectDownload");
+            cookie.Value = "true";
+            cookie.Path = "/";
+            //cookie.SameSite = SameSiteMode.Lax;
+
+            if (!Request.IsLocal) {
+                cookie.Domain = ".geonorge.no";
+            }
+
+            Response.Cookies.Add(cookie);
+        }
+
+        Response.Redirect("/search/SignIn");
+    }
+ }
+
 <!DOCTYPE html>
 <html lang="@CultureHelper.GetCurrentCulture()" class="js flexbox no-flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg no-smil svgclippaths">
 <head>
@@ -50,14 +89,60 @@
                         '//www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
             })(window, document, 'script', 'dataLayer', 'GTM-MR2X5P');
         }</script>
-</head>
-<body class="geonorge-container prototype  geonorge ng-scope fixed-menu-margin">
-    <main-navigation environment="@Html.EnvironmentName()"
-                     norwegianurl="@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url }))"
-                     englishurl="@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Request.Url }))"
-                     language="@CultureHelper.GetCurrentCulture()">
 
-    </main-navigation>
+    <link href="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@3.0.1/index.css")" rel="stylesheet" type="text/css">
+</head>
+@{
+    dynamic userInfo = new System.Dynamic.ExpandoObject();
+    userInfo.name = "";
+    userInfo.email = "";
+
+    dynamic organization = new System.Dynamic.ExpandoObject();
+    organization.organizationName = "";
+    organization.organizationNumber = "";
+
+    <!-- user claims: -->
+    var cp = (ClaimsPrincipal)User;
+    foreach (var claim in cp.Claims)
+    {
+        <!-- @claim.Type = @claim.Value -->
+        if(claim.Type == "Name")
+        {
+            userInfo.name = claim.Value;
+        }
+        if(claim.Type == "Email")
+        {
+            userInfo.email = claim.Value;
+        }
+        if (claim.Type == "OrganizationOrgnr")
+        {
+            organization.organizationNumber = claim.Value;
+        }
+        if (claim.Type == "OrganizationName")
+        {
+            organization.organizationName = claim.Value;
+        }
+    }
+
+    <!-- roles: -->
+    var roles = cp.FindAll(GeonorgeAuthorizationService.ClaimIdentifierRole);
+    foreach (var role in roles)
+    {
+        <!-- @role.Value-->
+    }
+
+    string userInfoJson = Newtonsoft.Json.JsonConvert.SerializeObject(userInfo);
+    string organizationJson = Newtonsoft.Json.JsonConvert.SerializeObject(organization);
+}
+
+<body class="geonorge-container prototype  geonorge ng-scope fixed-menu-margin">
+    <main-navigation userinfo='@userInfoJson' organization='@organizationJson' environment="@Html.EnvironmentName()"
+                     signinurl="@Html.Raw(Url.Action("SignIn", "Search"))"
+                     signouturl="@Html.Raw(Url.Action("SignOut", "Search"))"
+                     isLoggedIn="@Request.IsAuthenticated.ToString().ToLower()"
+                     norwegianurl="@Html.Raw(Url.Action("SetCulture", "Search", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url }))"
+                     englishurl="@Html.Raw(Url.Action("SetCulture", "Search", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Request.Url }))"
+                     language="@CultureHelper.GetCurrentCulture()"></main-navigation>
     <div id="loading-animation" class="loading-animation" style="display: none;"></div>
 
     @Styles.Render("~/Content/bower_components/kartverket-felleskomponenter/assets/css/styles")
@@ -98,8 +183,8 @@
     @RenderSection("scripts", required: false)
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@2.20.6/MainNavigation.js")"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@2.20.6/GeonorgeFooter.js")"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@3.0.1/MainNavigation.js")"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@("@kartverket/geonorge-web-components@3.0.1/GeonorgeFooter.js")"></script>
 </body>
 
 </html>

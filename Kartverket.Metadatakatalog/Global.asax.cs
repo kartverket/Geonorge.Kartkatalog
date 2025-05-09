@@ -119,36 +119,6 @@ namespace Kartverket.Metadatakatalog
 
         protected void Application_EndRequest()
         {
-            try
-            {
-                //set logged in cookie for menu
-                bool loggedIn;
-                if (Request.IsAuthenticated)
-                    loggedIn = true;
-                else
-                    loggedIn = false;
-
-                var loggedInCookie = Context.Request.Cookies["_loggedIn"];
-                if (loggedInCookie != null)
-                {
-                    loggedInCookie.Value = loggedIn.ToString().ToLower();
-                    HttpContext.Current.Response.Cookies.Set(loggedInCookie);
-                }
-                else
-                {
-                    loggedInCookie = new HttpCookie("_loggedIn", loggedIn.ToString().ToLower());
-                    if (!Request.IsLocal)
-                        loggedInCookie.Domain = ".geonorge.no";
-
-                    if(!HttpContext.Current.Response.Cookies.AllKeys.Contains("_loggedIn"))
-                        HttpContext.Current.Response.Cookies.Add(loggedInCookie);
-                }
-            }
-
-            catch(Exception ex)
-            {
-                log.Error(ex);
-            }
         }
 
 

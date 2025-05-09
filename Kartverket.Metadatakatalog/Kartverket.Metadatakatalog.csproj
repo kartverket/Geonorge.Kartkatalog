@@ -99,10 +99,10 @@
       <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Geonorge.AuthLib.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Geonorge.AuthLib.Common.1.0.60\lib\netstandard2.0\Geonorge.AuthLib.Common.dll</HintPath>
+      <HintPath>..\packages\Geonorge.AuthLib.Common.1.0.65\lib\netstandard2.0\Geonorge.AuthLib.Common.dll</HintPath>
     </Reference>
     <Reference Include="Geonorge.AuthLib.NetFull, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Geonorge.AuthLib.NetFull.1.0.60\lib\net472\Geonorge.AuthLib.NetFull.dll</HintPath>
+      <HintPath>..\packages\Geonorge.AuthLib.NetFull.1.0.65\lib\net472\Geonorge.AuthLib.NetFull.dll</HintPath>
     </Reference>
     <Reference Include="GeoNorgeAPI, Version=3.8.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GeoNorgeAPI.3.8.1\lib\net48\GeoNorgeAPI.dll</HintPath>
@@ -195,11 +195,11 @@
     <Reference Include="Microsoft.IdentityModel.Logging, Version=7.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Logging.7.3.1\lib\net472\Microsoft.IdentityModel.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Protocols, Version=5.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Protocols.5.5.0\lib\net461\Microsoft.IdentityModel.Protocols.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Protocols, Version=7.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Protocols.7.3.1\lib\net472\Microsoft.IdentityModel.Protocols.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect, Version=5.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Protocols.OpenIdConnect.5.5.0\lib\net461\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect, Version=7.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Protocols.OpenIdConnect.7.3.1\lib\net472\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Tokens, Version=7.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Tokens.7.3.1\lib\net472\Microsoft.IdentityModel.Tokens.dll</HintPath>

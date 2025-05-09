@@ -1,7 +1,10 @@
-﻿using System.Web;
+﻿using System;
+using System.Net;
+using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Models;
+using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Article;
@@ -74,6 +77,52 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         public void SignOut()
         {
+            // Save redirect to basket in a cookie
+            HttpCookie cookie = Request.Cookies["_redirectDownload"];
+
+            if (cookie != null)
+            {
+                cookie.Value = "false";   // update cookie value
+                cookie.Path = "/";
+                //cookie.SameSite = SameSiteMode.Lax;
+                if (!Request.IsLocal)
+                    cookie.Domain = ".geonorge.no";
+            }
+            else
+            {
+                cookie = new HttpCookie("_redirectDownload");
+                cookie.Value = "false";
+                cookie.Path = "/";
+                //cookie.SameSite = SameSiteMode.Lax;
+
+                if (!Request.IsLocal)
+                    cookie.Domain = ".geonorge.no";
+            }
+            Response.Cookies.Add(cookie);
+
+
+            // Change loggedIn cookie
+            cookie = Request.Cookies["_loggedIn"];
+
+            if (cookie != null)
+            {
+                cookie.Value = "false";   // update cookie value
+                //cookie.SameSite = SameSiteMode.Lax;
+                if (!Request.IsLocal)
+                    cookie.Domain = ".geonorge.no";
+            }
+            else
+            {
+                cookie = new HttpCookie("_loggedIn");
+                cookie.Value = "false";
+                //cookie.SameSite = SameSiteMode.Lax;
+
+                if (!Request.IsLocal)
+                    cookie.Domain = ".geonorge.no";
+            }
+            Response.Cookies.Add(cookie);
+
+
             var redirectUri = WebConfigurationManager.AppSettings["GeoID:PostLogoutRedirectUri"];
             HttpContext.GetOwinContext().Authentication.SignOut(
                 new AuthenticationProperties { RedirectUri = redirectUri },
