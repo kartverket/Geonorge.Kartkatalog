@@ -6,17 +6,18 @@
 
 @{
     var loggedInCookie = Context.Request.Cookies["_loggedIn"];
-    // Save redirect to basket in a cookie
-    HttpCookie cookie = Request.Cookies["_redirectDownload"];
-    if (loggedInCookie != null && loggedInCookie.Value == "true" && !Request.IsAuthenticated && string.IsNullOrEmpty(Request.QueryString["login"]))
+    if (loggedInCookie != null && loggedInCookie.Value == "true" && !Request.IsAuthenticated)
     {
+        // Save redirect to basket in a cookie
+        HttpCookie cookie = Request.Cookies["_redirectDownload"];
 
         if (cookie != null)
         {
             cookie.Value = "true";   // update cookie value
             cookie.Path = "/";
             //cookie.SameSite = SameSiteMode.Lax;
-            if (!Request.IsLocal) {
+            if (!Request.IsLocal)
+            {
                 cookie.Domain = ".geonorge.no";
             }
 
@@ -29,44 +30,17 @@
             cookie.Path = "/";
             //cookie.SameSite = SameSiteMode.Lax;
 
-            if (!Request.IsLocal) {
+            if (!Request.IsLocal)
+            {
                 cookie.Domain = ".geonorge.no";
             }
 
             Response.Cookies.Add(cookie);
         }
 
-        Response.Redirect("/search/SignIn?login=true");
+        Response.Redirect("/search/SignIn");
     }
-
-    if (cookie != null)
-    {
-        cookie.Value = "false";   // update cookie value
-        cookie.Path = "/";
-        //cookie.SameSite = SameSiteMode.Lax;
-        if (!Request.IsLocal)
-        {
-            cookie.Domain = ".geonorge.no";
-        }
-
-        Response.Cookies.Set(cookie);
-    }
-    else
-    {
-        cookie = new HttpCookie("_redirectDownload");
-        cookie.Value = "false";
-        cookie.Path = "/";
-        //cookie.SameSite = SameSiteMode.Lax;
-
-        if (!Request.IsLocal)
-        {
-            cookie.Domain = ".geonorge.no";
-        }
-
-        Response.Cookies.Add(cookie);
-    }
-
- }
+}
 
 <!DOCTYPE html>
 <html lang="@CultureHelper.GetCurrentCulture()" class="js flexbox no-flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg no-smil svgclippaths">
@@ -134,11 +108,11 @@
     foreach (var claim in cp.Claims)
     {
         <!-- @claim.Type = @claim.Value -->
-        if(claim.Type == "Name")
+        if (claim.Type == "Name")
         {
             userInfo.name = claim.Value;
         }
-        if(claim.Type == "Email")
+        if (claim.Type == "Email")
         {
             userInfo.email = claim.Value;
         }
