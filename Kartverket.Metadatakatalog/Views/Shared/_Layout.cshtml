@@ -38,7 +38,7 @@
 //        Response.Cookies.Add(cookie);
 //    }
 
-//    //Response.Redirect("/search/SignIn"); //todo fix
+//    //Response.Redirect("/search/SignIn");
 //}
 }
 
@@ -138,8 +138,10 @@
 }
 
 <body class="geonorge-container prototype  geonorge ng-scope fixed-menu-margin">
-    <main-navigation  environment="@Html.EnvironmentName()"
-                     
+    <main-navigation userinfo='@userInfoJson' organization='@organizationJson' environment="@Html.EnvironmentName()"
+                     signinurl="@Html.Raw(Url.Action("SignIn", "Search"))"
+                     signouturl="@Html.Raw(Url.Action("SignOut", "Search"))"
+                     isLoggedIn="@Request.IsAuthenticated.ToString().ToLower()"
                      norwegianurl="@Html.Raw(Url.Action("SetCulture", "Search", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url }))"
                      englishurl="@Html.Raw(Url.Action("SetCulture", "Search", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Request.Url }))"
                      language="@CultureHelper.GetCurrentCulture()"></main-navigation>
