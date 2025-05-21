@@ -570,7 +570,14 @@ var OrderLine = {
                     }.bind(this),
                     error: function (err) {
                         hideLoadingAnimation();
-                        showAlert("Validering feilet for " + orderItem.metadata.name + ": " + err.statusText, "danger")
+                        console.log(err);
+                        var errorMessage = "";
+                        if (err.responseText)
+                        {
+                            errorMessage = ". " + err.responseText;      
+                        }
+
+                        showAlert("Validering feilet for " + orderItem.metadata.name + ": " + err.statusText + errorMessage, "danger")
                     }
                 });
             } else {
