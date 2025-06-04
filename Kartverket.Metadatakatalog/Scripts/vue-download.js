@@ -571,13 +571,13 @@ var OrderLine = {
                     error: function (err) {
                         hideLoadingAnimation();
                         console.log(err);
-                        var errorMessage = "";
+                        var errorMessage = err.statusText;
                         if (err.responseText)
                         {
-                            errorMessage = ". " + err.responseText;      
+                            errorMessage = err.responseText;      
                         }
 
-                        showAlert("Validering feilet for " + orderItem.metadata.name + ": " + err.statusText + errorMessage, "danger")
+                        showAlert("Validering feilet for " + orderItem.metadata.name + ": " + errorMessage, "danger")
                     }
                 });
             } else {
