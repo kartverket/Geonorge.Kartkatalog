@@ -5,41 +5,41 @@
 @using Geonorge.AuthLib.Common
 
 @{
-//var loggedInCookie = Context.Request.Cookies["_loggedIn"];
-//if (loggedInCookie != null && loggedInCookie.Value == "true" && !Request.IsAuthenticated)
-//{
-//    // Save redirect to basket in a cookie
-//    HttpCookie cookie = Request.Cookies["_redirectDownload"];
+    var loggedInCookie = Context.Request.Cookies["_loggedIn"];
+    if (loggedInCookie != null && loggedInCookie.Value == "true" && !Request.IsAuthenticated)
+    {
+        // Save redirect to basket in a cookie
+        HttpCookie cookie = Request.Cookies["_redirectDownload"];
 
-//    if (cookie != null)
-//    {
-//        cookie.Value = "true";   // update cookie value
-//        cookie.Path = "/";
-//        //cookie.SameSite = SameSiteMode.Lax;
-//        if (!Request.IsLocal)
-//        {
-//            cookie.Domain = ".geonorge.no";
-//        }
+        if (cookie != null)
+        {
+            cookie.Value = "true";   // update cookie value
+            cookie.Path = "/";
+            //cookie.SameSite = SameSiteMode.Lax;
+            if (!Request.IsLocal)
+            {
+                cookie.Domain = ".geonorge.no";
+            }
 
-//        Response.Cookies.Set(cookie);
-//    }
-//    else
-//    {
-//        cookie = new HttpCookie("_redirectDownload");
-//        cookie.Value = "true";
-//        cookie.Path = "/";
-//        //cookie.SameSite = SameSiteMode.Lax;
+            Response.Cookies.Set(cookie);
+        }
+        else
+        {
+            cookie = new HttpCookie("_redirectDownload");
+            cookie.Value = "true";
+            cookie.Path = "/";
+            //cookie.SameSite = SameSiteMode.Lax;
 
-//        if (!Request.IsLocal)
-//        {
-//            cookie.Domain = ".geonorge.no";
-//        }
+            if (!Request.IsLocal)
+            {
+                cookie.Domain = ".geonorge.no";
+            }
 
-//        Response.Cookies.Add(cookie);
-//    }
+            Response.Cookies.Add(cookie);
+        }
 
-//    Response.Redirect("/search/SignIn");
-//}
+        Response.Redirect("/search/SignIn");
+    }
 }
 
 <!DOCTYPE html>
@@ -139,7 +139,9 @@
 
 <body class="geonorge-container prototype  geonorge ng-scope fixed-menu-margin">
     <main-navigation userinfo='@userInfoJson' organization='@organizationJson' environment="@Html.EnvironmentName()"
-                    
+                     signinurl="@Html.Raw(Url.Action("SignIn", "Search"))"
+                     signouturl="@Html.Raw(Url.Action("SignOut", "Search"))"
+                     isLoggedIn="@Request.IsAuthenticated.ToString().ToLower()"
                      norwegianurl="@Html.Raw(Url.Action("SetCulture", "Search", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url }))"
                      englishurl="@Html.Raw(Url.Action("SetCulture", "Search", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Request.Url }))"
                      language="@CultureHelper.GetCurrentCulture()"></main-navigation>
