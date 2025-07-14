@@ -1303,6 +1303,7 @@ namespace Kartverket.Metadatakatalog.Service
                 KeywordsTheme = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, SimpleKeyword.TYPE_THEME, null)),
                 KeywordsInspire = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_GEMET_INSPIRE_V1)),
                 KeywordsInspirePriorityDataset = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_INSPIRE_PRIORITY_DATASET)),
+                KeywordsHighValueDatasetCategories = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_HIGHVALUE_DATASET)),
                 KeywordsNationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)),
                 KeywordsNationalTheme = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME)),
                 KeywordsOther = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, null)),
@@ -1346,7 +1347,17 @@ namespace Kartverket.Metadatakatalog.Service
                 OrderingInstructions = (simpleMetadata.AccessProperties != null && !string.IsNullOrEmpty(simpleMetadata.AccessProperties.OrderingInstructions)) ? simpleMetadata.AccessProperties.OrderingInstructions : ""
             };
 
-            if(simpleMetadata.ResolutionDistance.HasValue)
+            //Remove keyword high value dataset that are not used in the metadata editor, only for xml
+            if (metadata.KeywordsOther != null && metadata.KeywordsOther.Count > 0)
+            {
+                var keyHigValueData = metadata.KeywordsOther.Where(k => k.KeywordLink.Contains(SimpleKeyword.HIGHVALUE_DATASET_LINK)).FirstOrDefault();
+                if (keyHigValueData != null)
+                {
+                    metadata.KeywordsOther.Remove(keyHigValueData);
+                }
+            }
+
+            if (simpleMetadata.ResolutionDistance.HasValue)
                 metadata.ResolutionDistance = simpleMetadata.ResolutionDistance.Value;
 
             if (simpleMetadata.TopicCategories != null) 
