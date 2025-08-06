@@ -364,7 +364,10 @@ namespace Kartverket.Metadatakatalog.Models
                 }
                 else
                 {
-                    facetQueries[facet.Name] = facetQueries[facet.Name] + " OR " + facet.Name + ":\"" + facet.Value + "\"";
+                    if(facet.Value == "High value dataset")
+                        facetQueries[facet.Name] = facetQueries[facet.Name] + " AND " + facet.Name + ":\"" + facet.Value + "\"";
+                    else
+                        facetQueries[facet.Name] = facetQueries[facet.Name] + " OR " + facet.Name + ":\"" + facet.Value + "\"";
                 }
             }
 
