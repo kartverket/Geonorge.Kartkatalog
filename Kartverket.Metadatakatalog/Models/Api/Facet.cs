@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Resources;
 
@@ -28,7 +29,13 @@ namespace Kartverket.Metadatakatalog.Models.Api
         {
             FacetField = item.FacetField;
             Name = item.FacetField;
-            FacetResults = FacetField == "area" ? FacetValue.OrganizationCreateFromList(item.FacetResults) : FacetValue.CreateFromList(item.FacetResults);
+            if (FacetField == "area") 
+              FacetResults = FacetValue.OrganizationCreateFromList(item.FacetResults);
+            else if (FacetField == "nationalinitiative")
+                FacetResults = FacetValue.NationalInitiativeCreateFromList(item.FacetResults);
+            else
+                FacetResults = FacetValue.CreateFromList(item.FacetResults);
+
             NameTranslated = UI.ResourceManager.GetString("Facet_" + item.FacetField);
         }
 
@@ -106,6 +113,71 @@ namespace Kartverket.Metadatakatalog.Models.Api
                 {
                     var municipalities = facetResults.Where(k => k.Name.Length > 4 && k.Name.StartsWith(area.Name)).Select(ko => ko).OrderBy(ko => ko.Name).ToList();
                     facets.Add(new FacetValue(area, municipalities, areaDictionary));
+                }
+
+                return facets;
+            }
+            public static List<FacetValue> NationalInitiativeCreateFromList(IEnumerable<Models.Facet.FacetValue> facetResults)
+            {
+                List<FacetValue> facets = new List<FacetValue>();
+
+                var categoriesDictionary = new Dictionary<string, string>
+                {
+                    { "Geodata", "Geodata" },
+                    { "Jordobservasjon og miljø", "Jordobservasjon og miljø" },
+                    { "Meteorologi", "Meteorologi" },
+                    { "Mobilitet", "Mobilitet" },
+                    { "Selskaps- og eierskapsdata", "Selskaps- og eierskapsdata" },
+                    { "Statistikk", "Statistikk" },
+                    { "Geospatial", "Geospatial" },
+                    { "Earth observation and environment", "Earth observation and environment" },
+                    { "Meteorological", "Meteorological" },
+                    { "Mobility", "Mobility" },
+                    { "Companies and company ownership", "Sompanies and company ownership" },
+                    { "Statistics", "Statistics" },
+
+                };
+
+                IEnumerable<Models.Facet.FacetValue> facetsGeneral = new List<Models.Facet.FacetValue>();
+                IEnumerable<Models.Facet.FacetValue> facetsHVD = new List<Models.Facet.FacetValue>();
+
+                foreach (var initiative in facetResults)
+                {
+                    foreach (var category in categoriesDictionary.Keys)
+                    {
+                        if (initiative.Name.Contains(category))
+                        {
+                            if(!facetsHVD.Any(f => f.Name == initiative.Name))
+                                facetsHVD = facetsHVD.Append(initiative);
+                        }
+                        else
+                        {
+                            if (!facetsGeneral.Any(f => f.Name == initiative.Name) && initiative.Name != "High value dataset")
+                                facetsGeneral = facetsGeneral.Append(initiative);
+                        }
+                    }
+                }
+
+                foreach (var initiative in facetsGeneral)
+                {
+                    facets.Add(new FacetValue(initiative));
+                }
+
+                if(facetsHVD.Any())
+                {
+                    var categories = new List<Models.Facet.FacetValue>();
+                    foreach (var category in categoriesDictionary.Keys)
+                    {
+                        var count = facetsHVD.Where(f => f.Name.Contains(category)).Distinct().Sum(f => f.Count);
+                        if (count > 0)
+                        {
+                            categories.Add(new Models.Facet.FacetValue { Name = category, Count = count });
+                        }
+                    }
+
+                    var highValueDataset = facetResults.FirstOrDefault(f => f.Name == "High value dataset");
+
+                    facets.Add(new FacetValue(new Models.Facet.FacetValue { Count = highValueDataset.Count, Name = "High value dataset" }, categories, categoriesDictionary));
                 }
 
                 return facets;

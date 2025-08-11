@@ -423,6 +423,11 @@ namespace Kartverket.Metadatakatalog.Service
                 indexDoc.Keywords = keyWords;
 
                 var nationalInitiative = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_INITIATIVE)).ToList();
+                var highValueDatasetCategories = Convert(SimpleKeyword.Filter(simpleMetadata.Keywords, null, SimpleKeyword.THESAURUS_HIGHVALUE_DATASET)).ToList();
+                if(highValueDatasetCategories != null && highValueDatasetCategories.Count > 0) { 
+                    nationalInitiative.Add(new Keyword { KeywordValue = "High value dataset", EnglishKeyword = "High value dataset" });
+                    nationalInitiative.AddRange(highValueDatasetCategories);
+                }
                 keyWords = new List<string>();
                 foreach (var keyword in nationalInitiative)
                 {
