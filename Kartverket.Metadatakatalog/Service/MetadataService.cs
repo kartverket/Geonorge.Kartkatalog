@@ -1350,7 +1350,7 @@ namespace Kartverket.Metadatakatalog.Service
             //Remove keyword high value dataset that are not used in the metadata editor, only for xml
             if (metadata.KeywordsOther != null && metadata.KeywordsOther.Count > 0)
             {
-                var keyHigValueData = metadata.KeywordsOther.Where(k => k.KeywordLink.Contains(SimpleKeyword.HIGHVALUE_DATASET_LINK)).FirstOrDefault();
+                var keyHigValueData = metadata.KeywordsOther.Where(k => k.KeywordLink != null && k.KeywordLink.Contains(SimpleKeyword.HIGHVALUE_DATASET_LINK)).FirstOrDefault();
                 if (keyHigValueData != null)
                 {
                     metadata.KeywordsOther.Remove(keyHigValueData);
