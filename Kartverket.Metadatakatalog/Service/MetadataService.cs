@@ -307,8 +307,12 @@ namespace Kartverket.Metadatakatalog.Service
             //Serie
             if (metadata.HierarchyLevel == "series")
             {
-                
-                if (metadata.TypeName == "series_time")
+
+                if (metadata.Uuid == "no.met.adc:0f449e05-892a-5da2-b8d9-686f040ef4b5" || metadata.Uuid == "no.met.adc:53e19fd0-2370-535c-b58a-be1635b3862a") //Todo uuid must be configurable
+                {
+                    metadata.Distributions.RelatedSerieDatasets = GetClimateRelatedDistributions(metadata.Uuid, parameters);
+                }
+                else if (metadata.TypeName == "series_time")
                 {
                     metadata.Distributions.RelatedSerieDatasets = GetTimeRelatedDistributions(metadata.Uuid, parameters);
                 }
@@ -538,6 +542,128 @@ namespace Kartverket.Metadatakatalog.Service
 
 
                             distribution.Serie = new Serie { TypeName = "series_time" };
+
+                            distributions.Add(distribution);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                    }
+
+                }
+
+            }
+            catch (Exception ex) { }
+
+            return distributions;
+        }
+
+        private List<Distribution> GetClimateRelatedDistributions(object uuid, Models.Api.SearchParameters parameters)
+        {
+            List<Distribution> distributions = new List<Distribution>();
+
+            if (parameters.offset == 0)
+                parameters.offset = 1;
+
+            if (parameters.limit == 0)
+                parameters.limit = 10;
+
+            try
+            {
+                _geoNorge = new GeoNorge("", "", WebConfigurationManager.AppSettings["MetUrl"]);
+
+
+                var filters = new object[]
+                          {
+
+                    new BinaryLogicOpType()
+                        {
+                            Items = new object[]
+                                {
+                                    new PropertyIsLikeType
+                                    {
+                                        escapeChar = "\\",
+                                        singleChar = "_",
+                                        wildCard = "%",
+                                        PropertyName = new PropertyNameType {Text = new[] {"apiso:ParentIdentifier"}},
+                                        Literal = new LiteralType {Text = new[] { uuid.ToString() }}
+                                    },
+                                    new PropertyIsLikeType
+                                    {
+                                        escapeChar = "\\",
+                                        singleChar = "_",
+                                        wildCard = "%",
+                                        PropertyName = new PropertyNameType {Text = new[] {"apiso:AnyText"}},
+                                        Literal = new LiteralType {Text = new[] { parameters.text }}
+                                    },
+                                },
+
+                                ItemsElementName = new ItemsChoiceType22[]
+                                    {
+                                        ItemsChoiceType22.PropertyIsLike, ItemsChoiceType22.PropertyIsLike
+                                    }
+                        },
+
+                          };
+
+                var filterNames = new ItemsChoiceType23[]
+                    {
+                    ItemsChoiceType23.And
+                    };
+
+
+                var res = _geoNorge.SearchWithFilters(filters, filterNames, parameters.offset, parameters.limit, false, true);
+
+                if (res.numberOfRecordsMatched != "0")
+                {
+
+
+                    try
+                    {
+                        for (int s = 0; s < res.Items.Length; s++)
+                        {
+                            MD_Metadata_Type item = (MD_Metadata_Type)res.Items[s];
+                            SimpleMetadata result = new SimpleMetadata(item);
+
+                            Distribution distribution = new Distribution();
+
+                            distribution.Uuid = result.Uuid;
+                            distribution.Type = result.HierarchyLevel;
+                            distribution.Title = result.Title;
+                            distribution.Organization = result.ContactMetadata.Organization;
+                            distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
+                            distribution.Protocol = result.DistributionDetails?.Protocol != null ? Register.GetDistributionType(result.DistributionDetails?.Protocol) : "";
+                            distribution.CanShowDownloadUrl = !string.IsNullOrEmpty(result.DistributionDetails.URL);
+                            distribution.DistributionUrl = result.DistributionDetails.URL;
+                            if (distribution.DistributionUrl.EndsWith(".nc"))
+                                distribution.DistributionUrl = distribution.DistributionUrl + ".html";
+
+                            ////Åpne data, begrenset, skjermet
+                            if (SimpleMetadataUtil.IsOpendata(result.Constraints.OtherConstraints)) distribution.AccessIsOpendata = true;
+                            if (SimpleMetadataUtil.IsRestricted(result.Constraints.OtherConstraintsAccess)) distribution.AccessIsRestricted = true;
+                            if (SimpleMetadataUtil.IsProtected(result.Constraints.AccessConstraints)) distribution.AccessIsProtected = true;
+
+                            foreach (var distro in result.DistributionsFormats)
+                            {
+                                if (distro.Protocol == "OGC:WMS")
+                                {
+                                    distribution.CanShowMapUrl = true;
+                                    distribution.DatasetServicesWithShowMapLink = new List<DatasetService>
+                                    {
+                                        new DatasetService
+                                        {
+                                            Uuid = distribution.Uuid,
+                                            Title = distribution.Title,
+                                            DistributionProtocol = distro.Protocol,
+                                            GetCapabilitiesUrl = distro.URL
+                                        }
+                                    };
+
+                                }
+                            }
+
+
+                            //distribution.Serie = new Serie { TypeName = "series_time" };
 
                             distributions.Add(distribution);
                         }
