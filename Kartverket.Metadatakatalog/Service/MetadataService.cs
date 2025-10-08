@@ -302,17 +302,18 @@ namespace Kartverket.Metadatakatalog.Service
                    }
                }
             }
-                
 
+
+            if (metadata.Uuid == WebConfigurationManager.AppSettings["ClimateSerieUuid1"] || metadata.Uuid == WebConfigurationManager.AppSettings["ClimateSerieUuid2"])
+            {
+                metadata.Distributions.RelatedSerieDatasets = GetClimateRelatedDistributions(metadata.Uuid, parameters);
+            }
             //Serie
-            if (metadata.HierarchyLevel == "series")
+            else if (metadata.HierarchyLevel == "series")
             {
 
-                if (metadata.Uuid == WebConfigurationManager.AppSettings["ClimateSerieUuid1"] || metadata.Uuid == WebConfigurationManager.AppSettings["ClimateSerieUuid2"])
-                {
-                    metadata.Distributions.RelatedSerieDatasets = GetClimateRelatedDistributions(metadata.Uuid, parameters);
-                }
-                else if (metadata.TypeName == "series_time")
+
+                if (metadata.TypeName == "series_time")
                 {
                     metadata.Distributions.RelatedSerieDatasets = GetTimeRelatedDistributions(metadata.Uuid, parameters);
                 }
