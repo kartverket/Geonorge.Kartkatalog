@@ -308,7 +308,7 @@ namespace Kartverket.Metadatakatalog.Service
             if (metadata.HierarchyLevel == "series")
             {
 
-                if (metadata.Uuid == "no.met.adc:0f449e05-892a-5da2-b8d9-686f040ef4b5" || metadata.Uuid == "no.met.adc:53e19fd0-2370-535c-b58a-be1635b3862a") //Todo uuid must be configurable
+                if (metadata.Uuid == WebConfigurationManager.AppSettings["ClimateSerieUuid1"] || metadata.Uuid == WebConfigurationManager.AppSettings["ClimateSerieUuid2"])
                 {
                     metadata.Distributions.RelatedSerieDatasets = GetClimateRelatedDistributions(metadata.Uuid, parameters);
                 }
