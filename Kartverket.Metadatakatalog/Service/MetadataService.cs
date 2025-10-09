@@ -304,12 +304,12 @@ namespace Kartverket.Metadatakatalog.Service
             }
 
 
-            if (metadata.Uuid == WebConfigurationManager.AppSettings["ClimateSerieUuid1"] || metadata.Uuid == WebConfigurationManager.AppSettings["ClimateSerieUuid2"])
-            {
-                metadata.Distributions.RelatedSerieDatasets = GetClimateRelatedDistributions(metadata.Uuid, parameters);
-            }
+            /*if (metadata.Uuid == WebConfigurationManager.AppSettings["ClimateSerieUuid1"] || metadata.Uuid == WebConfigurationManager.AppSettings["ClimateSerieUuid2"])
+            //{
+                //metadata.Distributions.RelatedSerieDatasets = GetClimateRelatedDistributions(metadata.Uuid, parameters);
+            //}
             //Serie
-            else if (metadata.HierarchyLevel == "series")
+            else*/ if (metadata.HierarchyLevel == "series")
             {
 
 
