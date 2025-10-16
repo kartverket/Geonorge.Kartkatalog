@@ -29,6 +29,8 @@ namespace Kartverket.Metadatakatalog.Models
 
         [SolrField("organization")]
         public string Organization { get; set; }
+        [SolrField("organizations")]
+        public List<string> Organizations { get; set; }
 
         [SolrField("organization2")]
         public string Organization2 { get; set; }
