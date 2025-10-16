@@ -1749,6 +1749,11 @@
               Looks up a localized string similar to Organisasjon.
             </summary>
         </member>
+        <member name="P:Resources.UI.Facet_organizations">
+            <summary>
+              Looks up a localized string similar to Organisasjon.
+            </summary>
+        </member>
         <member name="P:Resources.UI.Facet_place">
             <summary>
               Looks up a localized string similar to Geografisk område.
