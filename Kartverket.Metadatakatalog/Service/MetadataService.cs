@@ -510,6 +510,7 @@ namespace Kartverket.Metadatakatalog.Service
                             else
                                 distribution.Title = result.Title;
                             distribution.Organization = result.ContactOwner.Organization;
+                            distribution.Organizations = result.ContactOwners.Select(o => o.Organization).ToList();
                             distribution.DistributionFormats = GetDistributionFormats(result.Uuid);
                             distribution.Protocol = result.DistributionDetails?.Protocol != null ? Register.GetDistributionType(result.DistributionDetails?.Protocol) : "";
                             distribution.CanShowDownloadUrl = !string.IsNullOrEmpty(result.DistributionDetails.URL);
@@ -1061,7 +1062,7 @@ namespace Kartverket.Metadatakatalog.Service
             distribution.TypeName = simpleMetadata.HierarchyLevelName;
             distribution.DistributionFormats.Add(GetDistributionFormat(simpleMetadataDistribution));
             distribution.Organization = GetOrganizationFromContactMetadata(simpleMetadata.ContactOwner);
-
+            distribution.Organizations = simpleMetadata.ContactOwners.Select(o => GetOrganizationFromContactMetadata(o)).ToList();
             distribution.ShowDetailsUrl = "/metadata/org/title/" + uuid;
             if (simpleMetadata.Constraints != null)
                 distribution.ServiceDistributionAccessConstraint = simpleMetadata.Constraints.AccessConstraints;
