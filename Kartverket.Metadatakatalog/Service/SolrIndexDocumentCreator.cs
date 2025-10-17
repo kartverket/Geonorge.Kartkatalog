@@ -280,6 +280,17 @@ namespace Kartverket.Metadatakatalog.Service
 
                     }
                 }
+
+                if (simpleMetadata.ContactOwners != null)
+                { 
+                    indexDoc.Organizations = new List<string>();
+                    foreach (var contact in simpleMetadata.ContactOwners)
+                    {
+                        var orgName = culture == Culture.EnglishCode && !string.IsNullOrEmpty(contact.OrganizationEnglish) ? contact.OrganizationEnglish : contact.Organization;
+                        if (!string.IsNullOrEmpty(orgName) && !indexDoc.Organizations.Contains(orgName))
+                            indexDoc.Organizations.Add(orgName);
+                    }
+                }
                 if (simpleMetadata.ContactMetadata != null)
                 {
                     indexDoc.Organization2 = simpleMetadata.ContactMetadata.Organization;
@@ -1401,6 +1412,7 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.ParentIdentifier = simpleMetadata.ParentIdentifier;
             indexDoc.Organizationgroup = simpleMetadata.Organizationgroup;
             indexDoc.Organization = simpleMetadata.Organization;
+            indexDoc.Organizations = simpleMetadata.Organizations;
             indexDoc.OrganizationContactname = simpleMetadata.OrganizationContactname;
             indexDoc.OrganizationSeoName = simpleMetadata.OrganizationSeoName;
             indexDoc.OrganizationShortName = simpleMetadata.OrganizationShortName;

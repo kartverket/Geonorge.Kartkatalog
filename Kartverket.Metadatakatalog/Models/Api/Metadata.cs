@@ -47,6 +47,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public string Organization { get; set; }
         /// <summary>
+        /// The list of owners of the metadata
+        /// </summary>
+        public List<string> Organizations { get; set; }
+        /// <summary>
         /// The logo for the organization
         /// </summary>
         public string OrganizationLogo { get; set; }
@@ -189,6 +193,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
             TypeTranslated = TranslateType();
             Theme = item.Theme;
             Organization = item.Organization;
+            Organizations = item.Organizations;
+
             OrganizationLogo = item.OrganizationLogoUrl;
             ThumbnailUrl = item.ThumbnailUrl;
             DistributionUrl = item.DistributionUrl;

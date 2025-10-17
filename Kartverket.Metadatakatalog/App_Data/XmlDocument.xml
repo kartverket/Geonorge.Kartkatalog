@@ -829,6 +829,11 @@
             The owner of the metadata
             </summary>
         </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.Organizations">
+            <summary>
+            The list of owners of the metadata
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.OrganizationLogo">
             <summary>
             The logo for the organization
@@ -1745,6 +1750,11 @@
             </summary>
         </member>
         <member name="P:Resources.UI.Facet_organizationgroup">
+            <summary>
+              Looks up a localized string similar to Organisasjon.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Facet_organizations">
             <summary>
               Looks up a localized string similar to Organisasjon.
             </summary>
