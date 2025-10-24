@@ -176,8 +176,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
                     }
 
                     var highValueDataset = facetResults.FirstOrDefault(f => f.Name == "High value dataset");
-
-                    facets.Add(new FacetValue(new Models.Facet.FacetValue { Count = highValueDataset.Count, Name = "High value dataset" }, categories, categoriesDictionary));
+                    if(highValueDataset != null)
+                        facets.Add(new FacetValue(new Models.Facet.FacetValue { Count = highValueDataset.Count, Name = "High value dataset" }, categories, categoriesDictionary));
                 }
 
                 return facets;
