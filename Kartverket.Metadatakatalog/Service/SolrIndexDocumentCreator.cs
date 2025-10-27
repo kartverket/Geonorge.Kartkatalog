@@ -28,6 +28,7 @@ namespace Kartverket.Metadatakatalog.Service
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public RegisterFetcher Register = new RegisterFetcher();
+        private readonly Dictionary<string, Organization> _organizationCache = new Dictionary<string, Organization>();
 
         private readonly IOrganizationService _organizationService;
         private readonly ThemeResolver _themeResolver;
@@ -244,9 +245,19 @@ namespace Kartverket.Metadatakatalog.Service
                     //}
                     indexDoc.OrganizationSeoName = new SeoUrl(indexDoc.Organizationgroup, null).Organization;
 
-                    Task<Organization> organizationTask =
+                    string orgKey = simpleMetadata.ContactOwner.Organization;
+                    Organization organization;
+                    if (_organizationCache.TryGetValue(orgKey, out organization))
+                    { 
+                        organization = _organizationCache[orgKey];
+                    }
+                    else 
+                    { 
+                        Task<Organization> organizationTask =
                         _organizationService.GetOrganizationByName(simpleMetadata.ContactOwner.Organization);
-                    Organization organization = organizationTask.Result;
+                        organization = organizationTask.Result;
+                        _organizationCache[orgKey] = organization;
+                    }
                     if (organization != null)
                     {
                         if(!string.IsNullOrEmpty(organization.ShortName))
