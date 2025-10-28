@@ -111,26 +111,35 @@ namespace Kartverket.Metadatakatalog.Service
         {
             var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
             System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-
-            if (culture == Culture.EnglishCode)
-                SetEnglishIndexCores();
-            else
-                SetNorwegianIndexCores();
-
-            if (metadataIndexDoc.Type != null && (metadataIndexDoc.Type.ToLower() == "service" || metadataIndexDoc.Type.ToLower() == "servicelayer"))
+            try 
             {
-                _indexerService.Index(_indexDocumentCreator.ConvertIndexDocToService(metadataIndexDoc));
+                if (culture == Culture.EnglishCode)
+                    SetEnglishIndexCores();
+                else
+                    SetNorwegianIndexCores();
+
+                if (metadataIndexDoc.Type != null && (metadataIndexDoc.Type.ToLower() == "service" || metadataIndexDoc.Type.ToLower() == "servicelayer"))
+                {
+                    _indexerService.Index(_indexDocumentCreator.ConvertIndexDocToService(metadataIndexDoc));
+                }
+                else if (metadataIndexDoc.Type != null && metadataIndexDoc.Type.ToLower() == "software")
+                {
+                    _indexerApplication.Index(_indexDocumentCreator.ConvertIndexDocToApplication(metadataIndexDoc));
+                }
+                else
+                    _indexer.Index(metadataIndexDoc);
+
+                _indexerAll.Index(_indexDocumentCreator.ConvertIndexDocToMetadataAll(metadataIndexDoc));
             }
-            else if (metadataIndexDoc.Type != null && metadataIndexDoc.Type.ToLower() == "software")
+            catch (Exception exception)
             {
-                _indexerApplication.Index(_indexDocumentCreator.ConvertIndexDocToApplication(metadataIndexDoc));
+                Log.Error("Error indexing document uuid: " + metadataIndexDoc.Uuid + "", exception);
+                _errorService.AddError(metadataIndexDoc.Uuid, exception);
             }
-            else
-                _indexer.Index(metadataIndexDoc);
-
-            _indexerAll.Index(_indexDocumentCreator.ConvertIndexDocToMetadataAll(metadataIndexDoc));
-
-            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+            finally
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+            }
         }
 
         private void RunSearch(int startPosition)
