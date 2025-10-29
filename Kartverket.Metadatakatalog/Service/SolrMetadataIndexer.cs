@@ -146,7 +146,7 @@ namespace Kartverket.Metadatakatalog.Service
         {
             Log.Info("Running search from start position: " + startPosition);
             SearchResultsType searchResult=null;
-            bool runningSingle = false;
+            //bool runningSingle = false;
             try
             {
                 searchResult = _geoNorge.SearchIso("", startPosition, 50, false);
@@ -161,65 +161,66 @@ namespace Kartverket.Metadatakatalog.Service
                 {
                     RunIndex(doc, Culture.EnglishCode);
                 }
-                runningSingle = false;
+                //runningSingle = false;
             }
             catch (Exception exception)
             {
-                Log.Error("Error in ISO format from Geonetwork position: " + startPosition + " + 50. Trying to index one by one", exception);
+                Log.Error("Error in ISO format from Geonetwork position: " + startPosition , exception);
                 //Forsøke en og en?
-                int count = 50;
-                for (int i = 1; i <= count; i++)
-                {
-                    SearchResultsType searchResult2 = null;
-                    try
-                    {
-                        Log.Info("Running single index for start position: " + startPosition);
-                        searchResult2 = _geoNorge.SearchIso("", startPosition, 1, false);
+                //int count = 50;
+                //for (int i = 1; i <= count; i++)
+                //{
+                //    SearchResultsType searchResult2 = null;
+                //    try
+                //    {
+                //        Log.Info("Running single index for start position: " + startPosition);
+                //        searchResult2 = _geoNorge.SearchIso("", startPosition, 1, false);
                         
-                        Log.Info("Next record: " + searchResult2.nextRecord + " " + searchResult2.numberOfRecordsMatched);
-                        List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult2.Items, _geoNorge, Culture.NorwegianCode);
-                        foreach (var doc in indexDocs)
-                        {
-                            RunIndex(doc, Culture.NorwegianCode);
-                        }
-                        indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult2.Items, _geoNorge, Culture.EnglishCode);
-                        foreach (var doc in indexDocs)
-                        {
-                            RunIndex(doc, Culture.EnglishCode);
-                        }
-                        //_indexer.Index(indexDocs);
-                        startPosition++;
-                        runningSingle = true;
-                    }
-                    catch (Exception exception2)
-                    {
-                        Log.Error("Error in ISO format from Geonetwork position: " + startPosition + ".", exception2);
-                        if (searchResult2 != null && searchResult2.Items != null) Log.Info(searchResult2.Items[0]);
+                //        Log.Info("Next record: " + searchResult2.nextRecord + " " + searchResult2.numberOfRecordsMatched);
+                //        List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult2.Items, _geoNorge, Culture.NorwegianCode);
+                //        foreach (var doc in indexDocs)
+                //        {
+                //            RunIndex(doc, Culture.NorwegianCode);
+                //        }
+                //        indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult2.Items, _geoNorge, Culture.EnglishCode);
+                //        foreach (var doc in indexDocs)
+                //        {
+                //            RunIndex(doc, Culture.EnglishCode);
+                //        }
+                //        //_indexer.Index(indexDocs);
+                //        startPosition++;
+                //        runningSingle = true;
+                //    }
+                //    catch (Exception exception2)
+                //    {
+                //        Log.Error("Error in ISO format from Geonetwork position: " + startPosition + ".", exception2);
+                //        if (searchResult2 != null && searchResult2.Items != null) Log.Info(searchResult2.Items[0]);
 
-                        startPosition++;
-                    }
+                //        startPosition++;
+                //    }
 
-                }
+                //}
 
 
             }
 
             int nextRecord;
             int numberOfRecordsMatched;
-            if (runningSingle)
-            {
-                nextRecord = startPosition;
-                RunSearch(nextRecord);
-            }
-            else
-            {
+            //if (runningSingle)
+            //{
+            //    nextRecord = startPosition;
+            //    RunSearch(nextRecord);
+            //}
+            //else
+            //{
                 nextRecord = int.Parse(searchResult.nextRecord);
                 numberOfRecordsMatched = int.Parse(searchResult.numberOfRecordsMatched);
                 if (nextRecord < numberOfRecordsMatched)
                 {
-                    RunSearch(nextRecord);
+                    if(nextRecord > 0)
+                        RunSearch(nextRecord);
                 }
-            }
+            //}
             
         }
 
