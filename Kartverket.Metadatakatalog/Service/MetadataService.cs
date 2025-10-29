@@ -627,7 +627,7 @@ namespace Kartverket.Metadatakatalog.Service
         {
             SearchResultItem metadata = null;
 
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.MetadataAll));
 
             ISolrQuery query = new SolrQuery("uuid:" + uuid);
             try
