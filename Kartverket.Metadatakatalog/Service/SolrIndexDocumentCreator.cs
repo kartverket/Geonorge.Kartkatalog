@@ -251,12 +251,18 @@ namespace Kartverket.Metadatakatalog.Service
                     { 
                         organization = _organizationCache[orgKey];
                     }
-                    else 
-                    { 
+                    else
+                    {
+                        try { 
                         Task<Organization> organizationTask =
                         _organizationService.GetOrganizationByName(simpleMetadata.ContactOwner.Organization);
                         organization = organizationTask.Result;
                         _organizationCache[orgKey] = organization;
+                        }
+                        catch (Exception ex)
+                        {
+                            
+                        }
                     }
                     if (organization != null)
                     {
@@ -545,12 +551,18 @@ namespace Kartverket.Metadatakatalog.Service
                             string OrganizationLogoUrl = "";
                             if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
                             {
+                                try { 
                                 Task<Organization> organizationTaskRel =
                                 _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
                                 Organization organizationRel = organizationTaskRel.Result;
                                 if (organizationRel != null)
                                 {
                                     OrganizationLogoUrl = organizationRel.LogoUrl;
+                                }
+                                }
+                                catch (Exception ex)
+                                {
+
                                 }
                             }
 
@@ -608,12 +620,18 @@ namespace Kartverket.Metadatakatalog.Service
                         string OrganizationLogoUrl = "";
                         if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
                         {
+                            try { 
                             Task<Organization> organizationTaskRel =
                             _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
                             Organization organizationRel = organizationTaskRel.Result;
                             if (organizationRel != null)
                             {
                                 OrganizationLogoUrl = organizationRel.LogoUrl;
+                            }
+                            }
+                            catch (Exception ex)
+                            {
+
                             }
                         }
 
@@ -693,12 +711,18 @@ namespace Kartverket.Metadatakatalog.Service
                             string OrganizationLogoUrl = "";
                             if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
                             {
+                                try { 
                                 Task<Organization> organizationTaskRel =
                                 _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
                                 Organization organizationRel = organizationTaskRel.Result;
                                 if (organizationRel != null)
                                 {
                                     OrganizationLogoUrl = organizationRel.LogoUrl;
+                                }
+                                }
+                                catch (Exception ex)
+                                {
+
                                 }
                             }
 
@@ -799,12 +823,18 @@ namespace Kartverket.Metadatakatalog.Service
                     string OrganizationLogoUrl = "";
                     if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
                     {
+                        try { 
                         Task<Organization> organizationTaskRel =
                         _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
                         Organization organizationRel = organizationTaskRel.Result;
                         if (organizationRel != null)
                         {
                             OrganizationLogoUrl = organizationRel.LogoUrl;
+                        }
+                        }
+                        catch (Exception ex)
+                        {
+
                         }
                     }
 
@@ -863,12 +893,18 @@ namespace Kartverket.Metadatakatalog.Service
                         string OrganizationLogoUrl = "";
                         if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
                         {
+                            try { 
                             Task<Organization> organizationTaskRel =
                             _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
                             Organization organizationRel = organizationTaskRel.Result;
                             if (organizationRel != null)
                             {
                                 OrganizationLogoUrl = organizationRel.LogoUrl;
+                            }
+                            }
+                            catch (Exception ex)
+                            {
+
                             }
                         }
 
@@ -940,12 +976,18 @@ namespace Kartverket.Metadatakatalog.Service
                             string OrganizationLogoUrl = "";
                             if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
                             {
+                                try { 
                                 Task<Organization> organizationTaskRel =
                                 _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
                                 Organization organizationRel = organizationTaskRel.Result;
                                 if (organizationRel != null)
                                 {
                                     OrganizationLogoUrl = organizationRel.LogoUrl;
+                                }
+                                }
+                                catch (Exception ex)
+                                {
+
                                 }
                             }
 
@@ -1250,12 +1292,18 @@ namespace Kartverket.Metadatakatalog.Service
                     string OrganizationLogoUrl = "";
                     if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
                     {
+                        try { 
                         Task<Organization> organizationTaskRel =
                         _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
                         Organization organizationRel = organizationTaskRel.Result;
                         if (organizationRel != null)
                         {
                             OrganizationLogoUrl = organizationRel.LogoUrl;
+                        }
+                        }
+                        catch (Exception ex)
+                        {
+
                         }
                     }
 
@@ -1308,12 +1356,18 @@ namespace Kartverket.Metadatakatalog.Service
                 string OrganizationLogoUrl = "";
                 if (metadata.ContactOwner != null && metadata.ContactOwner.Organization != null)
                 {
+                    try { 
                     Task<Organization> organizationTaskRel =
                     _organizationService.GetOrganizationByName(metadata.ContactOwner.Organization);
                     Organization organizationRel = organizationTaskRel.Result;
                     if (organizationRel != null)
                     {
                         OrganizationLogoUrl = organizationRel.LogoUrl;
+                    }
+                    }
+                    catch (Exception ex)
+                    {
+
                     }
                 }
 

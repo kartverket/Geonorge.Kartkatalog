@@ -1275,6 +1275,9 @@ namespace Kartverket.Metadatakatalog.Service
 
         private MetadataViewModel ConvertSimpleMetadataToMetadata(SimpleMetadata simpleMetadata)
         {
+            if (simpleMetadata == null)
+                throw new ArgumentNullException(nameof(simpleMetadata));
+            try { 
             var metadata = new MetadataViewModel
             {
                 Title = GetTranslation(simpleMetadata.Title, simpleMetadata.EnglishTitle),
@@ -1407,6 +1410,11 @@ namespace Kartverket.Metadatakatalog.Service
             }
 
             return metadata;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         private string FixMarkDown(string text)
@@ -1568,9 +1576,16 @@ namespace Kartverket.Metadatakatalog.Service
         private string GetOrganizationLogoUrl(Contact contactOwner)
         {
             if (contactOwner == null) return null;
-            var getOrganizationTask = _organizationService.GetOrganizationByName(contactOwner.Organization);
-            var organization = getOrganizationTask.Result;
-            return organization?.LogoUrl;
+            try 
+            { 
+                var getOrganizationTask = _organizationService.GetOrganizationByName(contactOwner.Organization);
+                var organization = getOrganizationTask.Result;
+                return organization?.LogoUrl;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private List<ReferenceSystem> GetReferenceSystems(SimpleMetadata simpleMetadata)
