@@ -627,12 +627,12 @@ namespace Kartverket.Metadatakatalog.Service
         {
             SearchResultItem metadata = null;
 
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexAllDoc>>(CultureHelper.GetIndexCore(SolrCores.MetadataAll));
 
             ISolrQuery query = new SolrQuery("uuid:" + uuid);
             try
             {
-                SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                SolrQueryResults<MetadataIndexAllDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
                 {
                     Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
                     "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
@@ -1275,6 +1275,9 @@ namespace Kartverket.Metadatakatalog.Service
 
         private MetadataViewModel ConvertSimpleMetadataToMetadata(SimpleMetadata simpleMetadata)
         {
+            if (simpleMetadata == null)
+                throw new ArgumentNullException(nameof(simpleMetadata));
+            try { 
             var metadata = new MetadataViewModel
             {
                 Title = GetTranslation(simpleMetadata.Title, simpleMetadata.EnglishTitle),
@@ -1407,6 +1410,11 @@ namespace Kartverket.Metadatakatalog.Service
             }
 
             return metadata;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         private string FixMarkDown(string text)
@@ -1568,9 +1576,16 @@ namespace Kartverket.Metadatakatalog.Service
         private string GetOrganizationLogoUrl(Contact contactOwner)
         {
             if (contactOwner == null) return null;
-            var getOrganizationTask = _organizationService.GetOrganizationByName(contactOwner.Organization);
-            var organization = getOrganizationTask.Result;
-            return organization?.LogoUrl;
+            try 
+            { 
+                var getOrganizationTask = _organizationService.GetOrganizationByName(contactOwner.Organization);
+                var organization = getOrganizationTask.Result;
+                return organization?.LogoUrl;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private List<ReferenceSystem> GetReferenceSystems(SimpleMetadata simpleMetadata)
