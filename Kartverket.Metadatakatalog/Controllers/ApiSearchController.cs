@@ -107,6 +107,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Catalogue search for dataset
         /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/datasets")]
         [System.Web.Http.HttpGet]
         public SearchResult Datasets([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
@@ -136,6 +137,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Catalogue search for opendata
         /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/aapnedata")]
         [System.Web.Http.HttpGet]
         public SearchResult Opendata([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
@@ -166,6 +168,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Catalogue search for applications
         /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/kartlosninger-i-norge")]
         [System.Web.Http.HttpGet]
         public SearchResult applications([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
@@ -193,6 +196,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Catalogue search for services
         /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/servicedirectory")]
         [System.Web.Http.HttpGet]
         public SearchResult servicedirectory([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
@@ -220,6 +224,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Catalogue search for articles
         /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/articles")]
         [System.Web.Http.HttpGet]
         public Models.Api.Article.SearchResult Articles([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters parameters)
@@ -245,6 +250,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Catalogue search for articles
         /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/datasets-namespace")]
         [System.Web.Http.HttpGet]
         public SearchResult DatasetsNamespace(string @namespace, int limit = 10, int offset = 0)
@@ -271,6 +277,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Get simple metadata list
         /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/datasets-simple")]
         [System.Web.Http.HttpGet]
         public SearchResult DatasetsSimple(string organization = "")
@@ -365,6 +372,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Get metadata for uuid for external met
         /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/get-external-metadata-xml/{uuid}")]
         [System.Web.Http.HttpGet]
         public HttpResponseMessage GetExternalXml(string uuid)
@@ -379,6 +387,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Get related services, datasets and bundles for uuid
         /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/relateddata/{uuid}")]
         [System.Web.Http.HttpGet]
         public SearchResult GetRelated(string uuid)
@@ -400,6 +409,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Get distributions for uuid
         /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/distributions/{uuid}")]
         [System.Web.Http.HttpGet]
         public List<Distribution> GetDistributions(string uuid)
@@ -407,6 +417,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             return _metadataService.GetRelatedDistributionsByUuid(uuid);
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/distribution-lists/{uuid}")]
         [System.Web.Http.HttpGet]
         public Distributions GetDistributionLists(string uuid, [System.Web.Http.ModelBinding.ModelBinder(typeof(SearchParameterModelBuilder))] SearchParameters parameters)
