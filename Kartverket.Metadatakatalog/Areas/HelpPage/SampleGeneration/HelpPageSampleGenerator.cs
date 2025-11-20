@@ -12,6 +12,7 @@ using System.Net.Http.Headers;
 using System.Web.Http.Description;
 using System.Xml.Linq;
 using Newtonsoft.Json;
+using Kartverket.Metadatakatalog.Models; // Added for MetadataViewModel
 
 namespace Kartverket.Metadatakatalog.Areas.HelpPage
 {
@@ -31,6 +32,25 @@ namespace Kartverket.Metadatakatalog.Areas.HelpPage
             SampleObjectFactories = new List<Func<HelpPageSampleGenerator, Type, object>>
             {
                 DefaultSampleObjectFactory,
+            };
+
+            // Explicit non-cyclical sample object for MetadataViewModel to avoid recursive serialization
+            SampleObjects[typeof(MetadataViewModel)] = CreateMetadataViewModelSample();
+        }
+
+        private static MetadataViewModel CreateMetadataViewModelSample()
+        {
+            return new MetadataViewModel
+            {
+                NorwegianTitle = "Sample Norwegian title",
+                EnglishTitle = "Sample English title",
+                Abstract = "Sample abstract",
+                HierarchyLevel = "dataset",
+                Uuid = Guid.NewGuid().ToString(),
+                // Ensure non-cyclical: keep Related empty
+                Related = new List<MetadataViewModel>(),
+                Keywords = new List<Keyword>(),
+                Thumbnails = new List<Thumbnail>()
             };
         }
 
