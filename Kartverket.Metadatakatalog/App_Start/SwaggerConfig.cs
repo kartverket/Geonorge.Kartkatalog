@@ -20,7 +20,7 @@ namespace Kartverket.Metadatakatalog
                     {
                         c.SingleApiVersion("v1", "Kartverket.Metadatakatalog");
 
-                        // Force HTTPS and correct port for Swagger JSON
+                        //set the host for the Swagger document
                         c.RootUrl(req =>
                         {                  
                             return WebConfigurationManager.AppSettings["KartkatalogenUrl"];
