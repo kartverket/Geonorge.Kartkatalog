@@ -1,8 +1,9 @@
-using System.Web.Http;
-using WebActivatorEx;
 using Kartverket.Metadatakatalog;
 using Swashbuckle.Application;
 using System.Net.Http;
+using System.Web.Configuration;
+using System.Web.Http;
+using WebActivatorEx;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
@@ -21,16 +22,11 @@ namespace Kartverket.Metadatakatalog
 
                         // Force HTTPS and correct port for Swagger JSON
                         c.RootUrl(req =>
-                        {
-                            var uri = req.RequestUri;
-                            var builder = new System.UriBuilder(uri)
-                            {
-                                Scheme = "https"
-                            };
-                            return builder.Uri.GetLeftPart(System.UriPartial.Authority) + req.GetRequestContext().VirtualPathRoot.TrimEnd('/');
+                        {                  
+                            return WebConfigurationManager.AppSettings["KartkatalogenUrl"];
                         });
                     })
-                .EnableSwaggerUi( c => { });
+                .EnableSwaggerUi(c => { });
         }
     }
 }
