@@ -202,12 +202,9 @@ namespace Kartverket.Metadatakatalog.Models.Api
             DistributionName = item.DistributionName;
             DistributionType = item.DistributionType;
             GetCapabilitiesUrl = GetGetCapabilitiesUrl(item);
-            if (urlHelper != null)
-            {
-                ShowDetailsUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/uuid/" + item.Uuid;
-                string s = new SeoUrl(item.Organization, "").Organization;
-                OrganizationUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/" + s;
-            }
+
+            ShowDetailsUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/uuid/" + item.Uuid;
+            OrganizationUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "?organizations=" + item?.Organization;
 
             if (item.DataAccess != null && item.DataAccess == "Åpne data" && UI.OpenData == "Open data")
                 item.DataAccess = "Open data";

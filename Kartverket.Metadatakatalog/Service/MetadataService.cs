@@ -1352,6 +1352,10 @@ namespace Kartverket.Metadatakatalog.Service
                 OrderingInstructions = (simpleMetadata.AccessProperties != null && !string.IsNullOrEmpty(simpleMetadata.AccessProperties.OrderingInstructions)) ? simpleMetadata.AccessProperties.OrderingInstructions : ""
             };
 
+            //for access owner at root level, wish from Havforskningsinstituttet MoMap
+            metadata.Organization = simpleMetadata?.ContactOwner?.Organization;
+            metadata.OrganizationEnglish = simpleMetadata?.ContactOwner?.OrganizationEnglish;
+
             //Remove keyword high value dataset that are not used in the metadata editor, only for xml
             if (metadata.KeywordsOther != null && metadata.KeywordsOther.Count > 0)
             {

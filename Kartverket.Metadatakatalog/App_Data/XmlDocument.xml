@@ -587,8 +587,10 @@
         </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetData(System.String)">
             <summary>
-            Get metadata for uuid
+            Gets metadata for the specified uuid.
             </summary>
+            <param name="uuid">The metadata uuid.</param>
+            <returns>IHttpActionResult containing <see cref="T:Kartverket.Metadatakatalog.Models.MetadataViewModel"/> if found, otherwise NotFound.</returns>
         </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetExternalXml(System.String)">
             <summary>
