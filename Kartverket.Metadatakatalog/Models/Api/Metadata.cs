@@ -205,8 +205,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             if (urlHelper != null)
             {
                 ShowDetailsUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/uuid/" + item.Uuid;
-                string s = new SeoUrl(item.Organization, "").Organization;
-                OrganizationUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/" + s;
+                OrganizationUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "?organizations=" + item?.Organization;
             }
 
             if (item.DataAccess != null && item.DataAccess == "Åpne data" && UI.OpenData == "Open data")
