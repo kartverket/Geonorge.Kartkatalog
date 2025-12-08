@@ -34,6 +34,8 @@ namespace Kartverket.Metadatakatalog.Models
         public Constraints Constraints { get; set; }
         public Contact ContactMetadata { get; set; }
         public Contact ContactOwner { get; set; }
+        public string Organization { get; set; }
+        public string OrganizationEnglish { get; set; }
         public List<Contact> ContactOwners { get; set; }
         public Contact ContactPublisher { get; set; }
         [DisplayFormat(DataFormatString = "{0:d}")]
