@@ -367,7 +367,9 @@ namespace Kartverket.Metadatakatalog.Controllers
             { 
                 model = _metadataService.GetMetadataViewModelByUuid(uuid);
                 if(model == null)
-                    return NotFound();
+                {   string returnObj = null;
+                    return Content(HttpStatusCode.NotFound, new { returnObj }); 
+                }
 
                 return Ok(model);
             }
