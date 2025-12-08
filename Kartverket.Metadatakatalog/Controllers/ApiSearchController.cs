@@ -1,33 +1,34 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
-using System.Web.Http.Cors;
-using System.Web.Mvc;
+﻿using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models;
-using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Models.Api;
-using SearchParameters = Kartverket.Metadatakatalog.Models.Api.SearchParameters;
-using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
-using System;
+using Kartverket.Metadatakatalog.Models.Article;
+using Kartverket.Metadatakatalog.Models.Translations;
+using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service;
+using Kartverket.Metadatakatalog.Service.Application;
+using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
-using Kartverket.Metadatakatalog.Models.ViewModels;
-using System.Web.Http.Description;
-using Kartverket.Metadatakatalog.Service.Article;
-using Kartverket.Metadatakatalog.Models.Article;
-using System.Web.Configuration;
 using Resources;
-using System.Net.Http;
-using Kartverket.Metadatakatalog.Models.Translations;
-using Kartverket.Metadatakatalog.Helpers;
-using System.Net.Http.Headers;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Threading;
-using System.Xml;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Web;
+using System.Web.Configuration;
+using System.Web.Http;
+using System.Web.Http.Cors;
+using System.Web.Http.Description;
+using System.Web.Mvc;
+using System.Xml;
+using SearchParameters = Kartverket.Metadatakatalog.Models.Api.SearchParameters;
+using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
 
 
 // Metadata search api examples
@@ -352,21 +353,29 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         /// <summary>
-        /// Get metadata for uuid
+        /// Gets metadata for the specified uuid.
         /// </summary>
+        /// <param name="uuid">The metadata uuid.</param>
+        /// <returns>IHttpActionResult containing <see cref="Models.MetadataViewModel"/> if found, otherwise NotFound.</returns>
+        [ResponseType(typeof(Models.MetadataViewModel))]
         [System.Web.Http.Route("api/getdata/{uuid}")]
         [System.Web.Http.HttpGet]
-        public Models.MetadataViewModel GetData(string uuid)
+        public IHttpActionResult GetData(string uuid)
         {
-            try { 
-            Models.MetadataViewModel model = _metadataService.GetMetadataViewModelByUuid(uuid);
-            return model;
+            Models.MetadataViewModel model = null;
+            try
+            { 
+                model = _metadataService.GetMetadataViewModelByUuid(uuid);
+                if(model == null)
+                    return NotFound();
+
+                return Ok(model);
             }
             catch(Exception ex) 
             {
                 Log.Error(ex);
+                return InternalServerError();
             }
-            return null;
         }
 
         /// <summary>
