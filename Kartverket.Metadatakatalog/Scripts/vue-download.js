@@ -41,17 +41,24 @@ function IsGeonorge(distributionUrl) {
     return distributionUrl.indexOf("geonorge.no") > -1;
 }
 
-function getJsonData(url) {
+function getJsonData(options) {
+    var url = typeof options === "string" ? options : options.url;
+    var bearerToken = options.bearerToken;
     var lastSlash = url.lastIndexOf('/');
     var uuid = url.substring(lastSlash + 1);
     var name = getOrderItemName(uuid);
     var jsonUri = fixUrl(url);
-    returnData = "";
+    var returnData = "";
     if (jsonUri != "") {
         $.ajax({
             url: jsonUri,
             dataType: 'json',
             async: false,
+            beforeSend: function (xhr) {
+                if (bearerToken) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + bearerToken);
+                }
+            },
             error: function (jqXHR, textStatus, errorThrown) {
                 showAlert("Kunne ikke legge til " + name + " til nedlastning. Feilmelding: " + errorThrown + "<br/>", "danger");
                 returnData = "error";
@@ -1430,7 +1437,10 @@ var mainVueModel = Vue.createApp({
                                         this.masterOrderLine.allAvailableAreas[uuid] = {};
 
                                     if (link.rel === "http://rel.geonorge.no/download/area" && orderLines[key].capabilities.supportsAreaSelection) {
-                                        var availableAreas = metadata.areas && metadata.areas.length ? metadata.areas : getJsonData(this.addAccessTokenForRestrictedRole(link.href, capabilities));
+                                        var areaOptions = this.addAccessTokenForRestrictedRole(link.href, capabilities);
+                                        var availableAreas = metadata.areas && metadata.areas.length
+                                            ? metadata.areas
+                                            : getJsonData(areaOptions);
 
                                         if (availableAreas.length === 0)
                                             showAlert("Ingen områder er tilgjengelige for " + metadata.name, 'danger');
@@ -1526,22 +1536,18 @@ var mainVueModel = Vue.createApp({
     },
     methods: {
         addAccessTokenForRestrictedRole: function (url, capabilities) {
-
             var bearerToken = GetCookie('oidcAccessToken');
+            var sendBearer = false;
 
             if (capabilities !== "" && capabilities.accessConstraintRequiredRole !== undefined) {
-
-                if (capabilities.accessConstraintRequiredRole.indexOf('nd.egenkommune') > -1
-                    || capabilities.accessConstraintRequiredRole.indexOf('nd.landbrukspart') > -1) {
-                    if (bearerToken) {
-                        if (bearerToken.indexOf('?') > -1)
-                            url = url + '&access_token=' + bearerToken;
-                        else
-                            url = url + '?access_token=' + bearerToken;
-                    }
+                if (
+                    capabilities.accessConstraintRequiredRole.indexOf('nd.egenkommune') > -1 ||
+                    capabilities.accessConstraintRequiredRole.indexOf('nd.landbrukspart') > -1
+                ) {
+                    sendBearer = !!bearerToken;
                 }
             }
-            return url;
+            return { url: url, bearerToken: sendBearer ? bearerToken : null };
         },
         getPurposeName: function (purpose) {
 
@@ -2381,17 +2387,17 @@ var mainVueModel = Vue.createApp({
                 });
             }
         },
-        AddAccessToken: function (fileUrl) {
-            var bearerToken = this.getCookie('oidcAccessToken');
+        //AddAccessToken: function (fileUrl) {
+        //    var bearerToken = this.getCookie('oidcAccessToken');
 
-            if (bearerToken) {
-                if (bearerToken.indexOf('?') > -1)
-                    fileUrl = fileUrl + '&access_token=' + bearerToken;
-                else
-                    fileUrl = fileUrl + '?access_token=' + bearerToken;
-            }
-            return fileUrl;
-        },
+        //    if (bearerToken) {
+        //        if (bearerToken.indexOf('?') > -1)
+        //            fileUrl = fileUrl + '&access_token=' + bearerToken;
+        //        else
+        //            fileUrl = fileUrl + '?access_token=' + bearerToken;
+        //    }
+        //    return fileUrl;
+        //},
         removeFromLocalStorage: function (uuid) {
             var uuidLength = uuid.length;
             var orderItems = JSON.parse(localStorage["orderItems"]);
