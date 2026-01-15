@@ -110,6 +110,8 @@ namespace Kartverket.Metadatakatalog.Models
         public string CoverageUrl { get; set; }
         public string CoverageGridUrl { get; set; }
         public string CoverageCellUrl { get; set; }
+        public string SurveyAreaMapUrl { get; set; }
+        public string SurveyAreaMapUrlWms { get; set; }
         public string DownloadUrl { get; set; }
         public string Purpose { get; set; }
         public List<QualitySpecification> QualitySpecifications { get; set; }
@@ -472,12 +474,81 @@ namespace Kartverket.Metadatakatalog.Models
 
                     if (!string.IsNullOrEmpty(CoverageCellUrl))
                         CoverageLink = CoverageLink + "&geojson=" + System.Net.WebUtility.UrlEncode(CoverageCellUrl);
-
+                    if(!string.IsNullOrEmpty(SurveyAreaMapUrl) || !string.IsNullOrEmpty(SurveyAreaMapUrlWms))
+                        CoverageLink = AddSurveyAreaMap(CoverageLink, SurveyAreaMapUrl, SurveyAreaMapUrlWms);
 
                     return CoverageLink;
                 }
             }
             return CoverageUrl;
+        }
+
+        private string AddSurveyAreaMap(string coverageLink, string surveyAreaMapUrl, string surveyAreaMapUrlWms)
+        {
+            var uriBuilder = new UriBuilder(coverageLink.Replace("#",""));
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+
+            string wmsUrl, layerName;
+            ExtractWmsUrlAndLayer(SurveyAreaMapUrlWms, out wmsUrl, out layerName);
+
+            // Handle WMS
+            if (!string.IsNullOrWhiteSpace(wmsUrl))
+            {
+                // Add or append to 'wms' parameter
+                var wms = query["wms"];
+                if (!string.IsNullOrWhiteSpace(wms))
+                    wms += "," + wmsUrl;
+                else
+                    wms = wmsUrl;
+                query["wms"] = wms;
+
+                // Add or append to 'addLayers' parameter
+                var addLayers = query["addLayers"];
+                if (!string.IsNullOrWhiteSpace(addLayers))
+                    addLayers += "," + layerName;
+                else
+                    addLayers = layerName;
+                query["addLayers"] = addLayers;
+            }
+
+            // Handle GeoJSON
+            if (!string.IsNullOrWhiteSpace(surveyAreaMapUrl))
+            {
+                query["geojson"] = surveyAreaMapUrl;
+                query["addLayers"] = string.IsNullOrWhiteSpace(query["addLayers"])
+                    ? "geojson"
+                    : query["addLayers"] + ",geojson";
+            }
+
+            uriBuilder.Query = "#" + query.ToString();
+            var url = uriBuilder.Uri.ToString();
+            url = url.Replace("!?#", "#!?");
+            return url;
+        }
+
+        private static void ExtractWmsUrlAndLayer(string input, out string wmsUrl, out string layerName)
+        {
+            wmsUrl = null;
+            layerName = null;
+
+            if (string.IsNullOrEmpty(input))
+                return;
+
+            int pathIndex = input.IndexOf("@PATH:");
+            int layerIndex = input.IndexOf("@LAYER:");
+
+            if (pathIndex == -1 || layerIndex == -1)
+                return;
+
+            // @PATH: is 6 chars, so start after that
+            int pathStart = pathIndex + 6;
+            int pathLength = layerIndex - pathStart;
+            wmsUrl = input.Substring(pathStart, pathLength).Trim();
+
+            // @LAYER: is 7 chars, so start after that
+            int layerStart = layerIndex + 7;
+            if (layerStart < input.Length)
+                layerName = input.Substring(layerStart).Trim();
         }
 
         public string GetCoverageParams()

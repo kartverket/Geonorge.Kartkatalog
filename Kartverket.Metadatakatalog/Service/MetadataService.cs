@@ -847,6 +847,8 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.AccessIsProtected = metadata.IsOffline();
 
             metadata.CoverageCellUrl = simpleMetadata.CoverageCellUrl;
+            metadata.SurveyAreaMapUrl = simpleMetadata.SurveyAreaMapUrl;
+            metadata.SurveyAreaMapUrlWms = simpleMetadata.SurveyAreaMapUrlWms;
             metadata.CanShowMapUrl = metadata.ShowMapLink();
             metadata.CanShowServiceMapUrl = metadata.ShowServiceMapLink();
             metadata.CanShowDownloadService = metadata.ShowDownloadService();
