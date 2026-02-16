@@ -318,6 +318,25 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
         }
 
+        /// <summary>
+        /// Get metadata dataset id
+        /// </summary>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [System.Web.Http.Route("api/metadata-dataset-id")]
+        [System.Web.Http.HttpGet]
+        public SearchResultItemViewModel MetadataDatasetId(string datasetId)
+        {
+            try
+            {
+                return _metadataService.GetMetadataByDatasetId(datasetId);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error API", ex);
+                return null;
+            }
+        }
+
 
         [ApiExplorerSettings(IgnoreApi = true)]
         [System.Web.Http.Route("api/metadata/{uuid}")]

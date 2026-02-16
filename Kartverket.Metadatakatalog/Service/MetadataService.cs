@@ -769,6 +769,38 @@ namespace Kartverket.Metadatakatalog.Service
  
         }
 
+        public SearchResultItemViewModel GetMetadataByDatasetId(string datasetId)
+        {
+            List<MetadataIndexDoc> metadata = null;
+            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+
+            ISolrQuery query = new SolrQuery("resourceReferenceCodeName:\"" + datasetId + "\" ");
+            try
+            {
+                SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
+                {
+                    Fields = new[] { "uuid", "title", "abstract", "purpose", "type", "theme", "organization", "organization_seo_lowercase", "placegroups", "organizationgroup",
+                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "resourceReferenceCodeName" }
+                });
+
+                metadata = queryResults.ToList();
+                if (metadata.Count == 1)
+                {
+                    return Metadata(metadata.FirstOrDefault().Uuid);
+                }
+                else
+                    return null;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+
+        }
+
 
         private SimpleMetadata GetSimpleMetadataByUuid(string uuid)
         {
