@@ -585,6 +585,11 @@
             Valid metadata dataset name
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.MetadataDatasetId(System.String)">
+            <summary>
+            Get metadata dataset id
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetData(System.String)">
             <summary>
             Gets metadata for the specified uuid.
