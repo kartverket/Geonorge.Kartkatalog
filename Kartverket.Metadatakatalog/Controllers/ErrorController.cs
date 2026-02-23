@@ -1,15 +1,15 @@
-﻿using Kartverket.Metadatakatalog.Models.ViewModels;
+using Kartverket.Metadatakatalog.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
     public class ErrorController : Controller
     {
-        public ActionResult NotFound(string url)
+        public IActionResult NotFound(string url)
         {
             var originalUri = url ?? Request.QueryString["aspxerrorpath"] ?? Request.Url.OriginalString;
 

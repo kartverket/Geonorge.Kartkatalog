@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Security.Claims;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Geonorge.AuthLib.Common;
 using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
-    [HandleError]
     public class IndexController : Controller
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -24,7 +23,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
 
         [Authorize]
-        public ActionResult Index()
+        public IActionResult Index()
         {
             Log.Info("Run indexing of entire metadata catalogue.");
             DateTime start = DateTime.Now;
@@ -40,7 +39,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         [Authorize]
         [Route("IndexSingle/{uuid}")]
-        public ActionResult IndexSingle(string uuid)
+        public IActionResult IndexSingle(string uuid)
         {
             Log.Info("Run indexing of single metadata.");
             DateTime start = DateTime.Now;
@@ -60,7 +59,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         [Authorize]
-        public ActionResult ReIndex()
+        public IActionResult ReIndex()
         {
             if (ClaimsPrincipal.Current.IsInRole(GeonorgeRoles.MetadataAdmin))
             {

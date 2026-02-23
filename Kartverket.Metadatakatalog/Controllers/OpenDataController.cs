@@ -1,4 +1,4 @@
-﻿using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
@@ -6,7 +6,6 @@ using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
-    [HandleError]
     public class OpenDataController : Controller
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -18,7 +17,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             _searchService = searchService;
         }
 
-        public ActionResult Index(SearchParameters parameters)
+        public IActionResult Index(SearchParameters parameters)
         {
             parameters.SetFacetOpenData();
             parameters.AddComplexFacetsIfMissing();
@@ -30,7 +29,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View(model);
         }
 
-        public ActionResult Area(SearchByAreaParameters parameters)
+        public IActionResult Area(SearchByAreaParameters parameters)
         {
             parameters.AddDefaultFacetsIfMissing();
             parameters.CreateFacetOfArea();

@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Models;
 
@@ -13,7 +13,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         // GET: Download
-        public ActionResult Index()
+        public IActionResult Index()
         {
             RegisterFetcher registerFetcher = new RegisterFetcher();
             ViewBag.DownloadUseGroups = registerFetcher.GetDownloadUseGroups();
@@ -22,7 +22,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         [HttpPost]
-        public ActionResult Order(FormCollection order)
+        public IActionResult Order(FormCollection order)
         {
             OrderTypeExt o = GetOrderForm(order);
             List<OrderReceiptType> model = new List<OrderReceiptType>();

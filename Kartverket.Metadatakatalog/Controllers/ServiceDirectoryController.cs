@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
@@ -27,7 +27,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         /// <param name="parameters">Facets</param>
         /// <returns>/apier-og-tjenester</returns>
-        public ActionResult Index(SearchParameters parameters)
+        public IActionResult Index(SearchParameters parameters)
         {
             parameters.AddComplexFacetsIfMissing();
             SearchResult searchResult = _ServiceDirectoryService.Services(parameters);

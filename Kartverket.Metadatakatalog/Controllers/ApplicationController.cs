@@ -1,7 +1,7 @@
-﻿using Kartverket.Metadatakatalog.Models;
+using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -18,11 +18,11 @@ namespace Kartverket.Metadatakatalog.Controllers
 
 
         /// <summary>
-        /// Shows "Kartløsninger". Contains metadata of type "Application"
+        /// Shows "Kartl�sninger". Contains metadata of type "Application"
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>/kartlosninger</returns>
-        public ActionResult Index(SearchParameters parameters)
+        public IActionResult Index(SearchParameters parameters)
         {
             parameters.AddComplexFacetsIfMissing();
             SearchResult searchResult = _applicationService.Applications(parameters);

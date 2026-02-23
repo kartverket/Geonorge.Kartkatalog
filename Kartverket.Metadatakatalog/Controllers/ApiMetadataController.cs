@@ -1,22 +1,19 @@
-﻿using Kartverket.Metadatakatalog.App_Start;
+using Kartverket.Metadatakatalog.App_Start;
 using Kartverket.Metadatakatalog.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Web.Http;
-using System.Web.Http.Cors;
-using System.Web.Http.Description;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
-    [HandleError]
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public class ApiMetadataController : ApiController
+    [EnableCors]
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ApiMetadataController : ControllerBase
     {
 
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -36,7 +33,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
         [System.Web.Http.Route("api/metadataupdated")]
         [System.Web.Http.HttpPost]
-        public IHttpActionResult MetadataUpdated(FormDataCollection metadata)
+        public IActionResult MetadataUpdated(FormDataCollection metadata)
         {
             HttpStatusCode statusCode;
 
@@ -77,7 +74,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
         [System.Web.Http.Route("api/index-metadata")]
         [System.Web.Http.HttpGet]
-        public IHttpActionResult Index()
+        public IActionResult Index()
         {
             HttpStatusCode statusCode;
 
@@ -109,7 +106,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
         [System.Web.Http.Route("api/reindex-metadata")]
         [System.Web.Http.HttpGet]
-        public IHttpActionResult ReIndex()
+        public IActionResult ReIndex()
         {
             HttpStatusCode statusCode;
 
@@ -138,7 +135,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("api/flushcache")]
-        public ActionResult FlushCache()
+        public IActionResult FlushCache()
         {
             MemoryCacher memCacher = new MemoryCacher();
             memCacher.DeleteAll();
@@ -151,7 +148,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
         [System.Web.Http.Route("api/remove-metadata/{uuid}")]
         [System.Web.Http.HttpGet]
-        public IHttpActionResult Remove(string uuid)
+        public IActionResult Remove(string uuid)
         {
             HttpStatusCode statusCode;
 

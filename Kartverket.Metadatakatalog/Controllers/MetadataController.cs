@@ -1,5 +1,5 @@
-﻿using System;
-using System.Web.Mvc;
+using System;
+using Microsoft.AspNetCore.Mvc;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service;
@@ -9,7 +9,6 @@ using Kartverket.Metadatakatalog.Service.Search;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
-    [HandleError]
     public class MetadataController : Controller
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -31,7 +30,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <param name="title"></param>
         /// <param name="orderby"></param>
         /// <returns>/metadata/{organization}/{title}/{uuid}</returns>
-        public ActionResult Index(string uuid, string organization = null, string title = null, string orderby = "title")
+        public IActionResult Index(string uuid, string organization = null, string title = null, string orderby = "title")
         {
             MetadataViewModel model = null;
             //try
@@ -83,7 +82,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>/etatvis-oversikt/{organization}</returns>
-        public ActionResult Organization(SearchByOrganizationParameters parameters)
+        public IActionResult Organization(SearchByOrganizationParameters parameters)
         {
             parameters.AddDefaultFacetsIfMissing();
             FixOrganizationParameters(parameters);

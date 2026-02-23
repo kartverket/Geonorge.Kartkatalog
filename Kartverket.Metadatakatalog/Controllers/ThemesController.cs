@@ -1,11 +1,11 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Net;
-using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
 using System.IO;
@@ -25,7 +25,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         // GET: Themes
         [Authorize]
-        public ActionResult Index()
+        public IActionResult Index()
         {
             var model = _themeService.GetThemes();
 
@@ -33,7 +33,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         // GET: Themes
-        public ActionResult Details(int? id)
+        public IActionResult Details(int? id)
         {
             var theme = _themeService.GetTheme(id);
             if (theme == null) return HttpNotFound();
@@ -45,7 +45,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         // GET: Themes/Create
         [Authorize]
-        public ActionResult Create()
+        public IActionResult Create()
         {
             Theme theme = new Theme();
             theme.AddMissingTranslations();
@@ -59,7 +59,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Theme theme, HttpPostedFileBase uploadFile)
+        public IActionResult Create(Theme theme, HttpPostedFileBase uploadFile)
         {
             if (!ClaimsPrincipal.Current.IsInRole(GeonorgeRoles.MetadataAdmin))
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
@@ -69,7 +69,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 if (!(uploadFile.ContentType == "image/jpeg" || uploadFile.ContentType == "image/gif"
                     || uploadFile.ContentType == "image/png" || uploadFile.ContentType == "image/svg+xml"))
                 {
-                    ModelState.AddModelError(string.Empty, "Thumnail mÃ¥ vÃ¦re bilde format");
+                    ModelState.AddModelError(string.Empty, "Thumnail må være bilde format");
                 }
                 else { 
                 theme.ThumbnailUrl = SaveFile(theme, uploadFile);
@@ -105,7 +105,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         // GET: Themes/Edit/5
         [Authorize]
-        public ActionResult Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -126,7 +126,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Theme theme, string[] operatesOn, HttpPostedFileBase uploadFile)
+        public IActionResult Edit(Theme theme, string[] operatesOn, HttpPostedFileBase uploadFile)
         {
 
             if (!ClaimsPrincipal.Current.IsInRole(GeonorgeRoles.MetadataAdmin))
@@ -137,7 +137,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 if (!(uploadFile.ContentType == "image/jpeg" || uploadFile.ContentType == "image/gif"
                     || uploadFile.ContentType == "image/png" || uploadFile.ContentType == "image/svg+xml"))
                 {
-                    ModelState.AddModelError(string.Empty, "Thumnail mÃ¥ vÃ¦re bilde format");
+                    ModelState.AddModelError(string.Empty, "Thumnail må være bilde format");
                 }
                 else { 
                 theme.ThumbnailUrl = SaveFile(theme, uploadFile);
@@ -155,7 +155,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         // GET: Themes/Delete/5
         [Authorize]
-        public ActionResult Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -173,7 +173,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
             if(!ClaimsPrincipal.Current.IsInRole(GeonorgeRoles.MetadataAdmin))
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);

@@ -1,4 +1,4 @@
-ï»¿using Kartverket.Metadatakatalog.Helpers;
+using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.Api;
 using Kartverket.Metadatakatalog.Models.Article;
@@ -20,12 +20,10 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Web;
-using System.Web.Configuration;
-using System.Web.Http;
-using System.Web.Http.Cors;
-using System.Web.Http.Description;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using System.Xml;
 using SearchParameters = Kartverket.Metadatakatalog.Models.Api.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
@@ -53,9 +51,10 @@ using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
-    [HandleError]
-    [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
-    public class ApiSearchController : ApiController
+    [ApiController]
+    [Route("api/[controller]")]
+    [EnableCors]
+    public class ApiSearchController : ControllerBase
     {
         private readonly ISearchService _searchService;
         private readonly ISearchServiceAll _searchServiceAll;
@@ -375,11 +374,11 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Gets metadata for the specified uuid.
         /// </summary>
         /// <param name="uuid">The metadata uuid.</param>
-        /// <returns>IHttpActionResult containing <see cref="Models.MetadataViewModel"/> if found, otherwise NotFound.</returns>
+        /// <returns>IActionResult containing <see cref="Models.MetadataViewModel"/> if found, otherwise NotFound.</returns>
         [ResponseType(typeof(Models.MetadataViewModel))]
         [System.Web.Http.Route("api/getdata/{uuid}")]
         [System.Web.Http.HttpGet]
-        public IHttpActionResult GetData(string uuid)
+        public IActionResult GetData(string uuid)
         {
             Models.MetadataViewModel model = null;
             try
@@ -552,17 +551,17 @@ namespace Kartverket.Metadatakatalog.Controllers
                 // replace & with and
                 text = Regex.Replace(text, @"\&+", "and");
 
-                text = text.Replace("Ã¦", "ae");
-                text = text.Replace("Ã¤", "ae");
-                text = text.Replace("Ã¸", "oe");
-                text = text.Replace("Ã¶", "oe");
-                text = text.Replace("Ã¥", "aa");
+                text = text.Replace("æ", "ae");
+                text = text.Replace("ä", "ae");
+                text = text.Replace("ø", "oe");
+                text = text.Replace("ö", "oe");
+                text = text.Replace("å", "aa");
 
                 // remove characters
                 text = text.Replace("'", "");
 
                 // remove invalid characters
-                text = Regex.Replace(text, @"[^a-z0-9Ã¦Ã¸Ã¥.]", "-");
+                text = Regex.Replace(text, @"[^a-z0-9æøå.]", "-");
 
                 // remove duplicates
                 text = Regex.Replace(text, @"-+", "-");

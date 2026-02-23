@@ -1,4 +1,4 @@
-﻿using Kartverket.Metadatakatalog.ActionFilters;
+using Kartverket.Metadatakatalog.ActionFilters;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Article;
@@ -7,9 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Web.Http;
-using System.Web.Http.Description;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -33,7 +31,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [System.Web.Http.Route("api/articleupdated")]
         [System.Web.Http.HttpPost]
-        public IHttpActionResult ArticleUpdated(ArticleStatus article)
+        public IActionResult ArticleUpdated(ArticleStatus article)
         {
             HttpStatusCode statusCode;
 
@@ -72,7 +70,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [System.Web.Http.Route("api/index-articles")]
         [System.Web.Http.HttpGet]
-        public IHttpActionResult Index()
+        public IActionResult Index()
         {
             HttpStatusCode statusCode;
 
@@ -103,7 +101,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [System.Web.Http.Route("api/reindex-articles")]
         [System.Web.Http.HttpGet]
-        public IHttpActionResult ReIndex()
+        public IActionResult ReIndex()
         {
             HttpStatusCode statusCode;
 

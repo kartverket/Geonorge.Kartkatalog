@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Service;
 
@@ -20,7 +20,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         [OutputCache(Duration = 86400)]
-        public ActionResult Index(string uuid, string type="default")
+        public IActionResult Index(string uuid, string type="default")
         {
             try
             {
@@ -78,7 +78,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             return HttpNotFound();
         }
 
-        public ActionResult RemoveCache(string uuid)
+        public IActionResult RemoveCache(string uuid)
         {
             var url = Url.Action("Index", "Thumbnail", new { uuid = uuid });
             System.Web.HttpResponse.RemoveOutputCacheItem(url);
