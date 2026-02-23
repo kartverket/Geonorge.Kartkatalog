@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Net;
-using System.Web;
-using System.Web.Configuration;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Service.Search;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.OpenIdConnect;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
-    [HandleError]
     public class SearchController : Controller
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -35,7 +34,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         /// <param name="parameters">Facets</param>
         /// <returns>/search</returns>
-        public ActionResult Index(SearchParameters parameters)
+        public IActionResult Index(SearchParameters parameters)
         {
             parameters.AddComplexFacetsIfMissing();
             var searchResult = _searchService.Search(parameters);
@@ -57,7 +56,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         /// <param name="parameters">Uses AreaCode to find selected municipality or county. </param>
         /// <returns>/hva-finnes-i-kommunen-eller-fylket</returns>
-        public ActionResult Area(SearchByAreaParameters parameters)
+        public IActionResult Area(SearchByAreaParameters parameters)
         {
             parameters.AddDefaultFacetsIfMissing();
             parameters.CreateFacetOfArea();
@@ -134,7 +133,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// This is the action responding to /signout-callback-oidc route after logout at the identity provider
         /// </summary>
         /// <returns></returns>
-        public ActionResult SignOutCallback()
+        public IActionResult SignOutCallback()
         {
             return RedirectToAction(nameof(SearchController.Index), "Search");
         }
