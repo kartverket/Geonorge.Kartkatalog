@@ -585,10 +585,17 @@
             Valid metadata dataset name
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.MetadataDatasetId(System.String)">
+            <summary>
+            Get metadata dataset id
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetData(System.String)">
             <summary>
-            Get metadata for uuid
+            Gets metadata for the specified uuid.
             </summary>
+            <param name="uuid">The metadata uuid.</param>
+            <returns>IHttpActionResult containing <see cref="T:Kartverket.Metadatakatalog.Models.MetadataViewModel"/> if found, otherwise NotFound.</returns>
         </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetExternalXml(System.String)">
             <summary>
@@ -827,6 +834,11 @@
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.Organization">
             <summary>
             The owner of the metadata
+            </summary>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.Organizations">
+            <summary>
+            The list of owners of the metadata
             </summary>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.OrganizationLogo">
@@ -1745,6 +1757,11 @@
             </summary>
         </member>
         <member name="P:Resources.UI.Facet_organizationgroup">
+            <summary>
+              Looks up a localized string similar to Organisasjon.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Facet_organizations">
             <summary>
               Looks up a localized string similar to Organisasjon.
             </summary>

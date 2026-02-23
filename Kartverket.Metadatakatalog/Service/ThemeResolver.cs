@@ -155,6 +155,8 @@ namespace Kartverket.Metadatakatalog.Service
                         dataaccess = Register.ListOfRestrictionInspireValuesEnglish["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"]; 
                     else if (OtherConstraintsAccess == "no restrictions")
                         dataaccess = Register.ListOfRestrictionInspireValuesEnglish["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
+                if(!string.IsNullOrEmpty(OtherConstraintsAccess) && OtherConstraintsAccess == "http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1f")
+                        dataaccess = Register.ListOfRestrictionInspireValuesEnglish["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1f"];
             }
             else
             {
@@ -169,6 +171,10 @@ namespace Kartverket.Metadatakatalog.Service
                         dataaccess = Register.ListOfRestrictionInspireValues["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1d"];
                     else if (OtherConstraintsAccess == "no restrictions")
                         dataaccess = Register.ListOfRestrictionInspireValues["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/noLimitations"];
+                
+                if (!string.IsNullOrEmpty(OtherConstraintsAccess) && OtherConstraintsAccess == "http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1f")
+                        dataaccess = Register.ListOfRestrictionInspireValues["http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/INSPIRE_Directive_Article13_1f"];
+
             }
             return dataaccess;
         }

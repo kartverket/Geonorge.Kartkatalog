@@ -86,6 +86,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     WebConfigurationManager.AppSettings["AI:Key"],
                     "https://www.googleapis.com/auth/cloud-platform");
 
+                    System.Net.ServicePointManager.Expect100Continue = false; // otherwise google could return http 417 ExpectationFailed (with body ...your computer or network may be sending automated queries)
                     var client = _httpClientFactory.GetHttpClient();
 
                     var request = new HttpRequestMessage(HttpMethod.Post, endpoint);

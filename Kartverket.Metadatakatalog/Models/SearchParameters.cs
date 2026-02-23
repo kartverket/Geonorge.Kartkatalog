@@ -75,7 +75,7 @@ namespace Kartverket.Metadatakatalog.Models
         public void AddDefaultFacetsIfMissing()
         {
             List<FacetParameter> FacetList = new List<FacetParameter>();
-            var facets = new List<string> { "type", "theme", "organization", "nationalinitiative", "DistributionProtocols", "area", "dataaccess", "spatialscope" };
+            var facets = new List<string> { "type", "theme", "organizations", "nationalinitiative", "DistributionProtocols", "area", "dataaccess", "spatialscope" };
 
             foreach (var defaultFacet in facets)
             {
@@ -364,7 +364,8 @@ namespace Kartverket.Metadatakatalog.Models
                 }
                 else
                 {
-                    facetQueries[facet.Name] = facetQueries[facet.Name] + " OR " + facet.Name + ":\"" + facet.Value + "\"";
+                    if(facet.Value != "High value dataset")
+                        facetQueries[facet.Name] = facetQueries[facet.Name] + " OR " + facet.Name + ":\"" + facet.Value + "\"";
                 }
             }
 

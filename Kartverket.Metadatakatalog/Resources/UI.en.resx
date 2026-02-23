@@ -876,4 +876,7 @@
   <data name="ResolutionDistance" xml:space="preserve">
     <value>Distance in meters</value>
   </data>
+  <data name="Facet_organizations" xml:space="preserve">
+    <value>Organizations</value>
+  </data>
 </root>

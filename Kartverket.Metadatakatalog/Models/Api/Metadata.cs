@@ -47,6 +47,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         /// </summary>
         public string Organization { get; set; }
         /// <summary>
+        /// The list of owners of the metadata
+        /// </summary>
+        public List<string> Organizations { get; set; }
+        /// <summary>
         /// The logo for the organization
         /// </summary>
         public string OrganizationLogo { get; set; }
@@ -189,6 +193,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
             TypeTranslated = TranslateType();
             Theme = item.Theme;
             Organization = item.Organization;
+            Organizations = item.Organizations;
+
             OrganizationLogo = item.OrganizationLogoUrl;
             ThumbnailUrl = item.ThumbnailUrl;
             DistributionUrl = item.DistributionUrl;
@@ -196,12 +202,9 @@ namespace Kartverket.Metadatakatalog.Models.Api
             DistributionName = item.DistributionName;
             DistributionType = item.DistributionType;
             GetCapabilitiesUrl = GetGetCapabilitiesUrl(item);
-            if (urlHelper != null)
-            {
-                ShowDetailsUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/uuid/" + item.Uuid;
-                string s = new SeoUrl(item.Organization, "").Organization;
-                OrganizationUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/" + s;
-            }
+
+            ShowDetailsUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "metadata/uuid/" + item.Uuid;
+            OrganizationUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"] + "?organizations=" + item?.Organization;
 
             if (item.DataAccess != null && item.DataAccess == "Åpne data" && UI.OpenData == "Open data")
                 item.DataAccess = "Open data";

@@ -86,7 +86,7 @@ namespace Kartverket.Metadatakatalog.Service
         }
         public static bool IsProtected(string accessConstraints)
         {
-            return (accessConstraints == "Beskyttet" || accessConstraints == "restricted");
+            return (accessConstraints == "Beskyttet" || accessConstraints == "restricted" || accessConstraints == "Personvern begrenset" || accessConstraints == "Privacy restricted");
         }
 
         internal static bool ShowMapLink(SimpleDistribution simpleMetadataDistribution, string hierarchyLevel)

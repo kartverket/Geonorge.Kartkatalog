@@ -70,7 +70,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         public void SignIn()
         {
-            var redirectUrl = Url.Action(nameof(SearchController.Index), "Search");
+            var redirectUrl = "/nedlasting";
             HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = redirectUrl },
                 OpenIdConnectAuthenticationDefaults.AuthenticationType);
         }
