@@ -3,15 +3,21 @@ using Kartverket.Metadatakatalog.Models.Translations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Configuration;
-using System.Web.Routing;
 using Kartverket.Metadatakatalog.Service;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
+using System.Web;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
 {
     public class SearchResultItemViewModel
     {
+        private static IConfiguration _configuration;
+        
+        public static void SetConfiguration(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public string Uuid { get; set; }
         public string Title { get; set; }
         public string @Abstract { get; set; }
@@ -99,7 +105,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         public bool DownloadService()
         {
-            if (System.Web.Configuration.WebConfigurationManager.AppSettings["DownloadServiceEnabled"] == "true")
+            if (_configuration != null && Convert.ToBoolean(_configuration["DownloadServiceEnabled"] ?? "false"))
             {
                 if (DistributionProtocol != null && DistributionProtocol.Contains("GEONORGE:DOWNLOAD"))
                     return true;
@@ -229,12 +235,12 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             if (ShowMaplink())
             {
                 ShowMapLink = true;
-                return SimpleMetadataUtil.NorgeskartUrl + DownloadUrl;
+                return SimpleMetadataUtil.StaticNorgeskartUrl + DownloadUrl;
             }
             if (ShowServiceMaplink())
             {
                 ShowServiceMapLink = true; 
-                return SimpleMetadataUtil.NorgeskartUrl + ServiceUrl;
+                return SimpleMetadataUtil.StaticNorgeskartUrl + ServiceUrl;
             }
             return "";
         }
@@ -248,17 +254,20 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
                 if (IsRestricted || IsOffline)
                 {
                     string addToCartEventParamater = "?addtocart_event_id=addToCart-" + Uuid;
-                    if (HttpContext.Current.Request.Url.AbsoluteUri.Contains("?"))
+                    // Note: In ASP.NET Core, this would need to be passed from the controller/page
+                    // For now, we'll use the simpler parameter
+                    
+                    if (_configuration?["BaseUrl"]?.Contains("?") == true)
                     {
                         addToCartEventParamater = "&addtocart_event_id=addToCart-" + Uuid;
                     }
 
-                    string downloadSignInUrl = WebConfigurationManager.AppSettings["DownloadUrl"]
+                    string downloadSignInUrl = _configuration?["DownloadUrl"]
                                              + "AuthServices/SignIn?ReturnUrl="
-                                             + HttpContext.Current.Request.Url.AbsoluteUri
+                                             + _configuration?["BaseUrl"] // Simplified for ASP.NET Core
                                              + addToCartEventParamater;
 
-                    addToCartUrl = WebConfigurationManager.AppSettings["KartkatalogenUrl"]
+                    addToCartUrl = _configuration?["KartkatalogenUrl"]
                                  + "AuthServices/SignIn?ReturnUrl="
                                  + downloadSignInUrl;
                 }

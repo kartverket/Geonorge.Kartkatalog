@@ -1,17 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
 {
-    public class NotFoundModel : HandleErrorInfo
+    public class NotFoundModel
     {
         public NotFoundModel(Exception exception, string controllerName, string actionName)
-            : base(exception, controllerName, actionName)
         {
+            Exception = exception;
+            ControllerName = controllerName;
+            ActionName = actionName;
         }
+        
+        public Exception Exception { get; set; }
+        public string ControllerName { get; set; }
+        public string ActionName { get; set; }
         public string RequestedUrl { get; set; }
         public string ReferrerUrl { get; set; }
     }

@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
+using Microsoft.Extensions.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -15,6 +16,12 @@ namespace Kartverket.Metadatakatalog.Service
     {
         MemoryCacher memCacher = new MemoryCacher();
         private static readonly HttpClient _httpClient = new HttpClient();
+        private static IConfiguration _configuration;
+
+        public static void SetConfiguration(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         IDictionary<string, string> TopicCategories = new ConcurrentDictionary<string, string>();
         IDictionary<string, string> TopicCategoriesEnglish = new ConcurrentDictionary<string, string>();
@@ -112,7 +119,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (Organizations == null && Organizations.Count < 1)
             {
-                var url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/register/organisasjoner";
+                var url = _configuration?["RegistryUrl"] + "api/register/organisasjoner";
                 _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", Culture.NorwegianCode);
 
@@ -299,7 +306,7 @@ namespace Kartverket.Metadatakatalog.Service
             else
             {
                 object lockObj = new object();
-                string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
+                string url = _configuration?["RegistryUrl"] + "api/kodelister/" + systemid;
 
                 var message = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
                 message.Headers.Add("Accept-Language", culture);
@@ -352,7 +359,7 @@ namespace Kartverket.Metadatakatalog.Service
             else
             {
 
-                string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/metadata-kodelister/" + name;
+                string url = _configuration?["RegistryUrl"] + "api/metadata-kodelister/" + name;
 
                 _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
@@ -402,7 +409,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (RegisterItems ==  null && RegisterItems.Count < 1)
             {
-                var url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/subregister/" + registername;
+                var url = _configuration?["RegistryUrl"] + "api/subregister/" + registername;
 
                 _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
@@ -451,7 +458,7 @@ namespace Kartverket.Metadatakatalog.Service
             else
             {
 
-                string url = System.Web.Configuration.WebConfigurationManager.AppSettings["RegistryUrl"] + "api/kodelister/" + systemid;
+                string url = _configuration?["RegistryUrl"] + "api/kodelister/" + systemid;
                 _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 

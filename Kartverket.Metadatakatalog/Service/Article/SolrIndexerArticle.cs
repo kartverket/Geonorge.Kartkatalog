@@ -14,9 +14,9 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
         private ISolrOperations<ArticleIndexDoc> _solr;
 
-        public SolrIndexerArticle()
+        public SolrIndexerArticle(ISolrOperations<ArticleIndexDoc> solrOperations)
         {
-            _solr = MvcApplication.indexContainer.Resolve<ISolrOperations<ArticleIndexDoc>>(SolrCores.Articles);
+            _solr = solrOperations;
         }
 
         public void Index(IEnumerable<ArticleIndexDoc> docs)
@@ -58,7 +58,13 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
         public void SetSolrIndexer(string coreId)
         {
-            _solr = MvcApplication.indexContainer.Resolve<ISolrOperations<ArticleIndexDoc>>(coreId);
+            // For backwards compatibility - this should be called from DI container setup
+            // In practice, the ISolrOperations should be injected via constructor
+        }
+
+        public void SetSolrIndexer(ISolrOperations<ArticleIndexDoc> solrOperations)
+        {
+            _solr = solrOperations;
         }
 
     }

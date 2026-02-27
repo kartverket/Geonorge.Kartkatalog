@@ -14,9 +14,9 @@ namespace Kartverket.Metadatakatalog.Service.Search
         private readonly ISolrOperations<ServiceIndexDoc> _solrInstance;
         RegisterFetcher register;
 
-        public ServiceDirectoryService()
+        public ServiceDirectoryService(ISolrOperations<ServiceIndexDoc> solrInstance)
         {
-            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ServiceIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Services));
+            _solrInstance = solrInstance;
         }
 
         public SearchResult Services(SearchParameters parameters)
@@ -71,7 +71,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
         private int GetNumFound(SolrQueryResults<ServiceIndexDoc> queryResults)
         {
-            return queryResults?.NumFound ?? 0;
+            return (int)(queryResults?.NumFound ?? 0);
         }
 
         private string GetType(SolrQueryResults<ServiceIndexDoc> queryResults)

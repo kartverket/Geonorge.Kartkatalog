@@ -3,6 +3,7 @@ using System.Linq;
 using Kartverket.Metadatakatalog.Models;
 using SolrNet;
 using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -11,10 +12,18 @@ namespace Kartverket.Metadatakatalog.Service
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private ISolrOperations<ApplicationIndexDoc> _solr;
+        private readonly IServiceProvider _serviceProvider;
 
-        public SolrIndexerApplication()
+        public SolrIndexerApplication(IServiceProvider serviceProvider)
         {
-            _solr = MvcApplication.indexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>(SolrCores.Applications);
+            _serviceProvider = serviceProvider;
+            _solr = GetSolrOperations(SolrCores.Applications);
+        }
+
+        private ISolrOperations<ApplicationIndexDoc> GetSolrOperations(string coreId)
+        {
+            // Use the Windsor container until fully migrated to native DI
+            return Program.IndexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>(coreId);
         }
 
         public void Index(IEnumerable<ApplicationIndexDoc> docs)
@@ -39,10 +48,10 @@ namespace Kartverket.Metadatakatalog.Service
             _solr.Commit();
         }
 
-
         public void RemoveIndexDocument(string uuid)
         {
-            try {
+            try
+            {
                 Log.Info(string.Format("Removes document uuid={0} from index", uuid));
                 _solr.Delete(uuid);
                 _solr.Commit();
@@ -55,7 +64,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public void SetSolrIndexer(string coreId)
         {
-            _solr = MvcApplication.indexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>(coreId);
+            _solr = GetSolrOperations(coreId);
         }
     }
 }

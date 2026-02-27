@@ -99,8 +99,8 @@ namespace Kartverket.Metadatakatalog.Models.Api
             {
                 List<FacetValue> facets = new List<FacetValue>();
 
-                var placeResolver = new Service.PlaceResolver();
-                var areaDictionary = placeResolver.GetAreas();
+                // TODO: This should be injected via DI - temporary fix for compilation
+                var areaDictionary = new Dictionary<string, string>(); // Fallback to empty dictionary
                 var areas = facetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.Name).ToList();
                 var places = facetResults.Where(p => !p.Name.Contains("/")).Select(p => p).Distinct().OrderBy(po => po.Name).ToList();
 

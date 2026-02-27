@@ -1,9 +1,8 @@
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http.Controllers;
-using System.Web.Http.ModelBinding;
+using System.Threading.Tasks;
 
 namespace Kartverket.Metadatakatalog.Models.Api
 {
@@ -13,15 +12,15 @@ namespace Kartverket.Metadatakatalog.Models.Api
         {
 
         }
-        public bool BindModel(HttpActionContext actionContext, ModelBindingContext bindingContext)
-
+        public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            var model = bindingContext;
-
-            if (model != null)
+            if (bindingContext == null)
             {
-                SearchParameters searchParameters = new SearchParameters();
-                searchParameters.text = GetValue(bindingContext, "text");
+                throw new ArgumentNullException(nameof(bindingContext));
+            }
+
+            SearchParameters searchParameters = new SearchParameters();
+            searchParameters.text = GetValue(bindingContext, "text");
                 int limit = 5;
                 if (int.TryParse(GetValue(bindingContext, "limit"), out limit))
                 {
@@ -54,31 +53,35 @@ namespace Kartverket.Metadatakatalog.Models.Api
 
                 searchParameters.orderby = GetValue(bindingContext, "orderby");
                 List<FacetInput> facets = new List<FacetInput>();
-                var query = HttpContext.Current.Request.QueryString;
+                
+                // ASP.NET Core way to access query string
+                var query = bindingContext.HttpContext.Request.Query;
                 int i = 0;
+                
+                
                 //Check if array input starts at 1
-                if (string.IsNullOrEmpty(query["facets[0]name"]) && !string.IsNullOrEmpty(query["facets[1]name"]))
+                if (string.IsNullOrEmpty(query[$"facets[0]name"]) && !string.IsNullOrEmpty(query[$"facets[1]name"]))
                     i = 1;
 
-                while (!string.IsNullOrEmpty(query["facets[" + i + "]name"]))
+                while (!string.IsNullOrEmpty(query[$"facets[{i}]name"]))
                 {
                     var facet = new FacetInput();
-                    facet.name = query["facets[" + i + "]name"];
-                    facet.value = query["facets[" + i + "]value"];
+                    facet.name = query[$"facets[{i}]name"];
+                    facet.value = query[$"facets[{i}]value"];
                     facets.Add(facet);
                     i++;
                 }
+                
                 searchParameters.facets = facets;
-                bindingContext.Model = searchParameters;
-                return true;
-            }
-            return false;
+                bindingContext.Result = ModelBindingResult.Success(searchParameters);
+                
+                return Task.CompletedTask;
         }
 
         private string GetValue(ModelBindingContext context, string key)
         {
             var result = context.ValueProvider.GetValue(key);
-            return result == null ? null : result.AttemptedValue;
+            return result == ValueProviderResult.None ? null : result.FirstValue;
         }
     }
 }

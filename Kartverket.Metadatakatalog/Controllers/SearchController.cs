@@ -12,6 +12,9 @@ using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Service.Search;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -21,11 +24,15 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         private readonly ISearchServiceAll _searchService;
         private readonly IArticleService _articleService;
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _environment;
 
-        public SearchController(ISearchServiceAll searchService, IArticleService articleSevice)
+        public SearchController(ISearchServiceAll searchService, IArticleService articleSevice, IConfiguration configuration, IWebHostEnvironment environment)
         {
             _searchService = searchService;
             _articleService = articleSevice;
+            _configuration = configuration;
+            _environment = environment;
         }
 
 
@@ -67,66 +74,34 @@ namespace Kartverket.Metadatakatalog.Controllers
             return View(model);
         }
 
-        public void SignIn()
+        public IActionResult SignIn()
         {
             var redirectUrl = "/nedlasting";
-            HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = redirectUrl },
-                OpenIdConnectAuthenticationDefaults.AuthenticationType);
+            return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, OpenIdConnectDefaults.AuthenticationScheme);
         }
 
-        public void SignOut()
+        public new IActionResult SignOut()
         {
             // Save redirect to basket in a cookie
-            HttpCookie cookie = Request.Cookies["_redirectDownload"];
-
-            if (cookie != null)
+            var cookieOptions = new CookieOptions
             {
-                cookie.Value = "false";   // update cookie value
-                cookie.Path = "/";
-                //cookie.SameSite = SameSiteMode.Lax;
-                if (!Request.IsLocal)
-                    cookie.Domain = ".geonorge.no";
-            }
-            else
-            {
-                cookie = new HttpCookie("_redirectDownload");
-                cookie.Value = "false";
-                cookie.Path = "/";
-                //cookie.SameSite = SameSiteMode.Lax;
+                Path = "/",
+                SameSite = SameSiteMode.Lax
+            };
 
-                if (!Request.IsLocal)
-                    cookie.Domain = ".geonorge.no";
-            }
-            Response.Cookies.Add(cookie);
+            if (!_environment.IsDevelopment())
+                cookieOptions.Domain = ".geonorge.no";
 
+            // Set redirect download cookie
+            Response.Cookies.Append("_redirectDownload", "false", cookieOptions);
 
-            // Change loggedIn cookie
-            cookie = Request.Cookies["_loggedIn"];
+            // Set logged in cookie
+            Response.Cookies.Append("_loggedIn", "false", cookieOptions);
 
-            if (cookie != null)
-            {
-                cookie.Value = "false";   // update cookie value
-                //cookie.SameSite = SameSiteMode.Lax;
-                if (!Request.IsLocal)
-                    cookie.Domain = ".geonorge.no";
-            }
-            else
-            {
-                cookie = new HttpCookie("_loggedIn");
-                cookie.Value = "false";
-                //cookie.SameSite = SameSiteMode.Lax;
-
-                if (!Request.IsLocal)
-                    cookie.Domain = ".geonorge.no";
-            }
-            Response.Cookies.Add(cookie);
-
-
-            var redirectUri = WebConfigurationManager.AppSettings["GeoID:PostLogoutRedirectUri"];
-            HttpContext.GetOwinContext().Authentication.SignOut(
-                new AuthenticationProperties { RedirectUri = redirectUri },
-                OpenIdConnectAuthenticationDefaults.AuthenticationType,
-                CookieAuthenticationDefaults.AuthenticationType);
+            var redirectUri = _configuration["GeoID:PostLogoutRedirectUri"];
+            return base.SignOut(new AuthenticationProperties { RedirectUri = redirectUri },
+                OpenIdConnectDefaults.AuthenticationScheme,
+                CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         /// <summary>
@@ -136,11 +111,6 @@ namespace Kartverket.Metadatakatalog.Controllers
         public IActionResult SignOutCallback()
         {
             return RedirectToAction(nameof(SearchController.Index), "Search");
-        }
-
-        protected override void OnException(ExceptionContext filterContext)
-        {
-            Log.Error("Error", filterContext.Exception);
         }
     }
 }

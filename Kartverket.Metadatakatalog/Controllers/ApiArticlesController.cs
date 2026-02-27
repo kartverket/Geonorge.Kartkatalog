@@ -8,12 +8,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [ApiAuthorize]
-    public class ApiArticlesController : ApiController
+    public class ApiArticlesController : ControllerBase
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -29,8 +30,8 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Article updated
         /// </summary>
-        [System.Web.Http.Route("api/articleupdated")]
-        [System.Web.Http.HttpPost]
+        [Route("api/articleupdated")]
+        [HttpPost]
         public IActionResult ArticleUpdated(ArticleStatus article)
         {
             HttpStatusCode statusCode;
@@ -62,14 +63,14 @@ namespace Kartverket.Metadatakatalog.Controllers
                 _errorService.AddError(Id, e);
                 statusCode = HttpStatusCode.BadRequest;
             }
-            return StatusCode(statusCode);
+            return StatusCode((int)statusCode);
         }
 
         /// <summary>
         /// Run article indexing
         /// </summary>
-        [System.Web.Http.Route("api/index-articles")]
-        [System.Web.Http.HttpGet]
+        [Route("api/index-articles")]
+        [HttpGet]
         public IActionResult Index()
         {
             HttpStatusCode statusCode;
@@ -93,14 +94,14 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Log.Error("Exception while indexing articles.", e);
                 statusCode = HttpStatusCode.BadRequest;
             }
-            return StatusCode(statusCode);
+            return StatusCode((int)statusCode);
         }
 
         /// <summary>
         /// Run article re-indexing
         /// </summary>
-        [System.Web.Http.Route("api/reindex-articles")]
-        [System.Web.Http.HttpGet]
+        [Route("api/reindex-articles")]
+        [HttpGet]
         public IActionResult ReIndex()
         {
             HttpStatusCode statusCode;
@@ -124,7 +125,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Log.Error("Exception while re-indexing articles.", e);
                 statusCode = HttpStatusCode.BadRequest;
             }
-            return StatusCode(statusCode);
+            return StatusCode((int)statusCode);
         }
     }
 

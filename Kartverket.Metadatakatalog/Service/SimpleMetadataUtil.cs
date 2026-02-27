@@ -2,21 +2,26 @@
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
-using System.Web.Configuration;
-using Value = Google.Protobuf.WellKnownTypes.Value;
-using System.Linq;
-using System.Net.Http;
-using System.Net;
-using Google.Api.Gax.Grpc;
-using Kartverket.Metadatakatalog.Service.Search;
+using Microsoft.Extensions.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service
 {
-    public static class SimpleMetadataUtil
+    public class SimpleMetadataUtil
     {
+        private readonly IConfiguration _configuration;
+        static log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        // Static instance for backwards compatibility
+        private static SimpleMetadataUtil _instance;
+        public static SimpleMetadataUtil Instance => _instance ??= new SimpleMetadataUtil(null);
+
+        public SimpleMetadataUtil(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            // Set static instance for backwards compatibility
+            _instance = this;
+        }
         public const string ZoomLevel = "3";
         public const string Longitude = "306722";
         public const string Latitude = "7197864";
@@ -28,10 +33,15 @@ namespace Kartverket.Metadatakatalog.Service
         public const string Wfs = "wfs";
         public const string Wcs = "wcs";
 
-        public static readonly string NorgeskartUrl = WebConfigurationManager.AppSettings["NorgeskartUrl"];
-        public static readonly bool MapOnlyWms = Convert.ToBoolean(WebConfigurationManager.AppSettings["MapOnlyWms"]);
-        public static readonly bool UseVectorSearch = System.Convert.ToBoolean(WebConfigurationManager.AppSettings["AI:UseVectorSearch"]);
-        static log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public string NorgeskartUrl => _configuration?["NorgeskartUrl"] ?? "";
+        public bool MapOnlyWms => Convert.ToBoolean(_configuration?["MapOnlyWms"] ?? "false");
+        public bool UseVectorSearch => Convert.ToBoolean(_configuration?["AI:UseVectorSearch"] ?? "false");
+
+        // Static accessors for backwards compatibility
+        public static string StaticNorgeskartUrl => Instance.NorgeskartUrl;
+        public static bool StaticMapOnlyWms => Instance.MapOnlyWms;
+        public static bool StaticUseVectorSearch => Instance.UseVectorSearch;
+        public static bool StaticDownloadServiceEnabled => Convert.ToBoolean(Instance._configuration?["DownloadServiceEnabled"] ?? "false");
 
         public static string ConvertHierarchyLevelToType(string hierarchyLevel)
         {
@@ -91,7 +101,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         internal static bool ShowMapLink(SimpleDistribution simpleMetadataDistribution, string hierarchyLevel)
         {
-            return !string.IsNullOrWhiteSpace(simpleMetadataDistribution?.URL) /*&& !string.IsNullOrWhiteSpace(simpleMetadataDistribution.Protocol)*/ && (simpleMetadataDistribution.Protocol.Contains("OGC:WMS") || (!MapOnlyWms && simpleMetadataDistribution.Protocol.Contains("OGC:WFS"))) && (hierarchyLevel == "service" || hierarchyLevel == "servicelayer");
+            return !string.IsNullOrWhiteSpace(simpleMetadataDistribution?.URL) /*&& !string.IsNullOrWhiteSpace(simpleMetadataDistribution.Protocol)*/ && (simpleMetadataDistribution.Protocol.Contains("OGC:WMS") || (!StaticMapOnlyWms && simpleMetadataDistribution.Protocol.Contains("OGC:WFS"))) && (hierarchyLevel == "service" || hierarchyLevel == "servicelayer");
         }
 
         public static string GetCapabilitiesUrl(string url, string protocol)
@@ -134,7 +144,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         internal static bool ShowDownloadService(SimpleDistribution simpleMetadataDistribution)
         {
-            if (System.Web.Configuration.WebConfigurationManager.AppSettings["DownloadServiceEnabled"] != "true") return false;
+            if (!StaticDownloadServiceEnabled) return false;
             return !string.IsNullOrWhiteSpace(simpleMetadataDistribution?.Protocol) && simpleMetadataDistribution.Protocol.Contains("GEONORGE:DOWNLOAD");
         }
 
@@ -188,7 +198,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 if (!relativePath)
                 {
-                    url.Append(NorgeskartUrl);
+                    url.Append(StaticNorgeskartUrl);
                 }
                 url.Append($"#!?zoom={ZoomLevel}&lon={Longitude}&lat={Latitude}&{protocolName}=");
             }

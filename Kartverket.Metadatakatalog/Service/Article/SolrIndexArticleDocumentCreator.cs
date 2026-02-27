@@ -2,10 +2,7 @@ using Kartverket.Metadatakatalog.Models.Article;
 using Kartverket.Metadatakatalog.Models.SearchIndex;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Web;
-using System.Web.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service.Article
 {
@@ -13,10 +10,12 @@ namespace Kartverket.Metadatakatalog.Service.Article
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         IArticleFetcher _articleFether;
+        private readonly IConfiguration _configuration;
 
-        public SolrIndexArticleDocumentCreator(IArticleFetcher articleFetcher)
+        public SolrIndexArticleDocumentCreator(IArticleFetcher articleFetcher, IConfiguration configuration)
         {
             _articleFether = articleFetcher;
+            _configuration = configuration;
         }
 
         public List<ArticleIndexDoc> CreateIndexDocs(List<ArticleDocument> items)
@@ -56,7 +55,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
                     indexDoc.MainBody = document.MainBody.Substring(0, document.MainBody.Length > 30000 ? 30000 : document.MainBody.Length);
                 indexDoc.StartPublish = document.StartPublish;
                 if(document.LinkUrl.StartsWith("/"))
-                    indexDoc.LinkUrl = WebConfigurationManager.AppSettings["GeonorgeUrl"] + document.LinkUrl.TrimStart('/');
+                    indexDoc.LinkUrl = _configuration["GeonorgeUrl"] + document.LinkUrl.TrimStart('/');
                 else
                     indexDoc.LinkUrl = document.LinkUrl;
                 //foreach (var linkArea in document.LinkArea)

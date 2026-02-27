@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Configuration
 @using System.Security.Claims
 @using Geonorge.AuthLib.Common
+@using Microsoft.AspNetCore.Http.Extensions
 
 @{
 //var loggedInCookie = Context.Request.Cookies["_loggedIn"];
@@ -104,11 +105,11 @@
         var applicationVersionNumber = '@Html.ApplicationVersionNumber()';
         var applicationEnvironment = '@Html.EnvironmentName()';
 
-        var cultureData = {
-            friendlyUrlEN: '@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Request.Url }))',
-            friendlyUrlNO: '@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url }))',
-            currentCulture: '@CultureHelper.GetCurrentCulture()'
-            };
+    var cultureData = {
+        friendlyUrlEN: '@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Html.ViewContext.HttpContext.Request.GetDisplayUrl() }))',
+        friendlyUrlNO: '@Html.Raw(Url.Action("SetCulture", "Home", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Html.ViewContext.HttpContext.Request.GetDisplayUrl() }))',
+        currentCulture: '@CultureHelper.GetCurrentCulture()'
+        };
     </script>
     <script>var environmentIsProduction = @(Html.EnvironmentName() == "" ? "true" : "false");</script>
     <script>
@@ -173,13 +174,14 @@
     <main-navigation userinfo='@userInfoJson' organization='@organizationJson' environment="@Html.EnvironmentName()"
                      signinurl="@Html.Raw(Url.Action("SignIn", "Search"))"
                      signouturl="@Html.Raw(Url.Action("SignOut", "Search"))"
-                     isLoggedIn="@Request.IsAuthenticated.ToString().ToLower()"
-                     norwegianurl="@Html.Raw(Url.Action("SetCulture", "Search", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Request.Url }))"
-                     englishurl="@Html.Raw(Url.Action("SetCulture", "Search", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Request.Url }))"
+                     isLoggedIn="@User.Identity.IsAuthenticated.ToString().ToLower()"
+                     norwegianurl="@Html.Raw(Url.Action("SetCulture", "Search", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.NorwegianCode, ReturnUrl = Html.ViewContext.HttpContext.Request.GetDisplayUrl() }))"
+                     englishurl="@Html.Raw(Url.Action("SetCulture", "Search", new { culture = Kartverket.Metadatakatalog.Models.Translations.Culture.EnglishCode, ReturnUrl = Html.ViewContext.HttpContext.Request.GetDisplayUrl() }))"
                      language="@CultureHelper.GetCurrentCulture()"></main-navigation>
     <div id="loading-animation" class="loading-animation" style="display: none;"></div>
 
-    @Styles.Render("~/Content/bower_components/kartverket-felleskomponenter/assets/css/styles")
+    <!-- CSS Bundles - Updated for ASP.NET Core -->
+    <link rel="stylesheet" href="/css/styles.css" asp-append-version="true" />
 
     @{
         var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
@@ -213,7 +215,8 @@
 
     <geonorge-footer language="@CultureHelper.GetCurrentCulture()" version="@Html.ApplicationVersionNumber()" environment="@Html.EnvironmentName()" accessibilitystatementurl="@Html.Accessibilitystatementurl()" />
 
-    @Scripts.Render("~/bundles/js")
+    <!-- JavaScript Bundles - Updated for ASP.NET Core -->
+    <script src="/js/bundle.js" asp-append-version="true"></script>
     @RenderSection("scripts", required: false)
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

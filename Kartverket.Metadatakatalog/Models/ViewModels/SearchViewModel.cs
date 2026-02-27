@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Routing;
+using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Routing;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
 {
@@ -23,7 +22,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public Dictionary<string, string> areaDictionary { get; set; }
         public List<string> EnabledFacets { get; set; }
 
-        public SearchViewModel(SearchParameters parameters, SearchResult searchResult, Article.SearchResult articleResult = null)
+        public SearchViewModel(SearchParameters parameters, SearchResult searchResult, Article.SearchResult articleResult = null, Service.PlaceResolver placeResolver = null)
         {
             if(articleResult == null)
             {
@@ -40,8 +39,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             NumFoundTotal = searchResult.NumFound + articleResult.NumFound;
             orderby = parameters?.orderby != null ? parameters?.orderby?.ToString() : "score";
             page = 1;
-            var placeResolver = new Service.PlaceResolver();
-            areaDictionary = placeResolver.GetAreas();
+            areaDictionary = placeResolver?.GetAreas() ?? new Dictionary<string, string>();
 
             if (Offset != 1)
             {

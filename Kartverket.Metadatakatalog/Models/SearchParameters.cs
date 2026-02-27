@@ -6,14 +6,6 @@ using SolrNet.Commands.Parameters;
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Resources;
-using System.Web.Configuration;
-using System.Web;
-using Google.Apis.Auth.OAuth2;
-using Grpc.Core;
-using System.IO;
-using Google.Apis.Http;
-using System.Threading.Tasks;
-using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Search;
 
@@ -233,7 +225,7 @@ namespace Kartverket.Metadatakatalog.Models
                     string vectorSearchString = null;
                     if(Text.Length > 2) 
                     {
-                        if (SimpleMetadataUtil.UseVectorSearch) 
+                        if (SimpleMetadataUtil.StaticUseVectorSearch) 
                         {
                             var embedding = _aiService.GetPredictions(Text);
                             if(embedding != null) 
@@ -258,7 +250,7 @@ namespace Kartverket.Metadatakatalog.Models
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
-                        SimpleMetadataUtil.UseVectorSearch && vectorSearchString != null ? new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80"): null,                            
+                        SimpleMetadataUtil.StaticUseVectorSearch && vectorSearchString != null ? new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80"): null,                            
                     });
                 }
             }

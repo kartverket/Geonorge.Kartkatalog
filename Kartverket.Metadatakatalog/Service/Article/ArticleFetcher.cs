@@ -1,14 +1,12 @@
-﻿using Kartverket.Geonorge.Utilities.Organization;
-using Kartverket.Metadatakatalog.Models.Article;
+﻿using Kartverket.Metadatakatalog.Models.Article;
 using log4net;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Configuration;
+using System.Text.Json;
+using Microsoft.Extensions.Configuration;
+using System.Net.Http.Json;
 
 namespace Kartverket.Metadatakatalog.Service.Article
 {
@@ -17,12 +15,15 @@ namespace Kartverket.Metadatakatalog.Service.Article
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly Geonorge.Utilities.Organization.IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
-        string endPointUri = WebConfigurationManager.AppSettings["GeonorgeUrl"];
+        string endPointUri;
 
-        public ArticleFetcher(Geonorge.Utilities.Organization.IHttpClientFactory httpClientFactory)
+        public ArticleFetcher(Geonorge.Utilities.Organization.IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
+            endPointUri = _configuration["GeonorgeUrl"];
         }
 
         public async Task<List<ArticleDocument>> FetchArticleDocumentsAsync(string culture)
@@ -36,7 +37,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadAsAsync<List<ArticleDocument>>().ConfigureAwait(false);
+            return await response.Content.ReadFromJsonAsync<List<ArticleDocument>>().ConfigureAwait(false);
         }
 
         public async Task<ArticleDocument> FetchArticleDocumentAsync(string articleId, string culture)
@@ -50,7 +51,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadAsAsync<ArticleDocument>().ConfigureAwait(false);
+            return await response.Content.ReadFromJsonAsync<ArticleDocument>().ConfigureAwait(false);
         }
 
     }

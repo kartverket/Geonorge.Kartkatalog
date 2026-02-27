@@ -1,12 +1,12 @@
 using Kartverket.Metadatakatalog.App_Start;
 using Kartverket.Metadatakatalog.Service;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
@@ -30,16 +30,16 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Metadata updated
         /// </summary>
-        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [System.Web.Http.Route("api/metadataupdated")]
-        [System.Web.Http.HttpPost]
-        public IActionResult MetadataUpdated(FormDataCollection metadata)
+        [Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [Route("api/metadataupdated")]
+        [HttpPost]
+        public IActionResult MetadataUpdated([FromForm] IFormCollection metadata)
         {
             HttpStatusCode statusCode;
 
-            string action = metadata.Get("action");
-            string uuid = metadata.Get("uuid");
-            string XMLFile = metadata.Get("XMLFile");
+            string action = metadata["action"];
+            string uuid = metadata["uuid"];
+            string XMLFile = metadata["XMLFile"];
 
             try
             {
@@ -65,15 +65,15 @@ namespace Kartverket.Metadatakatalog.Controllers
                 _errorService.AddError(uuid, e);
                 statusCode = HttpStatusCode.BadRequest;
             }
-            return StatusCode(statusCode);
+            return StatusCode((int)statusCode);
         }
 
         /// <summary>
         /// Run metadata indexing
         /// </summary>
-        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [System.Web.Http.Route("api/index-metadata")]
-        [System.Web.Http.HttpGet]
+        [Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [Route("api/index-metadata")]
+        [HttpGet]
         public IActionResult Index()
         {
             HttpStatusCode statusCode;
@@ -97,15 +97,15 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Log.Error("Exception while indexing metadata.", e);
                 statusCode = HttpStatusCode.BadRequest;
             }
-            return StatusCode(statusCode);
+            return StatusCode((int)statusCode);
         }
 
         /// <summary>
         /// Run metadata re-indexing
         /// </summary>
-        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [System.Web.Http.Route("api/reindex-metadata")]
-        [System.Web.Http.HttpGet]
+        [Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [Route("api/reindex-metadata")]
+        [HttpGet]
         public IActionResult ReIndex()
         {
             HttpStatusCode statusCode;
@@ -129,25 +129,25 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Log.Error("Exception while re-indexing metadata.", e);
                 statusCode = HttpStatusCode.BadRequest;
             }
-            return StatusCode(statusCode);
+            return StatusCode((int)statusCode);
         }
 
-        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/flushcache")]
+        [Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [HttpGet]
+        [Route("api/flushcache")]
         public IActionResult FlushCache()
         {
             MemoryCacher memCacher = new MemoryCacher();
             memCacher.DeleteAll();
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return StatusCode((int)HttpStatusCode.OK);
         }
 
         /// <summary>
         /// Remove metadata uuid from index
         /// </summary>
-        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [System.Web.Http.Route("api/remove-metadata/{uuid}")]
-        [System.Web.Http.HttpGet]
+        [Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [Route("api/remove-metadata/{uuid}")]
+        [HttpGet]
         public IActionResult Remove(string uuid)
         {
             HttpStatusCode statusCode;
@@ -167,7 +167,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Log.Error("Exception while removing metadata.", e);
                 statusCode = HttpStatusCode.BadRequest;
             }
-            return StatusCode(statusCode);
+            return StatusCode((int)statusCode);
         }
 
     }

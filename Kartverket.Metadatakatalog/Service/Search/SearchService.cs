@@ -19,10 +19,10 @@ namespace Kartverket.Metadatakatalog.Service.Search
         private readonly IOrganizationService _organizationService;
         private readonly ISolrOperations<MetadataIndexDoc> _solrInstance;
 
-        public SearchService(IOrganizationService organizationService)
+        public SearchService(IOrganizationService organizationService, ISolrOperations<MetadataIndexDoc> solrInstance)
         {
             _organizationService = organizationService;
-            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+            _solrInstance = solrInstance;
         }
 
         public SearchResult Search(SearchParameters parameters)
@@ -99,7 +99,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
             if (queryResults != null)
             {
-                searchResult.NumFound = queryResults.NumFound;
+                searchResult.NumFound = (int)queryResults.NumFound;
             }
             return searchResult;
         }
@@ -107,7 +107,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
         public MetadataIndexDoc GetMetadata(string uuid)
         {
             MetadataIndexDoc metadata = null;
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+            var solrInstance = _solrInstance;
             uuid = uuid.Replace(":",@"\:");
             ISolrQuery query = new SolrQuery("uuid:" + uuid);
             try

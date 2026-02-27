@@ -3,6 +3,21 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Kartverket.Metadatakatalog.Extensions;
+using Kartverket.Metadatakatalog.Models;
+using Microsoft.AspNetCore.Antiforgery;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+using Kartverket.Metadatakatalog.Middleware;
+using Kartverket.Metadatakatalog.Service;
+using Kartverket.Metadatakatalog.Service.Application;
+using Kartverket.Metadatakatalog.Service.Article;
+using Kartverket.Metadatakatalog.Service.Search;
+using Kartverket.Metadatakatalog.Service.ServiceDirectory;
+using GeoNorgeAPI;
+using Kartverket.Geonorge.Utilities;
+using Kartverket.Geonorge.Utilities.Organization;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -18,19 +33,68 @@ namespace Kartverket.Metadatakatalog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add Response Compression (replaces custom CompressFilter)
+            services.AddCustomResponseCompression(Configuration);
+
+            // Add Memory Cache
+            services.AddMemoryCache();
+
+            // Add Geonorge Authentication (migrated from GeonorgeAuthenticationModule)
+            services.AddGeonorgeAuthentication(Configuration);
+            services.AddGeonorgeAuthorization();
+
             // Add services to the container.
             services.AddControllersWithViews();
             
             // Add API controllers
             services.AddControllers();
 
-            // TODO: Add specific services during migration
-            // This is a placeholder for migrating Autofac services
+            // Add Razor Pages
+            services.AddRazorPages(options =>
+            {
+                // Configure Razor Pages authorization
+                options.Conventions.AuthorizeFolder("/Admin", "Admin");
+                options.Conventions.AuthorizeFolder("/Editor", "Editor");
+            });
+
+            // Register configuration service for easy access
+            services.AddScoped<Kartverket.Metadatakatalog.Helpers.IConfigurationService, Kartverket.Metadatakatalog.Helpers.ConfigurationService>();
+
+            // Register all Kartverket services (migrated from DependencyConfig)
+            services.AddKartverketServices(Configuration);
+
+            // Configure Antiforgery (replaces AntiForgeryConfig.UniqueClaimTypeIdentifier)
+            services.Configure<AntiforgeryOptions>(options =>
+            {
+                // You can set the HeaderName to specify the header used for the antiforgery token.
+                options.HeaderName = "X-CSRF-TOKEN";
+                // Other options can be configured as needed.
+            });
+
+            // Configure localization
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("nb-NO"),
+                    new CultureInfo("en-US")
+                };
+
+                options.DefaultRequestCulture = new RequestCulture("nb-NO");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
+
+            // Add HttpClient for PlaceResolver
+            services.AddHttpClient<Kartverket.Metadatakatalog.Service.PlaceResolver>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // Add global exception handling (replaces Application_Error)
+            app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -43,10 +107,24 @@ namespace Kartverket.Metadatakatalog
             }
 
             app.UseHttpsRedirection();
+            
+            // Add Response Compression (replaces custom CompressFilter)
+            app.UseResponseCompression();
+            
             app.UseStaticFiles();
+
+            // Add custom middleware for culture handling (replaces Application_BeginRequest)
+            app.UseMiddleware<CultureMiddleware>();
+
+            // Add custom middleware for return URL validation
+            app.UseMiddleware<ReturnUrlValidationMiddleware>();
 
             app.UseRouting();
 
+            // Add localization middleware
+            app.UseRequestLocalization();
+
+            // Add authentication and authorization (migrated from GeonorgeAuthenticationModule)
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -56,7 +134,9 @@ namespace Kartverket.Metadatakatalog
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
         }
     }
 }
+

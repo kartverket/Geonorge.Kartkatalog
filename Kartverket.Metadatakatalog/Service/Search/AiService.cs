@@ -6,9 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Web;
-using System.Web.Configuration;
-using System.Web.Helpers;
+using Microsoft.Extensions.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service.Search
 {
@@ -18,13 +16,15 @@ namespace Kartverket.Metadatakatalog.Service.Search
     public class AiService : IAiService
     {
         private readonly Geonorge.Utilities.Organization.IHttpClientFactory _httpClientFactory;
-        public static readonly bool UseVectorSearch = System.Convert.ToBoolean(WebConfigurationManager.AppSettings["AI:UseVectorSearch"]);
+        private readonly IConfiguration _configuration;
+        
+        public bool UseVectorSearch => Convert.ToBoolean(_configuration["AI:UseVectorSearch"]);
         static log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public AiService() { }
-        public AiService(Geonorge.Utilities.Organization.IHttpClientFactory httpClientFactory)
+        public AiService(Geonorge.Utilities.Organization.IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
         }
 
         /// <summary>  
@@ -60,7 +60,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
         public float[] GetPredictions(string text)
         {
-            if (SimpleMetadataUtil.UseVectorSearch)
+                if (SimpleMetadataUtil.StaticUseVectorSearch)
             {
                 object infoForDebug = "Search for: " + text;
                 try
@@ -76,14 +76,14 @@ namespace Kartverket.Metadatakatalog.Service.Search
                         }
                     };
 
-                    string projectId = WebConfigurationManager.AppSettings["AI:ProjectId"];
-                    string locationId = WebConfigurationManager.AppSettings["AI:LocationId"];
-                    string model = WebConfigurationManager.AppSettings["AI:Model"];
+                    string projectId = _configuration["AI:ProjectId"];
+                    string locationId = _configuration["AI:LocationId"];
+                    string model = _configuration["AI:Model"];
 
                     var endpoint = $"https://{locationId}-aiplatform.googleapis.com/v1/projects/{projectId}/locations/{locationId}/publishers/google/models/{model}:predict";
 
                     var token = GetAccessTokenFromJSONKey(
-                    WebConfigurationManager.AppSettings["AI:Key"],
+                    _configuration["AI:Key"],
                     "https://www.googleapis.com/auth/cloud-platform");
 
                     System.Net.ServicePointManager.Expect100Continue = false; // otherwise google could return http 417 ExpectationFailed (with body ...your computer or network may be sending automated queries)

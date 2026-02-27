@@ -7,7 +7,9 @@ using System.Net;
 using System.Net.Http;
 using System;
 using System.Net.Http.Headers;
-using System.Web.Configuration;
+using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+using System.Net.Http.Json;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Models;
 
@@ -64,23 +66,32 @@ namespace Kartverket.Metadatakatalog.Service
         public const string PlaceSvalbard = "Svalbard";
         public const string PlaceJanMayen = "Jan Mayen";
 
-
         private Dictionary<string, string> _areas;
-        private static readonly HttpClient _httpClient = new HttpClient
+        private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
+
+        public PlaceResolver(HttpClient httpClient, IConfiguration configuration)
         {
-            BaseAddress = new Uri(WebConfigurationManager.AppSettings["RegistryUrl"]),
-        };
+            _httpClient = httpClient;
+            _configuration = configuration;
+            _httpClient.BaseAddress = new Uri(_configuration["AppSettings:RegistryUrl"]);
+        }
         /// <summary>
         /// Gets fylke og kommuner fra register i et dictionary
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, string> GetAreas()
+        public async Task<Dictionary<string, string>> GetAreasAsync()
         {
-            populateAreas();
+            await PopulateAreasAsync();
             return _areas;
         }
 
-        private void populateAreas()
+        public Dictionary<string, string> GetAreas()
+        {
+            return GetAreasAsync().Result;
+        }
+
+        private async Task PopulateAreasAsync()
         {
             MemoryCacher memCacher = new MemoryCacher();
             var cache = memCacher.GetValue("areas");
@@ -95,10 +106,10 @@ namespace Kartverket.Metadatakatalog.Service
                 //call register fylker og kommuner
                 _httpClient.DefaultRequestHeaders.Accept.Clear();
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var result = _httpClient.GetAsync("api/sosi-kodelister/inndelinger/inndelingsbase/fylkesnummer").Result;
+                var result = await _httpClient.GetAsync("api/sosi-kodelister/inndelinger/inndelingsbase/fylkesnummer");
                 if (result.IsSuccessStatusCode)
                 {
-                    var register = result.Content.ReadAsAsync<Register>().Result;
+                    var register = await result.Content.ReadFromJsonAsync<Register>();
 
                     foreach (var item in register.containeditems)
                     {
@@ -109,10 +120,10 @@ namespace Kartverket.Metadatakatalog.Service
                             _areas.Add("0/" + codevalue, label);
                     }
                 }
-                var result2 = _httpClient.GetAsync("api/sosi-kodelister/inndelinger/inndelingsbase/kommunenummer").Result;
+                var result2 = await _httpClient.GetAsync("api/sosi-kodelister/inndelinger/inndelingsbase/kommunenummer");
                 if (result2.IsSuccessStatusCode)
                 {
-                    var register = result2.Content.ReadAsAsync<Register>().Result;
+                    var register = await result2.Content.ReadFromJsonAsync<Register>();
                     foreach (var item in register.containeditems)
                     {
                         var codevalue = item.codevalue;
@@ -239,7 +250,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public List<string> ResolveArea(SimpleMetadata metadata)
         {
-            populateAreas();
+            PopulateAreasAsync().Wait();
 
             List<string> placegroup = new List<string>();
 
@@ -267,7 +278,7 @@ namespace Kartverket.Metadatakatalog.Service
                 var result = _httpClient.GetAsync("https://ws.geonorge.no/dekningsApi/dekning?uuid=" + metadata.Uuid).Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    var register = result.Content.ReadAsAsync<Coverage>().Result;
+                    var register = result.Content.ReadFromJsonAsync<Coverage>().Result;
 
                     for(int c = 0; c < register.kommuner.Count(); c ++)
                     {

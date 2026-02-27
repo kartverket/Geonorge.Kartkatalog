@@ -18,10 +18,10 @@ namespace Kartverket.Metadatakatalog.Service.Search
         private readonly IOrganizationService _organizationService;
         private readonly ISolrOperations<MetadataIndexAllDoc> _solrInstance;
 
-        public SearchServiceAll(IOrganizationService organizationService)
+        public SearchServiceAll(IOrganizationService organizationService, ISolrOperations<MetadataIndexAllDoc> solrInstance)
         {
             _organizationService = organizationService;
-            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexAllDoc>>(CultureHelper.GetIndexCore(SolrCores.MetadataAll));
+            _solrInstance = solrInstance;
         }
 
         public SearchResult Search(SearchParameters parameters)
@@ -98,7 +98,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
             if (queryResults != null)
             {
-                searchResult.NumFound = queryResults.NumFound;
+                searchResult.NumFound = (int)queryResults.NumFound;
             }
             return searchResult;
         }

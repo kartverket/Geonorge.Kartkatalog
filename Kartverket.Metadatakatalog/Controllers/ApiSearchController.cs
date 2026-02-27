@@ -9,10 +9,16 @@ using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -20,10 +26,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Cors;
 using System.Xml;
 using SearchParameters = Kartverket.Metadatakatalog.Models.Api.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
@@ -61,12 +63,13 @@ namespace Kartverket.Metadatakatalog.Controllers
         private readonly IApplicationService _applicationService;
         private readonly IServiceDirectoryService _serviceDirectoryService;
         private readonly IArticleService _articleService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IMetadataService _metadataService;
         private readonly IAiService _aiService;
 
-        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll, IArticleService articleService, IAiService aiService)
+        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll, IArticleService articleService, IAiService aiService, IWebHostEnvironment webHostEnvironment)
         {
             _searchService = searchService;
             _metadataService = metadataService;
@@ -75,26 +78,25 @@ namespace Kartverket.Metadatakatalog.Controllers
             _searchServiceAll = searchServiceAll;
             _articleService = articleService;
             _aiService = aiService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
         /// Catalogue search
         /// </summary>
-
-        public SearchResult Get([System.Web.Http.ModelBinding.ModelBinder(typeof(SearchParameterModelBuilder))] SearchParameters parameters)
+        [HttpGet]
+        public SearchResult Get([FromQuery] SearchParameters parameters)
         {
-           try
-           {                
+            try
+            {
                 if (parameters == null)
                     parameters = new SearchParameters();
-            
+
                 Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
                 searchParameters.AddDefaultFacetsIfMissing();
-                Models.SearchResult searchResult   = _searchServiceAll.Search(searchParameters);
+                Models.SearchResult searchResult = _searchServiceAll.Search(searchParameters);
 
-                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
-
-                return new SearchResult(searchResult, urlHelper);
+                return new SearchResult(searchResult, Url);
             }
             catch (Exception ex)
             {
@@ -108,9 +110,8 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Catalogue search for dataset
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/datasets")]
-        [System.Web.Http.HttpGet]
-        public SearchResult Datasets([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
+        [HttpGet("datasets")]
+        public SearchResult Datasets([FromQuery] SearchParameters parameters)
         {
             try
             {
@@ -122,9 +123,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 searchParameters.AddDefaultFacetsIfMissing();
                 Models.SearchResult searchResult = _searchService.Search(searchParameters);
 
-                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
-
-                return new SearchResult(searchResult, urlHelper);
+                return new SearchResult(searchResult, Url);
             }
             catch (Exception ex)
             {
@@ -138,9 +137,8 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Catalogue search for opendata
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/aapnedata")]
-        [System.Web.Http.HttpGet]
-        public SearchResult Opendata([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
+        [HttpGet("aapnedata")]
+        public SearchResult Opendata([FromQuery] SearchParameters parameters)
         {
             try
             {
@@ -153,9 +151,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 searchParameters.AddDefaultFacetsIfMissing();
                 Models.SearchResult searchResult = _searchService.Search(searchParameters);
 
-                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
-
-                return new SearchResult(searchResult, urlHelper);
+                return new SearchResult(searchResult, Url);
             }
             catch (Exception ex)
             {
@@ -169,9 +165,8 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Catalogue search for applications
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/kartlosninger-i-norge")]
-        [System.Web.Http.HttpGet]
-        public SearchResult applications([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
+        [HttpGet("kartlosninger-i-norge")]
+        public SearchResult applications([FromQuery] SearchParameters parameters)
         {
             try
             {
@@ -182,9 +177,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 searchParameters.AddDefaultFacetsIfMissing();
                 Models.SearchResult searchResult = _applicationService.Applications(searchParameters);
 
-                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
-
-                return new SearchResult(searchResult, urlHelper);
+                return new SearchResult(searchResult, Url);
             }
             catch (Exception ex)
             {
@@ -197,9 +190,8 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Catalogue search for services
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/servicedirectory")]
-        [System.Web.Http.HttpGet]
-        public SearchResult servicedirectory([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] SearchParameters parameters)
+        [HttpGet("servicedirectory")]
+        public SearchResult servicedirectory([FromQuery] SearchParameters parameters)
         {
             try
             {
@@ -210,9 +202,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 searchParameters.AddDefaultFacetsIfMissing();
                 Models.SearchResult searchResult = _serviceDirectoryService.Services(searchParameters);
 
-                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
-
-                return new SearchResult(searchResult, urlHelper);
+                return new SearchResult(searchResult, Url);
             }
             catch (Exception ex)
             {
@@ -225,9 +215,8 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Catalogue search for articles
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/articles")]
-        [System.Web.Http.HttpGet]
-        public Models.Api.Article.SearchResult Articles([System.Web.Http.ModelBinding.ModelBinder(typeof(SM.General.Api.FieldValueModelBinder))] Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters parameters)
+        [HttpGet("articles")]
+        public Models.Api.Article.SearchResult Articles([FromQuery] Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters parameters)
         {
             try
             {
@@ -251,8 +240,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Catalogue search for articles
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/datasets-namespace")]
-        [System.Web.Http.HttpGet]
+        [HttpGet("datasets-namespace")]
         public SearchResult DatasetsNamespace(string @namespace, int limit = 10, int offset = 0)
         {
             try
@@ -261,11 +249,9 @@ namespace Kartverket.Metadatakatalog.Controllers
                 searchParameters.Limit = limit;
                 searchParameters.Offset = offset;
 
-                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
-
                 Models.SearchResult searchResult = _metadataService.GetMetadataForNamespace(@namespace, searchParameters);
 
-                return new SearchResult(searchResult, urlHelper) ;
+                return new SearchResult(searchResult, Url);
             }
             catch (Exception ex)
             {
@@ -278,17 +264,14 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Get simple metadata list
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/datasets-simple")]
-        [System.Web.Http.HttpGet]
+        [HttpGet("datasets-simple")]
         public SearchResult DatasetsSimple(string organization = "")
         {
             try
             {
-                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
-
                 Models.SearchResult searchResult = _metadataService.GetSimpleMetadata(organization);
 
-                return new SearchResult(searchResult, urlHelper);
+                return new SearchResult(searchResult, Url);
             }
             catch (Exception ex)
             {
@@ -302,8 +285,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Valid metadata dataset name
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/valid-dataset-name")]
-        [System.Web.Http.HttpGet]
+        [HttpGet("valid-dataset-name")]
         public DatasetNameValidationResult ValidDatasetsName(string @namespace, string datasetName, string uuid)
         {
             try
@@ -321,8 +303,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Get metadata dataset id
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/metadata-dataset-id")]
-        [System.Web.Http.HttpGet]
+        [HttpGet("metadata-dataset-id")]
         public SearchResultItemViewModel MetadataDatasetId(string datasetId)
         {
             try
@@ -338,8 +319,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
 
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/metadata/{uuid}")]
-        [System.Web.Http.HttpGet]
+        [HttpGet("metadata/{uuid}")]
         public SearchResultItemViewModel Metadata(string uuid)
         {
             try
@@ -354,8 +334,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/resources")]
-        [System.Web.Http.HttpGet]
+        [HttpGet("resources")]
         public System.Resources.ResourceSet Resources()
         {
             try
@@ -375,24 +354,23 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         /// <param name="uuid">The metadata uuid.</param>
         /// <returns>IActionResult containing <see cref="Models.MetadataViewModel"/> if found, otherwise NotFound.</returns>
-        [ResponseType(typeof(Models.MetadataViewModel))]
-        [System.Web.Http.Route("api/getdata/{uuid}")]
-        [System.Web.Http.HttpGet]
+        [ProducesResponseType(typeof(Models.MetadataViewModel), 200)]
+        [HttpGet("getdata/{uuid}")]
         public IActionResult GetData(string uuid)
         {
             Models.MetadataViewModel model = null;
             try
-            { 
+            {
                 model = _metadataService.GetMetadataViewModelByUuid(uuid);
                 if (model == null)
                     return NotFound();
 
                 return Ok(model);
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 Log.Error(ex);
-                return InternalServerError();
+                return StatusCode(500);
             }
         }
 
@@ -400,23 +378,18 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Get metadata for uuid for external met
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/get-external-metadata-xml/{uuid}")]
-        [System.Web.Http.HttpGet]
-        public HttpResponseMessage GetExternalXml(string uuid)
+        [HttpGet("get-external-metadata-xml/{uuid}")]
+        public IActionResult GetExternalXml(string uuid)
         {
             string XML = _metadataService.GetExternalXml(uuid);
-            return new HttpResponseMessage()
-            {
-                Content = new StringContent(XML, Encoding.UTF8, "application/xml")
-            };
+            return Content(XML, "application/xml", Encoding.UTF8);
         }
 
         /// <summary>
         /// Get related services, datasets and bundles for uuid
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/relateddata/{uuid}")]
-        [System.Web.Http.HttpGet]
+        [HttpGet("relateddata/{uuid}")]
         public SearchResult GetRelated(string uuid)
         {
 
@@ -424,10 +397,9 @@ namespace Kartverket.Metadatakatalog.Controllers
             Models.MetadataViewModel result = _metadataService.GetMetadataViewModelByUuid(uuid);
 
             Models.SearchResult relatedResult = CreateRelated(result);
-                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
 
-                return new SearchResult(relatedResult, urlHelper);
-           
+            return new SearchResult(relatedResult, Url);
+
 
         }
 
@@ -437,17 +409,15 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Get distributions for uuid
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/distributions/{uuid}")]
-        [System.Web.Http.HttpGet]
+        [HttpGet("distributions/{uuid}")]
         public List<Distribution> GetDistributions(string uuid)
         {
             return _metadataService.GetRelatedDistributionsByUuid(uuid);
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/distribution-lists/{uuid}")]
-        [System.Web.Http.HttpGet]
-        public Distributions GetDistributionLists(string uuid, [System.Web.Http.ModelBinding.ModelBinder(typeof(SearchParameterModelBuilder))] SearchParameters parameters)
+        [HttpGet("distribution-lists/{uuid}")]
+        public Distributions GetDistributionLists(string uuid, [FromQuery] SearchParameters parameters)
         {
             var metadata = _metadataService.GetMetadataViewModelByUuid(uuid);
             return _metadataService.GetDistributions(metadata, parameters);
@@ -456,25 +426,21 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         ///     Catalogue in dcat format
         /// </summary>
-        [System.Web.Http.Route("api/sitemap")]
-        [System.Web.Http.HttpGet]
-        public HttpResponseMessage SiteMap()
+        [HttpGet("sitemap")]
+        public IActionResult SiteMap()
         {
             var doc = new System.Xml.XmlDocument();
-            doc.Load(HttpContext.Current.Request.MapPath("~\\sitemap\\sitemap.xml"));
-            return new HttpResponseMessage
-            {
-                Content = new StringContent(doc.OuterXml, System.Text.Encoding.UTF8, "application/xml")
-            };
+            var sitemapPath = Path.Combine(_webHostEnvironment.WebRootPath, "sitemap", "sitemap.xml");
+            doc.Load(sitemapPath);
+            return Content(doc.OuterXml, "application/xml", Encoding.UTF8);
         }
 
         /// <summary>
         /// Create sitemap
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
-        [System.Web.Http.Route("api/create-sitemap")]
-        [System.Web.Http.HttpGet]
-        public HttpResponseMessage CreateSiteMap()
+        [HttpGet("create-sitemap")]
+        public IActionResult CreateSiteMap()
         {
             try
             {
@@ -486,25 +452,20 @@ namespace Kartverket.Metadatakatalog.Controllers
                 searchParameters.AddDefaultFacetsIfMissing();
                 Models.SearchResult searchResult = _searchService.Search(searchParameters);
 
-                var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
-
-                var results = new SearchResult(searchResult, urlHelper).Results;
+                var results = new SearchResult(searchResult, Url).Results;
 
                 var xml = CreateSiteMap(results);
 
-                return new HttpResponseMessage
-                {
-                    Content = new StringContent(xml.OuterXml, System.Text.Encoding.UTF8, "application/xml")
-                };
+                return Content(xml.OuterXml, "application/xml", Encoding.UTF8);
 
             }
             catch (Exception ex)
             {
                 Log.Error("Error API", ex);
-                return null;
+                return StatusCode(500);
             }
 
-}
+        }
 
         private System.Xml.XmlDocument CreateSiteMap(List<Models.Api.Metadata> results)
         {
@@ -516,7 +477,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             root.SetAttribute("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
             doc.AppendChild(root);
 
-            foreach(var item in results)
+            foreach (var item in results)
             {
                 XmlElement url = doc.CreateElement("url");
 
@@ -535,7 +496,8 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             }
 
-            doc.Save(System.Web.HttpContext.Current.Request.MapPath("~\\sitemap\\sitemap.xml"));
+            var sitemapPath = Path.Combine(_webHostEnvironment.WebRootPath, "sitemap", "sitemap.xml");
+            doc.Save(sitemapPath);
 
             return doc;
         }
@@ -622,7 +584,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             model.listhidden = parameters.listhidden;
 
             return model;
-           
+
         }
 
         private Models.Article.SearchParameters CreateSearchParameters(Models.Api.Article.SearchParameters parameters)
@@ -641,21 +603,22 @@ namespace Kartverket.Metadatakatalog.Controllers
             return facets
                 .Select(item => new FacetParameter
                 {
-                    Name = item.name, Value = item.value,
+                    Name = item.name,
+                    Value = item.value,
                     NameTranslated = UI.ResourceManager.GetString("Facet_" + item.name)
 
                 }).Where(v => v.Name != null)
                 .ToList();
         }
 
-        private void SetLanguage(HttpRequestMessage request)
+        private void SetLanguage(HttpRequest request)
         {
             string language = Culture.NorwegianCode;
 
-            IEnumerable<string> headerValues;
-            if (request.Headers.TryGetValues("Accept-Language", out headerValues))
+            var acceptLanguageHeader = request.Headers["Accept-Language"].FirstOrDefault();
+            if (!string.IsNullOrEmpty(acceptLanguageHeader))
             {
-                language = headerValues.FirstOrDefault();
+                language = acceptLanguageHeader;
                 if (CultureHelper.IsNorwegian(language))
                     language = Culture.NorwegianCode;
                 else
@@ -663,10 +626,10 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             else
             {
-                CookieHeaderValue cookie = request.Headers.GetCookies("_culture").FirstOrDefault();
-                if (cookie != null && !string.IsNullOrEmpty(cookie["_culture"].Value))
+                var cultureCookie = request.Cookies["_culture"];
+                if (!string.IsNullOrEmpty(cultureCookie))
                 {
-                    language = cookie["_culture"].Value;
+                    language = cultureCookie;
                 }
             }
 

@@ -14,9 +14,9 @@ namespace Kartverket.Metadatakatalog.Service.Article
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly ISolrOperations<ArticleIndexDoc> _solrInstance;
 
-        public ArticleService()
+        public ArticleService(ISolrOperations<ArticleIndexDoc> solrInstance)
         {
-            _solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ArticleIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Articles));
+            _solrInstance = solrInstance;
         }
 
         public Kartverket.Metadatakatalog.Models.Article.SearchResult Search(Kartverket.Metadatakatalog.Models.Article.SearchParameters parameters)
@@ -59,7 +59,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
         private int GetNumFound(SolrQueryResults<ArticleIndexDoc> queryResults)
         {
-            return queryResults?.NumFound ?? 0;
+            return (int)(queryResults?.NumFound ?? 0);
         }
 
         private List<Kartverket.Metadatakatalog.Models.Article.SearchResultItem> ParseResultDocuments(SolrQueryResults<ArticleIndexDoc> queryResults)

@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Web.Mvc;
 
 namespace Kartverket.Metadatakatalog.Models.Api
 {
@@ -13,7 +12,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             NumFound = searchResult.NumFound;
         }
 
-        public SearchResult(Models.SearchResult searchResult, UrlHelper urlHelper)
+        public SearchResult(Models.SearchResult searchResult, IUrlHelper urlHelper)
         {
             Limit = searchResult.Limit;
             Offset = searchResult.Offset;

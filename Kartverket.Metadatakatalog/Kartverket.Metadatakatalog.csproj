@@ -7,6 +7,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DebugSymbols>true</DebugSymbols>
     <Configurations>Debug;Dev;Release;Test</Configurations>
+	  <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
@@ -16,19 +17,18 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
-  <!-- Legacy system references removed - included in .NET 10 framework reference -->
   <ItemGroup>
-    <Compile Update="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
+    <Compile Remove="Util\**" />
+    <EmbeddedResource Remove="Util\**" />
+    <EntityDeploy Remove="Util\**" />
+    <None Remove="Util\**" />
   </ItemGroup>
+  <!-- Legacy system references removed - included in .NET 10 framework reference -->
   <ItemGroup>
     <Content Include="App_Data\XmlDocument.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\Blocks\SurveyBlock\SurveyBlockScript.js" />
-    <Content Include="Content\Blocks\SurveyBlock\SurveyBlockStyle.css" />
     <Content Include="Content\bower_components\axios\.bower.json" />
     <Content Include="Content\bower_components\axios\bower.json" />
     <Content Include="Content\bower_components\axios\CHANGELOG.md" />
@@ -706,7 +706,6 @@
     <Content Include="Content\temp.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Global.asax" />
     <Content Include="gulpfile.js" />
     <Content Include="Helpers\SearchHelpers.cshtml" />
     <Content Include="fonts\MetaComp-Book.ttf" />
@@ -820,26 +819,6 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\fonts\MetaComp-Book.ttf" />
     <Content Include="Content\fonts\web.config" />
-    <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Web.config" />
-    <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\ResourceModel.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\Index.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\TextSample.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\SimpleTypeModelDescription.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\Samples.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\Parameters.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ModelDescriptionLink.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\KeyValuePairModelDescription.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\InvalidSample.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ImageSample.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\HelpPageApiModel.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\EnumTypeModelDescription.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\DictionaryModelDescription.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ComplexTypeModelDescription.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="protos\google\type\timeofday.proto" />
     <Content Include="protos\google\type\quaternion.proto" />
     <Content Include="protos\google\type\postal_address.proto" />
@@ -921,82 +900,17 @@
     <Content Include="Scripts\vue-download.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Buttons\_AddToCartButton.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Buttons\_ContactOwnerButton.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Buttons\_HelpButton.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Buttons\_ShowCoverageButton.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Buttons\_ShowInMapButton.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Buttons\_ShowLegendDescriptionButton.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Buttons\_ShowProductPageButton.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Buttons\_ShowProductSheetButton.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Buttons\_ShowProductSpecificationButton.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Buttons\_ShowWebsiteButton.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Helpers\_ConvertModelToResultItem.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Helpers\_SetVariablesForResultItem.cshtml" />
-    <Content Include="Views\Shared\VueComponents\ResultItem\_DistributionFormats.cshtml" />
-    <Content Include="Views\Shared\VueComponents\ResultItem\_DistributionType.cshtml" />
-    <Content Include="Views\Shared\VueComponents\ResultItem\_DistributionUrl.cshtml" />
-    <Content Include="Views\Shared\VueComponents\ResultItem\_OpenData.cshtml" />
-    <Content Include="Views\Shared\VueComponents\ResultItem\_Owner.cshtml" />
-    <Content Include="Views\Shared\VueComponents\ResultItem\_Thumbnail.cshtml" />
-    <Content Include="Views\Shared\VueComponents\ResultItem\_Title.cshtml" />
-    <Content Include="Views\Shared\VueComponents\_Buttons.cshtml" />
-    <Content Include="Views\Shared\VueComponents\_ListRowButtons.cshtml" />
-    <Content Include="Views\Shared\VueComponents\_TableHeader.cshtml" />
-    <Content Include="Views\Shared\VueComponents\_TableRowButtons.cshtml" />
-    <Content Include="Views\Shared\VueComponents\_TopRowButtons.cshtml" />
-    <Content Include="Views\Shared\_FacetFilter.cshtml" />
-    <Content Include="Views\Shared\_FilterPages.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Shared\_Map.cshtml" />
-    <Content Include="Views\Shared\_resultItemRow.cshtml" />
     <Content Include="Views\Shared\_SharedMenu.cshtml" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Metadata\Index.cshtml" />
-    <Content Include="Views\Index\Index.cshtml" />
-    <Content Include="Views\Search\Index.cshtml" />
-    <Content Include="Views\Search\_SearchBox.cshtml" />
-    <Content Include="Views\Metadata\Organization.cshtml" />
-    <Content Include="Web.Dev.config" />
-    <Content Include="Web.Test.config" />
-    <Content Include="Views\Index\ReIndex.cshtml" />
-    <Content Include="Views\Search\_SearchBarPartial.cshtml" />
-    <Content Include="Views\Index\IndexSingle.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Download\Index.cshtml" />
     <Content Include="settings.default.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\ServiceDirectory\Index.cshtml" />
-    <Content Include="Views\Application\Index.cshtml" />
-    <Content Include="Views\Search\Area.cshtml" />
-    <Content Include="Views\Themes\Create.cshtml" />
-    <Content Include="Views\Themes\Delete.cshtml" />
-    <Content Include="Views\Themes\Edit.cshtml" />
-    <Content Include="Views\Themes\Index.cshtml" />
-    <Content Include="Views\Themes\_OperatesOn.cshtml" />
-    <Content Include="Views\Shared\_ThemeGroup.cshtml" />
-    <Content Include="Views\Themes\Details.cshtml" />
-    <Content Include="Views\OpenData\Index.cshtml" />
-    <Content Include="Views\Shared\VueComponents\Buttons\_CopyUrlButton.cshtml" />
     <Content Include="Content\Blocks\SurveyBlock\_SurveyBlock.cshtml" />
-    <Content Include="Views\Shared\_Pagination.cshtml" />
-    <Content Include="Views\Shared\_PaginationForArea.cshtml" />
-    <Content Include="Views\Shared\_PaginationForOrganization.cshtml" />
-    <Content Include="Views\Shared\_Resources.cshtml" />
-    <Content Include="Views\Shared\VueComponents\_FilterTab.cshtml" />
     <Content Include="settings.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1008,7 +922,6 @@
     <Folder Include="Content\bower_components\vue\packages\weex-template-compiler\" />
     <Folder Include="Content\bower_components\vue\packages\weex-vue-framework\" />
     <Folder Include="KartverketSharedMenu\Bundles\" />
-    <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Api.CommonProtos" Version="2.16.0" />
@@ -1021,17 +934,10 @@
     <PackageReference Include="Grpc.Core.Api" Version="2.66.0" />
     <PackageReference Include="Grpc.Net.Client" Version="2.66.0" />
     <PackageReference Include="Grpc.Net.Common" Version="2.66.0" />
-    <!-- Removed legacy ASP.NET packages - functionality included in ASP.NET Core framework -->
-    
-    <!-- Added modern .NET 10.0 packages -->
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.3" />
-    <!-- Removed Microsoft.Owin packages - incompatible with ASP.NET Core -->
-    <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
-    <PackageReference Include="OpenAI.2.0.0-beta" Version="11" />
-    <!-- Removed OWIN base package - incompatible with ASP.NET Core -->
-    <PackageReference Include="System.ClientModel.1.1.0-beta" Version="5" />
+    <!-- ASP.NET Core packages are included in the framework for .NET 10 -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.0" />
+    <!-- ResponseCompression is included in ASP.NET Core framework -->
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -1040,15 +946,17 @@
     <PackageReference Include="Antlr" Version="3.5.0.2" />
     <PackageReference Include="Arkitektum.GIS.Lib.MetadataCSW" Version="2.0.0" />
     <PackageReference Include="Arkitektum.GIS.Lib.SerializeUtil" Version="1.4.0" />
-    <PackageReference Include="Autofac" Version="4.9.4" />
-    <!-- Removed Autofac.Mvc5 and OWIN-related packages - replaced by ASP.NET Core DI -->
-    <PackageReference Include="Azure.Core" Version="1.42.0" />
-    <PackageReference Include="Castle.Core" Version="4.4.0" />
-    <PackageReference Include="Castle.Windsor" Version="5.0.1" />
-    <PackageReference Include="CommonServiceLocator" Version="2.0.4" />
-    <PackageReference Include="EntityFramework" Version="6.3.0" />
-    <PackageReference Include="Geonorge.AuthLib.Common" Version="1.0.67" />
-    <PackageReference Include="Geonorge.AuthLib.NetFull" Version="1.0.67" />
+    <PackageReference Include="Autofac" Version="8.1.0" />
+    <PackageReference Include="Castle.Core" Version="5.1.1" />
+    <PackageReference Include="Castle.Windsor" Version="6.0.0" />
+    <PackageReference Include="CommonServiceLocator" Version="2.0.7" />
+    <!-- Replace EntityFramework with EntityFramework Core for .NET 10 -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0" />
+    <PackageReference Include="Geonorge.AuthLib.Common" Version="2.0.0" />
+    <!-- Replace deprecated packages with ASP.NET Core equivalents -->
+    <!-- <PackageReference Include="Geonorge.AuthLib.NetFull" Version="2.0.0" /> - Replace with ASP.NET Core auth -->
     <PackageReference Include="GeoNorgeAPI" Version="4.0.3" />
     <PackageReference Include="Google.Apis" Version="1.68.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
@@ -1056,77 +964,94 @@
     <PackageReference Include="jQuery" Version="3.7.0" />
     <PackageReference Include="jQuery.Validation" Version="1.19.5" />
     <PackageReference Include="Kartverket.Geonorge.Utilities" Version="1.0.64" />
-    <PackageReference Include="log4net" Version="2.0.12" />
-    <PackageReference Include="Microsoft.AspNet.Cors" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
-    <!-- Removed redundant ASP.NET Core packages - included in Microsoft.NET.Sdk.Web framework reference -->
-    <PackageReference Include="Microsoft.AspNet.WebApi.HelpPage" Version="5.2.7" />
-    <!-- Removed legacy Microsoft.Bcl packages - not needed for .NET 10 -->
-    <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="8.0.1" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.Abstractions" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
-    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.11" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.WebEncoders" Version="8.0.11" />
+    <PackageReference Include="log4net" Version="2.0.17" />
+    
+    <!-- Remove legacy ASP.NET Web API packages - replaced by ASP.NET Core -->
+    <!-- <PackageReference Include="Microsoft.AspNet.Cors" Version="5.2.7" /> -->
+    <!-- <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" /> -->
+    <!-- <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" /> -->
+    
+    <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="10.0.1" />
+    
+    <!-- Update Microsoft.Extensions packages to latest stable versions -->
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.WebEncoders" Version="9.0.0" />
+    
     <PackageReference Include="Microsoft.IdentityModel.Abstractions" Version="8.14.0" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.14.0" />
     <PackageReference Include="Microsoft.IdentityModel.Logging" Version="8.14.0" />
     <PackageReference Include="Microsoft.IdentityModel.Protocols" Version="8.14.0" />
     <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.14.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens.Saml" Version="5.2.4" />
-    <PackageReference Include="Microsoft.IdentityModel.Xml" Version="5.2.4" />
-    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="3.2.11" />
-    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
-    <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.3.0" />
-    <PackageReference Include="Microsoft.Win32.Registry" Version="4.5.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens.Saml" Version="8.14.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Xml" Version="8.14.0" />
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="4.0.0" />
+    
+    <PackageReference Include="Microsoft.Net.Http.Headers" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
-    <PackageReference Include="OctoPack" Version="3.6.4" />
-    <PackageReference Include="OpenAI" Version="2.0.0-beta.11" />
-    <PackageReference Include="PCLStorage" Version="1.0.2" />
-    <PackageReference Include="Respond" Version="1.4.2" />
-    <PackageReference Include="SolrNet" Version="1.0.19" />
-    <PackageReference Include="SolrNet.Core" Version="1.0.19" />
-    <PackageReference Include="SolrNet.Windsor" Version="1.0.19" />
-    <PackageReference Include="Swashbuckle" Version="5.6.0" />
-    <PackageReference Include="Swashbuckle.Core" Version="5.6.0" />
-    <PackageReference Include="System.Buffers" Version="4.6.0" />
-    <PackageReference Include="System.ClientModel" Version="1.1.0-beta.5" />
-    <PackageReference Include="System.CodeDom" Version="7.0.0" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.6.0" />
+    <PackageReference Include="OctoPack" Version="3.6.5" />
+    <!-- <PackageReference Include="PCLStorage" Version="1.0.2" /> - Remove legacy PCL package -->
+    <!-- <PackageReference Include="Respond" Version="1.4.2" /> - Remove legacy package -->
+    
+    <PackageReference Include="SolrNet" Version="1.1.1" />
+    <PackageReference Include="SolrNet.Core" Version="1.1.1" />
+    <PackageReference Include="SolrNet.Windsor" Version="1.1.1" />
+    
+    <!-- Replace Swashbuckle with modern OpenAPI for .NET 10 -->
+    <!-- <PackageReference Include="Swashbuckle" Version="5.6.0" /> -->
+    <!-- <PackageReference Include="Swashbuckle.Core" Version="5.6.0" /> -->
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+    
+    <!-- Remove packages included in .NET 10 runtime -->
+    <!-- <PackageReference Include="System.Buffers" Version="4.6.0" /> -->
+    <PackageReference Include="System.CodeDom" Version="9.0.0" />
+    <!-- <PackageReference Include="System.ComponentModel.Annotations" Version="4.6.0" /> -->
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.4" />
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
+    <!-- <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" /> -->
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
-    <PackageReference Include="System.Management" Version="7.0.2" />
-    <PackageReference Include="System.Memory" Version="4.5.5" />
-    <PackageReference Include="System.Memory.Data" Version="1.0.2" />
-    <PackageReference Include="System.Net.Http.WinHttpHandler" Version="8.0.0" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
-    <PackageReference Include="System.Security.AccessControl" Version="4.7.0" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.2" />
-    <PackageReference Include="System.Security.Permissions" Version="4.7.0" />
+    <PackageReference Include="System.Management" Version="9.0.0" />
+    <!-- <PackageReference Include="System.Memory" Version="4.5.5" /> -->
+    <PackageReference Include="System.Memory.Data" Version="9.0.0" />
+    <PackageReference Include="System.Net.Http.WinHttpHandler" Version="9.0.0" />
+    <!-- <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" /> -->
+    <!-- <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" /> -->
+    <PackageReference Include="System.Security.AccessControl" Version="6.0.1" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.0" />
+    <PackageReference Include="System.Security.Permissions" Version="9.0.0" />
     <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
-    <PackageReference Include="System.Text.Encodings.Web" Version="8.0.0" />
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    <PackageReference Include="WebActivatorEx" Version="2.0" />
-    <PackageReference Include="WebApi.BasicAuth" Version="0.3.0" />
-    <PackageReference Include="WebGrease" Version="1.6.0" />
+    <!-- <PackageReference Include="System.Text.Encodings.Web" Version="8.0.0" /> -->
+    <!-- <PackageReference Include="System.Text.Json" Version="8.0.5" /> -->
+    <!-- <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" /> -->
+    <!-- <PackageReference Include="System.ValueTuple" Version="4.5.0" /> -->
+    
+    <!-- Remove legacy Web packages -->
+    <!-- <PackageReference Include="WebActivatorEx" Version="2.0" /> -->
+    <!-- <PackageReference Include="WebApi.BasicAuth" Version="0.3.0" /> -->
+    <!-- <PackageReference Include="WebGrease" Version="1.6.0" /> -->
+    
+    <!-- Fix vulnerable packages -->
+    <!-- Replace System.Data.SqlClient with Microsoft.Data.SqlClient -->
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1" />
+    <!-- Update System.Drawing.Common to fix vulnerability -->
+    <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
+    
+    <!-- Add GeoCoordinate for location calculations -->
+    <PackageReference Include="System.Device.Location.Portable" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup Label="Compile items now included by globbing that were not in the original project file">
     <Compile Remove="KartverketSharedMenu\Bundles\SharedMenu.cs" />

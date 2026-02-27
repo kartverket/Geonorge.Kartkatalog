@@ -1,26 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Kartverket.Metadatakatalog.Models;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Formatting;
 using System.Text;
 using System.Net;
+using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 using System.Threading.Tasks;
-using System.Web.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service
 {
     public class DownloadService
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly IConfiguration _configuration;
 
-        public OrderReceiptType Order(OrderType o, string orderUrl)
+        public DownloadService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public async Task<OrderReceiptType> Order(OrderType o, string orderUrl)
         {
                 if (string.IsNullOrEmpty(orderUrl))
-                orderUrl = WebConfigurationManager.AppSettings["DownloadUrl"] + "api/order";
+                orderUrl = _configuration["DownloadUrl"] + "api/order";
 
             //Disable SSL sertificate errors
             System.Net.ServicePointManager.ServerCertificateValidationCallback +=
@@ -50,9 +51,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                 if (response.IsSuccessStatusCode)
                 {
-
-                    var result = response.Content.ReadAsAsync<object>().Result;
-                    var resultAsString = result.ToString();
+                    var resultAsString = await response.Content.ReadAsStringAsync();
                     Log.Info($"Response:\r\n{resultAsString}");
                     var order = Newtonsoft.Json.JsonConvert.DeserializeObject<OrderReceiptType>(resultAsString);
 

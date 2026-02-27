@@ -17,13 +17,11 @@ using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
 using SolrNet;
 using Kartverket.Metadatakatalog.Helpers;
 using Resources;
-using System.Text.RegularExpressions;
-using System.Web.Configuration;
-using SolrNet.Commands.Parameters;
 using System.Globalization;
+using Kartverket.Metadatakatalog.Models.SearchIndex;
 using www.opengis.net;
 using Arkitektum.GIS.Lib.SerializeUtil;
-using System.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -35,11 +33,17 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly IOrganizationService _organizationService;
         private readonly ISearchService _searchService;
         private readonly IServiceDirectoryService _searchServiceDirectoryService;
+        private readonly IAiService _aiService;
+        private readonly IConfiguration _configuration;
+        private readonly ISolrOperations<MetadataIndexAllDoc> _solrMetadataOperations;
+        private readonly ISolrOperations<ServiceIndexDoc> _solrServiceOperations;
+        private readonly ISolrOperations<ArticleIndexDoc> _solrArticleOperations;
+        private readonly ISolrOperations<MetadataIndexDoc> _solrMetadataIndexOperations;
+        private readonly ISolrOperations<ApplicationIndexDoc> _solrApplicationOperations;
         public RegisterFetcher Register = new RegisterFetcher();
         public string Culture = Models.Translations.Culture.NorwegianCode;
-        private readonly IAiService _aiService;
 
-        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService, IAiService aiService)
+        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService, IAiService aiService, IConfiguration configuration, ISolrOperations<MetadataIndexAllDoc> solrMetadataOperations, ISolrOperations<ServiceIndexDoc> solrServiceOperations, ISolrOperations<ArticleIndexDoc> solrArticleOperations, ISolrOperations<MetadataIndexDoc> solrMetadataIndexOperations, ISolrOperations<ApplicationIndexDoc> solrApplicationOperations)
         {
             _geoNorge = geoNorge;
             _geoNetworkUtil = geoNetworkUtil;
@@ -48,6 +52,12 @@ namespace Kartverket.Metadatakatalog.Service
             _searchService = searchService;
             _searchServiceDirectoryService = searchServiceDirectoryService;
             _aiService = aiService;
+            _configuration = configuration;
+            _solrMetadataOperations = solrMetadataOperations;
+            _solrServiceOperations = solrServiceOperations;
+            _solrArticleOperations = solrArticleOperations;
+            _solrMetadataIndexOperations = solrMetadataIndexOperations;
+            _solrApplicationOperations = solrApplicationOperations;
         }
 
 
@@ -426,7 +436,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             try
             {
-                _geoNorge = new GeoNorge("", "", WebConfigurationManager.AppSettings["MetUrl"]);
+                _geoNorge = new GeoNorge("", "", _configuration["MetUrl"]);
 
                 ExpressionType[] expressionTypesFromDate = new ExpressionType[2];
                 expressionTypesFromDate[0] = new PropertyNameType { Text = new[] { "apiso:TempExtent_begin" } };
@@ -627,7 +637,7 @@ namespace Kartverket.Metadatakatalog.Service
         {
             SearchResultItem metadata = null;
 
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexAllDoc>>(CultureHelper.GetIndexCore(SolrCores.MetadataAll));
+            var solrInstance = _solrMetadataOperations;
 
             ISolrQuery query = new SolrQuery("uuid:" + uuid);
             try
@@ -651,7 +661,7 @@ namespace Kartverket.Metadatakatalog.Service
         public ServiceIndexDoc GetMetadataForService(string uuid)
         {
             ServiceIndexDoc metadata = null;
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ServiceIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Services));
+            var solrInstance = _solrServiceOperations;
 
             ISolrQuery query = new SolrQuery("uuid:" + uuid);
             try
@@ -673,7 +683,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public Models.SearchResult GetMetadataForNamespace(string @namespace, Models.SearchParameters searchParameters)
         {
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+            var solrInstance = _solrMetadataIndexOperations;
             @namespace = @namespace.Replace(@"\", @"\\");
             @namespace = @namespace.Replace(@"/", @"\/");
             @namespace = @namespace.Replace(@":", @"\:");
@@ -702,7 +712,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public Models.SearchResult GetSimpleMetadata(string organization)
         {
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+            var solrInstance = _solrMetadataIndexOperations;
 
             ISolrQuery query = new SolrQuery("metadata_standard:\"ISO19115\\:Norsk versjon\"");
             try
@@ -736,7 +746,7 @@ namespace Kartverket.Metadatakatalog.Service
         public DatasetNameValidationResult ValidDatasetsName(string @namespace, string datasetName, string uuid)
         {
             List<MetadataIndexDoc> metadata = null;
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+            var solrInstance = _solrMetadataIndexOperations;
             @namespace = @namespace.Replace(@"\", @"\\");
             @namespace = @namespace.Replace(@"/", @"\/");
             @namespace = @namespace.Replace(@":", @"\:");
@@ -772,7 +782,7 @@ namespace Kartverket.Metadatakatalog.Service
         public SearchResultItemViewModel GetMetadataByDatasetId(string datasetId)
         {
             List<MetadataIndexDoc> metadata = null;
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Metadata));
+            var solrInstance = _solrMetadataIndexOperations;
 
             ISolrQuery query = new SolrQuery("resourceReferenceCodeName:\"" + datasetId + "\" ");
             try
@@ -807,7 +817,7 @@ namespace Kartverket.Metadatakatalog.Service
             var mdMetadataType = _geoNorge.GetRecordByUuid(uuid);
             if(mdMetadataType == null) 
             {
-                _geoNorge = new GeoNorge("","", WebConfigurationManager.AppSettings["MetUrl"]);
+                _geoNorge = new GeoNorge("","", _configuration["MetUrl"]);
                 try { mdMetadataType = _geoNorge.GetRecordByUuid(uuid);}catch (Exception ex) { }
             }
             return mdMetadataType == null ? null : new SimpleMetadata(mdMetadataType);
@@ -1207,7 +1217,7 @@ namespace Kartverket.Metadatakatalog.Service
         private ApplicationIndexDoc GetMetadataForApplication(string uuid)
         {
             ApplicationIndexDoc metadata = null;
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Applications));
+            var solrInstance = _solrApplicationOperations;
 
             ISolrQuery query = new SolrQuery("uuid:" + uuid);
             try
@@ -1231,7 +1241,7 @@ namespace Kartverket.Metadatakatalog.Service
         {
             var distlist = new List<Distribution>();
 
-            var solrInstance = MvcApplication.indexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>(CultureHelper.GetIndexCore(SolrCores.Applications));
+            var solrInstance = _solrApplicationOperations;
 
             ISolrQuery query = new SolrQuery("applicationdataset:" + uuid + "*");
             try
@@ -1444,7 +1454,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             if (!string.IsNullOrEmpty(metadata.ParentIdentifier) && (metadata?.ContactMetadata?.Organization == "Meteorologisk institutt" || metadata?.ContactOwner?.Organization == "Meteorologisk institutt")) { 
                 metadata.MetMetadata = true;
-                metadata.MetadataXmlUrl = ConfigurationManager.AppSettings["KartkatalogenUrl"] + "api/get-external-metadata-xml/" + metadata.Uuid;
+                metadata.MetadataXmlUrl = _configuration["KartkatalogenUrl"] + "api/get-external-metadata-xml/" + metadata.Uuid;
             }
 
             return metadata;
@@ -1887,7 +1897,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public string GetExternalXml(string uuid)
         {
-            _geoNorge = new GeoNorge("", "", WebConfigurationManager.AppSettings["MetUrl"]);
+            _geoNorge = new GeoNorge("", "", _configuration["MetUrl"]);
             var metadata = _geoNorge.GetRecordByUuid(uuid);
             var xml = SerializeUtil.SerializeToString(metadata);
             return xml;

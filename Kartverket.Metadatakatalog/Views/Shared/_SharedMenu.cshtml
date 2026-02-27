@@ -30,9 +30,16 @@
                 <div class="container-login">
                     <ul>
                         <li><a href="@Html.GeonorgeUrl()kartdata/oppslagsverk/Brukernavn-og-passord/">Ny bruker</a></li>
-                        @if (Request.IsAuthenticated)
+                        @if (Context.User.Identity.IsAuthenticated)
                         {
-                            string username = ""; foreach (var c in System.Security.Claims.ClaimsPrincipal.Current.Claims) { if (c.Type == "urn:oid:0.9.2342.19200300.100.1.1" || c.Type == "username") { username = @c.Value; } }
+                            string username = ""; 
+                            foreach (var c in Context.User.Claims) 
+                            { 
+                                if (c.Type == "urn:oid:0.9.2342.19200300.100.1.1" || c.Type == "username") 
+                                { 
+                                    username = @c.Value; 
+                                } 
+                            }
                             <li id="login"><a href="@Url.Action("SignOut", "AuthServices")" class="geonorge-aut" title="Logg ut @username"> Logg ut</a></li>
                         }
                         else

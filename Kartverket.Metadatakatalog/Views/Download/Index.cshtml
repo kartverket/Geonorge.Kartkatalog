@@ -524,6 +524,6 @@
     var downloadUrl = '@Html.DownloadUrl()';
 </script>
 @section scripts{
-    @Scripts.Render("~/Content/download");
-    @Scripts.Render("~/bundles/shopping-cart");
+    <script src="/js/download.js" asp-append-version="true"></script>
+    <script src="/js/shopping-cart.js" asp-append-version="true"></script>
 }

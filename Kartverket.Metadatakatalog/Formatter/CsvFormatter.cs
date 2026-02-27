@@ -1,102 +1,81 @@
 ﻿using Kartverket.Metadatakatalog.Models.Api;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Web;
+using System.Threading.Tasks;
 using Resources;
 
 namespace Kartverket.Metadatakatalog.Formatter
 {
-    public class CsvFormatter : BufferedMediaTypeFormatter
+    public class CsvFormatter : TextOutputFormatter
     {
-        private readonly string csv = "text/csv";
-
         public CsvFormatter()
         {
-            SupportedMediaTypes.Add(new MediaTypeHeaderValue(csv));
-            MediaTypeMappings.Add(new QueryStringMapping("mediatype", "csv", csv));
-            MediaTypeMappings.Add(new UriPathExtensionMapping("csv", csv));
-
-            SupportedEncodings.Add(new UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
+            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/csv"));
+            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("application/csv"));
+            
+            SupportedEncodings.Add(Encoding.UTF8);
             SupportedEncodings.Add(Encoding.GetEncoding("iso-8859-1"));
         }
 
-        public override void SetDefaultContentHeaders(Type type, HttpContentHeaders headers, MediaTypeHeaderValue mediaType)
-        {
-            if (CanWriteType(type) && mediaType.MediaType == csv)
-            {
-                headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-                headers.ContentDisposition.FileName = "kartkatalogen.csv";
-            }
-            else
-            {
-                base.SetDefaultContentHeaders(type, headers, mediaType);
-            }
-        }
-
-        public override bool CanWriteType(System.Type type)
+        protected override bool CanWriteType(Type type)
         {
             if (type == typeof(SearchResult))
             {
                 return true;
             }
-            else
-            {
-                Type enumerableType = typeof(IEnumerable<SearchResult>);
-                return enumerableType.IsAssignableFrom(type);
-            }
+            
+            Type enumerableType = typeof(IEnumerable<SearchResult>);
+            return enumerableType.IsAssignableFrom(type);
         }
 
-        public override bool CanReadType(Type type)
+        public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
         {
-            return false;
-        }
+            var httpContext = context.HttpContext;
+            var response = httpContext.Response;
 
-        public override void WriteToStream(Type type, object value, Stream writeStream, HttpContent content)
-        {
-            Encoding effectiveEncoding = SelectCharacterEncoding(content.Headers);
+            // Set content disposition for file download
+            response.Headers.Append("Content-Disposition", "attachment; filename=kartkatalogen.csv");
 
-            using (var writer = new StreamWriter(writeStream, effectiveEncoding))
+            using var writer = new StreamWriter(response.Body, selectedEncoding, leaveOpen: true);
+            
+            var data = context.Object as SearchResult;
+            if (data == null)
             {
-                var data = value as SearchResult;
-                if (data == null)
-                {
-                    throw new InvalidOperationException("Cannot serialize type");
-                }
-                Write(data, writer);
+                throw new InvalidOperationException("Cannot serialize type");
             }
+            
+            await WriteAsync(data, writer);
+            await writer.FlushAsync();
         }
-
 
         // Helper methods for serializing SearchResult to CSV format. 
-        private void Write(SearchResult data, StreamWriter writer)
+        private async Task WriteAsync(SearchResult data, StreamWriter writer)
         {
-
             if (data.IsSearch())
             {
-                WriteSearchLines(data, writer);
+                await WriteSearchLinesAsync(data, writer);
             }
             else if (data.IsApplication())
             {
-                WriteApplicationLines(data, writer);
+                await WriteApplicationLinesAsync(data, writer);
             }
             else if (data.IsServiceDirectory())
             {
-                WriteServiceDirectoryLines(data, writer);
+                await WriteServiceDirectoryLinesAsync(data, writer);
             }
         }
 
-        private void WriteApplicationLines(SearchResult data, StreamWriter writer)
+        private async Task WriteApplicationLinesAsync(SearchResult data, StreamWriter writer)
         {
-            writer.WriteLine(UI.Title + ";Type;" + UI.Facet_organization + ";Uuid;" + UI.UrlToService + ";");
+            await writer.WriteLineAsync(UI.Title + ";Type;" + UI.Facet_organization + ";Uuid;" + UI.UrlToService + ";");
             foreach (var meta in data.Results)
             {
-                writer.WriteLine(
+                await writer.WriteLineAsync(
                     Escape(meta.Title) + ";" +
                     Escape(meta.DistributionType) + ";" +
                     Escape(meta.Organization) + ";" +
@@ -106,12 +85,12 @@ namespace Kartverket.Metadatakatalog.Formatter
             }
         }
 
-        private void WriteServiceDirectoryLines(SearchResult data, StreamWriter writer)
+        private async Task WriteServiceDirectoryLinesAsync(SearchResult data, StreamWriter writer)
         {
-            writer.WriteLine(UI.Title + ";Type;" + UI.Facet_organization + ";Uuid;" + UI.UrlToService + ";");
+            await writer.WriteLineAsync(UI.Title + ";Type;" + UI.Facet_organization + ";Uuid;" + UI.UrlToService + ";");
             foreach (var meta in data.Results)
             {
-                writer.WriteLine(
+                await writer.WriteLineAsync(
                     Escape(meta.Title) + ";" +
                     Escape(meta.DistributionType) + ";" +
                     Escape(meta.Organization) + ";" +
@@ -121,12 +100,12 @@ namespace Kartverket.Metadatakatalog.Formatter
             }
         }
 
-        private void WriteSearchLines(SearchResult data, StreamWriter writer)
+        private async Task WriteSearchLinesAsync(SearchResult data, StreamWriter writer)
         {
-            writer.WriteLine(UI.Title + ";Type;" + UI.Facet_theme + ";" + UI.Facet_organization + ";" + UI.OpenData + ";DOK-data;Uuid;Wms-url;Wfs-url;Atom-feed;"+ UI.Facet_spatialscope+";"+ UI.Facet_DistributionProtocols + ";" + UI.DistributionUrl);
+            await writer.WriteLineAsync(UI.Title + ";Type;" + UI.Facet_theme + ";" + UI.Facet_organization + ";" + UI.OpenData + ";DOK-data;Uuid;Wms-url;Wfs-url;Atom-feed;"+ UI.Facet_spatialscope+";"+ UI.Facet_DistributionProtocols + ";" + UI.DistributionUrl);
             foreach (var meta in data.Results)
             {
-                writer.WriteLine(
+                await writer.WriteLineAsync(
                     Escape(meta.Title) + ";" +
                     Escape(meta.Type) + ";" +
                     Escape(meta.Theme) + ";" +
@@ -140,12 +119,9 @@ namespace Kartverket.Metadatakatalog.Formatter
                     Escape(meta.SpatialScope) + ";" +
                     Escape(meta.DistributionProtocol) + ";" +
                     Escape(meta.DistributionUrl)
-
                 );
             }
         }
-
-
 
         static char[] _specialChars = new char[] { ';', '\n', '\r', '"' };
 
@@ -165,6 +141,5 @@ namespace Kartverket.Metadatakatalog.Formatter
             }
             else return field;
         }
-
     }
 }

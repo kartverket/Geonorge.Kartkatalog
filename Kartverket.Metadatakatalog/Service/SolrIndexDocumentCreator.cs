@@ -7,19 +7,11 @@ using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Models;
 using www.opengis.net;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using Kartverket.Metadatakatalog.Models.Translations;
-using System.Diagnostics;
-using System.Web.Configuration;
-using OpenAI.Embeddings;
-using System.ClientModel;
-using Value = Google.Protobuf.WellKnownTypes.Value;
-using System.Web;
-using Google.Apis.Auth.OAuth2;
-using System.IO;
 using Kartverket.Metadatakatalog.Service.Search;
+using Microsoft.Extensions.Configuration;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -34,16 +26,17 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly ThemeResolver _themeResolver;
         private readonly PlaceResolver _placeResolver;
         private readonly GeoNetworkUtil _geoNetworkUtil;
+        private readonly IConfiguration _configuration;
         private static readonly HttpClient _httpClient = new HttpClient();
-        public static readonly bool MapOnlyWms = System.Convert.ToBoolean(WebConfigurationManager.AppSettings["MapOnlyWms"]);
         private readonly IAiService _aiService;
 
-        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil, IAiService aiService)
+        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil, IAiService aiService, IConfiguration configuration, HttpClient httpClient)
         {
             _organizationService = organizationService;
             _themeResolver = themeResolver;
             _geoNetworkUtil = geoNetworkUtil;
-            _placeResolver = new PlaceResolver();
+            _configuration = configuration;
+            _placeResolver = new PlaceResolver(httpClient, configuration);
             _aiService = aiService;
         }
 
@@ -1055,10 +1048,11 @@ namespace Kartverket.Metadatakatalog.Service
                                         uuidFound = uuid;
                                         break;
                                     }
-                                    else if (!MapOnlyWms && !string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS" && !string.IsNullOrEmpty(uriName))
+                                    else if (!SimpleMetadataUtil.StaticMapOnlyWms && !string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS" && !string.IsNullOrEmpty(uriName))
                                     {
                                         uuidFound = uuid;
                                     }
+
 
                                 }
 
@@ -1246,7 +1240,7 @@ namespace Kartverket.Metadatakatalog.Service
                         uuidFound = uuid;
                         break;
                     }
-                    else if (!MapOnlyWms && !string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS" && !string.IsNullOrEmpty(uriName))
+                    else if (!SimpleMetadataUtil.StaticMapOnlyWms && !string.IsNullOrEmpty(uriProtocol) && uriProtocol == "OGC:WFS" && !string.IsNullOrEmpty(uriName))
                     {
                         uuidFound = uuid;
                     }
@@ -1546,7 +1540,7 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.typenumber = simpleMetadata.typenumber;
             indexDoc.DatasetServices = simpleMetadata.DatasetServices;
             var embeddings = _aiService.GetPredictions(simpleMetadata.Title + " " + simpleMetadata.Abstract);
-            if (SimpleMetadataUtil.UseVectorSearch && embeddings != null)
+            if (SimpleMetadataUtil.StaticUseVectorSearch && embeddings != null)
                 indexDoc.Vector = embeddings;
 
             return indexDoc;
