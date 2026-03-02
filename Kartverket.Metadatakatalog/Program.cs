@@ -2,16 +2,18 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using System.Threading;
 using log4net;
-using Castle.Windsor;
-using Castle.Facilities.SolrNetIntegration;
-using Kartverket.Metadatakatalog.Service;
-using Kartverket.Metadatakatalog.Models.SearchIndex;
 using System.Reflection;
 using System.IO;
+using Castle.Windsor;
+using Castle.Facilities.SolrNetIntegration;
+using SolrNet;
 using Kartverket.Metadatakatalog.Models;
+using Kartverket.Metadatakatalog.Models.SearchIndex;
+using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -42,6 +44,23 @@ namespace Kartverket.Metadatakatalog
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureServices((context, services) =>
+                {
+                    // BRIDGE SOLRNET SERVICES FROM WINDSORCONTAINER TO ASP.NET CORE DI
+                    services.AddSingleton<ISolrOperations<MetadataIndexDoc>>(provider => 
+                        IndexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(SolrCores.Metadata));
+                    services.AddSingleton<ISolrOperations<MetadataIndexAllDoc>>(provider => 
+                        IndexContainer.Resolve<ISolrOperations<MetadataIndexAllDoc>>(SolrCores.MetadataAll));
+                    services.AddSingleton<ISolrOperations<ServiceIndexDoc>>(provider => 
+                        IndexContainer.Resolve<ISolrOperations<ServiceIndexDoc>>(SolrCores.Services));
+                    services.AddSingleton<ISolrOperations<ApplicationIndexDoc>>(provider => 
+                        IndexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>(SolrCores.Applications));
+                    services.AddSingleton<ISolrOperations<ArticleIndexDoc>>(provider => 
+                        IndexContainer.Resolve<ISolrOperations<ArticleIndexDoc>>(SolrCores.Articles));
+
+                    // ADD MISSING HTTPCLIENT SERVICES
+                    services.AddHttpClient();
                 })
                 .ConfigureLogging(logging =>
                 {

@@ -4,6 +4,31 @@
         <name>Kartverket.Metadatakatalog</name>
     </assembly>
     <members>
+        <member name="T:Kartverket.Metadatakatalog.Adapters.HttpClientFactoryAdapter">
+            <summary>
+            Adapter to bridge the custom IHttpClientFactory interface with the standard .NET HttpClientFactory
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Adapters.HttpClientFactoryAdapter.CreateClient(System.String)">
+            <summary>
+            Creates an HttpClient using the standard .NET HttpClientFactory
+            </summary>
+            <param name="name">The logical name of the client to create</param>
+            <returns>A new HttpClient instance</returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Adapters.HttpClientFactoryAdapter.CreateClient``1">
+            <summary>
+            Creates an HttpClient for the given type using the standard .NET HttpClientFactory
+            </summary>
+            <typeparam name="T">The type to create a client for</typeparam>
+            <returns>A new HttpClient instance</returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Adapters.HttpClientFactoryAdapter.GetHttpClient">
+            <summary>
+            Implementation of GetHttpClient method required by the interface
+            </summary>
+            <returns>A new HttpClient instance</returns>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiArticlesController.ArticleUpdated(Kartverket.Metadatakatalog.Controllers.ArticleStatus)">
             <summary>
             Article updated

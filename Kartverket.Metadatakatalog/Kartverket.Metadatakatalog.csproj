@@ -899,6 +899,7 @@
     <Content Include="Scripts\visninger.js" />
     <Content Include="Scripts\vue-download.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_SharedMenu.cshtml" />

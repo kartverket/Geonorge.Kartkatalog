@@ -1,23 +1,25 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using GeoNorgeAPI;
+using Kartverket.Geonorge.Utilities;
+using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Extensions;
-using Kartverket.Metadatakatalog.Models;
-using Microsoft.AspNetCore.Antiforgery;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Localization;
-using System.Globalization;
 using Kartverket.Metadatakatalog.Middleware;
+using Kartverket.Metadatakatalog.Models;
+using Kartverket.Metadatakatalog.Models.SearchIndex;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
-using GeoNorgeAPI;
-using Kartverket.Geonorge.Utilities;
-using Kartverket.Geonorge.Utilities.Organization;
+using Kartverket.Metadatakatalog.Adapters;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Globalization;
+using System.Security.Claims;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -34,7 +36,7 @@ namespace Kartverket.Metadatakatalog
         public void ConfigureServices(IServiceCollection services)
         {
             // Add Response Compression (replaces custom CompressFilter)
-            services.AddCustomResponseCompression(Configuration);
+            services.AddResponseCompression();
 
             // Add Memory Cache
             services.AddMemoryCache();
@@ -45,7 +47,7 @@ namespace Kartverket.Metadatakatalog
 
             // Add services to the container.
             services.AddControllersWithViews();
-            
+
             // Add API controllers
             services.AddControllers();
 
@@ -56,6 +58,12 @@ namespace Kartverket.Metadatakatalog
                 options.Conventions.AuthorizeFolder("/Admin", "Admin");
                 options.Conventions.AuthorizeFolder("/Editor", "Editor");
             });
+
+            // ADD MISSING HTTPCLIENTFACTORY
+            services.AddHttpClient();
+            
+            // Register custom HttpClientFactory adapter for Kartverket.Geonorge.Utilities.Organization.IHttpClientFactory
+            services.AddSingleton<Kartverket.Geonorge.Utilities.Organization.IHttpClientFactory, HttpClientFactoryAdapter>();
 
             // Register configuration service for easy access
             services.AddScoped<Kartverket.Metadatakatalog.Helpers.IConfigurationService, Kartverket.Metadatakatalog.Helpers.ConfigurationService>();
@@ -76,9 +84,9 @@ namespace Kartverket.Metadatakatalog
             {
                 var supportedCultures = new[]
                 {
-                    new CultureInfo("nb-NO"),
-                    new CultureInfo("en-US")
-                };
+            new CultureInfo("nb-NO"),
+            new CultureInfo("en-US")
+        };
 
                 options.DefaultRequestCulture = new RequestCulture("nb-NO");
                 options.SupportedCultures = supportedCultures;
