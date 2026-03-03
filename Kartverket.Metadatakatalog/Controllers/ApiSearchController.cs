@@ -54,7 +54,7 @@ using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
 namespace Kartverket.Metadatakatalog.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/search")]
     [EnableCors]
     public class ApiSearchController : ControllerBase
     {

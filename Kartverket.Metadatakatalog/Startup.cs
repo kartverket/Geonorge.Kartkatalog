@@ -95,6 +95,9 @@ namespace Kartverket.Metadatakatalog
 
             // Add HttpClient for PlaceResolver
             services.AddHttpClient<Kartverket.Metadatakatalog.Service.PlaceResolver>();
+
+            // Add CORS services
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -129,6 +132,9 @@ namespace Kartverket.Metadatakatalog
 
             app.UseRouting();
 
+            // Add CORS middleware (must be between UseRouting and UseEndpoints)
+            app.UseCors();
+
             // Add localization middleware
             app.UseRequestLocalization();
 
@@ -147,4 +153,6 @@ namespace Kartverket.Metadatakatalog
         }
     }
 }
+
+
 
