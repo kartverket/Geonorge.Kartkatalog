@@ -71,6 +71,9 @@ namespace Kartverket.Metadatakatalog
             // Register all Kartverket services (migrated from DependencyConfig)
             services.AddKartverketServices(Configuration);
 
+            // Register RegisterFetcher service
+            services.AddScoped<RegisterFetcher>();
+
             // Configure Antiforgery (replaces AntiForgeryConfig.UniqueClaimTypeIdentifier)
             services.Configure<AntiforgeryOptions>(options =>
             {

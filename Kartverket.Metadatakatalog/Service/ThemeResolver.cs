@@ -9,7 +9,12 @@ namespace Kartverket.Metadatakatalog.Service
 {
     public class ThemeResolver
     {
-        public RegisterFetcher Register = new RegisterFetcher();
+        private readonly RegisterFetcher Register;
+
+        public ThemeResolver(RegisterFetcher registerFetcher)
+        {
+            Register = registerFetcher;
+        }
 
         public const string DokBasisGeodata = "Basis geodata";
         public const string DokSamferdsel = "Samferdsel";

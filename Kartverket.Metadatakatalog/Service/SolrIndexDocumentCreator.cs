@@ -19,7 +19,7 @@ namespace Kartverket.Metadatakatalog.Service
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public RegisterFetcher Register = new RegisterFetcher();
+        private readonly RegisterFetcher Register;
         private readonly Dictionary<string, Organization> _organizationCache = new Dictionary<string, Organization>();
 
         private readonly IOrganizationService _organizationService;
@@ -30,7 +30,7 @@ namespace Kartverket.Metadatakatalog.Service
         private static readonly HttpClient _httpClient = new HttpClient();
         private readonly IAiService _aiService;
 
-        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil, IAiService aiService, IConfiguration configuration, HttpClient httpClient)
+        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil, IAiService aiService, IConfiguration configuration, HttpClient httpClient, RegisterFetcher registerFetcher)
         {
             _organizationService = organizationService;
             _themeResolver = themeResolver;
@@ -38,6 +38,7 @@ namespace Kartverket.Metadatakatalog.Service
             _configuration = configuration;
             _placeResolver = new PlaceResolver(httpClient, configuration);
             _aiService = aiService;
+            Register = registerFetcher;
         }
 
         public List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems, IGeoNorge geoNorge, string culture)

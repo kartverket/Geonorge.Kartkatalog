@@ -4,6 +4,8 @@ using SolrNet;
 using SolrNet.Commands.Parameters;
 using System;
 using Kartverket.Metadatakatalog.Helpers;
+using Microsoft.Extensions.Configuration;
+using System.Net.Http;
 
 namespace Kartverket.Metadatakatalog.Service.Application
 {
@@ -11,11 +13,15 @@ namespace Kartverket.Metadatakatalog.Service.Application
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly ISolrOperations<ApplicationIndexDoc> _solrInstance;
+        private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _httpClientFactory;
         RegisterFetcher register;
 
-        public ApplicationService(ISolrOperations<ApplicationIndexDoc> solrInstance)
+        public ApplicationService(ISolrOperations<ApplicationIndexDoc> solrInstance, IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _solrInstance = solrInstance;
+            _configuration = configuration;
+            _httpClientFactory = httpClientFactory;
         }
 
         public SearchResult Applications(SearchParameters parameters)
@@ -103,7 +109,7 @@ namespace Kartverket.Metadatakatalog.Service.Application
 
         private List<SearchResultItem> ParseResultDocuments(SolrQueryResults<ApplicationIndexDoc> queryResults)
         {
-            register = new RegisterFetcher();
+            register = new RegisterFetcher(_configuration, _httpClientFactory);
             var items = new List<SearchResultItem>();
             if (queryResults != null)
             {

@@ -40,10 +40,10 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly ISolrOperations<ArticleIndexDoc> _solrArticleOperations;
         private readonly ISolrOperations<MetadataIndexDoc> _solrMetadataIndexOperations;
         private readonly ISolrOperations<ApplicationIndexDoc> _solrApplicationOperations;
-        public RegisterFetcher Register = new RegisterFetcher();
+        private readonly RegisterFetcher Register;
         public string Culture = Models.Translations.Culture.NorwegianCode;
 
-        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService, IAiService aiService, IConfiguration configuration, ISolrOperations<MetadataIndexAllDoc> solrMetadataOperations, ISolrOperations<ServiceIndexDoc> solrServiceOperations, ISolrOperations<ArticleIndexDoc> solrArticleOperations, ISolrOperations<MetadataIndexDoc> solrMetadataIndexOperations, ISolrOperations<ApplicationIndexDoc> solrApplicationOperations)
+        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService, IAiService aiService, IConfiguration configuration, ISolrOperations<MetadataIndexAllDoc> solrMetadataOperations, ISolrOperations<ServiceIndexDoc> solrServiceOperations, ISolrOperations<ArticleIndexDoc> solrArticleOperations, ISolrOperations<MetadataIndexDoc> solrMetadataIndexOperations, ISolrOperations<ApplicationIndexDoc> solrApplicationOperations, RegisterFetcher registerFetcher)
         {
             _geoNorge = geoNorge;
             _geoNetworkUtil = geoNetworkUtil;
@@ -58,6 +58,7 @@ namespace Kartverket.Metadatakatalog.Service
             _solrArticleOperations = solrArticleOperations;
             _solrMetadataIndexOperations = solrMetadataIndexOperations;
             _solrApplicationOperations = solrApplicationOperations;
+            Register = registerFetcher;
         }
 
 

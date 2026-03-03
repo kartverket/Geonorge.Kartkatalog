@@ -15,13 +15,8 @@ namespace Kartverket.Metadatakatalog.Service
     public class RegisterFetcher
     {
         MemoryCacher memCacher = new MemoryCacher();
-        private static readonly HttpClient _httpClient = new HttpClient();
-        private static IConfiguration _configuration;
-
-        public static void SetConfiguration(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
         IDictionary<string, string> TopicCategories = new ConcurrentDictionary<string, string>();
         IDictionary<string, string> TopicCategoriesEnglish = new ConcurrentDictionary<string, string>();
@@ -53,8 +48,10 @@ namespace Kartverket.Metadatakatalog.Service
         IDictionary<string, string> ListOfInspire = new ConcurrentDictionary<string, string>();
         
 
-        public RegisterFetcher()
+        public RegisterFetcher(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
+            _configuration = configuration;
+            _httpClientFactory = httpClientFactory;
             TopicCategories = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB100");
             TopicCategoriesEnglish = GetCodeList("9A46038D-16EE-4562-96D2-8F6304AAB100", Culture.EnglishCode);
             SpatialRepresentations = GetCodeList("4C54EB31-714E-4457-AF6A-44FE6DBE76C1");
@@ -84,6 +81,11 @@ namespace Kartverket.Metadatakatalog.Service
 
             ListOfInspire = GetCodeList("E7E48BC6-47C6-4E37-BE12-08FB9B2FEDE6");
 
+        }
+
+        private HttpClient CreateHttpClient()
+        {
+            return _httpClientFactory.CreateClient();
         }
 
         public IDictionary<string, string> GetDownloadUseGroups()
@@ -120,10 +122,11 @@ namespace Kartverket.Metadatakatalog.Service
             if (Organizations == null && Organizations.Count < 1)
             {
                 var url = _configuration?["RegistryUrl"] + "api/register/organisasjoner";
-                _httpClient.DefaultRequestHeaders.Clear();
-                _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", Culture.NorwegianCode);
+                using var httpClient = CreateHttpClient();
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", Culture.NorwegianCode);
 
-                var responseResult = _httpClient.GetAsync(url).Result;
+                var responseResult = httpClient.GetAsync(url).Result;
                 HttpContent content = responseResult.Content;
                 var data = content.ReadAsStringAsync().Result;
 
@@ -308,10 +311,11 @@ namespace Kartverket.Metadatakatalog.Service
                 object lockObj = new object();
                 string url = _configuration?["RegistryUrl"] + "api/kodelister/" + systemid;
 
+                using var httpClient = CreateHttpClient();
                 var message = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
                 message.Headers.Add("Accept-Language", culture);
 
-                var responseResult = _httpClient.SendAsync(message).Result;
+                var responseResult = httpClient.SendAsync(message).Result;
                 HttpContent content = responseResult.Content;
                 var data = content.ReadAsStringAsync().Result;
 
@@ -361,10 +365,11 @@ namespace Kartverket.Metadatakatalog.Service
 
                 string url = _configuration?["RegistryUrl"] + "api/metadata-kodelister/" + name;
 
-                _httpClient.DefaultRequestHeaders.Clear();
-                _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
+                using var httpClient = CreateHttpClient();
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
-                var data = _httpClient.GetAsync(url).Result.Content.ReadAsStringAsync().Result;
+                var data = httpClient.GetAsync(url).Result.Content.ReadAsStringAsync().Result;
 
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
                 var codeList = response["containeditems"];
@@ -411,10 +416,11 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 var url = _configuration?["RegistryUrl"] + "api/subregister/" + registername;
 
-                _httpClient.DefaultRequestHeaders.Clear();
-                _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
+                using var httpClient = CreateHttpClient();
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
-                var responseResult = _httpClient.GetAsync(url).Result;
+                var responseResult = httpClient.GetAsync(url).Result;
                 HttpContent content = responseResult.Content;
                 var data = content.ReadAsStringAsync().Result;
 
@@ -459,10 +465,11 @@ namespace Kartverket.Metadatakatalog.Service
             {
 
                 string url = _configuration?["RegistryUrl"] + "api/kodelister/" + systemid;
-                _httpClient.DefaultRequestHeaders.Clear();
-                _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
+                using var httpClient = CreateHttpClient();
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", culture);
 
-                var responseResult = _httpClient.GetAsync(url).Result;
+                var responseResult = httpClient.GetAsync(url).Result;
                 HttpContent content = responseResult.Content;
                 var data = content.ReadAsStringAsync().Result;
                 var response = Newtonsoft.Json.Linq.JObject.Parse(data);
