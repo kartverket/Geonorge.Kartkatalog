@@ -710,55 +710,11 @@
     <Content Include="Images\geonorge_devlogo.svg" />
     <Content Include="Images\geonorge_logo_350px.svg" />
     <Content Include="Images\geonorge_testlogo.svg" />
-    <Content Include="KartverketSharedMenu\Images\Dot_ffffff_8px-01.png" />
-    <Content Include="KartverketSharedMenu\Images\gif_loading-01.gif" />
-    <Content Include="KartverketSharedMenu\Scripts\angular-1.4.9.js" />
-    <Content Include="KartverketSharedMenu\Scripts\angular-1.4.9.min.js" />
-    <Content Include="KartverketSharedMenu\Scripts\jquery-1.11.3.js" />
-    <Content Include="KartverketSharedMenu\Scripts\ui-bootstrap-1.1.0.js" />
-    <Content Include="KartverketSharedMenu\Scripts\ui-bootstrap-1.1.0.min.js" />
-    <Content Include="KartverketSharedMenu\web.config" />
-    <Content Include="KartverketSharedMenu\Scripts\angular-1.4.9.min.js.map" />
     <Content Include="Images\arrow_ffffff_13px-01.svg" />
     <Content Include="Images\geonorge_logo.svg" />
     <Content Include="Images\gif_loading-01.gif" />
     <Content Include="Images\search_icon-01.svg" />
     <Content Include="Images\shopping_cart_968c83_ikon-01.svg" />
-    <Content Include="KartverketSharedMenu\Scripts\bootstrap.js" />
-    <Content Include="KartverketSharedMenu\Scripts\bootstrap.min.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-common\baseUrl.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-common\common.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\aggregatedController.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\aggregatedService.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\app.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\frontController.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\geonorgeHelpers.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_autoCompleteRow.html" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_filters.html" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_kartverket.html" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_loading.html" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_metadata.html" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_objektkatalog.html" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\partials\_storedSearches.html" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\proto1App.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\searchApp.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\searchController.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\searchOptions.dev.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\searchOptions.local.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\searchOptions.prod.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-old\searchOptions.test.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-top\menuTopController.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-top\searchOptions\searchOption.local.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-top\searchOptions\searchOption.prod.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-top\searchOptions\searchOption.test.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge-top\searchTopController.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge\app.js" />
-    <Content Include="KartverketSharedMenu\Scripts\geonorge\partials\_autoCompleteRow.html" />
-    <Content Include="KartverketSharedMenu\Scripts\jquery-1.11.3.min.js" />
-    <Content Include="KartverketSharedMenu\Styles\bootstrap.css" />
-    <Content Include="KartverketSharedMenu\Styles\geonorge-top\logoTop.css" />
-    <Content Include="KartverketSharedMenu\Styles\geonorge-top\menuTop.css" />
-    <Content Include="KartverketSharedMenu\Styles\geonorge-top\searchTop.css" />
     <Content Include="robots.txt" />
     <Content Include="PostDeploy.ps1" />
     <Content Include="authentication.default.config" />
@@ -909,7 +865,6 @@
     <Folder Include="Content\bower_components\vue\packages\vue-template-compiler\" />
     <Folder Include="Content\bower_components\vue\packages\weex-template-compiler\" />
     <Folder Include="Content\bower_components\vue\packages\weex-vue-framework\" />
-    <Folder Include="KartverketSharedMenu\Bundles\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.Api.CommonProtos" Version="2.16.0" />
@@ -1040,9 +995,6 @@
     
     <!-- Add GeoCoordinate for location calculations -->
     <PackageReference Include="System.Device.Location.Portable" Version="1.0.0" />
-  </ItemGroup>
-  <ItemGroup Label="Compile items now included by globbing that were not in the original project file">
-    <Compile Remove="KartverketSharedMenu\Bundles\SharedMenu.cs" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
