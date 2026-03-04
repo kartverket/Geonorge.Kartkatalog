@@ -702,7 +702,6 @@
     <Content Include="Content\bower_components\vue\test\weex\runtime\style.spec.js" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Content\shopping-cart.css" />
     <Content Include="Content\temp.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -915,6 +914,7 @@
     <Content Include="settings.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="wwwroot\css\shopping-cart.css" />
     <Content Include="yarn.lock" />
   </ItemGroup>
   <ItemGroup>
