@@ -54,7 +54,7 @@ using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
 namespace Kartverket.Metadatakatalog.Controllers
 {
     [ApiController]
-    [Route("api/search")]
+    [Route("api")]
     [EnableCors]
     public class ApiSearchController : ControllerBase
     {
@@ -84,8 +84,8 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Catalogue search
         /// </summary>
-        [HttpGet]
-        public SearchResult Get([FromQuery] SearchParameters parameters)
+        [HttpGet("search")]
+        public SearchResult Get([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("datasets")]
-        public SearchResult Datasets([FromQuery] SearchParameters parameters)
+        public SearchResult Datasets([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
         {
             try
             {
@@ -138,7 +138,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("aapnedata")]
-        public SearchResult Opendata([FromQuery] SearchParameters parameters)
+        public SearchResult Opendata([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
         {
             try
             {
@@ -166,7 +166,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("kartlosninger-i-norge")]
-        public SearchResult applications([FromQuery] SearchParameters parameters)
+        public SearchResult applications([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
         {
             try
             {
@@ -191,7 +191,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("servicedirectory")]
-        public SearchResult servicedirectory([FromQuery] SearchParameters parameters)
+        public SearchResult servicedirectory([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
         {
             try
             {
@@ -216,7 +216,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("articles")]
-        public Models.Api.Article.SearchResult Articles([FromQuery] Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters parameters)
+        public Models.Api.Article.SearchResult Articles([ModelBinder(BinderType = typeof(ModelBinders.ArticleSearchParameterModelBinder))] Kartverket.Metadatakatalog.Models.Api.Article.SearchParameters parameters)
         {
             try
             {
@@ -417,7 +417,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("distribution-lists/{uuid}")]
-        public Distributions GetDistributionLists(string uuid, [FromQuery] SearchParameters parameters)
+        public Distributions GetDistributionLists(string uuid, [ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
         {
             var metadata = _metadataService.GetMetadataViewModelByUuid(uuid);
             return _metadataService.GetDistributions(metadata, parameters);

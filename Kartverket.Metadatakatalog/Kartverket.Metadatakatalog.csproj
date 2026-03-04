@@ -705,7 +705,6 @@
     <Content Include="Content\temp.css" />
     <Content Include="gulpfile.js" />
     <Content Include="Helpers\SearchHelpers.cshtml" />
-    <Content Include="robots.txt" />
     <Content Include="PostDeploy.ps1" />
     <Content Include="authentication.default.config" />
     <Content Include="Content\bower_components\vue\.babelrc" />
@@ -824,6 +823,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="wwwroot\css\shopping-cart.css" />
+    <Content Include="wwwroot\robots.txt" />
     <Content Include="yarn.lock" />
   </ItemGroup>
   <ItemGroup>
