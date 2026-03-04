@@ -703,17 +703,8 @@
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\temp.css" />
-    <Content Include="fonts\fontawesome-webfont.svg" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="gulpfile.js" />
     <Content Include="Helpers\SearchHelpers.cshtml" />
-    <Content Include="fonts\MetaComp-Book.ttf" />
-    <Content Include="fonts\fontawesome-webfont.eot" />
-    <Content Include="fonts\fontawesome-webfont.ttf" />
-    <Content Include="fonts\fontawesome-webfont.woff" />
-    <Content Include="fonts\fontawesome-webfont.woff2" />
-    <Content Include="fonts\FontAwesome.otf" />
-    <Content Include="fonts\web.config" />
     <Content Include="Images\Arrow_414042_12px_mobile.svg" />
     <Content Include="Images\Dot_ffffff_8px-01.png" />
     <Content Include="Images\geonorge_devlogo.svg" />
@@ -800,10 +791,6 @@
     <Content Include="Content\bower_components\vue\test\weex\.eslintrc" />
     <Content Include="Content\bower_components\vue\test\weex\jasmine.json" />
     <Content Include="package.json" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="authentication.config">
       <SubType>Designer</SubType>
     </Content>

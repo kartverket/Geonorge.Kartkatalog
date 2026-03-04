@@ -13,7 +13,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToActionPermanent("Index", "Search");
+            return RedirectToActionPermanent("Index", "Download");
         }
 
         [Route("setculture/{culture}")]

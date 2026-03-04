@@ -147,9 +147,21 @@ namespace Kartverket.Metadatakatalog
 
             app.UseEndpoints(endpoints =>
             {
+                // Add a specific route for Norwegian "nedlasting" to map to Download controller
+                endpoints.MapControllerRoute(
+                    name: "nedlasting",
+                    pattern: "nedlasting/{action=Index}/{id?}",
+                    defaults: new { controller = "Download" });
+                    
+                // Add a specific route for the root to Download
+                endpoints.MapControllerRoute(
+                    name: "root",
+                    pattern: "",
+                    defaults: new { controller = "Download", action = "Index" });
+                    
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Download}/{action=Index}/{id?}");
                 endpoints.MapControllers();
                 endpoints.MapRazorPages();
             });

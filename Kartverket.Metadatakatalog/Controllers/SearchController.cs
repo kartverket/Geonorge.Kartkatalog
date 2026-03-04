@@ -43,35 +43,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <returns>/search</returns>
         public IActionResult Index(SearchParameters parameters)
         {
-            parameters.AddComplexFacetsIfMissing();
-            var searchResult = _searchService.Search(parameters);
-            Kartverket.Metadatakatalog.Models.Article.SearchParameters articleParameters = new Models.Article.SearchParameters();
-            articleParameters.Text = parameters.Text;
-            articleParameters.Limit = 200;
-            if (string.IsNullOrEmpty(parameters.Text))
-                articleParameters.orderby = "StartPublish";
-            var articleResult = _articleService.Search(articleParameters);
-
-
-            var model = new SearchViewModel(parameters, searchResult, articleResult);
-
-            return View(model);
-        }
-
-        /// <summary>
-        /// Shows datasets by selected municipality or county.
-        /// </summary>
-        /// <param name="parameters">Uses AreaCode to find selected municipality or county. </param>
-        /// <returns>/hva-finnes-i-kommunen-eller-fylket</returns>
-        public IActionResult Area(SearchByAreaParameters parameters)
-        {
-            parameters.AddDefaultFacetsIfMissing();
-            parameters.CreateFacetOfArea();
-
-            var searchResult = _searchService.Search(parameters);
-            var model = new SearchByAreaViewModel(parameters, searchResult);
-
-            return View(model);
+            return RedirectToActionPermanent("Index", "Download");
         }
 
         public IActionResult SignIn()

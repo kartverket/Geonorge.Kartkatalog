@@ -153,13 +153,6 @@
             <param name="parameters">Facets</param>
             <returns>/search</returns>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.SearchController.Area(Kartverket.Metadatakatalog.Models.SearchByAreaParameters)">
-            <summary>
-            Shows datasets by selected municipality or county.
-            </summary>
-            <param name="parameters">Uses AreaCode to find selected municipality or county. </param>
-            <returns>/hva-finnes-i-kommunen-eller-fylket</returns>
-        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.SearchController.SignOutCallback">
             <summary>
             This is the action responding to /signout-callback-oidc route after logout at the identity provider
