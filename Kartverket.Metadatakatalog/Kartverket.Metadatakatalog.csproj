@@ -32,11 +32,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Helpers\SearchHelpers.cshtml" />
-    <Content Include="authentication.default.config" />
     <Content Include="package.json" />
-    <Content Include="authentication.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="protos\google\type\timeofday.proto" />
     <Content Include="protos\google\type\quaternion.proto" />
     <Content Include="protos\google\type\postal_address.proto" />
@@ -101,12 +97,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Download\Index.cshtml" />
-    <Content Include="settings.default.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="settings.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="wwwroot\Content\bower_components\kartverket-felleskomponenter\.bower.json" />
     <Content Include="wwwroot\Content\bower_components\kartverket-felleskomponenter\assets\css\all.css" />
     <Content Include="wwwroot\Content\bower_components\kartverket-felleskomponenter\assets\css\all.min.css" />
