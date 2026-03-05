@@ -1,7 +1,7 @@
 # keep config file out of source control
 settings.config
 authentication.config
-appsettings.Development.json
+appsettings.local.json
 
 Kartverket.Metadatakatalog/temafiler
 
