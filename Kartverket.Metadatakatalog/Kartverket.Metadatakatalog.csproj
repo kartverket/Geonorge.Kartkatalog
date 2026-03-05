@@ -31,9 +31,7 @@
     <Content Include="App_Data\XmlDocument.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="gulpfile.js" />
     <Content Include="Helpers\SearchHelpers.cshtml" />
-    <Content Include="PostDeploy.ps1" />
     <Content Include="authentication.default.config" />
     <Content Include="package.json" />
     <Content Include="authentication.config">
@@ -99,7 +97,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_SharedMenu.cshtml" />
-    <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
