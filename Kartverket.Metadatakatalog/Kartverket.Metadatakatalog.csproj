@@ -19,11 +19,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Content\**" />
+    <Compile Remove="protos\**" />
     <Compile Remove="Util\**" />
     <EmbeddedResource Remove="Content\**" />
+    <EmbeddedResource Remove="protos\**" />
     <EmbeddedResource Remove="Util\**" />
     <EntityDeploy Remove="Util\**" />
     <None Remove="Content\**" />
+    <None Remove="protos\**" />
     <None Remove="Util\**" />
   </ItemGroup>
   <!-- Legacy system references removed - included in .NET 10 framework reference -->
@@ -33,62 +36,6 @@
     </Content>
     <Content Include="Helpers\SearchHelpers.cshtml" />
     <Content Include="package.json" />
-    <Content Include="protos\google\type\timeofday.proto" />
-    <Content Include="protos\google\type\quaternion.proto" />
-    <Content Include="protos\google\type\postal_address.proto" />
-    <Content Include="protos\google\type\phone_number.proto" />
-    <Content Include="protos\google\type\month.proto" />
-    <Content Include="protos\google\type\money.proto" />
-    <Content Include="protos\google\type\localized_text.proto" />
-    <Content Include="protos\google\type\latlng.proto" />
-    <Content Include="protos\google\type\interval.proto" />
-    <Content Include="protos\google\type\fraction.proto" />
-    <Content Include="protos\google\type\expr.proto" />
-    <Content Include="protos\google\type\decimal.proto" />
-    <Content Include="protos\google\type\dayofweek.proto" />
-    <Content Include="protos\google\type\datetime.proto" />
-    <Content Include="protos\google\type\date.proto" />
-    <Content Include="protos\google\type\color.proto" />
-    <Content Include="protos\google\type\calendar_period.proto" />
-    <Content Include="protos\google\rpc\status.proto" />
-    <Content Include="protos\google\rpc\http.proto" />
-    <Content Include="protos\google\rpc\error_details.proto" />
-    <Content Include="protos\google\rpc\context\audit_context.proto" />
-    <Content Include="protos\google\rpc\context\attribute_context.proto" />
-    <Content Include="protos\google\rpc\code.proto" />
-    <Content Include="protos\google\api\visibility.proto" />
-    <Content Include="protos\google\api\usage.proto" />
-    <Content Include="protos\google\api\system_parameter.proto" />
-    <Content Include="protos\google\api\source_info.proto" />
-    <Content Include="protos\google\api\service.proto" />
-    <Content Include="protos\google\api\routing.proto" />
-    <Content Include="protos\google\api\resource.proto" />
-    <Content Include="protos\google\api\quota.proto" />
-    <Content Include="protos\google\api\policy.proto" />
-    <Content Include="protos\google\api\monitoring.proto" />
-    <Content Include="protos\google\api\monitored_resource.proto" />
-    <Content Include="protos\google\api\metric.proto" />
-    <Content Include="protos\google\api\logging.proto" />
-    <Content Include="protos\google\api\log.proto" />
-    <Content Include="protos\google\api\launch_stage.proto" />
-    <Content Include="protos\google\api\label.proto" />
-    <Content Include="protos\google\api\httpbody.proto" />
-    <Content Include="protos\google\api\http.proto" />
-    <Content Include="protos\google\api\field_info.proto" />
-    <Content Include="protos\google\api\field_behavior.proto" />
-    <Content Include="protos\google\api\error_reason.proto" />
-    <Content Include="protos\google\api\endpoint.proto" />
-    <Content Include="protos\google\api\documentation.proto" />
-    <Content Include="protos\google\api\distribution.proto" />
-    <Content Include="protos\google\api\control.proto" />
-    <Content Include="protos\google\api\context.proto" />
-    <Content Include="protos\google\api\consumer.proto" />
-    <Content Include="protos\google\api\config_change.proto" />
-    <Content Include="protos\google\api\client.proto" />
-    <Content Include="protos\google\api\billing.proto" />
-    <Content Include="protos\google\api\backend.proto" />
-    <Content Include="protos\google\api\auth.proto" />
-    <Content Include="protos\google\api\annotations.proto" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
