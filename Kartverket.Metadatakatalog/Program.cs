@@ -14,6 +14,7 @@ using SolrNet;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.SearchIndex;
 using Kartverket.Metadatakatalog.Service;
+using System;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -41,6 +42,13 @@ namespace Kartverket.Metadatakatalog
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    if (context.HostingEnvironment.IsDevelopment())
+                    {
+                        config.AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true);
+                    }
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
@@ -72,10 +80,19 @@ namespace Kartverket.Metadatakatalog
         private static void InitializeSolrNet()
         {
             // Initialize SolrNet with multiple cores (from Application_Start)
-            var configuration = new ConfigurationBuilder()
+            var configBuilder = new ConfigurationBuilder()
                 .SetBasePath(System.IO.Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile("appsettings.Development.json", optional: true)
+                .AddJsonFile("appsettings.Development.json", optional: true);
+            
+            // Only load local settings in development
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+            if (environment == "Development")
+            {
+                configBuilder.AddJsonFile("appsettings.local.json", optional: true);
+            }
+            
+            var configuration = configBuilder
                 .AddEnvironmentVariables()
                 .Build();
 
