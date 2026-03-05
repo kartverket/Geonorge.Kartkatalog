@@ -20,13 +20,16 @@
   <ItemGroup>
     <Compile Remove="Content\**" />
     <Compile Remove="protos\**" />
+    <Compile Remove="Service\**" />
     <Compile Remove="Util\**" />
     <EmbeddedResource Remove="Content\**" />
     <EmbeddedResource Remove="protos\**" />
+    <EmbeddedResource Remove="Service\**" />
     <EmbeddedResource Remove="Util\**" />
     <EntityDeploy Remove="Util\**" />
     <None Remove="Content\**" />
     <None Remove="protos\**" />
+    <None Remove="Service\**" />
     <None Remove="Util\**" />
   </ItemGroup>
   <!-- Legacy system references removed - included in .NET 10 framework reference -->
