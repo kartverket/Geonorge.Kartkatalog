@@ -86,11 +86,11 @@
             </div>
         </div>
         <div v-if="supportsPolygonSelection && $parent.mapIsLoaded">
-            <component v-if="master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="true">
+            <component v-if="master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.NorgeskartUrl()select.html'" v-bind:master="true">
             </component>
         </div>
         <div v-if="supportsPolygonSelection && $parent.mapIsLoaded">
-            <component v-if="!master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="false">
+            <component v-if="!master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.NorgeskartUrl()select.html'" v-bind:master="false">
             </component>
         </div>
         <div v-if="supportsGridSelection && $parent.mapIsLoaded">
