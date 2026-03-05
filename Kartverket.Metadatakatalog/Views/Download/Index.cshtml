@@ -97,7 +97,7 @@
             <component v-if="!master"
                  v-show="$parent.showMap" is="mapSelect"
                  v-bind:map-data="$parent.mapData"
-                 v-bind:map-src="'@Html.SecureNorgeskartUrl()' + 'nedlasting.html#' + $parent.mapData.defaultConfigurations.zoom_level + '/' + $parent.mapData.defaultConfigurations.center_longitude + '/' + $parent.mapData.defaultConfigurations.center_latitude + '/' + $parent.mapData.defaultConfigurations.service_name"
+                 v-bind:map-src="'@Html.NorgeskartUrl()' + 'nedlasting.html#' + $parent.mapData.defaultConfigurations.zoom_level + '/' + $parent.mapData.defaultConfigurations.center_longitude + '/' + $parent.mapData.defaultConfigurations.center_latitude + '/' + $parent.mapData.defaultConfigurations.service_name"
                  v-bind:master="false">
             </component>
 

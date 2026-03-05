@@ -33,22 +33,10 @@ namespace Kartverket.Metadatakatalog.Helpers
             return url;
         }
 
-        public static string GeonorgeArtiklerUrl(this IHtmlHelper helper)
-        {
-            var configuration = GetConfiguration(helper);
-            return configuration["AppSettings:GeonorgeArtiklerUrl"];
-        }
-
         public static string NorgeskartUrl(this IHtmlHelper helper)
         {
             var configuration = GetConfiguration(helper);
             return configuration["AppSettings:NorgeskartUrl"];
-        }
-
-        public static string SecureNorgeskartUrl(this IHtmlHelper helper)
-        {
-            var configuration = GetConfiguration(helper);
-            return configuration["AppSettings:SecureNorgeskartUrl"];
         }
 
         public static string RegistryUrl(this IHtmlHelper helper)
