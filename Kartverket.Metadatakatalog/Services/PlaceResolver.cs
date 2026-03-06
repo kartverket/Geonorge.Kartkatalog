@@ -74,7 +74,7 @@ namespace Kartverket.Metadatakatalog.Service
         {
             _httpClient = httpClient;
             _configuration = configuration;
-            _httpClient.BaseAddress = new Uri(_configuration["AppSettings:RegistryUrl"]);
+            _httpClient.BaseAddress = new Uri(_configuration["RegistryUrl"]);
         }
         /// <summary>
         /// Gets fylke og kommuner fra register i et dictionary

@@ -455,6 +455,9 @@
     <!-- Add GeoCoordinate for location calculations -->
     <PackageReference Include="System.Device.Location.Portable" Version="1.0.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Start\" />
+  </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">

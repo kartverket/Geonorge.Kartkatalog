@@ -167,7 +167,7 @@
         </member>
         <member name="M:Kartverket.Metadatakatalog.Extensions.AuthenticationExtensions.AddGeonorgeAuthentication(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
-            Add Geonorge authentication services (JWT + Cookies + OpenID Connect)
+            Add Geonorge authentication services (JWT + Cookies + OpenID Connect + Basic Auth)
             </summary>
         </member>
         <member name="M:Kartverket.Metadatakatalog.Extensions.AuthenticationExtensions.AddGeonorgeAuthorization(Microsoft.Extensions.DependencyInjection.IServiceCollection)">

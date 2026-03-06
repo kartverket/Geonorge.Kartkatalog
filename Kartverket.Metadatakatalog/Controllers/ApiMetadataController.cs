@@ -13,6 +13,7 @@ namespace Kartverket.Metadatakatalog.Controllers
     [EnableCors]
     [ApiController]
     [Route("api")]
+    [Authorize(AuthenticationSchemes = "BasicAuthentication")]
     public class ApiMetadataController : ControllerBase
     {
         private readonly ILogger<ApiMetadataController> _logger;
@@ -30,7 +31,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Metadata updated
         /// </summary>
-        [Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [Authorize(Roles = AuthConfig.DatasetProviderRole, AuthenticationSchemes = "BasicAuthentication")]
         [Route("metadataupdated")]
         [HttpPost]
         public IActionResult MetadataUpdated([FromForm] IFormCollection metadata)
@@ -71,7 +72,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Run metadata indexing
         /// </summary>
-        [Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [Authorize(Roles = AuthConfig.DatasetProviderRole, AuthenticationSchemes = "BasicAuthentication")]
         [Route("index-metadata")]
         [HttpGet]
         public IActionResult Index()
@@ -103,7 +104,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Run metadata re-indexing
         /// </summary>
-        [Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [Authorize(Roles = AuthConfig.DatasetProviderRole, AuthenticationSchemes = "BasicAuthentication")]
         [Route("reindex-metadata")]
         [HttpGet]
         public IActionResult ReIndex()
@@ -132,7 +133,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             return StatusCode((int)statusCode);
         }
 
-        [Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [Authorize(Roles = AuthConfig.DatasetProviderRole, AuthenticationSchemes = "BasicAuthentication")]
         [HttpGet]
         [Route("flushcache")]
         public IActionResult FlushCache()
@@ -145,7 +146,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// <summary>
         /// Remove metadata uuid from index
         /// </summary>
-        [Authorize(Roles = AuthConfig.DatasetProviderRole)]
+        [Authorize(Roles = AuthConfig.DatasetProviderRole, AuthenticationSchemes = "BasicAuthentication")]
         [Route("remove-metadata/{uuid}")]
         [HttpGet]
         public IActionResult Remove(string uuid)

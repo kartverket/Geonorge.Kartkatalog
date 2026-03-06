@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,6 +9,7 @@ using System;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Kartverket.Metadatakatalog.Authentication;
 
 namespace Kartverket.Metadatakatalog.Extensions
 {
@@ -18,7 +20,7 @@ namespace Kartverket.Metadatakatalog.Extensions
     public static class AuthenticationExtensions
     {
         /// <summary>
-        /// Add Geonorge authentication services (JWT + Cookies + OpenID Connect)
+        /// Add Geonorge authentication services (JWT + Cookies + OpenID Connect + Basic Auth)
         /// </summary>
         public static IServiceCollection AddGeonorgeAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
@@ -29,6 +31,9 @@ namespace Kartverket.Metadatakatalog.Extensions
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
+
+            // Add Basic Authentication for API endpoints
+            authBuilder.AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", options => { });
 
             // Add Cookie Authentication (for web sessions)
             authBuilder.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
@@ -76,8 +81,9 @@ namespace Kartverket.Metadatakatalog.Extensions
             });
 
             // Add OpenID Connect (for external authentication - Azure AD, etc.)
+            // Only add if properly configured (not using placeholder values)
             var oidcSettings = configuration.GetSection("Authentication:OpenIdConnect");
-            if (oidcSettings.Exists())
+            if (oidcSettings.Exists() && !oidcSettings["Authority"]?.Contains("your-tenant-id") == true)
             {
                 authBuilder.AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                 {
@@ -128,9 +134,20 @@ namespace Kartverket.Metadatakatalog.Extensions
                 options.AddPolicy("Editor", policy =>
                     policy.RequireRole("Editor", "Administrator", "Admin"));
 
-                // API policy - require specific API claims
+                // API policy - require specific API claims or basic auth
                 options.AddPolicy("ApiAccess", policy =>
-                    policy.RequireClaim("scope", "api.geonorge"));
+                {
+                    policy.AuthenticationSchemes.Add("BasicAuthentication");
+                    policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+                    policy.RequireAuthenticatedUser();
+                });
+
+                // API Dataset Provider policy - for metadata API endpoints
+                options.AddPolicy("ApiDatasetProvider", policy =>
+                {
+                    policy.AuthenticationSchemes.Add("BasicAuthentication");
+                    policy.RequireRole("DatasetProvider", "Administrator", "Admin");
+                });
 
                 // Organization policy - require organization membership
                 options.AddPolicy("OrganizationMember", policy =>
