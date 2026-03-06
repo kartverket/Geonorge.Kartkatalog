@@ -1,38 +1,40 @@
-using System;
-using System.Net;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Service.Search;
-using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Net;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
     public class SearchController : Controller
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger<SearchController> _logger;
 
         private readonly ISearchServiceAll _searchService;
         private readonly IArticleService _articleService;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
-        public SearchController(ISearchServiceAll searchService, IArticleService articleSevice, IConfiguration configuration, IWebHostEnvironment environment)
+        public SearchController(ISearchServiceAll searchService, IArticleService articleSevice, IConfiguration configuration, IWebHostEnvironment environment, ILogger<SearchController> logger)
         {
             _searchService = searchService;
             _articleService = articleSevice;
             _configuration = configuration;
             _environment = environment;
+            _logger = logger;
         }
 
 

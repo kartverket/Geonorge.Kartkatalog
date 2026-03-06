@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Net;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -10,12 +11,13 @@ namespace Kartverket.Metadatakatalog.Service
 {
     public class DownloadService
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger<DownloadService> _logger;
         private readonly IConfiguration _configuration;
 
-        public DownloadService(IConfiguration configuration)
+        public DownloadService(IConfiguration configuration, ILogger<DownloadService> logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task<OrderReceiptType> Order(OrderType o, string orderUrl)
@@ -44,15 +46,15 @@ namespace Kartverket.Metadatakatalog.Service
                     );
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                Log.Info($"Sending request to download api: {orderUrl}\r\n{content}");
+                _logger.LogInformation("Sending request to download api: {OrderUrl}\r\n{Content}", orderUrl, content);
 
                 HttpResponseMessage response = client.PostAsync(orderUrl, content).Result;
-                Log.Info($"Response code: " + response.StatusCode);
+                _logger.LogInformation("Response code: {StatusCode}", response.StatusCode);
 
                 if (response.IsSuccessStatusCode)
                 {
                     var resultAsString = await response.Content.ReadAsStringAsync();
-                    Log.Info($"Response:\r\n{resultAsString}");
+                    _logger.LogInformation("Response:\r\n{ResultAsString}", resultAsString);
                     var order = Newtonsoft.Json.JsonConvert.DeserializeObject<OrderReceiptType>(resultAsString);
 
                 return order;

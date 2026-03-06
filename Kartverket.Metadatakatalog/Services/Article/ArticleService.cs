@@ -1,22 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models;
+using Kartverket.Metadatakatalog.Models.SearchIndex;
+using Kartverket.Metadatakatalog.Service.ServiceDirectory;
+using Microsoft.Extensions.Logging;
 using SolrNet;
 using SolrNet.Commands.Parameters;
 using System;
-using Kartverket.Metadatakatalog.Service.ServiceDirectory;
-using Kartverket.Metadatakatalog.Helpers;
-using Kartverket.Metadatakatalog.Models.SearchIndex;
+using System.Collections.Generic;
 
 namespace Kartverket.Metadatakatalog.Service.Article
 {
     public class ArticleService : IArticleService
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger<IArticleService> _logger;
         private readonly ISolrOperations<ArticleIndexDoc> _solrInstance;
 
-        public ArticleService(ISolrOperations<ArticleIndexDoc> solrInstance)
+        public ArticleService(ISolrOperations<ArticleIndexDoc> solrInstance, ILogger<IArticleService> logger)
         {
             _solrInstance = solrInstance;
+            _logger = logger;
         }
 
         public Kartverket.Metadatakatalog.Models.Article.SearchResult Search(Kartverket.Metadatakatalog.Models.Article.SearchParameters parameters)
@@ -36,7 +38,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
             }
             catch (Exception ex)
             {
-                Log.Error("Error in search", ex);
+                _logger.LogError(ex, "Error in search");
 
                 return CreateSearchResults(null, parameters);
             }
@@ -69,7 +71,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
             {
                 foreach (var doc in queryResults)
                 {
-                    Log.Debug(doc.Score + " " + doc.Heading + " " + doc.Id);
+                    _logger.LogDebug("Score: {Score} Heading: {Heading} Id: {Id}", doc.Score, doc.Heading, doc.Id);
                     var item = new Kartverket.Metadatakatalog.Models.Article.SearchResultItem(doc);
                     items.Add(item);
                 }

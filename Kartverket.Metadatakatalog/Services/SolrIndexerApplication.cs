@@ -4,19 +4,20 @@ using Kartverket.Metadatakatalog.Models;
 using SolrNet;
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Kartverket.Metadatakatalog.Service
 {
     public class SolrIndexerApplication : IndexerApplication
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+        private readonly ILogger<SolrIndexerApplication> _logger;
         private ISolrOperations<ApplicationIndexDoc> _solr;
         private readonly IServiceProvider _serviceProvider;
 
-        public SolrIndexerApplication(IServiceProvider serviceProvider)
+        public SolrIndexerApplication(IServiceProvider serviceProvider, ILogger<SolrIndexerApplication> logger)
         {
             _serviceProvider = serviceProvider;
+            _logger = logger;
             _solr = GetSolrOperations(SolrCores.Applications);
         }
 
@@ -28,14 +29,14 @@ namespace Kartverket.Metadatakatalog.Service
 
         public void Index(IEnumerable<ApplicationIndexDoc> docs)
         {
-            Log.Info(string.Format("Indexing {0} docs", docs.Count()));
+            _logger.LogInformation("Indexing {DocCount} docs", docs.Count());
             _solr.AddRange(docs);
             _solr.Commit();
         }
 
         public void DeleteIndex()
         {
-            Log.Info("Deletes intire index for reindexing");
+            _logger.LogInformation("Deletes entire index for reindexing");
             SolrQuery sq = new SolrQuery("*:*");
             _solr.Delete(sq);
             _solr.Commit();
@@ -43,7 +44,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public void Index(ApplicationIndexDoc doc)
         {
-            Log.Info(string.Format("Indexing single document uuid={0} title={1}", doc.Uuid, doc.Title));
+            _logger.LogInformation("Indexing single document uuid={Uuid} title={Title}", doc.Uuid, doc.Title);
             _solr.Add(doc);
             _solr.Commit();
         }
@@ -52,13 +53,13 @@ namespace Kartverket.Metadatakatalog.Service
         {
             try
             {
-                Log.Info(string.Format("Removes document uuid={0} from index", uuid));
+                _logger.LogInformation("Removes document uuid={Uuid} from index", uuid);
                 _solr.Delete(uuid);
                 _solr.Commit();
             }
             catch (Exception exception)
             {
-                Log.Error("Error removing UUID: " + uuid + "", exception);
+                _logger.LogError(exception, "Error removing UUID: {Uuid}", uuid);
             }
         }
 

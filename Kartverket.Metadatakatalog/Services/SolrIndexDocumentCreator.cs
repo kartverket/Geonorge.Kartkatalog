@@ -12,13 +12,13 @@ using System.Threading;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Service.Search;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Kartverket.Metadatakatalog.Service
 {
     public class SolrIndexDocumentCreator : IndexDocumentCreator
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+        private readonly ILogger<SolrIndexDocumentCreator> _logger;
         private readonly RegisterFetcher Register;
         private readonly Dictionary<string, Organization> _organizationCache = new Dictionary<string, Organization>();
 
@@ -30,7 +30,7 @@ namespace Kartverket.Metadatakatalog.Service
         private static readonly HttpClient _httpClient = new HttpClient();
         private readonly IAiService _aiService;
 
-        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil, IAiService aiService, IConfiguration configuration, HttpClient httpClient, RegisterFetcher registerFetcher)
+        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil, IAiService aiService, IConfiguration configuration, HttpClient httpClient, RegisterFetcher registerFetcher, ILogger<SolrIndexDocumentCreator> logger)
         {
             _organizationService = organizationService;
             _themeResolver = themeResolver;
@@ -39,6 +39,7 @@ namespace Kartverket.Metadatakatalog.Service
             _placeResolver = new PlaceResolver(httpClient, configuration);
             _aiService = aiService;
             Register = registerFetcher;
+            _logger = logger;
         }
 
         public List<MetadataIndexDoc> CreateIndexDocs(IEnumerable<object> searchResultItems, IGeoNorge geoNorge, string culture)
@@ -61,7 +62,7 @@ namespace Kartverket.Metadatakatalog.Service
                     catch (Exception e)
                     {
                         string identifier = metadataItem.fileIdentifier != null ? metadataItem.fileIdentifier.CharacterString : null;
-                        Log.Error("Exception while parsing metadata: " + identifier, e);
+                        _logger.LogError(e, "Exception while parsing metadata: {Identifier}", identifier);
                     }
                 }
             }
@@ -324,7 +325,7 @@ namespace Kartverket.Metadatakatalog.Service
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Error parsing datetime", e);
+                    _logger.LogError(e, "Error parsing datetime");
                 }
 
                 indexDoc.LegendDescriptionUrl = simpleMetadata.LegendDescriptionUrl;
@@ -419,7 +420,7 @@ namespace Kartverket.Metadatakatalog.Service
                     }
                     catch (Exception ex) {
                         //stopWatch.Stop();
-                        Log.Error("Exception while setting thumbnail resurces for metadata: " + simpleMetadata.Uuid, ex);
+                        _logger.LogError(ex, "Exception while setting thumbnail resources for metadata: {Uuid}", simpleMetadata.Uuid);
                     }
                     finally
                     {
@@ -585,7 +586,7 @@ namespace Kartverket.Metadatakatalog.Service
                         catch (Exception ex)
                         {
                             string identifier = rel;
-                            Log.Error("Exception while parsing applicationDatasets: " + identifier, ex);
+                            _logger.LogError(ex, "Exception while parsing applicationDatasets: {Identifier}", identifier);
                         }
                     }
 
@@ -660,7 +661,7 @@ namespace Kartverket.Metadatakatalog.Service
                     catch(Exception ex)
                     {
                         string identifier = simpleMetadata.Uuid;
-                        Log.Error("Exception serie: " + identifier, ex);
+                        _logger.LogError(ex, "Exception serie: {Identifier}", identifier);
                     }
 
                 }
@@ -763,15 +764,15 @@ namespace Kartverket.Metadatakatalog.Service
                     }
                 }
 
-                Log.Info(string.Format("Indexing metadata with uuid={0}, title={1}", indexDoc.Uuid,
-                indexDoc.Title));
+                _logger.LogInformation("Indexing metadata with uuid={Uuid}, title={Title}", indexDoc.Uuid,
+                indexDoc.Title);
                 
 
             }
             catch (Exception e)
             {
                 string identifier = simpleMetadata.Uuid;
-                Log.Error("Exception while parsing metadata: " + identifier, e);
+                _logger.LogError(e, "Exception while parsing metadata: {Identifier}", identifier);
                 return null;
             }
             return indexDoc;
@@ -929,7 +930,7 @@ namespace Kartverket.Metadatakatalog.Service
                     catch (Exception ex)
                     {
                         string identifier = simpleMetadata.Uuid;
-                        Log.Error("Exception serviceDatasets: " + identifier, ex);
+                        _logger.LogError(ex, "Exception serviceDatasets: {Identifier}", identifier);
                     }
                 }
 
@@ -1151,7 +1152,7 @@ namespace Kartverket.Metadatakatalog.Service
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex);
+                        _logger.LogError(ex, "Exception occurred");
                     }
                 }
 
@@ -1275,7 +1276,7 @@ namespace Kartverket.Metadatakatalog.Service
                 for (int s = 0; s < res.Items.Length; s++)
                 {
                     string serviceId = ((www.opengis.net.DCMIRecordType)(res.Items[s])).Items[0].Text[0];
-                    Log.Info("Search with filter for srv:operatesOn returned uuid=" + serviceId);
+                    _logger.LogInformation("Search with filter for srv:operatesOn returned uuid={ServiceId}", serviceId);
                     MD_Metadata_Type md = geoNorge.GetRecordByUuid(serviceId);
                     var simpleMd = new SimpleMetadata(md);
 

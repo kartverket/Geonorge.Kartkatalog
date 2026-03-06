@@ -1,27 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using SolrNet;
 using SolrNet.Commands.Parameters;
 using System;
-using Kartverket.Metadatakatalog.Helpers;
-using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 using System.Net.Http;
 
 namespace Kartverket.Metadatakatalog.Service.Application
 {
     public class ApplicationService : IApplicationService
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger<IApplicationService> _logger;
         private readonly ISolrOperations<ApplicationIndexDoc> _solrInstance;
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
         RegisterFetcher register;
 
-        public ApplicationService(ISolrOperations<ApplicationIndexDoc> solrInstance, IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public ApplicationService(ISolrOperations<ApplicationIndexDoc> solrInstance, IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<IApplicationService> logger)
         {
             _solrInstance = solrInstance;
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
+            _logger = logger;
         }
 
         public SearchResult Applications(SearchParameters parameters)
@@ -50,7 +52,7 @@ namespace Kartverket.Metadatakatalog.Service.Application
             }
             catch (Exception ex)
             {
-                Log.Error("Error in search", ex);
+                _logger.LogError(ex, "Error in search");
 
                 return CreateSearchResults(null, parameters);
             }
@@ -115,7 +117,7 @@ namespace Kartverket.Metadatakatalog.Service.Application
             {
                 foreach (var doc in queryResults)
                 {
-                    Log.Debug(doc.Score + " " + doc.Title + " " + doc.Uuid);
+                    _logger.LogDebug("Score: {Score} Title: {Title} Uuid: {Uuid}", doc.Score, doc.Title, doc.Uuid);
 
                     var item = new SearchResultItem(doc);
                     item.DistributionType = register.GetDistributionType(item.DistributionProtocol);

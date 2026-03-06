@@ -1,14 +1,17 @@
 ﻿using Kartverket.Metadatakatalog.Service.Search;
+using Microsoft.Extensions.Logging;
 using SolrNet;
 
 namespace Kartverket.Metadatakatalog.Models
 {
     public class SearchByOrganizationParameters : SearchParameters
     {
+        private readonly ILogger<SearchByOrganizationParameters> _logger;
         public string OrganizationSeoName { get; set; }
 
-        public SearchByOrganizationParameters(IAiService aiService) : base(aiService: aiService)
+        public SearchByOrganizationParameters(IAiService aiService, ILogger<SearchByOrganizationParameters> logger, ILogger<SearchParameters> baseLogger) : base(aiService: aiService, logger: baseLogger)
         {
+            _logger = logger;
         }
 
         public void CreateFacetOfOrganizationSeoName()
@@ -21,7 +24,6 @@ namespace Kartverket.Metadatakatalog.Models
         {
             get
             {
-                log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
                 if (!string.IsNullOrEmpty(Text))
                 {
                     Text = Text.Replace(":", " ");
@@ -32,7 +34,7 @@ namespace Kartverket.Metadatakatalog.Models
                     new SolrQuery("allText:" + Text + "*"),
                     new SolrQuery("allText:" + Text)
                 });
-                    Log.Debug("Query: " + query.ToString());
+                    _logger.LogDebug("Query: " + query.ToString());
                     return query;
                 }
                 return SolrQuery.All;

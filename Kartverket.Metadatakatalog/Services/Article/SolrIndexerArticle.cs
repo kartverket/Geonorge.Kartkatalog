@@ -1,5 +1,6 @@
 ﻿using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.SearchIndex;
+using Microsoft.Extensions.Logging;
 using SolrNet;
 using System;
 using System.Collections.Generic;
@@ -10,25 +11,25 @@ namespace Kartverket.Metadatakatalog.Service.Article
 {
     public class SolrIndexerArticle : IndexerArticle
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+        private readonly ILogger<SolrIndexerArticle> _logger;
         private ISolrOperations<ArticleIndexDoc> _solr;
 
-        public SolrIndexerArticle(ISolrOperations<ArticleIndexDoc> solrOperations)
+        public SolrIndexerArticle(ISolrOperations<ArticleIndexDoc> solrOperations, ILogger<SolrIndexerArticle> logger)
         {
             _solr = solrOperations;
+            _logger = logger;
         }
 
         public void Index(IEnumerable<ArticleIndexDoc> docs)
         {
-            Log.Info(string.Format("Indexing {0} docs", docs.Count()));
+            _logger.LogInformation("Indexing {DocumentCount} docs", docs.Count());
             _solr.AddRange(docs);
             _solr.Commit();
         }
 
         public void DeleteIndex()
         {
-            Log.Info("Deletes intire index for reindexing");
+            _logger.LogInformation("Deletes entire index for reindexing");
             SolrQuery sq = new SolrQuery("*:*");
             _solr.Delete(sq);
             _solr.Commit();
@@ -36,7 +37,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
         public void Index(ArticleIndexDoc doc)
         {
-            Log.Info(string.Format("Indexing single document Id={0} Heading={1}", doc.Id, doc.Heading));
+            _logger.LogInformation("Indexing single document Id={Id} Heading={Heading}", doc.Id, doc.Heading);
             _solr.Add(doc);
             _solr.Commit();
         }
@@ -46,13 +47,13 @@ namespace Kartverket.Metadatakatalog.Service.Article
         {
             try
             {
-                Log.Info(string.Format("Removes document uuid={0} from index", uuid));
+                _logger.LogInformation("Removes document uuid={Uuid} from index", uuid);
                 _solr.Delete(uuid);
                 _solr.Commit();
             }
             catch (Exception exception)
             {
-                Log.Error("Error removing UUID: " + uuid + "", exception);
+                _logger.LogError(exception, "Error removing UUID: {Uuid}", uuid);
             }
         }
 

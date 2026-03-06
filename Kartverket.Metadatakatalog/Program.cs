@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using System.Threading;
-using log4net;
 using System.Reflection;
 using System.IO;
 using Castle.Windsor;
@@ -15,6 +14,7 @@ using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.SearchIndex;
 using Kartverket.Metadatakatalog.Service;
 using System;
+using Serilog;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -25,23 +25,45 @@ namespace Kartverket.Metadatakatalog
 
         public static void Main(string[] args)
         {
-            // Configure log4net early in the application lifecycle
-            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-            log4net.Config.XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+            // Configure Serilog early in the application lifecycle
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+                .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
+                .Build();
 
-            // Set default culture for the application
-            var culture = new CultureInfo("nb-NO");
-            Thread.CurrentThread.CurrentCulture = culture;
-            Thread.CurrentThread.CurrentUICulture = culture;
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
 
-            // Initialize SolrNet configuration
-            InitializeSolrNet();
+            try
+            {
+                Log.Information("Starting Kartverket Metadatakatalog application");
 
-            CreateHostBuilder(args).Build().Run();
+                // Set default culture for the application
+                var culture = new CultureInfo("nb-NO");
+                Thread.CurrentThread.CurrentCulture = culture;
+                Thread.CurrentThread.CurrentUICulture = culture;
+
+                // Initialize SolrNet configuration
+                InitializeSolrNet();
+
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Application terminated unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSerilog() // Use Serilog instead of default logging
                 .ConfigureAppConfiguration((context, config) =>
                 {
                     if (context.HostingEnvironment.IsDevelopment())
@@ -69,12 +91,6 @@ namespace Kartverket.Metadatakatalog
 
                     // ADD MISSING HTTPCLIENT SERVICES
                     services.AddHttpClient();
-                })
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                    logging.AddDebug();
                 });
 
         private static void InitializeSolrNet()

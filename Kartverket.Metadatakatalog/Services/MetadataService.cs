@@ -22,6 +22,7 @@ using Kartverket.Metadatakatalog.Models.SearchIndex;
 using www.opengis.net;
 using Arkitektum.GIS.Lib.SerializeUtil;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -35,6 +36,7 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly IServiceDirectoryService _searchServiceDirectoryService;
         private readonly IAiService _aiService;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<SearchParameters> _searchParametersLogger;
         private readonly ISolrOperations<MetadataIndexAllDoc> _solrMetadataOperations;
         private readonly ISolrOperations<ServiceIndexDoc> _solrServiceOperations;
         private readonly ISolrOperations<ArticleIndexDoc> _solrArticleOperations;
@@ -43,7 +45,7 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly RegisterFetcher Register;
         public string Culture = Models.Translations.Culture.NorwegianCode;
 
-        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService, IAiService aiService, IConfiguration configuration, ISolrOperations<MetadataIndexAllDoc> solrMetadataOperations, ISolrOperations<ServiceIndexDoc> solrServiceOperations, ISolrOperations<ArticleIndexDoc> solrArticleOperations, ISolrOperations<MetadataIndexDoc> solrMetadataIndexOperations, ISolrOperations<ApplicationIndexDoc> solrApplicationOperations, RegisterFetcher registerFetcher)
+        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService, IAiService aiService, IConfiguration configuration, ISolrOperations<MetadataIndexAllDoc> solrMetadataOperations, ISolrOperations<ServiceIndexDoc> solrServiceOperations, ISolrOperations<ArticleIndexDoc> solrArticleOperations, ISolrOperations<MetadataIndexDoc> solrMetadataIndexOperations, ISolrOperations<ApplicationIndexDoc> solrApplicationOperations, RegisterFetcher registerFetcher, ILogger<SearchParameters> searchParametersLogger)
         {
             _geoNorge = geoNorge;
             _geoNetworkUtil = geoNetworkUtil;
@@ -59,6 +61,7 @@ namespace Kartverket.Metadatakatalog.Service
             _solrMetadataIndexOperations = solrMetadataIndexOperations;
             _solrApplicationOperations = solrApplicationOperations;
             Register = registerFetcher;
+            _searchParametersLogger = searchParametersLogger;
         }
 
 
@@ -718,7 +721,7 @@ namespace Kartverket.Metadatakatalog.Service
             ISolrQuery query = new SolrQuery("metadata_standard:\"ISO19115\\:Norsk versjon\"");
             try
             {
-                SearchParameters searchParameters = new SearchParameters(_aiService);
+                SearchParameters searchParameters = new SearchParameters(_aiService, _searchParametersLogger);
                 searchParameters.AddComplexFacetsIfMissing();
                 searchParameters.Limit = 1000;
                 searchParameters.Offset = 1;
@@ -830,7 +833,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             var metadata = ConvertSimpleMetadataToMetadata(simpleMetadata);
 
-            var parameters = new SearchParameters (_aiService);
+            var parameters = new SearchParameters (_aiService, _searchParametersLogger);
             parameters.Text = simpleMetadata.Uuid;
             var searchResult = _searchService.Search(parameters);
 

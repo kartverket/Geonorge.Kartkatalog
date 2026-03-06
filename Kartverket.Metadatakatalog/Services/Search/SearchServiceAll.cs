@@ -8,20 +8,21 @@ using SearchParameters = Kartverket.Metadatakatalog.Models.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.SearchResult;
 using System;
 using Kartverket.Metadatakatalog.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace Kartverket.Metadatakatalog.Service.Search
 {
     public class SearchServiceAll : ISearchServiceAll
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+        private readonly ILogger<SearchServiceAll> _logger;
         private readonly IOrganizationService _organizationService;
         private readonly ISolrOperations<MetadataIndexAllDoc> _solrInstance;
 
-        public SearchServiceAll(IOrganizationService organizationService, ISolrOperations<MetadataIndexAllDoc> solrInstance)
+        public SearchServiceAll(IOrganizationService organizationService, ISolrOperations<MetadataIndexAllDoc> solrInstance, ILogger<SearchServiceAll> logger)
         {
             _organizationService = organizationService;
             _solrInstance = solrInstance;
+            _logger = logger;
         }
 
         public SearchResult Search(SearchParameters parameters)
@@ -50,7 +51,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
             }
             catch (Exception ex)
             {
-                Log.Error("Error in search", ex);
+                _logger.LogError(ex, "Error in search");
 
                 return CreateSearchResults(null, parameters);
             }
@@ -130,14 +131,14 @@ namespace Kartverket.Metadatakatalog.Service.Search
             return facets;
         }
 
-        private static List<SearchResultItem> ParseResultDocuments(SolrQueryResults<MetadataIndexAllDoc> queryResults)
+        private List<SearchResultItem> ParseResultDocuments(SolrQueryResults<MetadataIndexAllDoc> queryResults)
         {
             var items = new List<SearchResultItem>();
             if (queryResults != null)
             {
                 foreach (var doc in queryResults)
                 {
-                    Log.Debug(doc.Score + " " + doc.Title + " " + doc.Uuid);
+                    _logger.LogDebug("Score: {Score} Title: {Title} Uuid: {Uuid}", doc.Score, doc.Title, doc.Uuid);
 
                     var item = new SearchResultItem(doc);
                     items.Add(item);

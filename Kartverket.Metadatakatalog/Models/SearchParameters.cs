@@ -1,13 +1,14 @@
-using SolrNet;
-using System.Collections.Generic;
-using System.Linq;
-using System;
-using SolrNet.Commands.Parameters;
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
-using Resources;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Search;
+using Microsoft.Extensions.Logging;
+using Resources;
+using SolrNet;
+using SolrNet.Commands.Parameters;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -38,14 +39,15 @@ namespace Kartverket.Metadatakatalog.Models
     public class SearchParameters
     {
         private readonly IAiService _aiService;
-
-        public SearchParameters(IAiService aiService)
+        private readonly ILogger<SearchParameters> _logger;
+        public SearchParameters(IAiService aiService, ILogger<SearchParameters> logger)
         {
             Facets = new List<FacetParameter>();
             Offset = 1;
             Limit = 30;
             orderby = Models.OrderBy.score.ToString();
             _aiService = aiService;
+            _logger = logger;
         }
 
         public SearchParameters()
@@ -168,7 +170,6 @@ namespace Kartverket.Metadatakatalog.Models
         /// <returns></returns>
         public ISolrQuery BuildQuery()
         {
-            log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             ISolrQuery query = null;
             try
             {
@@ -264,7 +265,7 @@ namespace Kartverket.Metadatakatalog.Models
             }
             catch (Exception ex)
             {
-                Log.Error("Error in BuildQuery: " + ex.Message);
+                _logger.LogError("Error in BuildQuery: " + ex.Message);
             }
 
             return query;

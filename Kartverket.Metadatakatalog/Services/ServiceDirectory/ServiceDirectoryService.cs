@@ -5,19 +5,21 @@ using SolrNet.Commands.Parameters;
 using System;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 using Kartverket.Metadatakatalog.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace Kartverket.Metadatakatalog.Service.Search
 {
     public class ServiceDirectoryService : IServiceDirectoryService
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger<ServiceDirectoryService> _logger;
         private readonly ISolrOperations<ServiceIndexDoc> _solrInstance;
         private readonly RegisterFetcher _registerFetcher;
 
-        public ServiceDirectoryService(ISolrOperations<ServiceIndexDoc> solrInstance, RegisterFetcher registerFetcher)
+        public ServiceDirectoryService(ISolrOperations<ServiceIndexDoc> solrInstance, RegisterFetcher registerFetcher, ILogger<ServiceDirectoryService> logger)
         {
             _solrInstance = solrInstance;
             _registerFetcher = registerFetcher;
+            _logger = logger;
         }
 
         public SearchResult Services(SearchParameters parameters)
@@ -45,7 +47,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
             }
             catch (Exception ex)
             {
-                Log.Error("Error in search", ex);
+                _logger.LogError(ex, "Error in search");
 
                 return CreateSearchResults(null, parameters);
             }
@@ -109,7 +111,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
             {
                 foreach (var doc in queryResults)
                 {
-                    Log.Debug(doc.Score + " " + doc.Title + " " + doc.Uuid);
+                    _logger.LogDebug("Score: {Score} Title: {Title} Uuid: {Uuid}", doc.Score, doc.Title, doc.Uuid);
 
                     var item = new SearchResultItem(doc);
                     item.DistributionType = _registerFetcher.GetDistributionType(item.DistributionProtocol);

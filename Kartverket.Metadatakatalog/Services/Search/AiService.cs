@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Kartverket.Metadatakatalog.Service.Search
 {
@@ -17,14 +18,15 @@ namespace Kartverket.Metadatakatalog.Service.Search
     {
         private readonly Geonorge.Utilities.Organization.IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AiService> _logger;
         
         public bool UseVectorSearch => Convert.ToBoolean(_configuration["AI:UseVectorSearch"]);
-        static log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public AiService(Geonorge.Utilities.Organization.IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public AiService(Geonorge.Utilities.Organization.IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<AiService> logger)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+            _logger = logger;
         }
 
         /// <summary>  
@@ -105,7 +107,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Error creating vector embeddings returned: " + infoForDebug, e);
+                    _logger.LogError(e, "Error creating vector embeddings returned: {DebugInfo}", infoForDebug);
                     return null;
                 }
             }

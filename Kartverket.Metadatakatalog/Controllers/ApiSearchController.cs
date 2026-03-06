@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Resources;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ using System.Threading;
 using System.Xml;
 using SearchParameters = Kartverket.Metadatakatalog.Models.Api.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
+using Kartverket.Metadatakatalog.ModelBinders; // Ensure this using directive is present
 
 
 // Metadata search api examples
@@ -64,12 +66,14 @@ namespace Kartverket.Metadatakatalog.Controllers
         private readonly IServiceDirectoryService _serviceDirectoryService;
         private readonly IArticleService _articleService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger<ApiSearchController> _logger;
 
         private readonly IMetadataService _metadataService;
         private readonly IAiService _aiService;
+        private readonly ILogger<Models.SearchParameters> _searchParametersLogger;
+        private readonly ILogger<Models.Article.SearchParameters> _articleSearchParametersLogger;
 
-        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll, IArticleService articleService, IAiService aiService, IWebHostEnvironment webHostEnvironment)
+        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll, IArticleService articleService, IAiService aiService, IWebHostEnvironment webHostEnvironment, ILogger<ApiSearchController> logger, ILogger<Models.SearchParameters> searchParametersLogger, ILogger<Models.Article.SearchParameters> articleSearchParametersLogger)
         {
             _searchService = searchService;
             _metadataService = metadataService;
@@ -79,6 +83,9 @@ namespace Kartverket.Metadatakatalog.Controllers
             _articleService = articleService;
             _aiService = aiService;
             _webHostEnvironment = webHostEnvironment;
+            _logger = logger;
+            _searchParametersLogger = searchParametersLogger;
+            _articleSearchParametersLogger = articleSearchParametersLogger;
         }
 
         /// <summary>
@@ -100,7 +107,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return null;
             }
 
@@ -127,7 +134,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return null;
             }
 
@@ -155,7 +162,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return null;
             }
 
@@ -181,7 +188,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return null;
             }
         }
@@ -206,7 +213,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return null;
             }
         }
@@ -231,7 +238,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return null;
             }
         }
@@ -245,7 +252,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             try
             {
-                Models.SearchParameters searchParameters = new Models.SearchParameters(_aiService);
+                Models.SearchParameters searchParameters = new Models.SearchParameters(_aiService, _searchParametersLogger);
                 searchParameters.Limit = limit;
                 searchParameters.Offset = offset;
 
@@ -255,7 +262,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return null;
             }
         }
@@ -275,7 +282,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return null;
             }
         }
@@ -294,7 +301,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return new DatasetNameValidationResult { IsValid = false, Result = ex.Message };
             }
         }
@@ -312,7 +319,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return null;
             }
         }
@@ -328,7 +335,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return null;
             }
         }
@@ -344,7 +351,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return null;
             }
         }
@@ -369,7 +376,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error(ex);
+                _logger.LogError("Error search", ex);
                 return StatusCode(500);
             }
         }
@@ -461,7 +468,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("Error API", ex);
+                _logger.LogError("Error API", ex);
                 return StatusCode(500);
             }
 
@@ -575,7 +582,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         private Models.SearchParameters CreateSearchParameters(SearchParameters parameters)
         {
-            var model = new Models.SearchParameters(_aiService);
+            var model = new Models.SearchParameters(_aiService, _searchParametersLogger);
             model.Text = parameters.text;
             model.Facets = CreateFacetParameters(parameters.facets);
             model.Offset = parameters.offset;
@@ -589,7 +596,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         private Models.Article.SearchParameters CreateSearchParameters(Models.Api.Article.SearchParameters parameters)
         {
-            return new Models.Article.SearchParameters
+            return new Models.Article.SearchParameters(_articleSearchParametersLogger)
             {
                 Text = parameters.text,
                 Offset = parameters.offset,

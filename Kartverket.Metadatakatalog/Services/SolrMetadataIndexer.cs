@@ -7,13 +7,13 @@ using System.Globalization;
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Service.Search;
+using Microsoft.Extensions.Logging;
 
 namespace Kartverket.Metadatakatalog.Service
 {
     public class SolrMetadataIndexer : MetadataIndexer
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+        private readonly ILogger<SolrMetadataIndexer> _logger;
         private readonly IGeoNorge _geoNorge;
         private readonly Indexer _indexer;
         private readonly IndexerAll _indexerAll;
@@ -22,7 +22,7 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly IndexDocumentCreator _indexDocumentCreator;
         private readonly IErrorService _errorService;
 
-        public SolrMetadataIndexer(IGeoNorge geoNorge, Indexer indexer, IndexerApplication indexerApp, IndexerService indexerService, IndexDocumentCreator indexDocumentCreator, IErrorService errorService, IndexerAll indexerAll)
+        public SolrMetadataIndexer(IGeoNorge geoNorge, Indexer indexer, IndexerApplication indexerApp, IndexerService indexerService, IndexDocumentCreator indexDocumentCreator, IErrorService errorService, IndexerAll indexerAll, ILogger<SolrMetadataIndexer> logger)
         {
             _geoNorge = geoNorge;
             _indexer = indexer;
@@ -31,6 +31,7 @@ namespace Kartverket.Metadatakatalog.Service
             _indexDocumentCreator = indexDocumentCreator;
             _errorService = errorService;
             _indexerAll = indexerAll;
+            _logger = logger;
         }
 
         public void RunIndexing()
@@ -48,7 +49,7 @@ namespace Kartverket.Metadatakatalog.Service
 
                 if (metadata != null && action != "delete")
                 {
-                    Log.Info(string.Format("Trying to remove and update document uuid={0} from index", uuid));
+                    _logger.LogInformation("Trying to remove and update document uuid={Uuid} from index", uuid);
 
                     SetNorwegianIndexCores();
                     MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.NorwegianCode);
@@ -78,7 +79,7 @@ namespace Kartverket.Metadatakatalog.Service
             }
             catch (Exception exception)
             {
-                Log.Error("Error in UUID: " + uuid + "", exception);
+                _logger.LogError(exception, "Error in UUID: {Uuid}", uuid);
                 _errorService.AddError(uuid, exception);
             }
         }
@@ -133,7 +134,7 @@ namespace Kartverket.Metadatakatalog.Service
             }
             catch (Exception exception)
             {
-                Log.Error("Error indexing document uuid: " + metadataIndexDoc.Uuid + "", exception);
+                _logger.LogError(exception, "Error indexing document uuid: {Uuid}", metadataIndexDoc.Uuid);
                 _errorService.AddError(metadataIndexDoc.Uuid, exception);
             }
             finally
@@ -144,13 +145,13 @@ namespace Kartverket.Metadatakatalog.Service
 
         private void RunSearch(int startPosition)
         {
-            Log.Info("Running search from start position: " + startPosition);
+            _logger.LogInformation("Running search from start position: {StartPosition}", startPosition);
             SearchResultsType searchResult=null;
             //bool runningSingle = false;
             try
             {
                 searchResult = _geoNorge.SearchIso("", startPosition, 50, false);
-                Log.Info("Next record: " + searchResult.nextRecord + " " + searchResult.numberOfRecordsReturned + " " + searchResult.numberOfRecordsMatched);
+                _logger.LogInformation("Next record: {NextRecord} {NumberOfRecordsReturned} {NumberOfRecordsMatched}", searchResult.nextRecord, searchResult.numberOfRecordsReturned, searchResult.numberOfRecordsMatched);
                 List<MetadataIndexDoc> indexDocs = _indexDocumentCreator.CreateIndexDocs(searchResult.Items, _geoNorge, Culture.NorwegianCode);
                 foreach (var doc in indexDocs)
                 {
@@ -165,7 +166,7 @@ namespace Kartverket.Metadatakatalog.Service
             }
             catch (Exception exception)
             {
-                Log.Error("Error in ISO format from Geonetwork position: " + startPosition , exception);
+                _logger.LogError(exception, "Error in ISO format from Geonetwork position: {StartPosition}", startPosition);
                 //Forsøke en og en?
                 //int count = 50;
                 //for (int i = 1; i <= count; i++)

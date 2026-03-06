@@ -337,6 +337,8 @@
     <!-- ASP.NET Core packages are included in the framework for .NET 10 -->
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
     <!-- ResponseCompression is included in ASP.NET Core framework -->
   </ItemGroup>
   <ItemGroup>

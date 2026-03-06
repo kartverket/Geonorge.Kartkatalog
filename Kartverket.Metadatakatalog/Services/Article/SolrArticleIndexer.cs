@@ -1,6 +1,7 @@
 ﻿using Kartverket.Metadatakatalog.Models.Article;
 using Kartverket.Metadatakatalog.Models.SearchIndex;
 using Kartverket.Metadatakatalog.Models.Translations;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,19 +11,20 @@ namespace Kartverket.Metadatakatalog.Service.Article
 {
     public class SolrArticleIndexer : ArticleIndexer
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger<SolrArticleIndexer> _logger;
 
         private readonly IndexerArticle _indexer;
         private readonly IndexArticleDocumentCreator _indexDocumentCreator;
         private readonly IErrorService _errorService;
         IArticleFetcher _articleFether;
 
-        public SolrArticleIndexer(IndexerArticle indexer, IndexArticleDocumentCreator indexDocumentCreator, IErrorService errorService, IArticleFetcher articleFetcher)
+        public SolrArticleIndexer(IndexerArticle indexer, IndexArticleDocumentCreator indexDocumentCreator, IErrorService errorService, IArticleFetcher articleFetcher, ILogger<SolrArticleIndexer> logger)
         {
             _indexer = indexer;
             _indexDocumentCreator = indexDocumentCreator;
             _errorService = errorService;
             _articleFether = articleFetcher;
+            _logger = logger;
         }
 
         public void RunIndexing()
@@ -61,7 +63,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
             }
             catch (Exception exception)
             {
-                Log.Error("Error in UUID: " + uuid + "", exception);
+                _logger.LogDebug("Error in UUID: " + uuid + "", exception);
                 _errorService.AddError(uuid, exception);
             }
         }
@@ -78,7 +80,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
 
         private void RunSearch(string culture, string articleId = "")
         {
-            Log.Info("Running indexing articles");
+            _logger.LogInformation("Running indexing articles");
             List<ArticleDocument> documents = null;
             try
             {
@@ -97,7 +99,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
             }
             catch (Exception exception)
             {
-                Log.Error("Error index articles", exception);
+                _logger.LogError("Error index articles", exception);
             }
         }
 

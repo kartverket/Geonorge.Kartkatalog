@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Helpers;
 
@@ -9,7 +10,12 @@ namespace Kartverket.Metadatakatalog.Controllers
 {
     public class HomeController : Controller
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger<HomeController> _logger;
+
+        public HomeController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
+        }
 
         public IActionResult Index()
         {
@@ -47,7 +53,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             if (context.Exception != null)
             {
-                Log.Error("Error", context.Exception);
+                _logger.LogError(context.Exception, "Error occurred in HomeController");
             }
             base.OnActionExecuted(context);
         }

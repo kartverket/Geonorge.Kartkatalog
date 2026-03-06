@@ -15,16 +15,16 @@ namespace Kartverket.Metadatakatalog.Controllers
     [Route("api/[controller]")]
     public class ApiMetadataController : ControllerBase
     {
-
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger<ApiMetadataController> _logger;
 
         private readonly MetadataIndexer _indexer;
         private readonly IErrorService _errorService;
 
-        public ApiMetadataController(MetadataIndexer indexer, IErrorService errorService)
+        public ApiMetadataController(MetadataIndexer indexer, IErrorService errorService, ILogger<ApiMetadataController> logger)
         {
             _indexer = indexer;
             _errorService = errorService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -43,11 +43,11 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             try
             {
-                Log.Info("Received notification of updated metadata: " + action + ", uuid=" + uuid);
+                _logger.LogInformation("Received notification of updated metadata: " + action + ", uuid=" + uuid);
 
                 if (!string.IsNullOrWhiteSpace(uuid))
                 {
-                    Log.Info("Running single indexing of metadata with uuid=" + uuid);
+                    _logger.LogInformation("Running single indexing of metadata with uuid=" + uuid);
 
                     _indexer.RunIndexingOn(uuid, action);
 
@@ -55,13 +55,13 @@ namespace Kartverket.Metadatakatalog.Controllers
                 }
                 else
                 {
-                    Log.Warn("Not indexing metadata - uuid was empty");
+                    _logger.LogWarning("Not indexing metadata - uuid was empty");
                     statusCode = HttpStatusCode.BadRequest;
                 }
             }
             catch (Exception e)
             {
-                Log.Error("Exception while indexing single metadata.", e);
+                _logger.LogError("Exception while indexing single metadata.", e);
                 _errorService.AddError(uuid, e);
                 statusCode = HttpStatusCode.BadRequest;
             }
@@ -80,21 +80,21 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             try
             {
-                Log.Info("Run indexing of entire metadata catalogue.");
+                _logger.LogInformation("Run indexing of entire metadata catalogue.");
                 DateTime start = DateTime.Now;
 
                 _indexer.RunIndexing();
 
                 DateTime stop = DateTime.Now;
                 double seconds = stop.Subtract(start).TotalSeconds;
-                Log.Info(string.Format("Indexing fininshed after {0} seconds.", seconds));
+                _logger.LogInformation(string.Format("Indexing fininshed after {0} seconds.", seconds));
 
                 statusCode = HttpStatusCode.OK;
 
             }
             catch (Exception e)
             {
-                Log.Error("Exception while indexing metadata.", e);
+                _logger.LogError("Exception while indexing metadata.", e);
                 statusCode = HttpStatusCode.BadRequest;
             }
             return StatusCode((int)statusCode);
@@ -112,21 +112,21 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             try
             {
-                Log.Info("Run re-indexing of entire metadata catalogue.");
+                _logger.LogInformation("Run re-indexing of entire metadata catalogue.");
                 DateTime start = DateTime.Now;
 
                 _indexer.RunReIndexing();
 
                 DateTime stop = DateTime.Now;
                 double seconds = stop.Subtract(start).TotalSeconds;
-                Log.Info(string.Format("Indexing fininshed after {0} seconds.", seconds));
+                _logger.LogInformation(string.Format("Indexing fininshed after {0} seconds.", seconds));
 
                 statusCode = HttpStatusCode.OK;
 
             }
             catch (Exception e)
             {
-                Log.Error("Exception while re-indexing metadata.", e);
+                _logger.LogError("Exception while re-indexing metadata.", e);
                 statusCode = HttpStatusCode.BadRequest;
             }
             return StatusCode((int)statusCode);
@@ -154,7 +154,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
             try
             {
-                Log.Info("Remove metadata uuid: " + uuid);
+                _logger.LogInformation("Remove metadata uuid: " + uuid);
                 DateTime start = DateTime.Now;
 
                 _indexer.RemoveUuid(uuid);
@@ -164,7 +164,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception e)
             {
-                Log.Error("Exception while removing metadata.", e);
+                _logger.LogError("Exception while removing metadata.", e);
                 statusCode = HttpStatusCode.BadRequest;
             }
             return StatusCode((int)statusCode);

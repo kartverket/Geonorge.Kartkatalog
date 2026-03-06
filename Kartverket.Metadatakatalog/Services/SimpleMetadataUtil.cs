@@ -10,7 +10,6 @@ namespace Kartverket.Metadatakatalog.Service
     public class SimpleMetadataUtil
     {
         private readonly IConfiguration _configuration;
-        static log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         // Static instance for backwards compatibility
         private static SimpleMetadataUtil _instance;
