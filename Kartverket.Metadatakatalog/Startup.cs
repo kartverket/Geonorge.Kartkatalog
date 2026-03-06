@@ -127,6 +127,9 @@ namespace Kartverket.Metadatakatalog
             
             app.UseStaticFiles();
 
+            // Add whitespace compression middleware
+            app.UseMiddleware<Kartverket.Metadatakatalog.Middleware.WhitespaceCompressionMiddleware>();
+
             // Add custom middleware for culture handling (replaces Application_BeginRequest)
             app.UseMiddleware<CultureMiddleware>();
 
