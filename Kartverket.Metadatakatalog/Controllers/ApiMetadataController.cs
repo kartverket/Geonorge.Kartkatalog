@@ -12,7 +12,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 {
     [EnableCors]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api")]
     public class ApiMetadataController : ControllerBase
     {
         private readonly ILogger<ApiMetadataController> _logger;
@@ -31,7 +31,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Metadata updated
         /// </summary>
         [Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [Route("api/metadataupdated")]
+        [Route("metadataupdated")]
         [HttpPost]
         public IActionResult MetadataUpdated([FromForm] IFormCollection metadata)
         {
@@ -72,7 +72,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Run metadata indexing
         /// </summary>
         [Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [Route("api/index-metadata")]
+        [Route("index-metadata")]
         [HttpGet]
         public IActionResult Index()
         {
@@ -104,7 +104,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Run metadata re-indexing
         /// </summary>
         [Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [Route("api/reindex-metadata")]
+        [Route("reindex-metadata")]
         [HttpGet]
         public IActionResult ReIndex()
         {
@@ -134,7 +134,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         [Authorize(Roles = AuthConfig.DatasetProviderRole)]
         [HttpGet]
-        [Route("api/flushcache")]
+        [Route("flushcache")]
         public IActionResult FlushCache()
         {
             MemoryCacher memCacher = new MemoryCacher();
@@ -146,7 +146,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// Remove metadata uuid from index
         /// </summary>
         [Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [Route("api/remove-metadata/{uuid}")]
+        [Route("remove-metadata/{uuid}")]
         [HttpGet]
         public IActionResult Remove(string uuid)
         {
