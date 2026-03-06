@@ -11,7 +11,6 @@ namespace Kartverket.Metadatakatalog.Helpers
         string GetApplicationVersionNumber();
         string GetGeonorgeUrl();
         string GetEnvironmentName();
-        string GetStatusApiUrl();
         string GetAccessibilitystatementurl();
         string GetDownloadUrl();
         string GetKartkatalogenUrl();
@@ -36,17 +35,12 @@ namespace Kartverket.Metadatakatalog.Helpers
 
         public string GetGeonorgeUrl()
         {
-            return _configuration["GeonorgeUrl"] ?? _configuration["AppSettings:GeonorgeUrl"];
+            return _configuration["GeonorgeUrl"];
         }
 
         public string GetEnvironmentName()
         {
             return _configuration["AppSettings:EnvironmentName"] ?? string.Empty;
-        }
-
-        public string GetStatusApiUrl()
-        {
-            return _configuration["AppSettings:StatusApiUrl"];
         }
 
         public string GetAccessibilitystatementurl()
@@ -56,12 +50,12 @@ namespace Kartverket.Metadatakatalog.Helpers
 
         public string GetDownloadUrl()
         {
-            return _configuration["DownloadUrl"] ?? _configuration["AppSettings:DownloadUrl"];
+            return _configuration["DownloadUrl"];
         }
 
         public string GetKartkatalogenUrl()
         {
-            return _configuration["KartkatalogenUrl"] ?? _configuration["AppSettings:KartkatalogenUrl"];
+            return _configuration["KartkatalogenUrl"];
         }
 
         public bool IsProduction()

@@ -32,29 +32,3 @@
     });
 });
 
-function getServiceStatus(uuid, id) {
-    $.getJSON(statusApi + "monitorApi/serviceDetail?uuid=" + uuid, function (result) {
-        try {
-            var vurderingIsDefined = result.connect !== undefined && result.connect.vurdering !== undefined;
-            var numLayersIsDefined = result.numLayers !== undefined && result.numLayers.svar !== undefined;
-            var statusOK = vurderingIsDefined && result.connect.vurdering != "no";
-            var numLayers = parseInt(numLayersIsDefined ? result.numLayers.svar : 0);
-            if (!statusOK) {
-                $('#mapmacro-' + id + ', #mapmacro-button-' + id).attr("class", "custom-icon custom-icon-kartmarkoer-unavailable");
-                $('#mapmacrolink-' + id + ', #mapmacrolink-button-' + id).attr("title", "Tjenesten er utilgjengelig for øyeblikket");
-                $('#mapmacrolink-' + id + ', #mapmacrolink-button-' + id).removeAttr("href");
-                $('#mapmacrolink-' + id + ', #mapmacrolink-button-' + id).removeAttr("onclick");
-                $('#mapmacrolink-' + id + ', #mapmacrolink-button-' + id).attr("disabled", "disabled");
-                $('#mapmacrolink-' + id + ', #mapmacrolink-button-' + id).addClass("disabled");
-            }
-            else if (numLayers > 30) {
-                $('#mapmacro-' + id + ', #mapmacro-button-' + id).attr("class", "custom-icon custom-icon-kartmarkoer-warning");
-                $('#mapmacrolink-' + id + ', #mapmacrolink-button-' + id).attr("title", "Tjenesten kan være treg å vise");
-            }
-        }
-        catch (err) {
-            console.log(err);
-        }
-    });
-};
-

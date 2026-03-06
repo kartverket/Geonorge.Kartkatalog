@@ -27,11 +27,11 @@ namespace Kartverket.Metadatakatalog.Extensions
                 new GeoNorge(
                     geonetworkUsername: "",
                     geonetworkPassword: "",
-                    geonetworkEndpoint: configuration["AppSettings:GeoNetworkUrl"]));
+                    geonetworkEndpoint: configuration["GeoNetworkUrl"]));
 
             // GeoNetworkUtil from Kartverket.Geonorge.Utilities
             services.AddScoped<GeoNetworkUtil>(provider =>
-                new GeoNetworkUtil(configuration["AppSettings:GeoNetworkUrl"]));
+                new GeoNetworkUtil(configuration["GeoNetworkUrl"]));
 
             // Organization Service
             services.AddScoped<IOrganizationService>(provider =>
@@ -41,7 +41,7 @@ namespace Kartverket.Metadatakatalog.Extensions
 
             // URL Resolver
             services.AddScoped<IGeonorgeUrlResolver>(provider =>
-                new GeonorgeUrlResolver(configuration["AppSettings:EditorUrl"]));
+                new GeonorgeUrlResolver(configuration["EditorUrl"]));
 
             return services;
         }

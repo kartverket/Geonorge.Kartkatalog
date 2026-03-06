@@ -208,7 +208,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             // In a production app, you should inject IConfiguration into the service that creates this object
             var httpContext = urlHelper.ActionContext.HttpContext;
             var configuration = httpContext.RequestServices.GetRequiredService<Microsoft.Extensions.Configuration.IConfiguration>();
-            var kartkatalogenUrl = configuration["KartkatalogenUrl"] ?? configuration["AppSettings:KartkatalogenUrl"];
+            var kartkatalogenUrl = configuration["KartkatalogenUrl"];
             
             ShowDetailsUrl = kartkatalogenUrl + "metadata/uuid/" + item.Uuid;
             OrganizationUrl = kartkatalogenUrl + "?organizations=" + item?.Organization;

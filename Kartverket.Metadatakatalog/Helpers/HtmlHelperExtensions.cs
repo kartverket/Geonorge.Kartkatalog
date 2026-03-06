@@ -24,8 +24,7 @@ namespace Kartverket.Metadatakatalog.Helpers
         public static string GeonorgeUrl(this IHtmlHelper helper)
         {
             var configuration = GetConfiguration(helper);
-            // Use the top-level GeonorgeUrl first, fallback to AppSettings
-            var url = configuration["GeonorgeUrl"] ?? configuration["AppSettings:GeonorgeUrl"];
+            var url = configuration["GeonorgeUrl"];
             var culture = CultureHelper.GetCurrentCulture();
             if (culture != Culture.NorwegianCode)
                 url = url + Culture.EnglishCode;
@@ -36,19 +35,13 @@ namespace Kartverket.Metadatakatalog.Helpers
         public static string NorgeskartUrl(this IHtmlHelper helper)
         {
             var configuration = GetConfiguration(helper);
-            return configuration["AppSettings:NorgeskartUrl"];
+            return configuration["NorgeskartUrl"];
         }
 
         public static string RegistryUrl(this IHtmlHelper helper)
         {
             var configuration = GetConfiguration(helper);
             return configuration["AppSettings:RegistryUrl"];
-        }
-
-        public static string ObjektkatalogUrl(this IHtmlHelper helper)
-        {
-            var configuration = GetConfiguration(helper);
-            return configuration["AppSettings:ObjektkatalogUrl"];
         }
 
         public static bool DownloadServiceEnabled(this IHtmlHelper helper)
@@ -79,21 +72,13 @@ namespace Kartverket.Metadatakatalog.Helpers
         public static string KartkatalogenUrl(this IHtmlHelper helper)
         {
             var configuration = GetConfiguration(helper);
-            // Use the top-level KartkatalogenUrl first, fallback to AppSettings
-            return configuration["KartkatalogenUrl"] ?? configuration["AppSettings:KartkatalogenUrl"];
+            return configuration["KartkatalogenUrl"];
         }
 
         public static string DownloadUrl(this IHtmlHelper helper)
         {
             var configuration = GetConfiguration(helper);
-            // Use the top-level DownloadUrl first, fallback to AppSettings
-            return configuration["DownloadUrl"] ?? configuration["AppSettings:DownloadUrl"];
-        }
-
-        public static string StatusApiUrl(this IHtmlHelper helper)
-        {
-            var configuration = GetConfiguration(helper);
-            return configuration["AppSettings:StatusApiUrl"];
+            return configuration["DownloadUrl"];
         }
 
         public static string SolrServerUrl(this IHtmlHelper helper)
