@@ -186,6 +186,21 @@
             Enrich user claims with Geonorge-specific information
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Extensions.AuthenticationExtensions.EnrichClaimsFromBaatApi(System.Security.Claims.ClaimsIdentity,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Enrich claims by calling BAAT Authorization API with basic authentication
+            </summary>
+        </member>
+        <member name="T:Kartverket.Metadatakatalog.Extensions.AuthenticationExtensions.BaatAuthorizationResponse">
+            <summary>
+            Response model for BAAT Authorization API
+            </summary>
+        </member>
+        <member name="T:Kartverket.Metadatakatalog.Extensions.AuthenticationExtensions.BaatOrganization">
+            <summary>
+            Organization model for BAAT Authorization API
+            </summary>
+        </member>
         <member name="T:Kartverket.Metadatakatalog.Extensions.ServiceRegistrationExtensions">
             <summary>
             Extension methods for registering application services in ASP.NET Core DI

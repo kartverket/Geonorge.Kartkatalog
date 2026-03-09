@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 using Kartverket.Metadatakatalog.Authentication;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace Kartverket.Metadatakatalog.Extensions
 {
@@ -204,7 +207,19 @@ namespace Kartverket.Metadatakatalog.Extensions
                     policy.RequireAssertion(context =>
                         context.User.HasClaim("role", "Editor") ||
                         context.User.HasClaim("role", "Administrator") ||
-                        context.User.HasClaim("permission", "metadata.edit")));
+                        context.User.HasClaim("permission", "metadata.edit") ||
+                        (context.User.HasClaim("baat_authorized", "true") && 
+                         context.User.HasClaim(ClaimTypes.Role, "AuthorizedUser"))));
+
+                // BAAT authorized user policy
+                options.AddPolicy("BaatAuthorized", policy =>
+                    policy.RequireClaim("baat_authorized", "true"));
+
+                // Kartverket employee policy
+                options.AddPolicy("KartverketEmployee", policy =>
+                    policy.RequireAssertion(context =>
+                        context.User.HasClaim("organization", "Kartverket") &&
+                        context.User.HasClaim("baat_authorized", "true")));
             });
 
             return services;
@@ -239,7 +254,168 @@ namespace Kartverket.Metadatakatalog.Extensions
                 identity.AddClaim(new Claim("system", "geonorge"));
             }
 
-            await Task.CompletedTask;
+            // Get additional claims from BAAT Authorization API
+            await EnrichClaimsFromBaatApi(identity, configuration);
+        }
+
+        /// <summary>
+        /// Enrich claims by calling BAAT Authorization API with basic authentication
+        /// </summary>
+        private static async Task EnrichClaimsFromBaatApi(ClaimsIdentity identity, IConfiguration configuration)
+        {
+            try
+            {
+                // Get BAAT API configuration
+                var baatApiUrl = configuration["Authentication:OpenIdConnect:BaatAuthzApiUrl"];
+                var baatCredentials = configuration["Authentication:OpenIdConnect:BaatAuthzApiCredentials"];
+
+                if (string.IsNullOrEmpty(baatApiUrl) || string.IsNullOrEmpty(baatCredentials))
+                {
+                    return; // Configuration not available, skip BAAT enrichment
+                }
+
+                // Get user identifier from existing claims
+                var userIdentifier = identity.FindFirst("preferred_username")?.Value;
+                if (string.IsNullOrEmpty(userIdentifier))
+                {
+                    return; // No user identifier found
+                }
+
+                // Create HTTP client and configure basic authentication
+                using var httpClient = new HttpClient();
+                var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(baatCredentials));
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials);
+                httpClient.Timeout = TimeSpan.FromSeconds(10); // Set reasonable timeout
+
+                // Construct API URL for user authorization (adjust URL structure as needed)
+                var requestUrl = $"{baatApiUrl.TrimEnd('/')}/authzinfo/{userIdentifier}";
+
+                // Make the API call
+                var response = await httpClient.GetAsync(requestUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonContent = await response.Content.ReadAsStringAsync();
+                    var authorizationData = JsonSerializer.Deserialize<BaatAuthorizationResponse>(jsonContent, new JsonSerializerOptions 
+                    { 
+                        PropertyNameCaseInsensitive = true 
+                    });
+
+                    if (authorizationData != null)
+                    {
+                        // Add BAAT user identifier if not already present
+                        if (!string.IsNullOrEmpty(authorizationData.User) && 
+                            !identity.HasClaim("baat_user", authorizationData.User))
+                        {
+                            identity.AddClaim(new Claim("baat_user", authorizationData.User));
+                        }
+
+                        // Add email if not already present and different from existing
+                        if (!string.IsNullOrEmpty(authorizationData.Email) && 
+                            !identity.HasClaim(ClaimTypes.Email, authorizationData.Email))
+                        {
+                            identity.AddClaim(new Claim(ClaimTypes.Email, authorizationData.Email));
+                        }
+
+                        // Add full name if not already present
+                        if (!string.IsNullOrEmpty(authorizationData.Name) && 
+                            !identity.HasClaim(ClaimTypes.Name, authorizationData.Name))
+                        {
+                            identity.AddClaim(new Claim(ClaimTypes.Name, authorizationData.Name));
+                        }
+
+                        // Add authorization period claims
+                        if (authorizationData.AuthorizedFrom > 0)
+                        {
+                            identity.AddClaim(new Claim("baat_authorized_from", authorizationData.AuthorizedFrom.ToString()));
+                        }
+
+                        if (authorizationData.AuthorizedUntil > 0)
+                        {
+                            identity.AddClaim(new Claim("baat_authorized_until", authorizationData.AuthorizedUntil.ToString()));
+                        }
+
+                        // Check if user authorization is currently valid
+                        var currentDate = int.Parse(DateTime.Now.ToString("yyyyMMdd"));
+                        var isAuthorized = authorizationData.AuthorizedFrom <= currentDate && 
+                                         authorizationData.AuthorizedUntil >= currentDate;
+                        
+                        identity.AddClaim(new Claim("baat_authorized", isAuthorized.ToString().ToLower()));
+
+                        // Add organization information if available
+                        if (authorizationData.Organization != null)
+                        {
+                            if (!string.IsNullOrEmpty(authorizationData.Organization.Name))
+                            {
+                                identity.AddClaim(new Claim("organization", authorizationData.Organization.Name));
+                            }
+
+                            if (!string.IsNullOrEmpty(authorizationData.Organization.Orgnr))
+                            {
+                                identity.AddClaim(new Claim("organization_number", authorizationData.Organization.Orgnr));
+                            }
+
+                            if (!string.IsNullOrEmpty(authorizationData.Organization.ContactName))
+                            {
+                                identity.AddClaim(new Claim("organization_contact_name", authorizationData.Organization.ContactName));
+                            }
+
+                            if (!string.IsNullOrEmpty(authorizationData.Organization.ContactEmail))
+                            {
+                                identity.AddClaim(new Claim("organization_contact_email", authorizationData.Organization.ContactEmail));
+                            }
+
+                            if (!string.IsNullOrEmpty(authorizationData.Organization.ContactPhone))
+                            {
+                                identity.AddClaim(new Claim("organization_contact_phone", authorizationData.Organization.ContactPhone));
+                            }
+                        }
+
+                        // Add role based on authorization status and organization
+                        if (isAuthorized)
+                        {
+                            identity.AddClaim(new Claim(ClaimTypes.Role, "AuthorizedUser"));
+                            
+                            // Add organization-specific roles
+                            if (authorizationData.Organization?.Name == "Kartverket")
+                            {
+                                identity.AddClaim(new Claim(ClaimTypes.Role, "KartverketUser"));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the error but don't fail authentication
+                // In a production environment, use proper logging
+                System.Diagnostics.Debug.WriteLine($"Failed to enrich claims from BAAT API: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Response model for BAAT Authorization API
+        /// </summary>
+        private class BaatAuthorizationResponse
+        {
+            public string User { get; set; }
+            public string Email { get; set; }
+            public int AuthorizedUntil { get; set; }
+            public int AuthorizedFrom { get; set; }
+            public BaatOrganization Organization { get; set; }
+            public string Name { get; set; }
+        }
+
+        /// <summary>
+        /// Organization model for BAAT Authorization API
+        /// </summary>
+        private class BaatOrganization
+        {
+            public string Name { get; set; }
+            public string Orgnr { get; set; }
+            public string ContactName { get; set; }
+            public string ContactEmail { get; set; }
+            public string ContactPhone { get; set; }
         }
     }
 }
