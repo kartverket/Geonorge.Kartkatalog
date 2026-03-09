@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Net;
 
 namespace Kartverket.Metadatakatalog.Controllers
@@ -47,11 +48,42 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             return RedirectToActionPermanent("Index", "Download");
         }
-
         public IActionResult SignIn()
         {
-            var redirectUrl = "/nedlasting";
-            return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, OpenIdConnectDefaults.AuthenticationScheme);
+            try
+            {
+                _logger.LogInformation("SignIn method called - starting authentication challenge");
+                _logger.LogInformation($"Current user authenticated: {User.Identity.IsAuthenticated}");
+
+                var redirectUrl = "/nedlasting";
+                _logger.LogInformation($"Challenging with redirect URL: {redirectUrl}");
+
+                // Also log cookie information
+                _logger.LogInformation($"Current cookies: {string.Join(", ", Request.Cookies.Keys)}");
+
+                return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during authentication challenge");
+                throw;
+            }
+        }
+
+        [HttpGet("test-auth")]
+        public IActionResult TestAuth()
+        {
+            _logger.LogInformation($"User authenticated: {User.Identity.IsAuthenticated}");
+            _logger.LogInformation($"User name: {User.Identity.Name}");
+            _logger.LogInformation($"Claims count: {User.Claims.Count()}");
+            _logger.LogInformation($"Cookies: {string.Join(", ", Request.Cookies.Keys)}");
+
+            return Ok(new
+            {
+                IsAuthenticated = User.Identity.IsAuthenticated,
+                Name = User.Identity.Name,
+                Claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList()
+            });
         }
 
         public new IActionResult SignOut()
@@ -72,7 +104,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             // Set logged in cookie
             Response.Cookies.Append("_loggedIn", "false", cookieOptions);
 
-            var redirectUri = _configuration["GeoID:PostLogoutRedirectUri"];
+            var redirectUri = "/nedlasting";
             return base.SignOut(new AuthenticationProperties { RedirectUri = redirectUri },
                 OpenIdConnectDefaults.AuthenticationScheme,
                 CookieAuthenticationDefaults.AuthenticationScheme);
@@ -88,3 +120,4 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
     }
 }
+

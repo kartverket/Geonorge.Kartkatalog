@@ -36,15 +36,13 @@ namespace Kartverket.Metadatakatalog.Middleware
             // Skip certain requests
             if (context.Request.Path.Value?.EndsWith("/sitemap.xml") == true ||
                 context.Request.Path.Value?.StartsWith("/api") == true ||
-                !context.Request.Path.Value?.EndsWith(".html") != false)
+                context.Request.Path.Value?.StartsWith("/signin-") == true ||
+                context.Request.Path.Value?.StartsWith("/signout-") == true ||
+                context.Request.Path.Value?.Contains("/connect/") == true ||
+                context.Request.Path.Value?.EndsWith(".html") != true)
             {
-                // Skip for non-HTML responses or API calls
-                var contentType = context.Response.ContentType;
-                if (!string.IsNullOrEmpty(contentType) && !contentType.Contains("text/html"))
-                {
-                    await _next(context);
-                    return;
-                }
+                await _next(context);
+                return;
             }
 
             System.Diagnostics.Debug.WriteLine($"WhitespaceMiddleware: Processing {context.Request.Path}");

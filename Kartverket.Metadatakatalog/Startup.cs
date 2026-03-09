@@ -127,15 +127,6 @@ namespace Kartverket.Metadatakatalog
             
             app.UseStaticFiles();
 
-            // Add whitespace compression middleware
-            app.UseMiddleware<Kartverket.Metadatakatalog.Middleware.WhitespaceCompressionMiddleware>();
-
-            // Add custom middleware for culture handling (replaces Application_BeginRequest)
-            app.UseMiddleware<CultureMiddleware>();
-
-            // Add custom middleware for return URL validation
-            app.UseMiddleware<ReturnUrlValidationMiddleware>();
-
             app.UseRouting();
 
             // Add CORS middleware (must be between UseRouting and UseEndpoints)
@@ -144,9 +135,18 @@ namespace Kartverket.Metadatakatalog
             // Add localization middleware
             app.UseRequestLocalization();
 
-            // Add authentication and authorization (migrated from GeonorgeAuthenticationModule)
+            // Add authentication and authorization BEFORE culture middleware for auth paths
             app.UseAuthentication();
             app.UseAuthorization();
+
+            // Add whitespace compression middleware (after authentication to prevent interference)
+            app.UseMiddleware<Kartverket.Metadatakatalog.Middleware.WhitespaceCompressionMiddleware>();
+
+            // Add custom middleware for culture handling (after authentication to prevent interference)
+            app.UseMiddleware<CultureMiddleware>();
+
+            // Add custom middleware for return URL validation (after authentication)
+            app.UseMiddleware<ReturnUrlValidationMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

@@ -22,6 +22,16 @@ namespace Kartverket.Metadatakatalog.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
+            // Skip culture middleware for authentication-related paths
+            var path = context.Request.Path.Value;
+            if (path != null && (path.StartsWith("/signin-oidc", StringComparison.OrdinalIgnoreCase) ||
+                                path.StartsWith("/signout-oidc", StringComparison.OrdinalIgnoreCase) ||
+                                path.StartsWith("/Account/", StringComparison.OrdinalIgnoreCase)))
+            {
+                await _next(context);
+                return;
+            }
+
             var cookie = context.Request.Cookies["_culture"];
             var lang = context.Request.Query["lang"];
 

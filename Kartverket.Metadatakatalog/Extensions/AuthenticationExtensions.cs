@@ -10,6 +10,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Kartverket.Metadatakatalog.Authentication;
+using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Extensions
 {
@@ -24,11 +26,18 @@ namespace Kartverket.Metadatakatalog.Extensions
         /// </summary>
         public static IServiceCollection AddGeonorgeAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
+            // Check if OpenIdConnect will be registered
+            var oidcSettings = configuration.GetSection("Authentication:OpenIdConnect");
+            bool oidcAvailable = oidcSettings.Exists() && !oidcSettings["Authority"]?.Contains("your-tenant-id") == true;
+
             // Configure authentication schemes
             var authBuilder = services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                // Use OpenIdConnect if available, otherwise fall back to Cookies
+                options.DefaultChallengeScheme = oidcAvailable ? 
+                    OpenIdConnectDefaults.AuthenticationScheme : 
+                    CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
 
@@ -38,8 +47,7 @@ namespace Kartverket.Metadatakatalog.Extensions
             // Add Cookie Authentication (for web sessions)
             authBuilder.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                options.LoginPath = "/Account/Login";
-                options.LogoutPath = "/Account/Logout";
+                options.LoginPath = "/Search/SignIn";
                 options.AccessDeniedPath = "/Account/AccessDenied";
                 options.ExpireTimeSpan = TimeSpan.FromHours(8);
                 options.SlidingExpiration = true;
@@ -47,12 +55,8 @@ namespace Kartverket.Metadatakatalog.Extensions
                 options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
                 options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
 
-                // Configure cookie domain for production
-                var cookieDomain = configuration["Culture:CookieDomain"];
-                if (!string.IsNullOrEmpty(cookieDomain) && cookieDomain != "localhost")
-                {
-                    options.Cookie.Domain = cookieDomain;
-                }
+                // Remove domain configuration temporarily for testing
+                // This ensures cookies work properly in development
             });
 
             // Add JWT Bearer Authentication (for API endpoints)
@@ -82,30 +86,72 @@ namespace Kartverket.Metadatakatalog.Extensions
 
             // Add OpenID Connect (for external authentication - Azure AD, etc.)
             // Only add if properly configured (not using placeholder values)
-            var oidcSettings = configuration.GetSection("Authentication:OpenIdConnect");
-            if (oidcSettings.Exists() && !oidcSettings["Authority"]?.Contains("your-tenant-id") == true)
+            if (oidcAvailable)
             {
                 authBuilder.AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                 {
                     options.Authority = oidcSettings["Authority"];
                     options.ClientId = oidcSettings["ClientId"];
                     options.ClientSecret = oidcSettings["ClientSecret"];
+                    options.MetadataAddress = oidcSettings["MetadataAddress"];
+                    
+                    // Use authorization code flow (modern, secure)
                     options.ResponseType = "code";
+                    options.ResponseMode = "query";
+                    
+                    // Enable PKCE for security
+                    options.UsePkce = true;
+                    
+                    // Configure callback paths to match routing
+                    options.CallbackPath = "/signin-oidc";
+                    options.SignedOutCallbackPath = "/signout-callback-oidc";
+                    
                     options.SaveTokens = true;
                     options.GetClaimsFromUserInfoEndpoint = true;
 
-                    // Add scopes for Norwegian government systems
+                    // Add required scopes for OpenID Connect
                     options.Scope.Clear();
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
-                    options.Scope.Add("email");
-                    options.Scope.Add("geonorge");
 
                     options.Events = new OpenIdConnectEvents
                     {
+                        OnRedirectToIdentityProvider = context =>
+                        {
+                            System.Diagnostics.Debug.WriteLine($"OpenIdConnect: Redirecting to identity provider: {context.ProtocolMessage.IssuerAddress}");
+                            return Task.CompletedTask;
+                        },
+                        OnAuthorizationCodeReceived = context =>
+                        {
+                            System.Diagnostics.Debug.WriteLine("OpenIdConnect: Authorization code received");
+                            return Task.CompletedTask;
+                        },
                         OnTokenValidated = async context =>
                         {
+                            System.Diagnostics.Debug.WriteLine("OpenIdConnect: Token validated successfully");
+                            System.Diagnostics.Debug.WriteLine($"OpenIdConnect: User identity name: {context.Principal.Identity.Name}");
+                            System.Diagnostics.Debug.WriteLine($"OpenIdConnect: Claims count: {context.Principal.Claims.Count()}");
+                            System.Diagnostics.Debug.WriteLine($"OpenIdConnect: Authentication type: {context.Principal.Identity.AuthenticationType}");
+                            System.Diagnostics.Debug.WriteLine($"OpenIdConnect: DefaultSignInScheme: {context.Scheme.Name}");
+                            
+                            // Log first few claims
+                            foreach (var claim in context.Principal.Claims.Take(5))
+                            {
+                                System.Diagnostics.Debug.WriteLine($"OpenIdConnect: Claim {claim.Type}: {claim.Value}");
+                            }
+                            
                             await EnrichClaims(context.Principal, configuration);
+                            System.Diagnostics.Debug.WriteLine("OpenIdConnect: About to complete sign-in");
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+                            System.Diagnostics.Debug.WriteLine($"OpenIdConnect: Authentication failed: {context.Exception?.Message}");
+                            return Task.CompletedTask;
+                        },
+                        OnRemoteFailure = context =>
+                        {
+                            System.Diagnostics.Debug.WriteLine($"OpenIdConnect: Remote authentication failure: {context.Failure?.Message}");
+                            return Task.CompletedTask;
                         }
                     };
                 });

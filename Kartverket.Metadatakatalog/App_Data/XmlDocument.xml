@@ -146,6 +146,12 @@
             Create sitemap
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.AuthenticationController.Callback">
+            <summary>
+            Handle OpenID Connect callback
+            This action is called by the identity provider after successful authentication
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.SearchController.Index(Kartverket.Metadatakatalog.Models.SearchParameters)">
             <summary>
             Main search page. Contains all datasets
