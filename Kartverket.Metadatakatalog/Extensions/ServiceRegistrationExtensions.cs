@@ -101,6 +101,10 @@ namespace Kartverket.Metadatakatalog.Extensions
             services.AddIndexingServices();
             services.AddAuthenticationServices();
 
+            // Register SimpleMetadataUtil with configuration
+            services.AddSingleton<SimpleMetadataUtil>(provider => 
+                new SimpleMetadataUtil(configuration));
+
             return services;
         }
 

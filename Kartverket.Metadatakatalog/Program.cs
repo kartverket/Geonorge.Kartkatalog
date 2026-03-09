@@ -49,6 +49,9 @@ namespace Kartverket.Metadatakatalog
                 // Initialize SolrNet configuration
                 InitializeSolrNet();
 
+                // Initialize SimpleMetadataUtil with configuration early
+                var simpleMetadataUtil = new SimpleMetadataUtil(configuration);
+
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
