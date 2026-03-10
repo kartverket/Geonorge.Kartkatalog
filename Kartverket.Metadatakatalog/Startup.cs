@@ -41,9 +41,7 @@ namespace Kartverket.Metadatakatalog
             // Add Memory Cache
             services.AddMemoryCache();
 
-            // Add Geonorge Authentication (migrated from GeonorgeAuthenticationModule)
             services.AddGeonorgeAuthentication(Configuration);
-            services.AddGeonorgeAuthorization();
 
             // Add services to the container.
             services.AddControllersWithViews();

@@ -171,68 +171,6 @@ namespace Kartverket.Metadatakatalog.Extensions
         }
 
         /// <summary>
-        /// Add authorization policies for Geonorge
-        /// </summary>
-        public static IServiceCollection AddGeonorgeAuthorization(this IServiceCollection services)
-        {
-            services.AddAuthorization(options =>
-            {
-                // Default policy - require authenticated users
-                options.DefaultPolicy = new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-
-                // Admin policy - require admin role
-                options.AddPolicy("Admin", policy =>
-                    policy.RequireRole("Administrator", "Admin"));
-
-                // Editor policy - require editor role
-                options.AddPolicy("Editor", policy =>
-                    policy.RequireRole("Editor", "Administrator", "Admin"));
-
-                // API policy - require specific API claims or basic auth
-                options.AddPolicy("ApiAccess", policy =>
-                {
-                    policy.AuthenticationSchemes.Add("BasicAuthentication");
-                    policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
-                    policy.RequireAuthenticatedUser();
-                });
-
-                // API Dataset Provider policy - for metadata API endpoints
-                options.AddPolicy("ApiDatasetProvider", policy =>
-                {
-                    policy.AuthenticationSchemes.Add("BasicAuthentication");
-                    policy.RequireRole("DatasetProvider", "Administrator", "Admin");
-                });
-
-                // Organization policy - require organization membership
-                options.AddPolicy("OrganizationMember", policy =>
-                    policy.RequireClaim("organization"));
-
-                // Metadata editor policy
-                options.AddPolicy("MetadataEditor", policy =>
-                    policy.RequireAssertion(context =>
-                        context.User.HasClaim("role", "Editor") ||
-                        context.User.HasClaim("role", "Administrator") ||
-                        context.User.HasClaim("permission", "metadata.edit") ||
-                        (context.User.HasClaim("baat_authorized", "true") && 
-                         context.User.HasClaim(ClaimTypes.Role, "AuthorizedUser"))));
-
-                // BAAT authorized user policy
-                options.AddPolicy("BaatAuthorized", policy =>
-                    policy.RequireClaim("baat_authorized", "true"));
-
-                // Kartverket employee policy
-                options.AddPolicy("KartverketEmployee", policy =>
-                    policy.RequireAssertion(context =>
-                        context.User.HasClaim("organization", "Kartverket") &&
-                        context.User.HasClaim("baat_authorized", "true")));
-            });
-
-            return services;
-        }
-
-        /// <summary>
         /// Enrich user claims with Geonorge-specific information
         /// </summary>
         private static async Task EnrichClaims(ClaimsPrincipal principal, IConfiguration configuration)
@@ -372,7 +310,7 @@ namespace Kartverket.Metadatakatalog.Extensions
             {
                 // Log the error but don't fail authentication
                 // In a production environment, use proper logging
-                System.Diagnostics.Debug.WriteLine($"Failed to enrich claims from BAAT API: {ex.Message}");
+                Log.Error(ex, "Failed to enrich claims from BAAT API");
             }
         }
 

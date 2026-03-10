@@ -176,11 +176,6 @@
             Add Geonorge authentication services (JWT + Cookies + OpenID Connect + Basic Auth)
             </summary>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Extensions.AuthenticationExtensions.AddGeonorgeAuthorization(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary>
-            Add authorization policies for Geonorge
-            </summary>
-        </member>
         <member name="M:Kartverket.Metadatakatalog.Extensions.AuthenticationExtensions.EnrichClaims(System.Security.Claims.ClaimsPrincipal,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             Enrich user claims with Geonorge-specific information
