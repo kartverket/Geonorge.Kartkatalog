@@ -1,20 +1,25 @@
+using Geonorge.AuthLib.Common;
+using Kartverket.Metadatakatalog.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using Kartverket.Metadatakatalog.Authentication;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Kartverket.Metadatakatalog.Extensions
 {
@@ -24,6 +29,8 @@ namespace Kartverket.Metadatakatalog.Extensions
     /// </summary>
     public static class AuthenticationExtensions
     {
+        private const string GeonorgeRoleNamePrefix = "nd.";
+        public const string ClaimIdentifierRole = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
         /// <summary>
         /// Add Geonorge authentication services (JWT + Cookies + OpenID Connect + Basic Auth)
         /// </summary>
@@ -242,18 +249,6 @@ namespace Kartverket.Metadatakatalog.Extensions
             // 3. Add permissions based on user context
             // 4. Add Norwegian-specific claims
 
-            // Example: Add default claims if not present
-            if (!principal.HasClaim(ClaimTypes.Role, "User"))
-            {
-                identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
-            }
-
-            // Add system identifier for Geonorge
-            if (!principal.HasClaim("system", "geonorge"))
-            {
-                identity.AddClaim(new Claim("system", "geonorge"));
-            }
-
             // Get additional claims from BAAT Authorization API
             await EnrichClaimsFromBaatApi(identity, configuration);
         }
@@ -296,91 +291,79 @@ namespace Kartverket.Metadatakatalog.Extensions
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonContent = await response.Content.ReadAsStringAsync();
-                    var authorizationData = JsonSerializer.Deserialize<BaatAuthorizationResponse>(jsonContent, new JsonSerializerOptions 
+                    var authorizationData = System.Text.Json.JsonSerializer.Deserialize<BaatAuthorizationResponse>(jsonContent, new JsonSerializerOptions 
                     { 
                         PropertyNameCaseInsensitive = true 
                     });
 
                     if (authorizationData != null)
                     {
-                        // Add BAAT user identifier if not already present
-                        if (!string.IsNullOrEmpty(authorizationData.User) && 
-                            !identity.HasClaim("baat_user", authorizationData.User))
+                       
+                        if (!string.IsNullOrEmpty(authorizationData.Name) &&
+                            !identity.HasClaim("Name", authorizationData.Name))
                         {
-                            identity.AddClaim(new Claim("baat_user", authorizationData.User));
+                            identity.AddClaim(new Claim("Name", authorizationData.Name));
                         }
 
-                        // Add email if not already present and different from existing
-                        if (!string.IsNullOrEmpty(authorizationData.Email) && 
-                            !identity.HasClaim(ClaimTypes.Email, authorizationData.Email))
+                        if (!identity.HasClaim("AuthorizedFrom", authorizationData.Authorized_From.ToString()))
                         {
-                            identity.AddClaim(new Claim(ClaimTypes.Email, authorizationData.Email));
+                            identity.AddClaim(new Claim("AuthorizedFrom", authorizationData.Authorized_From.ToString()));
                         }
 
-                        // Add full name if not already present
-                        if (!string.IsNullOrEmpty(authorizationData.Name) && 
-                            !identity.HasClaim(ClaimTypes.Name, authorizationData.Name))
+                        if (!identity.HasClaim("AuthorizedUntil", authorizationData.Authorized_Until.ToString()))
                         {
-                            identity.AddClaim(new Claim(ClaimTypes.Name, authorizationData.Name));
+                            identity.AddClaim(new Claim("AuthorizedUntil", authorizationData.Authorized_Until.ToString()));
                         }
 
-                        // Add authorization period claims
-                        if (authorizationData.AuthorizedFrom > 0)
+                        if (!string.IsNullOrEmpty(authorizationData?.Organization?.Name) &&
+                            !identity.HasClaim("OrganizationName", authorizationData.Organization.Name))
                         {
-                            identity.AddClaim(new Claim("baat_authorized_from", authorizationData.AuthorizedFrom.ToString()));
+                            identity.AddClaim(new Claim("OrganizationName", authorizationData.Organization.Name));
                         }
 
-                        if (authorizationData.AuthorizedUntil > 0)
+                        if (!string.IsNullOrEmpty(authorizationData?.Organization?.Orgnr) &&
+                            !identity.HasClaim("OrganizationOrgnr", authorizationData.Organization.Orgnr))
                         {
-                            identity.AddClaim(new Claim("baat_authorized_until", authorizationData.AuthorizedUntil.ToString()));
+                            identity.AddClaim(new Claim("OrganizationOrgnr", authorizationData.Organization.Orgnr));
                         }
 
-                        // Check if user authorization is currently valid
-                        var currentDate = int.Parse(DateTime.Now.ToString("yyyyMMdd"));
-                        var isAuthorized = authorizationData.AuthorizedFrom <= currentDate && 
-                                         authorizationData.AuthorizedUntil >= currentDate;
-                        
-                        identity.AddClaim(new Claim("baat_authorized", isAuthorized.ToString().ToLower()));
-
-                        // Add organization information if available
-                        if (authorizationData.Organization != null)
+                        if (!string.IsNullOrEmpty(authorizationData?.Organization?.Contact_Name) &&
+                            !identity.HasClaim("OrganizationContactName", authorizationData.Organization.Contact_Name))
                         {
-                            if (!string.IsNullOrEmpty(authorizationData.Organization.Name))
-                            {
-                                identity.AddClaim(new Claim("organization", authorizationData.Organization.Name));
-                            }
-
-                            if (!string.IsNullOrEmpty(authorizationData.Organization.Orgnr))
-                            {
-                                identity.AddClaim(new Claim("organization_number", authorizationData.Organization.Orgnr));
-                            }
-
-                            if (!string.IsNullOrEmpty(authorizationData.Organization.ContactName))
-                            {
-                                identity.AddClaim(new Claim("organization_contact_name", authorizationData.Organization.ContactName));
-                            }
-
-                            if (!string.IsNullOrEmpty(authorizationData.Organization.ContactEmail))
-                            {
-                                identity.AddClaim(new Claim("organization_contact_email", authorizationData.Organization.ContactEmail));
-                            }
-
-                            if (!string.IsNullOrEmpty(authorizationData.Organization.ContactPhone))
-                            {
-                                identity.AddClaim(new Claim("organization_contact_phone", authorizationData.Organization.ContactPhone));
-                            }
+                            identity.AddClaim(new Claim("OrganizationContactName", authorizationData.Organization.Contact_Name));
                         }
 
-                        // Add role based on authorization status and organization
-                        if (isAuthorized)
+                        if (!string.IsNullOrEmpty(authorizationData?.Organization?.Contact_Email) &&
+                            !identity.HasClaim("OrganizationContactEmail", authorizationData.Organization.Contact_Email))
                         {
-                            identity.AddClaim(new Claim(ClaimTypes.Role, "AuthorizedUser"));
+                            identity.AddClaim(new Claim("OrganizationContactEmail", authorizationData.Organization.Contact_Email));
+                        }
+
+                        if (!string.IsNullOrEmpty(authorizationData?.Organization?.Contact_Phone) &&
+                            !identity.HasClaim("OrganizationContactPhone", authorizationData.Organization.Contact_Phone))
+                        {
+                            identity.AddClaim(new Claim("OrganizationContactPhone", authorizationData.Organization.Contact_Phone));
+                        }
+
+
+                        var url = $"{baatApiUrl.TrimEnd('/')}/authzlist/{userIdentifier}";
+
+                        var res = await httpClient.GetAsync(url);
                             
-                            // Add organization-specific roles
-                            if (authorizationData.Organization?.Name == "Kartverket")
-                            {
-                                identity.AddClaim(new Claim(ClaimTypes.Role, "KartverketUser"));
-                            }
+                        var json = await res.Content.ReadAsStringAsync();
+
+
+                        if (json.Contains("\"services\": false"))
+                            json = json.Replace("\"services\": false", "\"services\": \"\"");
+
+                        var responseRoles = JsonConvert.DeserializeObject<BaatAuthzUserRolesResponse>(json);
+
+                        if (responseRoles.Services != null)
+                        {
+                            responseRoles.Services
+                                .Where(role => role.StartsWith(GeonorgeRoleNamePrefix))
+                                .ToList()
+                                .ForEach(role => identity.AddClaim(new Claim(ClaimIdentifierRole, role)));
                         }
                     }
                 }
@@ -393,15 +376,23 @@ namespace Kartverket.Metadatakatalog.Extensions
             }
         }
 
-        /// <summary>
-        /// Response model for BAAT Authorization API
-        /// </summary>
-        private class BaatAuthorizationResponse
+        public class BaatAuthzUserRolesResponse
+        {
+            public static readonly BaatAuthzUserRolesResponse Empty = new BaatAuthzUserRolesResponse();
+
+            [JsonProperty("services")]
+            public List<string> Services = new List<string>();
+        }
+
+/// <summary>
+/// Response model for BAAT Authorization API
+/// </summary>
+private class BaatAuthorizationResponse
         {
             public string User { get; set; }
             public string Email { get; set; }
-            public int AuthorizedUntil { get; set; }
-            public int AuthorizedFrom { get; set; }
+            public int Authorized_Until { get; set; }
+            public int Authorized_From { get; set; }
             public BaatOrganization Organization { get; set; }
             public string Name { get; set; }
         }
@@ -413,9 +404,9 @@ namespace Kartverket.Metadatakatalog.Extensions
         {
             public string Name { get; set; }
             public string Orgnr { get; set; }
-            public string ContactName { get; set; }
-            public string ContactEmail { get; set; }
-            public string ContactPhone { get; set; }
+            public string Contact_Name { get; set; }
+            public string Contact_Email { get; set; }
+            public string Contact_Phone { get; set; }
         }
     }
 }
