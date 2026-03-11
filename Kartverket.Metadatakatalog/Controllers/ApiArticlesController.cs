@@ -33,7 +33,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [Route("api/articleupdated")]
         [HttpPost]
-        public IActionResult ArticleUpdated(ArticleStatus article)
+        public IActionResult ArticleUpdated([FromBody] ArticleStatus article)
         {
             HttpStatusCode statusCode;
 
