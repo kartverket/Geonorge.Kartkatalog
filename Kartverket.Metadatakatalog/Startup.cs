@@ -20,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Globalization;
 using System.Security.Claims;
+using System.Net.Http;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -59,6 +60,18 @@ namespace Kartverket.Metadatakatalog
 
             // ADD MISSING HTTPCLIENTFACTORY
             services.AddHttpClient();
+
+            // Configure HttpClient with certificate bypass for development
+            if (Configuration["AppSettings:EnvironmentName"] == "dev")
+            {
+                services.ConfigureHttpClientDefaults(builder =>
+                {
+                    builder.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler()
+                    {
+                        ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                    });
+                });
+            }
             
             // Register custom HttpClientFactory adapter for Kartverket.Geonorge.Utilities.Organization.IHttpClientFactory
             services.AddSingleton<Kartverket.Geonorge.Utilities.Organization.IHttpClientFactory, HttpClientFactoryAdapter>();
