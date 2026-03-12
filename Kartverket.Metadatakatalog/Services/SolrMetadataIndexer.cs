@@ -52,19 +52,19 @@ namespace Kartverket.Metadatakatalog.Service
                     _logger.LogInformation("Trying to remove and update document uuid={Uuid} from index", uuid);
 
                     SetNorwegianIndexCores();
-                    MetadataIndexDoc metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.NorwegianCode);
-                    if(metadataIndexDoc != null) 
+                    MetadataIndexDoc norwegianMetadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.NorwegianCode);
+                    if(norwegianMetadataIndexDoc != null) 
                     {
                         RemoveIndexDocument(uuid);
-                        RunIndex(metadataIndexDoc, Culture.NorwegianCode);
+                        RunIndex(norwegianMetadataIndexDoc, Culture.NorwegianCode);
                     }
 
                     SetEnglishIndexCores();
-                    metadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.EnglishCode);
-                    if(metadataIndexDoc != null) 
+                    MetadataIndexDoc englishMetadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.EnglishCode);
+                    if(englishMetadataIndexDoc != null) 
                     {
                         RemoveIndexDocument(uuid);
-                        RunIndex(metadataIndexDoc, Culture.EnglishCode);
+                        RunIndexEnglish(englishMetadataIndexDoc, norwegianMetadataIndexDoc);
                     }
                 }
                 else 
@@ -136,6 +136,41 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 _logger.LogError(exception, "Error indexing document uuid: {Uuid}", metadataIndexDoc.Uuid);
                 _errorService.AddError(metadataIndexDoc.Uuid, exception);
+            }
+            finally
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
+            }
+        }
+
+        private void RunIndexEnglish(MetadataIndexDoc englishMetadataIndexDoc, MetadataIndexDoc norwegianMetadataIndexDoc)
+        {
+            var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            try 
+            {
+                // Index English content to English cores
+                if (englishMetadataIndexDoc.Type != null && (englishMetadataIndexDoc.Type.ToLower() == "service" || englishMetadataIndexDoc.Type.ToLower() == "servicelayer"))
+                {
+                    _indexerService.Index(_indexDocumentCreator.ConvertIndexDocToService(englishMetadataIndexDoc));
+                }
+                else if (englishMetadataIndexDoc.Type != null && englishMetadataIndexDoc.Type.ToLower() == "software")
+                {
+                    _indexerApplication.Index(_indexDocumentCreator.ConvertIndexDocToApplication(englishMetadataIndexDoc));
+                }
+                else
+                    _indexer.Index(englishMetadataIndexDoc);
+
+                // Index Norwegian content to metadata_all (English core), ensuring Norwegian content in metadata_all
+                if (norwegianMetadataIndexDoc != null)
+                {
+                    _indexerAll.Index(_indexDocumentCreator.ConvertIndexDocToMetadataAll(norwegianMetadataIndexDoc));
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Error indexing English document uuid: {Uuid}", englishMetadataIndexDoc.Uuid);
+                _errorService.AddError(englishMetadataIndexDoc.Uuid, exception);
             }
             finally
             {
