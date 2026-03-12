@@ -70,22 +70,6 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
         }
 
-        [HttpGet("test-auth")]
-        public IActionResult TestAuth()
-        {
-            _logger.LogInformation($"User authenticated: {User.Identity.IsAuthenticated}");
-            _logger.LogInformation($"User name: {User.Identity.Name}");
-            _logger.LogInformation($"Claims count: {User.Claims.Count()}");
-            _logger.LogInformation($"Cookies: {string.Join(", ", Request.Cookies.Keys)}");
-
-            return Ok(new
-            {
-                IsAuthenticated = User.Identity.IsAuthenticated,
-                Name = User.Identity.Name,
-                Claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList()
-            });
-        }
-
         public new IActionResult SignOut()
         {
             // Save redirect to basket in a cookie

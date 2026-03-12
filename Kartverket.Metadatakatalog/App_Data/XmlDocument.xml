@@ -64,71 +64,6 @@
             Remove metadata uuid from index
             </summary>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.FixMissingDocument(System.String)">
-            <summary>
-            Re-index a specific document to fix missing data issues
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.TestSolrConnectivity">
-            <summary>
-            Test different Solr connection methods
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.TestSolr(System.String,System.String)">
-            <summary>
-            Test direct Solr operations (for debugging)
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.MetadataUpdatedFast(Microsoft.AspNetCore.Http.IFormCollection)">
-            <summary>
-            Metadata updated (optimized version for performance testing)
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.PerformanceTest">
-            <summary>
-            Simple performance test - minimal Solr operation
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.SolrHealth">
-            <summary>
-            Check Solr server health and configuration
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.MetadataUpdatedMinimal(Microsoft.AspNetCore.Http.IFormCollection)">
-            <summary>
-            Metadata updated (minimal operations for testing)
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.MetadataUpdatedBatch(Microsoft.AspNetCore.Http.IFormCollection)">
-            <summary>
-            Metadata updated (simplified batch optimization)
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.MetadataUpdatedDebug(Microsoft.AspNetCore.Http.IFormCollection)">
-            <summary>
-            Metadata updated (detailed timing analysis)
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.MetadataUpdatedForceOptimize(Microsoft.AspNetCore.Http.IFormCollection)">
-            <summary>
-            Force-optimize a metadata update (bypass normal flow)
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.MetadataUpdatedFixedConfig(Microsoft.AspNetCore.Http.IFormCollection)">
-            <summary>
-            Test the updated configuration performance
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.SearchDocumentAcrossCores(System.String)">
-            <summary>
-            Search for a document across all Solr cores to check data consistency
-            </summary>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiMetadataController.CheckDependencyInjection">
-            <summary>
-            Quick dependency injection diagnostic
-            </summary>
-        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Get(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
             <summary>
             Catalogue search
@@ -843,6 +778,11 @@
         <member name="M:Kartverket.Metadatakatalog.Services.Authentication.IGeonorgeAuthenticationService.IsGeonorgeAuthenticated(System.Security.Claims.ClaimsPrincipal)">
             <summary>
             Check if user is authenticated for Geonorge
+            </summary>
+        </member>
+        <member name="T:Kartverket.Metadatakatalog.Swagger.CustomModelBinderSchemaFilter">
+            <summary>
+            Custom schema filter to handle complex model binding scenarios that cause Swagger generation issues
             </summary>
         </member>
         <member name="T:AreaType">
