@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using System.Globalization;
 using System.Security.Claims;
 using System.Net.Http;
@@ -112,6 +113,49 @@ namespace Kartverket.Metadatakatalog
 
             // Add CORS services
             services.AddCors();
+
+            // Add Swagger/OpenAPI services
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo 
+                { 
+                    Title = "Kartverket Metadata Catalog API", 
+                    Version = "v1",
+                    Description = "API for managing metadata in the Kartverket metadata catalog"
+                });
+                
+                // Include XML comments for Swagger documentation
+                var xmlFile = System.IO.Path.Combine(System.AppContext.BaseDirectory, "App_Data", "XmlDocument.xml");
+                if (System.IO.File.Exists(xmlFile))
+                {
+                    c.IncludeXmlComments(xmlFile);
+                }
+
+                // Add Basic Authentication support
+                c.AddSecurityDefinition("basic", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                    Scheme = "basic",
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Description = "Basic Authorization header using the Bearer scheme."
+                });
+                
+                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                {
+                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        {
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "basic"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -123,12 +167,28 @@ namespace Kartverket.Metadatakatalog
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                
+                // Enable Swagger in development
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Kartverket Metadata Catalog API v1");
+                    c.RoutePrefix = "swagger"; // Set Swagger UI at /swagger
+                });
             }
             else
             {
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios.
                 app.UseHsts();
+                
+                // Optionally enable Swagger in production (uncomment if needed)
+                // app.UseSwagger();
+                // app.UseSwaggerUI(c =>
+                // {
+                //     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Kartverket Metadata Catalog API v1");
+                //     c.RoutePrefix = "swagger";
+                // });
             }
 
             app.UseHttpsRedirection();

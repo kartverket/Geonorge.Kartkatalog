@@ -18,6 +18,21 @@ using Serilog;
 
 namespace Kartverket.Metadatakatalog
 {
+    // Factory interface for accessing different Solr cores
+    public interface ISolrOperationsFactory
+    {
+        ISolrOperations<T> GetOperations<T>(string coreId);
+    }
+
+    // Factory implementation that uses the WindsorContainer
+    public class SolrOperationsFactory : ISolrOperationsFactory
+    {
+        public ISolrOperations<T> GetOperations<T>(string coreId)
+        {
+            return Program.IndexContainer.Resolve<ISolrOperations<T>>(coreId);
+        }
+    }
+
     public class Program
     {
         // Global static container for SolrNet (maintaining compatibility with existing code)
@@ -81,6 +96,7 @@ namespace Kartverket.Metadatakatalog
                 .ConfigureServices((context, services) =>
                 {
                     // BRIDGE SOLRNET SERVICES FROM WINDSORCONTAINER TO ASP.NET CORE DI
+                    // Register default cores (for backward compatibility)
                     services.AddSingleton<ISolrOperations<MetadataIndexDoc>>(provider => 
                         IndexContainer.Resolve<ISolrOperations<MetadataIndexDoc>>(SolrCores.Metadata));
                     services.AddSingleton<ISolrOperations<MetadataIndexAllDoc>>(provider => 
@@ -91,6 +107,10 @@ namespace Kartverket.Metadatakatalog
                         IndexContainer.Resolve<ISolrOperations<ApplicationIndexDoc>>(SolrCores.Applications));
                     services.AddSingleton<ISolrOperations<ArticleIndexDoc>>(provider => 
                         IndexContainer.Resolve<ISolrOperations<ArticleIndexDoc>>(SolrCores.Articles));
+
+                    // REGISTER SOLR FACTORY FOR MULTI-CORE ACCESS
+                    // This enables our optimized indexers to access different cores dynamically
+                    services.AddSingleton<ISolrOperationsFactory>(provider => new SolrOperationsFactory());
 
                     // ADD MISSING HTTPCLIENT SERVICES
                     services.AddHttpClient();

@@ -29,14 +29,14 @@ namespace Kartverket.Metadatakatalog.Service
 
         public void Index(IEnumerable<ApplicationIndexDoc> docs)
         {
-            _logger.LogInformation("Indexing {DocCount} docs", docs.Count());
+            _logger.LogInformation("Indexing {DocCount} docs to current core", docs.Count());
             _solr.AddRange(docs);
             _solr.Commit();
         }
 
         public void DeleteIndex()
         {
-            _logger.LogInformation("Deletes entire index for reindexing");
+            _logger.LogInformation("Deletes entire index for reindexing on current core");
             SolrQuery sq = new SolrQuery("*:*");
             _solr.Delete(sq);
             _solr.Commit();
@@ -44,7 +44,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         public void Index(ApplicationIndexDoc doc)
         {
-            _logger.LogInformation("Indexing single document uuid={Uuid} title={Title}", doc.Uuid, doc.Title);
+            _logger.LogInformation("Indexing single document uuid={Uuid} title={Title} to current core", doc.Uuid, doc.Title);
             _solr.Add(doc);
             _solr.Commit();
         }
@@ -53,19 +53,28 @@ namespace Kartverket.Metadatakatalog.Service
         {
             try
             {
-                _logger.LogInformation("Removes document uuid={Uuid} from index", uuid);
+                _logger.LogInformation("=== INDEXER APPLICATION REMOVE OPERATION START ===");
+                _logger.LogInformation("IndexerApplication: Removes document uuid={Uuid} from current core", uuid);
                 _solr.Delete(uuid);
                 _solr.Commit();
+                _logger.LogInformation("IndexerApplication: Successfully removed document uuid={Uuid}", uuid);
+                _logger.LogInformation("=== INDEXER APPLICATION REMOVE OPERATION END ===");
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Error removing UUID: {Uuid}", uuid);
+                _logger.LogError(exception, "IndexerApplication: Error removing UUID: {Uuid}", uuid);
+                _logger.LogError("=== INDEXER APPLICATION REMOVE OPERATION FAILED ===");
+                throw;
             }
         }
 
         public void SetSolrIndexer(string coreId)
         {
+            _logger.LogInformation("=== INDEXER APPLICATION CORE SWITCHING START ===");
+            _logger.LogInformation("IndexerApplication: Setting Solr indexer for core: {CoreId}", coreId);
             _solr = GetSolrOperations(coreId);
+            _logger.LogInformation("IndexerApplication: Successfully switched to core: {CoreId}", coreId);
+            _logger.LogInformation("=== INDEXER APPLICATION CORE SWITCHING END ===");
         }
     }
 }

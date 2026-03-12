@@ -71,6 +71,9 @@ namespace Kartverket.Metadatakatalog.Extensions
         /// </summary>
         public static IServiceCollection AddIndexingServices(this IServiceCollection services)
         {
+            // Note: SolrNet ISolrOperations registration is handled elsewhere or was working through different means
+            // For now, just register the service classes without the SolrNet dependencies
+            
             // Metadata indexers
             services.AddScoped<MetadataIndexer, SolrMetadataIndexer>();
             services.AddScoped<Indexer, SolrIndexer>();
