@@ -780,11 +780,6 @@
             Check if user is authenticated for Geonorge
             </summary>
         </member>
-        <member name="T:Kartverket.Metadatakatalog.Swagger.CustomModelBinderSchemaFilter">
-            <summary>
-            Custom schema filter to handle complex model binding scenarios that cause Swagger generation issues
-            </summary>
-        </member>
         <member name="T:AreaType">
             <remarks/>
         </member>

@@ -11,7 +11,6 @@ using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 using Kartverket.Metadatakatalog.Adapters;
-using Kartverket.Metadatakatalog.Swagger;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +18,6 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using System.Globalization;
 using System.Security.Claims;
 using System.Net.Http;
@@ -146,91 +144,53 @@ namespace Kartverket.Metadatakatalog
 
                 // Add Swagger/OpenAPI services
                 services.AddEndpointsApiExplorer(); // Required for minimal APIs and better OpenAPI support
+                
                 services.AddSwaggerGen(c =>
                 {
-                    try 
+                    // Configure OpenAPI document
+                    c.SwaggerDoc("v1", new()
                     {
-                        c.SwaggerDoc("v1", new OpenApiInfo 
-                        { 
-                            Title = "Kartverket Metadata Catalog API", 
-                            Version = "v1",
-                            Description = "API for managing metadata in the Kartverket metadata catalog"
-                        });
-                        
-                        // Skip XML comments for now to avoid path issues
-                        // TODO: Re-enable when XML documentation generation is properly configured
-                        
-                        // Add Basic Authentication support
-                        c.AddSecurityDefinition("basic", new OpenApiSecurityScheme
-                        {
-                            Name = "Authorization",
-                            Type = SecuritySchemeType.Http,
-                            Scheme = "basic",
-                            In = ParameterLocation.Header,
-                            Description = "Basic Authorization header."
-                        });
-                        
-                        c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                        {
-                            {
-                                new OpenApiSecurityScheme
-                                {
-                                    Reference = new OpenApiReference
-                                    {
-                                        Type = ReferenceType.SecurityScheme,
-                                        Id = "basic"
-                                    }
-                                },
-                                new string[] {}
-                            }
-                        });
+                        Title = "Kartverket Metadata Catalog API",
+                        Version = "v1",
+                        Description = "API for managing metadata in the Kartverket metadata catalog"
+                    });
 
-                        // Handle ambiguous actions by selecting the first one
-                        c.ResolveConflictingActions(apiDescriptions =>
+                    // Add more robust error handling for action discovery
+                    c.DocInclusionPredicate((name, api) => 
+                    {
+                        try
                         {
-                            return apiDescriptions.FirstOrDefault();
-                        });
-
-                        // Ignore obsolete actions and properties
-                        c.IgnoreObsoleteActions();
-                        c.IgnoreObsoleteProperties();
-                        
-                        // Handle custom model binders and complex types that cause issues
-                        c.SchemaFilter<CustomModelBinderSchemaFilter>();
-                        
-                        // Add more robust error handling for action discovery
-                        c.DocInclusionPredicate((name, api) => 
-                        {
-                            try
+                            // Skip actions with custom model binders that cause problems
+                            var parameters = api.ParameterDescriptions;
+                            foreach (var param in parameters)
                             {
-                                // Skip actions with custom model binders that cause problems
-                                var parameters = api.ParameterDescriptions;
-                                foreach (var param in parameters)
+                                if (param.ModelMetadata?.BindingSource?.Id == "ModelBinding" ||
+                                    param.Source?.Id == "ModelBinding")
                                 {
-                                    if (param.ModelMetadata?.BindingSource?.Id == "ModelBinding" ||
-                                        param.Source?.Id == "ModelBinding")
-                                    {
-                                        System.Diagnostics.Debug.WriteLine($"⚠️ Excluding API action due to custom model binder: {api.ActionDescriptor.DisplayName}");
-                                        return false;
-                                    }
+                                    System.Diagnostics.Debug.WriteLine($"⚠️ Excluding API action due to custom model binder: {api.ActionDescriptor.DisplayName}");
+                                    return false;
                                 }
-                                return true;
                             }
-                            catch (Exception ex)
-                            {
-                                System.Diagnostics.Debug.WriteLine($"❌ Error checking API action: {ex.Message}");
-                                return false; // Exclude problematic actions
-                            }
-                        });
-                        
-                        System.Diagnostics.Debug.WriteLine("✅ Swagger generation configured");
-                    }
-                    catch (Exception ex)
+                            return true;
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"❌ Error checking API action: {ex.Message}");
+                            return false; // Exclude problematic actions
+                        }
+                    });
+
+                    // Handle ambiguous actions by selecting the first one
+                    c.ResolveConflictingActions(apiDescriptions =>
                     {
-                        System.Diagnostics.Debug.WriteLine($"❌ Swagger generation setup failed: {ex.Message}");
-                        System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                        throw;
-                    }
+                        return apiDescriptions.FirstOrDefault();
+                    });
+
+                    // Ignore obsolete actions and properties
+                    c.IgnoreObsoleteActions();
+                    c.IgnoreObsoleteProperties();
+                    
+                    System.Diagnostics.Debug.WriteLine("✅ Swagger generation configured");
                 });
 
                 System.Diagnostics.Debug.WriteLine("✅ ConfigureServices completed successfully");

@@ -337,9 +337,14 @@
     <!-- ASP.NET Core packages are included in the framework for .NET 10 -->
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+    <PackageReference Include="Microsoft.OpenApi" Version="2.4.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="10.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.1.5" />
     <!-- ResponseCompression is included in ASP.NET Core framework -->
   </ItemGroup>
   <ItemGroup>
@@ -416,7 +421,6 @@
     <PackageReference Include="SolrNet.Windsor" Version="1.1.1" />
     
     <!-- Use latest Swashbuckle for .NET 10 compatibility -->
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.0" />
     
     <!-- Remove packages included in .NET 10 runtime -->
     <!-- <PackageReference Include="System.Buffers" Version="4.6.0" /> -->
@@ -457,6 +461,7 @@
   <ItemGroup>
     <Folder Include="App_Start\" />
     <Folder Include="Filters\" />
+    <Folder Include="Swagger\" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
