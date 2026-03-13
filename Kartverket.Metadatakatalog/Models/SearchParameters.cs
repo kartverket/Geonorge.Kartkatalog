@@ -228,13 +228,13 @@ namespace Kartverket.Metadatakatalog.Models
                     {
                         if (SimpleMetadataUtil.StaticUseVectorSearch) 
                         {
-                            var embedding = _aiService.GetPredictions(Text);
-                            if(embedding != null) 
-                            {
-                                vectorSearchString = "[" + string.Join("|", embedding) + "]";
-                                vectorSearchString = vectorSearchString.Replace(",", ".");
-                                vectorSearchString = vectorSearchString.Replace("|", ",");
-                            }
+                             var embedding = _aiService.GetPredictions(Text);
+                             if(embedding != null && embedding.Length > 0) 
+                             {
+                                 // Format embedding values with proper ASCII formatting for Solr
+                                 var formattedEmbedding = embedding.Select(f => f.ToString("F8", System.Globalization.CultureInfo.InvariantCulture));
+                                 vectorSearchString = "[" + string.Join(",", formattedEmbedding) + "]";
+                             }
                         }
                     }
 
