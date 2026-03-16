@@ -66,13 +66,56 @@
         </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Get(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
             <summary>
-            Catalogue search
+            Search the metadata catalogue
             </summary>
+            <remarks>
+            Search through the metadata catalogue with various filtering and sorting options.
+            
+            **Example requests:**
+            
+            - Get all documents: `GET /api/search/`
+            - Search by text: `GET /api/search/?text=Norge`
+            - With pagination: `GET /api/search/?text=Norge&amp;limit=5&amp;offset=2`
+            - With facet filters: `GET /api/search/?text=Norge&amp;facets[0]name=type&amp;facets[0]value=dataset`
+            - Multiple facets: `GET /api/search/?facets[0]name=type&amp;facets[0]value=dataset&amp;facets[1]name=organization&amp;facets[1]value=Kartverket`
+            - Sort by title: `GET /api/search/?text=Norge&amp;orderby=title`
+            
+            **Available facet names:**
+            - `type` - Resource type (dataset, service, etc.)
+            - `theme` - Thematic categories
+            - `organization` - Publishing organization
+            - `nationalinitiative` - National initiatives
+            - `DistributionProtocols` - Distribution protocols
+            - `area` - Geographic area
+            - `dataaccess` - Data access levels
+            - `spatialscope` - Spatial scope
+            
+            **Available sort options:**
+            - `score` (default) - Relevance score
+            - `title`, `title_desc` - Alphabetical by title
+            - `organization`, `organization_desc` - By organization name
+            - `newest` - Newest first (by publication date)
+            - `updated` - Recently updated first
+            - `popularMetadata` - By popularity
+            </remarks>
+            <param name="parameters">Search parameters</param>
+            <returns>Search results containing metadata items and facets</returns>
+            <response code="200">Returns the search results</response>
+            <response code="400">Invalid search parameters</response>
+            <response code="500">Internal server error</response>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Datasets(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetSearchApiHelp">
             <summary>
-            Catalogue search for dataset
+            Get API documentation and examples
             </summary>
+            <returns>API usage documentation with examples</returns>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.GetFacetValues(System.String)">
+            <summary>
+            Get available facet values for a specific facet
+            </summary>
+            <param name="facetName">Name of the facet (type, theme, organization, etc.)</param>
+            <returns>Available values for the specified facet</returns>
         </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Opendata(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
             <summary>
@@ -394,15 +437,22 @@
             The facet result
             </summary>
         </member>
+        <member name="T:Kartverket.Metadatakatalog.Models.Api.FacetInput">
+            <summary>
+            Represents a facet filter for narrowing search results
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.FacetInput.name">
             <summary>
-            The name of the facet
+            The name of the facet. Valid values: type, theme, organization, nationalinitiative, DistributionProtocols, area, dataaccess, spatialscope
             </summary>
+            <example>type</example>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.FacetInput.value">
             <summary>
-            The value of the facet
+            The value to filter by for this facet
             </summary>
+            <example>dataset</example>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.Metadata.Uuid">
             <summary>
@@ -585,33 +635,59 @@
             The full dataset name
             </summary>
         </member>
+        <member name="T:Kartverket.Metadatakatalog.Models.Api.SearchParameters">
+            <summary>
+            Parameters for metadata catalogue search
+            </summary>
+        </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.text">
             <summary>
-            The text to search for
+            The text to search for in the metadata catalogue
             </summary>
+            <example>Norge kartdata</example>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.offset">
             <summary>
-            This param indicates an offset into the list of constraints to allow paging. Default is 1.
+            Page offset for pagination. Minimum value is 1. Default is 1.
             </summary>
+            <example>1</example>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.limit">
             <summary>
-            This param indicates the maximum number of constraint counts that should be returned. Default is 10.
+            Maximum number of results to return per page. Range: 1-1000, Default is 10.
             </summary>
+            <example>20</example>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.listhidden">
             <summary>
-            List hidden metadata like series_historic, series_time
+            Include hidden metadata like series_historic, series_time in results. Default is false.
             </summary>
+            <example>false</example>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.orderby">
             <summary>
-            Limits the list to facets. Ex. <![CDATA[ &facets[0]name=organization&facets[0]value=Kartverket]]>. Facets result is grouped by  "theme" , "type", "organization".
+            Field to order results by. Valid values: score, title, title_desc, organization, organization_desc, newest, updated, popularMetadata. Default is 'score'.
             </summary>
+            <example>title</example>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.datefrom">
             <summary>
-            Field to order by, ex: orderby=title, default order is score desc.
+            Filter results from this date onwards. Format: yyyy-MM-dd or yyyy-MM-ddTHH:mm:ss
             </summary>
+            <example>2023-01-01</example>
+        </member>
+        <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.dateto">
+            <summary>
+            Filter results up to this date. Format: yyyy-MM-dd or yyyy-MM-ddTHH:mm:ss
+            </summary>
+            <example>2023-12-31</example>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.facets" -->
+        <member name="M:Kartverket.Metadatakatalog.Models.Api.SearchParameters.ValidateParameters">
+            <summary>
+            Validates the search parameters
+            </summary>
+            <returns>List of validation errors, empty if valid</returns>
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchResult.NumFound">
             <summary>

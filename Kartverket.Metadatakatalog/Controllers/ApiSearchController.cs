@@ -89,33 +89,307 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
 
         /// <summary>
-        /// Catalogue search
+        /// Search the metadata catalogue
         /// </summary>
+        /// <remarks>
+        /// Search through the metadata catalogue with various filtering and sorting options.
+        /// 
+        /// **Example requests:**
+        /// 
+        /// - Get all documents: `GET /api/search/`
+        /// - Search by text: `GET /api/search/?text=Norge`
+        /// - With pagination: `GET /api/search/?text=Norge&amp;limit=5&amp;offset=2`
+        /// - With facet filters: `GET /api/search/?text=Norge&amp;facets[0]name=type&amp;facets[0]value=dataset`
+        /// - Multiple facets: `GET /api/search/?facets[0]name=type&amp;facets[0]value=dataset&amp;facets[1]name=organization&amp;facets[1]value=Kartverket`
+        /// - Sort by title: `GET /api/search/?text=Norge&amp;orderby=title`
+        /// 
+        /// **Available facet names:**
+        /// - `type` - Resource type (dataset, service, etc.)
+        /// - `theme` - Thematic categories
+        /// - `organization` - Publishing organization
+        /// - `nationalinitiative` - National initiatives
+        /// - `DistributionProtocols` - Distribution protocols
+        /// - `area` - Geographic area
+        /// - `dataaccess` - Data access levels
+        /// - `spatialscope` - Spatial scope
+        /// 
+        /// **Available sort options:**
+        /// - `score` (default) - Relevance score
+        /// - `title`, `title_desc` - Alphabetical by title
+        /// - `organization`, `organization_desc` - By organization name
+        /// - `newest` - Newest first (by publication date)
+        /// - `updated` - Recently updated first
+        /// - `popularMetadata` - By popularity
+        /// </remarks>
+        /// <param name="parameters">Search parameters</param>
+        /// <returns>Search results containing metadata items and facets</returns>
+        /// <response code="200">Returns the search results</response>
+        /// <response code="400">Invalid search parameters</response>
+        /// <response code="500">Internal server error</response>
         [HttpGet("search")]
-        public SearchResult Get([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
+        [ProducesResponseType(typeof(SearchResult), 200)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
+        [ProducesResponseType(500)]
+        public IActionResult Get([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
         {
             try
             {
                 if (parameters == null)
                     parameters = new SearchParameters();
 
+                // Validate parameters
+                var validationErrors = parameters.ValidateParameters();
+                if (validationErrors.Count > 0)
+                {
+                    var problemDetails = new ValidationProblemDetails();
+                    problemDetails.Title = "Invalid search parameters";
+                    foreach (var error in validationErrors)
+                    {
+                        problemDetails.Errors.Add("SearchParameters", new[] { error });
+                    }
+                    return BadRequest(problemDetails);
+                }
+
                 Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
                 searchParameters.AddDefaultFacetsIfMissing();
                 Models.SearchResult searchResult = _searchServiceAll.Search(searchParameters);
 
-                return new SearchResult(searchResult, Url);
+                var result = new SearchResult(searchResult, Url);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid search parameters: {Message}", ex.Message);
+                return BadRequest(new { error = "Invalid search parameters", details = ex.Message });
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error API", ex);
-                return null;
+                _logger.LogError(ex, "Error occurred during search operation");
+                return StatusCode(500, new { error = "An error occurred while processing your search request" });
             }
-
         }
 
         /// <summary>
-        /// Catalogue search for dataset
+        /// Get API documentation and examples
         /// </summary>
+        /// <returns>API usage documentation with examples</returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet("search/help")]
+        public IActionResult GetSearchApiHelp()
+        {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/api/search";
+            
+            var help = new
+            {
+                Title = "Metadata Catalogue Search API Documentation",
+                BaseUrl = baseUrl,
+                Description = "Search through the Norwegian metadata catalogue with flexible filtering and sorting options",
+                
+                Parameters = new
+                {
+                    text = new { Type = "string", Description = "Search text to query across all metadata fields", Example = "Norge kartdata" },
+                    limit = new { Type = "integer", Description = "Maximum number of results (1-1000)", Default = 10, Example = 20 },
+                    offset = new { Type = "integer", Description = "Page offset for pagination (1-based)", Default = 1, Example = 1 },
+                    orderby = new { 
+                        Type = "string", 
+                        Description = "Sort field", 
+                        Default = "score",
+                        ValidValues = new[] { "score", "title", "title_desc", "organization", "organization_desc", "newest", "updated", "popularMetadata" },
+                        Example = "title"
+                    },
+                    listhidden = new { Type = "boolean", Description = "Include hidden metadata", Default = false, Example = false },
+                    datefrom = new { Type = "datetime", Description = "Filter from date (yyyy-MM-dd)", Example = "2023-01-01" },
+                    dateto = new { Type = "datetime", Description = "Filter to date (yyyy-MM-dd)", Example = "2024-12-31" },
+                    facets = new { 
+                        Type = "array", 
+                        Description = "Facet filters",
+                        Format = "facets[index]name=facetName&facets[index]value=facetValue",
+                        ValidFacets = new[] { "type", "theme", "organization", "nationalinitiative", "DistributionProtocols", "area", "dataaccess", "spatialscope" }
+                    }
+                },
+
+                InteractiveExamples = new[]
+                {
+                    new { 
+                        Title = "?? Basic Search",
+                        Description = "Simple text search", 
+                        Url = $"{baseUrl}?text=Norge+kartdata&limit=10",
+                        TryItLink = $"{baseUrl}?text=Norge+kartdata&limit=10"
+                    },
+                    new { 
+                        Title = "?? Search by Organization", 
+                        Description = "Find Kartverket datasets", 
+                        Url = $"{baseUrl}?facets[0]name=organization&facets[0]value=Kartverket&limit=15",
+                        TryItLink = $"{baseUrl}?facets[0]name=organization&facets[0]value=Kartverket&limit=15"
+                    },
+                    new { 
+                        Title = "?? Dataset Search", 
+                        Description = "Filter by resource type", 
+                        Url = $"{baseUrl}?text=marine&facets[0]name=type&facets[0]value=dataset&orderby=title",
+                        TryItLink = $"{baseUrl}?text=marine&facets[0]name=type&facets[0]value=dataset&orderby=title"
+                    },
+                    new { 
+                        Title = "?? Recent Updates", 
+                        Description = "Latest updated metadata", 
+                        Url = $"{baseUrl}?orderby=updated&limit=20",
+                        TryItLink = $"{baseUrl}?orderby=updated&limit=20"
+                    },
+                    new { 
+                        Title = "?? Date Range Filter", 
+                        Description = "Metadata from specific period", 
+                        Url = $"{baseUrl}?datefrom=2023-01-01&dateto=2024-12-31&orderby=newest&limit=25",
+                        TryItLink = $"{baseUrl}?datefrom=2023-01-01&dateto=2024-12-31&orderby=newest&limit=25"
+                    },
+                    new { 
+                        Title = "?? Complex Search", 
+                        Description = "Multiple filters combined", 
+                        Url = $"{baseUrl}?text=havdata&facets[0]name=type&facets[0]value=dataset&facets[1]name=theme&facets[1]value=Biota&facets[2]name=dataaccess&facets[2]value=open&orderby=popularity&limit=30",
+                        TryItLink = $"{baseUrl}?text=havdata&facets[0]name=type&facets[0]value=dataset&facets[1]name=theme&facets[1]value=Biota&facets[2]name=dataaccess&facets[2]value=open&orderby=popularMetadata&limit=30"
+                    },
+                    new { 
+                        Title = "?? Pagination Example", 
+                        Description = "Navigate through results", 
+                        Url = $"{baseUrl}?text=geodata&limit=50&offset=3",
+                        TryItLink = $"{baseUrl}?text=geodata&limit=50&offset=3"
+                    }
+                },
+
+                QueryStringExamples = new[]
+                {
+                    new { 
+                        Description = "Get all datasets", 
+                        Url = "/api/search/" 
+                    },
+                    new { 
+                        Description = "Search for 'Norge kartdata'", 
+                        Url = "/api/search/?text=Norge+kartdata" 
+                    },
+                    new { 
+                        Description = "Search with pagination", 
+                        Url = "/api/search/?text=Norge&limit=20&offset=2" 
+                    },
+                    new { 
+                        Description = "Filter by type = dataset", 
+                        Url = "/api/search/?facets[0]name=type&facets[0]value=dataset" 
+                    },
+                    new { 
+                        Description = "Multiple filters", 
+                        Url = "/api/search/?facets[0]name=type&facets[0]value=dataset&facets[1]name=organization&facets[1]value=Kartverket" 
+                    },
+                    new { 
+                        Description = "Sort by title", 
+                        Url = "/api/search/?text=Norge&orderby=title" 
+                    },
+                    new { 
+                        Description = "Date range filter", 
+                        Url = "/api/search/?datefrom=2023-01-01&dateto=2024-12-31" 
+                    }
+                },
+
+                FacetInformation = new
+                {
+                    AvailableFacets = new[]
+                    {
+                        new { Name = "type", Description = "Resource type (dataset, service, application, etc.)", CommonValues = new[] { "dataset", "service", "application", "series" } },
+                        new { Name = "theme", Description = "Thematic categories", CommonValues = new[] { "Biota", "Environment", "GeoscientificInformation", "Transportation" } },
+                        new { Name = "organization", Description = "Publishing organization", CommonValues = new[] { "Kartverket", "Meteorologisk institutt", "Miljødirektoratet" } },
+                        new { Name = "nationalinitiative", Description = "National initiatives", CommonValues = new[] { "Norge digitalt", "INSPIRE" } },
+                        new { Name = "DistributionProtocols", Description = "Distribution protocols", CommonValues = new[] { "WMS", "WFS", "WCS", "ATOM" } },
+                        new { Name = "area", Description = "Geographic area coverage", CommonValues = new[] { "Norge", "Svalbard", "Kontinentalsokkel" } },
+                        new { Name = "dataaccess", Description = "Data access levels", CommonValues = new[] { "open", "restricted", "public" } },
+                        new { Name = "spatialscope", Description = "Spatial scope", CommonValues = new[] { "national", "regional", "local" } }
+                    }
+                },
+
+                ResponseFormat = new
+                {
+                    Description = "The API returns a SearchResult object containing:",
+                    Structure = new
+                    {
+                        NumFound = "Total number of matching items",
+                        Offset = "Current page offset",
+                        Limit = "Items per page",
+                        Results = "Array of metadata items",
+                        Facets = "Available facet values for filtering"
+                    },
+                    SampleResponse = new
+                    {
+                        NumFound = 150,
+                        Offset = 1,
+                        Limit = 20,
+                        Results = new[] {
+                            new {
+                                Title = "Eksempel kartdata",
+                                Uuid = "12345-67890-abcdef",
+                                Type = "dataset",
+                                Organization = "Kartverket",
+                                Theme = "GeoscientificInformation"
+                            }
+                        },
+                        Facets = new[] {
+                            new {
+                                FacetField = "type",
+                                FacetResults = new[] {
+                                    new { Name = "dataset", Count = 120 },
+                                    new { Name = "service", Count = 25 },
+                                    new { Name = "application", Count = 5 }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            return Ok(help);
+        }
+
+        /// <summary>
+        /// Get available facet values for a specific facet
+        /// </summary>
+        /// <param name="facetName">Name of the facet (type, theme, organization, etc.)</param>
+        /// <returns>Available values for the specified facet</returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet("search/facets/{facetName}")]
+        public IActionResult GetFacetValues(string facetName)
+        {
+            try
+            {
+                var validFacets = new[] { "type", "theme", "organization", "organisations", "nationalinitiative", "DistributionProtocols", "area", "dataaccess", "spatialscope" };
+                
+                if (string.IsNullOrEmpty(facetName) || !Array.Exists(validFacets, x => x.Equals(facetName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return BadRequest(new { 
+                        error = "Invalid facet name", 
+                        validFacets = validFacets,
+                        message = $"'{facetName}' is not a valid facet name. Use one of: {string.Join(", ", validFacets)}"
+                    });
+                }
+
+                // Get facet values by performing a search with empty text and the specified facet
+                var searchParameters = new Models.SearchParameters(_aiService, _searchParametersLogger);
+                searchParameters.Limit = 1; // We only need facet values, not results
+                searchParameters.AddDefaultFacetsIfMissing();
+                
+                var searchResult = _searchServiceAll.Search(searchParameters);
+                var facet = searchResult.Facets?.FirstOrDefault(f => f.FacetField.Equals(facetName, StringComparison.OrdinalIgnoreCase));
+
+                if (facet == null)
+                {
+                    return NotFound(new { error = $"No facet data found for '{facetName}'" });
+                }
+
+                return Ok(new
+                {
+                    FacetName = facet.FacetField,
+                    Values = facet.FacetResults.Select(fr => new { Value = fr.Name, Count = fr.Count }).ToList()
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting facet values for {FacetName}", facetName);
+                return StatusCode(500, new { error = "An error occurred while retrieving facet values" });
+            }
+        }
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("datasets")]
         public SearchResult Datasets([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)

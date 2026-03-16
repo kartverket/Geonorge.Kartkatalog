@@ -25,6 +25,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.IO;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -229,6 +230,13 @@ namespace Kartverket.Metadatakatalog
 
                     // Simple conflict resolution
                     c.ResolveConflictingActions(apiDescriptions => apiDescriptions.FirstOrDefault());
+                    
+                    // Include XML comments for better documentation
+                    var xmlFile = System.IO.Path.Combine(AppContext.BaseDirectory, "App_Data", "XmlDocument.xml");
+                    if (System.IO.File.Exists(xmlFile))
+                    {
+                        c.IncludeXmlComments(xmlFile);
+                    }
                     
                     System.Diagnostics.Debug.WriteLine("✅ Swagger generation configured");
                 });
