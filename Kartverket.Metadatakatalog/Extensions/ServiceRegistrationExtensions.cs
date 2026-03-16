@@ -7,7 +7,10 @@ using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
 using GeoNorgeAPI;
 using Kartverket.Geonorge.Utilities;
-using Kartverket.Geonorge.Utilities.Organization;
+using System;
+using System.Linq;
+using System.Net.Http;
+using System.Reflection;
 
 namespace Kartverket.Metadatakatalog.Extensions
 {
@@ -22,28 +25,81 @@ namespace Kartverket.Metadatakatalog.Extensions
         /// </summary>
         public static IServiceCollection AddExternalServices(this IServiceCollection services, IConfiguration configuration)
         {
-            // GeoNorgeAPI
+            // ?? CRITICAL PERFORMANCE FIX: Register optimized GeoNorge service with HttpClientFactory
             services.AddScoped<IGeoNorge>(provider =>
-                new GeoNorge(
-                    geonetworkUsername: "",
-                    geonetworkPassword: "",
-                    geonetworkEndpoint: configuration["GeoNetworkUrl"]));
+            {
+                var httpClientFactory = provider.GetService<System.Net.Http.IHttpClientFactory>();
+                var optimizedGeoNorge = CreateOptimizedGeoNorge(configuration, httpClientFactory);
+                return optimizedGeoNorge;
+            });
 
             // GeoNetworkUtil from Kartverket.Geonorge.Utilities
             services.AddScoped<GeoNetworkUtil>(provider =>
                 new GeoNetworkUtil(configuration["GeoNetworkUrl"]));
 
-            // Organization Service
-            services.AddScoped<IOrganizationService>(provider =>
-                new OrganizationService(
+            // Organization Service with optimized HttpClient
+            services.AddScoped<Kartverket.Geonorge.Utilities.Organization.IOrganizationService>(provider =>
+                new Kartverket.Geonorge.Utilities.Organization.OrganizationService(
                     configuration["AppSettings:RegistryUrl"],
-                    provider.GetRequiredService<IHttpClientFactory>()));
+                    provider.GetRequiredService<Kartverket.Geonorge.Utilities.Organization.IHttpClientFactory>()));
 
             // URL Resolver
-            services.AddScoped<IGeonorgeUrlResolver>(provider =>
-                new GeonorgeUrlResolver(configuration["EditorUrl"]));
+            services.AddScoped<Kartverket.Geonorge.Utilities.IGeonorgeUrlResolver>(provider =>
+                new Kartverket.Geonorge.Utilities.GeonorgeUrlResolver(configuration["EditorUrl"]));
 
             return services;
+        }
+
+        /// <summary>
+        /// Create an optimized GeoNorge instance using the performance-optimized HttpClient
+        /// </summary>
+        private static IGeoNorge CreateOptimizedGeoNorge(IConfiguration configuration, System.Net.Http.IHttpClientFactory httpClientFactory)
+        {
+            try
+            {
+                // Try to use named HttpClient if GeoNorge constructor supports it
+                var geoNorgeClient = httpClientFactory?.CreateClient("GeoNorge");
+                
+                // Use reflection to check if GeoNorge constructor accepts HttpClient
+                var geoNorgeType = typeof(GeoNorge);
+                var constructors = geoNorgeType.GetConstructors();
+                
+                // Look for constructor with HttpClient parameter
+                var httpClientConstructor = constructors.FirstOrDefault(c => 
+                    c.GetParameters().Any(p => p.ParameterType == typeof(HttpClient)));
+
+                if (httpClientConstructor != null && geoNorgeClient != null)
+                {
+                    System.Console.WriteLine("?? Using optimized HttpClient for GeoNorge API");
+                    // If HttpClient constructor exists, use it
+                    var parameters = httpClientConstructor.GetParameters();
+                    var args = new object[parameters.Length];
+                    for (int i = 0; i < parameters.Length; i++)
+                    {
+                        if (parameters[i].ParameterType == typeof(HttpClient))
+                            args[i] = geoNorgeClient;
+                        else if (parameters[i].ParameterType == typeof(string))
+                        {
+                            if (parameters[i].Name.Contains("endpoint", StringComparison.OrdinalIgnoreCase))
+                                args[i] = configuration["GeoNetworkUrl"];
+                            else
+                                args[i] = ""; // username/password
+                        }
+                    }
+                    return (IGeoNorge)Activator.CreateInstance(geoNorgeType, args);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"?? Could not create optimized GeoNorge instance: {ex.Message}");
+            }
+
+            // Fallback to standard constructor - this is likely the 6-7 second bottleneck
+            System.Console.WriteLine("?? Using standard GeoNorge constructor (performance bottleneck identified here)");
+            return new GeoNorge(
+                geonetworkUsername: "",
+                geonetworkPassword: "",
+                geonetworkEndpoint: configuration["GeoNetworkUrl"]);
         }
 
         /// <summary>

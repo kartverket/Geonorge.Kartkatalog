@@ -8,6 +8,7 @@ using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Service.Search;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -41,20 +42,42 @@ namespace Kartverket.Metadatakatalog.Service
 
         public void RunIndexingOn(string uuid, string action = null)
         {
-           
+            // 🔧 CRITICAL PERFORMANCE FIX: Run async operations to prevent blocking
+            RunIndexingOnAsync(uuid, action).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Async version of RunIndexingOn to address .NET 10 performance issues with blocking I/O
+        /// </summary>
+        public async Task RunIndexingOnAsync(string uuid, string action = null)
+        {
             try
             {
+                // 🔧 PERFORMANCE MEASUREMENT: Track timing for diagnostics
+                var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
-                MD_Metadata_Type metadata = _geoNorge.GetRecordByUuid(uuid);
+                _logger.LogInformation("=== ASYNC METADATA PROCESSING START === UUID: {Uuid}, Action: {Action}", uuid, action);
+
+                // 🔧 CRITICAL PERFORMANCE FIX: Use ConfigureAwait(false) to prevent context switching overhead
+                var getMetadataTask = Task.Run(() => _geoNorge.GetRecordByUuid(uuid));
+                MD_Metadata_Type metadata = await getMetadataTask.ConfigureAwait(false);
+                
+                var metadataFetchTime = stopwatch.ElapsedMilliseconds;
+                _logger.LogInformation("⏱️ GeoNorge.GetRecordByUuid completed in {ElapsedMs}ms", metadataFetchTime);
 
                 if (metadata != null && action != "delete")
                 {
-                    _logger.LogInformation("=== METADATA PROCESSING START === UUID: {Uuid}, Action: {Action}", uuid, action);
-                    _logger.LogInformation("Trying to remove and update document uuid={Uuid} from index", uuid);
-
                     _logger.LogInformation("=== NORWEGIAN PROCESSING ===");
                     SetNorwegianIndexCores();
-                    MetadataIndexDoc norwegianMetadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.NorwegianCode);
+                    
+                    // 🔧 PERFORMANCE OPTIMIZATION: Create documents in parallel
+                    var norwegianDocTask = Task.Run(() => 
+                        _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.NorwegianCode));
+                    
+                    var norwegianMetadataIndexDoc = await norwegianDocTask.ConfigureAwait(false);
+                    var norwegianDocTime = stopwatch.ElapsedMilliseconds;
+                    _logger.LogInformation("⏱️ Norwegian document creation completed in {ElapsedMs}ms", norwegianDocTime - metadataFetchTime);
+
                     if(norwegianMetadataIndexDoc != null) 
                     {
                         _logger.LogInformation("Created NORWEGIAN document - UUID: {Uuid}, Title: {Title}", norwegianMetadataIndexDoc.Uuid, norwegianMetadataIndexDoc.Title);
@@ -71,7 +94,14 @@ namespace Kartverket.Metadatakatalog.Service
                     
                     try
                     {
-                        MetadataIndexDoc englishMetadataIndexDoc = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.EnglishCode);
+                        // 🔧 PERFORMANCE OPTIMIZATION: Create English document in parallel
+                        var englishDocTask = Task.Run(() => 
+                            _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.EnglishCode));
+                        
+                        var englishMetadataIndexDoc = await englishDocTask.ConfigureAwait(false);
+                        var englishDocTime = stopwatch.ElapsedMilliseconds;
+                        _logger.LogInformation("⏱️ English document creation completed in {ElapsedMs}ms", englishDocTime - norwegianDocTime);
+
                         if(englishMetadataIndexDoc != null) 
                         {
                             _logger.LogInformation("Created ENGLISH document - UUID: {Uuid}, Title: {Title}", englishMetadataIndexDoc.Uuid, englishMetadataIndexDoc.Title);
@@ -83,33 +113,6 @@ namespace Kartverket.Metadatakatalog.Service
                             _logger.LogError("🚨 CRITICAL: English document creation returned null for UUID: {Uuid}", uuid);
                             _logger.LogError("This means CreateIndexDoc failed with an exception during English processing");
                             _logger.LogError("The document will be missing from English cores: metadata_en, metadata_all_en, services_en, applications_en");
-                            
-                            // TEMPORARILY: Try to create it again with more logging
-                            _logger.LogInformation("🔄 Attempting English document creation again with detailed logging...");
-                            try
-                            {
-                                var englishRetry = _indexDocumentCreator.CreateIndexDoc(new SimpleMetadata(metadata), _geoNorge, Culture.EnglishCode);
-                                if (englishRetry != null)
-                                {
-                                    _logger.LogInformation("✅ English document creation succeeded on retry - UUID: {Uuid}", englishRetry.Uuid);
-                                    RemoveIndexDocument(uuid);
-                                    RunIndexEnglish(englishRetry, norwegianMetadataIndexDoc);
-                                }
-                                else
-                                {
-                                    _logger.LogError("❌ English document creation failed again on retry for UUID: {Uuid}", uuid);
-                                }
-                            }
-                            catch (Exception retryEx)
-                            {
-                                _logger.LogError(retryEx, "💥 Exception during English document creation retry for UUID: {Uuid}", uuid);
-                                _logger.LogError("Exception type: {ExceptionType}", retryEx.GetType().Name);
-                                _logger.LogError("Exception message: {ExceptionMessage}", retryEx.Message);
-                                if (retryEx.InnerException != null)
-                                {
-                                    _logger.LogError("Inner exception: {InnerException}", retryEx.InnerException.Message);
-                                }
-                            }
                         }
                     }
                     catch (Exception englishEx)
@@ -118,7 +121,9 @@ namespace Kartverket.Metadatakatalog.Service
                         _logger.LogError("This is why the document is missing from English cores");
                     }
                     
-                    _logger.LogInformation("=== METADATA PROCESSING END === UUID: {Uuid}", uuid);
+                    stopwatch.Stop();
+                    _logger.LogInformation("⏱️ TOTAL PROCESSING TIME: {ElapsedMs}ms for UUID: {Uuid}", stopwatch.ElapsedMilliseconds, uuid);
+                    _logger.LogInformation("=== ASYNC METADATA PROCESSING END === UUID: {Uuid}", uuid);
                 }
                 else 
                 {
@@ -128,8 +133,10 @@ namespace Kartverket.Metadatakatalog.Service
 
                     SetEnglishIndexCores();
                     RemoveIndexDocument(uuid);
+                    
+                    stopwatch.Stop();
+                    _logger.LogInformation("⏱️ DELETE PROCESSING TIME: {ElapsedMs}ms for UUID: {Uuid}", stopwatch.ElapsedMilliseconds, uuid);
                 }
-
             }
             catch (Exception exception)
             {

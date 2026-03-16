@@ -207,6 +207,11 @@
             Register external API services
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Extensions.ServiceRegistrationExtensions.CreateOptimizedGeoNorge(Microsoft.Extensions.Configuration.IConfiguration,System.Net.Http.IHttpClientFactory)">
+            <summary>
+            Create an optimized GeoNorge instance using the performance-optimized HttpClient
+            </summary>
+        </member>
         <!-- Badly formed XML comment ignored for member "M:Kartverket.Metadatakatalog.Extensions.ServiceRegistrationExtensions.AddKartverketApplicationServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)" -->
         <member name="M:Kartverket.Metadatakatalog.Extensions.ServiceRegistrationExtensions.AddIndexingServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
@@ -663,6 +668,26 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Program.PrewarmWindsorContainer">
+            <summary>
+            Pre-warm Castle Windsor container to prevent first-time JIT compilation delays
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Program.WarmupSolrOperations">
+            <summary>
+            Warm up SolrNet operations to prevent first-call delays
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Program.ConfigureHttpPerformanceSettings">
+            <summary>
+            Configure HTTP performance settings to address .NET 10 vs .NET Framework 4.8 performance differences
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Program.ConfigureSolrNetHttpClient(Castle.Facilities.SolrNetIntegration.SolrNetFacility)">
+            <summary>
+            Configure SolrNet to use optimized HTTP client settings
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Service.MetadataService.CreateDistributionRows(System.String,GeoNorgeAPI.SimpleMetadata)">
             <summary>
             Add rows for each distribution url. Update row if it's the same url.
@@ -692,6 +717,16 @@
             <param name="jsonKeyFilePath">Path to your JSON Key file</param>  
             <param name="scopes">Scopes required in access token</param>  
             <returns>Access token as string</returns>  
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Service.SolrIndexDocumentCreator.ProcessRelatedServiceAsync(GeoNorgeAPI.IGeoNorge,System.String)">
+            <summary>
+            Process a single related service asynchronously to enable parallel processing
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Service.SolrMetadataIndexer.RunIndexingOnAsync(System.String,System.String)">
+            <summary>
+            Async version of RunIndexingOn to address .NET 10 performance issues with blocking I/O
+            </summary>
         </member>
         <member name="T:Kartverket.Metadatakatalog.Services.Authentication.GeonorgeAuthenticationService">
             <summary>
@@ -778,6 +813,11 @@
         <member name="M:Kartverket.Metadatakatalog.Services.Authentication.IGeonorgeAuthenticationService.IsGeonorgeAuthenticated(System.Security.Claims.ClaimsPrincipal)">
             <summary>
             Check if user is authenticated for Geonorge
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Startup.ConfigureSocketPerformance">
+            <summary>
+            Configure socket-level performance settings to address .NET 10 vs .NET Framework 4.8 performance differences
             </summary>
         </member>
         <member name="T:AreaType">

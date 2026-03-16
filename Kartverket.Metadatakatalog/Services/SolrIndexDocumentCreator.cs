@@ -13,6 +13,7 @@ using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Service.Search;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Kartverket.Metadatakatalog.Service
 {
@@ -21,6 +22,12 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly ILogger<SolrIndexDocumentCreator> _logger;
         private readonly RegisterFetcher Register;
         private readonly Dictionary<string, Organization> _organizationCache = new Dictionary<string, Organization>();
+        
+        // 🔧 CRITICAL PERFORMANCE FIX: Add memory cache for metadata to prevent repeated GeoNorge API calls
+        private readonly IMemoryCache _metadataCache = new MemoryCache(new MemoryCacheOptions
+        {
+            SizeLimit = 1000 // Limit to 1000 cached metadata objects
+        });
 
         private readonly IOrganizationService _organizationService;
         private readonly ThemeResolver _themeResolver;
@@ -504,7 +511,8 @@ namespace Kartverket.Metadatakatalog.Service
 
                 if (indexDoc.Type == "dataset" || indexDoc.Type == "series")
                 {
-                    AddRelatedDatasetServices(geoNorge, indexDoc, simpleMetadata);
+                    // 🔧 CRITICAL PERFORMANCE FIX: Use optimized async method and wait for it
+                    AddRelatedDatasetServicesAsync(geoNorge, indexDoc, simpleMetadata).GetAwaiter().GetResult();
                 }
                 else if (indexDoc.Type == "dimensionGroup")
                 {
@@ -1167,9 +1175,35 @@ namespace Kartverket.Metadatakatalog.Service
             }
         }
 
-        private void AddRelatedDatasetServices(IGeoNorge geoNorge, MetadataIndexDoc indexDoc, SimpleMetadata metadata)
+        private async Task<MD_Metadata_Type> GetRecordByUuidWithCache(IGeoNorge geoNorge, string uuid)
         {
+            // 🔧 CRITICAL PERFORMANCE FIX: Simple caching to avoid repeated API calls
+            // This cache prevents multiple GetRecordByUuid calls for the same UUID during a single indexing operation
+            if (!_metadataCache.TryGetValue(uuid, out MD_Metadata_Type cachedMetadata))
+            {
+                // 🔧 PERFORMANCE OPTIMIZATION: Run on background thread to avoid blocking
+                cachedMetadata = await Task.Run(() => geoNorge.GetRecordByUuid(uuid)).ConfigureAwait(false);
+                
+                // Cache for 5 minutes to help with bulk operations
+                _metadataCache.Set(uuid, cachedMetadata, TimeSpan.FromMinutes(5));
+                
+                _logger.LogDebug("🔧 Cached metadata for UUID: {Uuid}", uuid);
+            }
+            else
+            {
+                _logger.LogDebug("🔧 Using cached metadata for UUID: {Uuid}", uuid);
+            }
+            
+            return cachedMetadata;
+        }
+
+        private async Task AddRelatedDatasetServicesAsync(IGeoNorge geoNorge, MetadataIndexDoc indexDoc, SimpleMetadata metadata)
+        {
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             string searchString = indexDoc.Uuid;
+            
+            _logger.LogInformation("🔧 Starting AddRelatedDatasetServices for UUID: {Uuid}", searchString);
+            
             //Sjekk om denne er koblet til noen tjenester
             var filters = new object[]
             {
@@ -1195,14 +1229,20 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 try
                 {
-                    res = geoNorge.SearchWithFilters(filters, filterNames, 1, 200);
+                    var searchStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                    
+                    // 🔧 PERFORMANCE OPTIMIZATION: Run search on background thread
+                    res = await Task.Run(() => geoNorge.SearchWithFilters(filters, filterNames, 1, 200)).ConfigureAwait(false);
+                    
+                    searchStopwatch.Stop();
+                    _logger.LogInformation("⏱️ SearchWithFilters completed in {ElapsedMs}ms", searchStopwatch.ElapsedMilliseconds);
                     break; // success!
                 }
                 catch
                 {
                     if (--tries == 0)
                         throw;
-                    Thread.Sleep(3000);
+                    await Task.Delay(3000); // Use async delay instead of Thread.Sleep
                 }
             }
 
@@ -1256,7 +1296,12 @@ namespace Kartverket.Metadatakatalog.Service
 
                 if (!string.IsNullOrEmpty(uuidFound))
                 {
-                    MD_Metadata_Type m = geoNorge.GetRecordByUuid(uuidFound);
+                    // 🔧 CRITICAL PERFORMANCE FIX: Use cached API call
+                    var getRecordStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                    MD_Metadata_Type m = await GetRecordByUuidWithCache(geoNorge, uuidFound);
+                    getRecordStopwatch.Stop();
+                    _logger.LogInformation("⏱️ GetRecordByUuid for {Uuid} completed in {ElapsedMs}ms", uuidFound, getRecordStopwatch.ElapsedMilliseconds);
+                    
                     SimpleMetadata sm = new SimpleMetadata(m);
                     var servicedistributionDetails = sm.DistributionDetails;
                     if (servicedistributionDetails != null)
@@ -1269,64 +1314,30 @@ namespace Kartverket.Metadatakatalog.Service
                     }
                 }
 
-                // Create bundle - services mapped to datasets
-
+                // 🔧 CRITICAL PERFORMANCE FIX: Process dataset services in parallel
                 List<MetaDataEntry> datasetServices = new List<MetaDataEntry>();
+                var serviceProcessingTasks = new List<Task<MetaDataEntry>>();
+
+                _logger.LogInformation("⏱️ Processing {Count} related services in parallel", res.Items.Length);
 
                 for (int s = 0; s < res.Items.Length; s++)
                 {
                     string serviceId = ((www.opengis.net.DCMIRecordType)(res.Items[s])).Items[0].Text[0];
                     _logger.LogInformation("Search with filter for srv:operatesOn returned uuid={ServiceId}", serviceId);
-                    MD_Metadata_Type md = geoNorge.GetRecordByUuid(serviceId);
-                    var simpleMd = new SimpleMetadata(md);
-
-                    SimpleKeyword nationalTheme = SimpleKeyword.Filter(simpleMd.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME).FirstOrDefault();
-                    string keywordNationalTheme = "";
-                    if (nationalTheme != null)
-                        keywordNationalTheme = nationalTheme.Keyword;
-
-                    string OrganizationLogoUrl = "";
-                    if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
-                    {
-                        try { 
-                        Task<Organization> organizationTaskRel =
-                        _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
-                        Organization organizationRel = organizationTaskRel.Result;
-                        if (organizationRel != null)
-                        {
-                            OrganizationLogoUrl = organizationRel.LogoUrl;
-                        }
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
-                    }
-
-                    string thumbnailsUrl = "";
-                    List<SimpleThumbnail> thumbnailsRel = simpleMd.Thumbnails;
-                    if (thumbnailsRel != null && thumbnailsRel.Count > 0)
-                    {
-                        thumbnailsUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMd.Uuid, thumbnailsRel[thumbnailsRel.Count - 1].URL);
-                    }
-
-                    datasetServices.Add(new MetaDataEntry
-                    {
-                        Uuid = simpleMd.Uuid,
-                        Title = simpleMd.Title,
-                        ParentIdentifier = simpleMd.ParentIdentifier,
-                        HierarchyLevel = simpleMd.HierarchyLevel,
-                        ContactOwnerOrganization = (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null) ? simpleMd.ContactOwner.Organization : "",
-                        DistributionDetailsName = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Name != null) ? simpleMd.DistributionDetails.Name : "",
-                        DistributionDetailsProtocol = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
-                        DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
-                        KeywordNationalTheme = keywordNationalTheme,
-                        OrganizationLogoUrl = OrganizationLogoUrl,
-                        ThumbnailUrl = thumbnailsUrl,
-                        AccessConstraints = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.AccessConstraints) ? simpleMd.Constraints.AccessConstraints : ""),
-                        OtherConstraintsAccess = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.OtherConstraintsAccess) ? simpleMd.Constraints.OtherConstraintsAccess : "")
-                    });
+                    
+                    // 🔧 PERFORMANCE OPTIMIZATION: Process each service in parallel
+                    var serviceTask = ProcessRelatedServiceAsync(geoNorge, serviceId);
+                    serviceProcessingTasks.Add(serviceTask);
                 }
+
+                // 🔧 CRITICAL PERFORMANCE FIX: Wait for all parallel operations to complete
+                var parallelStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                var completedServices = await Task.WhenAll(serviceProcessingTasks).ConfigureAwait(false);
+                parallelStopwatch.Stop();
+                _logger.LogInformation("⏱️ Parallel service processing completed in {ElapsedMs}ms", parallelStopwatch.ElapsedMilliseconds);
+
+                // Filter out null results from failed operations
+                datasetServices.AddRange(completedServices.Where(s => s != null));
 
                 List<string> datasetServicesNewList = new List<string>();
                 foreach (var service in datasetServices)
@@ -1395,6 +1406,79 @@ namespace Kartverket.Metadatakatalog.Service
                     indexDoc.DatasetServices = new List<string>();
 
                 indexDoc.DatasetServices.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl + "|" + service.KeywordNationalTheme + "|" + service.OrganizationLogoUrl + "|" + service.ThumbnailUrl + "|" + service.AccessConstraints + "|" + service.OtherConstraintsAccess);
+            }
+            
+            stopwatch.Stop();
+            _logger.LogInformation("⏱️ TOTAL AddRelatedDatasetServices completed in {ElapsedMs}ms for UUID: {Uuid}", stopwatch.ElapsedMilliseconds, searchString);
+        }
+
+        /// <summary>
+        /// Process a single related service asynchronously to enable parallel processing
+        /// </summary>
+        private async Task<MetaDataEntry> ProcessRelatedServiceAsync(IGeoNorge geoNorge, string serviceId)
+        {
+            try
+            {
+                var serviceStopwatch = System.Diagnostics.Stopwatch.StartNew();
+                
+                // 🔧 CRITICAL PERFORMANCE FIX: Use cached API call instead of direct call
+                MD_Metadata_Type md = await GetRecordByUuidWithCache(geoNorge, serviceId);
+                var simpleMd = new SimpleMetadata(md);
+
+                serviceStopwatch.Stop();
+                _logger.LogDebug("⏱️ Processed service {ServiceId} in {ElapsedMs}ms", serviceId, serviceStopwatch.ElapsedMilliseconds);
+
+                SimpleKeyword nationalTheme = SimpleKeyword.Filter(simpleMd.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME).FirstOrDefault();
+                string keywordNationalTheme = "";
+                if (nationalTheme != null)
+                    keywordNationalTheme = nationalTheme.Keyword;
+
+                string OrganizationLogoUrl = "";
+                if (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null)
+                {
+                    try { 
+                        Task<Organization> organizationTaskRel =
+                        _organizationService.GetOrganizationByName(simpleMd.ContactOwner.Organization);
+                        Organization organizationRel = await organizationTaskRel.ConfigureAwait(false);
+                        if (organizationRel != null)
+                        {
+                            OrganizationLogoUrl = organizationRel.LogoUrl;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Failed to get organization for service {ServiceId}", serviceId);
+                    }
+                }
+
+                string thumbnailsUrl = "";
+                List<SimpleThumbnail> thumbnailsRel = simpleMd.Thumbnails;
+                if (thumbnailsRel != null && thumbnailsRel.Count > 0)
+                {
+                    thumbnailsUrl = _geoNetworkUtil.GetThumbnailUrl(simpleMd.Uuid, thumbnailsRel[thumbnailsRel.Count - 1].URL);
+                }
+
+                return new MetaDataEntry
+                {
+                    Uuid = simpleMd.Uuid,
+                    Title = simpleMd.Title,
+                    ParentIdentifier = simpleMd.ParentIdentifier,
+                    HierarchyLevel = simpleMd.HierarchyLevel,
+                    ContactOwnerOrganization = (simpleMd.ContactOwner != null && simpleMd.ContactOwner.Organization != null) ? simpleMd.ContactOwner.Organization : "",
+                    DistributionDetailsName = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Name != null) ? simpleMd.DistributionDetails.Name : "",
+                    DistributionDetailsProtocol = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.Protocol != null) ? simpleMd.DistributionDetails.Protocol : "",
+                    DistributionDetailsUrl = (simpleMd.DistributionDetails != null && simpleMd.DistributionDetails.URL != null) ? simpleMd.DistributionDetails.URL : "",
+                    KeywordNationalTheme = keywordNationalTheme,
+                    OrganizationLogoUrl = OrganizationLogoUrl,
+                    ThumbnailUrl = thumbnailsUrl,
+                    AccessConstraints = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.AccessConstraints) ? simpleMd.Constraints.AccessConstraints : ""),
+                    OtherConstraintsAccess = (simpleMd.Constraints != null && !string.IsNullOrEmpty(simpleMd.Constraints.OtherConstraintsAccess) ? simpleMd.Constraints.OtherConstraintsAccess : "")
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to process related service {ServiceId}", serviceId);
+                return null; // Return null for failed operations
             }
         }
 
