@@ -47,24 +47,14 @@ namespace Kartverket.Metadatakatalog
                 // Add Memory Cache
                 services.AddMemoryCache();
 
-                // Temporarily comment out AddGeonorgeAuthentication to isolate startup issues
-                // services.AddGeonorgeAuthentication(Configuration);
+                // Add Razor Pages first (primary framework for this project)
+                services.AddRazorPages();
 
-                // Register Basic Authentication scheme for API controllers  
-                services.AddAuthentication("Cookies")
-                    .AddCookie("Cookies")
-                    .AddScheme<Microsoft.AspNetCore.Authentication.AuthenticationSchemeOptions, Kartverket.Metadatakatalog.Authentication.BasicAuthenticationHandler>(
-                        "BasicAuthentication", 
-                        options => { });
-
-                // Add services to the container.
-                services.AddControllersWithViews();
-
-                // Add API controllers
+                // Add API controllers for REST endpoints
                 services.AddControllers();
 
-                // Add Razor Pages
-                services.AddRazorPages();
+                // Enable Geonorge Authentication (includes OpenIdConnect)
+                services.AddGeonorgeAuthentication(Configuration);
 
                 // Add simplified authorization policies
                 services.AddAuthorization();
@@ -142,12 +132,12 @@ namespace Kartverket.Metadatakatalog
                 // Add CORS services
                 services.AddCors();
 
-                // Add Swagger/OpenAPI services
-                services.AddEndpointsApiExplorer(); // Required for minimal APIs and better OpenAPI support
+                // Add Swagger/OpenAPI services with simplified configuration
+                services.AddEndpointsApiExplorer();
                 
                 services.AddSwaggerGen(c =>
                 {
-                    // Configure OpenAPI document
+                    // Simple OpenAPI document configuration
                     c.SwaggerDoc("v1", new()
                     {
                         Title = "Kartverket Metadata Catalog API",
@@ -155,40 +145,15 @@ namespace Kartverket.Metadatakatalog
                         Description = "API for managing metadata in the Kartverket metadata catalog"
                     });
 
-                    // Add more robust error handling for action discovery
+                    // Only include controllers with [ApiController] attribute to avoid conflicts
                     c.DocInclusionPredicate((name, api) => 
                     {
-                        try
-                        {
-                            // Skip actions with custom model binders that cause problems
-                            var parameters = api.ParameterDescriptions;
-                            foreach (var param in parameters)
-                            {
-                                if (param.ModelMetadata?.BindingSource?.Id == "ModelBinding" ||
-                                    param.Source?.Id == "ModelBinding")
-                                {
-                                    System.Diagnostics.Debug.WriteLine($"⚠️ Excluding API action due to custom model binder: {api.ActionDescriptor.DisplayName}");
-                                    return false;
-                                }
-                            }
-                            return true;
-                        }
-                        catch (Exception ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine($"❌ Error checking API action: {ex.Message}");
-                            return false; // Exclude problematic actions
-                        }
+                        return api.ActionDescriptor.EndpointMetadata
+                            .Any(x => x is Microsoft.AspNetCore.Mvc.ApiControllerAttribute);
                     });
 
-                    // Handle ambiguous actions by selecting the first one
-                    c.ResolveConflictingActions(apiDescriptions =>
-                    {
-                        return apiDescriptions.FirstOrDefault();
-                    });
-
-                    // Ignore obsolete actions and properties
-                    c.IgnoreObsoleteActions();
-                    c.IgnoreObsoleteProperties();
+                    // Simple conflict resolution
+                    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.FirstOrDefault());
                     
                     System.Diagnostics.Debug.WriteLine("✅ Swagger generation configured");
                 });
@@ -297,23 +262,28 @@ namespace Kartverket.Metadatakatalog
 
                 app.UseEndpoints(endpoints =>
                 {
-                    // Add a specific route for Norwegian "nedlasting" to map to Download controller
-                    endpoints.MapControllerRoute(
-                        name: "nedlasting",
-                        pattern: "nedlasting/{action=Index}/{id?}",
-                        defaults: new { controller = "Download" });
-                        
-                    // Add a specific route for the root to Download
+                    // Map Razor Pages first (primary routing for this project)
+                    endpoints.MapRazorPages();
+                    
+                    // Add root route to redirect to Download controller
                     endpoints.MapControllerRoute(
                         name: "root",
                         pattern: "",
                         defaults: new { controller = "Download", action = "Index" });
-                        
+                    
+                    // Add specific route for Norwegian "nedlasting" to map to Download controller
+                    endpoints.MapControllerRoute(
+                        name: "nedlasting",
+                        pattern: "nedlasting/{action=Index}/{id?}",
+                        defaults: new { controller = "Download" });
+                    
+                    // Add general controller route for MVC controllers like SearchController
                     endpoints.MapControllerRoute(
                         name: "default",
                         pattern: "{controller=Download}/{action=Index}/{id?}");
+                    
+                    // Map API controllers for REST endpoints
                     endpoints.MapControllers();
-                    endpoints.MapRazorPages();
                 });
 
                 System.Diagnostics.Debug.WriteLine("✅ Configure method completed successfully");
