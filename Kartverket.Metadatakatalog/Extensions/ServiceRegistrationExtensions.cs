@@ -40,7 +40,7 @@ namespace Kartverket.Metadatakatalog.Extensions
             // Organization Service with optimized HttpClient
             services.AddScoped<Kartverket.Geonorge.Utilities.Organization.IOrganizationService>(provider =>
                 new Kartverket.Geonorge.Utilities.Organization.OrganizationService(
-                    configuration["AppSettings:RegistryUrl"],
+                    configuration["RegistryUrl"],
                     provider.GetRequiredService<Kartverket.Geonorge.Utilities.Organization.IHttpClientFactory>()));
 
             // URL Resolver

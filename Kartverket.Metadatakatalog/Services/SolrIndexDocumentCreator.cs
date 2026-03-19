@@ -263,7 +263,7 @@ namespace Kartverket.Metadatakatalog.Service
                         }
                         catch (Exception ex)
                         {
-                            
+                            _logger.LogError(ex, "Exception while fetching organization: {OrganizationName}", simpleMetadata.ContactOwner.Organization);
                         }
                     }
                     if (organization != null)

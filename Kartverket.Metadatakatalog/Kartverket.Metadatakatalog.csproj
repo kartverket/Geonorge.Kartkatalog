@@ -371,7 +371,7 @@
     <PackageReference Include="Google.Apis.Core" Version="1.68.0" />
     <PackageReference Include="jQuery" Version="3.7.0" />
     <PackageReference Include="jQuery.Validation" Version="1.19.5" />
-    <PackageReference Include="Kartverket.Geonorge.Utilities" Version="1.0.64" />
+    <PackageReference Include="Kartverket.Geonorge.Utilities" Version="2.0.0" />
     <PackageReference Include="log4net" Version="2.0.17" />
     
     <!-- Remove legacy ASP.NET Web API packages - replaced by ASP.NET Core -->
