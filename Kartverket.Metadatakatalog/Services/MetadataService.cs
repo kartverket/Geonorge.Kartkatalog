@@ -145,6 +145,52 @@ namespace Kartverket.Metadatakatalog.Service
 
                     // Tjenester
                     metadata.Distributions.RelatedServices = ConvertRelatedData(serviceIndexDoc.ServiceLayers);
+
+                    // If this service is a servicelayer and is linked to a parent service, include parent's distributions
+                    try
+                    {
+                        var simpleMeta = GetSimpleMetadataByUuid(metadata.Uuid);
+                        var parentId = simpleMeta?.ParentIdentifier;
+                        if (!string.IsNullOrEmpty(parentId))
+                        {
+                            var parentSimple = GetSimpleMetadataByUuid(parentId);
+                            if (parentSimple != null && parentSimple.DistributionsFormats != null && parentSimple.DistributionsFormats.Any())
+                            {
+                                var parentRows = CreateDistributionRows(parentId, parentSimple);
+                                foreach (var kv in parentRows)
+                                {
+                                    var parentDist = kv.Value;
+                                    var protocol = kv.Key.Protocol;
+
+                                    // View services
+                                    if (protocol == "OGC:WMS" || protocol == "OGC:WMTS" || protocol == "WMS-C")
+                                    {
+                                        if (metadata.Distributions.RelatedViewServices == null)
+                                            metadata.Distributions.RelatedViewServices = new List<Distribution>();
+                                        metadata.Distributions.RelatedViewServices.Add(parentDist);
+                                    }
+                                    // Download services
+                                    else if (protocol == "OGC:WFS" || protocol == "OGC:WCS" || protocol == "W3C:REST" || protocol == "W3C:WS" || protocol == "W3C:AtomFeed" || (!string.IsNullOrEmpty(protocol) && protocol.StartsWith("OGC:API")))
+                                    {
+                                        if (metadata.Distributions.RelatedDownloadServices == null)
+                                            metadata.Distributions.RelatedDownloadServices = new List<Distribution>();
+                                        metadata.Distributions.RelatedDownloadServices.Add(parentDist);
+                                    }
+                                    else
+                                    {
+                                        if (metadata.Distributions.RelatedServices == null)
+                                            metadata.Distributions.RelatedServices = new List<Distribution>();
+                                        metadata.Distributions.RelatedServices.Add(parentDist);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Don't block main flow if lookup fails
+                        _searchParametersLogger?.LogDebug(ex, "Failed to include parent distributions for servicelayer {Uuid}", metadata.Uuid);
+                    }
                 }
                 else
                 {
