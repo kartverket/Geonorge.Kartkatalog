@@ -206,7 +206,7 @@ namespace Kartverket.Metadatakatalog
                 services.AddHttpClient<Kartverket.Metadatakatalog.Service.PlaceResolver>();
 
                 // Add CORS services
-                services.AddCors();
+                services.AddCors(options => options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
                 // Add Swagger/OpenAPI services with simplified configuration
                 services.AddEndpointsApiExplorer();
