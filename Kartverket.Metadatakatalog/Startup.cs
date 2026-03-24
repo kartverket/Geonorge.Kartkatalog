@@ -1,4 +1,4 @@
-﻿using GeoNorgeAPI;
+using GeoNorgeAPI;
 using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Extensions;
@@ -53,7 +53,14 @@ namespace Kartverket.Metadatakatalog
                 services.AddRazorPages();
 
                 // Add API controllers for REST endpoints
-                services.AddControllers();
+                services.AddControllers()
+                    .AddJsonOptions(opts =>
+                    {
+                        // Preserve exact property names (no camel-casing)
+                        opts.JsonSerializerOptions.PropertyNamingPolicy = null;
+                        // optional: control other options
+                        // opts.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+                    });
 
                 // Enable Geonorge Authentication (includes OpenIdConnect)
                 services.AddGeonorgeAuthentication(Configuration);
