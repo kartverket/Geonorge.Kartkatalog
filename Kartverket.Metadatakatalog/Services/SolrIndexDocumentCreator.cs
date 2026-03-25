@@ -1194,7 +1194,13 @@ namespace Kartverket.Metadatakatalog.Service
                 cachedMetadata = await Task.Run(() => geoNorge.GetRecordByUuid(uuid)).ConfigureAwait(false);
                 
                 // Cache for 5 minutes to help with bulk operations
-                _metadataCache.Set(uuid, cachedMetadata, TimeSpan.FromMinutes(5));
+                // When a MemoryCache is created with SizeLimit, each entry must specify a Size.
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                    Size = 1
+                };
+                _metadataCache.Set(uuid, cachedMetadata, cacheEntryOptions);
                 
                 _logger.LogDebug("🔧 Cached metadata for UUID: {Uuid}", uuid);
             }
