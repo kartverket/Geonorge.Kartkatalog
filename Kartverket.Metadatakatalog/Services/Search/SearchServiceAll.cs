@@ -17,11 +17,13 @@ namespace Kartverket.Metadatakatalog.Service.Search
         private readonly ILogger<SearchServiceAll> _logger;
         private readonly IOrganizationService _organizationService;
         private readonly ISolrOperations<MetadataIndexAllDoc> _solrInstance;
+        private readonly ISolrOperationsFactory _solrFactory;
 
-        public SearchServiceAll(IOrganizationService organizationService, ISolrOperations<MetadataIndexAllDoc> solrInstance, ILogger<SearchServiceAll> logger)
+        public SearchServiceAll(IOrganizationService organizationService, ISolrOperations<MetadataIndexAllDoc> solrInstance, ISolrOperationsFactory solrFactory, ILogger<SearchServiceAll> logger)
         {
             _organizationService = organizationService;
             _solrInstance = solrInstance;
+            _solrFactory = solrFactory;
             _logger = logger;
         }
 
@@ -30,7 +32,31 @@ namespace Kartverket.Metadatakatalog.Service.Search
             ISolrQuery query = parameters.BuildQuery();
             try
             {
-                SolrQueryResults<MetadataIndexAllDoc> queryResults = _solrInstance.Query(query, new QueryOptions
+                // Select core based on current culture (append _en for English)
+                var coreId = Kartverket.Metadatakatalog.Helpers.CultureHelper.GetIndexCore(Kartverket.Metadatakatalog.Service.SolrCores.MetadataAll);
+                ISolrOperations<MetadataIndexAllDoc> solrToUse = _solrInstance;
+                try
+                {
+                    if (_solrFactory != null && !string.IsNullOrEmpty(coreId))
+                    {
+                        var ops = _solrFactory.GetOperations<MetadataIndexAllDoc>(coreId);
+                        if (ops != null)
+                        {
+                            solrToUse = ops;
+                            _logger.LogDebug("Using Solr core {CoreId} for search", coreId);
+                        }
+                        else
+                        {
+                            _logger.LogDebug("Solr factory returned null for core {CoreId}, falling back to default core", coreId);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Failed to get Solr operations for core {CoreId}, using default", coreId);
+                }
+
+                SolrQueryResults<MetadataIndexAllDoc> queryResults = solrToUse.Query(query, new QueryOptions
                 {
                     //WMS lag skal få redusert sin boost
                     FilterQueries = parameters.BuildFilterQueries(),
