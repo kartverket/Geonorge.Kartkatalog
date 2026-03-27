@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Kartverket.Metadatakatalog.Models.Api;
 using Microsoft.Extensions.Configuration;
-using System.Device.Location;
+using GeoCoordinatePortable;
 using System.Web;
 using Resources;
 using System.Text;
