@@ -170,3 +170,7 @@ $RECYCLE.BIN/
 node_modules/
 
 Kartverket.Metadatakatalog/wwwroot/sitemap/sitemap.xml
+
+.env
+key.json
+application_default_credentials.json

@@ -1,0 +1,116 @@
+name: ImageBuild
+
+on:
+  push:
+    branches:
+      - upgrade-to-NET10
+  workflow_dispatch:
+
+env:
+  DOCKER_REGISTRY: ghcr.io
+  NAME: kartverket/geonorge-kartkatalog-backend
+
+jobs:
+  build_image:
+    name: Build image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      actions: read
+      id-token: write
+
+    outputs:
+      version: ${{ steps.set_output.outputs.version }}
+      tags: ${{ steps.meta.outputs.tags }}
+      short_tag: ${{ steps.short_tag.outputs.value }}
+      commit_message: ${{ steps.get_commit_message.outputs.backend_commit_message }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Extract the latest commit message from the current repo
+      - name: Get commit message
+        id: get_commit_message
+        run: |
+          {
+            echo 'backend_commit_message<<EOF'
+            git log -1 --pretty=%B
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_REGISTRY }}/${{ env.NAME }}
+          tags: |
+            type=ref,event=branch
+            type=sha,format=short
+
+      - name: Compute short tag
+        id: short_tag
+        run: echo "value=sha-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Build docker image and push
+        id: build_image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./
+          file: ./Kartverket.Metadatakatalog/Dockerfile
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          push: true
+
+      - name: Summarize image digest and set output
+        id: set_output
+        run: |
+          echo "Tags: ${{ steps.meta.outputs.tags }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Digest: ${{ steps.build_image.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "version=${{ github.ref_name }}@${{ steps.build_image.outputs.digest }}" >> "$GITHUB_OUTPUT"
+
+  # trigger_internal:
+  #   needs: [build_image]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Trigger internal repo workflow
+  #       env:
+  #         INTERNAL_PAT: ${{ secrets.INTERNAL_PAT }}
+  #         SHORT_TAG: ${{ needs.build_image.outputs.short_tag }}
+  #         COMMIT_MESSAGE: ${{ needs.build_image.outputs.commit_message }}
+  #       run: |
+  #         payload="$(jq -n \
+  #           --arg ref "main" \
+  #           --arg application "kartkatalog-backend" \
+  #           --arg ghcr_path "ghcr.io/kartverket/geonorge-kartkatalog-backend" \
+  #           --arg dev_env "atgcp1" \
+  #           --arg namespace "geonorge-kartkatalog-dev" \
+  #           --arg tag "$SHORT_TAG" \
+  #           --arg commit_message "$COMMIT_MESSAGE" \
+  #           '{
+  #             ref: $ref,
+  #             inputs: {
+  #               application: $application,
+  #               ghcr_path: $ghcr_path,
+  #               dev_env: $dev_env,
+  #               namespace: $namespace,
+  #               tag: $tag,
+  #               commit_message: $commit_message
+  #             }
+  #           }'
+  #         )"
+
+  #         curl -X POST \
+  #           -H "Accept: application/vnd.github+json" \
+  #           -H "Authorization: Bearer $INTERNAL_PAT" \
+  #           -H "X-GitHub-Api-Version: 2022-11-28" \
+  #           https://api.github.com/repos/kartverket/geonorge-apps/actions/workflows/release-new-dev-public.yml/dispatches \
+  #           -d "$payload"

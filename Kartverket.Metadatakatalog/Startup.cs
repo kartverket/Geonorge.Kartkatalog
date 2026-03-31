@@ -326,7 +326,7 @@ namespace Kartverket.Metadatakatalog
                 }
 
                 app.UseHttpsRedirection();
-                
+
                 // Add Response Compression (replaces custom CompressFilter)
                 app.UseResponseCompression();
                 
