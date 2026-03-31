@@ -1099,6 +1099,35 @@ namespace Kartverket.Metadatakatalog.Service
 
             distribution.DataAccess = SimpleMetadataUtil.GetDataAccess(simpleMetadata, Culture);
 
+            // Set thumbnail url based on precedence: miniatyrbilde, medium, original
+            try
+            {
+                if (simpleMetadata.Thumbnails != null && simpleMetadata.Thumbnails.Any())
+                {
+                    var precedence = new[] { "miniatyrbilde", "medium", "original" };
+                    SimpleThumbnail chosen = null;
+
+                    foreach (var type in precedence)
+                    {
+                        chosen = simpleMetadata.Thumbnails.FirstOrDefault(t => !string.IsNullOrEmpty(t.Type) && t.Type.Equals(type, StringComparison.OrdinalIgnoreCase));
+                        if (chosen != null) break;
+                    }
+
+                    // If none matched by type, fall back to first available thumbnail
+                    if (chosen == null)
+                        chosen = simpleMetadata.Thumbnails.FirstOrDefault();
+
+                    if (chosen != null)
+                    {
+                        distribution.ThumbnailUrl = chosen.URL;
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore thumbnail assignment failures
+            }
+
             return distribution;
         }
 
