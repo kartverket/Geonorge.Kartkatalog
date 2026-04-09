@@ -1,6 +1,7 @@
 using GeoNorgeAPI;
 using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
+using Kartverket.Metadatakatalog.Adapters;
 using Kartverket.Metadatakatalog.Extensions;
 using Kartverket.Metadatakatalog.Middleware;
 using Kartverket.Metadatakatalog.Models;
@@ -10,22 +11,22 @@ using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Service.Search;
 using Kartverket.Metadatakatalog.Service.ServiceDirectory;
-using Kartverket.Metadatakatalog.Adapters;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Globalization;
-using System.Security.Claims;
-using System.Net.Http;
-using System.Linq;
 using System;
 using System.Collections.Generic;
-using System.Net;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Security.Claims;
 
 namespace Kartverket.Metadatakatalog
 {
@@ -268,6 +269,16 @@ namespace Kartverket.Metadatakatalog
                 // 🔧 CRITICAL PERFORMANCE FIX: Configure system-level network settings early
                 ConfigureSocketPerformance();
 
+                app.UseForwardedHeaders(new ForwardedHeadersOptions
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost,
+                    ForwardLimit = int.Parse(Configuration["HeaderForwardLimit"]!), // Default is 1
+                    KnownProxies = { IPAddress.Loopback, IPAddress.Parse("127.0.0.6") },
+                    KnownIPNetworks = {
+                        new System.Net.IPNetwork(IPAddress.Parse("10.0.0.0"), 8),
+                    }
+                });
+
                 // Add global exception handling (replaces Application_Error)
                 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
@@ -325,7 +336,7 @@ namespace Kartverket.Metadatakatalog
                     }
                 }
 
-                app.UseHttpsRedirection();
+                //app.UseHttpsRedirection();
 
                 // Add Response Compression (replaces custom CompressFilter)
                 app.UseResponseCompression();
