@@ -38,6 +38,9 @@
   </ItemGroup>
   <!-- Legacy system references removed - included in .NET 10 framework reference -->
   <ItemGroup>
+	<Content Include="appsettings.json">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
     <Content Include="App_Data\XmlDocument.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
