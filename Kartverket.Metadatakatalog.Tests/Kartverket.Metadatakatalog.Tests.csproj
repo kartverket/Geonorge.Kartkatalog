@@ -1,128 +1,67 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <Configurations>Debug;Dev;Release;Test</Configurations>
-	  <EnableDefaultContentItems>false</EnableDefaultContentItems>
+	<TargetFramework>net10.0</TargetFramework>
+	<OutputType>Library</OutputType>
+	<IsPackable>false</IsPackable>
+	<SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+	<RestorePackages>true</RestorePackages>
+	<Configurations>Debug;Dev;Release;Test</Configurations>
+	<EnableDefaultContentItems>false</EnableDefaultContentItems>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Dev|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Dev\</OutputPath>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+	<DebugSymbols>true</DebugSymbols>
+	<OutputPath>bin\Dev\</OutputPath>
+	<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Test\</OutputPath>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+	<DebugSymbols>true</DebugSymbols>
+	<OutputPath>bin\Test\</OutputPath>
+	<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-  <!-- Legacy system references removed - included in .NET 10 framework reference -->
-  <!-- Legacy unit test framework references removed - using xUnit -->
+
   <ItemGroup>
-    <ProjectReference Include="..\Kartverket.Metadatakatalog\Kartverket.Metadatakatalog.csproj" />
+	<ProjectReference Include="..\Kartverket.Metadatakatalog\Kartverket.Metadatakatalog.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Arkitektum.GIS.Lib.MetadataCSW" Version="2.0.0" />
-    <PackageReference Include="Arkitektum.GIS.Lib.SerializeUtil" Version="1.4.0" />
-    <PackageReference Include="Azure.Core" Version="1.47.1" />
-    <PackageReference Include="Castle.Core" Version="4.4.0" />
-    <PackageReference Include="EntityFramework" Version="6.3.0" />
-    <PackageReference Include="FluentAssertions" Version="5.9.0" />
-    <PackageReference Include="GeoNorgeAPI" Version="4.0.3" />
-    <PackageReference Include="Google.Api.CommonProtos" Version="2.16.0" />
-    <PackageReference Include="Google.Api.Gax" Version="4.9.0" />
-    <PackageReference Include="Google.Api.Gax.Grpc" Version="4.9.0" />
-    <PackageReference Include="Google.Apis" Version="1.68.0" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
-    <PackageReference Include="Google.Apis.Core" Version="1.68.0" />
-    <PackageReference Include="Google.Cloud.Location" Version="2.3.0" />
-    <PackageReference Include="Google.Protobuf" Version="3.28.2" />
-    <PackageReference Include="Grpc.Auth" Version="2.66.0" />
-    <PackageReference Include="Grpc.Core" Version="2.46.6" />
-    <PackageReference Include="Grpc.Core.Api" Version="2.66.0" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.66.0" />
-    <PackageReference Include="Grpc.Net.Common" Version="2.66.0" />
-    <PackageReference Include="Kartverket.Geonorge.Utilities" Version="1.0.64" />
-    <PackageReference Include="log4net" Version="2.0.12" />
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.7" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.7" />
-    <PackageReference Include="Microsoft.Bcl" Version="1.1.10" />
-    <PackageReference Include="Microsoft.Bcl.Async" Version="1.0.168" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Bcl.Build" Version="1.0.21" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
-    <PackageReference Include="Moq" Version="4.13.0" />
-    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
-    <PackageReference Include="OpenAI.2.0.0-beta" Version="11" />
-    <PackageReference Include="PCLStorage" Version="1.0.2" />
-    <PackageReference Include="System.Buffers" Version="4.5.1" />
-    <PackageReference Include="System.ClientModel.1.1.0-beta" Version="5" />
-    <PackageReference Include="System.CodeDom" Version="7.0.0" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
-    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.1" />
-    <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
-    <PackageReference Include="System.Globalization" Version="4.3.0" />
-    <PackageReference Include="System.IO" Version="4.3.0" />
-    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
-    <PackageReference Include="System.Linq" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
-    <PackageReference Include="System.Management" Version="7.0.2" />
-    <PackageReference Include="System.Memory" Version="4.5.5" />
-    <PackageReference Include="System.Memory.Data" Version="1.0.2" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="System.Net.Http.WinHttpHandler" Version="8.0.0" />
-    <PackageReference Include="System.Net.Primitives" Version="4.3.1" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
-    <PackageReference Include="System.ObjectModel" Version="4.3.0" />
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
-    <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
-    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
-    <PackageReference Include="System.Security.Cryptography.Encoding" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
-    <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
-    <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" />
-    <PackageReference Include="System.Text.Json" Version="4.7.2" />
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-    <PackageReference Include="System.Threading" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
-    <PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.abstractions" Version="2.0.3" />
-    <PackageReference Include="xunit.analyzers" Version="0.10.0" />
-    <PackageReference Include="xunit.assert" Version="2.4.1" />
-    <PackageReference Include="xunit.core" Version="2.4.1" />
-    <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
-    <PackageReference Include="xunit.extensibility.execution" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
+	<!-- Core testing packages -->
+	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+	<PackageReference Include="xunit" Version="2.9.2" />
+	<PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+	<PackageReference Include="coverlet.collector" Version="6.0.2">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+
+	<!-- Test utilities and mocking -->
+	<PackageReference Include="FluentAssertions" Version="7.0.0" />
+	<PackageReference Include="Moq" Version="4.20.72" />
+	<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.5" />
+
+	<!-- Only include packages that are actually needed for testing and not included in main project -->
+	<!-- Match versions with main project to avoid downgrades -->
+	<PackageReference Include="GeoNorgeAPI" Version="4.0.4" />
+	<PackageReference Include="Google.Apis.Auth" Version="1.73.0" />
+	<PackageReference Include="Google.Apis.Core" Version="1.73.0" />
+	<PackageReference Include="Kartverket.Geonorge.Utilities" Version="2.0.0" />
+	<PackageReference Include="log4net" Version="3.3.0" />
+	<PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
+	<PackageReference Include="System.CodeDom" Version="10.0.5" />
+
+	<!-- Packages specific to testing needs -->
+	<PackageReference Include="Arkitektum.GIS.Lib.MetadataCSW" Version="2.0.0" />
+	<PackageReference Include="Arkitektum.GIS.Lib.SerializeUtil" Version="1.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 </Project>

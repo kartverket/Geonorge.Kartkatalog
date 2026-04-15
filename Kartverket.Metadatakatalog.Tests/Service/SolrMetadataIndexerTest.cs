@@ -6,6 +6,7 @@ using Moq;
 using Xunit;
 using www.opengis.net;
 using Kartverket.Metadatakatalog.Models.Translations;
+using Microsoft.Extensions.Logging;
 
 namespace Kartverket.Metadatakatalog.Tests.Service
 {
@@ -53,8 +54,9 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             indexDocumentCreator.Setup(i => i.CreateIndexDocs(It.IsAny<object[]>(), geoNorgeMock.Object, culture)).Returns(indexDocs);
 
             var errorMock = new Mock<IErrorService>();
+            var loggerMock = new Mock<ILogger<SolrMetadataIndexer>>();
 
-            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexerAppMock.Object, indexerSerMock.Object, indexDocumentCreator.Object, errorMock.Object, indexerMockAll.Object);
+            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexerAppMock.Object, indexerSerMock.Object, indexDocumentCreator.Object, errorMock.Object, indexerMockAll.Object, loggerMock.Object);
 
             indexer.RunIndexing();
 
@@ -101,8 +103,9 @@ namespace Kartverket.Metadatakatalog.Tests.Service
             var errorMock = new Mock<IErrorService>();
 
             indexDocumentCreator.Setup(i => i.CreateIndexDocs(It.IsAny<object[]>(),geoNorgeMock.Object, culture)).Returns(indexDocs);
+            var loggerMock = new Mock<ILogger<SolrMetadataIndexer>>();
 
-            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexerAppMock.Object, indexerSerMock.Object, indexDocumentCreator.Object, errorMock.Object, indexerMockAll.Object);
+            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexerAppMock.Object, indexerSerMock.Object, indexDocumentCreator.Object, errorMock.Object, indexerMockAll.Object, loggerMock.Object);
 
             indexer.RunIndexing();
 
@@ -134,7 +137,8 @@ namespace Kartverket.Metadatakatalog.Tests.Service
                 .Returns(metadataIndexDoc);
 
             var errorMock = new Mock<IErrorService>();
-            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexerAppMock.Object, indexerSerMock.Object, indexDocumentCreator.Object, errorMock.Object, indexerMockAll.Object);
+            var loggerMock = new Mock<ILogger<SolrMetadataIndexer>>();
+            var indexer = new SolrMetadataIndexer(geoNorgeMock.Object, indexerMock.Object, indexerAppMock.Object, indexerSerMock.Object, indexDocumentCreator.Object, errorMock.Object, indexerMockAll.Object, loggerMock.Object);
             
             indexer.RunIndexingOn(uuid);
 
