@@ -895,14 +895,18 @@ namespace Kartverket.Metadatakatalog.Service
             var metadataIndexDocResult = _searchService.GetMetadata(metadata.Uuid) /*?? throw new ArgumentNullException("GetMetadata(metadata.Uuid)")*/;
 
             if(metadataIndexDocResult != null)
-            { 
+            {
                 // Visningstjenester - OGC:WMS, OGC:WMTS, WMS-C
+                if (metadata.Distributions == null)
+                    metadata.Distributions = new Distributions();
                 metadata.Distributions.RelatedViewServices = GetRelatedViewService(metadataIndexDocResult.DatasetServices);
                 if(metadata.Distributions.RelatedViewServices != null)
                 { 
                     foreach (var simpleDistributionFormat in metadata.Distributions.RelatedViewServices) { 
                         if((simpleDistributionFormat?.Protocol == "OGC:WMS" || simpleDistributionFormat?.Protocol == "WMS-tjeneste")
-                            /*&& string.IsNullOrEmpty(simpleDistributionFormat?.DistributionName)*/) { 
+                            /*&& string.IsNullOrEmpty(simpleDistributionFormat?.DistributionName)*/) {
+                            if (metadata.DatasetServicesWithShowMapLink == null)
+                                metadata.DatasetServicesWithShowMapLink = new List<DatasetService>();
                         metadata.DatasetServicesWithShowMapLink.Add(
                         new DatasetService
                         {
@@ -1398,7 +1402,7 @@ namespace Kartverket.Metadatakatalog.Service
             if (simpleMetadata == null)
                 throw new ArgumentNullException(nameof(simpleMetadata));
             try { 
-            var metadata = new MetadataViewModel
+            var metadata = new MetadataViewModel(_configuration)
             {
                 Title = GetTranslation(simpleMetadata.Title, simpleMetadata.EnglishTitle),
                 NorwegianTitle = simpleMetadata.Title,

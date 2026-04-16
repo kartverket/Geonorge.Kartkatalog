@@ -40,7 +40,7 @@ namespace Kartverket.Metadatakatalog.Service
         public static string StaticNorgeskartUrl => Instance.NorgeskartUrl;
         public static bool StaticMapOnlyWms => Instance.MapOnlyWms;
         public static bool StaticUseVectorSearch => Instance.UseVectorSearch;
-        public static bool StaticDownloadServiceEnabled => Convert.ToBoolean(Instance._configuration?["DownloadServiceEnabled"] ?? "false");
+        public static bool StaticDownloadServiceEnabled => Convert.ToBoolean(Instance._configuration?["AppSettings:DownloadServiceEnabled"] ?? "false");
 
         public static string ConvertHierarchyLevelToType(string hierarchyLevel)
         {

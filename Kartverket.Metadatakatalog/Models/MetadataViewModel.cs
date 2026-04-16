@@ -21,7 +21,7 @@ namespace Kartverket.Metadatakatalog.Models
     {
         private readonly IConfiguration _configuration;
         
-        public bool MapOnlyWms => _configuration != null ? Convert.ToBoolean(_configuration["MapOnlyWms"]) : false;
+        public bool MapOnlyWms => _configuration != null ? Convert.ToBoolean(_configuration["AppSettings:MapOnlyWms"]) : false;
 
         public MetadataViewModel(IConfiguration configuration = null)
         {
@@ -299,7 +299,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowDownloadService()
         {
-            if (_configuration != null && Convert.ToBoolean(_configuration["DownloadServiceEnabled"] ?? "false")) 
+            if (_configuration != null && Convert.ToBoolean(_configuration["AppSettings:DownloadServiceEnabled"] ?? "false")) 
             {
                 if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains("GEONORGE:DOWNLOAD"))
                     return true;
