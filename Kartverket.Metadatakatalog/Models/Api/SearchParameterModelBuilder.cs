@@ -92,7 +92,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
                     var facetValue = query[$"facets[{i}]value"].ToString();
 
                     // Validate facet names
-                    var validFacetNames = new[] { "type", "theme", "organization", "organisations", "nationalinitiative", "DistributionProtocols", "area", "dataaccess", "spatialscope" };
+                    var validFacetNames = new[] { "type", "theme", "organization", "organizations", "nationalinitiative", "DistributionProtocols", "area", "dataaccess", "spatialscope" };
                     if (!string.IsNullOrWhiteSpace(facetName) && !string.IsNullOrWhiteSpace(facetValue)
                         && Array.Exists(validFacetNames, x => x.Equals(facetName, StringComparison.OrdinalIgnoreCase)))
                     {

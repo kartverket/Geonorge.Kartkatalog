@@ -75,7 +75,7 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 if (Facets != null)
                 {
-                    var selectedFacets = Facets.Where(f => f.Name == defaultFacet);
+                    var selectedFacets = Facets.Where(f => string.Equals(f.Name, defaultFacet, StringComparison.OrdinalIgnoreCase));
                     if (selectedFacets.Any())
                     {
                         foreach (var selectedFacet in selectedFacets)
