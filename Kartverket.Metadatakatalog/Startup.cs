@@ -59,6 +59,10 @@ namespace Kartverket.Metadatakatalog
                     {
                         // Preserve exact property names (no camel-casing)
                         opts.JsonSerializerOptions.PropertyNamingPolicy = null;
+                        // Skip null properties during serialization
+                        opts.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+                        // Optional: also skip default values (empty strings, 0, false, etc.)
+                        // opts.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault;
                         // optional: control other options
                         // opts.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
                     });

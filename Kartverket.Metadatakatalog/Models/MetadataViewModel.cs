@@ -14,6 +14,7 @@ using Resources;
 using System.Text;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Microsoft.AspNetCore.Routing;
+using System.Text.Json.Serialization;
 
 namespace Kartverket.Metadatakatalog.Models
 {
