@@ -21,6 +21,16 @@ namespace Kartverket.Metadatakatalog.Models.Api
             Facets = Facet.CreateFromList(searchResult.Facets);
             Type = searchResult.Type;
         }
+
+        public SearchResult(Models.SearchResult searchResult, IUrlHelper urlHelper, Dictionary<string, string> areaDictionary)
+        {
+            Limit = searchResult.Limit;
+            Offset = searchResult.Offset;
+            NumFound = searchResult.NumFound;
+            Results = Metadata.CreateFromList(searchResult.Items, urlHelper);
+            Facets = Facet.CreateFromList(searchResult.Facets, areaDictionary);
+            Type = searchResult.Type;
+        }
         /// <summary>
         /// Number of items found
         /// </summary>

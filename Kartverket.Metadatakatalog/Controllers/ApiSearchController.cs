@@ -67,13 +67,14 @@ namespace Kartverket.Metadatakatalog.Controllers
         private readonly IArticleService _articleService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<ApiSearchController> _logger;
+        private readonly PlaceResolver _placeResolver;
 
         private readonly IMetadataService _metadataService;
         private readonly IAiService _aiService;
         private readonly ILogger<Models.SearchParameters> _searchParametersLogger;
         private readonly ILogger<Models.Article.SearchParameters> _articleSearchParametersLogger;
 
-        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll, IArticleService articleService, IAiService aiService, IWebHostEnvironment webHostEnvironment, ILogger<ApiSearchController> logger, ILogger<Models.SearchParameters> searchParametersLogger, ILogger<Models.Article.SearchParameters> articleSearchParametersLogger)
+        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll, IArticleService articleService, IAiService aiService, IWebHostEnvironment webHostEnvironment, ILogger<ApiSearchController> logger, ILogger<Models.SearchParameters> searchParametersLogger, ILogger<Models.Article.SearchParameters> articleSearchParametersLogger, PlaceResolver placeResolver)
         {
             _searchService = searchService;
             _metadataService = metadataService;
@@ -86,6 +87,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             _logger = logger;
             _searchParametersLogger = searchParametersLogger;
             _articleSearchParametersLogger = articleSearchParametersLogger;
+            _placeResolver = placeResolver;
         }
 
         /// <summary>
@@ -154,7 +156,9 @@ namespace Kartverket.Metadatakatalog.Controllers
                 searchParameters.AddDefaultFacetsIfMissing();
                 Models.SearchResult searchResult = _searchServiceAll.Search(searchParameters);
 
-                var result = new SearchResult(searchResult, Url);
+                // Get area dictionary for proper translation of municipality and county names
+                var areaDictionary = _placeResolver.GetAreas();
+                var result = new SearchResult(searchResult, Url, areaDictionary);
                 return Ok(result);
             }
             catch (ArgumentException ex)
@@ -404,7 +408,9 @@ namespace Kartverket.Metadatakatalog.Controllers
                 searchParameters.AddDefaultFacetsIfMissing();
                 Models.SearchResult searchResult = _searchService.Search(searchParameters);
 
-                return new SearchResult(searchResult, Url);
+                // Get area dictionary for proper translation of municipality and county names
+                var areaDictionary = _placeResolver.GetAreas();
+                return new SearchResult(searchResult, Url, areaDictionary);
             }
             catch (Exception ex)
             {
@@ -432,7 +438,9 @@ namespace Kartverket.Metadatakatalog.Controllers
                 searchParameters.AddDefaultFacetsIfMissing();
                 Models.SearchResult searchResult = _searchService.Search(searchParameters);
 
-                return new SearchResult(searchResult, Url);
+                // Get area dictionary for proper translation of municipality and county names
+                var areaDictionary = _placeResolver.GetAreas();
+                return new SearchResult(searchResult, Url, areaDictionary);
             }
             catch (Exception ex)
             {
@@ -458,7 +466,9 @@ namespace Kartverket.Metadatakatalog.Controllers
                 searchParameters.AddDefaultFacetsIfMissing();
                 Models.SearchResult searchResult = _applicationService.Applications(searchParameters);
 
-                return new SearchResult(searchResult, Url);
+                // Get area dictionary for proper translation of municipality and county names
+                var areaDictionary = _placeResolver.GetAreas();
+                return new SearchResult(searchResult, Url, areaDictionary);
             }
             catch (Exception ex)
             {
@@ -483,7 +493,9 @@ namespace Kartverket.Metadatakatalog.Controllers
                 searchParameters.AddDefaultFacetsIfMissing();
                 Models.SearchResult searchResult = _serviceDirectoryService.Services(searchParameters);
 
-                return new SearchResult(searchResult, Url);
+                // Get area dictionary for proper translation of municipality and county names
+                var areaDictionary = _placeResolver.GetAreas();
+                return new SearchResult(searchResult, Url, areaDictionary);
             }
             catch (Exception ex)
             {
@@ -532,7 +544,9 @@ namespace Kartverket.Metadatakatalog.Controllers
 
                 Models.SearchResult searchResult = _metadataService.GetMetadataForNamespace(@namespace, searchParameters);
 
-                return new SearchResult(searchResult, Url);
+                // Get area dictionary for proper translation of municipality and county names
+                var areaDictionary = _placeResolver.GetAreas();
+                return new SearchResult(searchResult, Url, areaDictionary);
             }
             catch (Exception ex)
             {
@@ -552,7 +566,9 @@ namespace Kartverket.Metadatakatalog.Controllers
             {
                 Models.SearchResult searchResult = _metadataService.GetSimpleMetadata(organization);
 
-                return new SearchResult(searchResult, Url);
+                // Get area dictionary for proper translation of municipality and county names
+                var areaDictionary = _placeResolver.GetAreas();
+                return new SearchResult(searchResult, Url, areaDictionary);
             }
             catch (Exception ex)
             {

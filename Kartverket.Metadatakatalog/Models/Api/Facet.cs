@@ -25,6 +25,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public string NameTranslated { get; set; }
 
         public Facet() { }
+
         private Facet(Models.Facet item)
         {
             FacetField = item.FacetField;
@@ -39,9 +40,28 @@ namespace Kartverket.Metadatakatalog.Models.Api
             NameTranslated = UI.ResourceManager.GetString("Facet_" + item.FacetField);
         }
 
+        private Facet(Models.Facet item, Dictionary<string, string> areaDictionary)
+        {
+            FacetField = item.FacetField;
+            Name = item.FacetField;
+            if (FacetField == "area") 
+              FacetResults = FacetValue.OrganizationCreateFromList(item.FacetResults, areaDictionary);
+            else if (FacetField == "nationalinitiative")
+                FacetResults = FacetValue.NationalInitiativeCreateFromList(item.FacetResults);
+            else
+                FacetResults = FacetValue.CreateFromList(item.FacetResults);
+
+            NameTranslated = UI.ResourceManager.GetString("Facet_" + item.FacetField);
+        }
+
         public static List<Facet> CreateFromList(IEnumerable<Models.Facet> facets)
         {
             return facets.Select(item => new Facet(item)).ToList();
+        }
+
+        public static List<Facet> CreateFromList(IEnumerable<Models.Facet> facets, Dictionary<string, string> areaDictionary)
+        {
+            return facets.Select(item => new Facet(item, areaDictionary)).ToList();
         }
 
         public class FacetValue
@@ -97,10 +117,13 @@ namespace Kartverket.Metadatakatalog.Models.Api
 
             public static List<FacetValue> OrganizationCreateFromList(IEnumerable<Models.Facet.FacetValue> facetResults)
             {
+                return OrganizationCreateFromList(facetResults, new Dictionary<string, string>());
+            }
+
+            public static List<FacetValue> OrganizationCreateFromList(IEnumerable<Models.Facet.FacetValue> facetResults, Dictionary<string, string> areaDictionary)
+            {
                 List<FacetValue> facets = new List<FacetValue>();
 
-                // TODO: This should be injected via DI - temporary fix for compilation
-                var areaDictionary = new Dictionary<string, string>(); // Fallback to empty dictionary
                 var areas = facetResults.Where(fy => fy.Name.Length == 4 && fy.Name != "0/21" && fy.Name != "0/22").Select(fy => fy).Distinct().OrderBy(fo => fo.Name).ToList();
                 var places = facetResults.Where(p => !p.Name.Contains("/")).Select(p => p).Distinct().OrderBy(po => po.Name).ToList();
 

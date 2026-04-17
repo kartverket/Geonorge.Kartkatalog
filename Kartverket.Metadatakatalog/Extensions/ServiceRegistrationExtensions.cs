@@ -145,6 +145,7 @@ namespace Kartverket.Metadatakatalog.Extensions
 
             // Resolvers and fetchers
             services.AddScoped<ThemeResolver>();
+            services.AddScoped<PlaceResolver>();
             services.AddScoped<IArticleFetcher, ArticleFetcher>();
 
             return services;

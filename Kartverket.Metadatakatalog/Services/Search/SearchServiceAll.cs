@@ -18,13 +18,15 @@ namespace Kartverket.Metadatakatalog.Service.Search
         private readonly IOrganizationService _organizationService;
         private readonly ISolrOperations<MetadataIndexAllDoc> _solrInstance;
         private readonly ISolrOperationsFactory _solrFactory;
+        private readonly PlaceResolver _placeResolver;
 
-        public SearchServiceAll(IOrganizationService organizationService, ISolrOperations<MetadataIndexAllDoc> solrInstance, ISolrOperationsFactory solrFactory, ILogger<SearchServiceAll> logger)
+        public SearchServiceAll(IOrganizationService organizationService, ISolrOperations<MetadataIndexAllDoc> solrInstance, ISolrOperationsFactory solrFactory, ILogger<SearchServiceAll> logger, PlaceResolver placeResolver)
         {
             _organizationService = organizationService;
             _solrInstance = solrInstance;
             _solrFactory = solrFactory;
             _logger = logger;
+            _placeResolver = placeResolver;
         }
 
         public SearchResult Search(SearchParameters parameters)
