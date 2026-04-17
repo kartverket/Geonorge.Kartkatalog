@@ -98,7 +98,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
                     {
                         var facet = new FacetInput
                         {
-                            name = facetName.ToLower(),
+                            name = facetName,
                             value = facetValue
                         };
                         facets.Add(facet);
