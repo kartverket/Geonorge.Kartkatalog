@@ -48,7 +48,7 @@
 
 	<!-- Only include packages that are actually needed for testing and not included in main project -->
 	<!-- Match versions with main project to avoid downgrades -->
-	<PackageReference Include="GeoNorgeAPI" Version="4.0.4" />
+	<PackageReference Include="GeoNorgeAPI" Version="4.0.8" />
 	<PackageReference Include="Google.Apis.Auth" Version="1.73.0" />
 	<PackageReference Include="Google.Apis.Core" Version="1.73.0" />
 	<PackageReference Include="Kartverket.Geonorge.Utilities" Version="2.0.0" />

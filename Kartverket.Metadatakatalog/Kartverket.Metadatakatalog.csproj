@@ -82,7 +82,7 @@
     <PackageReference Include="Geonorge.AuthLib.Common" Version="2.0.0" />
     <!-- Replace deprecated packages with ASP.NET Core equivalents -->
     <!-- <PackageReference Include="Geonorge.AuthLib.NetFull" Version="2.0.0" /> - Replace with ASP.NET Core auth -->
-    <PackageReference Include="GeoNorgeAPI" Version="4.0.4" />
+    <PackageReference Include="GeoNorgeAPI" Version="4.0.8" />
     <PackageReference Include="Google.Apis.Auth" Version="1.73.0" />
     <PackageReference Include="Google.Apis.Core" Version="1.73.0" />
     <PackageReference Include="jQuery" Version="3.7.1" />

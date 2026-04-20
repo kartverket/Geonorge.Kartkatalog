@@ -463,6 +463,9 @@ namespace Kartverket.Metadatakatalog.Service
 
         private List<Distribution> GetTimeRelatedDistributions(object uuid, Models.Api.SearchParameters parameters)
         {
+
+            _geoNorge = new GeoNorge("","",_configuration["MetUrl"]);
+
             List<Distribution> distributions = new List<Distribution>();
 
             if (parameters.offset == 0)
