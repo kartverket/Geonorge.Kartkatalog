@@ -109,7 +109,9 @@ namespace Kartverket.Metadatakatalog.Service
         public Distributions GetDistributions(MetadataViewModel metadata, Models.Api.SearchParameters parameters)
         {
             string type = null;
-                       
+
+            if (metadata.Distributions == null) metadata.Distributions = new Distributions();
+
             if (metadata.IsDataset() || metadata.IsDatasetSeries())
             {
                 var metadataIndexDocResult = _searchService.GetMetadata(metadata.Uuid) ?? throw new ArgumentNullException("GetMetadata(metadata.Uuid)");
