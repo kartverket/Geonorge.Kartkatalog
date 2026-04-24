@@ -184,7 +184,11 @@ namespace Kartverket.Metadatakatalog
                 // Register RegisterFetcher service
                 try 
                 {
-                    services.AddScoped<RegisterFetcher>();
+                    // Singleton: the constructor performs ~25 synchronous HTTP calls against
+                    // the Kartverket register service to populate code lists, and caches them
+                    // in per-instance dictionaries. Scoping this service threw the cache away
+                    // on every request, which was the dominant per-request cost (~1 s).
+                    services.AddSingleton<RegisterFetcher>();
                     System.Diagnostics.Debug.WriteLine("✅ RegisterFetcher registered");
                 }
                 catch (Exception ex)
@@ -344,7 +348,7 @@ namespace Kartverket.Metadatakatalog
 
                 // Add Response Compression (replaces custom CompressFilter)
                 app.UseResponseCompression();
-                
+
                 app.UseStaticFiles();
 
                 app.UseRouting();

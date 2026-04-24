@@ -25,12 +25,13 @@ namespace Kartverket.Metadatakatalog.Extensions
         /// </summary>
         public static IServiceCollection AddExternalServices(this IServiceCollection services, IConfiguration configuration)
         {
-            // ?? CRITICAL PERFORMANCE FIX: Register optimized GeoNorge service with HttpClientFactory
-            services.AddScoped<IGeoNorge>(provider =>
+            // GeoNorge is a stateless HTTP/CSW client wrapper. Its constructor performs
+            // remote service discovery against GeoNetworkUrl, which takes ~900 ms. Registering
+            // it as a singleton pays that cost once at startup instead of on every request.
+            services.AddSingleton<IGeoNorge>(provider =>
             {
                 var httpClientFactory = provider.GetService<System.Net.Http.IHttpClientFactory>();
-                var optimizedGeoNorge = CreateOptimizedGeoNorge(configuration, httpClientFactory);
-                return optimizedGeoNorge;
+                return CreateOptimizedGeoNorge(configuration, httpClientFactory);
             });
 
             // GeoNetworkUtil from Kartverket.Geonorge.Utilities
