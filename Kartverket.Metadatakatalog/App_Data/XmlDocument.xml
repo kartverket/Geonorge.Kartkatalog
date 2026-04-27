@@ -64,7 +64,7 @@
             Remove metadata uuid from index
             </summary>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Get(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Get(Kartverket.Metadatakatalog.Models.Api.SearchParameters,System.Threading.CancellationToken)">
             <summary>
             Search the metadata catalogue
             </summary>
@@ -99,6 +99,7 @@
             - `popularMetadata` - By popularity
             </remarks>
             <param name="parameters">Search parameters</param>
+            <param name="cancellationToken">Cancellation token from the request abort signal</param>
             <returns>Search results containing metadata items and facets</returns>
             <response code="200">Returns the search results</response>
             <response code="400">Invalid search parameters</response>
@@ -117,17 +118,17 @@
             <param name="facetName">Name of the facet (type, theme, organization, etc.)</param>
             <returns>Available values for the specified facet</returns>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Opendata(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.Opendata(Kartverket.Metadatakatalog.Models.Api.SearchParameters,System.Threading.CancellationToken)">
             <summary>
             Catalogue search for opendata
             </summary>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.applications(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.applications(Kartverket.Metadatakatalog.Models.Api.SearchParameters,System.Threading.CancellationToken)">
             <summary>
             Catalogue search for applications
             </summary>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.servicedirectory(Kartverket.Metadatakatalog.Models.Api.SearchParameters)">
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.servicedirectory(Kartverket.Metadatakatalog.Models.Api.SearchParameters,System.Threading.CancellationToken)">
             <summary>
             Catalogue search for services
             </summary>
@@ -137,12 +138,12 @@
             Catalogue search for articles
             </summary>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.DatasetsNamespace(System.String,System.Int32,System.Int32)">
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.DatasetsNamespace(System.String,System.Int32,System.Int32,System.Threading.CancellationToken)">
             <summary>
             Catalogue search for articles
             </summary>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.DatasetsSimple(System.String)">
+        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.DatasetsSimple(System.String,System.Threading.CancellationToken)">
             <summary>
             Get simple metadata list
             </summary>
@@ -772,27 +773,10 @@
             <param name="simpleMetadata">SimpleMetadata</param>
             <returns></returns>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Service.PlaceResolver.GetAreasAsync">
+        <member name="M:Kartverket.Metadatakatalog.Service.PlaceResolver.GetAreasAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets fylke og kommuner fra register i et dictionary
+            Gets fylke og kommuner fra register i et dictionary, cached for 12 hours.
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Service.Search.AiService.GetAccessTokenFromJSONKeyAsync(System.String,System.String[])">
-            <summary>  
-            Get Access Token From JSON Key Async  
-            </summary>  
-            <param name="jsonKeyFilePath">Path to your JSON Key file</param>  
-            <param name="scopes">Scopes required in access token</param>  
-            <returns>Access token as string Task</returns>  
-        </member>
-        <member name="M:Kartverket.Metadatakatalog.Service.Search.AiService.GetAccessTokenFromJSONKey(System.String,System.String[])">
-            <summary>  
-            Get Access Token From JSON Key  
-            </summary>  
-            <param name="jsonKeyFilePath">Path to your JSON Key file</param>  
-            <param name="scopes">Scopes required in access token</param>  
-            <returns>Access token as string</returns>  
         </member>
         <member name="M:Kartverket.Metadatakatalog.Service.SolrIndexDocumentCreator.ProcessRelatedServiceAsync(GeoNorgeAPI.IGeoNorge,System.String)">
             <summary>

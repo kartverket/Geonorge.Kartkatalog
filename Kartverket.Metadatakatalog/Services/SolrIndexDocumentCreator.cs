@@ -37,13 +37,13 @@ namespace Kartverket.Metadatakatalog.Service
         private static readonly HttpClient _httpClient = new HttpClient();
         private readonly IAiService _aiService;
 
-        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil, IAiService aiService, IConfiguration configuration, HttpClient httpClient, RegisterFetcher registerFetcher, ILogger<SolrIndexDocumentCreator> logger)
+        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil, IAiService aiService, IConfiguration configuration, HttpClient httpClient, RegisterFetcher registerFetcher, IMemoryCache memoryCache, ILogger<SolrIndexDocumentCreator> logger)
         {
             _organizationService = organizationService;
             _themeResolver = themeResolver;
             _geoNetworkUtil = geoNetworkUtil;
             _configuration = configuration;
-            _placeResolver = new PlaceResolver(httpClient, configuration);
+            _placeResolver = new PlaceResolver(httpClient, configuration, memoryCache);
             _aiService = aiService;
             Register = registerFetcher;
             _logger = logger;

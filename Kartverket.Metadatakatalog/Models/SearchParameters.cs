@@ -226,10 +226,13 @@ namespace Kartverket.Metadatakatalog.Models
                     string vectorSearchString = null;
                     if(Text.Length > 2) 
                     {
-                        if (SimpleMetadataUtil.StaticUseVectorSearch) 
+                        if (SimpleMetadataUtil.StaticUseVectorSearch)
                         {
+                             var vectorSw = System.Diagnostics.Stopwatch.StartNew();
                              var embedding = _aiService.GetPredictions(Text);
-                             if(embedding != null && embedding.Length > 0) 
+                             vectorSw.Stop();
+                             _logger?.LogInformation("Vertex embedding ms={EmbeddingMs} text={Text}", vectorSw.ElapsedMilliseconds, Text);
+                             if(embedding != null && embedding.Length > 0)
                              {
                                  // Format embedding values with proper ASCII formatting for Solr
                                  var formattedEmbedding = embedding.Select(f => f.ToString("F8", System.Globalization.CultureInfo.InvariantCulture));

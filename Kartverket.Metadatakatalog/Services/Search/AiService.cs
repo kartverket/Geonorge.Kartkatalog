@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,15 +12,22 @@ using Microsoft.Extensions.Logging;
 
 namespace Kartverket.Metadatakatalog.Service.Search
 {
-    public interface IAiService { 
+    public interface IAiService {
        float[] GetPredictions(string text);
     }
     public class AiService : IAiService
     {
+        // GoogleCredential's UnderlyingCredential has a built-in OAuth token cache that
+        // refreshes ~5 min before expiry. Reuse one instance per key file path so the
+        // ~hour-long token is actually shared across requests instead of regenerated.
+        private static readonly ConcurrentDictionary<string, Lazy<ITokenAccess>> TokenAccessByKeyPath = new();
+
+        private static readonly string[] CloudPlatformScope = { "https://www.googleapis.com/auth/cloud-platform" };
+
         private readonly Geonorge.Utilities.Organization.IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AiService> _logger;
-        
+
         public bool UseVectorSearch => Convert.ToBoolean(_configuration["AI:UseVectorSearch"]);
 
         public AiService(Geonorge.Utilities.Organization.IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<AiService> logger)
@@ -29,92 +37,65 @@ namespace Kartverket.Metadatakatalog.Service.Search
             _logger = logger;
         }
 
-        /// <summary>  
-        /// Get Access Token From JSON Key Async  
-        /// </summary>  
-        /// <param name="jsonKeyFilePath">Path to your JSON Key file</param>  
-        /// <param name="scopes">Scopes required in access token</param>  
-        /// <returns>Access token as string Task</returns>  
-        public string GetAccessTokenFromJSONKeyAsync(string jsonKeyFilePath, params string[] scopes)
-        {
-            using (var stream = new FileStream(jsonKeyFilePath, FileMode.Open, FileAccess.Read))
-            {
-                var credentials = GoogleCredential
-                    .FromStream(stream) // Loads key file  
-                    .CreateScoped(scopes) // Gathers scopes requested  
-                    .UnderlyingCredential // Gets the credentials  
-                    .GetAccessTokenForRequestAsync(); // Gets the Access Token  
-
-                return credentials.Result;
-            }
-        }
-
-        /// <summary>  
-        /// Get Access Token From JSON Key  
-        /// </summary>  
-        /// <param name="jsonKeyFilePath">Path to your JSON Key file</param>  
-        /// <param name="scopes">Scopes required in access token</param>  
-        /// <returns>Access token as string</returns>  
-        public string GetAccessTokenFromJSONKey(string jsonKeyFilePath, params string[] scopes)
-        {
-            return GetAccessTokenFromJSONKeyAsync(jsonKeyFilePath, scopes);
-        }
-
         public float[] GetPredictions(string text)
         {
-                if (SimpleMetadataUtil.StaticUseVectorSearch)
+            if (!SimpleMetadataUtil.StaticUseVectorSearch)
+                return null;
+
+            string projectId = _configuration["AI:ProjectId"];
+            string locationId = _configuration["AI:LocationId"];
+            string model = _configuration["AI:Model"];
+
+            object infoForDebug = "Search for: " + text;
+            try
             {
-                object infoForDebug = "Search for: " + text;
-                try
+                var inputRequest = new
                 {
-                    var inputRequest = new
+                    instances = new[]
                     {
-                        instances = new[]
-{
-                            new
-                            {
-                                content  = text
-                            }
-                        }
-                    };
+                        new { content = text }
+                    }
+                };
 
-                    string projectId = _configuration["AI:ProjectId"];
-                    string locationId = _configuration["AI:LocationId"];
-                    string model = _configuration["AI:Model"];
+                var endpoint = $"https://{locationId}-aiplatform.googleapis.com/v1/projects/{projectId}/locations/{locationId}/publishers/google/models/{model}:predict";
 
-                    var endpoint = $"https://{locationId}-aiplatform.googleapis.com/v1/projects/{projectId}/locations/{locationId}/publishers/google/models/{model}:predict";
+                var token = GetAccessToken(_configuration["AI:Key"]);
 
-                    var token = GetAccessTokenFromJSONKey(
-                    _configuration["AI:Key"],
-                    "https://www.googleapis.com/auth/cloud-platform");
+                var client = _httpClientFactory.GetHttpClient();
 
-                    System.Net.ServicePointManager.Expect100Continue = false; // otherwise google could return http 417 ExpectationFailed (with body ...your computer or network may be sending automated queries)
-                    var client = _httpClientFactory.GetHttpClient();
+                using var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
+                request.Content = new StringContent(JsonConvert.SerializeObject(inputRequest), System.Text.Encoding.UTF8, "application/json");
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                    var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
-                    request.Content = new StringContent(JsonConvert.SerializeObject(inputRequest), System.Text.Encoding.UTF8, "application/json");
-                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                    var response = client.SendAsync(request);
-                    var result = response.Result.Content.ReadAsStringAsync().Result;
-                    infoForDebug = result;
+                using var response = client.SendAsync(request).GetAwaiter().GetResult();
+                var result = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                infoForDebug = result;
 
-                    var jsonResponse = JsonConvert.DeserializeObject<dynamic>(result);
-                    var values = jsonResponse.predictions[0].embeddings.values;
-                    float[] floatValues = ((IEnumerable<dynamic>)values).Select(v => (float)v).ToArray();
-
-                    return floatValues;
-
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Error creating vector embeddings returned: {DebugInfo}", infoForDebug);
-                    return null;
-                }
+                var jsonResponse = JsonConvert.DeserializeObject<dynamic>(result);
+                var values = jsonResponse.predictions[0].embeddings.values;
+                return ((IEnumerable<dynamic>)values).Select(v => (float)v).ToArray();
             }
-            else
+            catch (Exception e)
             {
+                _logger.LogError(e, "Error creating vector embeddings returned: {DebugInfo}", infoForDebug);
                 return null;
             }
+        }
+
+        private static string GetAccessToken(string jsonKeyFilePath)
+        {
+            var tokenAccess = TokenAccessByKeyPath.GetOrAdd(
+                jsonKeyFilePath,
+                path => new Lazy<ITokenAccess>(() =>
+                {
+                    using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                    return GoogleCredential
+                        .FromStream(stream)
+                        .CreateScoped(CloudPlatformScope)
+                        .UnderlyingCredential;
+                })).Value;
+
+            return tokenAccess.GetAccessTokenForRequestAsync().GetAwaiter().GetResult();
         }
     }
 }

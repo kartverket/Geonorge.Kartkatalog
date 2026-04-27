@@ -27,6 +27,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using SearchParameters = Kartverket.Metadatakatalog.Models.Api.SearchParameters;
 using SearchResult = Kartverket.Metadatakatalog.Models.Api.SearchResult;
@@ -124,6 +125,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// - `popularMetadata` - By popularity
         /// </remarks>
         /// <param name="parameters">Search parameters</param>
+        /// <param name="cancellationToken">Cancellation token from the request abort signal</param>
         /// <returns>Search results containing metadata items and facets</returns>
         /// <response code="200">Returns the search results</response>
         /// <response code="400">Invalid search parameters</response>
@@ -132,7 +134,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         [ProducesResponseType(typeof(SearchResult), 200)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(500)]
-        public IActionResult Get([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
+        public async Task<IActionResult> Get([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters, CancellationToken cancellationToken)
         {
             try
             {
@@ -157,7 +159,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Models.SearchResult searchResult = _searchServiceAll.Search(searchParameters);
 
                 // Get area dictionary for proper translation of municipality and county names
-                var areaDictionary = _placeResolver.GetAreas();
+                var areaDictionary = await _placeResolver.GetAreasAsync(cancellationToken);
                 var result = new SearchResult(searchResult, Url, areaDictionary);
                 return Ok(result);
             }
@@ -296,7 +298,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                     {
                         new { Name = "type", Description = "Resource type (dataset, service, application, etc.)", CommonValues = new[] { "dataset", "service", "application", "series" } },
                         new { Name = "theme", Description = "Thematic categories", CommonValues = new[] { "Biota", "Environment", "GeoscientificInformation", "Transportation" } },
-                        new { Name = "organization", Description = "Publishing organization", CommonValues = new[] { "Kartverket", "Meteorologisk institutt", "Miljødirektoratet" } },
+                        new { Name = "organization", Description = "Publishing organization", CommonValues = new[] { "Kartverket", "Meteorologisk institutt", "Miljï¿½direktoratet" } },
                         new { Name = "nationalinitiative", Description = "National initiatives", CommonValues = new[] { "Norge digitalt", "INSPIRE" } },
                         new { Name = "DistributionProtocols", Description = "Distribution protocols", CommonValues = new[] { "WMS", "WFS", "WCS", "ATOM" } },
                         new { Name = "area", Description = "Geographic area coverage", CommonValues = new[] { "Norge", "Svalbard", "Kontinentalsokkel" } },
@@ -396,7 +398,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         }
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("datasets")]
-        public SearchResult Datasets([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
+        public async Task<SearchResult> Datasets([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters, CancellationToken cancellationToken)
         {
             try
             {
@@ -409,7 +411,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Models.SearchResult searchResult = _searchService.Search(searchParameters);
 
                 // Get area dictionary for proper translation of municipality and county names
-                var areaDictionary = _placeResolver.GetAreas();
+                var areaDictionary = await _placeResolver.GetAreasAsync(cancellationToken);
                 return new SearchResult(searchResult, Url, areaDictionary);
             }
             catch (Exception ex)
@@ -425,7 +427,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("aapnedata")]
-        public SearchResult Opendata([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
+        public async Task<SearchResult> Opendata([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters, CancellationToken cancellationToken)
         {
             try
             {
@@ -439,7 +441,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Models.SearchResult searchResult = _searchService.Search(searchParameters);
 
                 // Get area dictionary for proper translation of municipality and county names
-                var areaDictionary = _placeResolver.GetAreas();
+                var areaDictionary = await _placeResolver.GetAreasAsync(cancellationToken);
                 return new SearchResult(searchResult, Url, areaDictionary);
             }
             catch (Exception ex)
@@ -455,7 +457,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("kartlosninger-i-norge")]
-        public SearchResult applications([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
+        public async Task<SearchResult> applications([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters, CancellationToken cancellationToken)
         {
             try
             {
@@ -467,7 +469,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Models.SearchResult searchResult = _applicationService.Applications(searchParameters);
 
                 // Get area dictionary for proper translation of municipality and county names
-                var areaDictionary = _placeResolver.GetAreas();
+                var areaDictionary = await _placeResolver.GetAreasAsync(cancellationToken);
                 return new SearchResult(searchResult, Url, areaDictionary);
             }
             catch (Exception ex)
@@ -482,7 +484,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("servicedirectory")]
-        public SearchResult servicedirectory([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters)
+        public async Task<SearchResult> servicedirectory([ModelBinder(BinderType = typeof(SearchParameterModelBuilder))] SearchParameters parameters, CancellationToken cancellationToken)
         {
             try
             {
@@ -494,7 +496,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Models.SearchResult searchResult = _serviceDirectoryService.Services(searchParameters);
 
                 // Get area dictionary for proper translation of municipality and county names
-                var areaDictionary = _placeResolver.GetAreas();
+                var areaDictionary = await _placeResolver.GetAreasAsync(cancellationToken);
                 return new SearchResult(searchResult, Url, areaDictionary);
             }
             catch (Exception ex)
@@ -534,7 +536,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("datasets-namespace")]
-        public SearchResult DatasetsNamespace(string @namespace, int limit = 10, int offset = 0)
+        public async Task<SearchResult> DatasetsNamespace(string @namespace, int limit = 10, int offset = 0, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -545,7 +547,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Models.SearchResult searchResult = _metadataService.GetMetadataForNamespace(@namespace, searchParameters);
 
                 // Get area dictionary for proper translation of municipality and county names
-                var areaDictionary = _placeResolver.GetAreas();
+                var areaDictionary = await _placeResolver.GetAreasAsync(cancellationToken);
                 return new SearchResult(searchResult, Url, areaDictionary);
             }
             catch (Exception ex)
@@ -560,14 +562,14 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("datasets-simple")]
-        public SearchResult DatasetsSimple(string organization = "")
+        public async Task<SearchResult> DatasetsSimple(string organization = "", CancellationToken cancellationToken = default)
         {
             try
             {
                 Models.SearchResult searchResult = _metadataService.GetSimpleMetadata(organization);
 
                 // Get area dictionary for proper translation of municipality and county names
-                var areaDictionary = _placeResolver.GetAreas();
+                var areaDictionary = await _placeResolver.GetAreasAsync(cancellationToken);
                 return new SearchResult(searchResult, Url, areaDictionary);
             }
             catch (Exception ex)
@@ -810,17 +812,17 @@ namespace Kartverket.Metadatakatalog.Controllers
                 // replace & with and
                 text = Regex.Replace(text, @"\&+", "and");
 
-                text = text.Replace("æ", "ae");
-                text = text.Replace("ä", "ae");
-                text = text.Replace("ø", "oe");
-                text = text.Replace("ö", "oe");
-                text = text.Replace("å", "aa");
+                text = text.Replace("ï¿½", "ae");
+                text = text.Replace("ï¿½", "ae");
+                text = text.Replace("ï¿½", "oe");
+                text = text.Replace("ï¿½", "oe");
+                text = text.Replace("ï¿½", "aa");
 
                 // remove characters
                 text = text.Replace("'", "");
 
                 // remove invalid characters
-                text = Regex.Replace(text, @"[^a-z0-9æøå.]", "-");
+                text = Regex.Replace(text, @"[^a-z0-9ï¿½ï¿½ï¿½.]", "-");
 
                 // remove duplicates
                 text = Regex.Replace(text, @"-+", "-");

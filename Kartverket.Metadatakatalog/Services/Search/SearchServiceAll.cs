@@ -31,7 +31,9 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
         public SearchResult Search(SearchParameters parameters)
         {
+            var totalSw = System.Diagnostics.Stopwatch.StartNew();
             ISolrQuery query = parameters.BuildQuery();
+            var buildMs = totalSw.ElapsedMilliseconds;
             try
             {
                 // Select core based on current culture (append _en for English)
@@ -58,6 +60,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     _logger.LogWarning(ex, "Failed to get Solr operations for core {CoreId}, using default", coreId);
                 }
 
+                var solrSw = System.Diagnostics.Stopwatch.StartNew();
                 SolrQueryResults<MetadataIndexAllDoc> queryResults = solrToUse.Query(query, new QueryOptions
                 {
                     //WMS lag skal få redusert sin boost
@@ -74,6 +77,10 @@ namespace Kartverket.Metadatakatalog.Service.Search
                     //}
 
                 });
+                solrSw.Stop();
+                totalSw.Stop();
+                _logger.LogInformation("Search timings ms: build={BuildMs} solr={SolrMs} total={TotalMs} text={Text}",
+                    buildMs, solrSw.ElapsedMilliseconds, totalSw.ElapsedMilliseconds, parameters.Text);
 
                 return CreateSearchResults(queryResults, parameters);
             }

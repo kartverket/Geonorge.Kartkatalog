@@ -7,7 +7,9 @@ using System.Net;
 using System.Net.Http;
 using System;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
 using Kartverket.Metadatakatalog.Models.Translations;
@@ -66,77 +68,86 @@ namespace Kartverket.Metadatakatalog.Service
         public const string PlaceSvalbard = "Svalbard";
         public const string PlaceJanMayen = "Jan Mayen";
 
-        private Dictionary<string, string> _areas;
+        private const string AreasCacheKey = "PlaceResolver.Areas";
+        private static readonly TimeSpan AreasCacheLifetime = TimeSpan.FromHours(12);
+        private static readonly SemaphoreSlim AreasFetchLock = new SemaphoreSlim(1, 1);
+
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
+        private readonly IMemoryCache _cache;
 
-        public PlaceResolver(HttpClient httpClient, IConfiguration configuration)
+        public PlaceResolver(HttpClient httpClient, IConfiguration configuration, IMemoryCache cache)
         {
             _httpClient = httpClient;
             _configuration = configuration;
+            _cache = cache;
             _httpClient.BaseAddress = new Uri(_configuration["RegistryUrl"]);
         }
+
         /// <summary>
-        /// Gets fylke og kommuner fra register i et dictionary
+        /// Gets fylke og kommuner fra register i et dictionary, cached for 12 hours.
         /// </summary>
-        /// <returns></returns>
-        public async Task<Dictionary<string, string>> GetAreasAsync()
+        public async Task<Dictionary<string, string>> GetAreasAsync(CancellationToken cancellationToken = default)
         {
-            await PopulateAreasAsync();
-            return _areas;
+            if (_cache.TryGetValue(AreasCacheKey, out Dictionary<string, string> cached))
+                return cached;
+
+            await AreasFetchLock.WaitAsync(cancellationToken);
+            try
+            {
+                if (_cache.TryGetValue(AreasCacheKey, out cached))
+                    return cached;
+
+                var areas = await FetchAreasAsync(cancellationToken);
+                _cache.Set(AreasCacheKey, areas, AreasCacheLifetime);
+                return areas;
+            }
+            finally
+            {
+                AreasFetchLock.Release();
+            }
         }
 
-        public Dictionary<string, string> GetAreas()
+        // Sync wrapper retained for legacy callers. Cache hits are non-blocking
+        // dictionary lookups; only the very first call after process start (or
+        // cache expiry) actually blocks on I/O.
+        public Dictionary<string, string> GetAreas() => GetAreasAsync().GetAwaiter().GetResult();
+
+        private async Task<Dictionary<string, string>> FetchAreasAsync(CancellationToken cancellationToken)
         {
-            return GetAreasAsync().Result;
+            var areas = new Dictionary<string, string>();
+
+            await AddCodeListAsync(
+                areas,
+                "api/sosi-kodelister/inndelinger/inndelingsbase/fylkesnummer",
+                code => "0/" + code,
+                cancellationToken);
+
+            await AddCodeListAsync(
+                areas,
+                "api/sosi-kodelister/inndelinger/inndelingsbase/kommunenummer",
+                code => "0/" + code.Substring(0, 2) + "/" + code,
+                cancellationToken);
+
+            return areas;
         }
 
-        private async Task PopulateAreasAsync()
+        private async Task AddCodeListAsync(Dictionary<string, string> target, string requestUri, Func<string, string> keyBuilder, CancellationToken cancellationToken)
         {
-            MemoryCacher memCacher = new MemoryCacher();
-            var cache = memCacher.GetValue("areas");
+            using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (cache != null)
+            using var response = await _httpClient.SendAsync(request, cancellationToken);
+            if (!response.IsSuccessStatusCode) return;
+
+            var register = await response.Content.ReadFromJsonAsync<Register>(cancellationToken: cancellationToken);
+            if (register?.containeditems == null) return;
+
+            foreach (var item in register.containeditems)
             {
-                _areas = cache as Dictionary<string, string>;
+                if (item.status != "Gyldig" || string.IsNullOrEmpty(item.codevalue)) continue;
+                target[keyBuilder(item.codevalue)] = RemoveSamiTranslation(item.description);
             }
-            else
-            {
-                _areas = new Dictionary<string, string>();
-                //call register fylker og kommuner
-                _httpClient.DefaultRequestHeaders.Accept.Clear();
-                _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var result = await _httpClient.GetAsync("api/sosi-kodelister/inndelinger/inndelingsbase/fylkesnummer");
-                if (result.IsSuccessStatusCode)
-                {
-                    var register = await result.Content.ReadFromJsonAsync<Register>();
-
-                    foreach (var item in register.containeditems)
-                    {
-                        var codevalue = item.codevalue;
-                        var label = RemoveSamiTranslation(item.description);
-                        var status = item.status;
-                        if (status == "Gyldig")                        
-                            _areas.Add("0/" + codevalue, label);
-                    }
-                }
-                var result2 = await _httpClient.GetAsync("api/sosi-kodelister/inndelinger/inndelingsbase/kommunenummer");
-                if (result2.IsSuccessStatusCode)
-                {
-                    var register = await result2.Content.ReadFromJsonAsync<Register>();
-                    foreach (var item in register.containeditems)
-                    {
-                        var codevalue = item.codevalue;
-                        var label = RemoveSamiTranslation(item.description);
-                        var status = item.status;
-                        if (status == "Gyldig")
-                            _areas.Add("0/" + codevalue.Substring(0, 2) + "/" + codevalue, label);
-                    }
-                }
-
-                memCacher.Add("areas", _areas, new DateTimeOffset(DateTime.Now.AddHours(12)));
-            }
-
         }
 
         private string RemoveSamiTranslation(string description)
@@ -250,16 +261,16 @@ namespace Kartverket.Metadatakatalog.Service
 
         public List<string> ResolveArea(SimpleMetadata metadata)
         {
-            PopulateAreasAsync().Wait();
+            var areas = GetAreasAsync().GetAwaiter().GetResult();
 
             List<string> placegroup = new List<string>();
 
             foreach (var keyword in metadata.Keywords)
             {
                 string[] keyWords = FixKeyWord(keyword.Keyword.ToLower());
-                foreach (var keyWord in keyWords) 
-                { 
-                    var myValueList = _areas.Where(x => x.Value.ToLower() == keyWord).ToList();
+                foreach (var keyWord in keyWords)
+                {
+                    var myValueList = areas.Where(x => x.Value.ToLower() == keyWord).ToList();
                     if(myValueList != null)
                     {
                         foreach (var myValue in myValueList)
@@ -271,14 +282,14 @@ namespace Kartverket.Metadatakatalog.Service
 
             }
 
-            if(metadata.HierarchyLevel != "software") 
-            { 
-                _httpClient.DefaultRequestHeaders.Accept.Clear();
-                _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var result = _httpClient.GetAsync("https://ws.geonorge.no/dekningsApi/dekning?uuid=" + metadata.Uuid).Result;
+            if(metadata.HierarchyLevel != "software")
+            {
+                using var coverageRequest = new HttpRequestMessage(HttpMethod.Get, "https://ws.geonorge.no/dekningsApi/dekning?uuid=" + metadata.Uuid);
+                coverageRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var result = _httpClient.SendAsync(coverageRequest).GetAwaiter().GetResult();
                 if (result.IsSuccessStatusCode)
                 {
-                    var register = result.Content.ReadFromJsonAsync<Coverage>().Result;
+                    var register = result.Content.ReadFromJsonAsync<Coverage>().GetAwaiter().GetResult();
 
                     for(int c = 0; c < register.kommuner.Count(); c ++)
                     {
@@ -286,10 +297,10 @@ namespace Kartverket.Metadatakatalog.Service
                         string fylke = kommune.Substring(0,2);
                         kommune = "0/" + kommune.Substring(0, 2) + "/" + kommune;
                         fylke = "0/" + fylke;
-                        var municipality = _areas.FirstOrDefault(x => x.Key == kommune).Key;
+                        var municipality = areas.FirstOrDefault(x => x.Key == kommune).Key;
                         if (municipality != null && !placegroup.Contains(kommune)) placegroup.Add(municipality);
 
-                        var areaFylke = _areas.FirstOrDefault(x => x.Key == fylke).Key;
+                        var areaFylke = areas.FirstOrDefault(x => x.Key == fylke).Key;
                         if (areaFylke != null && !placegroup.Contains(fylke)) placegroup.Add(areaFylke);
                     }
 
