@@ -7,6 +7,7 @@ using Kartverket.Metadatakatalog.Service.Search;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -48,6 +49,8 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             return RedirectToActionPermanent("Index", "Download");
         }
+
+        [AllowAnonymous]
         public IActionResult SignIn()
         {
             try
@@ -70,6 +73,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
         }
 
+        [AllowAnonymous]
         public new IActionResult SignOut()
         {
             // Save redirect to basket in a cookie
