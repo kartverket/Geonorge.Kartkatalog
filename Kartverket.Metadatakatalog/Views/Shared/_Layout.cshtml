@@ -6,73 +6,43 @@
 @using Microsoft.AspNetCore.Http.Extensions
 
 @{
-//var loggedInCookie = Context.Request.Cookies["_loggedIn"];
-//if (loggedInCookie != null && loggedInCookie.Value == "true" && !Request.IsAuthenticated)
-//{
-//    // Save redirect to basket in a cookie
-//    HttpCookie cookie = Request.Cookies["_redirectDownload"];
+var loggedInCookie = Context.Request.Cookies["_loggedIn"];
+var isLocal = Context.Request.IsLocal();
+if (loggedInCookie != null && loggedInCookie == "true" && !User.Identity.IsAuthenticated)
+{
+   // Save redirect to basket in a cookie
+   var cookieOptions = new CookieOptions
+   {
+       Path = "/",
+       SameSite = SameSiteMode.Lax
+   };
 
-//    if (cookie != null)
-//    {
-//        cookie.Value = "true";   // update cookie value
-//        cookie.Path = "/";
-//        //cookie.SameSite = SameSiteMode.Lax;
-//        if (!Request.IsLocal)
-//        {
-//            cookie.Domain = ".geonorge.no";
-//        }
+   if (!isLocal)
+   {
+       cookieOptions.Domain = ".geonorge.no";
+   }
 
-//        Response.Cookies.Set(cookie);
-//    }
-//    else
-//    {
-//        cookie = new HttpCookie("_redirectDownload");
-//        cookie.Value = "true";
-//        cookie.Path = "/";
-//        //cookie.SameSite = SameSiteMode.Lax;
+   Context.Response.Cookies.Append("_redirectDownload", "true", cookieOptions);
 
-//        if (!Request.IsLocal)
-//        {
-//            cookie.Domain = ".geonorge.no";
-//        }
+   //todo fix not working prod? Working SKIP?
+   Context.Response.Redirect("/Search/SignIn");
+}
+else
+{
+   // Save redirect to basket in a cookie
+   var cookieOptions = new CookieOptions
+   {
+       Path = "/",
+       SameSite = SameSiteMode.Lax
+   };
 
-//        Response.Cookies.Add(cookie);
-//    }
-//    //todo fix not working prod
-//    Response.Redirect("/search/SignIn");
-//}
-//else
-//{
-//    // Save redirect to basket in a cookie
-//    HttpCookie cookie = Request.Cookies["_redirectDownload"];
+   if (!isLocal)
+   {
+       cookieOptions.Domain = ".geonorge.no";
+   }
 
-//    if (cookie != null)
-//    {
-//        cookie.Value = "false";   // update cookie value
-//        cookie.Path = "/";
-//        //cookie.SameSite = SameSiteMode.Lax;
-//        if (!Request.IsLocal)
-//        {
-//            cookie.Domain = ".geonorge.no";
-//        }
-
-//        Response.Cookies.Set(cookie);
-//    }
-//    else
-//    {
-//        cookie = new HttpCookie("_redirectDownload");
-//        cookie.Value = "false";
-//        cookie.Path = "/";
-//        //cookie.SameSite = SameSiteMode.Lax;
-
-//        if (!Request.IsLocal)
-//        {
-//            cookie.Domain = ".geonorge.no";
-//        }
-
-//        Response.Cookies.Add(cookie);
-//    }
-//}
+   Context.Response.Cookies.Append("_redirectDownload", "false", cookieOptions);
+}
 }
 
 <!DOCTYPE html>
