@@ -39,7 +39,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
 
         public float[] GetPredictions(string text)
         {
-            if (!UseVectorSearch)
+            if (!SimpleMetadataUtil.StaticUseVectorSearch)
                 return null;
 
             string projectId = _configuration["AI:ProjectId"];
