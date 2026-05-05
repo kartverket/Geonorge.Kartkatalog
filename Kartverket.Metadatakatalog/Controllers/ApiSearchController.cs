@@ -74,8 +74,9 @@ namespace Kartverket.Metadatakatalog.Controllers
         private readonly IAiService _aiService;
         private readonly ILogger<Models.SearchParameters> _searchParametersLogger;
         private readonly ILogger<Models.Article.SearchParameters> _articleSearchParametersLogger;
+        private readonly ISimpleMetadataUtil _simpleMetadataUtil;
 
-        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll, IArticleService articleService, IAiService aiService, IWebHostEnvironment webHostEnvironment, ILogger<ApiSearchController> logger, ILogger<Models.SearchParameters> searchParametersLogger, ILogger<Models.Article.SearchParameters> articleSearchParametersLogger, PlaceResolver placeResolver)
+        public ApiSearchController(ISearchService searchService, IMetadataService metadataService, IApplicationService applicationService, IServiceDirectoryService serviceDirectoryService, ISearchServiceAll searchServiceAll, IArticleService articleService, IAiService aiService, IWebHostEnvironment webHostEnvironment, ILogger<ApiSearchController> logger, ILogger<Models.SearchParameters> searchParametersLogger, ILogger<Models.Article.SearchParameters> articleSearchParametersLogger, PlaceResolver placeResolver, ISimpleMetadataUtil simpleMetadataUtil)
         {
             _searchService = searchService;
             _metadataService = metadataService;
@@ -89,6 +90,7 @@ namespace Kartverket.Metadatakatalog.Controllers
             _searchParametersLogger = searchParametersLogger;
             _articleSearchParametersLogger = articleSearchParametersLogger;
             _placeResolver = placeResolver;
+            _simpleMetadataUtil = simpleMetadataUtil;
         }
 
         /// <summary>
@@ -372,7 +374,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 }
 
                 // Get facet values by performing a search with empty text and the specified facet
-                var searchParameters = new Models.SearchParameters(_aiService, _searchParametersLogger);
+                var searchParameters = new Models.SearchParameters(_aiService, _searchParametersLogger, _simpleMetadataUtil);
                 searchParameters.Limit = 1; // We only need facet values, not results
                 searchParameters.AddDefaultFacetsIfMissing();
                 
@@ -540,7 +542,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             try
             {
-                Models.SearchParameters searchParameters = new Models.SearchParameters(_aiService, _searchParametersLogger);
+                Models.SearchParameters searchParameters = new Models.SearchParameters(_aiService, _searchParametersLogger, _simpleMetadataUtil);
                 searchParameters.Limit = limit;
                 searchParameters.Offset = offset;
 
@@ -883,7 +885,7 @@ namespace Kartverket.Metadatakatalog.Controllers
 
         private Models.SearchParameters CreateSearchParameters(SearchParameters parameters)
         {
-            var model = new Models.SearchParameters(_aiService, _searchParametersLogger);
+            var model = new Models.SearchParameters(_aiService, _searchParametersLogger, _simpleMetadataUtil);
             model.Text = parameters.text;
             model.Facets = CreateFacetParameters(parameters.facets);
             model.Offset = parameters.offset;

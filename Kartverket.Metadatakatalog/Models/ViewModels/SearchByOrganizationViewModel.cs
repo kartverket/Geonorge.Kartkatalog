@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Kartverket.Metadatakatalog.Service;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
 
@@ -11,8 +12,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public string OrganizationLogoUrl { get; set; }
         public SelectList OrganizationSelectList { get; set; }
 
-        public SearchByOrganizationViewModel(SearchByOrganizationParameters parameters, SearchResultForOrganization searchResult)
-            : base(parameters, searchResult)
+        public SearchByOrganizationViewModel(SearchByOrganizationParameters parameters, SearchResultForOrganization searchResult, ISimpleMetadataUtil simpleMetadataUtil)
+            : base(parameters, searchResult, simpleMetadataUtil)
         {
             EnabledFacets = new List<string> { "themes", "types", "nationalinitiatives", "areas", "distributionProtocols", "dataAccesses" };
 

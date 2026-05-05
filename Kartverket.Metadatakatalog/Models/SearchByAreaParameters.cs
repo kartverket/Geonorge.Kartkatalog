@@ -1,4 +1,5 @@
-﻿using Kartverket.Metadatakatalog.Service.Search;
+﻿using Kartverket.Metadatakatalog.Service;
+using Kartverket.Metadatakatalog.Service.Search;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Kartverket.Metadatakatalog.Models
 {
     public class SearchByAreaParameters : SearchParameters
     {
-        public SearchByAreaParameters(IAiService aiService, ILogger<SearchParameters> logger) : base(aiService: aiService, logger: logger)
+        public SearchByAreaParameters(IAiService aiService, ILogger<SearchParameters> logger, ISimpleMetadataUtil simpleMetadataUtil) : base(aiService: aiService, logger: logger, simpleMetadataUtil: simpleMetadataUtil)
         {
         }
 

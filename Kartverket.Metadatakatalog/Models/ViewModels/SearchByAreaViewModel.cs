@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Routing;
+﻿using Kartverket.Metadatakatalog.Service;
+using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,8 +13,8 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public ICollection<Area> Counties { get; set; }
         public string AreaCode { get; set; }
 
-        public SearchByAreaViewModel(SearchByAreaParameters parameters, SearchResult searchResult)
-            : base(parameters, searchResult)
+        public SearchByAreaViewModel(SearchByAreaParameters parameters, SearchResult searchResult, ISimpleMetadataUtil simpleMetadataUtil)
+            : base(parameters, searchResult, simpleMetadataUtil)
         {
             EnabledFacets = new List<string> { "themes", "types", "nationalinitiatives", "organizations", "distributionProtocols", "dataAccesses" };
             if (parameters.AreaCode != null)

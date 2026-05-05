@@ -208,6 +208,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             // In a production app, you should inject IConfiguration into the service that creates this object
             var httpContext = urlHelper.ActionContext.HttpContext;
             var configuration = httpContext.RequestServices.GetRequiredService<Microsoft.Extensions.Configuration.IConfiguration>();
+            var simpleMetadataUtil = httpContext.RequestServices.GetRequiredService<ISimpleMetadataUtil>();
             var kartkatalogenUrl = configuration["KartkatalogenUrl"];
             
             ShowDetailsUrl = kartkatalogenUrl + "metadata/uuid/" + item.Uuid;
@@ -253,7 +254,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             {
                 if (!string.IsNullOrWhiteSpace(item.ServiceDistributionProtocolForDataset))
                 {
-                    string commonPart = SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(item.ServiceDistributionProtocolForDataset, true);
+                    string commonPart = simpleMetadataUtil.GetCommonPartOfNorgeskartUrl(item.ServiceDistributionProtocolForDataset, true);
 
                     if (item.ServiceDistributionProtocolForDataset.Contains(SimpleMetadataUtil.OgcWms))
                     {
@@ -291,7 +292,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
             {
                 if (!string.IsNullOrWhiteSpace(item.DistributionProtocol) && !string.IsNullOrWhiteSpace(item.DistributionUrl))
                 {
-                    string commonPart = $"{SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(item.DistributionProtocol, true)}{RemoveQueryString(item.DistributionUrl)}";
+                    string commonPart = $"{simpleMetadataUtil.GetCommonPartOfNorgeskartUrl(item.DistributionProtocol, true)}{RemoveQueryString(item.DistributionUrl)}";
 
                     if (item.DistributionProtocol.Contains(SimpleMetadataUtil.OgcWms) || item.DistributionProtocol.Contains(SimpleMetadataUtil.OgcWfs))
                     {
@@ -320,7 +321,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
                     DownloadUrl = MakeDownloadUrlRelative();
             }
 
-            MapUrl = GetMapUrl();
+            MapUrl = GetMapUrl(simpleMetadataUtil);
 
             SpatialScope = item.SpatialScope;
         }
@@ -471,18 +472,18 @@ namespace Kartverket.Metadatakatalog.Models.Api
             DistributionDetails distributionDetails = new DistributionDetails(null, item.DistributionProtocol, null, item.DistributionUrl);
             return distributionDetails.DistributionDetailsGetCapabilitiesUrl();
         }
-        private string GetMapUrl()
+        private string GetMapUrl(ISimpleMetadataUtil simpleMetadataUtil)
         {
             ShowMapLink = false; 
             if (ShowMaplink())
             {
                 ShowMapLink = true;
-                return SimpleMetadataUtil.StaticNorgeskartUrl + DownloadUrl;
+                return simpleMetadataUtil.NorgeskartUrl + DownloadUrl;
             }
             if (ShowServiceMaplink())
             {
                 ShowServiceMapLink = true;
-                return SimpleMetadataUtil.StaticNorgeskartUrl + ServiceUrl;
+                return simpleMetadataUtil.NorgeskartUrl + ServiceUrl;
             }
             return "";
         }
