@@ -21,6 +21,7 @@ namespace Kartverket.Metadatakatalog.Controllers
     [EnableCors]
     [ApiController]
     [Route("api")]
+    [Authorize(AuthenticationSchemes = "BasicAuthentication")]
     public class ApiMetadataController : ControllerBase
     {
         private readonly ILogger<ApiMetadataController> _logger;
