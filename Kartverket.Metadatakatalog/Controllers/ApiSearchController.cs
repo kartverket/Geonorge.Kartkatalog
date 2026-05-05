@@ -728,35 +728,35 @@ namespace Kartverket.Metadatakatalog.Controllers
         [HttpGet("sitemap")]
         public IActionResult SiteMap()
         {
-            var doc = new System.Xml.XmlDocument();
-            var sitemapPath = Path.Combine(_webHostEnvironment.WebRootPath, "sitemap", "sitemap.xml");
-            doc.Load(sitemapPath);
-            return Content(doc.OuterXml, "application/xml", Encoding.UTF8);
-        }
-
-        /// <summary>
-        /// Create sitemap
-        /// </summary>
-        [ApiExplorerSettings(IgnoreApi = true)]
-        [HttpGet("create-sitemap")]
-        public IActionResult CreateSiteMap()
-        {
             try
             {
-                SearchParameters parameters = new SearchParameters();
-                parameters.limit = 50000;
+                var sitemapPath = Path.Combine(_webHostEnvironment.WebRootPath, "sitemap", "sitemap.xml");
+                var sitemapDirectory = Path.GetDirectoryName(sitemapPath);
 
-                Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
+                if (!string.IsNullOrEmpty(sitemapDirectory) && !Directory.Exists(sitemapDirectory))
+                    Directory.CreateDirectory(sitemapDirectory);
 
-                searchParameters.AddDefaultFacetsIfMissing();
-                Models.SearchResult searchResult = _searchService.Search(searchParameters);
+                XmlDocument doc;
+                if (ShouldRecreateSiteMap(sitemapPath))
+                {
+                    SearchParameters parameters = new SearchParameters();
+                    parameters.limit = 50000;
 
-                var results = new SearchResult(searchResult, Url).Results;
+                    Models.SearchParameters searchParameters = CreateSearchParameters(parameters);
 
-                var xml = CreateSiteMap(results);
+                    searchParameters.AddDefaultFacetsIfMissing();
+                    Models.SearchResult searchResult = _searchService.Search(searchParameters);
 
-                return Content(xml.OuterXml, "application/xml", Encoding.UTF8);
+                    var results = new SearchResult(searchResult, Url).Results;
+                    doc = CreateSiteMap(results);
+                }
+                else
+                {
+                    doc = new XmlDocument();
+                    doc.Load(sitemapPath);
+                }
 
+                return Content(doc.OuterXml, "application/xml", Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -799,6 +799,15 @@ namespace Kartverket.Metadatakatalog.Controllers
             doc.Save(sitemapPath);
 
             return doc;
+        }
+
+        private static bool ShouldRecreateSiteMap(string sitemapPath)
+        {
+            if (!System.IO.File.Exists(sitemapPath))
+                return true;
+
+            var creationDate = System.IO.File.GetCreationTimeUtc(sitemapPath).Date;
+            return creationDate < DateTime.UtcNow.Date;
         }
 
         static string ConvertTextToUrlSlug(string text)

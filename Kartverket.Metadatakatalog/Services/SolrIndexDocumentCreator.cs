@@ -1641,7 +1641,9 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.typenumber = simpleMetadata.typenumber;
             indexDoc.DatasetServices = simpleMetadata.DatasetServices;
             var embeddings = _aiService.GetPredictions(simpleMetadata.Title + " " + simpleMetadata.Abstract);
-            if (SimpleMetadataUtil.StaticUseVectorSearch && embeddings != null)
+            bool useVectorSearch;
+            bool.TryParse(_configuration?["AI:UseVectorSearch"], out useVectorSearch);
+            if (useVectorSearch && embeddings != null)
                 indexDoc.Vector = embeddings;
 
             return indexDoc;

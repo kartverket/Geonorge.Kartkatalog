@@ -185,11 +185,6 @@
                 Catalogue in dcat format
             </summary>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Controllers.ApiSearchController.CreateSiteMap">
-            <summary>
-            Create sitemap
-            </summary>
-        </member>
         <member name="M:Kartverket.Metadatakatalog.Controllers.AuthenticationController.Callback">
             <summary>
             Handle OpenID Connect callback
