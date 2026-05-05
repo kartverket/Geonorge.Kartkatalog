@@ -63,7 +63,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
             }
             catch (Exception exception)
             {
-                _logger.LogDebug("Error in UUID: " + uuid + "", exception);
+                _logger.LogDebug(exception, "Error in UUID: {Uuid}", uuid);
                 _errorService.AddError(uuid, exception);
             }
         }
@@ -99,7 +99,7 @@ namespace Kartverket.Metadatakatalog.Service.Article
             }
             catch (Exception exception)
             {
-                _logger.LogError("Error index articles", exception);
+                _logger.LogError(exception, "Error index articles");
             }
         }
 

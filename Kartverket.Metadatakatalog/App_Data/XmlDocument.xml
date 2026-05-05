@@ -755,11 +755,6 @@
             Configure HTTP performance settings to address .NET 10 vs .NET Framework 4.8 performance differences
             </summary>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Program.ConfigureSolrNetHttpClient(Castle.Facilities.SolrNetIntegration.SolrNetFacility)">
-            <summary>
-            Configure SolrNet to use optimized HTTP client settings
-            </summary>
-        </member>
         <member name="M:Kartverket.Metadatakatalog.Service.MetadataService.CreateDistributionRows(System.String,GeoNorgeAPI.SimpleMetadata)">
             <summary>
             Add rows for each distribution url. Update row if it's the same url.

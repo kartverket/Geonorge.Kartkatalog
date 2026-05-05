@@ -145,10 +145,7 @@ namespace Kartverket.Metadatakatalog
             
             // ?? PERFORMANCE FIX: Create SolrNetFacility with optimized settings
             var solrFacility = new SolrNetFacility(solrServerUrl);
-            
-            // ?? PERFORMANCE FIX: Configure SolrNet to use optimized HTTP client
-            ConfigureSolrNetHttpClient(solrFacility);
-            
+
             // ?? PERFORMANCE OPTIMIZATION: Add cores in optimized order (most used first)
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             
@@ -242,16 +239,6 @@ namespace Kartverket.Metadatakatalog
             System.Runtime.GCSettings.LatencyMode = System.Runtime.GCLatencyMode.SustainedLowLatency;
             
             Console.WriteLine("?? Applied comprehensive .NET 10 performance optimizations for HTTP/GeoNorge/Solr");
-        }
-
-        /// <summary>
-        /// Configure SolrNet to use optimized HTTP client settings
-        /// </summary>
-        private static void ConfigureSolrNetHttpClient(SolrNetFacility facility)
-        {
-            // ?? HTTP CLIENT PERFORMANCE: Create optimized HTTP client for SolrNet
-            // Note: This requires SolrNet to support custom HttpClient injection
-            // If not available, these settings need to be applied at the system level
         }
     }
 }
