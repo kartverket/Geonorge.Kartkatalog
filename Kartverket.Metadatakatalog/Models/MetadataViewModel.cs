@@ -24,11 +24,8 @@ namespace Kartverket.Metadatakatalog.Models
         
         public bool MapOnlyWms => _configuration != null ? Convert.ToBoolean(_configuration["AppSettings:MapOnlyWms"]) : false;
 
-        private readonly ISimpleMetadataUtil _simpleMetadataUtil;
-
-        public MetadataViewModel(ISimpleMetadataUtil simpleMetadataUtil, IConfiguration configuration = null)
+        public MetadataViewModel(IConfiguration configuration = null)
         {
-            _simpleMetadataUtil = simpleMetadataUtil;
             _configuration = configuration;
         }
 
@@ -208,12 +205,12 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 if (DistributionDetails != null)
                 {
-                    mappedUrl = _simpleMetadataUtil.MapUrl(DistributionDetails.URL, HierarchyLevel, DistributionDetails.Protocol, DistributionDetails.Name, true);
+                    mappedUrl = SimpleMetadataUtil.MapUrl(DistributionDetails.URL, HierarchyLevel, DistributionDetails.Protocol, DistributionDetails.Name, true);
                 }
             }
             else if (IsDataset())
             {
-                return _simpleMetadataUtil.NorgeskartUrl + ServiceUrl();
+                return SimpleMetadataUtil.StaticNorgeskartUrl + ServiceUrl();
             }
             return mappedUrl;
         }
@@ -245,7 +242,7 @@ namespace Kartverket.Metadatakatalog.Models
                     {
                         if (ServiceDistributionProtocolForDataset.Contains(SimpleMetadataUtil.OgcWms))
                         {
-                            string commonPart = _simpleMetadataUtil.GetCommonPartOfNorgeskartUrl(SimpleMetadataUtil.OgcWms, true);
+                            string commonPart = SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(SimpleMetadataUtil.OgcWms, true);
 
                             if (!string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
                             {
@@ -259,7 +256,7 @@ namespace Kartverket.Metadatakatalog.Models
                         }
                         else if (!MapOnlyWms && ServiceDistributionProtocolForDataset.Contains(SimpleMetadataUtil.OgcWfs))
                         {
-                            string commonPart = _simpleMetadataUtil.GetCommonPartOfNorgeskartUrl(SimpleMetadataUtil.OgcWfs, true);
+                            string commonPart = SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(SimpleMetadataUtil.OgcWfs, true);
 
                             if (!string.IsNullOrWhiteSpace(ServiceDistributionNameForDataset) && !string.IsNullOrWhiteSpace(ServiceDistributionUrlForDataset))
                             {
@@ -454,7 +451,7 @@ namespace Kartverket.Metadatakatalog.Models
                         layerStrGrid = coverageStrGrid.Substring(startLayerGrid, endLayerGrid);
                     }
 
-                    string commonPart = $"{_simpleMetadataUtil.NorgeskartUrl}#!?zoom={ZoomLevel()}&";
+                    string commonPart = $"{SimpleMetadataUtil.StaticNorgeskartUrl}#!?zoom={ZoomLevel()}&";
 
                     if (typeStr == "GEONORGE-WMS")
                     {

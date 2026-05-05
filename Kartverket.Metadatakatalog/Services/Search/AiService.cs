@@ -27,19 +27,19 @@ namespace Kartverket.Metadatakatalog.Service.Search
         private readonly Geonorge.Utilities.Organization.IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AiService> _logger;
-        private readonly ISimpleMetadataUtil _simpleMetadataUtil;
 
-        public AiService(Geonorge.Utilities.Organization.IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<AiService> logger, ISimpleMetadataUtil simpleMetadataUtil)
+        public bool UseVectorSearch => Convert.ToBoolean(_configuration["AI:UseVectorSearch"]);
+
+        public AiService(Geonorge.Utilities.Organization.IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<AiService> logger)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _logger = logger;
-            _simpleMetadataUtil = simpleMetadataUtil;
         }
 
         public float[] GetPredictions(string text)
         {
-            if (!_simpleMetadataUtil.UseVectorSearch)
+            if (!UseVectorSearch)
                 return null;
 
             string projectId = _configuration["AI:ProjectId"];

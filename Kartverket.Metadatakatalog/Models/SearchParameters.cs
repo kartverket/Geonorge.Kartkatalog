@@ -40,8 +40,7 @@ namespace Kartverket.Metadatakatalog.Models
     {
         private readonly IAiService _aiService;
         private readonly ILogger<SearchParameters> _logger;
-        private readonly ISimpleMetadataUtil _simpleMetadataUtil;
-        public SearchParameters(IAiService aiService, ILogger<SearchParameters> logger, ISimpleMetadataUtil simpleMetadataUtil)
+        public SearchParameters(IAiService aiService, ILogger<SearchParameters> logger)
         {
             Facets = new List<FacetParameter>();
             Offset = 1;
@@ -49,7 +48,6 @@ namespace Kartverket.Metadatakatalog.Models
             orderby = Models.OrderBy.score.ToString();
             _aiService = aiService;
             _logger = logger;
-            _simpleMetadataUtil = simpleMetadataUtil;
         }
 
         public SearchParameters()
@@ -228,7 +226,7 @@ namespace Kartverket.Metadatakatalog.Models
                     string vectorSearchString = null;
                     if(Text.Length > 2) 
                     {
-                        if (_simpleMetadataUtil.UseVectorSearch)
+                        if (SimpleMetadataUtil.StaticUseVectorSearch)
                         {
                              var vectorSw = System.Diagnostics.Stopwatch.StartNew();
                              var embedding = _aiService.GetPredictions(Text);
@@ -256,7 +254,7 @@ namespace Kartverket.Metadatakatalog.Models
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
-                        _simpleMetadataUtil.UseVectorSearch && vectorSearchString != null ? new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80"): null,                            
+                        SimpleMetadataUtil.StaticUseVectorSearch && vectorSearchString != null ? new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80"): null,                            
                     });
                 }
             }

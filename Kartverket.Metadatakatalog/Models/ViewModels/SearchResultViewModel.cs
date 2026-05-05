@@ -1,5 +1,4 @@
-﻿using Kartverket.Metadatakatalog.Service;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
 {
@@ -8,9 +7,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public List<SearchResultItemViewModel> Items { get; set; }
         public List<SearchResultFacetViewModel> Facets { get; set; }
 
-        public SearchResultViewModel(SearchResult searchResult, ISimpleMetadataUtil simpleMetadataUtil)
+        public SearchResultViewModel(SearchResult searchResult)
         {
-            Items = SearchResultItemViewModel.CreateFromList(searchResult.Items, simpleMetadataUtil);
+            Items = SearchResultItemViewModel.CreateFromList(searchResult.Items);
             Facets = SearchResultFacetViewModel.CreateFromList(searchResult.Facets);
         }
 

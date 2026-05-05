@@ -1,5 +1,4 @@
-﻿using Kartverket.Metadatakatalog.Service;
-using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +22,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public Dictionary<string, string> areaDictionary { get; set; }
         public List<string> EnabledFacets { get; set; }
 
-        public SearchViewModel(SearchParameters parameters, SearchResult searchResult, ISimpleMetadataUtil simpleMetadataUtil, Article.SearchResult articleResult = null, Service.PlaceResolver placeResolver = null)
+        public SearchViewModel(SearchParameters parameters, SearchResult searchResult, Article.SearchResult articleResult = null, Service.PlaceResolver placeResolver = null)
         {
             if(articleResult == null)
             {
@@ -32,7 +31,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
             Text = parameters.Text;
             FacetParameters = parameters.Facets;
-            Result = new SearchResultViewModel(searchResult, simpleMetadataUtil);
+            Result = new SearchResultViewModel(searchResult);
             ResultArticles = articleResult;
             Limit = searchResult.Limit == 0 ? 50 : searchResult.Limit;
             Offset = searchResult.Offset;

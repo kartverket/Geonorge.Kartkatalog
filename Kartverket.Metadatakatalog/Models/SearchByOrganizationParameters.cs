@@ -1,5 +1,4 @@
-﻿using Kartverket.Metadatakatalog.Service;
-using Kartverket.Metadatakatalog.Service.Search;
+﻿using Kartverket.Metadatakatalog.Service.Search;
 using Microsoft.Extensions.Logging;
 using SolrNet;
 
@@ -10,7 +9,7 @@ namespace Kartverket.Metadatakatalog.Models
         private readonly ILogger<SearchByOrganizationParameters> _logger;
         public string OrganizationSeoName { get; set; }
 
-        public SearchByOrganizationParameters(IAiService aiService, ILogger<SearchByOrganizationParameters> logger, ILogger<SearchParameters> baseLogger, ISimpleMetadataUtil simpleMetadataUtil) : base(aiService: aiService, logger: baseLogger, simpleMetadataUtil: simpleMetadataUtil)
+        public SearchByOrganizationParameters(IAiService aiService, ILogger<SearchByOrganizationParameters> logger, ILogger<SearchParameters> baseLogger) : base(aiService: aiService, logger: baseLogger)
         {
             _logger = logger;
         }

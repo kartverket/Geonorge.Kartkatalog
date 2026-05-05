@@ -163,7 +163,8 @@ namespace Kartverket.Metadatakatalog.Extensions
             services.AddAuthenticationServices();
 
             // Register SimpleMetadataUtil with configuration
-            services.AddSingleton<ISimpleMetadataUtil, SimpleMetadataUtil>();
+            services.AddSingleton<SimpleMetadataUtil>(provider => 
+                new SimpleMetadataUtil(configuration));
 
             return services;
         }

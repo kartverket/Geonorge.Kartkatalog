@@ -43,10 +43,9 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly ISolrOperations<MetadataIndexDoc> _solrMetadataIndexOperations;
         private readonly ISolrOperations<ApplicationIndexDoc> _solrApplicationOperations;
         private readonly RegisterFetcher Register;
-        private readonly ISimpleMetadataUtil _simpleMetadataUtil;
         public string Culture = Models.Translations.Culture.NorwegianCode;
 
-        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService, IAiService aiService, IConfiguration configuration, ISolrOperations<MetadataIndexAllDoc> solrMetadataOperations, ISolrOperations<ServiceIndexDoc> solrServiceOperations, ISolrOperations<ArticleIndexDoc> solrArticleOperations, ISolrOperations<MetadataIndexDoc> solrMetadataIndexOperations, ISolrOperations<ApplicationIndexDoc> solrApplicationOperations, RegisterFetcher registerFetcher, ILogger<SearchParameters> searchParametersLogger, ISimpleMetadataUtil simpleMetadataUtil)
+        public MetadataService(IGeoNorge geoNorge, GeoNetworkUtil geoNetworkUtil, IGeonorgeUrlResolver geonorgeUrlResolver, IOrganizationService organizationService, ISearchService searchService, IServiceDirectoryService searchServiceDirectoryService, IAiService aiService, IConfiguration configuration, ISolrOperations<MetadataIndexAllDoc> solrMetadataOperations, ISolrOperations<ServiceIndexDoc> solrServiceOperations, ISolrOperations<ArticleIndexDoc> solrArticleOperations, ISolrOperations<MetadataIndexDoc> solrMetadataIndexOperations, ISolrOperations<ApplicationIndexDoc> solrApplicationOperations, RegisterFetcher registerFetcher, ILogger<SearchParameters> searchParametersLogger)
         {
             _geoNorge = geoNorge;
             _geoNetworkUtil = geoNetworkUtil;
@@ -63,7 +62,6 @@ namespace Kartverket.Metadatakatalog.Service
             _solrApplicationOperations = solrApplicationOperations;
             Register = registerFetcher;
             _searchParametersLogger = searchParametersLogger;
-            _simpleMetadataUtil = simpleMetadataUtil;
         }
 
 
@@ -709,7 +707,7 @@ namespace Kartverket.Metadatakatalog.Service
             }
             catch (Exception) { }
 
-            return new SearchResultItemViewModel(metadata, _simpleMetadataUtil);
+            return new SearchResultItemViewModel(metadata);
         }
 
 
@@ -772,7 +770,7 @@ namespace Kartverket.Metadatakatalog.Service
             ISolrQuery query = new SolrQuery("metadata_standard:\"ISO19115\\:Norsk versjon\"");
             try
             {
-                SearchParameters searchParameters = new SearchParameters(_aiService, _searchParametersLogger, _simpleMetadataUtil);
+                SearchParameters searchParameters = new SearchParameters(_aiService, _searchParametersLogger);
                 searchParameters.AddComplexFacetsIfMissing();
                 searchParameters.Limit = 1000;
                 searchParameters.Offset = 1;
@@ -883,7 +881,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             var metadata = ConvertSimpleMetadataToMetadata(simpleMetadata);
 
-            var parameters = new SearchParameters (_aiService, _searchParametersLogger, _simpleMetadataUtil);
+            var parameters = new SearchParameters (_aiService, _searchParametersLogger);
             parameters.Text = simpleMetadata.Uuid;
             var searchResult = _searchService.Search(parameters);
 
@@ -1066,15 +1064,15 @@ namespace Kartverket.Metadatakatalog.Service
             }
             distribution.DistributionName = simpleMetadata.DistributionDetails?.Name;
             //Vis kart
-            if (_simpleMetadataUtil.ShowMapLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
+            if (SimpleMetadataUtil.ShowMapLink(simpleMetadataDistribution, simpleMetadata.HierarchyLevel))
             {
-                distribution.MapUrl = _simpleMetadataUtil.MapUrl(simpleMetadataDistribution, simpleMetadata.HierarchyLevel);
+                distribution.MapUrl = SimpleMetadataUtil.MapUrl(simpleMetadataDistribution, simpleMetadata.HierarchyLevel);
                 distribution.CanShowMapUrl = true;
                 if (distribution.CanShowMapUrl)
                     distribution.ServiceUuid = uuid;
             }
             //Handlekurv
-            if (_simpleMetadataUtil.ShowDownloadService(simpleMetadataDistribution))
+            if (SimpleMetadataUtil.ShowDownloadService(simpleMetadataDistribution))
             {
                 distribution.DownloadUrl = simpleMetadataDistribution.URL;
                 distribution.CanShowDownloadService = true;
@@ -1409,7 +1407,7 @@ namespace Kartverket.Metadatakatalog.Service
             if (simpleMetadata == null)
                 throw new ArgumentNullException(nameof(simpleMetadata));
             try { 
-            var metadata = new MetadataViewModel(_simpleMetadataUtil, _configuration)
+            var metadata = new MetadataViewModel(_configuration)
             {
                 Title = GetTranslation(simpleMetadata.Title, simpleMetadata.EnglishTitle),
                 NorwegianTitle = simpleMetadata.Title,

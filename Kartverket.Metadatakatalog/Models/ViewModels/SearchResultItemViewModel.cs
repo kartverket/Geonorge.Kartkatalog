@@ -130,7 +130,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             else return false;
         }
 
-        public SearchResultItemViewModel(SearchResultItem item, ISimpleMetadataUtil simpleMetadataUtil)
+        public SearchResultItemViewModel(SearchResultItem item)
         {
             Uuid = item.Uuid;
             Title = item.Title;
@@ -160,7 +160,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             {
                 if (!string.IsNullOrWhiteSpace(item.ServiceDistributionProtocolForDataset))
                 {
-                    string commonPart = simpleMetadataUtil.GetCommonPartOfNorgeskartUrl(item.ServiceDistributionProtocolForDataset, true);
+                    string commonPart = SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(item.ServiceDistributionProtocolForDataset, true);
 
                     if (item.ServiceDistributionProtocolForDataset.Contains(SimpleMetadataUtil.OgcWms))
                     {
@@ -192,7 +192,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             {
                 if (!string.IsNullOrWhiteSpace(item.DistributionProtocol) && !string.IsNullOrWhiteSpace(item.DistributionUrl))
                 {
-                    string commonPart = $"{simpleMetadataUtil.GetCommonPartOfNorgeskartUrl(item.DistributionProtocol, true)}{RemoveQueryString(item.DistributionUrl)}";
+                    string commonPart = $"{SimpleMetadataUtil.GetCommonPartOfNorgeskartUrl(item.DistributionProtocol, true)}{RemoveQueryString(item.DistributionUrl)}";
 
                     if (item.DistributionProtocol.Contains(SimpleMetadataUtil.OgcWms) || item.DistributionProtocol.Contains(SimpleMetadataUtil.OgcWfs))
                     {
@@ -227,20 +227,20 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             ShowDownloadService = DownloadService();
             ShowDownloadLink = DownloadLink();
             AddToCartUrl = GetAddToCartUrl();
-            MapUrl = GetMapUrl(simpleMetadataUtil);
+            MapUrl = GetMapUrl();
         }
 
-        private string GetMapUrl(ISimpleMetadataUtil simpleMetadataUtil)
+        private string GetMapUrl()
         {
             if (ShowMaplink())
             {
                 ShowMapLink = true;
-                return simpleMetadataUtil.NorgeskartUrl + DownloadUrl;
+                return SimpleMetadataUtil.StaticNorgeskartUrl + DownloadUrl;
             }
             if (ShowServiceMaplink())
             {
                 ShowServiceMapLink = true; 
-                return simpleMetadataUtil.NorgeskartUrl + ServiceUrl;
+                return SimpleMetadataUtil.StaticNorgeskartUrl + ServiceUrl;
             }
             return "";
         }
@@ -299,9 +299,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         }
 
-        public static List<SearchResultItemViewModel> CreateFromList(IEnumerable<SearchResultItem> items, ISimpleMetadataUtil simpleMetadataUtil)
+        public static List<SearchResultItemViewModel> CreateFromList(IEnumerable<SearchResultItem> items)
         {
-            return items.Select(item => new SearchResultItemViewModel(item, simpleMetadataUtil)).ToList();
+            return items.Select(item => new SearchResultItemViewModel(item)).ToList();
         }
 
         public RouteValueDictionary ShowMetadataLinkRouteValueDictionary()
