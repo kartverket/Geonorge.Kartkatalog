@@ -163,7 +163,7 @@ jobs:
         env:
           COMMIT_MESSAGE: ${{ needs.build_image.outputs.commit_message }}
         run: |
-          echo "\"ghcr.io/kartverket/geonorge-kartkatalog-backend${{ needs.build_image.outputs.short_tag }}"\" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
+          echo "\"ghcr.io/kartverket/geonorge-kartkatalog-backend:${{ needs.build_image.outputs.short_tag }}"\" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
           git add .
           git commit -m "$COMMIT_MESSAGE"
           git push
