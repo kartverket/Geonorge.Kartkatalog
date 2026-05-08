@@ -161,9 +161,9 @@ jobs:
 
       - name: Update deployment
         env:
-          COMMIT_MESSAGE: ${{ needs.build_image.outputs.tags }}
+          COMMIT_MESSAGE: ${{ needs.build_image.outputs.commit_message }}
         run: |
-          echo "\"${{ needs.build_image.outputs.docker_tag }}"\" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
+          echo "\"${{ needs.build_image.outputs.short_tag }}"\" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
           git add .
           git commit -m "$COMMIT_MESSAGE"
           git push
