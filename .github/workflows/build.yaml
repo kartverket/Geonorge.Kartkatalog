@@ -161,7 +161,7 @@ jobs:
 
       - name: Update deployment
         env:
-          COMMIT_MESSAGE: ${{ needs.build_image.outputs.commit_message }}
+          COMMIT_MESSAGE: ${{ needs.build_image.outputs.tags }}
         run: |
           echo "\"${{ needs.build_image.outputs.docker_tag }}"\" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
           git add .
