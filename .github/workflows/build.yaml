@@ -134,7 +134,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build_image]
     name: Deploy
     permissions:
       contents: read
