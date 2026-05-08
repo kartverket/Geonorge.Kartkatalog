@@ -115,19 +115,55 @@ jobs:
   #           https://api.github.com/repos/kartverket/geonorge-apps/actions/workflows/release-new-dev-public.yml/dispatches \
   #           -d "$payload"
 
+  # deploy:
+  #   needs: [build_image]
+  #   name: Deploy
+  #   permissions:
+  #     id-token: write
+  #   uses: kartverket/geonorge-apps/.github/workflows/release-new-dev.yml@main
+  #   with:
+  #     # Apps repo app name
+  #     application: kartkatalog-backend
+  #     # Apps repo namespace
+  #     namespace: geonorge-kartkatalog-dev
+  #     # Ghrc.io image tag
+  #     tag: ${{ needs.build_image.outputs.tags }}
+  #     # identity for the octo-sts action
+  #     identity: Geonorge.Kartkatalog
+  #     commit_message: ${{ needs.build_image.outputs.commit_message }}
+
   deploy:
-    needs: [build_image]
+    runs-on: ubuntu-latest
+    needs: build
     name: Deploy
     permissions:
+      contents: read
       id-token: write
-    uses: kartverket/geonorge-apps/.github/workflows/release-new-dev.yml@main
-    with:
-      # Apps repo app name
-      application: kartkatalog-backend
-      # Apps repo namespace
-      namespace: geonorge-kartkatalog-dev
-      # Ghrc.io image tag
-      tag: ${{ needs.build_image.outputs.tags }}
-      # identity for the octo-sts action
-      identity: Geonorge.Kartkatalog
-      commit_message: ${{ needs.build_image.outputs.commit_message }}
+    # if: github.event_name != 'pull_request'
+    steps:
+      - uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05
+        id: octo-sts
+        with:
+          scope: kartverket/geonorge-apps
+          identity: kartkatalog-backend
+
+      - name: Checkout apps repository
+        uses: actions/checkout@v6
+        with:
+          repository: kartverket/geonorge-apps
+          ref: main
+          token: ${{ steps.octo-sts.outputs.token }}
+
+      - name: Git setup for deploy
+        run: |
+          git config --global user.email "kartkatalog-backend@kartverket.no"
+          git config --global user.name "kartkatalog-backend CI"
+
+      - name: Update deployment
+        env:
+          COMMIT_MESSAGE: ${{ needs.build_image.outputs.commit_message }}
+        run: |
+          echo "\"${{ needs.build_image.outputs.docker_tag }}"\" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
+          git add .
+          git commit -m "$COMMIT_MESSAGE"
+          git push
