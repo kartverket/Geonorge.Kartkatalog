@@ -3,6 +3,7 @@ using Kartverket.Geonorge.Utilities;
 using Kartverket.Geonorge.Utilities.Organization;
 using Kartverket.Metadatakatalog.Adapters;
 using Kartverket.Metadatakatalog.Extensions;
+using Kartverket.Metadatakatalog.Formatter;
 using Kartverket.Metadatakatalog.Middleware;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.SearchIndex;
@@ -54,7 +55,10 @@ namespace Kartverket.Metadatakatalog
                 services.AddRazorPages();
 
                 // Add API controllers for REST endpoints
-                services.AddControllers()
+                services.AddControllers(options =>
+                    {
+                        options.OutputFormatters.Add(new CsvFormatter());
+                    })
                     .AddJsonOptions(opts =>
                     {
                         // Preserve exact property names (no camel-casing)
@@ -350,6 +354,19 @@ namespace Kartverket.Metadatakatalog
                 app.UseResponseCompression();
 
                 app.UseStaticFiles();
+
+                // Map legacy `?mediatype=...` querystring to the Accept header so MVC
+                // content negotiation picks the matching output formatter (e.g. CsvFormatter).
+                app.Use(async (ctx, next) =>
+                {
+                    var mt = ctx.Request.Query["mediatype"].ToString();
+                    if (!string.IsNullOrEmpty(mt))
+                    {
+                        var mapped = mt.Equals("csv", StringComparison.OrdinalIgnoreCase) ? "text/csv" : mt;
+                        ctx.Request.Headers["Accept"] = mapped;
+                    }
+                    await next();
+                });
 
                 app.UseRouting();
 

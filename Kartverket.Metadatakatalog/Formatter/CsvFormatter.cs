@@ -41,14 +41,14 @@ namespace Kartverket.Metadatakatalog.Formatter
             // Set content disposition for file download
             response.Headers.Append("Content-Disposition", "attachment; filename=kartkatalogen.csv");
 
-            using var writer = new StreamWriter(response.Body, selectedEncoding, leaveOpen: true);
-            
+            await using var writer = new StreamWriter(response.Body, selectedEncoding, leaveOpen: true);
+
             var data = context.Object as SearchResult;
             if (data == null)
             {
                 throw new InvalidOperationException("Cannot serialize type");
             }
-            
+
             await WriteAsync(data, writer);
             await writer.FlushAsync();
         }
