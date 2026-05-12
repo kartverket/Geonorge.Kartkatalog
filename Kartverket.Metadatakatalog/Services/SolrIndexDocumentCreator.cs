@@ -1511,7 +1511,7 @@ namespace Kartverket.Metadatakatalog.Service
                 else if (protocol.ToLower().Contains("www:download")) return "Downloadpage";
                 else if (protocol.ToLower().Contains("geonorge:download")) return "Geonorge";
                 else if (protocol.ToLower().Contains("geonorge:filedownload")) return "Filedownload";
-                else if (protocol.ToLower().Contains("link")) return "Webpage";
+                else if (protocol.ToLower().Contains("link")) return "Website";
                 else if (protocol.ToLower().Contains("rest")) return "REST-API";
                 else if (protocol.ToLower().Contains("wcs")) return "WCS-service";
                 else if (protocol.ToLower().Contains("ws")) return "Webservice";
