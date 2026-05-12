@@ -5,6 +5,7 @@ using System;
 using SolrNet.Commands.Parameters;
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
+using Microsoft.Extensions.Logging;
 
 namespace Kartverket.Metadatakatalog.Models.Article
 {
@@ -26,11 +27,13 @@ namespace Kartverket.Metadatakatalog.Models.Article
 
     public class SearchParameters
     {
-        public SearchParameters()
+        private readonly ILogger<SearchParameters> _logger;
+        public SearchParameters(ILogger<SearchParameters> logger)
         {
             Offset = 1;
             Limit = 30;
             orderby = Models.OrderBy.score.ToString();
+            _logger = logger;
         }
 
         public string Text { get; set; }
@@ -59,7 +62,6 @@ namespace Kartverket.Metadatakatalog.Models.Article
         /// <returns></returns>
         public ISolrQuery BuildQuery()
         {
-            log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             ISolrQuery query;
             if (!string.IsNullOrEmpty(Text))
             {
@@ -104,7 +106,7 @@ namespace Kartverket.Metadatakatalog.Models.Article
             }
             else query = SolrQuery.All;
 
-            Log.Debug("Query: " + query.ToString());
+            _logger.LogDebug("Query: " + query.ToString());
             return query;
         }
     }

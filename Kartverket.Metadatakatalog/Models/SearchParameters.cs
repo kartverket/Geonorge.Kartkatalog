@@ -1,21 +1,14 @@
-using SolrNet;
-using System.Collections.Generic;
-using System.Linq;
-using System;
-using SolrNet.Commands.Parameters;
 using Kartverket.Metadatakatalog.Helpers;
 using Kartverket.Metadatakatalog.Models.Translations;
-using Resources;
-using System.Web.Configuration;
-using System.Web;
-using Google.Apis.Auth.OAuth2;
-using Grpc.Core;
-using System.IO;
-using Google.Apis.Http;
-using System.Threading.Tasks;
-using GeoNorgeAPI;
 using Kartverket.Metadatakatalog.Service;
 using Kartverket.Metadatakatalog.Service.Search;
+using Microsoft.Extensions.Logging;
+using Resources;
+using SolrNet;
+using SolrNet.Commands.Parameters;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Kartverket.Metadatakatalog.Models
 {
@@ -46,14 +39,15 @@ namespace Kartverket.Metadatakatalog.Models
     public class SearchParameters
     {
         private readonly IAiService _aiService;
-
-        public SearchParameters(IAiService aiService)
+        private readonly ILogger<SearchParameters> _logger;
+        public SearchParameters(IAiService aiService, ILogger<SearchParameters> logger)
         {
             Facets = new List<FacetParameter>();
             Offset = 1;
             Limit = 30;
             orderby = Models.OrderBy.score.ToString();
             _aiService = aiService;
+            _logger = logger;
         }
 
         public SearchParameters()
@@ -81,7 +75,7 @@ namespace Kartverket.Metadatakatalog.Models
             {
                 if (Facets != null)
                 {
-                    var selectedFacets = Facets.Where(f => f.Name == defaultFacet);
+                    var selectedFacets = Facets.Where(f => string.Equals(f.Name, defaultFacet, StringComparison.OrdinalIgnoreCase));
                     if (selectedFacets.Any())
                     {
                         foreach (var selectedFacet in selectedFacets)
@@ -176,7 +170,6 @@ namespace Kartverket.Metadatakatalog.Models
         /// <returns></returns>
         public ISolrQuery BuildQuery()
         {
-            log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             ISolrQuery query = null;
             try
             {
@@ -233,15 +226,18 @@ namespace Kartverket.Metadatakatalog.Models
                     string vectorSearchString = null;
                     if(Text.Length > 2) 
                     {
-                        if (SimpleMetadataUtil.UseVectorSearch) 
+                        if (SimpleMetadataUtil.StaticUseVectorSearch)
                         {
-                            var embedding = _aiService.GetPredictions(Text);
-                            if(embedding != null) 
-                            {
-                                vectorSearchString = "[" + string.Join("|", embedding) + "]";
-                                vectorSearchString = vectorSearchString.Replace(",", ".");
-                                vectorSearchString = vectorSearchString.Replace("|", ",");
-                            }
+                             var vectorSw = System.Diagnostics.Stopwatch.StartNew();
+                             var embedding = _aiService.GetPredictions(Text);
+                             vectorSw.Stop();
+                             _logger?.LogInformation("Vertex embedding ms={EmbeddingMs} text={Text}", vectorSw.ElapsedMilliseconds, Text);
+                             if(embedding != null && embedding.Length > 0)
+                             {
+                                 // Format embedding values with proper ASCII formatting for Solr
+                                 var formattedEmbedding = embedding.Select(f => f.ToString("F8", System.Globalization.CultureInfo.InvariantCulture));
+                                 vectorSearchString = "[" + string.Join(",", formattedEmbedding) + "]";
+                             }
                         }
                     }
 
@@ -258,7 +254,7 @@ namespace Kartverket.Metadatakatalog.Models
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
-                        SimpleMetadataUtil.UseVectorSearch && vectorSearchString != null ? new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80"): null,                            
+                        SimpleMetadataUtil.StaticUseVectorSearch && vectorSearchString != null ? new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80"): null,                            
                     });
                 }
             }
@@ -272,7 +268,7 @@ namespace Kartverket.Metadatakatalog.Models
             }
             catch (Exception ex)
             {
-                Log.Error("Error in BuildQuery: " + ex.Message);
+                _logger.LogError("Error in BuildQuery: " + ex.Message);
             }
 
             return query;

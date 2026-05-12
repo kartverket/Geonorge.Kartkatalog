@@ -1,163 +1,178 @@
-﻿using Kartverket.Metadatakatalog.App_Start;
+using Kartverket.Metadatakatalog.App_Start;
 using Kartverket.Metadatakatalog.Service;
 using System;
+using System.Net;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Web.Http;
-using System.Web.Http.Cors;
-using System.Web.Http.Description;
-using System.Web.Mvc;
+using System.Threading.Tasks;
+using SolrNet;
+using Kartverket.Metadatakatalog.Models;
+using System.Reflection;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
-    [HandleError]
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class ApiMetadataController : ApiController
+    [EnableCors]
+    [ApiController]
+    [Route("api")]
+    [Authorize(AuthenticationSchemes = "BasicAuthentication")]
+    public class ApiMetadataController : ControllerBase
     {
-
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+        private readonly ILogger<ApiMetadataController> _logger;
+        private readonly IConfiguration _configuration;
         private readonly MetadataIndexer _indexer;
         private readonly IErrorService _errorService;
 
-        public ApiMetadataController(MetadataIndexer indexer, IErrorService errorService)
+        public ApiMetadataController(MetadataIndexer indexer, IErrorService errorService, ILogger<ApiMetadataController> logger, IConfiguration configuration)
         {
             _indexer = indexer;
             _errorService = errorService;
+            _logger = logger;
+            _configuration = configuration;
         }
 
         /// <summary>
         /// Metadata updated
         /// </summary>
-        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [System.Web.Http.Route("api/metadataupdated")]
-        [System.Web.Http.HttpPost]
-        public IHttpActionResult MetadataUpdated(FormDataCollection metadata)
+        [Route("metadataupdated")]
+        [HttpPost]
+        public IActionResult MetadataUpdated([FromForm] IFormCollection metadata)
         {
+            var overallStart = DateTime.UtcNow;
             HttpStatusCode statusCode;
 
-            string action = metadata.Get("action");
-            string uuid = metadata.Get("uuid");
-            string XMLFile = metadata.Get("XMLFile");
+            string action = metadata["action"];
+            string uuid = metadata["uuid"];
+            string XMLFile = metadata["XMLFile"];
 
             try
             {
-                Log.Info("Received notification of updated metadata: " + action + ", uuid=" + uuid);
+                _logger.LogInformation("?? PERFORMANCE TRACKING START - uuid={Uuid}", uuid);
+                _logger.LogInformation("Received notification of updated metadata: " + action + ", uuid=" + uuid);
 
                 if (!string.IsNullOrWhiteSpace(uuid))
                 {
-                    Log.Info("Running single indexing of metadata with uuid=" + uuid);
+                    _logger.LogInformation("Running single indexing of metadata with uuid=" + uuid);
 
+                    var indexingStart = DateTime.UtcNow;
                     _indexer.RunIndexingOn(uuid, action);
+                    var indexingEnd = DateTime.UtcNow;
+                    var indexingDuration = (indexingEnd - indexingStart).TotalSeconds;
+
+                    _logger.LogInformation("?? INDEXING COMPLETED in {Duration:F2} seconds for uuid={Uuid}", indexingDuration, uuid);
 
                     statusCode = HttpStatusCode.OK;
                 }
                 else
                 {
-                    Log.Warn("Not indexing metadata - uuid was empty");
+                    _logger.LogWarning("Not indexing metadata - uuid was empty");
                     statusCode = HttpStatusCode.BadRequest;
                 }
+
+                var overallEnd = DateTime.UtcNow;
+                var overallDuration = (overallEnd - overallStart).TotalSeconds;
+                _logger.LogInformation("?? TOTAL METADATAUPDATED DURATION: {Duration:F2} seconds for uuid={Uuid}", overallDuration, uuid);
             }
             catch (Exception e)
             {
-                Log.Error("Exception while indexing single metadata.", e);
+                var overallEnd = DateTime.UtcNow;
+                var overallDuration = (overallEnd - overallStart).TotalSeconds;
+                _logger.LogError("? Exception after {Duration:F2} seconds while indexing metadata uuid={Uuid}: {Exception}", overallDuration, uuid, e);
                 _errorService.AddError(uuid, e);
                 statusCode = HttpStatusCode.BadRequest;
             }
-            return StatusCode(statusCode);
+            return StatusCode((int)statusCode);
         }
 
         /// <summary>
         /// Run metadata indexing
         /// </summary>
-        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [System.Web.Http.Route("api/index-metadata")]
-        [System.Web.Http.HttpGet]
-        public IHttpActionResult Index()
+        [Route("index-metadata")]
+        [HttpGet]
+        public IActionResult Index()
         {
             HttpStatusCode statusCode;
 
             try
             {
-                Log.Info("Run indexing of entire metadata catalogue.");
+                _logger.LogInformation("Run indexing of entire metadata catalogue.");
                 DateTime start = DateTime.Now;
 
                 _indexer.RunIndexing();
 
                 DateTime stop = DateTime.Now;
                 double seconds = stop.Subtract(start).TotalSeconds;
-                Log.Info(string.Format("Indexing fininshed after {0} seconds.", seconds));
+                _logger.LogInformation(string.Format("Indexing fininshed after {0} seconds.", seconds));
 
                 statusCode = HttpStatusCode.OK;
 
             }
             catch (Exception e)
             {
-                Log.Error("Exception while indexing metadata.", e);
+                _logger.LogError("Exception while indexing metadata.", e);
                 statusCode = HttpStatusCode.BadRequest;
             }
-            return StatusCode(statusCode);
+            return StatusCode((int)statusCode);
         }
 
         /// <summary>
         /// Run metadata re-indexing
         /// </summary>
-        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [System.Web.Http.Route("api/reindex-metadata")]
-        [System.Web.Http.HttpGet]
-        public IHttpActionResult ReIndex()
+        [Route("reindex-metadata")]
+        [HttpGet]
+        public IActionResult ReIndex()
         {
             HttpStatusCode statusCode;
 
             try
             {
-                Log.Info("Run re-indexing of entire metadata catalogue.");
+                _logger.LogInformation("Run re-indexing of entire metadata catalogue.");
                 DateTime start = DateTime.Now;
 
                 _indexer.RunReIndexing();
 
                 DateTime stop = DateTime.Now;
                 double seconds = stop.Subtract(start).TotalSeconds;
-                Log.Info(string.Format("Indexing fininshed after {0} seconds.", seconds));
+                _logger.LogInformation(string.Format("Indexing fininshed after {0} seconds.", seconds));
 
                 statusCode = HttpStatusCode.OK;
 
             }
             catch (Exception e)
             {
-                Log.Error("Exception while re-indexing metadata.", e);
+                _logger.LogError("Exception while re-indexing metadata.", e);
                 statusCode = HttpStatusCode.BadRequest;
             }
-            return StatusCode(statusCode);
+            return StatusCode((int)statusCode);
         }
 
-        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("api/flushcache")]
-        public ActionResult FlushCache()
+        [HttpGet]
+        [Route("flushcache")]
+        public IActionResult FlushCache()
         {
             MemoryCacher memCacher = new MemoryCacher();
             memCacher.DeleteAll();
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return StatusCode((int)HttpStatusCode.OK);
         }
 
         /// <summary>
         /// Remove metadata uuid from index
         /// </summary>
-        [System.Web.Http.Authorize(Roles = AuthConfig.DatasetProviderRole)]
-        [System.Web.Http.Route("api/remove-metadata/{uuid}")]
-        [System.Web.Http.HttpGet]
-        public IHttpActionResult Remove(string uuid)
+        [Route("remove-metadata/{uuid}")]
+        [HttpGet]
+        public IActionResult Remove(string uuid)
         {
             HttpStatusCode statusCode;
 
             try
             {
-                Log.Info("Remove metadata uuid: " + uuid);
+                _logger.LogInformation("Remove metadata uuid: " + uuid);
                 DateTime start = DateTime.Now;
 
                 _indexer.RemoveUuid(uuid);
@@ -167,10 +182,10 @@ namespace Kartverket.Metadatakatalog.Controllers
             }
             catch (Exception e)
             {
-                Log.Error("Exception while removing metadata.", e);
+                _logger.LogError("Exception while removing metadata.", e);
                 statusCode = HttpStatusCode.BadRequest;
             }
-            return StatusCode(statusCode);
+            return StatusCode((int)statusCode);
         }
 
     }

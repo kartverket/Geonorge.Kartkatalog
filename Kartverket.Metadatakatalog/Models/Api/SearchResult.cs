@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Web.Mvc;
 
 namespace Kartverket.Metadatakatalog.Models.Api
 {
@@ -13,13 +12,23 @@ namespace Kartverket.Metadatakatalog.Models.Api
             NumFound = searchResult.NumFound;
         }
 
-        public SearchResult(Models.SearchResult searchResult, UrlHelper urlHelper)
+        public SearchResult(Models.SearchResult searchResult, IUrlHelper urlHelper)
         {
             Limit = searchResult.Limit;
             Offset = searchResult.Offset;
             NumFound = searchResult.NumFound;
             Results = Metadata.CreateFromList(searchResult.Items, urlHelper);
             Facets = Facet.CreateFromList(searchResult.Facets);
+            Type = searchResult.Type;
+        }
+
+        public SearchResult(Models.SearchResult searchResult, IUrlHelper urlHelper, Dictionary<string, string> areaDictionary)
+        {
+            Limit = searchResult.Limit;
+            Offset = searchResult.Offset;
+            NumFound = searchResult.NumFound;
+            Results = Metadata.CreateFromList(searchResult.Items, urlHelper);
+            Facets = Facet.CreateFromList(searchResult.Facets, areaDictionary);
             Type = searchResult.Type;
         }
         /// <summary>

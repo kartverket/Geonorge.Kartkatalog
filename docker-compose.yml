@@ -1,0 +1,16 @@
+services:
+  kartverket.metadatakatalog:
+    image: ${DOCKER_REGISTRY-}kartverketmetadatakatalog
+    build:
+      context: .
+      dockerfile: Kartverket.Metadatakatalog/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=
+    ports:
+      - "8082:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./key.json:/app/gcloud/application_default_credentials.json:ro

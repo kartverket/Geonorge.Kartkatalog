@@ -1,32 +1,42 @@
-﻿using System;
-using System.Net;
-using System.Web;
-using System.Web.Configuration;
-using System.Web.Mvc;
 using Kartverket.Metadatakatalog.Models;
 using Kartverket.Metadatakatalog.Models.Translations;
 using Kartverket.Metadatakatalog.Models.ViewModels;
 using Kartverket.Metadatakatalog.Service.Application;
 using Kartverket.Metadatakatalog.Service.Article;
 using Kartverket.Metadatakatalog.Service.Search;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Net;
 
 namespace Kartverket.Metadatakatalog.Controllers
 {
-    [HandleError]
     public class SearchController : Controller
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger<SearchController> _logger;
 
         private readonly ISearchServiceAll _searchService;
         private readonly IArticleService _articleService;
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _environment;
 
-        public SearchController(ISearchServiceAll searchService, IArticleService articleSevice)
+        public SearchController(ISearchServiceAll searchService, IArticleService articleSevice, IConfiguration configuration, IWebHostEnvironment environment, ILogger<SearchController> logger)
         {
             _searchService = searchService;
             _articleService = articleSevice;
+            _configuration = configuration;
+            _environment = environment;
+            _logger = logger;
         }
 
 
@@ -35,113 +45,67 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// </summary>
         /// <param name="parameters">Facets</param>
         /// <returns>/search</returns>
-        public ActionResult Index(SearchParameters parameters)
+        public IActionResult Index(SearchParameters parameters)
         {
-            parameters.AddComplexFacetsIfMissing();
-            var searchResult = _searchService.Search(parameters);
-            Kartverket.Metadatakatalog.Models.Article.SearchParameters articleParameters = new Models.Article.SearchParameters();
-            articleParameters.Text = parameters.Text;
-            articleParameters.Limit = 200;
-            if (string.IsNullOrEmpty(parameters.Text))
-                articleParameters.orderby = "StartPublish";
-            var articleResult = _articleService.Search(articleParameters);
-
-
-            var model = new SearchViewModel(parameters, searchResult, articleResult);
-
-            return View(model);
+            return RedirectToActionPermanent("Index", "Download");
         }
 
-        /// <summary>
-        /// Shows datasets by selected municipality or county.
-        /// </summary>
-        /// <param name="parameters">Uses AreaCode to find selected municipality or county. </param>
-        /// <returns>/hva-finnes-i-kommunen-eller-fylket</returns>
-        public ActionResult Area(SearchByAreaParameters parameters)
+        [AllowAnonymous]
+        public IActionResult SignIn()
         {
-            parameters.AddDefaultFacetsIfMissing();
-            parameters.CreateFacetOfArea();
+            try
+            {
+                _logger.LogInformation("SignIn method called - starting authentication challenge");
+                _logger.LogInformation($"Current user authenticated: {User.Identity.IsAuthenticated}");
 
-            var searchResult = _searchService.Search(parameters);
-            var model = new SearchByAreaViewModel(parameters, searchResult);
+                var redirectUrl = "/nedlasting";
+                _logger.LogInformation($"Challenging with redirect URL: {redirectUrl}");
 
-            return View(model);
+                // Also log cookie information
+                _logger.LogInformation($"Current cookies: {string.Join(", ", Request.Cookies.Keys)}");
+
+                return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during authentication challenge");
+                throw;
+            }
         }
 
-        public void SignIn()
-        {
-            var redirectUrl = "/nedlasting";
-            HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = redirectUrl },
-                OpenIdConnectAuthenticationDefaults.AuthenticationType);
-        }
-
-        public void SignOut()
+        [AllowAnonymous]
+        public new IActionResult SignOut()
         {
             // Save redirect to basket in a cookie
-            HttpCookie cookie = Request.Cookies["_redirectDownload"];
-
-            if (cookie != null)
+            var cookieOptions = new CookieOptions
             {
-                cookie.Value = "false";   // update cookie value
-                cookie.Path = "/";
-                //cookie.SameSite = SameSiteMode.Lax;
-                if (!Request.IsLocal)
-                    cookie.Domain = ".geonorge.no";
-            }
-            else
-            {
-                cookie = new HttpCookie("_redirectDownload");
-                cookie.Value = "false";
-                cookie.Path = "/";
-                //cookie.SameSite = SameSiteMode.Lax;
+                Path = "/",
+                SameSite = SameSiteMode.Lax
+            };
 
-                if (!Request.IsLocal)
-                    cookie.Domain = ".geonorge.no";
-            }
-            Response.Cookies.Add(cookie);
+            if (!_environment.IsDevelopment())
+                cookieOptions.Domain = ".geonorge.no";
 
+            // Set redirect download cookie
+            Response.Cookies.Append("_redirectDownload", "false", cookieOptions);
 
-            // Change loggedIn cookie
-            cookie = Request.Cookies["_loggedIn"];
+            // Set logged in cookie
+            Response.Cookies.Append("_loggedIn", "false", cookieOptions);
 
-            if (cookie != null)
-            {
-                cookie.Value = "false";   // update cookie value
-                //cookie.SameSite = SameSiteMode.Lax;
-                if (!Request.IsLocal)
-                    cookie.Domain = ".geonorge.no";
-            }
-            else
-            {
-                cookie = new HttpCookie("_loggedIn");
-                cookie.Value = "false";
-                //cookie.SameSite = SameSiteMode.Lax;
-
-                if (!Request.IsLocal)
-                    cookie.Domain = ".geonorge.no";
-            }
-            Response.Cookies.Add(cookie);
-
-
-            var redirectUri = WebConfigurationManager.AppSettings["GeoID:PostLogoutRedirectUri"];
-            HttpContext.GetOwinContext().Authentication.SignOut(
-                new AuthenticationProperties { RedirectUri = redirectUri },
-                OpenIdConnectAuthenticationDefaults.AuthenticationType,
-                CookieAuthenticationDefaults.AuthenticationType);
+            var redirectUri = "/nedlasting";
+            return base.SignOut(new AuthenticationProperties { RedirectUri = redirectUri },
+                OpenIdConnectDefaults.AuthenticationScheme,
+                CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         /// <summary>
         /// This is the action responding to /signout-callback-oidc route after logout at the identity provider
         /// </summary>
         /// <returns></returns>
-        public ActionResult SignOutCallback()
+        public IActionResult SignOutCallback()
         {
             return RedirectToAction(nameof(SearchController.Index), "Search");
         }
-
-        protected override void OnException(ExceptionContext filterContext)
-        {
-            Log.Error("Error", filterContext.Exception);
-        }
     }
 }
+

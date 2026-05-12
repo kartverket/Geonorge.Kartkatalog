@@ -1,6 +1,7 @@
 # keep config file out of source control
 settings.config
 authentication.config
+appsettings.local.json
 
 Kartverket.Metadatakatalog/temafiler
 
@@ -168,4 +169,8 @@ $RECYCLE.BIN/
 # npm packages  
 node_modules/
 
-Kartverket.Metadatakatalog/sitemap/sitemap.xml
+Kartverket.Metadatakatalog/wwwroot/sitemap/sitemap.xml
+
+.env
+key.json
+application_default_credentials.json

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Resources;
+using Kartverket.Metadatakatalog.Service;
 
 namespace Kartverket.Metadatakatalog.Models.ViewModels
 {
@@ -11,17 +12,16 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
         public int Count { get; set; }
         public string ShortName { get; set; }
 
-        private SearchResultFacetValueViewModel(Facet.FacetValue facetValue, string facetField)
+        private SearchResultFacetValueViewModel(Facet.FacetValue facetValue, string facetField, RegisterFetcher registerFetcher = null)
         {
             Name = facetValue.Name;
             Count = facetValue.Count;
-            if(facetField == "organization")
-                ShortName = GetShortName(facetValue.Name);
+            if(facetField == "organization" && registerFetcher != null)
+                ShortName = GetShortName(facetValue.Name, registerFetcher);
         }
 
-        private string GetShortName(string name)
+        private string GetShortName(string name, RegisterFetcher register)
         {
-            Service.RegisterFetcher register = new Service.RegisterFetcher();
             string newValue = name;
             register.OrganizationShortNames.TryGetValue(name, out newValue);
             if (!string.IsNullOrEmpty(newValue))
@@ -29,9 +29,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
             return name;
         }
 
-        public static List<SearchResultFacetValueViewModel> CreateFromList(Facet facet)
+        public static List<SearchResultFacetValueViewModel> CreateFromList(Facet facet, RegisterFetcher registerFetcher = null)
         {
-            return facet.FacetResults.Select(item => new SearchResultFacetValueViewModel(item, facet.FacetField)).ToList();
+            return facet.FacetResults.Select(item => new SearchResultFacetValueViewModel(item, facet.FacetField, registerFetcher)).ToList();
         }
 
         public string LinkName()

@@ -1,67 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Web;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.ModelBinding;
 using System.Reflection;
 using System.Collections;
 using System.Text.RegularExpressions;
-using System.Configuration;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
 
-namespace SM.General.Api
+namespace Kartverket.Metadatakatalog.Models.Api
 {
     public class FieldValueModelBinder : IModelBinder
     {
-        private const string RexChechNumeric = @"^\d+$";
+        private const string RexCheckNumeric = @"^\d+$";
         private const string RexBrackets = @"\[\d*\]";
         private const string RexSearchBracket = @"\[([^}])\]";
 
         //Define original source data list
         private List<KeyValuePair<string, string>> kvps;
 
-        //Set default maximum resursion limit
+        //Set default maximum recursion limit
         private int maxRecursionLimit = 100;
         private int recursionCount = 0;
 
-        //Implement base member
-        public bool BindModel(HttpActionContext actionContext, ModelBindingContext bindingContext)
+        private readonly IConfiguration _configuration;
+
+        public FieldValueModelBinder(IConfiguration configuration = null)
         {
-            //Overwrite default maximum resursion limit if value set in config file
-            var maxRecurseLimit = ConfigurationManager.AppSettings["MaxRecursionLimit"].ToString();
-            if (!string.IsNullOrEmpty(maxRecurseLimit) && Regex.IsMatch(maxRecurseLimit, RexChechNumeric))
+            _configuration = configuration;
+        }
+
+        //Implement base member for ASP.NET Core
+        public Task BindModelAsync(ModelBindingContext bindingContext)
+        {
+            if (bindingContext == null)
             {
-                maxRecursionLimit = Convert.ToInt32(maxRecurseLimit);
+                throw new ArgumentNullException(nameof(bindingContext));
             }
 
-            //Check and get source data from uri 
-            if (!string.IsNullOrEmpty(actionContext.Request.RequestUri.Query))
+            //Overwrite default maximum recursion limit if value set in config file
+            if (_configuration != null)
             {
-                kvps = actionContext.Request.GetQueryNameValuePairs().ToList();
+                var maxRecurseLimit = _configuration["MaxRecursionLimit"];
+                if (!string.IsNullOrEmpty(maxRecurseLimit) && Regex.IsMatch(maxRecurseLimit, RexCheckNumeric))
+                {
+                    maxRecursionLimit = Convert.ToInt32(maxRecurseLimit);
+                }
             }
-            //Check and get source data from body 
-            else if (actionContext.Request.Content.IsFormData())
+
+            var request = bindingContext.HttpContext.Request;
+
+            //Check and get source data from query string
+            if (request.Query.Count > 0)
             {
-                var bodyString = actionContext.Request.Content.ReadAsStringAsync().Result;
+                kvps = request.Query.SelectMany(q => q.Value, (q, v) => new KeyValuePair<string, string>(q.Key, v)).ToList();
+            }
+            //Check and get source data from form body 
+            else if (request.HasFormContentType && request.Form.Count > 0)
+            {
                 try
                 {
-                    kvps = ConvertToKvps(bodyString);
+                    kvps = request.Form.SelectMany(f => f.Value, (f, v) => new KeyValuePair<string, string>(f.Key, v)).ToList();
                 }
                 catch (Exception ex)
                 {
                     bindingContext.ModelState.AddModelError(bindingContext.ModelName, ex.Message);
-                    return false;
+                    bindingContext.Result = ModelBindingResult.Failed();
+                    return Task.CompletedTask;
                 }
             }
             else
             {
                 bindingContext.ModelState.AddModelError(bindingContext.ModelName, "No input data");
-                return false;
+                bindingContext.Result = ModelBindingResult.Failed();
+                return Task.CompletedTask;
             }
+
             //Initiate primary object
             var obj = Activator.CreateInstance(bindingContext.ModelType);
             try
@@ -71,13 +87,14 @@ namespace SM.General.Api
             }
             catch (Exception ex)
             {
-                bindingContext.ModelState.AddModelError(
-                    bindingContext.ModelName, ex.Message);
-                return false;
+                bindingContext.ModelState.AddModelError(bindingContext.ModelName, ex.Message);
+                bindingContext.Result = ModelBindingResult.Failed();
+                return Task.CompletedTask;
             }
+
             //Assign completed object tree to Model
-            bindingContext.Model = obj;
-            return true;
+            bindingContext.Result = ModelBindingResult.Success(obj);
+            return Task.CompletedTask;
         }
 
         public void SetPropertyValues(object obj, object parentObj = null, PropertyInfo parentProp = null)
@@ -261,7 +278,7 @@ namespace SM.General.Api
             //}
             recursionCount++;
 
-            //Valicate collection types
+            //Validate collection types
             if (prop.PropertyType.IsGenericType || prop.PropertyType.BaseType.IsGenericType)
             {
                 if ((prop.PropertyType.IsGenericType && prop.PropertyType.Name != "List`1")

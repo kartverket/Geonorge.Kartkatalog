@@ -7,13 +7,19 @@
 @section breadcrumb {
     <li class="active">@UI.FileDownload</li>
 }
-<script src="https://unpkg.com/vue@3.4.21/dist/vue.global.js"></script>
-@*<script src="https://unpkg.com/vue@3.4.21/dist/vue.global.prod.js"></script>*@
+
+<link rel="stylesheet" href="~/Content/css/shopping-cart.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/Content/bower_components/kartverket-felleskomponenter/assets/css/vendor.min.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/Content/bower_components/kartverket-felleskomponenter/assets/css/vendorfonts.min.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/Content/bower_components/kartverket-felleskomponenter/assets/css/main.min.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/Content/temp.css" asp-append-version="true" />
 <style type="text/css">
     .btn {
         margin-right: 5px;
     }
 </style>
+
+<script src="https://unpkg.com/vue@3.4.21/dist/vue.global.js"></script>
 <div id="feedback-alert" class="alert alert-success alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <span class="message"></span>
@@ -81,18 +87,18 @@
             </div>
         </div>
         <div v-if="supportsPolygonSelection && $parent.mapIsLoaded">
-            <component v-if="master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="true">
+            <component v-if="master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.NorgeskartUrl()select.html'" v-bind:master="true">
             </component>
         </div>
         <div v-if="supportsPolygonSelection && $parent.mapIsLoaded">
-            <component v-if="!master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.SecureNorgeskartUrl()select.html'" v-bind:master="false">
+            <component v-if="!master" v-show="$parent.showMap" is="mapSelect" v-bind:map-data="$parent.mapData" v-bind:map-src="'@Html.NorgeskartUrl()select.html'" v-bind:master="false">
             </component>
         </div>
         <div v-if="supportsGridSelection && $parent.mapIsLoaded">
             <component v-if="!master"
                  v-show="$parent.showMap" is="mapSelect"
                  v-bind:map-data="$parent.mapData"
-                 v-bind:map-src="'@Html.SecureNorgeskartUrl()' + 'nedlasting.html#' + $parent.mapData.defaultConfigurations.zoom_level + '/' + $parent.mapData.defaultConfigurations.center_longitude + '/' + $parent.mapData.defaultConfigurations.center_latitude + '/' + $parent.mapData.defaultConfigurations.service_name"
+                 v-bind:map-src="'@Html.NorgeskartUrl()' + 'nedlasting.html#' + $parent.mapData.defaultConfigurations.zoom_level + '/' + $parent.mapData.defaultConfigurations.center_longitude + '/' + $parent.mapData.defaultConfigurations.center_latitude + '/' + $parent.mapData.defaultConfigurations.service_name"
                  v-bind:master="false">
             </component>
 
@@ -172,7 +178,7 @@
                 </span>
             </span>
             <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom center" track title="@Html.Raw(UI.NavigateToDataset)" class="btn icon-btn"><span class="fa fa-home"></span></a>
-            <span v-on:click="$root.removeOrderLine(metadata.uuid, false)" data-toggle="tooltip" data-placement="bottom" title="@UI.DeleteDataset" class="btn icon-btn"><span class="fa fa-trash"></span></span>
+            <a href="#" v-on:click="$root.removeOrderLine(metadata.uuid, false)" data-toggle="tooltip" data-placement="bottom" title="@UI.DeleteDataset" class="btn icon-btn"><span class="fa fa-trash"></span></a>
         </div>
         <div class="clearfix"></div>
         <div v-show="expanded">
@@ -524,6 +530,9 @@
     var downloadUrl = '@Html.DownloadUrl()';
 </script>
 @section scripts{
-    @Scripts.Render("~/Content/download");
-    @Scripts.Render("~/bundles/shopping-cart");
+    <script src="~/Content/js/jquery-3.7.0.js" asp-append-version="true"></script>
+    <script src="~/Content/js/main.js" asp-append-version="true"></script>
+    <script src="~/Content/js/vendor.js" asp-append-version="true"></script>
+    <script src="~/Content/js/vue-download.js" asp-append-version="true"></script>
+    <script src="~/Content/js/shopping-cart.js" asp-append-version="true"></script>
 }

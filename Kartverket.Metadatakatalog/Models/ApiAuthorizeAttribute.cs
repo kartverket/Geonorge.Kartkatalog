@@ -1,38 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Security.Principal;
-using System.Web;
-using System.Web.Configuration;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Kartverket.Metadatakatalog.Models
 {
-    public class ApiAuthorizeAttribute : AuthorizeAttribute
+    public class ApiAuthorizeAttribute : ActionFilterAttribute
     {
-      
-        public override void OnAuthorization(System.Web.Http.Controllers.HttpActionContext actionContext)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (Authorize(actionContext))
+            if (!Authorize(context))
             {
+                context.Result = new UnauthorizedResult();
                 return;
             }
-            HandleUnauthorizedRequest(actionContext);
+            base.OnActionExecuting(context);
         }
 
-        protected override void HandleUnauthorizedRequest(System.Web.Http.Controllers.HttpActionContext actionContext)
-        {
-            var challengeMessage = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized);
-            throw new HttpResponseException(challengeMessage);
-        }
-
-        private bool Authorize(System.Web.Http.Controllers.HttpActionContext actionContext)
+        private bool Authorize(ActionExecutingContext context)
         {
             try
             {
-                var apiKey = (from h in actionContext.Request.Headers where h.Key == "apikey" select h.Value.First()).FirstOrDefault();
-                return apiKey == WebConfigurationManager.AppSettings["apikey"];
+                var configuration = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+                var expectedApiKey = configuration["apikey"];
+                
+                if (context.HttpContext.Request.Headers.TryGetValue("apikey", out var apiKeyValues))
+                {
+                    var apiKey = apiKeyValues.FirstOrDefault();
+                    return apiKey == expectedApiKey;
+                }
+                
+                return false;
             }
             catch (Exception)
             {

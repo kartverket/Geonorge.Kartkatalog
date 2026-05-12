@@ -5,22 +5,29 @@ using Kartverket.Metadatakatalog.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Device.Location;
 using System.Linq;
-using System.Web;
-using System.Web.Configuration;
-using System.Web.Routing;
 using Kartverket.Metadatakatalog.Models.Api;
+using Microsoft.Extensions.Configuration;
+using GeoCoordinatePortable;
+using System.Web;
 using Resources;
-using Kartverket.Metadatakatalog.Service;
 using System.Text;
 using Kartverket.Metadatakatalog.Models.ViewModels;
+using Microsoft.AspNetCore.Routing;
+using System.Text.Json.Serialization;
 
 namespace Kartverket.Metadatakatalog.Models
 {
     public class MetadataViewModel
     {
-        public static readonly bool MapOnlyWms = System.Convert.ToBoolean(WebConfigurationManager.AppSettings["MapOnlyWms"]);
+        private readonly IConfiguration _configuration;
+        
+        public bool MapOnlyWms => _configuration != null ? Convert.ToBoolean(_configuration["AppSettings:MapOnlyWms"]) : false;
+
+        public MetadataViewModel(IConfiguration configuration = null)
+        {
+            _configuration = configuration;
+        }
 
         public void SetDistributionUrl()
         {
@@ -203,7 +210,7 @@ namespace Kartverket.Metadatakatalog.Models
             }
             else if (IsDataset())
             {
-                return SimpleMetadataUtil.NorgeskartUrl + ServiceUrl();
+                return SimpleMetadataUtil.StaticNorgeskartUrl + ServiceUrl();
             }
             return mappedUrl;
         }
@@ -293,7 +300,7 @@ namespace Kartverket.Metadatakatalog.Models
 
         public bool ShowDownloadService()
         {
-            if (System.Web.Configuration.WebConfigurationManager.AppSettings["DownloadServiceEnabled"] == "true") 
+            if (_configuration != null && Convert.ToBoolean(_configuration["AppSettings:DownloadServiceEnabled"] ?? "false")) 
             {
                 if (DistributionDetails != null && !string.IsNullOrWhiteSpace(DistributionDetails.Protocol) && DistributionDetails.Protocol.Contains("GEONORGE:DOWNLOAD"))
                     return true;
@@ -444,7 +451,7 @@ namespace Kartverket.Metadatakatalog.Models
                         layerStrGrid = coverageStrGrid.Substring(startLayerGrid, endLayerGrid);
                     }
 
-                    string commonPart = $"{SimpleMetadataUtil.NorgeskartUrl}#!?zoom={ZoomLevel()}&";
+                    string commonPart = $"{SimpleMetadataUtil.StaticNorgeskartUrl}#!?zoom={ZoomLevel()}&";
 
                     if (typeStr == "GEONORGE-WMS")
                     {
