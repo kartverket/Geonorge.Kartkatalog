@@ -65,16 +65,8 @@ namespace Kartverket.Metadatakatalog.Models.Article
             ISolrQuery query;
             if (!string.IsNullOrEmpty(Text))
             {
-                Text = Text.Replace(":", " ");
-                Text = Text.Replace("!", " ");
-                Text = Text.Replace("{", " ");
-                Text = Text.Replace("}", " ");
-                Text = Text.Replace("[", " ");
-                Text = Text.Replace("]", " ");
-                Text = Text.Replace("(", " ");
-                Text = Text.Replace(")", " ");
-                Text = Text.Replace("^", " ");
-                Text = Text.Replace("-", "\\-");
+                Text = Text.Trim();
+                Text = Kartverket.Metadatakatalog.Models.SearchParameters.EscapeSolrQuery(Text);
 
                 if (Text.Trim().Length == 0) query = SolrQuery.All;
                 else if (Text.Trim().Length < 5)
