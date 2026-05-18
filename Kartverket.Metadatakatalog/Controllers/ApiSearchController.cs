@@ -821,17 +821,17 @@ namespace Kartverket.Metadatakatalog.Controllers
                 // replace & with and
                 text = Regex.Replace(text, @"\&+", "and");
 
-                text = text.Replace("�", "ae");
-                text = text.Replace("�", "ae");
-                text = text.Replace("�", "oe");
-                text = text.Replace("�", "oe");
-                text = text.Replace("�", "aa");
+                text = text.Replace("æ", "ae");
+                text = text.Replace("ä", "ae");
+                text = text.Replace("ø", "oe");
+                text = text.Replace("ö", "oe");
+                text = text.Replace("å", "aa");
 
                 // remove characters
                 text = text.Replace("'", "");
 
                 // remove invalid characters
-                text = Regex.Replace(text, @"[^a-z0-9���.]", "-");
+                text = Regex.Replace(text, @"[^a-z0-9æøå.]", "-");
 
                 // remove duplicates
                 text = Regex.Replace(text, @"-+", "-");
