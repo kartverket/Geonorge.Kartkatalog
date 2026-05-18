@@ -3,7 +3,7 @@ name: ImageBuild
 on:
   push:
     branches:
-      - upgrade-to-NET10
+      - main
   workflow_dispatch:
 
 env:
