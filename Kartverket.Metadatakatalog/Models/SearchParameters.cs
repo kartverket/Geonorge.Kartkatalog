@@ -192,7 +192,6 @@ namespace Kartverket.Metadatakatalog.Models
             if (!string.IsNullOrEmpty(text))
             {
                 text = text.Trim();
-                text = text.Replace(":", "");
                 text = EscapeSolrQuery(text);
 
                 var titleText = text.Replace(" ", "*");
