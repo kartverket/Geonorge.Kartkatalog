@@ -164,6 +164,21 @@ namespace Kartverket.Metadatakatalog.Models
             return hasnovalue;
         }
 
+        public static string EscapeSolrQuery(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+            // List of Solr special characters
+            char[] specialChars = { '+', '-', '&', '|', '!', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '\\', '/' };
+            var sb = new System.Text.StringBuilder();
+            foreach (char c in input)
+            {
+                if (specialChars.Contains(c))
+                    sb.Append('\\');
+                sb.Append(c);
+            }
+            return sb.ToString();
+        }
+
         /// <summary>
         /// Builds a Solr query based on "Text" parameter
         /// </summary>
@@ -177,16 +192,8 @@ namespace Kartverket.Metadatakatalog.Models
             if (!string.IsNullOrEmpty(text))
             {
                 text = text.Trim();
-                text = text.Replace(":", " ");
-                text = text.Replace("!", " ");
-                text = text.Replace("{", " ");
-                text = text.Replace("}", " ");
-                text = text.Replace("[", " ");
-                text = text.Replace("]", " ");
-                text = text.Replace("(", " ");
-                text = text.Replace(")", " ");
-                text = text.Replace("^", " ");
-                text = text.Replace("-", "\\-");
+                text = text.Replace(":", "");
+                text = EscapeSolrQuery(text);
 
                 var titleText = text.Replace(" ", "*");
 
