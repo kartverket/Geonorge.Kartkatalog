@@ -27,12 +27,10 @@ namespace Kartverket.Metadatakatalog.Models.Api
         public int offset { get; set; } = 1;
 
         /// <summary>
-        /// Maximum number of results to return per page. Range: 1-1000, Default is 10.
+        /// Maximum number of results to return per page. Default is 10.
         /// </summary>
         /// <example>20</example>
-        [Range(1, 1000, ErrorMessage = "Limit must be between 1 and 1000")]
         [DefaultValue(10)]
-        [Description("Maximum number of results to return (1-1000)")]
         public int limit { get; set; } = 10;
 
         /// <summary>
@@ -87,9 +85,6 @@ namespace Kartverket.Metadatakatalog.Models.Api
 
             if (offset < 1)
                 errors.Add("Offset must be 1 or greater");
-
-            if (limit < 1 || limit > 1000)
-                errors.Add("Limit must be between 1 and 1000");
 
             if (datefrom.HasValue && dateto.HasValue && datefrom > dateto)
                 errors.Add("DateFrom cannot be later than DateTo");

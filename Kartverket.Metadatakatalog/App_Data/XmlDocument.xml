@@ -650,7 +650,7 @@
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.SearchParameters.limit">
             <summary>
-            Maximum number of results to return per page. Range: 1-1000, Default is 10.
+            Maximum number of results to return per page. Default is 10.
             </summary>
             <example>20</example>
         </member>

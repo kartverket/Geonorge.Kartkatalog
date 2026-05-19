@@ -27,7 +27,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
                 // Parse limit with validation
                 if (int.TryParse(GetValue(bindingContext, "limit"), out int limit))
                 {
-                    searchParameters.limit = Math.Max(1, Math.Min(1000, limit)); // Clamp between 1 and 1000
+                    searchParameters.limit = Math.Max(1, limit); // Ensure minimum of 1 (no upper limit enforced)
                 }
 
                 // Parse offset with validation

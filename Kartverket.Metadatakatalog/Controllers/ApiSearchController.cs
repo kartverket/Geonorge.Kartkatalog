@@ -194,7 +194,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                 Parameters = new
                 {
                     text = new { Type = "string", Description = "Search text to query across all metadata fields", Example = "Norge kartdata" },
-                    limit = new { Type = "integer", Description = "Maximum number of results (1-1000)", Default = 10, Example = 20 },
+                    limit = new { Type = "integer", Description = "Maximum number of results", Default = 10, Example = 20 },
                     offset = new { Type = "integer", Description = "Page offset for pagination (1-based)", Default = 1, Example = 1 },
                     orderby = new { 
                         Type = "string", 
