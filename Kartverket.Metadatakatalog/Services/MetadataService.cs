@@ -692,7 +692,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             var solrInstance = _solrMetadataOperations;
 
-            ISolrQuery query = new SolrQuery("uuid:" + uuid);
+            ISolrQuery query = new SolrQuery("uuid:" + SearchParameters.EscapeSolrQuery(uuid));
             try
             {
                 SolrQueryResults<MetadataIndexAllDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
@@ -716,7 +716,7 @@ namespace Kartverket.Metadatakatalog.Service
             ServiceIndexDoc metadata = null;
             var solrInstance = _solrServiceOperations;
 
-            ISolrQuery query = new SolrQuery("uuid:" + uuid);
+            ISolrQuery query = new SolrQuery("uuid:" + SearchParameters.EscapeSolrQuery(uuid));
             try
             {
                 SolrQueryResults<ServiceIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
@@ -743,7 +743,7 @@ namespace Kartverket.Metadatakatalog.Service
             if (searchParameters.Offset == 0)
                 searchParameters.Offset = 1;
 
-            ISolrQuery query = new SolrQuery("resourceReferenceCodespace:" + @namespace);
+            ISolrQuery query = new SolrQuery("resourceReferenceCodespace:" + SearchParameters.EscapeSolrQuery(@namespace));
             try
             {
                 SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
@@ -806,7 +806,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             //ISolrQuery query = new SolrQuery("resourceReferenceCodespace:"+ @namespace + " AND resourceReferenceCodeName:\""+ datasetName + "\" AND -uuid:"+ uuid);
             //datasetName unique across namespace
-            ISolrQuery query = new SolrQuery("resourceReferenceCodeName:\"" + datasetName + "\" AND -uuid:" + uuid);
+            ISolrQuery query = new SolrQuery("resourceReferenceCodeName:\"" + SearchParameters.EscapeSolrQuery(datasetName) + "\" AND -uuid:" + SearchParameters.EscapeSolrQuery(uuid));
             try
             {
                 SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
@@ -837,7 +837,7 @@ namespace Kartverket.Metadatakatalog.Service
             List<MetadataIndexDoc> metadata = null;
             var solrInstance = _solrMetadataIndexOperations;
 
-            ISolrQuery query = new SolrQuery("resourceReferenceCodeName:\"" + datasetId + "\" ");
+            ISolrQuery query = new SolrQuery("resourceReferenceCodeName:\"" + SearchParameters.EscapeSolrQuery(datasetId) + "\" ");
             try
             {
                 SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
@@ -1304,7 +1304,7 @@ namespace Kartverket.Metadatakatalog.Service
             ApplicationIndexDoc metadata = null;
             var solrInstance = _solrApplicationOperations;
 
-            ISolrQuery query = new SolrQuery("uuid:" + uuid);
+            ISolrQuery query = new SolrQuery("uuid:" + SearchParameters.EscapeSolrQuery(uuid));
             try
             {
                 SolrQueryResults<ApplicationIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
@@ -1328,7 +1328,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             var solrInstance = _solrApplicationOperations;
 
-            ISolrQuery query = new SolrQuery("applicationdataset:" + uuid + "*");
+            ISolrQuery query = new SolrQuery("applicationdataset:" + SearchParameters.EscapeSolrQuery(uuid) + "*");
             try
             {
                 SolrQueryResults<ApplicationIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
