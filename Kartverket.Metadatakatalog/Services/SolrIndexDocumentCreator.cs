@@ -1422,7 +1422,67 @@ namespace Kartverket.Metadatakatalog.Service
 
                 indexDoc.DatasetServices.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl + "|" + service.KeywordNationalTheme + "|" + service.OrganizationLogoUrl + "|" + service.ThumbnailUrl + "|" + service.AccessConstraints + "|" + service.OtherConstraintsAccess);
             }
-            
+
+            //Check if dataset has W3C:AtomFeed distribution
+
+            var atomFeedDistribution = metadata.DistributionsFormats.Where(d => d.Protocol == "W3C:AtomFeed").FirstOrDefault();
+            if (atomFeedDistribution != null)
+            {
+
+                SimpleKeyword nationalTheme = SimpleKeyword.Filter(metadata.Keywords, null, SimpleKeyword.THESAURUS_NATIONAL_THEME).FirstOrDefault();
+                string keywordNationalTheme = "";
+                if (nationalTheme != null)
+                    keywordNationalTheme = nationalTheme.Keyword;
+
+                string OrganizationLogoUrl = "";
+                if (metadata.ContactOwner != null && metadata.ContactOwner.Organization != null)
+                {
+                    try
+                    {
+                        Task<Organization> organizationTaskRel =
+                        _organizationService.GetOrganizationByName(metadata.ContactOwner.Organization);
+                        Organization organizationRel = organizationTaskRel.Result;
+                        if (organizationRel != null)
+                        {
+                            OrganizationLogoUrl = organizationRel.LogoUrl;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+
+                string thumbnailsUrl = "";
+                List<SimpleThumbnail> thumbnailsRel = metadata.Thumbnails;
+                if (thumbnailsRel != null && thumbnailsRel.Count > 0)
+                {
+                    thumbnailsUrl = _geoNetworkUtil.GetThumbnailUrl(metadata.Uuid, thumbnailsRel[thumbnailsRel.Count - 1].URL);
+                }
+
+                var service = new MetaDataEntry
+                {
+                    Uuid = metadata.Uuid,
+                    Title = metadata.Title,
+                    ParentIdentifier = metadata.Uuid,
+                    HierarchyLevel = "service",
+                    ContactOwnerOrganization = (metadata.ContactOwner != null && metadata.ContactOwner.Organization != null) ? metadata.ContactOwner.Organization : "",
+                    DistributionDetailsName = atomFeedDistribution.Name != null ? atomFeedDistribution.Name : "",
+                    DistributionDetailsProtocol = atomFeedDistribution.Protocol,
+                    DistributionDetailsUrl = atomFeedDistribution.URL,
+                    KeywordNationalTheme = keywordNationalTheme,
+                    OrganizationLogoUrl = OrganizationLogoUrl,
+                    ThumbnailUrl = thumbnailsUrl,
+                    AccessConstraints = (metadata.Constraints != null && !string.IsNullOrEmpty(metadata.Constraints.AccessConstraints) ? metadata.Constraints.AccessConstraints : ""),
+                    OtherConstraintsAccess = (metadata.Constraints != null && !string.IsNullOrEmpty(metadata.Constraints.OtherConstraintsAccess) ? metadata.Constraints.OtherConstraintsAccess : "")
+                };
+
+                if (indexDoc.DatasetServices == null)
+                    indexDoc.DatasetServices = new List<string>();
+
+                indexDoc.DatasetServices.Add(service.Uuid + "|" + service.Title + "|" + service.ParentIdentifier + "|" + service.HierarchyLevel + "|" + service.ContactOwnerOrganization + "|" + service.DistributionDetailsName + "|" + service.DistributionDetailsProtocol + "|" + service.DistributionDetailsUrl + "|" + service.KeywordNationalTheme + "|" + service.OrganizationLogoUrl + "|" + service.ThumbnailUrl + "|" + service.AccessConstraints + "|" + service.OtherConstraintsAccess);
+            }
+
             stopwatch.Stop();
             _logger.LogInformation("⏱️ TOTAL AddRelatedDatasetServices completed in {ElapsedMs}ms for UUID: {Uuid}", stopwatch.ElapsedMilliseconds, searchString);
         }
