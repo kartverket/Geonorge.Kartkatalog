@@ -32,18 +32,20 @@ namespace Kartverket.Metadatakatalog.Service
         private readonly IOrganizationService _organizationService;
         private readonly ThemeResolver _themeResolver;
         private readonly PlaceResolver _placeResolver;
+        private readonly PopularMetadataResolver _popularMetadataResolver;
         private readonly GeoNetworkUtil _geoNetworkUtil;
         private readonly IConfiguration _configuration;
         private static readonly HttpClient _httpClient = new HttpClient();
         private readonly IAiService _aiService;
 
-        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil, IAiService aiService, IConfiguration configuration, HttpClient httpClient, RegisterFetcher registerFetcher, IMemoryCache memoryCache, ILogger<SolrIndexDocumentCreator> logger)
+        public SolrIndexDocumentCreator(IOrganizationService organizationService, ThemeResolver themeResolver, GeoNetworkUtil geoNetworkUtil, IAiService aiService, IConfiguration configuration, HttpClient httpClient, RegisterFetcher registerFetcher, IMemoryCache memoryCache, PopularMetadataResolver popularMetadataResolver, ILogger<SolrIndexDocumentCreator> logger)
         {
             _organizationService = organizationService;
             _themeResolver = themeResolver;
             _geoNetworkUtil = geoNetworkUtil;
             _configuration = configuration;
             _placeResolver = new PlaceResolver(httpClient, configuration, memoryCache);
+            _popularMetadataResolver = popularMetadataResolver;
             _aiService = aiService;
             Register = registerFetcher;
             _logger = logger;
@@ -128,6 +130,7 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.typenumber = simpleMetadata.typenumber;
             indexDoc.ServiceDatasets = simpleMetadata.ServiceDatasets;
             indexDoc.ServiceLayers = simpleMetadata.ServiceLayers;
+            indexDoc.PopularMetadata = simpleMetadata.PopularMetadata;
 
             return indexDoc;
 
@@ -179,6 +182,7 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.Type = simpleMetadata.Type;
             indexDoc.typenumber = simpleMetadata.typenumber;
             indexDoc.ApplicationDatasets = simpleMetadata.ApplicationDatasets;
+            indexDoc.PopularMetadata = simpleMetadata.PopularMetadata;
 
             return indexDoc;
 
@@ -190,6 +194,7 @@ namespace Kartverket.Metadatakatalog.Service
             try
             {
                 indexDoc.Uuid = simpleMetadata.Uuid;
+                indexDoc.PopularMetadata = _popularMetadataResolver?.GetScore(simpleMetadata.Uuid);
                 indexDoc.Title = culture == Culture.EnglishCode && !string.IsNullOrEmpty(simpleMetadata.EnglishTitle) ? simpleMetadata.EnglishTitle : simpleMetadata.Title;
                 indexDoc.ResourceReferenceCodespace = simpleMetadata?.ResourceReference?.Codespace;
                 indexDoc.ResourceReferenceCodeName = simpleMetadata?.ResourceReference?.Code;
@@ -1700,6 +1705,7 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.Type = simpleMetadata.Type;
             indexDoc.typenumber = simpleMetadata.typenumber;
             indexDoc.DatasetServices = simpleMetadata.DatasetServices;
+            indexDoc.PopularMetadata = simpleMetadata.PopularMetadata;
             var embeddings = _aiService.GetPredictions(simpleMetadata.Title + " " + simpleMetadata.Abstract);
             if (SimpleMetadataUtil.StaticUseVectorSearch && embeddings != null)
                 indexDoc.Vector = embeddings;

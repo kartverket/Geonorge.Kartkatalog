@@ -44,6 +44,9 @@
     <Content Include="App_Data\XmlDocument.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="App_Data\external_popularMetadata.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Helpers\SearchHelpers.cshtml" />
     <Content Include="package.json" />
     <Content Include="Views\Search\Index.cshtml" />

@@ -191,6 +191,9 @@ namespace Kartverket.Metadatakatalog.Models
 
         public string ClassName { get; set; }
 
+        [SolrField("popularMetadata")]
+        public int? PopularMetadata { get; set; }
+
         [SolrField("vector")]
         public float[] Vector { get; set; }
     }

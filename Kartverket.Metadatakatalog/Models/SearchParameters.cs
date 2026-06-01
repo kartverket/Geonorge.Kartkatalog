@@ -267,8 +267,9 @@ namespace Kartverket.Metadatakatalog.Models
             else
                 query = new SolrMultipleCriteriaQuery(new[]
                 {
-                     listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*"),
-                     listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_time*")
+                     SolrQuery.All,
+                     listhidden ? null : new SolrQuery("!serie:*series_historic*"),
+                     listhidden ? null : new SolrQuery("!serie:*series_time*")
                 });
 
             }
