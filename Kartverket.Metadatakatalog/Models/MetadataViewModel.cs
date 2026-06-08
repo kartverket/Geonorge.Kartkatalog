@@ -65,6 +65,7 @@ namespace Kartverket.Metadatakatalog.Models
         public DistributionFormat DistributionFormat { get; set; }
         public List<SimpleDistributionFormat> DistributionFormats { get; set; }
         public List<DistributionViewModel> DistributionsFormats { get; set; }
+        public List<DistributionFormatGrouped> DistributionFormatsGrouped { get; set; }
         public string UnitsOfDistribution { get; set; }
         public List<SimpleOperation> Operations { get; set; }
         public List<ReferenceSystem> ReferenceSystems { get; set; }

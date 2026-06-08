@@ -1428,6 +1428,7 @@ namespace Kartverket.Metadatakatalog.Service
                 DateUpdated = simpleMetadata.DateUpdated,
                 DistributionDetails = Convert(simpleMetadata.DistributionDetails, simpleMetadata?.DistributionsFormats),
                 DistributionsFormats = Convert(simpleMetadata.DistributionsFormats),
+                DistributionFormatsGrouped = ConvertGrouped(simpleMetadata.DistributionsFormats),
                 HierarchyLevel = simpleMetadata.HierarchyLevel,
                 Type = simpleMetadata.HierarchyLevel,
                 TypeTranslated = SimpleMetadataUtil.GetTypeTranslated(simpleMetadata.HierarchyLevel),
@@ -1662,6 +1663,42 @@ namespace Kartverket.Metadatakatalog.Service
                         UnitsOfDistribution = distribution.UnitsOfDistribution,
                         EnglishUnitsOfDistribution = distribution.EnglishUnitsOfDistribution
                         
+                    });
+                }
+            }
+            return output;
+        }
+
+        private List<DistributionFormatGrouped> ConvertGrouped(List<SimpleDistribution> simpleDistributions)
+        {
+            List<DistributionFormatGrouped> output = new List<DistributionFormatGrouped>();
+            if (simpleDistributions != null)
+            {
+                var groups = simpleDistributions.GroupBy(d => new
+                {
+                    d.Protocol,
+                    d.Organization
+                });
+
+                foreach (var group in groups)
+                {
+                    output.Add(new DistributionFormatGrouped
+                    {
+                        Protocol = group.Key.Protocol,
+                        ProtocolName = Register.GetDistributionType(group.Key.Protocol),
+                        Organization = group.Key.Organization,
+                        Formats = group
+                            .Select(d => new DistributionFormatItem
+                            {
+                                FormatName = d.FormatName,
+                                FormatVersion = d.FormatVersion
+                            })
+                            .ToList(),
+                        URL = group
+                            .Select(d => FixUrl(d.URL, d.Protocol))
+                            .Where(url => !string.IsNullOrEmpty(url))
+                            .Distinct()
+                            .ToList()
                     });
                 }
             }
