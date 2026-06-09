@@ -1682,11 +1682,14 @@ namespace Kartverket.Metadatakatalog.Service
 
                 foreach (var group in groups)
                 {
+                    var first = group.First();
                     output.Add(new DistributionFormatGrouped
                     {
                         Protocol = group.Key.Protocol,
                         ProtocolName = Register.GetDistributionType(group.Key.Protocol),
                         Organization = group.Key.Organization,
+                        UnitsOfDistribution = first.UnitsOfDistribution,
+                        EnglishUnitsOfDistribution = first.EnglishUnitsOfDistribution,
                         Formats = group
                             .Select(d => new DistributionFormatItem
                             {
