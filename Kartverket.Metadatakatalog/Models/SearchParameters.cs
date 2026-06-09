@@ -255,12 +255,12 @@ namespace Kartverket.Metadatakatalog.Models
                         new SolrQuery("(type:dataset AND titleText:*"+ titleText + "*)^73  titleText:*"+ titleText + "*^72"),
                         new SolrQuery("(type:dataset AND allText:*" + textAll + "*)^71 allText:*" + textAll + "*^70"),
                         !string.IsNullOrEmpty(queryString) ? new SolrQuery(queryString) : null,
-                        new SolrQuery("allText:" + text + "~^1"),   //Fuzzy
+                        new SolrQuery("allText:" + text + "~1^1"),   //Fuzzy
                         new SolrQuery("allText2:" + text + ""), //Stemmer
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber"),
-                        SimpleMetadataUtil.StaticUseVectorSearch && vectorSearchString != null ? new SolrQuery("{!knn f=vector topK=10}" + vectorSearchString + "^80"): null,                            
+                        SimpleMetadataUtil.StaticUseVectorSearch && vectorSearchString != null ? new SolrQuery("{!knn f=vector topK=5}" + vectorSearchString + "^80"): null,
                     });
                 }
             }
