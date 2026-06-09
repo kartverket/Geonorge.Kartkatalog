@@ -5,6 +5,7 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
     public class DistributionFormatGrouped
     {
         public string ProtocolName { get; set; }
+        public string ProtocolDescription { get; set; }
         public string Protocol { get; set; }
         public string Organization { get; set; }
         public string UnitsOfDistribution { get; set; }

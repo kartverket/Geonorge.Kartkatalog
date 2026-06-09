@@ -1687,6 +1687,7 @@ namespace Kartverket.Metadatakatalog.Service
                     {
                         Protocol = group.Key.Protocol,
                         ProtocolName = Register.GetDistributionType(group.Key.Protocol),
+                        ProtocolDescription = Register.GetDistributionTypeDescription(group.Key.Protocol),
                         Organization = group.Key.Organization,
                         UnitsOfDistribution = first.UnitsOfDistribution,
                         EnglishUnitsOfDistribution = first.EnglishUnitsOfDistribution,

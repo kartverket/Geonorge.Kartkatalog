@@ -22,10 +22,9 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
 
         private string GetShortName(string name, RegisterFetcher register)
         {
-            string newValue = name;
-            register.OrganizationShortNames.TryGetValue(name, out newValue);
-            if (!string.IsNullOrEmpty(newValue))
-                name = newValue;
+            register.OrganizationShortNames.TryGetValue(name, out var shortName);
+            if (!string.IsNullOrEmpty(shortName?.Value))
+                name = shortName.Value;
             return name;
         }
 
