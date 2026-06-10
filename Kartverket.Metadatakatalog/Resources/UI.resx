@@ -879,4 +879,7 @@
   <data name="Facet_organizations" xml:space="preserve">
     <value>Organisasjon</value>
   </data>
+  <data name="DistributionsLinked" xml:space="preserve">
+    <value>Distribusjoner koblede</value>
+  </data>
 </root>
