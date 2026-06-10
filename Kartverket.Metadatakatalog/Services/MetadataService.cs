@@ -384,6 +384,9 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
 
+            // Drop related distributions whose URL is already listed in the metadata's own DistributionsFormats
+            RemoveRelatedDistributionsAlreadyInSelf(metadata);
+
             metadata.Distributions.ShowSelfDistributions = metadata.Distributions.ShowSelf();
             metadata.Distributions.ShowRelatedDataset = metadata.Distributions.ShowDatasets();
             metadata.Distributions.ShowRelatedDatasetSerie = metadata.Distributions.ShowDatasetSerie();
@@ -396,6 +399,38 @@ namespace Kartverket.Metadatakatalog.Service
             metadata.Distributions = metadata.Distributions.GetTitle(metadata, type);
 
             return metadata.Distributions;
+        }
+
+        /// <summary>
+        /// Removes related distributions whose URL is already present in the metadata's own
+        /// DistributionsFormats. SelfDistribution is left untouched (it is built from DistributionsFormats).
+        /// </summary>
+        private void RemoveRelatedDistributionsAlreadyInSelf(MetadataViewModel metadata)
+        {
+            if (metadata?.DistributionsFormats == null || metadata.Distributions == null)
+                return;
+
+            var selfUrls = new HashSet<string>(
+                metadata.DistributionsFormats
+                    .Where(d => !string.IsNullOrWhiteSpace(d.URL))
+                    .Select(d => d.URL.Trim()),
+                StringComparer.OrdinalIgnoreCase);
+
+            if (selfUrls.Count == 0)
+                return;
+
+            bool IsInSelf(string url) => !string.IsNullOrWhiteSpace(url) && selfUrls.Contains(url.Trim());
+            bool MatchesSelf(Distribution d) =>
+                IsInSelf(d.DistributionUrl) || IsInSelf(d.GetCapabilitiesUrl) || IsInSelf(d.DownloadUrl) || IsInSelf(d.ServiceUrl);
+
+            metadata.Distributions.RelatedDataset?.RemoveAll(MatchesSelf);
+            metadata.Distributions.RelatedSerieDatasets?.RemoveAll(MatchesSelf);
+            metadata.Distributions.RelatedDatasetSerie?.RemoveAll(MatchesSelf);
+            metadata.Distributions.RelatedApplications?.RemoveAll(MatchesSelf);
+            metadata.Distributions.RelatedServices?.RemoveAll(MatchesSelf);
+            metadata.Distributions.RelatedServiceLayer?.RemoveAll(MatchesSelf);
+            metadata.Distributions.RelatedViewServices?.RemoveAll(MatchesSelf);
+            metadata.Distributions.RelatedDownloadServices?.RemoveAll(MatchesSelf);
         }
 
         private List<Distribution> GroupFormats(List<Distribution> distributionData, MetadataViewModel metadata)
