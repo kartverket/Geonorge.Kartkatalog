@@ -880,6 +880,6 @@
     <value>Organisasjon</value>
   </data>
   <data name="DistributionsLinked" xml:space="preserve">
-    <value>Distribusjoner koblede</value>
+    <value>Koblede distribusjoner</value>
   </data>
 </root>
