@@ -32,7 +32,19 @@ namespace Kartverket.Metadatakatalog.Service.Search
         public SearchResult Search(SearchParameters parameters)
         {
             var totalSw = System.Diagnostics.Stopwatch.StartNew();
-            ISolrQuery query = parameters.BuildQuery();
+            var options = new QueryOptions
+            {
+                //WMS lag skal få redusert sin boost
+                FilterQueries = parameters.BuildFilterQueries(),
+                OrderBy = parameters.OrderBy(),
+                Rows = parameters.Limit,
+                Start = parameters.Offset - 1, //solr is zero-based - we use one-based indexing in api
+                Facet = parameters.BuildFacetParameters(),
+                Fields = new[] { "uuid", "title", "title_en", "abstract" , "purpose", "type", "theme", "organization", "organizations", "organization_seo_lowercase", "organization_shortname", "placegroups", "organizationgroup",
+                "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
+                "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "spatialscope", "typename", "seriedatasets", "serie", "distributions" }
+            };
+            ISolrQuery query = parameters.BuildQuery(ref options);
             var buildMs = totalSw.ElapsedMilliseconds;
             try
             {
@@ -61,22 +73,7 @@ namespace Kartverket.Metadatakatalog.Service.Search
                 }
 
                 var solrSw = System.Diagnostics.Stopwatch.StartNew();
-                SolrQueryResults<MetadataIndexAllDoc> queryResults = solrToUse.Query(query, new QueryOptions
-                {
-                    //WMS lag skal få redusert sin boost
-                    FilterQueries = parameters.BuildFilterQueries(),
-                    OrderBy = parameters.OrderBy(),
-                    Rows = parameters.Limit,
-                    Start = parameters.Offset - 1, //solr is zero-based - we use one-based indexing in api
-                    Facet = parameters.BuildFacetParameters(),
-                    Fields = new[] { "uuid", "title", "title_en", "abstract" , "purpose", "type", "theme", "organization", "organizations", "organization_seo_lowercase", "organization_shortname", "placegroups", "organizationgroup",
-                    "topic_category", "organization_logo_url",  "thumbnail_url","distribution_url","distribution_protocol","distribution_name","product_page_url", "date_published", "date_updated", "nationalinitiative",
-                    "score", "ServiceDistributionProtocolForDataset", "ServiceDistributionUrlForDataset", "ServiceDistributionNameForDataset", "DistributionProtocols", "legend_description_url", "product_sheet_url", "product_specification_url", "area", "datasetservice", "popularMetadata", "bundle", "servicelayers", "accessconstraint", "servicedataset", "otherconstraintsaccess", "dataaccess", "ServiceDistributionUuidForDataset", "ServiceDistributionAccessConstraint", "parentidentifier", "spatialscope", "typename", "seriedatasets", "serie", "distributions" }
-                    //ExtraParams = new Dictionary<string, string> {
-                    //    {"q", ""}
-                    //}
-
-                });
+                SolrQueryResults<MetadataIndexAllDoc> queryResults = solrToUse.Query(query, options);
                 solrSw.Stop();
                 totalSw.Stop();
                 _logger.LogInformation("Search timings ms: build={BuildMs} solr={SolrMs} total={TotalMs} text={Text}",
