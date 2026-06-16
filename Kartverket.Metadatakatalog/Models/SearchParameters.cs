@@ -243,7 +243,8 @@ namespace Kartverket.Metadatakatalog.Models
 
                     var criteriaQueries = new List<ISolrQuery>
                     {
-                        new SolrQuery("uuid:" + text + "^76"),
+                        new SolrQuery("uuid:" + text + "^81"),
+                        new SolrQuery("(type:dataset AND titleText:" + titleText + ")^79  titleText:" + titleText + "^78"),
                         new SolrQuery("(type:dataset AND titleText:" + titleText + "*)^77  titleText:" + titleText + "*^76"),
                         new SolrQuery("(type:dataset AND title_lowercase:*" + titleText + "*)^75  titleText:" + titleText + "*^74"),
                         new SolrQuery("(type:dataset AND titleText:*" + titleText + "*)^73  titleText:*" + titleText + "*^72"),
@@ -262,16 +263,23 @@ namespace Kartverket.Metadatakatalog.Models
                     // --- VEKTORSØK FILTER LOGIKK ---
                     if (SimpleMetadataUtil.StaticUseVectorSearch && vectorSearchString != null)
                     {
-                        string knnString = "{!knn f=vector topK=5}" + vectorSearchString;
+                        // topK = kandidatpool (recall). Et lavt topK kapper hele resultatsettet
+                        // når knn brukes i et filter, så vi holder poolen romslig og lar
+                        // frange-terskelen (l) styre presisjonen.
+                        string knnString = "{!knn f=vector topK=200}" + vectorSearchString;
 
-                        // Ta vare på eksisterende filtre, og legg til det nye score-filteret.
-                        // Solr normaliserer dense-vector score til ~(0,1]; l=0.7 gir en moderat cutoff.
-                        // Merk: topK=5 begrenser dette filteret til maks 5 treff.
+                        // dot_product mot normaliserte embeddings: solrScore = (1 + cosinus) / 2.
+                        // l=0.72 ≈ cosinus 0.44 – moderat cutoff som luker ut semantisk fjerne treff.
                         var currentFilters = options.FilterQueries != null
                             ? options.FilterQueries.ToList()
                             : new List<ISolrQuery>();
 
-                        currentFilters.Add(new SolrQuery("{!frange l=0.75}query($knn_q)"));
+                        // Hybrid: behold leksikalske treff, OG legg til semantisk nære dokumenter
+                        // over terskel. Dermed mister vi ikke eksakte tekst-/titteltreff.
+                        // _query_-magifeltet lar oss neste en local-params-spørring (frange)
+                        // inne i et boolsk uttrykk; {!...} kan ikke stå inline ellers.
+                        currentFilters.Add(new SolrQuery(
+                            "allText:*" + textAll + "* OR _query_:\"{!frange l=0.72}query($knn_q)\""));
                         options.FilterQueries = currentFilters;
 
                         // Legg til ExtraParams uten å slette det som eventuelt lå der
@@ -279,7 +287,12 @@ namespace Kartverket.Metadatakatalog.Models
                             ? new Dictionary<string, string>(options.ExtraParams.ToDictionary(p => p.Key, p => p.Value))
                             : new Dictionary<string, string>();
                         extraParams["knn_q"] = knnString;
-                        extraParams["bq"] = knnString + "^80";
+                        // ReRank reordner de øverste reRankDocs leksikalske treffene etter
+                        // vektor-likhet. reRankWeight * knnScore legges til original-scoren,
+                        // og gir mer forutsigbar kontroll enn additivt bq mot ^70+-boostene.
+                        // Juster reRankWeight (start 20) til semantiske treff (f.eks. løsmasser
+                        // for «løs jord») havner høyt nok.
+                        extraParams["rq"] = "{!rerank reRankQuery=$knn_q reRankDocs=200 reRankWeight=20}";
                         options.ExtraParams = extraParams;
                         }
                     }
