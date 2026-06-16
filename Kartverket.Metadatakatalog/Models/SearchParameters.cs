@@ -269,7 +269,9 @@ namespace Kartverket.Metadatakatalog.Models
                         string knnString = "{!knn f=vector topK=200}" + vectorSearchString;
 
                         // dot_product mot normaliserte embeddings: solrScore = (1 + cosinus) / 2.
-                        // l=0.72 ≈ cosinus 0.44 – moderat cutoff som luker ut semantisk fjerne treff.
+                        // l=0.78 ≈ cosinus 0.56 – strammere cutoff. Leksikalske treff beholdes
+                        // uansett via venstre side av OR, så terskelen rammer kun rene
+                        // vektor-treff (f.eks. stedsnavn-kollisjonen «Kirkenes» for «kirker»).
                         var currentFilters = options.FilterQueries != null
                             ? options.FilterQueries.ToList()
                             : new List<ISolrQuery>();
@@ -279,7 +281,7 @@ namespace Kartverket.Metadatakatalog.Models
                         // _query_-magifeltet lar oss neste en local-params-spørring (frange)
                         // inne i et boolsk uttrykk; {!...} kan ikke stå inline ellers.
                         currentFilters.Add(new SolrQuery(
-                            "allText:*" + textAll + "* OR _query_:\"{!frange l=0.72}query($knn_q)\""));
+                            "allText:*" + textAll + "* OR _query_:\"{!frange l=0.78}query($knn_q)\""));
                         options.FilterQueries = currentFilters;
 
                         // Legg til ExtraParams uten å slette det som eventuelt lå der
