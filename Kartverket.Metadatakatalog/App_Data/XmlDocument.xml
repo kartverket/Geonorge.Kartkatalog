@@ -728,7 +728,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Kartverket.Metadatakatalog.Models.SearchParameters.BuildQuery">
+        <member name="M:Kartverket.Metadatakatalog.Models.SearchParameters.BuildQuery(SolrNet.Commands.Parameters.QueryOptions@)">
             <summary>
             Builds a Solr query based on "Text" parameter
             </summary>

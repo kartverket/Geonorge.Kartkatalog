@@ -183,94 +183,132 @@ namespace Kartverket.Metadatakatalog.Models
         /// Builds a Solr query based on "Text" parameter
         /// </summary>
         /// <returns></returns>
-        public ISolrQuery BuildQuery()
+        public ISolrQuery BuildQuery(ref QueryOptions options)
         {
             ISolrQuery query = null;
             try
             {
-            var text = Text;
-            if (!string.IsNullOrEmpty(text))
-            {
-                text = text.Trim();
-                text = EscapeSolrQuery(text);
-
-                var titleText = text.Replace(" ", "*");
-
-                var textAll = text.Replace(" ", "*");
-
-                var queryString = "";
-
-                if (text.Contains(" "))
+                var text = Text;
+                if (!string.IsNullOrEmpty(text))
                 {
-                    var words = text.Split(' ');
-                    string textOr = "";
-                    for (int w = 0; w < words.Count(); w++)
+                    text = text.Trim();
+                    text = EscapeSolrQuery(text);
+
+                    var titleText = text.Replace(" ", "*");
+                    var textAll = text.Replace(" ", "*");
+                    var queryString = "";
+
+                    if (text.Contains(" "))
                     {
-                        if (!string.IsNullOrEmpty(words[w]))
-                        {
-                            textOr = textOr + "(type:dataset AND titleText:*" + words[w] + "*)^0.5";
-                            textOr = textOr + " titleText:*" + words[w] + "*^0.4";
-                            if (w != words.Count() - 1)
-                                textOr = textOr + " OR ";
-                        }
+                        var words = text.Split(' ');
+                        string textOr = "";
+                        for (int w = 0; w < words.Count(); w++)
+                            if (!string.IsNullOrEmpty(words[w]))
+                            {
+                                textOr = textOr + "(type:dataset AND titleText:*" + words[w] + "*)^0.5";
+                                textOr = textOr + " titleText:*" + words[w] + "*^0.4";
+                                if (w != words.Count() - 1) textOr = textOr + " OR ";
+                            }
+                        queryString = textOr;
                     }
 
-                    queryString = textOr;
-                }
-
-
-                if (text.Trim().Length == 0)
-                {
-                    query = new SolrMultipleCriteriaQuery(new[]
+                    if (text.Trim().Length == 0)
                     {
+                        var criteriaQueries = new List<ISolrQuery>
+                        {
                         listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
-                    });
+                        };
+                        criteriaQueries.RemoveAll(q => q == null);
+                        query = new SolrMultipleCriteriaQuery(criteriaQueries);
+                    }
+                    else
+                    {
+                        string vectorSearchString = null;
+                        if (Text.Length > 2)
+                        {
+                            if (SimpleMetadataUtil.StaticUseVectorSearch)
+                            {
+                                var vectorSw = System.Diagnostics.Stopwatch.StartNew();
+                                var embedding = _aiService.GetPredictions(Text);
+                                vectorSw.Stop();
+                                _logger?.LogInformation("Vertex embedding ms={EmbeddingMs} text={Text}", vectorSw.ElapsedMilliseconds, Text);
+                                if (embedding != null && embedding.Length > 0)
+                                {
+                                    var formattedEmbedding = embedding.Select(f => f.ToString("F8", System.Globalization.CultureInfo.InvariantCulture));
+                                    vectorSearchString = "[" + string.Join(",", formattedEmbedding) + "]";
+                                }
+                            }
+                        }
+
+                    var criteriaQueries = new List<ISolrQuery>
+                    {
+                        new SolrQuery("uuid:" + text + "^81"),
+                        new SolrQuery("(type:dataset AND titleText:" + titleText + ")^79  titleText:" + titleText + "^78"),
+                        new SolrQuery("(type:dataset AND titleText:" + titleText + "*)^77  titleText:" + titleText + "*^76"),
+                        new SolrQuery("(type:dataset AND title_lowercase:*" + titleText + "*)^75  titleText:" + titleText + "*^74"),
+                        new SolrQuery("(type:dataset AND titleText:*" + titleText + "*)^73  titleText:*" + titleText + "*^72"),
+                        new SolrQuery("(type:dataset AND allText:*" + textAll + "*)^71 allText:*" + textAll + "*^70"),
+                        !string.IsNullOrEmpty(queryString) ? new SolrQuery(queryString) : null,
+                        new SolrQuery("allText:" + text + "~1^1"),
+                        new SolrQuery("allText2:" + text + ""),
+                        listhidden ? null : new SolrQuery("!serie:*series_historic*"),
+                        listhidden ? null : new SolrQuery("!serie:*series_time*"),
+                        new SolrQuery("!boost b=typenumber")
+                    };
+
+                    criteriaQueries.RemoveAll(q => q == null);
+                    query = new SolrMultipleCriteriaQuery(criteriaQueries);
+
+                    // --- VEKTORSØK FILTER LOGIKK ---
+                    if (SimpleMetadataUtil.StaticUseVectorSearch && vectorSearchString != null)
+                    {
+                        // topK = kandidatpool (recall). Et lavt topK kapper hele resultatsettet
+                        // når knn brukes i et filter, så vi holder poolen romslig og lar
+                        // frange-terskelen (l) styre presisjonen.
+                        string knnString = "{!knn f=vector topK=200}" + vectorSearchString;
+
+                        // dot_product mot normaliserte embeddings: solrScore = (1 + cosinus) / 2.
+                        // l=0.78 ≈ cosinus 0.56 – strammere cutoff. Leksikalske treff beholdes
+                        // uansett via venstre side av OR, så terskelen rammer kun rene
+                        // vektor-treff (f.eks. stedsnavn-kollisjonen «Kirkenes» for «kirker»).
+                        var currentFilters = options.FilterQueries != null
+                            ? options.FilterQueries.ToList()
+                            : new List<ISolrQuery>();
+
+                        // Hybrid: behold leksikalske treff, OG legg til semantisk nære dokumenter
+                        // over terskel. Dermed mister vi ikke eksakte tekst-/titteltreff.
+                        // _query_-magifeltet lar oss neste en local-params-spørring (frange)
+                        // inne i et boolsk uttrykk; {!...} kan ikke stå inline ellers.
+                        currentFilters.Add(new SolrQuery(
+                            "allText:*" + textAll + "* OR _query_:\"{!frange l=0.78}query($knn_q)\""));
+                        options.FilterQueries = currentFilters;
+
+                        // Legg til ExtraParams uten å slette det som eventuelt lå der
+                        var extraParams = options.ExtraParams != null
+                            ? new Dictionary<string, string>(options.ExtraParams.ToDictionary(p => p.Key, p => p.Value))
+                            : new Dictionary<string, string>();
+                        extraParams["knn_q"] = knnString;
+                        // ReRank reordner de øverste reRankDocs leksikalske treffene etter
+                        // vektor-likhet. reRankWeight * knnScore legges til original-scoren,
+                        // og gir mer forutsigbar kontroll enn additivt bq mot ^70+-boostene.
+                        // Juster reRankWeight (start 20) til semantiske treff (f.eks. løsmasser
+                        // for «løs jord») havner høyt nok.
+                        extraParams["rq"] = "{!rerank reRankQuery=$knn_q reRankDocs=200 reRankWeight=20}";
+                        options.ExtraParams = extraParams;
+                        }
+                    }
                 }
                 else
                 {
-                    string vectorSearchString = null;
-                    if(Text.Length > 2) 
+                    var criteriaQueries = new List<ISolrQuery>
                     {
-                        if (SimpleMetadataUtil.StaticUseVectorSearch)
-                        {
-                             var vectorSw = System.Diagnostics.Stopwatch.StartNew();
-                             var embedding = _aiService.GetPredictions(Text);
-                             vectorSw.Stop();
-                             _logger?.LogInformation("Vertex embedding ms={EmbeddingMs} text={Text}", vectorSw.ElapsedMilliseconds, Text);
-                             if(embedding != null && embedding.Length > 0)
-                             {
-                                 // Format embedding values with proper ASCII formatting for Solr
-                                 var formattedEmbedding = embedding.Select(f => f.ToString("F8", System.Globalization.CultureInfo.InvariantCulture));
-                                 vectorSearchString = "[" + string.Join(",", formattedEmbedding) + "]";
-                             }
-                        }
-                    }
-
-                    query = new SolrMultipleCriteriaQuery(new[]
-                    {
-                        new SolrQuery("uuid:"+ text + "^76"),
-                        new SolrQuery("(type:dataset AND titleText:"+ titleText + "*)^77  titleText:"+ titleText + "*^76"),
-                        new SolrQuery("(type:dataset AND title_lowercase:*"+ titleText + "*)^75  titleText:"+ titleText + "*^74"),
-                        new SolrQuery("(type:dataset AND titleText:*"+ titleText + "*)^73  titleText:*"+ titleText + "*^72"),
-                        new SolrQuery("(type:dataset AND allText:*" + textAll + "*)^71 allText:*" + textAll + "*^70"),
-                        !string.IsNullOrEmpty(queryString) ? new SolrQuery(queryString) : null,
-                        new SolrQuery("allText:" + text + "~1^1"),   //Fuzzy
-                        new SolrQuery("allText2:" + text + ""), //Stemmer
-                        listhidden ? null : new SolrQuery("!serie:*series_historic*"),
-                        listhidden ? null : new SolrQuery("!serie:*series_time*"),
-                        new SolrQuery("!boost b=typenumber"),
-                        SimpleMetadataUtil.StaticUseVectorSearch && vectorSearchString != null ? new SolrQuery("{!knn f=vector topK=5}" + vectorSearchString + "^80"): null,
-                    });
-                }
-            }
-            else
-                query = new SolrMultipleCriteriaQuery(new[]
-                {
                      listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_historic*"),
                      listhidden ? SolrQuery.All : new SolrQuery("!serie:*series_time*")
-                });
-
+                    };
+                    criteriaQueries.RemoveAll(q => q == null);
+                    query = new SolrMultipleCriteriaQuery(criteriaQueries);
+                }
             }
             catch (Exception ex)
             {
@@ -279,6 +317,8 @@ namespace Kartverket.Metadatakatalog.Models
 
             return query;
         }
+
+
 
         public void SetFacetOpenData()
         {
