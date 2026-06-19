@@ -36,10 +36,44 @@ namespace Kartverket.Metadatakatalog.Service
         public bool MapOnlyWms => Convert.ToBoolean(_configuration?["AppSettings:MapOnlyWms"] ?? "false");
         public bool UseVectorSearch => Convert.ToBoolean(_configuration?["AI:UseVectorSearch"] ?? "false");
 
+        // similarityFunction declared on the dense-vector field in the target Solr core.
+        // Must match the schema: Solr 10 here uses "dot_product", Solr 9 defaults to "euclidean".
+        // This controls how the cosine cutoff/re-rank weight are translated to Solr score space.
+        public string VectorSimilarityFunction => _configuration?["AI:VectorSimilarityFunction"] ?? "dot_product";
+        // Semantic cutoff expressed as cosine similarity (similarityFunction-independent).
+        // 0.56 reproduces the previously hard-coded dot_product frange l=0.78.
+        public double VectorCosineThreshold => double.Parse(_configuration?["AI:VectorCosineThreshold"] ?? "0.56", System.Globalization.CultureInfo.InvariantCulture);
+        public int VectorReRankWeight => Convert.ToInt32(_configuration?["AI:VectorReRankWeight"] ?? "80");
+
         // Static accessors for backwards compatibility
         public static string StaticNorgeskartUrl => Instance.NorgeskartUrl;
         public static bool StaticMapOnlyWms => Instance.MapOnlyWms;
         public static bool StaticUseVectorSearch => Instance.UseVectorSearch;
+        public static string StaticVectorSimilarityFunction => Instance.VectorSimilarityFunction;
+        public static double StaticVectorCosineThreshold => Instance.VectorCosineThreshold;
+        public static int StaticVectorReRankWeight => Instance.VectorReRankWeight;
+
+        /// <summary>
+        /// Translates a desired cosine-similarity cutoff into the Solr {!frange l=} threshold for
+        /// the configured dense-vector similarityFunction. Solr maps each function onto a different
+        /// positive score scale, so the same cosine cutoff needs a different l:
+        ///   dot_product / cosine : score = (1 + cos) / 2
+        ///   euclidean            : score = 1 / (1 + squaredDistance); for unit-length vectors
+        ///                          squaredDistance = 2 * (1 - cos)
+        /// Assumes unit-normalized embeddings (required by dot_product, and what Vertex AI returns).
+        /// </summary>
+        public static double CosineToFrangeThreshold(double cosine, string similarityFunction)
+        {
+            switch ((similarityFunction ?? "").Trim().ToLowerInvariant())
+            {
+                case "euclidean":
+                    return 1.0 / (1.0 + 2.0 * (1.0 - cosine));
+                case "cosine":
+                case "dot_product":
+                default:
+                    return (1.0 + cosine) / 2.0;
+            }
+        }
         public static bool StaticDownloadServiceEnabled => Convert.ToBoolean(Instance._configuration?["AppSettings:DownloadServiceEnabled"] ?? "false");
 
         public static string ConvertHierarchyLevelToType(string hierarchyLevel)

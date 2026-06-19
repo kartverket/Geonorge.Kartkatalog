@@ -774,6 +774,17 @@
             Gets fylke og kommuner fra register i et dictionary, cached for 12 hours.
             </summary>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Service.SimpleMetadataUtil.CosineToFrangeThreshold(System.Double,System.String)">
+            <summary>
+            Translates a desired cosine-similarity cutoff into the Solr {!frange l=} threshold for
+            the configured dense-vector similarityFunction. Solr maps each function onto a different
+            positive score scale, so the same cosine cutoff needs a different l:
+              dot_product / cosine : score = (1 + cos) / 2
+              euclidean            : score = 1 / (1 + squaredDistance); for unit-length vectors
+                                     squaredDistance = 2 * (1 - cos)
+            Assumes unit-normalized embeddings (required by dot_product, and what Vertex AI returns).
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Service.SolrIndexDocumentCreator.ProcessRelatedServiceAsync(GeoNorgeAPI.IGeoNorge,System.String)">
             <summary>
             Process a single related service asynchronously to enable parallel processing

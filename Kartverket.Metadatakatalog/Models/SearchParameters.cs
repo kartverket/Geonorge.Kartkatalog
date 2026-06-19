@@ -276,10 +276,17 @@ namespace Kartverket.Metadatakatalog.Models
                         // frange-terskelen (l) styre presisjonen.
                         string knnString = "{!knn f=vector topK=200}" + vectorSearchString;
 
-                        // dot_product mot normaliserte embeddings: solrScore = (1 + cosinus) / 2.
-                        // l=0.78 ≈ cosinus 0.56 – strammere cutoff. Leksikalske treff beholdes
-                        // uansett via venstre side av OR, så terskelen rammer kun rene
-                        // vektor-treff (f.eks. stedsnavn-kollisjonen «Kirkenes» for «kirker»).
+                        // Solr skalerer KNN-scoren ulikt per similarityFunction, så en fast l blir
+                        // feilkalibrert hvis kjernen ikke bruker dot_product. Vi uttrykker terskelen
+                        // som cosinus (default 0.56) og oversetter til riktig frange-l for kjernens
+                        // similarityFunction (default dot_product → l=0.78, euklidsk → l≈0.53).
+                        // Leksikalske treff beholdes uansett via venstre side av OR, så terskelen
+                        // rammer kun rene vektor-treff (f.eks. stedsnavn-kollisjonen «Kirkenes»).
+                        double frangeThreshold = SimpleMetadataUtil.CosineToFrangeThreshold(
+                            SimpleMetadataUtil.StaticVectorCosineThreshold,
+                            SimpleMetadataUtil.StaticVectorSimilarityFunction);
+                        string frangeL = frangeThreshold.ToString("0.####", System.Globalization.CultureInfo.InvariantCulture);
+
                         var currentFilters = options.FilterQueries != null
                             ? options.FilterQueries.ToList()
                             : new List<ISolrQuery>();
@@ -289,7 +296,7 @@ namespace Kartverket.Metadatakatalog.Models
                         // _query_-magifeltet lar oss neste en local-params-spørring (frange)
                         // inne i et boolsk uttrykk; {!...} kan ikke stå inline ellers.
                         currentFilters.Add(new SolrQuery(
-                            "allText:*" + textAll + "* OR _query_:\"{!frange l=0.78}query($knn_q)\""));
+                            "allText:*" + textAll + "* OR _query_:\"{!frange l=" + frangeL + "}query($knn_q)\""));
                         options.FilterQueries = currentFilters;
 
                         // Legg til ExtraParams uten å slette det som eventuelt lå der
@@ -314,7 +321,11 @@ namespace Kartverket.Metadatakatalog.Models
                             || orderby == Models.OrderBy.score.ToString();
                         if (sortByScore)
                         {
-                            extraParams["rq"] = "{!rerank reRankQuery=$knn_q reRankDocs=200 reRankWeight=80}";
+                            // reRankWeight er kalibrert mot dot_product-scoreskalaen [0,1]. Euklidsk
+                            // gir et komprimert område (~[0.2,1] for unit-vektorer), så vekten bør
+                            // kunne justeres per kjerne via config (default 80).
+                            extraParams["rq"] = "{!rerank reRankQuery=$knn_q reRankDocs=200 reRankWeight="
+                                + SimpleMetadataUtil.StaticVectorReRankWeight + "}";
                         }
                         options.ExtraParams = extraParams;
                         }
