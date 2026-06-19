@@ -198,6 +198,14 @@ namespace Kartverket.Metadatakatalog.Models
                     var textAll = text.Replace(" ", "*");
                     var queryString = "";
 
+                    // Per-word fuzzy terms (e.g. "løs~1 jord~1"). Built here so the allText fuzzy
+                    // clause below can be wrapped in parentheses and stay scoped to its field. Without
+                    // the parentheses, Lucene binds "field:" to only the FIRST token of a multi-word
+                    // query and the remaining words fall through to the default field (allText),
+                    // carrying the clause's boost with them (e.g. uuid:^81 leaking onto allText:jord).
+                    var fuzzyWords = string.Join(" ",
+                        text.Split(' ').Where(x => !string.IsNullOrEmpty(x)).Select(x => x + "~1"));
+
                     if (text.Contains(" "))
                     {
                         var words = text.Split(' ');
@@ -243,15 +251,15 @@ namespace Kartverket.Metadatakatalog.Models
 
                     var criteriaQueries = new List<ISolrQuery>
                     {
-                        new SolrQuery("uuid:" + text + "^81"),
+                        new SolrQuery("uuid:(" + text + ")^81"),
                         new SolrQuery("(type:dataset AND titleText:" + titleText + ")^79  titleText:" + titleText + "^78"),
                         new SolrQuery("(type:dataset AND titleText:" + titleText + "*)^77  titleText:" + titleText + "*^76"),
                         new SolrQuery("(type:dataset AND title_lowercase:*" + titleText + "*)^75  titleText:" + titleText + "*^74"),
                         new SolrQuery("(type:dataset AND titleText:*" + titleText + "*)^73  titleText:*" + titleText + "*^72"),
                         new SolrQuery("(type:dataset AND allText:*" + textAll + "*)^71 allText:*" + textAll + "*^70"),
                         !string.IsNullOrEmpty(queryString) ? new SolrQuery(queryString) : null,
-                        new SolrQuery("allText:" + text + "~1^1"),
-                        new SolrQuery("allText2:" + text + ""),
+                        new SolrQuery("allText:(" + fuzzyWords + ")^1"),
+                        new SolrQuery("allText2:(" + text + ")"),
                         listhidden ? null : new SolrQuery("!serie:*series_historic*"),
                         listhidden ? null : new SolrQuery("!serie:*series_time*"),
                         new SolrQuery("!boost b=typenumber")
@@ -292,8 +300,10 @@ namespace Kartverket.Metadatakatalog.Models
                         // ReRank reordner de øverste reRankDocs leksikalske treffene etter
                         // vektor-likhet. reRankWeight * knnScore legges til original-scoren,
                         // og gir mer forutsigbar kontroll enn additivt bq mot ^70+-boostene.
-                        // Juster reRankWeight (start 20) til semantiske treff (f.eks. løsmasser
-                        // for «løs jord») havner høyt nok.
+                        // reRankWeight=80: ved 20 ble semantiske treff (f.eks. «Løsmasser» for
+                        // «løs jord») liggende nederst fordi de leksikalske first-pass-scorene
+                        // dominerte; 80 løfter dem til topp 2-4 uten å forstyrre presise treff
+                        // (tittelmatch gir first-pass i hundreder, så rerank-bonusen blir støy der).
                         //
                         // ReRank er en relevans-operasjon og skal kun brukes når resultatet
                         // sorteres på score. Ved eksplisitt sortering (title, organization,
@@ -304,7 +314,7 @@ namespace Kartverket.Metadatakatalog.Models
                             || orderby == Models.OrderBy.score.ToString();
                         if (sortByScore)
                         {
-                            extraParams["rq"] = "{!rerank reRankQuery=$knn_q reRankDocs=200 reRankWeight=20}";
+                            extraParams["rq"] = "{!rerank reRankQuery=$knn_q reRankDocs=200 reRankWeight=80}";
                         }
                         options.ExtraParams = extraParams;
                         }
