@@ -294,7 +294,18 @@ namespace Kartverket.Metadatakatalog.Models
                         // og gir mer forutsigbar kontroll enn additivt bq mot ^70+-boostene.
                         // Juster reRankWeight (start 20) til semantiske treff (f.eks. løsmasser
                         // for «løs jord») havner høyt nok.
-                        extraParams["rq"] = "{!rerank reRankQuery=$knn_q reRankDocs=200 reRankWeight=20}";
+                        //
+                        // ReRank er en relevans-operasjon og skal kun brukes når resultatet
+                        // sorteres på score. Ved eksplisitt sortering (title, organization,
+                        // dato) ville rq overstyre den valgte sorteringen, så da hopper vi
+                        // over den. Hybrid-filteret over beholdes uansett (påvirker kun
+                        // hvilke dokumenter som matcher, ikke rekkefølgen).
+                        bool sortByScore = string.IsNullOrEmpty(orderby)
+                            || orderby == Models.OrderBy.score.ToString();
+                        if (sortByScore)
+                        {
+                            extraParams["rq"] = "{!rerank reRankQuery=$knn_q reRankDocs=200 reRankWeight=20}";
+                        }
                         options.ExtraParams = extraParams;
                         }
                     }
