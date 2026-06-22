@@ -529,9 +529,11 @@ namespace Kartverket.Metadatakatalog.Service
 
                 //add DistributionProtocols
                 indexDoc.DistributionProtocols = new List<string>();
-                if (!String.IsNullOrEmpty(indexDoc.DistributionProtocol))
+                if (simpleMetadata.DistributionsFormats != null && simpleMetadata.DistributionsFormats.Count > 0)
                 {
-                    indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(indexDoc.DistributionProtocol, culture));
+                    var distributionFormats = simpleMetadata.DistributionsFormats.Select(f => f.Protocol).Distinct();
+                    foreach(var distributionFormat in distributionFormats)
+                        indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(distributionFormat, culture));
                 }
                 //if (!String.IsNullOrEmpty(indexDoc.ServiceDistributionProtocolForDataset))
                 //{
@@ -1652,7 +1654,8 @@ namespace Kartverket.Metadatakatalog.Service
             if (simpleMetadata.DistributionProtocols != null && simpleMetadata.DistributionProtocols.Count > 0)
             {
                 List<string> distributionProtocols = new List<string>();
-                distributionProtocols.Add(simpleMetadata.DistributionProtocols[0]);
+                foreach (var distribution in simpleMetadata.DistributionProtocols)
+                    distributionProtocols.Add(distribution);
                 indexDoc.DistributionProtocols = distributionProtocols;
             }
 
