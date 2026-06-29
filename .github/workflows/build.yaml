@@ -128,7 +128,7 @@ jobs:
         run: |
           if [ "$BRANCH" = "main" ]; then
             echo "\"${IMAGE}\"" > env/atkv3-prod/geonorge-kartkatalog/kartkatalog-backend-version
-          elif [ "$BRANCH" = "main" ]; then
+          elif [ "$BRANCH" = "dev" ]; then
             echo "\"${IMAGE}\"" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
           else
             echo "Not deploying for branch $BRANCH"
