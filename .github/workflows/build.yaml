@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
+      - dev
 
 env:
   DOCKER_REGISTRY: ghcr.io
@@ -25,6 +25,8 @@ jobs:
       tags: ${{ steps.meta.outputs.tags }}
       short_tag: ${{ steps.short_tag.outputs.value }}
       commit_message: ${{ steps.get_commit_message.outputs.backend_commit_message }}
+      commit_author_name: ${{ steps.get_commit_author.outputs.name }}
+      commit_author_email: ${{ steps.get_commit_author.outputs.email }}
 
     steps:
       - name: Checkout repository
@@ -39,6 +41,12 @@ jobs:
             git log -1 --pretty=%B
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
+
+      - name: Get commit author
+        id: get_commit_author
+        run: |
+          echo "name=$(git log -1 --pretty=%an)" >> "$GITHUB_OUTPUT"
+          echo "email=$(git log -1 --pretty=%ae)" >> "$GITHUB_OUTPUT"
 
       - name: Extract Docker metadata
         id: meta
@@ -76,15 +84,32 @@ jobs:
           echo "Tags: ${{ steps.meta.outputs.tags }}" >> "$GITHUB_STEP_SUMMARY"
           echo "Digest: ${{ steps.build_image.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"
           echo "version=${{ github.ref_name }}@${{ steps.build_image.outputs.digest }}" >> "$GITHUB_OUTPUT"
+          echo "image_url=${{ env.DOCKER_REGISTRY }}/${{ env.NAME }}:${{ steps.meta.outputs.version }}@${{ steps.build_image.outputs.digest }}" >> "$GITHUB_OUTPUT"
+
+  run-pharos:
+    name: Run Pharos
+    runs-on: ubuntu-latest
+    needs: [build_image]
+    permissions:
+      actions: read
+      packages: read
+      contents: read
+      security-events: write
+    steps:
+      - name: "Run Pharos"
+        uses: kartverket/pharos@v0.6.4
+        with:
+          image_url: ${{ needs.build_image.outputs.image_url }}
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [build_image]
+    needs: [build_image, run-pharos]
     name: Deploy
     permissions:
       contents: read
       id-token: write
-    # if: github.event_name != 'pull_request'
+    # Using always() to ensure the deploy runs on dev even if run-pharos job fails, but only deploy to main if run-pharos is successful
+    if: always() && needs.build_image.result == 'success' && needs.run-pharos.result != 'cancelled' && (github.ref_name == 'dev' || needs.run-pharos.result == 'success')
     steps:
       - uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05
         id: octo-sts
@@ -101,14 +126,23 @@ jobs:
 
       - name: Git setup for deploy
         run: |
-          git config --global user.email "kartkatalog-backend@kartverket.no"
-          git config --global user.name "kartkatalog-backend CI"
+          git config --global user.email "${{ needs.build_image.outputs.commit_author_email }}"
+          git config --global user.name "${{ needs.build_image.outputs.commit_author_name }}"
 
       - name: Update deployment
         env:
           COMMIT_MESSAGE: ${{ needs.build_image.outputs.commit_message }}
+          BRANCH: ${{ github.ref_name }}
+          IMAGE: "ghcr.io/kartverket/geonorge-kartkatalog-backend:${{ needs.build_image.outputs.short_tag }}"
         run: |
-          echo "\"ghcr.io/kartverket/geonorge-kartkatalog-backend:${{ needs.build_image.outputs.short_tag }}"\" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
+          if [ "$BRANCH" = "main" ]; then
+            echo "\"${IMAGE}\"" > env/atkv3-prod/geonorge-kartkatalog/kartkatalog-backend-version
+          elif [ "$BRANCH" = "dev" ]; then
+            echo "\"${IMAGE}\"" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
+          else
+            echo "Not deploying for branch $BRANCH"
+            exit 0
+          fi
           git add .
           git commit -m "$COMMIT_MESSAGE"
           git push
