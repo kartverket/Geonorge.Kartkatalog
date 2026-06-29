@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - dev
-  workflow_dispatch:
 
 env:
   DOCKER_REGISTRY: ghcr.io
@@ -77,6 +76,7 @@ jobs:
           echo "Tags: ${{ steps.meta.outputs.tags }}" >> "$GITHUB_STEP_SUMMARY"
           echo "Digest: ${{ steps.build_image.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"
           echo "version=${{ github.ref_name }}@${{ steps.build_image.outputs.digest }}" >> "$GITHUB_OUTPUT"
+          echo "image_url=${{ env.DOCKER_REGISTRY }}/${{ env.NAME }}:${{ steps.meta.outputs.version }}@${{ steps.build_image.outputs.digest }}" >> "$GITHUB_OUTPUT"
 
   run-pharos:
     name: Run Pharos
@@ -128,8 +128,11 @@ jobs:
         run: |
           if [ "$BRANCH" = "main" ]; then
             echo "\"${IMAGE}\"" > env/atkv3-prod/geonorge-kartkatalog/kartkatalog-backend-version
-          else
+          elif [ "$BRANCH" = "main" ]; then
             echo "\"${IMAGE}\"" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
+          else
+            echo "Not deploying for branch $BRANCH"
+            exit 0
           fi
           git add .
           git commit -m "$COMMIT_MESSAGE"
