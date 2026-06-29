@@ -9,6 +9,8 @@ on:
 env:
   DOCKER_REGISTRY: ghcr.io
   NAME: kartverket/geonorge-kartkatalog-backend
+  ENV_SUFFIX: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+  DEPLOY_PATH: ${{ github.ref_name == 'main' && 'env/atkv3-prod/geonorge-kartkatalog/kartkatalog-backend-version' || 'env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version' }}
 
 jobs:
   build_image:
@@ -84,7 +86,7 @@ jobs:
           echo "Tags: ${{ steps.meta.outputs.tags }}" >> "$GITHUB_STEP_SUMMARY"
           echo "Digest: ${{ steps.build_image.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"
           echo "version=${{ github.ref_name }}@${{ steps.build_image.outputs.digest }}" >> "$GITHUB_OUTPUT"
-          echo "image_url=${{ env.DOCKER_REGISTRY }}/${{ env.NAME }}:${{ steps.meta.outputs.version }}@${{ steps.build_image.outputs.digest }}" >> "$GITHUB_OUTPUT"
+          echo "image_url=${{ env.DOCKER_REGISTRY }}/${{ env.NAME }}-${{ env.ENV_SUFFIX }}:${{ steps.meta.outputs.version }}@${{ steps.build_image.outputs.digest }}" >> "$GITHUB_OUTPUT"
 
   run-pharos:
     name: Run Pharos
@@ -132,17 +134,9 @@ jobs:
       - name: Update deployment
         env:
           COMMIT_MESSAGE: ${{ needs.build_image.outputs.commit_message }}
-          BRANCH: ${{ github.ref_name }}
-          IMAGE: "ghcr.io/kartverket/geonorge-kartkatalog-backend:${{ needs.build_image.outputs.short_tag }}"
+          IMAGE: "${{ env.DOCKER_REGISTRY }}/${{ env.NAME }}-${{ env.ENV_SUFFIX }}:${{ needs.build_image.outputs.short_tag }}"
         run: |
-          if [ "$BRANCH" = "main" ]; then
-            echo "\"${IMAGE}\"" > env/atkv3-prod/geonorge-kartkatalog/kartkatalog-backend-version
-          elif [ "$BRANCH" = "dev" ]; then
-            echo "\"${IMAGE}\"" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
-          else
-            echo "Not deploying for branch $BRANCH"
-            exit 0
-          fi
+          echo "\"${IMAGE}\"" > "${{ env.DEPLOY_PATH }}"
           git add .
           git commit -m "$COMMIT_MESSAGE"
           git push
