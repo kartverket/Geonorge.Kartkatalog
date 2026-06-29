@@ -25,6 +25,8 @@ jobs:
       tags: ${{ steps.meta.outputs.tags }}
       short_tag: ${{ steps.short_tag.outputs.value }}
       commit_message: ${{ steps.get_commit_message.outputs.backend_commit_message }}
+      commit_author_name: ${{ steps.get_commit_author.outputs.name }}
+      commit_author_email: ${{ steps.get_commit_author.outputs.email }}
 
     steps:
       - name: Checkout repository
@@ -39,6 +41,12 @@ jobs:
             git log -1 --pretty=%B
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
+
+      - name: Get commit author
+        id: get_commit_author
+        run: |
+          echo "name=$(git log -1 --pretty=%an)" >> "$GITHUB_OUTPUT"
+          echo "email=$(git log -1 --pretty=%ae)" >> "$GITHUB_OUTPUT"
 
       - name: Extract Docker metadata
         id: meta
@@ -100,6 +108,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    # Using always() to ensure the deploy runs on dev even if run-pharos job fails, but only deploy to main if run-pharos is successful
     if: always() && needs.build_image.result == 'success' && needs.run-pharos.result != 'cancelled' && (github.ref_name == 'dev' || needs.run-pharos.result == 'success')
     steps:
       - uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05
@@ -117,8 +126,8 @@ jobs:
 
       - name: Git setup for deploy
         run: |
-          git config --global user.email "kartkatalog-backend@kartverket.no"
-          git config --global user.name "kartkatalog-backend CI"
+          git config --global user.email "${{ needs.build_image.outputs.commit_author_email }}"
+          git config --global user.name "${{ needs.build_image.outputs.commit_author_name }}"
 
       - name: Update deployment
         env:
