@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
   workflow_dispatch:
 
 env:
@@ -77,14 +78,29 @@ jobs:
           echo "Digest: ${{ steps.build_image.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"
           echo "version=${{ github.ref_name }}@${{ steps.build_image.outputs.digest }}" >> "$GITHUB_OUTPUT"
 
-  deploy:
+  run-pharos:
+    name: Run Pharos
     runs-on: ubuntu-latest
     needs: [build_image]
+    permissions:
+      actions: read
+      packages: read
+      contents: read
+      security-events: write
+    steps:
+      - name: "Run Pharos"
+        uses: kartverket/pharos@v0.6.4
+        with:
+          image_url: ${{ needs.build_image.outputs.image_url }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build_image, run-pharos]
     name: Deploy
     permissions:
       contents: read
       id-token: write
-    # if: github.event_name != 'pull_request'
+    if: always() && needs.build_image.result == 'success' && needs.run-pharos.result != 'cancelled' && (github.ref_name == 'dev' || needs.run-pharos.result == 'success')
     steps:
       - uses: octo-sts/action@f603d3be9d8dd9871a265776e625a27b00effe05
         id: octo-sts
@@ -107,8 +123,14 @@ jobs:
       - name: Update deployment
         env:
           COMMIT_MESSAGE: ${{ needs.build_image.outputs.commit_message }}
+          BRANCH: ${{ github.ref_name }}
+          IMAGE: "ghcr.io/kartverket/geonorge-kartkatalog-backend:${{ needs.build_image.outputs.short_tag }}"
         run: |
-          echo "\"ghcr.io/kartverket/geonorge-kartkatalog-backend:${{ needs.build_image.outputs.short_tag }}"\" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
+          if [ "$BRANCH" = "main" ]; then
+            echo "\"${IMAGE}\"" > env/atkv3-prod/geonorge-kartkatalog/kartkatalog-backend-version
+          else
+            echo "\"${IMAGE}\"" > env/atkv3-dev/geonorge-kartkatalog-dev/kartkatalog-backend-version
+          fi
           git add .
           git commit -m "$COMMIT_MESSAGE"
           git push
