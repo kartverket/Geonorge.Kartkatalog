@@ -134,7 +134,7 @@ jobs:
       - name: Update deployment
         env:
           COMMIT_MESSAGE: ${{ needs.build_image.outputs.commit_message }}
-          IMAGE: "${{ env.DOCKER_REGISTRY }}/${{ env.NAME }}-${{ env.ENV_SUFFIX }}:${{ needs.build_image.outputs.short_tag }}"
+          IMAGE: "${{ env.DOCKER_REGISTRY }}/${{ env.NAME }}:${{ needs.build_image.outputs.short_tag }}"
         run: |
           echo "\"${IMAGE}\"" > "${{ env.DEPLOY_PATH }}"
           git add .
