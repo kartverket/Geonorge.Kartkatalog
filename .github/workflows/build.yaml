@@ -24,7 +24,6 @@ jobs:
 
     outputs:
       version: ${{ steps.set_output.outputs.version }}
-      image_url: ${{ steps.set_output.outputs.image_url }}
       tags: ${{ steps.meta.outputs.tags }}
       short_tag: ${{ steps.short_tag.outputs.value }}
       commit_message: ${{ steps.get_commit_message.outputs.backend_commit_message }}
@@ -87,7 +86,6 @@ jobs:
           echo "Tags: ${{ steps.meta.outputs.tags }}" >> "$GITHUB_STEP_SUMMARY"
           echo "Digest: ${{ steps.build_image.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"
           echo "version=${{ github.ref_name }}@${{ steps.build_image.outputs.digest }}" >> "$GITHUB_OUTPUT"
-          echo "image_url=${{ env.DOCKER_REGISTRY }}/${{ env.NAME }}-${{ env.ENV_SUFFIX }}:${{ steps.meta.outputs.version }}@${{ steps.build_image.outputs.digest }}" >> "$GITHUB_OUTPUT"
 
   run-pharos:
     name: Run Pharos
@@ -102,7 +100,7 @@ jobs:
       - name: "Run Pharos"
         uses: kartverket/pharos@v0.6.4
         with:
-          image_url: ${{ needs.build_image.outputs.image_url }}
+          image_url: ${{ env.DOCKER_REGISTRY }}/${{ env.NAME }}:${{ needs.build_image.outputs.short_tag }}
 
   deploy:
     runs-on: ubuntu-latest
