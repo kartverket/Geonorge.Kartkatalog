@@ -24,6 +24,7 @@ jobs:
 
     outputs:
       version: ${{ steps.set_output.outputs.version }}
+      image_url: ${{ steps.set_output.outputs.image_url }}
       tags: ${{ steps.meta.outputs.tags }}
       short_tag: ${{ steps.short_tag.outputs.value }}
       commit_message: ${{ steps.get_commit_message.outputs.backend_commit_message }}
