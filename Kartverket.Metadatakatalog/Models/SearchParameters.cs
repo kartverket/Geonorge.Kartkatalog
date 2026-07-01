@@ -291,12 +291,14 @@ namespace Kartverket.Metadatakatalog.Models
                             ? options.FilterQueries.ToList()
                             : new List<ISolrQuery>();
 
-                        // Hybrid: behold leksikalske treff, OG legg til semantisk nære dokumenter
-                        // over terskel. Dermed mister vi ikke eksakte tekst-/titteltreff.
+                        // Hybrid: behold leksikalske treff (inkl. direkte uuid-oppslag), OG legg
+                        // til semantisk nære dokumenter over terskel. uuid må stå i fq-en fordi
+                        // et rent uuid-treff ellers filtreres bort før ^81-boosten i q rekker å
+                        // virke (uuid ligger ikke i allText og er ikke vektor-nært).
                         // _query_-magifeltet lar oss neste en local-params-spørring (frange)
                         // inne i et boolsk uttrykk; {!...} kan ikke stå inline ellers.
                         currentFilters.Add(new SolrQuery(
-                            "allText:*" + textAll + "* OR _query_:\"{!frange l=" + frangeL + "}query($knn_q)\""));
+                            "uuid:(" + text + ") OR allText:*" + textAll + "* OR _query_:\"{!frange l=" + frangeL + "}query($knn_q)\""));
                         options.FilterQueries = currentFilters;
 
                         // Legg til ExtraParams uten å slette det som eventuelt lå der
