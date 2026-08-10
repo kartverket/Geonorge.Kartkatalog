@@ -1736,7 +1736,8 @@ namespace Kartverket.Metadatakatalog.Service
                             .Select(d => new DistributionFormatItem
                             {
                                 FormatName = d.FormatName,
-                                FormatVersion = d.FormatVersion
+                                FormatVersion = d.FormatVersion,
+                                URL = FixUrl(d.URL, d.Protocol)
                             })
                             .ToList(),
                         URL = group

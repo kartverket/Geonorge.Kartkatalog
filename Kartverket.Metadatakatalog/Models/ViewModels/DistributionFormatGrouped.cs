@@ -18,5 +18,6 @@ namespace Kartverket.Metadatakatalog.Models.ViewModels
     {
         public string FormatName { get; set; }
         public string FormatVersion { get; set; }
+        public string URL { get; set; }
     }
 }
