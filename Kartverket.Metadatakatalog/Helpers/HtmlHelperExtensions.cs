@@ -81,6 +81,43 @@ namespace Kartverket.Metadatakatalog.Helpers
             return configuration["DownloadUrl"];
         }
 
+        /// <summary>
+        /// PostHog project API key. Empty means analytics is disabled.
+        /// </summary>
+        public static string PostHogApiKey(this IHtmlHelper helper)
+        {
+            var configuration = GetConfiguration(helper);
+            return configuration["PostHog:ApiKey"] ?? string.Empty;
+        }
+
+        public static string PostHogHost(this IHtmlHelper helper)
+        {
+            var configuration = GetConfiguration(helper);
+            return configuration["PostHog:Host"] ?? "https://eu.i.posthog.com";
+        }
+
+        /// <summary>
+        /// Where the PostHog UI lives. Only relevant when Host points at a reverse proxy,
+        /// it keeps toolbar and "view in PostHog" links pointing at the real app.
+        /// </summary>
+        public static string PostHogUiHost(this IHtmlHelper helper)
+        {
+            var configuration = GetConfiguration(helper);
+            return configuration["PostHog:UiHost"] ?? string.Empty;
+        }
+
+        public static bool PostHogAutocapture(this IHtmlHelper helper)
+        {
+            var configuration = GetConfiguration(helper);
+            return configuration.GetValue<bool>("PostHog:Autocapture", false);
+        }
+
+        public static bool PostHogDisableSessionRecording(this IHtmlHelper helper)
+        {
+            var configuration = GetConfiguration(helper);
+            return configuration.GetValue<bool>("PostHog:DisableSessionRecording", true);
+        }
+
         public static string SolrServerUrl(this IHtmlHelper helper)
         {
             var configuration = GetConfiguration(helper);

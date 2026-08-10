@@ -284,6 +284,17 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Helpers.HtmlHelperExtensions.PostHogApiKey(Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper)">
+            <summary>
+            PostHog project API key. Empty means analytics is disabled.
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Helpers.HtmlHelperExtensions.PostHogUiHost(Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper)">
+            <summary>
+            Where the PostHog UI lives. Only relevant when Host points at a reverse proxy,
+            it keeps toolbar and "view in PostHog" links pointing at the real app.
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Helpers.HtmlHelperExtensions.GetConfigurationValue``1(Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper,System.String,``0)">
             <summary>
             Get configuration value with environment-specific override support

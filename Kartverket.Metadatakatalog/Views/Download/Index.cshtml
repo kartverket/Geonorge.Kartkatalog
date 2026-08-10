@@ -3,9 +3,58 @@
 @using Newtonsoft.Json
 @{
     ViewBag.Title = UI.FileDownload;
+    var postHogApiKey = Html.PostHogApiKey();
+    var postHogHost = Html.PostHogHost();
+    var postHogUiHost = Html.PostHogUiHost();
+    var postHogAutocapture = Html.PostHogAutocapture();
+    var postHogDisableSessionRecording = Html.PostHogDisableSessionRecording();
+    // IsProduction() treats an empty AppSettings:EnvironmentName as production,
+    // the same rule _Layout.cshtml uses to gate Google Tag Manager.
+    var postHogEnabled = !string.IsNullOrWhiteSpace(postHogApiKey) && Html.IsProduction();
 }
 @section breadcrumb {
     <li class="active">@UI.FileDownload</li>
+}
+
+@* PostHog is loaded on this view only, in production, when PostHog:ApiKey is set. *@
+@section head {
+    @if (postHogEnabled)
+    {
+        <script>
+            (function () {
+                var apiKey = @Html.Raw(JsonConvert.SerializeObject(postHogApiKey));
+                var apiHost = @Html.Raw(JsonConvert.SerializeObject(postHogHost));
+                var uiHost = @Html.Raw(JsonConvert.SerializeObject(postHogUiHost));
+                var assetHost = apiHost.replace('.i.posthog.com', '-assets.i.posthog.com');
+
+                var options = {
+                    api_host: apiHost,
+                    autocapture: @Html.Raw(JsonConvert.SerializeObject(postHogAutocapture)),
+                    capture_pageview: true,
+                    // Needed so PostHog flushes its queue while the page is unloading,
+                    // which is when download_order_abandoned is sent.
+                    capture_pageleave: true,
+                    disable_session_recording: @Html.Raw(JsonConvert.SerializeObject(postHogDisableSessionRecording)),
+                    person_profiles: 'identified_only'
+                };
+
+                // Only meaningful when api_host is a proxy, otherwise PostHog derives it itself.
+                if (uiHost) {
+                    options.ui_host = uiHost;
+                }
+
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.crossOrigin = 'anonymous';
+                script.async = true;
+                script.src = assetHost + '/static/array.js';
+                script.onload = function () {
+                    posthog.init(apiKey, options);
+                };
+                document.head.appendChild(script);
+            })();
+        </script>
+    }
 }
 
 <link rel="stylesheet" href="~/Content/css/shopping-cart.css" asp-append-version="true" />
@@ -177,7 +226,7 @@
                 <span class="custom-icon custom-icon-checked" data-toggle="tooltip" data-placement="bottom" title="@UI.DatasetIsCorrect">
                 </span>
             </span>
-            <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom center" track title="@Html.Raw(UI.NavigateToDataset)" class="btn icon-btn"><span class="fa fa-home"></span></a>
+            <a v-bind:href="metadata.url" data-toggle="tooltip" data-placement="bottom center" track data-exit-type="dataset_page" title="@Html.Raw(UI.NavigateToDataset)" class="btn icon-btn"><span class="fa fa-home"></span></a>
             <a href="#" v-on:click="$root.removeOrderLine(metadata.uuid, false)" data-toggle="tooltip" data-placement="bottom" title="@UI.DeleteDataset" class="btn icon-btn"><span class="fa fa-trash"></span></a>
         </div>
         <div class="clearfix"></div>
@@ -299,7 +348,7 @@
             <div class="intro-text">
                 @Html.Raw(UI.FileDownloadIntro)
                 <p>
-                    <a style="font-size: 12pt" href="https://www.geonorge.no/aktuelt/om-geonorge/slik-bruker-du-geonorge/laste-ned-data/">Les mer om å laste ned data</a>
+                    <a style="font-size: 12pt" href="https://www.geonorge.no/aktuelt/om-geonorge/slik-bruker-du-geonorge/laste-ned-data/" data-exit-type="help_page">Les mer om å laste ned data</a>
                 </p>
             </div>
             <div id="downloadformVue" class="download-form">
@@ -391,7 +440,7 @@
                             <div class="form-group">
                                 <div class="pull-right">
                                     <a class="btn" id="remove-all-items"><span class="fa fa-trash"></span> @UI.RemoveAll</a>
-                                    <a href="/" class="btn"><span class="fa fa-shopping-cart"></span> @UI.OrderMore</a>
+                                    <a href="/" class="btn" data-exit-type="order_more"><span class="fa fa-shopping-cart"></span> @UI.OrderMore</a>
                                     <button v-on:click="sendRequests()" v-bind:disabled="!formIsValid()" class="btn"><span class="fa fa-save"></span> @UI.Download</button>
                                 </div>
                                 <div class="clearfix"></div>
@@ -529,6 +578,14 @@
     var downloadSoftwareClientVersion = '@Html.ApplicationVersionNumber()';
     var downloadUrl = '@Html.DownloadUrl()';
     var SelectedFromMap = '@UI.SelectedFromMap';
+
+    // No-op unless PostHog is configured and loaded. Never pass personal data (e.g. email) as properties.
+    // options is passed straight to posthog.capture, e.g. { transport: 'sendBeacon' } when the page is unloading.
+    function trackDownloadEvent(eventName, properties, options) {
+        if (typeof posthog !== 'undefined' && typeof posthog.capture === 'function') {
+            posthog.capture(eventName, properties, options);
+        }
+    }
 </script>
 @section scripts{
     <script src="~/Content/js/jquery-3.7.0.js" asp-append-version="true"></script>
