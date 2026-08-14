@@ -425,7 +425,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             metadata.Distributions.RelatedDataset?.RemoveAll(MatchesSelf);
             metadata.Distributions.RelatedSerieDatasets?.RemoveAll(MatchesSelf);
-            metadata.Distributions.RelatedDatasetSerie?.RemoveAll(MatchesSelf);
+            //metadata.Distributions.RelatedDatasetSerie?.RemoveAll(MatchesSelf);
             metadata.Distributions.RelatedApplications?.RemoveAll(MatchesSelf);
             metadata.Distributions.RelatedServices?.RemoveAll(MatchesSelf);
             metadata.Distributions.RelatedServiceLayer?.RemoveAll(MatchesSelf);
