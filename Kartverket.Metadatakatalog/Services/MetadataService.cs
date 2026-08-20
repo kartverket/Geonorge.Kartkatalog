@@ -1723,15 +1723,14 @@ namespace Kartverket.Metadatakatalog.Service
 
                 foreach (var group in groups)
                 {
-                    var first = group.First();
                     output.Add(new DistributionFormatGrouped
                     {
                         Protocol = group.Key.Protocol,
                         ProtocolName = Register.GetDistributionType(group.Key.Protocol),
                         ProtocolDescription = Register.GetDistributionTypeDescription(group.Key.Protocol),
                         Organization = group.Key.Organization,
-                        UnitsOfDistribution = first.UnitsOfDistribution,
-                        EnglishUnitsOfDistribution = first.EnglishUnitsOfDistribution,
+                        UnitsOfDistribution = JoinDistinct(group.Select(d => d.UnitsOfDistribution)),
+                        EnglishUnitsOfDistribution = JoinDistinct(group.Select(d => d.EnglishUnitsOfDistribution)),
                         Formats = group
                             .Select(d => new DistributionFormatItem
                             {
@@ -1749,6 +1748,14 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
             return output;
+        }
+
+        private string JoinDistinct(IEnumerable<string> values)
+        {
+            return string.Join(", ", values
+                .Where(v => !string.IsNullOrWhiteSpace(v))
+                .Select(v => v.Trim())
+                .Distinct());
         }
 
         private string FixUrl(string url, string protocol)
