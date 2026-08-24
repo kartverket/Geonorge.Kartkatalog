@@ -493,6 +493,11 @@ var OrderLine = {
         },
         selectFromMap: function (orderItem, mapType) {
             orderItem.showMap = true;
+            trackDownloadEvent('map_selection_opened', {
+                scope: 'orderline',
+                map_type: mapType,
+                dataset_uuid: orderItem.metadata.uuid
+            });
             if (!this.mapIsLoaded) {
                 showLoadingAnimation("Henter kart");
             }
@@ -524,6 +529,14 @@ var OrderLine = {
                         clearAlertMessage();
                         hideAlert();
                         hideLoadingAnimation();
+
+                        trackDownloadEvent('clipper_file_validated', {
+                            scope: 'orderline',
+                            dataset_uuid: orderItem.metadata.uuid,
+                            valid: !!result.valid,
+                            // Server-generated validation text. Never include the uploaded file name.
+                            reason: result.valid ? null : result.message
+                        });
 
                         if (result.valid) {
                             showAlert("Validering vellykket for " + orderItem.metadata.name, "success");
@@ -581,8 +594,16 @@ var OrderLine = {
                         var errorMessage = err.statusText;
                         if (err.responseText)
                         {
-                            errorMessage = err.responseText;      
+                            errorMessage = err.responseText;
                         }
+
+                        trackDownloadEvent('clipper_file_validated', {
+                            scope: 'orderline',
+                            dataset_uuid: orderItem.metadata.uuid,
+                            valid: false,
+                            reason: 'request_failed',
+                            http_status: err.status
+                        });
 
                         showAlert("Validering feilet for " + orderItem.metadata.name + ": " + errorMessage, "danger")
                     }
@@ -773,7 +794,14 @@ var OrderLine = {
                                         if (data !== null) {
                                             if (!data.canDownload) {
                                                 clearAlertMessage();
-                                                if (data.message !== undefined && data.message !== null && data.message !== '') {
+                                                var hasMessage = data.message !== undefined && data.message !== null && data.message !== '';
+                                                trackDownloadEvent('area_selection_rejected', {
+                                                    scope: 'orderline',
+                                                    dataset_uuid: orderItem.metadata.uuid,
+                                                    reason: hasMessage ? 'other' : 'too_large',
+                                                    message: hasMessage ? data.message : null
+                                                });
+                                                if (hasMessage) {
                                                     showAlert("Det oppstod et problem ved valg av område: " + data.message, "danger");
                                                 }
                                                 else {
@@ -966,6 +994,10 @@ var MasterOrderLine = {
         },
         selectFromMap: function (orderItem, mapType) {
             orderItem.showMap = true;
+            trackDownloadEvent('map_selection_opened', {
+                scope: 'master',
+                map_type: mapType
+            });
             if (!this.mapIsLoaded) {
                 showLoadingAnimation("Henter kart");
             }
@@ -1002,9 +1034,16 @@ var MasterOrderLine = {
                                  },
                              success: function (result) {
                              console.log(result);
+                             trackDownloadEvent('clipper_file_validated', {
+                                 scope: 'master',
+                                 dataset_uuid: orderItem.metadata.uuid,
+                                 valid: !!result.valid,
+                                 // Server-generated validation text. Never include the uploaded file name.
+                                 reason: result.valid ? null : result.message
+                             });
                             if (result.valid) {
 
-                            orderItem.clipperFile = result.url;                           
+                            orderItem.clipperFile = result.url;
 
                             this.$root.masterOrderLine.allSelectedClipperFiles[orderItem.metadata.uuid] = orderItem.clipperFile;
                             var polygonArea = {
@@ -1092,6 +1131,13 @@ var MasterOrderLine = {
                                  }
                              }.bind(this),
                                  error: function (err) {
+                                     trackDownloadEvent('clipper_file_validated', {
+                                         scope: 'master',
+                                         dataset_uuid: orderItem.metadata.uuid,
+                                         valid: false,
+                                         reason: 'request_failed',
+                                         http_status: err.status
+                                     });
                                      showAlert("Validering av klippefil feilet for " + orderItem.metadata.name + ": " + err.statusText, "danger")
                                      //hideLoadingAnimation();
                                  }
@@ -1175,7 +1221,14 @@ var MasterOrderLine = {
                                         if (data !== null) {
                                             if (!data.canDownload) {
                                                 clearAlertMessage();
-                                                if (data.message !== undefined && data.message !== null && data.message !== '')
+                                                var hasMessage = data.message !== undefined && data.message !== null && data.message !== '';
+                                                trackDownloadEvent('area_selection_rejected', {
+                                                    scope: 'master',
+                                                    dataset_uuid: firstOrderItemWithPolygonSupport.metadata.uuid,
+                                                    reason: hasMessage ? 'other' : 'too_large',
+                                                    message: hasMessage ? data.message : null
+                                                });
+                                                if (hasMessage)
                                                 {
                                                     showAlert("Det oppstod et problem ved valg av område: " + data.message , "danger");
                                                 }
@@ -1307,6 +1360,8 @@ var mainVueModel = Vue.createApp({
             emailRequired: false,
             contentLoaded: false,
             activeMapUuid: false,
+            // Analytics only: distinguishes "never tried to order" from "tried and it failed".
+            orderSubmitted: false,
 
             masterOrderLine: {
                 allAvailableAreas: {},
@@ -1442,8 +1497,13 @@ var mainVueModel = Vue.createApp({
                                             ? metadata.areas
                                             : getJsonData(areaOptions);
 
-                                        if (availableAreas.length === 0)
+                                        if (availableAreas.length === 0) {
+                                            trackDownloadEvent('no_areas_available', {
+                                                dataset_uuid: uuid,
+                                                dataset_name: metadata.name
+                                            });
                                             showAlert("Ingen områder er tilgjengelige for " + metadata.name, 'danger');
+                                        }
 
                                         this.masterOrderLine.allAvailableAreas[uuid] = {};
 
@@ -1529,6 +1589,7 @@ var mainVueModel = Vue.createApp({
         this.updateNotAvailableSelectedFormatsForAllOrderLines();
         this.validateAreas();
         this.contentLoaded = true;
+        this.trackBasketFunnel();
     },
     components: {
         'orderLine': OrderLine,
@@ -2297,9 +2358,99 @@ var mainVueModel = Vue.createApp({
             }
             return '';
         },
+        // Funnel start, plus the drop-off on the way out. download_basket_loaded pairs with
+        // download_order_submitted in a PostHog funnel; download_order_abandoned adds the reason.
+        trackBasketFunnel: function () {
+            if (!this.orderLines.length) {
+                return;
+            }
+
+            var loadedAt = performance.now();
+
+            trackDownloadEvent('download_basket_loaded', Object.assign(
+                this.getDownloadTrackingProperties(),
+                { blockers: this.getFormBlockers() }
+            ));
+
+            // pagehide also fires when the user navigates deliberately with a full basket
+            // (e.g. "Bestill mer"), so record how they left. Links carry data-exit-type;
+            // anything else - closed tab, back button, address bar - stays 'unknown'.
+            var exitType = 'unknown';
+            document.addEventListener('click', function (event) {
+                if (event.target instanceof Element) {
+                    var link = event.target.closest('a[data-exit-type]');
+                    if (link) {
+                        exitType = link.getAttribute('data-exit-type');
+                    }
+                }
+            });
+
+            // pagehide rather than beforeunload, which is unreliable on mobile Safari.
+            window.addEventListener('pagehide', function (event) {
+                // persisted means the page is being frozen into the back/forward cache
+                // (mobile app backgrounding, tab discarding) rather than genuinely left.
+                if (event.persisted) {
+                    return;
+                }
+                if (this.orderSubmitted || !this.orderLines.length) {
+                    return;
+                }
+
+                trackDownloadEvent('download_order_abandoned', Object.assign(
+                    this.getDownloadTrackingProperties(),
+                    {
+                        blockers: this.getFormBlockers(),
+                        exit_type: exitType,
+                        seconds_on_page: Math.round((performance.now() - loadedAt) / 1000)
+                    }
+                ), { transport: 'sendBeacon' });
+            }.bind(this));
+        },
+        getDownloadTrackingProperties: function () {
+            var datasets = 0;
+            var formats = {};
+            var projections = {};
+            var orderRequests = this.orderRequests;
+
+            for (var distributionUrl in orderRequests) {
+                orderRequests[distributionUrl].orderLines.forEach(function (orderLine) {
+                    datasets++;
+                    (orderLine.formats || []).forEach(function (format) { formats[format.name] = true; });
+                    (orderLine.projections || []).forEach(function (projection) { projections[projection.name] = true; });
+                });
+            }
+
+            // How much the user had to fight the form to get here.
+            var errorCounts = { area: 0, projection: 0, format: 0 };
+            var allOrderLineErrors = this.masterOrderLine.allOrderLineErrors || {};
+            for (var orderLineUuid in allOrderLineErrors) {
+                Object.keys(errorCounts).forEach(function (errorType) {
+                    var errors = allOrderLineErrors[orderLineUuid][errorType];
+                    if (errors && errors.length) {
+                        errorCounts[errorType] += errors.length;
+                    }
+                });
+            }
+
+            return {
+                datasets: datasets,
+                distributors: Object.keys(orderRequests).length,
+                usage_group: this.usageGroup,
+                usage_purposes: this.usagePurposes,
+                formats: Object.keys(formats),
+                projections: Object.keys(projections),
+                orderline_errors: errorCounts.area + errorCounts.projection + errorCounts.format,
+                orderline_errors_area: errorCounts.area,
+                orderline_errors_projection: errorCounts.projection,
+                orderline_errors_format: errorCounts.format
+            };
+        },
         sendRequests: function () {
             this.updateUsageForOrderRequests();
             this.updateEmailForOrderRequests();
+            // Collected before the order lines are cleared below.
+            var trackingProperties = this.getDownloadTrackingProperties();
+            this.orderSubmitted = true;
             var responseData = [];
             var responseFailed = false;
             var orderRequests = this.orderRequests;
@@ -2351,6 +2502,9 @@ var mainVueModel = Vue.createApp({
                 this.removeSelectedMasterOrderLineValuesFromLocalStorage();
             }
             this.orderResponse = responseData;
+
+            trackingProperties.succeeded = !responseFailed;
+            trackDownloadEvent('download_order_submitted', trackingProperties);
         },
 
         sendOrderBundleRequest: function (responseItem) {
@@ -2377,11 +2531,23 @@ var mainVueModel = Vue.createApp({
                     },
                     success: function (data) {
                         hideLoadingAnimation();
+                        // The email address is deliberately not tracked.
+                        trackDownloadEvent('download_bundle_ordered', {
+                            distributed_by: responseItem.additionalInfo.distributedBy,
+                            files: responseItem.numberOfFiles,
+                            succeeded: true
+                        });
                         $('#order-bundle-message-' + responseItem.additionalInfo.distributedBy).addClass("alert alert-success");
                         $('#order-bundle-message-' + responseItem.additionalInfo.distributedBy).text('Pakken med alle datasett vil bli sendt til ' + emailAddress + ' så snart den er klar');
                     },
                     error: function (xhr, status, errorThrown) {
                         hideLoadingAnimation();
+                        trackDownloadEvent('download_bundle_ordered', {
+                            distributed_by: responseItem.additionalInfo.distributedBy,
+                            files: responseItem.numberOfFiles,
+                            succeeded: false,
+                            http_status: xhr.status
+                        });
                         showAlert("Feil: " + errorThrown + ". " + xhr.responseText, 'danger');
                     }
                 });
@@ -2516,6 +2682,29 @@ var mainVueModel = Vue.createApp({
             var usageNotEmpty = usageGroupFieldNotEmpty && usagePurposeNotEmpty;
             var formIsValid = (((emailFieldNotEmpty && emailRequired && emailAddressIsValid && formHasNoErrors) || (!emailRequired && formHasNoErrors)) ? true : false) && usageNotEmpty;
             return formIsValid;
+        },
+        // Why the Download button is disabled, as a list. Mirrors formIsValid().
+        getFormBlockers: function () {
+            var blockers = [];
+
+            if (this.usageGroup === "") {
+                blockers.push('usage_group_missing');
+            }
+            if (Object.keys(this.usagePurposes).length === 0) {
+                blockers.push('usage_purpose_missing');
+            }
+            if (!this.forHasNoErrors()) {
+                blockers.push('orderline_errors');
+            }
+            if (this.emailRequired) {
+                if (this.email === "") {
+                    blockers.push('email_missing');
+                } else if (!this.emailAddressIsValid(this.email)) {
+                    blockers.push('email_invalid');
+                }
+            }
+
+            return blockers;
         },
         projectionAndFormatIsRequired: function (orderItem) {
             var required = this.orderItemHasCoordinates(orderItem);

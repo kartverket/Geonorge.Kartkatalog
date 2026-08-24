@@ -425,7 +425,7 @@ namespace Kartverket.Metadatakatalog.Service
 
             metadata.Distributions.RelatedDataset?.RemoveAll(MatchesSelf);
             metadata.Distributions.RelatedSerieDatasets?.RemoveAll(MatchesSelf);
-            metadata.Distributions.RelatedDatasetSerie?.RemoveAll(MatchesSelf);
+            //metadata.Distributions.RelatedDatasetSerie?.RemoveAll(MatchesSelf);
             metadata.Distributions.RelatedApplications?.RemoveAll(MatchesSelf);
             metadata.Distributions.RelatedServices?.RemoveAll(MatchesSelf);
             metadata.Distributions.RelatedServiceLayer?.RemoveAll(MatchesSelf);
@@ -1723,20 +1723,20 @@ namespace Kartverket.Metadatakatalog.Service
 
                 foreach (var group in groups)
                 {
-                    var first = group.First();
                     output.Add(new DistributionFormatGrouped
                     {
                         Protocol = group.Key.Protocol,
                         ProtocolName = Register.GetDistributionType(group.Key.Protocol),
                         ProtocolDescription = Register.GetDistributionTypeDescription(group.Key.Protocol),
                         Organization = group.Key.Organization,
-                        UnitsOfDistribution = first.UnitsOfDistribution,
-                        EnglishUnitsOfDistribution = first.EnglishUnitsOfDistribution,
+                        UnitsOfDistribution = JoinDistinct(group.Select(d => d.UnitsOfDistribution)),
+                        EnglishUnitsOfDistribution = JoinDistinct(group.Select(d => d.EnglishUnitsOfDistribution)),
                         Formats = group
                             .Select(d => new DistributionFormatItem
                             {
                                 FormatName = d.FormatName,
-                                FormatVersion = d.FormatVersion
+                                FormatVersion = d.FormatVersion,
+                                URL = FixUrl(d.URL, d.Protocol)
                             })
                             .ToList(),
                         URL = group
@@ -1748,6 +1748,14 @@ namespace Kartverket.Metadatakatalog.Service
                 }
             }
             return output;
+        }
+
+        private string JoinDistinct(IEnumerable<string> values)
+        {
+            return string.Join(", ", values
+                .Where(v => !string.IsNullOrWhiteSpace(v))
+                .Select(v => v.Trim())
+                .Distinct());
         }
 
         private string FixUrl(string url, string protocol)
