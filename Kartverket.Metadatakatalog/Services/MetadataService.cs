@@ -1007,6 +1007,7 @@ namespace Kartverket.Metadatakatalog.Service
             }
             metadata.ServiceLink = metadata.ServiceUrl();
 
+            metadata.SurveyAreaMap = metadata.GetSurveyAreaMapLink();
             metadata.CoverageUrl = metadata.GetCoverageLink();
             if(simpleMetadata.IsService())
                 metadata.ServiceType = simpleMetadata.ServiceType;
