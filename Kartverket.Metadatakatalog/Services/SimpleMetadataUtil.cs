@@ -33,6 +33,7 @@ namespace Kartverket.Metadatakatalog.Service
         public const string Wcs = "wcs";
 
         public string NorgeskartUrl => _configuration?["NorgeskartUrl"] ?? "";
+        public string Norgeskart => _configuration?["Norgeskart"] ?? "";
         public bool MapOnlyWms => Convert.ToBoolean(_configuration?["AppSettings:MapOnlyWms"] ?? "false");
         public bool UseVectorSearch => Convert.ToBoolean(_configuration?["AI:UseVectorSearch"] ?? "false");
 
@@ -47,6 +48,7 @@ namespace Kartverket.Metadatakatalog.Service
 
         // Static accessors for backwards compatibility
         public static string StaticNorgeskartUrl => Instance.NorgeskartUrl;
+        public static string StaticNorgeskart => Instance.Norgeskart;
         public static bool StaticMapOnlyWms => Instance.MapOnlyWms;
         public static bool StaticUseVectorSearch => Instance.UseVectorSearch;
         public static string StaticVectorSimilarityFunction => Instance.VectorSimilarityFunction;

@@ -120,6 +120,7 @@ namespace Kartverket.Metadatakatalog.Models
         public string CoverageCellUrl { get; set; }
         public string SurveyAreaMapUrl { get; set; }
         public string SurveyAreaMapUrlWms { get; set; }
+        public string SurveyAreaMap { get; set; }
         public string DownloadUrl { get; set; }
         public string Purpose { get; set; }
         public List<QualitySpecification> QualitySpecifications { get; set; }
@@ -489,6 +490,103 @@ namespace Kartverket.Metadatakatalog.Models
                 }
             }
             return CoverageUrl;
+        }
+
+        private const string SurveyAreaMapZoom = "4";
+        private const string SurveyAreaMapLatitude = "7194396.01";
+        private const string SurveyAreaMapLongitude = "511194.69000000006";
+        private const string SurveyAreaMapBackgroundLayer = "topograatone";
+        private const string GeonorgeDekningskartWms = "https://wms.geonorge.no/skwms1/wms.geonorge_dekningskart";
+        private const string GeonorgeDekningsoversiktWms = "https://wms.geonorge.no/skwms1/wms.gp_dek_oversikt";
+
+        /// <summary>
+        /// Builds a link to the same coverage sources as GetCoverageLink(), but for the new Norgeskart client:
+        /// every service gets its own repeated wmsUrl/wfsUrl/geojsonUrl parameter instead of the comma
+        /// separated wms/addLayers pair, and the map is positioned with a fixed zoom and centre.
+        /// Must be called before CoverageUrl is overwritten with the result of GetCoverageLink().
+        /// </summary>
+        public string GetSurveyAreaMapLink()
+        {
+            ExtractTypePathAndLayer(CoverageUrl, out var type, out var path, out var layer);
+            ExtractTypePathAndLayer(CoverageGridUrl, out var typeGrid, out var pathGrid, out var layerGrid);
+
+            if (type == null && typeGrid == null)
+                return null;
+
+            var wmsUrls = new List<string>();
+            var wfsUrls = new List<string>();
+            var geojsonUrls = new List<string>();
+
+            var coverageType = type ?? typeGrid;
+
+            if (coverageType == "GEONORGE-WMS")
+            {
+                if (type != null && typeGrid != null)
+                {
+                    wmsUrls.Add($"{GeonorgeDekningskartWms}?datasett={layer}");
+                    wmsUrls.Add($"{GeonorgeDekningsoversiktWms}?datasett={layer}");
+                }
+                else if (type != null)
+                    wmsUrls.Add($"{GeonorgeDekningsoversiktWms}?datasett={layer}");
+                else
+                    wmsUrls.Add($"{GeonorgeDekningskartWms}?datasett={layerGrid}");
+            }
+            else if (coverageType == "WMS")
+                wmsUrls.Add(path ?? pathGrid);
+            else if (coverageType == "WFS")
+                wfsUrls.Add(RemoveQueryString(path ?? pathGrid));
+            else if (coverageType == "GeoJSON")
+                geojsonUrls.Add(RemoveQueryString(path ?? pathGrid));
+
+            if (!string.IsNullOrWhiteSpace(CoverageCellUrl))
+                geojsonUrls.Add(CoverageCellUrl);
+
+            ExtractWmsUrlAndLayer(SurveyAreaMapUrlWms, out var surveyAreaWmsUrl, out _);
+            if (!string.IsNullOrWhiteSpace(surveyAreaWmsUrl))
+                wmsUrls.Add(surveyAreaWmsUrl);
+
+            if (!string.IsNullOrWhiteSpace(SurveyAreaMapUrl))
+                geojsonUrls.Add(SurveyAreaMapUrl);
+
+            var url = new StringBuilder($"{SimpleMetadataUtil.StaticNorgeskart}?zoom={SurveyAreaMapZoom}&lat={SurveyAreaMapLatitude}&lon={SurveyAreaMapLongitude}&backgroundLayer={SurveyAreaMapBackgroundLayer}");
+
+            AppendUrlParameters(url, "wmsUrl", wmsUrls);
+            AppendUrlParameters(url, "wfsUrl", wfsUrls);
+            AppendUrlParameters(url, "geojsonUrl", geojsonUrls);
+
+            url.Append("&rotation=0&showMenu=false");
+
+            return url.ToString();
+        }
+
+        private static void AppendUrlParameters(StringBuilder url, string parameterName, List<string> values)
+        {
+            foreach (var value in values)
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                    url.Append($"&{parameterName}={Uri.EscapeDataString(value)}");
+            }
+        }
+
+        private static void ExtractTypePathAndLayer(string input, out string type, out string path, out string layer)
+        {
+            type = null;
+            path = null;
+            layer = null;
+
+            if (string.IsNullOrEmpty(input) || !input.StartsWith("TYPE:"))
+                return;
+
+            int pathIndex = input.IndexOf("@PATH:");
+            int layerIndex = input.IndexOf("@LAYER:");
+
+            if (pathIndex == -1 || layerIndex == -1 || layerIndex < pathIndex)
+                return;
+
+            // TYPE: is 5 chars, @PATH: is 6 chars, @LAYER: is 7 chars
+            type = input.Substring(5, pathIndex - 5).Trim();
+            path = input.Substring(pathIndex + 6, layerIndex - (pathIndex + 6)).Trim();
+            layer = input.Substring(layerIndex + 7).Trim();
         }
 
         private string AddSurveyAreaMap(string coverageLink, string surveyAreaMapUrl, string surveyAreaMapUrlWms)

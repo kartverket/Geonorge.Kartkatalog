@@ -733,6 +733,14 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Kartverket.Metadatakatalog.Models.MetadataViewModel.GetSurveyAreaMapLink">
+            <summary>
+            Builds a link to the same coverage sources as GetCoverageLink(), but for the new Norgeskart client:
+            every service gets its own repeated wmsUrl/wfsUrl/geojsonUrl parameter instead of the comma
+            separated wms/addLayers pair, and the map is positioned with a fixed zoom and centre.
+            Must be called before CoverageUrl is overwritten with the result of GetCoverageLink().
+            </summary>
+        </member>
         <member name="M:Kartverket.Metadatakatalog.Models.SearchParameters.OrderBy">
             <summary>
             Gets a sort order based on "Orderby" parameter
