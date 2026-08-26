@@ -424,7 +424,7 @@ namespace Kartverket.Metadatakatalog.Service
                 IsInSelf(d.DistributionUrl) || IsInSelf(d.GetCapabilitiesUrl) || IsInSelf(d.DownloadUrl) || IsInSelf(d.ServiceUrl);
 
             metadata.Distributions.RelatedDataset?.RemoveAll(MatchesSelf);
-            metadata.Distributions.RelatedSerieDatasets?.RemoveAll(MatchesSelf);
+            //metadata.Distributions.RelatedSerieDatasets?.RemoveAll(MatchesSelf);
             //metadata.Distributions.RelatedDatasetSerie?.RemoveAll(MatchesSelf);
             metadata.Distributions.RelatedApplications?.RemoveAll(MatchesSelf);
             metadata.Distributions.RelatedServices?.RemoveAll(MatchesSelf);
