@@ -77,7 +77,7 @@ namespace Kartverket.Metadatakatalog.Service
             }
             return documentsToIndex;
         }
-        public ServiceIndexDoc ConvertIndexDocToService(MetadataIndexDoc simpleMetadata)
+        public ServiceIndexDoc ConvertIndexDocToService(MetadataIndexDoc simpleMetadata, string culture)
         {
             var indexDoc = new ServiceIndexDoc();
 
@@ -108,7 +108,7 @@ namespace Kartverket.Metadatakatalog.Service
             indexDoc.DistributionProtocol = simpleMetadata.DistributionProtocol;
             if(simpleMetadata.DistributionProtocols != null && simpleMetadata.DistributionProtocols.Count > 0) {
                 List<string> distributionProtocols = new List<string>();
-                distributionProtocols.Add(simpleMetadata.DistributionProtocols[0]);
+                distributionProtocols.Add(FixProtocolName(simpleMetadata.DistributionProtocols[0], culture));
                 indexDoc.DistributionProtocols = distributionProtocols;
             }
             indexDoc.DistributionUrl = simpleMetadata.DistributionUrl;
@@ -135,7 +135,7 @@ namespace Kartverket.Metadatakatalog.Service
             return indexDoc;
 
         }
-        public ApplicationIndexDoc ConvertIndexDocToApplication(MetadataIndexDoc simpleMetadata)
+        public ApplicationIndexDoc ConvertIndexDocToApplication(MetadataIndexDoc simpleMetadata, string culture)
         {
             var indexDoc = new ApplicationIndexDoc();
             
@@ -1564,6 +1564,14 @@ namespace Kartverket.Metadatakatalog.Service
             }
         }
 
+        private string FixProtocolName(string protocol, string culture)
+        {
+            if (protocol.ToLower().Contains("ogc:oapif"))
+                return "OGC API-Features";
+            else
+                return protocol;
+        }
+
         private string ConvertProtocolToSimpleName(string protocol, string culture) {
             if (culture == Culture.EnglishCode) {
 
@@ -1583,6 +1591,7 @@ namespace Kartverket.Metadatakatalog.Service
                 else if (protocol.ToLower().Contains("wcs")) return "WCS-service";
                 else if (protocol.ToLower().Contains("ws")) return "Webservice";
                 else if (protocol.ToLower().Contains("wps")) return "WPS-service";
+                else if (protocol.ToLower().Contains("ogc:oapif")) return "OGC API-Features";
                 else return protocol;
             }
             else
@@ -1603,6 +1612,7 @@ namespace Kartverket.Metadatakatalog.Service
                 else if (protocol.ToLower().Contains("wcs")) return "WCS-tjeneste";
                 else if (protocol.ToLower().Contains("ws")) return "Webservice";
                 else if (protocol.ToLower().Contains("wps")) return "WPS-tjeneste";
+                else if (protocol.ToLower().Contains("ogc:oapif")) return "OGC API-Features";
                 else return protocol;
             }
         }
@@ -1627,7 +1637,7 @@ namespace Kartverket.Metadatakatalog.Service
             return output;
         }
 
-        public MetadataIndexAllDoc ConvertIndexDocToMetadataAll(MetadataIndexDoc simpleMetadata)
+        public MetadataIndexAllDoc ConvertIndexDocToMetadataAll(MetadataIndexDoc simpleMetadata, string culture)
         {
             var indexDoc = new MetadataIndexAllDoc();
             indexDoc.Uuid = simpleMetadata.Uuid;
@@ -1660,7 +1670,7 @@ namespace Kartverket.Metadatakatalog.Service
             {
                 List<string> distributionProtocols = new List<string>();
                 foreach (var distribution in simpleMetadata.DistributionProtocols)
-                    distributionProtocols.Add(distribution);
+                    distributionProtocols.Add(FixProtocolName(distribution, culture));
                 indexDoc.DistributionProtocols = distributionProtocols;
             }
 
