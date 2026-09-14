@@ -16,7 +16,8 @@
     <li class="active">@UI.FileDownload</li>
 }
 
-@* PostHog is loaded on this view only, in production, when PostHog:ApiKey is set. *@
+@* PostHog is loaded on this view only, in production, when PostHog:ApiKey is set
+   and the visitor has given analytics consent in the cookieyes-consent cookie. *@
 @section head {
     @if (postHogEnabled)
     {
@@ -26,37 +27,84 @@
                 var apiHost = @Html.Raw(JsonConvert.SerializeObject(postHogHost));
                 var uiHost = @Html.Raw(JsonConvert.SerializeObject(postHogUiHost));
                 var assetHost = apiHost.replace('.i.posthog.com', '-assets.i.posthog.com');
+                var loaded = false;
 
-                var options = {
-                    api_host: apiHost,
-                    autocapture: @Html.Raw(JsonConvert.SerializeObject(postHogAutocapture)),
-                    capture_pageview: true,
-                    // Needed so PostHog flushes its queue while the page is unloading,
-                    // which is when download_order_abandoned is sent.
-                    capture_pageleave: true,
-                    disable_session_recording: @Html.Raw(JsonConvert.SerializeObject(postHogDisableSessionRecording)),
-                    person_profiles: 'identified_only',
-                    // Registered from loaded rather than after init, so the initial
-                    // $pageview also carries the app property.
-                    loaded: function (ph) {
-                        ph.register({ app: 'kartkatalog' });
-                    }
-                };
-
-                // Only meaningful when api_host is a proxy, otherwise PostHog derives it itself.
-                if (uiHost) {
-                    options.ui_host = uiHost;
+                // cookieyes-consent is a flat key:value list, e.g.
+                //   consentid:<id>,consent:yes,necessary:yes,analytics:yes,...
+                // Values may be percent-encoded depending on how the banner wrote them.
+                // Never forward consentid to PostHog, it identifies the visitor.
+                function readConsent() {
+                    var match = document.cookie.match(/(?:^|;\s*)cookieyes-consent=([^;]*)/);
+                    if (!match) return {};
+                    var raw = match[1];
+                    try { raw = decodeURIComponent(raw); } catch (e) { /* keep raw */ }
+                    var consent = {};
+                    raw.split(',').forEach(function (part) {
+                        var i = part.indexOf(':');
+                        if (i > 0) consent[part.slice(0, i).trim()] = part.slice(i + 1).trim();
+                    });
+                    return consent;
                 }
 
-                var script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.crossOrigin = 'anonymous';
-                script.async = true;
-                script.src = assetHost + '/static/array.js';
-                script.onload = function () {
-                    posthog.init(apiKey, options);
-                };
-                document.head.appendChild(script);
+                function analyticsAllowed() {
+                    return readConsent().analytics === 'yes';
+                }
+
+                function loadPostHog() {
+                    if (loaded) return;
+                    loaded = true;
+
+                    var options = {
+                        api_host: apiHost,
+                        autocapture: @Html.Raw(JsonConvert.SerializeObject(postHogAutocapture)),
+                        capture_pageview: true,
+                        // Needed so PostHog flushes its queue while the page is unloading,
+                        // which is when download_order_abandoned is sent.
+                        capture_pageleave: true,
+                        disable_session_recording: @Html.Raw(JsonConvert.SerializeObject(postHogDisableSessionRecording)),
+                        person_profiles: 'identified_only',
+                        // Registered from loaded rather than after init, so the initial
+                        // $pageview also carries the app property.
+                        loaded: function (ph) {
+                            ph.register({ app: 'kartkatalog' });
+                        }
+                    };
+
+                    // Only meaningful when api_host is a proxy, otherwise PostHog derives it itself.
+                    if (uiHost) {
+                        options.ui_host = uiHost;
+                    }
+
+                    var script = document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.crossOrigin = 'anonymous';
+                    script.async = true;
+                    script.src = assetHost + '/static/array.js';
+                    script.onload = function () {
+                        posthog.init(apiKey, options);
+                    };
+                    document.head.appendChild(script);
+                }
+
+                function applyConsent() {
+                    if (analyticsAllowed()) {
+                        if (!loaded) {
+                            loadPostHog();
+                        } else if (window.posthog && posthog.has_opted_out_capturing && posthog.has_opted_out_capturing()) {
+                            posthog.opt_in_capturing();
+                        }
+                    } else if (loaded && window.posthog && posthog.opt_out_capturing) {
+                        // Stops capturing and clears PostHog's own persistence.
+                        posthog.opt_out_capturing();
+                    }
+                }
+
+                // Nothing is requested from PostHog until analytics consent is given,
+                // so a visitor who declines gets no script, no cookies and no events.
+                applyConsent();
+                // CookieYes fires this every time the visitor saves a choice, so consent
+                // given or withdrawn mid-session takes effect without a reload.
+                document.addEventListener('cookieyes_consent_update', applyConsent);
             })();
         </script>
     }
