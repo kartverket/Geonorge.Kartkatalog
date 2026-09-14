@@ -221,12 +221,12 @@ namespace Kartverket.Metadatakatalog.Service
                 if (metadataIndexDoc.Type != null && (metadataIndexDoc.Type.ToLower() == "service" || metadataIndexDoc.Type.ToLower() == "servicelayer"))
                 {
                     _logger.LogInformation("Indexing SERVICE document to _indexerService for culture: {Culture}", culture);
-                    _indexerService.Index(_indexDocumentCreator.ConvertIndexDocToService(metadataIndexDoc));
+                    _indexerService.Index(_indexDocumentCreator.ConvertIndexDocToService(metadataIndexDoc, culture));
                 }
                 else if (metadataIndexDoc.Type != null && metadataIndexDoc.Type.ToLower() == "software")
                 {
                     _logger.LogInformation("Indexing APPLICATION document to _indexerApplication for culture: {Culture}", culture);
-                    _indexerApplication.Index(_indexDocumentCreator.ConvertIndexDocToApplication(metadataIndexDoc));
+                    _indexerApplication.Index(_indexDocumentCreator.ConvertIndexDocToApplication(metadataIndexDoc, culture));
                 }
                 else
                 {
@@ -234,7 +234,7 @@ namespace Kartverket.Metadatakatalog.Service
                     _indexer.Index(metadataIndexDoc);
                 }
 
-                var allDoc = _indexDocumentCreator.ConvertIndexDocToMetadataAll(metadataIndexDoc);
+                var allDoc = _indexDocumentCreator.ConvertIndexDocToMetadataAll(metadataIndexDoc, culture);
                 _logger.LogInformation("Indexing to _indexerAll - Culture: {Culture}, UUID: {Uuid}, Title: {Title}", 
                     culture, allDoc.Uuid, allDoc.Title);
                 _logger.LogInformation("Expected target core: {ExpectedCore}", 
@@ -295,12 +295,12 @@ namespace Kartverket.Metadatakatalog.Service
                 if (englishMetadataIndexDoc.Type != null && (englishMetadataIndexDoc.Type.ToLower() == "service" || englishMetadataIndexDoc.Type.ToLower() == "servicelayer"))
                 {
                     _logger.LogInformation("Indexing ENGLISH SERVICE document to _indexerService");
-                    _indexerService.Index(_indexDocumentCreator.ConvertIndexDocToService(englishMetadataIndexDoc));
+                    _indexerService.Index(_indexDocumentCreator.ConvertIndexDocToService(englishMetadataIndexDoc, currentCulture.Name));
                 }
                 else if (englishMetadataIndexDoc.Type != null && englishMetadataIndexDoc.Type.ToLower() == "software")
                 {
                     _logger.LogInformation("Indexing ENGLISH APPLICATION document to _indexerApplication");
-                    _indexerApplication.Index(_indexDocumentCreator.ConvertIndexDocToApplication(englishMetadataIndexDoc));
+                    _indexerApplication.Index(_indexDocumentCreator.ConvertIndexDocToApplication(englishMetadataIndexDoc, currentCulture.Name));
                 }
                 else
                 {
@@ -311,7 +311,7 @@ namespace Kartverket.Metadatakatalog.Service
                 // Index English content to metadata_all_en (since we're in English cores context)
                 if (englishMetadataIndexDoc != null)
                 {
-                    var allDoc = _indexDocumentCreator.ConvertIndexDocToMetadataAll(englishMetadataIndexDoc);
+                    var allDoc = _indexDocumentCreator.ConvertIndexDocToMetadataAll(englishMetadataIndexDoc, currentCulture.Name);
                     _logger.LogInformation("Indexing ENGLISH document to _indexerAll (metadata_all_en) - UUID: {Uuid}, Title: {Title}", 
                         allDoc.Uuid, allDoc.Title);
                     _indexerAll.Index(allDoc);
