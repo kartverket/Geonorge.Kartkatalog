@@ -140,6 +140,9 @@ namespace Kartverket.Metadatakatalog.Models
         [SolrField("DistributionProtocols")]
         public List<string> DistributionProtocols { get; set; }
 
+        [SolrField("DistributionFormats")]
+        public List<string> DistributionFormats { get; set; }
+
         [SolrField("ServiceDistributionAccessConstraint")]
         public string ServiceDistributionAccessConstraint { get; set; }
 

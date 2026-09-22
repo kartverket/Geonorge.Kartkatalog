@@ -64,7 +64,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
 
         /// <summary>
         /// Facet filters to apply. Use array format: facets[0]name=type&facets[0]value=dataset
-        /// Available facet names: type, theme, organization, nationalinitiative, DistributionProtocols, area, dataaccess, spatialscope
+        /// Available facet names: type, theme, organization, nationalinitiative, DistributionProtocols, DistributionFormats, area, dataaccess, spatialscope
         /// </summary>
         /// <example>[{"name": "type", "value": "dataset"}, {"name": "organization", "value": "Kartverket"}]</example>
         [Description("Facet filters to narrow search results")]

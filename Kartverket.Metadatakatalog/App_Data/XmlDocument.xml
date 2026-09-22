@@ -86,6 +86,7 @@
             - `organization` - Publishing organization
             - `nationalinitiative` - National initiatives
             - `DistributionProtocols` - Distribution protocols
+            - `DistributionFormats` - Distribution formats
             - `area` - Geographic area
             - `dataaccess` - Data access levels
             - `spatialscope` - Spatial scope
@@ -451,7 +452,7 @@
         </member>
         <member name="P:Kartverket.Metadatakatalog.Models.Api.FacetInput.name">
             <summary>
-            The name of the facet. Valid values: type, theme, organization, nationalinitiative, DistributionProtocols, area, dataaccess, spatialscope
+            The name of the facet. Valid values: type, theme, organization, nationalinitiative, DistributionProtocols, DistributionFormats, area, dataaccess, spatialscope
             </summary>
             <example>type</example>
         </member>
@@ -791,6 +792,30 @@
         <member name="M:Kartverket.Metadatakatalog.Service.PlaceResolver.GetAreasAsync(System.Threading.CancellationToken)">
             <summary>
             Gets fylke og kommuner fra register i et dictionary, cached for 12 hours.
+            </summary>
+        </member>
+        <member name="F:Kartverket.Metadatakatalog.Service.RegisterFetcher.FormatAliases">
+            <summary>
+            Free text spellings of format names that the registers do not recognise, mapped onto the
+            spelling they should have had. The lookup ignores case, so an entry also settles the
+            casing of a name the registers do not contain - "Html" here makes both HTML and Html
+            index as HTML. Only obvious duplicates and typos belong here; values we cannot place are
+            kept as they are so they stay visible in the facet.
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Service.RegisterFetcher.GetFormatName(System.String)">
+            <summary>
+            Maps a free text format name from the metadata onto the codevalue in the raster- and
+            vector format registers. Matching ignores case, so GeoTiff and GEOTIFF end up as the
+            same facet value. Names with no match are returned unchanged.
+            </summary>
+        </member>
+        <member name="M:Kartverket.Metadatakatalog.Service.RegisterFetcher.GetFormats">
+            <summary>
+            Lookup from any known spelling of a format name to the codevalue it belongs to, built
+            from the raster and vector format registers. Both the codevalue and the label are usable
+            as keys, so "GeoPackage" and "GPKG" resolve to the same value. Format names are not
+            translated, so only the Norwegian register is read.
             </summary>
         </member>
         <member name="M:Kartverket.Metadatakatalog.Service.SimpleMetadataUtil.CosineToFrangeThreshold(System.Double,System.String)">
@@ -1545,6 +1570,11 @@
         <member name="P:Resources.UI.Facet_dataaccess">
             <summary>
               Looks up a localized string similar to Tilgang til data.
+            </summary>
+        </member>
+        <member name="P:Resources.UI.Facet_DistributionFormats">
+            <summary>
+              Looks up a localized string similar to Format.
             </summary>
         </member>
         <member name="P:Resources.UI.Facet_DistributionProtocols">

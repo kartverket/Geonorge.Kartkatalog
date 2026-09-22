@@ -112,6 +112,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         /// - `organization` - Publishing organization
         /// - `nationalinitiative` - National initiatives
         /// - `DistributionProtocols` - Distribution protocols
+        /// - `DistributionFormats` - Distribution formats
         /// - `area` - Geographic area
         /// - `dataaccess` - Data access levels
         /// - `spatialscope` - Spatial scope
@@ -210,7 +211,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                         Type = "array", 
                         Description = "Facet filters",
                         Format = "facets[index]name=facetName&facets[index]value=facetValue",
-                        ValidFacets = new[] { "type", "theme", "organization", "nationalinitiative", "DistributionProtocols", "area", "dataaccess", "spatialscope" }
+                        ValidFacets = new[] { "type", "theme", "organization", "nationalinitiative", "DistributionProtocols", "DistributionFormats", "area", "dataaccess", "spatialscope" }
                     }
                 },
 
@@ -301,6 +302,7 @@ namespace Kartverket.Metadatakatalog.Controllers
                         new { Name = "organization", Description = "Publishing organization", CommonValues = new[] { "Kartverket", "Meteorologisk institutt", "Milj�direktoratet" } },
                         new { Name = "nationalinitiative", Description = "National initiatives", CommonValues = new[] { "Norge digitalt", "INSPIRE" } },
                         new { Name = "DistributionProtocols", Description = "Distribution protocols", CommonValues = new[] { "WMS", "WFS", "WCS", "ATOM" } },
+                        new { Name = "DistributionFormats", Description = "Distribution formats", CommonValues = new[] { "SOSI", "GML", "GeoJSON", "FGDB" } },
                         new { Name = "area", Description = "Geographic area coverage", CommonValues = new[] { "Norge", "Svalbard", "Kontinentalsokkel" } },
                         new { Name = "dataaccess", Description = "Data access levels", CommonValues = new[] { "open", "restricted", "public" } },
                         new { Name = "spatialscope", Description = "Spatial scope", CommonValues = new[] { "national", "regional", "local" } }
@@ -360,7 +362,7 @@ namespace Kartverket.Metadatakatalog.Controllers
         {
             try
             {
-                var validFacets = new[] { "type", "theme", "organization", "organisations", "nationalinitiative", "DistributionProtocols", "area", "dataaccess", "spatialscope" };
+                var validFacets = new[] { "type", "theme", "organization", "organisations", "nationalinitiative", "DistributionProtocols", "DistributionFormats", "area", "dataaccess", "spatialscope" };
                 
                 if (string.IsNullOrEmpty(facetName) || !Array.Exists(validFacets, x => x.Equals(facetName, StringComparison.OrdinalIgnoreCase)))
                 {

@@ -889,6 +889,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Format.
+        /// </summary>
+        public static string Facet_DistributionFormats {
+            get {
+                return ResourceManager.GetString("Facet_DistributionFormats", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Distribusjonsform.
         /// </summary>
         public static string Facet_DistributionProtocols {

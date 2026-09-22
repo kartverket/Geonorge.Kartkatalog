@@ -123,6 +123,9 @@
   <data name="Facet_area" xml:space="preserve">
     <value>Geografisk område</value>
   </data>
+  <data name="Facet_DistributionFormats" xml:space="preserve">
+    <value>Format</value>
+  </data>
   <data name="Facet_DistributionProtocols" xml:space="preserve">
     <value>Distribusjonsform</value>
   </data>

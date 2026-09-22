@@ -9,7 +9,7 @@ namespace Kartverket.Metadatakatalog.Models.Api
     public class FacetInput
     {   
         /// <summary>
-        /// The name of the facet. Valid values: type, theme, organization, nationalinitiative, DistributionProtocols, area, dataaccess, spatialscope
+        /// The name of the facet. Valid values: type, theme, organization, nationalinitiative, DistributionProtocols, DistributionFormats, area, dataaccess, spatialscope
         /// </summary>
         /// <example>type</example>
         [Required(ErrorMessage = "Facet name is required")]

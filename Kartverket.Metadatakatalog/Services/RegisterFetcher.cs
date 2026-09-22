@@ -37,6 +37,7 @@ namespace Kartverket.Metadatakatalog.Service
         public IDictionary<string, CodeListValue> ListOfDistributionTypes = new ConcurrentDictionary<string, CodeListValue>();
         public IDictionary<string, CodeListValue> ListOfDistributionTypesEnglish = new ConcurrentDictionary<string, CodeListValue>();
         public IDictionary<string, CodeListValue> OrganizationShortNames = new ConcurrentDictionary<string, CodeListValue>();
+        public IDictionary<string, string> ListOfFormats = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         IDictionary<string, CodeListValue> ListOfOrderingInstructions = new ConcurrentDictionary<string, CodeListValue>();
         IDictionary<string, CodeListValue> ListOfOrderingInstructionsEnglish = new ConcurrentDictionary<string, CodeListValue>();
 
@@ -71,6 +72,7 @@ namespace Kartverket.Metadatakatalog.Service
             ListOfDistributionTypes = GetCodeList("94B5A165-7176-4F43-B6EC-1063F7ADE9EA");
             ListOfDistributionTypesEnglish = GetCodeList("94B5A165-7176-4F43-B6EC-1063F7ADE9EA", Culture.EnglishCode );
             OrganizationShortNames = GetListOfOrganizations();
+            ListOfFormats = GetFormats();
             ListOfOrderingInstructions = GetSubRegister("metadata-kodelister/kartverket/norge-digitalt-tjenesteerklaering");
             ListOfOrderingInstructionsEnglish = GetSubRegister("metadata-kodelister/kartverket/norge-digitalt-tjenesteerklaering", Culture.EnglishCode);
 
@@ -185,6 +187,49 @@ namespace Kartverket.Metadatakatalog.Service
                 : ListOfDistributionTypesEnglish.Where(p => p.Key == value).FirstOrDefault();
 
             return dic.Value?.Description;
+        }
+
+        /// <summary>
+        /// Free text spellings of format names that the registers do not recognise, mapped onto the
+        /// spelling they should have had. The lookup ignores case, so an entry also settles the
+        /// casing of a name the registers do not contain - "Html" here makes both HTML and Html
+        /// index as HTML. Only obvious duplicates and typos belong here; values we cannot place are
+        /// kept as they are so they stay visible in the facet.
+        /// </summary>
+        static readonly IDictionary<string, string> FormatAliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "Image/Png", "PNG" },
+            { "GeoJSON-format", "GeoJSON" },
+            { "JPEG2001", "JPEG2000" },
+            { "Html", "HTML" },
+            { "HTML5", "HTML" },
+            { "PostGIS.sql", "PostGIS" },
+            { "FILEGDB", "FGDB" },          // GDAL driver name for ESRI Filgeodatabase. Note that GDB
+                                            // is a register value of its own (ESRI Geodatabase) and
+                                            // must not be folded into FGDB.
+            { "Excel", "Microsoft Excel" },
+            { "MS_EXCEL", "Microsoft Excel" },
+        };
+
+        /// <summary>
+        /// Maps a free text format name from the metadata onto the codevalue in the raster- and
+        /// vector format registers. Matching ignores case, so GeoTiff and GEOTIFF end up as the
+        /// same facet value. Names with no match are returned unchanged.
+        /// </summary>
+        public string GetFormatName(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return value;
+
+            value = value.Trim();
+
+            if (FormatAliases.TryGetValue(value, out var alias))
+                value = alias;
+
+            if (ListOfFormats.TryGetValue(value, out var codevalue))
+                return codevalue;
+
+            return value;
         }
 
         public string GetSpatialRepresentation(string value)
@@ -403,6 +448,37 @@ namespace Kartverket.Metadatakatalog.Service
             }
 
             return CodeValues;
+        }
+
+        /// <summary>
+        /// Lookup from any known spelling of a format name to the codevalue it belongs to, built
+        /// from the raster and vector format registers. Both the codevalue and the label are usable
+        /// as keys, so "GeoPackage" and "GPKG" resolve to the same value. Format names are not
+        /// translated, so only the Norwegian register is read.
+        /// </summary>
+        private IDictionary<string, string> GetFormats()
+        {
+            IDictionary<string, string> formats = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            var codeLists = new[] { GetCodeListByName("rasterformater"), GetCodeListByName("vektorformater") };
+
+            // codevalues first, so a label that collides with another entry's codevalue never wins
+            foreach (var code in codeLists.SelectMany(c => c))
+            {
+                var codevalue = code.Key?.Trim();
+                if (!string.IsNullOrWhiteSpace(codevalue) && !formats.ContainsKey(codevalue))
+                    formats.Add(codevalue, codevalue);
+            }
+
+            // labels are entered by hand in the register and may carry stray whitespace
+            foreach (var code in codeLists.SelectMany(c => c))
+            {
+                var label = code.Value?.Value?.Trim();
+                if (!string.IsNullOrWhiteSpace(label) && !formats.ContainsKey(label))
+                    formats.Add(label, code.Key?.Trim());
+            }
+
+            return formats;
         }
 
         public IDictionary<string, CodeListValue> GetSubRegister(string registername, string culture = Culture.NorwegianCode)

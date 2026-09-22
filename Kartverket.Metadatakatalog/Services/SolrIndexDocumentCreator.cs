@@ -111,6 +111,7 @@ namespace Kartverket.Metadatakatalog.Service
                 distributionProtocols.Add(FixProtocolName(simpleMetadata.DistributionProtocols[0], culture));
                 indexDoc.DistributionProtocols = distributionProtocols;
             }
+            indexDoc.DistributionFormats = simpleMetadata.DistributionFormats;
             indexDoc.DistributionUrl = simpleMetadata.DistributionUrl;
             indexDoc.DistributionName = simpleMetadata.DistributionName;
             indexDoc.ThumbnailUrl = simpleMetadata.ThumbnailUrl;
@@ -534,11 +535,23 @@ namespace Kartverket.Metadatakatalog.Service
 
                 //add DistributionProtocols
                 indexDoc.DistributionProtocols = new List<string>();
+                indexDoc.DistributionFormats = new List<string>();
                 if (simpleMetadata.DistributionsFormats != null && simpleMetadata.DistributionsFormats.Count > 0)
                 {
                     var distributionFormats = simpleMetadata.DistributionsFormats.Select(f => f.Protocol).Distinct();
                     foreach(var distributionFormat in distributionFormats)
                         indexDoc.DistributionProtocols.Add(ConvertProtocolToSimpleName(distributionFormat, culture));
+
+                    //add DistributionFormats - format name only, versions are kept in the Distributions field
+                    //free text names are mapped onto the raster/vector registers so the facet does not
+                    //list the same format under several spellings
+                    var formatNames = simpleMetadata.DistributionsFormats
+                        .Select(f => f.FormatName)
+                        .Where(f => !string.IsNullOrWhiteSpace(f))
+                        .Select(f => Register.GetFormatName(f))
+                        .Distinct(StringComparer.OrdinalIgnoreCase);
+                    foreach (var formatName in formatNames)
+                        indexDoc.DistributionFormats.Add(formatName);
                 }
                 //if (!String.IsNullOrEmpty(indexDoc.ServiceDistributionProtocolForDataset))
                 //{
@@ -1673,6 +1686,7 @@ namespace Kartverket.Metadatakatalog.Service
                     distributionProtocols.Add(FixProtocolName(distribution, culture));
                 indexDoc.DistributionProtocols = distributionProtocols;
             }
+            indexDoc.DistributionFormats = simpleMetadata.DistributionFormats;
 
             if (indexDoc.Type == "dataset" || indexDoc.Type == "series")
             {
