@@ -1083,7 +1083,7 @@ namespace Kartverket.Metadatakatalog.Service
                 distribution.ServiceDistributionAccessConstraint = simpleMetadata.Constraints.AccessConstraints;
             distribution.Protocol = Register.GetDistributionType(simpleMetadataDistribution.Protocol);
 
-            if (!string.IsNullOrEmpty(simpleMetadata.ParentIdentifier) && (distribution.Protocol == "WMS-tjeneste" || distribution.Protocol == "WMS service"))
+            if (simpleMetadata.HierarchyLevel == "service" && !string.IsNullOrEmpty(simpleMetadata.DistributionDetails?.Name) && (distribution.Protocol == "WMS-tjeneste" || distribution.Protocol == "WMS service"))
                 distribution.Protocol = UI.Facet_type_servicelayer;
 
             if(simpleMetadata.HierarchyLevel == "series")
