@@ -1600,7 +1600,7 @@ var mainVueModel = Vue.createApp({
             var bearerToken = GetCookie('oidcAccessToken');
             var sendBearer = false;
 
-            if (capabilities !== "" && capabilities.accessConstraintRequiredRole !== undefined) {
+            if (capabilities !== "" && capabilities.distributedBy == "Geonorge" && capabilities.accessConstraintRequiredRole !== undefined) {
                 if (
                     capabilities.accessConstraintRequiredRole.indexOf('nd.egenkommune') > -1 ||
                     capabilities.accessConstraintRequiredRole.indexOf('nd.landbrukspart') > -1
@@ -2341,6 +2341,13 @@ var mainVueModel = Vue.createApp({
             this.orderRequests = orderRequests;
             this.orderRequestsAdditionalInfo = orderRequestsAdditionalInfo;
         },
+        isDistributedByGeonorge: function (distributionUrl) {
+            return this.orderLines.some(function (orderLine) {
+                return orderLine.metadata !== undefined
+                    && orderLine.metadata.orderDistributionUrl === distributionUrl
+                    && orderLine.capabilities.distributedBy == "Geonorge";
+            });
+        },
         getOrderRequestAdditionalInfo: function (distributionUrl, metadataUuid) {
             return this.orderRequestsAdditionalInfo[distributionUrl] != undefined && this.orderRequestsAdditionalInfo[distributionUrl][metadataUuid] != undefined ? this.orderRequestsAdditionalInfo[distributionUrl][metadataUuid] : {};
         },
@@ -2456,6 +2463,7 @@ var mainVueModel = Vue.createApp({
             var orderRequests = this.orderRequests;
             var bearerToken = this.getCookie('oidcAccessToken');
             for (distributionUrl in orderRequests) {
+                var sendBearer = this.isDistributedByGeonorge(distributionUrl);
 
                 $.ajax({
                     url: distributionUrl,
@@ -2466,7 +2474,7 @@ var mainVueModel = Vue.createApp({
                     xhrFields: { withCredentials: IsGeonorge(distributionUrl) },
                     async: false,
                     beforeSend: function (xhr) {
-                        if (bearerToken && bearerToken.length) {
+                        if (sendBearer && bearerToken && bearerToken.length) {
                             xhr.setRequestHeader('Authorization', 'Bearer ' + bearerToken);
                         }
                     },
@@ -2525,7 +2533,7 @@ var mainVueModel = Vue.createApp({
                     xhrFields: { withCredentials: IsGeonorge(responseItem.distributionUrl) },
                     data: JSON.stringify(data),
                     beforeSend: function (xhr) {
-                        if (bearerToken && bearerToken.length) {
+                        if (responseItem.additionalInfo.distributedBy == "Geonorge" && bearerToken && bearerToken.length) {
                             xhr.setRequestHeader('Authorization', 'Bearer ' + bearerToken);
                         }
                     },
