@@ -37,6 +37,13 @@ function getOrderItemName(uuid) {
     return metadata !== null && metadata.name !== undefined ? metadata.name : "";
 }
 
+// Distributors that validate the Norway Digital (nd.*) user token for restricted datasets.
+var bearerTokenSupportedDistributors = ["Geonorge", "Direktoratet for byggkvalitet"];
+
+function SupportsBearerToken(distributedBy) {
+    return bearerTokenSupportedDistributors.indexOf(distributedBy) > -1;
+}
+
 function IsGeonorge(distributionUrl) {
     return distributionUrl.indexOf("geonorge.no") > -1;
 }
@@ -1600,7 +1607,7 @@ var mainVueModel = Vue.createApp({
             var bearerToken = GetCookie('oidcAccessToken');
             var sendBearer = false;
 
-            if (capabilities !== "" && capabilities.distributedBy == "Geonorge" && capabilities.accessConstraintRequiredRole !== undefined) {
+            if (capabilities !== "" && SupportsBearerToken(capabilities.distributedBy) && capabilities.accessConstraintRequiredRole !== undefined) {
                 if (
                     capabilities.accessConstraintRequiredRole.indexOf('nd.egenkommune') > -1 ||
                     capabilities.accessConstraintRequiredRole.indexOf('nd.landbrukspart') > -1
@@ -2341,11 +2348,11 @@ var mainVueModel = Vue.createApp({
             this.orderRequests = orderRequests;
             this.orderRequestsAdditionalInfo = orderRequestsAdditionalInfo;
         },
-        isDistributedByGeonorge: function (distributionUrl) {
+        distributorSupportsBearerToken: function (distributionUrl) {
             return this.orderLines.some(function (orderLine) {
                 return orderLine.metadata !== undefined
                     && orderLine.metadata.orderDistributionUrl === distributionUrl
-                    && orderLine.capabilities.distributedBy == "Geonorge";
+                    && SupportsBearerToken(orderLine.capabilities.distributedBy);
             });
         },
         getOrderRequestAdditionalInfo: function (distributionUrl, metadataUuid) {
@@ -2463,7 +2470,7 @@ var mainVueModel = Vue.createApp({
             var orderRequests = this.orderRequests;
             var bearerToken = this.getCookie('oidcAccessToken');
             for (distributionUrl in orderRequests) {
-                var sendBearer = this.isDistributedByGeonorge(distributionUrl);
+                var sendBearer = this.distributorSupportsBearerToken(distributionUrl);
 
                 $.ajax({
                     url: distributionUrl,
@@ -2533,7 +2540,7 @@ var mainVueModel = Vue.createApp({
                     xhrFields: { withCredentials: IsGeonorge(responseItem.distributionUrl) },
                     data: JSON.stringify(data),
                     beforeSend: function (xhr) {
-                        if (responseItem.additionalInfo.distributedBy == "Geonorge" && bearerToken && bearerToken.length) {
+                        if (SupportsBearerToken(responseItem.additionalInfo.distributedBy) && bearerToken && bearerToken.length) {
                             xhr.setRequestHeader('Authorization', 'Bearer ' + bearerToken);
                         }
                     },
