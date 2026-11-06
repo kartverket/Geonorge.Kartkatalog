@@ -772,13 +772,10 @@ namespace Kartverket.Metadatakatalog.Service
         public Models.SearchResult GetMetadataForNamespace(string @namespace, Models.SearchParameters searchParameters)
         {
             var solrInstance = _solrMetadataIndexOperations;
-            @namespace = @namespace.Replace(@"\", @"\\");
-            @namespace = @namespace.Replace(@"/", @"\/");
-            @namespace = @namespace.Replace(@":", @"\:");
             if (searchParameters.Offset == 0)
                 searchParameters.Offset = 1;
 
-            ISolrQuery query = new SolrQuery("resourceReferenceCodespace:" + SearchParameters.EscapeSolrQuery(@namespace));
+            ISolrQuery query = new SolrQuery("resourceReferenceCodespace:\"" + SearchParameters.EscapeSolrQuery(@namespace) + "\"");
             try
             {
                 SolrQueryResults<MetadataIndexDoc> queryResults = solrInstance.Query(query, new SolrNet.Commands.Parameters.QueryOptions
